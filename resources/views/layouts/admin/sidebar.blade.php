@@ -60,43 +60,33 @@
           </li>  -->
 
         @elseif(Auth::user()->level == 'instructor')
+          
           <li class="header">MAIN NAVIGATION</li>
 
-          <li>
-            <a href="{{ url('/dashboard')}}">
+          <li class="{{ (Request::path() == 'home') ? 'active' : '' }}">
+            <a href="{{ url('/home')}}">
               <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-              <span class="pull-right-container">
-                <small class="label pull-right bg-green">new</small>
-              </span>
             </a>
           </li>
 
-          <li>
-            <a href="{{ url('/instructor/schedule/')}}">
-              <i class="fa fa-list-alt"></i> <span>Schedule</span>
-              <span class="pull-right-container">
-                <small class="label pull-right bg-green">new</small>
-              </span>
+          <li class="{{ (Request::path() == 'schedule/'.Auth::user()->id)  ? 'active' : '' }}">
+            <a href="{{ url('/schedule/'.Auth::user()->id) }}">
+              <i class="fa fa-th-large"></i> <span>Schedule</span>
             </a>
           </li>
-
+          <!-- 
           <li>
-            <a href="{{ url('/instructor/session/')}}">
+            <a href="#">
               <i class="fa fa-th-large"></i> <span>Session</span>
-              <span class="pull-right-container">
-                <small class="label pull-right bg-green">new</small>
-              </span>
             </a>
           </li>
 
           <li>
-            <a href="{{ url('/instructor/performance/')}}">
+            <a href="#">
               <i class="ion ion-pie-graph"></i> <span>Performance</span>
-              <span class="pull-right-container">
-                <small class="label pull-right bg-green">new</small>
-              </span>
             </a>
-          </li>
+          </li>  -->
+
         @else
           <li class="header">MAIN NAVIGATION</li>
         

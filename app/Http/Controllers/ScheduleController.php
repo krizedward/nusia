@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Models\Schedule;
 use App\Models\Classroom;
 use App\Models\Student;
@@ -17,11 +18,23 @@ class ScheduleController extends Controller
      */
     public function index($id)
     {
-        $student    = Student::where('user_id',$id)->first();
+        $temp    = User::where('id',$id)->first();
+        
+
+        if ($temp->level == 'student') 
+        {
+            $role    = Student::where('user_id',$id)->first();
+        } 
+
+        elseif ($temp->level == 'instructor') 
+        {
+            $role    = Instructors::where('user_id',$id)->first();
+        }
+        
         $data       = Schedule::all();
         $class      = Classroom::all();
         $instructor = Instructors::all();
-        return view('schedule.index',compact('data','class','instructor','student'));
+        return view('schedule.index',compact('data','class','instructor','role'));
     }
 
     public function choose($user_id, $id)

@@ -2,9 +2,65 @@
 
 @section('title','Schedule')
 
-@section('content')
 @if(Auth::user()->level == 'instructor')
-<p>Hello Instructor</p>
+
+@section('content-header')
+  <h1>
+    Schedule
+    <small>learning</small>
+  </h1>
+
+  <ol class="breadcrumb">
+    <li><a href="{{ url('/home') }}">Home</a></li>
+    <li class="active">Schedule</li>
+  </ol>
+@endsection
+
+@section('content')
+  <div class="row">
+
+    <div class="col-md-12">
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">Schedule Table</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="example1" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th>Student Name</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Class</th>
+              <th>Link Zoom</th>
+            </tr>
+            </thead>
+                  
+            <tbody>
+            @foreach($data as $e=>$dt)
+              @if($dt->instructor_id == $role->id)
+              <tr>
+                <td>{{ $dt->student->user->name}}</td>
+                <td>{{ date('h:i A', strtotime($dt->time_meet)) }}</td>
+                <td>{{ date('d-M-Y', strtotime($dt->date_meet)) }}</td>
+                <td>{{ $dt->class->name }}</td>
+                <td>
+                  <a href="{{ $dt->link }}">Click Here</a>
+                </td>
+              </tr>
+              @endif
+            @endforeach
+            </tbody>
+          </table>
+        </div>
+        <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <!-- /.row -->
+@endsection
+
 @endif
 
 @if(Auth::user()->level == 'student')
@@ -189,7 +245,7 @@
                   
             <tbody>
             @foreach($data as $e=>$dt)
-              @if($dt->student_id == $student->id)
+              @if($dt->student_id == $role->id)
               <tr>
                 <td>{{ $dt->instructor->user->name}}</td>
                 <td>{{ date('h:i A', strtotime($dt->time_meet)) }}</td>
@@ -209,13 +265,10 @@
         <!-- /.box -->
     </div>
     <!-- /.row -->
-
 @endsection
 
-<p>Schedule for Students</p>
 @endif
 
 @if(Auth::user()->level == 'admin')
 <p>Hello Admin</p>
 @endif
-@endsection
