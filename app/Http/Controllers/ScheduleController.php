@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Schedule;
+use App\Models\Classroom;
+use App\Models\Student;
+use App\Models\Instructors;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -12,19 +15,23 @@ class ScheduleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
+        $student    = Student::where('user_id',$id)->first();
+        $data       = Schedule::all();
+        $class      = Classroom::all();
+        $instructor = Instructors::all();
+        return view('schedule.index',compact('data','class','instructor','student'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function choose($user_id, $id)
     {
-        //
+        $student    = Student::where('user_id',$user_id)->first();
+        $choose     = Instructors::where('id',$id)->first();
+        $data       = Schedule::all();
+        $class      = Classroom::all();
+        $instructor = Instructors::all();
+        return view('schedule.index',compact('data','class','instructor','student','choose'));
     }
 
     /**
@@ -35,7 +42,28 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'id'            => 'required',
+            'instructor_id' => 'required',
+            'class_id'      => 'required',
+            'time_meet'     => 'required',
+            'date_meet'     => 'required',
+        ]);
+
+        $dt = Student::where('user_id',$request->id)->first();
+
+        Schedule::create([
+            'student_id'    => $dt->id,
+            'instructor_id' => $request->instructor_id,
+            'class_id'      => $request->class_id,
+            'time_meet'     => date('H:i:s', strtotime($request->time_meet)),
+            'date_meet'     => date('yy/m/d', strtotime($request->date_meet)),
+        ]);
+
+        \Session::flash('Schedule-Student','Create Schedule Success!');
+ 
+
+        return redirect('/schedule/'.$request->id);
     }
 
     /**

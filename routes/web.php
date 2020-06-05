@@ -15,6 +15,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Route::group(['middleware'=>'auth'], function() {
 
-Route::get('/home', 'HomeController@index')->name('home');
+	Route::get('/home', function() {
+		return view('home');
+	})->name('home');
+
+	/*Student*/
+	Route::get('/schedule/{user_id}', 'ScheduleController@index');
+	Route::get('/schedule/{user_id}/{instructor_id}', 'ScheduleController@choose');
+	Route::post('/schedule/store', 'ScheduleController@store');
+
+	Route::get('/instructors','InstructorsController@index');
+	/*End-Student*/
+
+});
+
+Auth::routes();
