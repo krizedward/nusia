@@ -22,12 +22,17 @@ Route::group(['middleware'=>'auth'], function() {
 	})->name('home');
 
 	/*Student*/
-	Route::get('/schedule/{user_id}', 'ScheduleController@index');
-	Route::get('/schedule/{user_id}/{instructor_id}', 'ScheduleController@choose');
-	Route::post('/schedule/store', 'ScheduleController@store');
+	Route::get('/schedule/{user_id}', 'ScheduleController@index')->name('schedule.index');
+	Route::get('/schedule/{user_id}/{instructor_id}', 'ScheduleController@choose')->name('choose');
+	Route::post('/schedule/store', 'ScheduleController@store')->name('store');
 
-	Route::get('/instructors','InstructorsController@index');
+	Route::get('/instructors','InstructorsController@index')->name('instructors.index');
 	/*End-Student*/
+
+	Route::get('/verfication-schedule/{user_id}/{vs_id}','ScheduleController@verfication')->name('verfication');
+
+	Route::get('/session/{user_id}','ScheduleController@session')->name('session');
+	Route::get('/material','MaterialClassController@index')->name('material.index');
 
 });
 

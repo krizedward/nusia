@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Models\Schedule;
+use App\Models\VerficationSchedule;
 use App\Models\Classroom;
 use App\Models\Student;
 use App\Models\Instructors;
@@ -31,7 +32,7 @@ class ScheduleController extends Controller
             $role    = Instructors::where('user_id',$id)->first();
         }
         
-        $data       = Schedule::all();
+        $data       = VerficationSchedule::all();
         $class      = Classroom::all();
         $instructor = Instructors::all();
         return view('schedule.index',compact('data','class','instructor','role'));
@@ -45,6 +46,35 @@ class ScheduleController extends Controller
         $class      = Classroom::all();
         $instructor = Instructors::all();
         return view('schedule.index',compact('data','class','instructor','student','choose'));
+    }
+
+    public function verfication($user_id, $vs_id)
+    {
+        VerficationSchedule::where('id',$vs_id)->update([
+            'status' => 'Aggree'
+        ]);
+        
+        return redirect('/Schedule/'.$user_id);
+    }
+
+    public function session($id)
+    {
+        $temp    = User::where('id',$id)->first();
+        
+
+        if ($temp->level == 'student') 
+        {
+            $role    = Student::where('user_id',$id)->first();
+        } 
+
+        elseif ($temp->level == 'instructor') 
+        {
+            $role    = Instructors::where('user_id',$id)->first();
+        }
+
+        $data       = VerficationSchedule::all();
+        
+        return view('session.index', compact('data','role'));
     }
 
     /**
@@ -71,6 +101,13 @@ class ScheduleController extends Controller
             'class_id'      => $request->class_id,
             'time_meet'     => date('H:i:s', strtotime($request->time_meet)),
             'date_meet'     => date('yy/m/d', strtotime($request->date_meet)),
+        ]);
+
+        $temp = Schedule::all()->last();
+
+        VerficationSchedule::create([
+            'schedule_id'   => $temp->id,
+            'status'        =>'Request',
         ]);
 
         \Session::flash('Schedule-Student','Create Schedule Success!');

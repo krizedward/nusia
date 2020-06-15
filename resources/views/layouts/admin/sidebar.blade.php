@@ -23,7 +23,7 @@
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
-        @if(Auth::user()->level == 'student')
+          
           <li class="header">MAIN NAVIGATION</li>
 
           <li class="{{ (Request::path() == 'home') ? 'active' : '' }}">
@@ -32,15 +32,24 @@
             </a>
           </li>
 
-          <li class="{{ (Request::path() == 'schedule/'.Auth::user()->id)  ? 'active' : '' }}">
-            <a href="{{ url('/schedule/'.Auth::user()->id) }}">
+        @if(Auth::user()->level == 'student')
+
+           
+          <li class="{{ set_active('schedule.index') }}">
+            <a href="{{ route('schedule.index',Auth::user()->id) }}">
               <i class="fa fa-th-large"></i> <span>Schedule</span>
+            </a>
+          </li> 
+
+          <li class="{{ set_active('instructors.index') }}">
+            <a href="{{ route('instructors.index') }}">
+              <i class="fa fa-users"></i> <span>Instructor</span>
             </a>
           </li>
 
-          <li class="{{ (Request::path() == 'instructors') ? 'active' : '' }}">
-            <a href="{{ url('/instructors/') }}">
-              <i class="fa fa-users"></i> <span>Instructor</span>
+          <li class="{{ set_active('material') }}">
+            <a href="{{ url('/material') }}">
+              <i class="fa fa-book"></i> <span>Material</span>
             </a>
           </li>
 
@@ -60,18 +69,22 @@
           </li>  -->
 
         @elseif(Auth::user()->level == 'instructor')
-          
-          <li class="header">MAIN NAVIGATION</li>
-
-          <li class="{{ (Request::path() == 'home') ? 'active' : '' }}">
-            <a href="{{ url('/home')}}">
-              <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-            </a>
-          </li>
 
           <li class="{{ (Request::path() == 'schedule/'.Auth::user()->id)  ? 'active' : '' }}">
             <a href="{{ url('/schedule/'.Auth::user()->id) }}">
               <i class="fa fa-th-large"></i> <span>Schedule</span>
+            </a>
+          </li>
+
+          <li class="{{ (Request::path() == 'session/'.Auth::user()->id)  ? 'active' : '' }}">
+            <a href="{{ url('/session/'.Auth::user()->id) }}">
+              <i class="fa fa-user"></i> <span>Session</span>
+            </a>
+          </li>
+
+          <li class="{{ (Request::path() == 'material')  ? 'active' : '' }}">
+            <a href="{{ url('/material') }}">
+              <i class="fa fa-book"></i> <span>Share Material</span>
             </a>
           </li>
           <!-- 
