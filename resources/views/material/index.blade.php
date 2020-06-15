@@ -66,11 +66,24 @@
                     <input type="text" name="title" class="form-control">
                   </div>
                   <!-- /.form-group -->
+                  
+                  <div class="form-group">
+                    <label>Session</label>
+                      <select class="form-control select2" name="class">
+                          <option selected="" disabled="">Choose Session</option>
+                          @foreach($class as $dt)
+                          <option value="{{$dt->id}}">{{$dt->name}}</option>
+                          @endforeach
+                      </select>
+                  </div>
+                  <!-- /.form-group -->
+
                   <div class="form-group">
                     <label>Upload File</label>
                     <input type="file" name="data">
                   </div>
                   <!-- /.form-group -->
+
                 </div>
                 <!-- /.col -->
               </div>
@@ -94,17 +107,17 @@
                   <th>#</th>
                   <th>Instructor</th>
                   <th>Title</th>
-                  <th>Date</th>
+                  <th>Session</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($data as $dt)
+                @foreach($data as $e=>$dt)
                 <tr>
-                  <td>{{ $dt->instructor_id }}</td>
-                  <td>{{ $dt->instructor_id }}</td>
+                  <td>{{ $e+1 }}</td>
+                  <td>{{ $dt->instructor->user->name }}</td>
+                  <td>{{ $dt->class->name }}</td>
                   <td>{{ $dt->title }}</td>
-                  <td>{{ $dt->upload_file }}</td>
                   <td>
                     <p>
                       <a href="{{ url('/material/download/'.$dt->id) }}" class="btn btn-flat btn-xs btn-success"><i class="fa fa-download"></i></a>
@@ -135,18 +148,18 @@
                 <thead>
                 <tr>
                   <th>#</th>
-                  <th>Title</th>
+                  <th>Class</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($data as $dt)
+                @foreach($class as $e=>$dt)
                 <tr>
-                  <td>{{ $dt->instructor_id }}</td>
-                  <td>{{ $dt->title }}</td>
+                  <td>{{ $e+1 }}</td>
+                  <td>{{ $dt->name }}</td>
                   <td>
                     <p>
-                      <a href="{{ url('/material/download/'.$dt->id) }}" class="btn btn-flat btn-xs btn-success"><i class="fa fa-download"></i></a>
+                      <a href="{{ url('/material/student/'.$dt->id) }}" class="btn btn-flat btn-xs btn-info"><i class="fa fa-list"></i></a>
                     </p>
                   </td>
                 </tr>

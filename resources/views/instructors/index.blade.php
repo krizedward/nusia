@@ -48,7 +48,9 @@
                 <ul class="list-group list-group-unbordered">
                   <li class="list-group-item">
                     <b>Professional Experiences</b> 
-                    <p>{{ $dt->pro_experiences }}</p>
+                    <p>
+                      {{ $dt->pro_experiences }}
+                    </p>
                   </li>
                   <li class="list-group-item">
                     <b>Interest</b>

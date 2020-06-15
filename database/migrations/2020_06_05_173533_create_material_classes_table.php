@@ -16,6 +16,7 @@ class CreateMaterialClassesTable extends Migration
         Schema::create('material_classes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('instructor_id');
+            $table->unsignedBigInteger('class_id');
             $table->string('title');
             $table->string('upload_file');
             $table->timestamps();
@@ -23,6 +24,11 @@ class CreateMaterialClassesTable extends Migration
             $table->foreign('instructor_id')
             ->references('id')
             ->on('instructors')
+            ->onDelete('cascade');
+
+            $table->foreign('class_id')
+            ->references('id')
+            ->on('classrooms')
             ->onDelete('cascade');
         });
     }

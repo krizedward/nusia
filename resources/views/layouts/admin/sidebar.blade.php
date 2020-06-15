@@ -47,7 +47,7 @@
             </a>
           </li>
 
-          <li class="{{ set_active('material') }}">
+          <li class="{{ set_active(['material.index','material.student']) }}">
             <a href="{{ url('/material') }}">
               <i class="fa fa-book"></i> <span>Material</span>
             </a>
@@ -82,7 +82,7 @@
             </a>
           </li>
 
-          <li class="{{ (Request::path() == 'material')  ? 'active' : '' }}">
+          <li class="{{ set_active('material.index') }}">
             <a href="{{ url('/material') }}">
               <i class="fa fa-book"></i> <span>Share Material</span>
             </a>

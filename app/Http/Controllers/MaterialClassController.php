@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Instructors;
 use App\Models\MaterialClass;
+use App\Models\Classroom;
 use Illuminate\Http\Request;
 
 class MaterialClassController extends Controller
@@ -15,8 +16,9 @@ class MaterialClassController extends Controller
      */
     public function index()
     {
-        $data = MaterialClass::all();
-        return view('material.index',compact('data'));
+        $data  = MaterialClass::all();
+        $class = Classroom::all();
+        return view('material.index',compact('data','class'));
     }
 
     public function download($id)
@@ -25,6 +27,12 @@ class MaterialClassController extends Controller
         $destinationPath = "/uploads/material/";
         $file = public_path() . $destinationPath . $model_file->upload_file;//Mencari file dari model yang sudah dicari
         return response()->download($file, $model_file->upload_file); //Download file yang dicari berdasarkan nama file
+    }
+
+    public function student($id)
+    {
+        $data  = MaterialClass::where('class_id',$id)->get();
+        return view('material.student',compact('data'));
     }
 
     /**
@@ -37,14 +45,17 @@ class MaterialClassController extends Controller
     {
         $this->validate($request,[
             'title' => 'required',
+            'class' => 'required',
         ]);
 
-        $file = $request->file('data');
+        $instructor = Instructors::where('user_id',$request->id)->first();
+        $file       = $request->file('data');
         
         if($file){
 
             MaterialClass::create([
-                'instructor_id' => 1,
+                'instructor_id' => $instructor->id,
+                'class_id'      => $request->class,
                 'title'         => $request->title,
                 'upload_file'   => $file->getClientOriginalName(),
             ]);

@@ -36,6 +36,7 @@ Route::group(['middleware'=>'auth'], function() {
 
 	Route::post('/material/store','MaterialClassController@store');
 	Route::get('/material/download/{id}','MaterialClassController@download');
+	Route::get('/material/student/{id_class}','MaterialClassController@student')->name('material.student');
 
 });
 
