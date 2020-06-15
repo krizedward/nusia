@@ -9,6 +9,6 @@ class MaterialClass extends Model
     protected $fillable = [
     	'instructor_id',
     	'title',
-    	'upload',
+    	'upload_file',
     ];
 }

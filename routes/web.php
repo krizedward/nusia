@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('login');
 });
 
 Route::group(['middleware'=>'auth'], function() {
@@ -33,6 +33,9 @@ Route::group(['middleware'=>'auth'], function() {
 
 	Route::get('/session/{user_id}','ScheduleController@session')->name('session');
 	Route::get('/material','MaterialClassController@index')->name('material.index');
+
+	Route::post('/material/store','MaterialClassController@store');
+	Route::get('/material/download/{id}','MaterialClassController@download');
 
 });
 

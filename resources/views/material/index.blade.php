@@ -43,6 +43,7 @@
 
 @section('content')
 
+      @if(Auth::user()->level == 'instructor')
       <div class="row">
         <div class="col-md-4">
           <div class="box box-warning box-solid">
@@ -55,19 +56,19 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <form role="form" method="post" action="{{ url('/schedule/store') }}" enctype="multipart/form-data">
+              <form role="form" method="post" action="{{ url('/material/store') }}" enctype="multipart/form-data">
               @csrf
               <input type="hidden" name="id" value="{{Auth::user()->id}}">
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Title File</label>
-                    <input type="text" name="titel" class="form-control">
+                    <input type="text" name="title" class="form-control">
                   </div>
                   <!-- /.form-group -->
                   <div class="form-group">
                     <label>Upload File</label>
-                    <input type="file">
+                    <input type="file" name="data">
                   </div>
                   <!-- /.form-group -->
                 </div>
@@ -98,17 +99,19 @@
                 </tr>
                 </thead>
                 <tbody>
+                @foreach($data as $dt)
                 <tr>
-                  <td>1</td>
-                  <td>Bella</td>
-                  <td>Session 1</td>
-                  <td>12-May-2020</td>
+                  <td>{{ $dt->instructor_id }}</td>
+                  <td>{{ $dt->instructor_id }}</td>
+                  <td>{{ $dt->title }}</td>
+                  <td>{{ $dt->upload_file }}</td>
                   <td>
                     <p>
-                      <a href="#" class="btn btn-flat btn-xs btn-danger btn-hapus"><i class="fa fa-trash"></i></a>
+                      <a href="{{ url('/material/download/'.$dt->id) }}" class="btn btn-flat btn-xs btn-success"><i class="fa fa-download"></i></a>
                     </p>
                   </td>
                 </tr>
+                @endforeach
                 </tbody>
               </table>
             </div>
@@ -119,6 +122,46 @@
         <!-- /.col -->
       </div>
       <!-- /.row -->
+      @endif
+
+      @if(Auth::user()->level == 'student')
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box box-warning">
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Title</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($data as $dt)
+                <tr>
+                  <td>{{ $dt->instructor_id }}</td>
+                  <td>{{ $dt->title }}</td>
+                  <td>
+                    <p>
+                      <a href="{{ url('/material/download/'.$dt->id) }}" class="btn btn-flat btn-xs btn-success"><i class="fa fa-download"></i></a>
+                    </p>
+                  </td>
+                </tr>
+                @endforeach
+                </tbody>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+      @endif
 
 @endsection
 

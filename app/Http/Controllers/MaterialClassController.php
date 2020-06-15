@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instructors;
 use App\Models\MaterialClass;
 use Illuminate\Http\Request;
 
@@ -14,17 +15,16 @@ class MaterialClassController extends Controller
      */
     public function index()
     {
-        return view('material.index');
+        $data = MaterialClass::all();
+        return view('material.index',compact('data'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function download($id)
     {
-        //
+        $model_file = MaterialClass::findOrFail($id); //Mencari model atau objek yang dicari
+        $destinationPath = "/uploads/material/";
+        $file = public_path() . $destinationPath . $model_file->upload_file;//Mencari file dari model yang sudah dicari
+        return response()->download($file, $model_file->upload_file); //Download file yang dicari berdasarkan nama file
     }
 
     /**
@@ -35,7 +35,27 @@ class MaterialClassController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'title' => 'required',
+        ]);
+
+        $file = $request->file('data');
+        
+        if($file){
+
+            MaterialClass::create([
+                'instructor_id' => 1,
+                'title'         => $request->title,
+                'upload_file'   => $file->getClientOriginalName(),
+            ]);
+
+            //Move Uploaded File
+            $destinationPath = 'uploads/material';
+            $file->move($destinationPath,$file->getClientOriginalName());    
+        }
+        
+
+        return redirect('/material');
     }
 
     /**
