@@ -14,7 +14,8 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-        //
+        $data = Classroom::all();
+        return view('classroom.index', compact('data'));
     }
 
     /**

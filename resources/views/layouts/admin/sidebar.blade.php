@@ -40,6 +40,12 @@
               <i class="fa fa-th-large"></i> <span>Schedule</span>
             </a>
           </li> 
+          
+          <li class="{{ set_active('classroom.index') }}">
+            <a href="{{ url('/classroom') }}">
+              <i class="fa fa-home"></i> <span>Classroom</span>
+            </a>
+          </li>
 
           <li class="{{ set_active('instructors.index') }}">
             <a href="{{ route('instructors.index') }}">
@@ -50,6 +56,12 @@
           <li class="{{ set_active(['material.index','material.student']) }}">
             <a href="{{ url('/material') }}">
               <i class="fa fa-book"></i> <span>Material</span>
+            </a>
+          </li>
+
+          <li class="{{ set_active('calendar.index') }}">
+            <a href="{{ route('calendar.index') }}">
+              <i class="fa fa-calendar"></i> <span>Calendar</span>
             </a>
           </li>
 

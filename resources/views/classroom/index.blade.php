@@ -1,79 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title', 'Instructor')
-
-@section('content-header')
-  <h1>
-    Instructor
-    <small>learning</small>
-  </h1>
-
-  <ol class="breadcrumb">
-    <li><a href="{{ url('/home') }}">Home</a></li>
-    <li class="active">Instructor</li>
-  </ol>
-@endsection
-
-@section('content')
-
-      <div class="row">
-
-        @foreach($data as $dt)
-        <div class="col-md-4">
-          <!-- Box Comment -->
-          <div class="box box-widget">
-            <div class="box-body">
-              <a href="#" data-toggle="modal" data-target="#{{$dt->id}}">
-                  <img class="img-responsive pad" src="{{ url('upload/nusia-ins/'.$dt->image) }}" alt="Photo">
-                </a>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-
-        <div class="modal fade" id="{{$dt->id}}">
-          <div class="modal-dialog">
-            <div class="modal-content">
-            <!-- Profile Image -->
-            <div class="box box-primary">
-              <div class="box-body box-profile">
-                <img class="profile-user-img img-responsive img-circle" src="{{ url('upload/nusia-ins/'.$dt->image) }}" alt="User profile picture">
-
-                <h3 class="profile-username text-center">{{$dt->user->name}}</h3>
-
-                <p class="text-muted text-center">I am Your Instructor</p>
-
-                <ul class="list-group list-group-unbordered">
-                  <li class="list-group-item">
-                    <b>Professional Experiences</b> 
-                    <p>
-                      {{ nl2br(e($dt->pro_experiences,false)) }}
-                    </p>
-                  </li>
-                  <li class="list-group-item">
-                    <b>Interest</b>
-                    <p>{{ $dt->interest }}</p>
-                  </li>
-                </ul>
-
-                <a href="{{ url('/schedule/'.Auth::user()->id).'/'.$dt->id }}" class="btn btn-primary btn-block"><b>Choose</b></a>
-              </div>
-              <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-        @endforeach
-      </div>
-
-@endsection
-
+@section('title', 'Class Nusia')
 
 @push('style')
 <!-- Tell the browser to be responsive to screen width -->
@@ -129,3 +56,70 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{{ url('adminlte/dist/js/demo.js')}}"></script>
 @endpush
+
+@section('content')
+
+      <div class="row">
+
+        @foreach($data as $dt)
+        <div class="col-md-4">
+          <!-- Box Comment -->
+          
+          <div class="box box-widget">
+          	<div class="box-header with-border">
+	        	<h3 class="box-title">{{ $dt->name }}</h3>
+	        </div>
+	        <!-- /.box-header-->
+            <div class="box-body">
+              <a href="#" data-toggle="modal" data-target="#{{$dt->id}}">
+                  <img class="img-responsive pad" src="http://placehold.it/900x500/39CCCC/ffffff&text=I+Love+Bootstrap" alt="Photo">
+                </a>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+            	<div class="pull-left">
+            		<p>Description :</p>
+            		<p>{{ $dt->detail }}</p>
+            	</div>
+            	<div class="pull-right">
+            		<p>Session : {{ $dt->session }}</p>
+            	</div>
+            </div>
+            <!-- /.box-footer-->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+        <div class="modal fade" id="{{$dt->id}}">
+          <div class="modal-dialog">
+            <div class="modal-content">
+            <!-- Profile Image -->
+            <div class="box box-primary">
+              <div class="box-body box-profile">
+                <h3 class="profile-username text-center">{{$dt->name}}</h3>
+                <ul class="list-group list-group-unbordered">
+                  <li class="list-group-item">
+                	<a href="#" class="btn btn-primary btn-block"><b>Low</b></a>
+                  </li>
+                  <li class="list-group-item">
+                	<a href="#" class="btn btn-primary btn-block"><b>Mid</b></a>
+                  </li>
+                  <li class="list-group-item">
+                	<a href="#" class="btn btn-primary btn-block"><b>High</b></a>
+                  </li>
+                </ul>
+
+              </div>
+              <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        @endforeach
+      </div>
+@endsection

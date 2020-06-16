@@ -118,6 +118,11 @@ class ScheduleController extends Controller
         return redirect('/schedule/'.$request->id);
     }
 
+    public function calendar()
+    {
+        return view('calendar.index');
+    }
+
     /**
      * Display the specified resource.
      *

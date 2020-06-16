@@ -39,6 +39,10 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::get('/material/student/{id_class}','MaterialClassController@student')->name('material.student');
 
 	Route::get('/schedule/instructors','ScheduleController@instructors');
+	//halaman classrooms
+	Route::get('/classroom','ClassroomController@index')->name('classroom.index');
+	//halaman calendar
+	Route::get('/calendar','ScheduleController@calendar')->name('calendar.index');
 
 });
 
