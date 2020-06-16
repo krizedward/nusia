@@ -38,6 +38,8 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::get('/material/download/{id}','MaterialClassController@download');
 	Route::get('/material/student/{id_class}','MaterialClassController@student')->name('material.student');
 
+	Route::get('/schedule/instructors','ScheduleController@instructors');
+
 });
 
 Auth::routes();

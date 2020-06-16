@@ -40,12 +40,14 @@ class ScheduleController extends Controller
 
     public function choose($user_id, $id)
     {
-        $student    = Student::where('user_id',$user_id)->first();
+        $role       = Student::where('user_id',$user_id)->first();
         $choose     = Instructors::where('id',$id)->first();
-        $data       = Schedule::all();
+        $data       = VerficationSchedule::all();
         $class      = Classroom::all();
         $instructor = Instructors::all();
-        return view('schedule.index',compact('data','class','instructor','student','choose'));
+        return view('schedule.index',compact('data','class','instructor','role','choose'));
+        
+        //return dd($choose);
     }
 
     public function verfication($user_id, $vs_id)

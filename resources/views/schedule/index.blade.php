@@ -64,6 +64,7 @@
 
 @endif
 
+<!-- student -->
 @if(Auth::user()->level == 'student')
 
 @section('content-header')
@@ -267,7 +268,7 @@
 @endsection
 
 @endif
-
+<!-- admin -->
 @if(Auth::user()->level == 'admin')
 <p>Hello Admin</p>
 @endif
