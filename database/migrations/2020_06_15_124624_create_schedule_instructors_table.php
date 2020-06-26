@@ -16,6 +16,7 @@ class CreateScheduleInstructorsTable extends Migration
         Schema::create('schedule_instructors', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('instructor_id');
+            $table->unsignedBigInteger('class_id');
             $table->time('time_meet')->nullable();
             $table->date('date_meet')->nullable();
             $table->timestamps();
@@ -23,6 +24,11 @@ class CreateScheduleInstructorsTable extends Migration
             $table->foreign('instructor_id')
             ->references('id')
             ->on('instructors')
+            ->onDelete('cascade');
+
+            $table->foreign('class_id')
+            ->references('id')
+            ->on('classrooms')
             ->onDelete('cascade');
             
         });

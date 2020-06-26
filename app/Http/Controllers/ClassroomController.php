@@ -18,6 +18,11 @@ class ClassroomController extends Controller
         return view('classroom.index', compact('data'));
     }
 
+    public function choose($id)
+    {
+        return redirect()->route('instructors.index',$id);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

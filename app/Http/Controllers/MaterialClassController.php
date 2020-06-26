@@ -21,6 +21,13 @@ class MaterialClassController extends Controller
         return view('material.index',compact('data','class'));
     }
 
+    public function detail($id)
+    {
+        $data  = MaterialClass::all();
+        $class = Classroom::all();
+        return view('material.detail',compact('data','class'));
+    }
+
     public function download($id)
     {
         $model_file = MaterialClass::findOrFail($id); //Mencari model atau objek yang dicari

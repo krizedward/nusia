@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Instructors;
+use App\Models\Classroom;
+use App\Models\ScheduleInstructor;
 use Illuminate\Http\Request;
 
 class InstructorsController extends Controller
@@ -12,10 +14,49 @@ class InstructorsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
         $data = Instructors::all();
-        return view('instructors.index',compact('data'));
+        $class = Classroom::where('id',$id)->first();
+        return view('instructors.index',compact('data','class'));
+    }
+
+    public function choose($class, $instructors)
+    {
+        return redirect()->route('time.index',[$class,$instructors]);
+    }
+
+    public function schedule(Request $request, $id)
+    {
+        $this->validate($request,[
+            'class' => 'required',
+            'time_meet'  => 'required',
+            'date_meet'  => 'required',
+        ]);
+
+        $dt = Instructors::where('user_id',$request->id)->first();
+        
+        ScheduleInstructor::create([
+            'instructor_id' => $dt->id,
+            'class_id'      => $request->class,
+            'time_meet'     => date('H:i:s', strtotime($request->time_meet)),
+            'date_meet'     => date('yy/m/d', strtotime($request->date_meet)),
+        ]);
+
+        return redirect('/schedule/'.$id);
+        
+        /*
+
+        ScheduleInstructor::create([
+            'instructor_id' => '1',
+            'class_id'      => '1',
+            'time_meet'     => '01:01:01',
+            'date_meet'     => '2020-02-02',
+        ]);
+
+        */
+
+        //return dd($request->id);
     }
 
     /**

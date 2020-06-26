@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title','Calendar')
+@section('title','Summary')
 
 @push('style')
 
@@ -50,53 +50,12 @@
 	<script src="{{ url('adminlte/bower_components/moment/moment.js')}}"></script>
 	<script src="{{ url('adminlte/bower_components/fullcalendar/dist/fullcalendar.min.js')}}"></script>
 	<!-- Page specific script -->
-
-	<script>
-	  $(function () {
-
-	    /* initialize the calendar
-	     -----------------------------------------------------------------*/
-	    //Date for the calendar events (dummy data)
-	    var date = new Date()
-	    var d    = date.getDate(),
-	        m    = date.getMonth(),
-	        y    = date.getFullYear()
-	    $('#calendar').fullCalendar({
-	      header    : {
-	        left  : 'prev,next today',
-	        center: 'title',
-	        right : 'month,agendaWeek'
-	      },
-	      buttonText: {
-	        today: 'today',
-	        month: 'month',
-	        week : 'week',
-	      },
-	      //Random default events
-	      events    : [
-	      //mengambil data dari model
-	      	@foreach($data as $dt)
-            @if($dt->instructor_id == $instructor->id)
-    	       	{
-    	        	title 	: '{{ $dt->instructor->user->name }}',
-    	            start 	: '{{ $dt->date_meet }} {{ $dt->time_meet }}',
-    	            url 	: '{{ route('schedule.summary', [$class->id,$instructor->id,$dt->id,]) }}'
-    	        },
-            @endif
-	        @endforeach
-	      ],
-	      editable  : false,
-	      droppable : false, // this allows things to be dropped onto the calendar !!!
-	      
-	    })
-
-	  })//end
-	</script>
 @endpush
 
 @section('content')
 	
       <div class="row">
+
         <div class="col-md-4">
 
           <div class="callout callout-danger">
@@ -118,8 +77,8 @@
 
         <div class="col-md-4">
           <div class="callout callout-warning">
-            <h4>Time</a></h4>
-            <form action="#">  
+            <h4>Time - {{date('H:i s', strtotime($time->time_meet)) }} ( {{ date('d M yy', strtotime($time->date_meet)) }} )</a></h4>
+            <form action="{{ route('instructors.choose',[$class->id,$instructor->id]) }}">  
                 <button type="submit" class="btn btn-warning btn-block btn-flat">Select</button>
             </form>
           </div>
@@ -128,41 +87,68 @@
       </div>
 
       <div class="row">
-        <div class="col-md-3">
-          <div class="box box-solid">
-            <div class="box-header with-border">
-              <h3 class="box-title">Date Available</h3>
-            </div>
-            <div class="box-body">
-              <table class="table table-bordered">
-                  <tr>
-                    <th style="width: 10px">#</th>
-                    <th>Date</th>
-                  </tr>
-                  @foreach($data as $dt)
-                    @if($dt->instructor_id == $instructor->id)
-                      <tr>
-                        <td>1</td>
-                        <td>{{ date('d M yy', strtotime($dt->date_meet))}}</td>
-                      </tr>
-                    @endif
-                  @endforeach
-                </table>
-            </div>
-          </div>
+        
+    <!-- Main content -->
+    <section class="invoice">
+      <!-- title row -->
+      <div class="row">
+        <div class="col-xs-12">
+          <h2 class="page-header">
+            <i class="fa fa-book"></i> Summary Book Nusia.
+            <small class="pull-right">Date: 2/10/2014</small>
+          </h2>
         </div>
         <!-- /.col -->
-        <div class="col-md-9">
-          <div class="box box-primary">
-            <div class="box-body no-padding">
-              <!-- THE CALENDAR -->
-              <div id="calendar"></div>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /. box -->
+      </div>
+      <!-- info row -->
+
+      <!-- Table row -->
+      <div class="row">
+        <div class="col-xs-12 table-responsive">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>Qty</th>
+              <th>Class</th>
+              <th>Level</th>
+              <th>Session</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Instructor</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>1</td>
+              <td>{{ $class->name }}</td>
+              <td>{{ $class->level }}</td>
+              <td>{{ $class->session }}</td>
+              <td>{{date('H:i s', strtotime($time->time_meet)) }}</td>
+              <td>{{date('d M yy', strtotime($time->date_meet)) }}</td>
+              <td>{{ $instructor->user->name }}</td>
+            </tr>
+            </tbody>
+          </table>
         </div>
         <!-- /.col -->
       </div>
       <!-- /.row -->
+
+      <!-- this row will not appear when printing -->
+      <div class="row no-print">
+        <div class="col-xs-12">
+          
+          <form action="{{ route('schedule.savesummary',[$class->id,$instructor->id,$time->time_meet,$time->date_meet,Auth::user()->id]) }}">  
+            <button type="submit" class="btn btn-success pull-right">Submit</button>
+          </form>
+          <form action="{{ route('instructors.choose',[$class->id,$instructor->id]) }}">  
+            <button type="submit" class="btn btn-primary pull-right" style="margin-right: 5px;">Back</button>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+    <div class="clearfix"></div>
+    </div>
+
 @endsection

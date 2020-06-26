@@ -8,6 +8,7 @@ use App\Models\VerficationSchedule;
 use App\Models\Classroom;
 use App\Models\Student;
 use App\Models\Instructors;
+use App\Models\ScheduleInstructor;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -19,9 +20,10 @@ class ScheduleController extends Controller
      */
     public function index($id)
     {
+        //parameter mencari id
         $temp    = User::where('id',$id)->first();
         
-
+        //cek student atau instructor
         if ($temp->level == 'student') 
         {
             $role    = Student::where('user_id',$id)->first();
@@ -31,11 +33,14 @@ class ScheduleController extends Controller
         {
             $role    = Instructors::where('user_id',$id)->first();
         }
-        
+        //mengambil data-data
         $data       = VerficationSchedule::all();
         $class      = Classroom::all();
         $instructor = Instructors::all();
-        return view('schedule.index',compact('data','class','instructor','role'));
+        //mengambil data jadwal instruktur
+        $instructor_schedule = ScheduleInstructor::all();
+        
+        return view('schedule.index',compact('data','class','instructor','role','instructor_schedule'));
     }
 
     public function choose($user_id, $id)
@@ -118,9 +123,45 @@ class ScheduleController extends Controller
         return redirect('/schedule/'.$request->id);
     }
 
-    public function calendar()
+    public function calendar($class,$instructor)
     {
-        return view('calendar.index');
+        $data = ScheduleInstructor::all();
+        $class = Classroom::where('id',$class)->first();
+        $instructor = Instructors::where('id',$instructor)->first();
+        return view('calendar.index',compact('data','class','instructor'));
+    }
+
+    public function summary($class,$instructor,$time)
+    {
+        $time       = ScheduleInstructor::where('id',$time)->first();
+        $class      = Classroom::where('id',$class)->first();
+        $instructor = Instructors::where('id',$instructor)->first();
+        return view('schedule.summary',compact('time','class','instructor'));
+    }
+
+    public function savesummary($class,$instructor,$time,$date,$user)
+    {
+        $dt = Student::where('user_id',$user)->first();
+
+        Schedule::create([
+            'student_id'    => $dt->id,
+            'instructor_id' => $instructor,
+            'class_id'      => $class,
+            'time_meet'     => $time,
+            'date_meet'     => $date,
+        ]);
+
+        $temp = Schedule::all()->last();
+
+        VerficationSchedule::create([
+            'schedule_id'   => $temp->id,
+            'status'        =>'Request',
+        ]);
+
+        \Session::flash('Schedule-Student','Create Schedule Success!');
+ 
+
+        return redirect('/schedule/'.$user);
     }
 
     /**

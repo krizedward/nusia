@@ -2,7 +2,7 @@
 
 @section('title', 'Instructor')
 
-@section('content-header')
+@section('content-headers')
   <h1>
     Instructor
     <small>learning</small>
@@ -15,7 +15,37 @@
 @endsection
 
 @section('content')
+      <div class="row">
+        <div class="col-md-4">
 
+          <div class="callout callout-danger">
+            <h4>Class - {{ $class->name }} ( {{ $class->level }} )</h4>
+            <form action="{{ url('/classroom') }}">  
+              <button type="submit" class="btn btn-danger btn-block btn-flat">Select</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="callout callout-info">
+            <h4>Instructor</h4>
+            <form action="#">  
+              <button type="submit" class="btn btn-info btn-block btn-flat disabled">Select</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="callout callout-default">
+            <h4>Time</a></h4>
+            <form action="#">  
+              <button type="submit" class="btn btn-block btn-default disabled">Select</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      
       <div class="row">
 
         @foreach($data as $dt)
@@ -58,9 +88,9 @@
                   </li>
                 </ul>
 
-                <a href="{{ url('/schedule/'.Auth::user()->id).'/'.$dt->id }}" class="btn btn-primary btn-block"><b>Choose</b></a>
+                <a href="{{ route('instructors.choose',[$class->id,$dt->id]) }}" class="btn btn-primary btn-block"><b>Choose</b></a>
               </div>
-              <!-- /.box-body -->
+              <!-- /.box-body {{ url('/schedule/'.Auth::user()->id).'/'.$dt->id }} -->
             </div>
             <!-- /.box -->
             </div>

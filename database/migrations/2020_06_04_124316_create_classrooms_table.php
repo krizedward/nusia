@@ -18,7 +18,7 @@ class CreateClassroomsTable extends Migration
             $table->string('name')->nullable();
             $table->integer('session')->nullable();
             $table->integer('price')->nullable();
-            $table->string('type')->nullable();
+            $table->string('level')->nullable();
             $table->text('detail')->nullable();
             $table->timestamps();
         });

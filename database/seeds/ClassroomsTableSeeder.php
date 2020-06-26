@@ -13,27 +13,83 @@ class ClassroomsTableSeeder extends Seeder
     public function run()
     {
         Classroom::create([
-        	'name'		=>'Beginning',
+            'name'      =>'Trial',
+            'session'   =>10,
+            'price'     =>100,
+            'level'     =>'low',
+            'detail'    =>'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        ]);
+
+        Classroom::create([
+        	'name'		=>'Novice',
         	'session'	=>10,
         	'price'		=>100,
-        	'type'		=>'dummy',
+        	'level'		=>'low',
         	'detail'	=>'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        ]);
+
+        Classroom::create([
+            'name'      =>'Novice',
+            'session'   =>10,
+            'price'     =>100,
+            'level'     =>'mid',
+            'detail'    =>'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        ]);
+
+        Classroom::create([
+            'name'      =>'Novice',
+            'session'   =>10,
+            'price'     =>100,
+            'level'     =>'high',
+            'detail'    =>'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         ]);
 
         Classroom::create([
         	'name'		=>'Intermediate',
         	'session'	=>10,
         	'price'		=>100,
-        	'type'		=>'dummy',
+        	'level'		=>'low',
         	'detail'	=>'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        ]);
+
+        Classroom::create([
+            'name'      =>'Intermediate',
+            'session'   =>10,
+            'price'     =>100,
+            'level'     =>'mid',
+            'detail'    =>'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        ]);
+
+        Classroom::create([
+            'name'      =>'Intermediate',
+            'session'   =>10,
+            'price'     =>100,
+            'level'     =>'high',
+            'detail'    =>'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         ]);
 
         Classroom::create([
         	'name'		=>'Advanced',
         	'session'	=>10,
         	'price'		=>100,
-        	'type'		=>'dummy',
+        	'level'		=>'low',
         	'detail'	=>'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        ]);
+
+        Classroom::create([
+            'name'      =>'Advanced',
+            'session'   =>10,
+            'price'     =>100,
+            'level'     =>'mid',
+            'detail'    =>'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        ]);
+
+        Classroom::create([
+            'name'      =>'Advanced',
+            'session'   =>10,
+            'price'     =>100,
+            'level'     =>'high',
+            'detail'    =>'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         ]);
     }
 }

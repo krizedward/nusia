@@ -105,7 +105,25 @@
         </div>
         <!-- ./col -->
       </div>
-      <!-- /.row -->
+
+      <div class="row">
+        <div class="col-lg-6">
+          <table>
+            <thead>
+              <tr>
+                <th>Class</th>
+                <th>Private/Group</th>
+                <th>Level</th>
+                <th>Session</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Link</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+      
 @endif
 
 @if(Auth::user()->level == 'admin')

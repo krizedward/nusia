@@ -31,11 +31,13 @@
 
 @section('content-header')
   <h1>
-    Share Material
+    Detail
+    <small>Share Material</small>
   </h1>
 
   <ol class="breadcrumb">
     <li><a href="{{ url('/home') }}">Home</a></li>
+    <li><a href="{{ route('material.index') }}">Share Material</a></li>
     <li class="active">Detail</li>
   </ol>
 @endsection
@@ -71,7 +73,7 @@
                       <select class="form-control select2" name="class">
                           <option selected="" disabled="">Choose Session</option>
                           @foreach($class as $dt)
-                          <option value="{{$dt->id}}">{{$dt->name}}</option>
+                          <option value="{{$dt->id}}">{{$dt->name}}-{{$dt->level}}</option>
                           @endforeach
                       </select>
                   </div>
@@ -104,18 +106,22 @@
                 <thead>
                 <tr>
                   <th>#</th>
+                  <th>Instructor</th>
                   <th>Class</th>
+                  <th>Title File</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($class as $e=>$dt)
+                @foreach($data as $e=>$dt)
                 <tr>
                   <td>{{ $e+1 }}</td>
-                  <td>{{ $dt->name}}-{{ $dt->level}}</td>
+                  <td>{{ $dt->instructor->user->name }}</td>
+                  <td>{{ $dt->class->name }}-{{ $dt->class->level }}</td>
+                  <td>{{ $dt->title }}</td>
                   <td>
                     <p>
-                      <a href="{{ route('material.detail', $dt->id) }}" class="btn btn-flat btn-xs btn-info">Detail</a>
+                      <a href="{{ url('/material/download/'.$dt->id) }}" class="btn btn-flat btn-xs btn-success"><i class="fa fa-download"></i></a>
                     </p>
                   </td>
                 </tr>

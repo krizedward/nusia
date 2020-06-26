@@ -22,6 +22,8 @@
       @yield('content-header')
     </section>
 
+    
+    
     <section class="content">
       @include('layouts.admin.flash_message')
 
