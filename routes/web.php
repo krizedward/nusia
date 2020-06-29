@@ -17,12 +17,14 @@ Route::get('/', function () {
 
 Route::group(['middleware'=>'auth'], function() {
 
-	Route::get('/home', function() {
+	Route::get('/home',function() {
 		return view('home');
 	})->name('home');
 
 	//Route::get('/home/{id}', 'HomeController@index')->name('home');
 
+	//menampilkan detail dari schedule
+	Route::get('/schedule/detail/{id_schedule}','ScheduleController@detail')->name('schedule.detail');
 	//menampilkan halaman schedule
 	Route::get('/schedule/{user_id}', 'ScheduleController@index')->name('schedule.index');
 	//url create schedule instuctor
@@ -61,7 +63,18 @@ Route::group(['middleware'=>'auth'], function() {
 	Route::get('/classroom/{id_class}/instructors/{id_instructors}/time/{id_schedule}','ScheduleController@summary')->name('schedule.summary');
 	//menyimpan url schedule
 	Route::get('/classroom/{id_class}/instructors/{id_instructors}/time/{id_time}/date/{id_date}/user/{id_user}','ScheduleController@savesummary')->name('schedule.savesummary');
+	/*
+	Route::get('/home', function() {
+		
+		$parameter =[
+			'id' 	=> Auth::user()->id,
+			'nama' 	=> Auth::user()->name,
+		];
 
+		$enkripsi= \Crypt::encrypt($parameter);
+		return view('home',compact('enkripsi'));
+	})->name('home');
+	*/
 });
 
 Auth::routes();

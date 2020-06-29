@@ -69,6 +69,46 @@
         <!-- ./col -->
       </div>
       <!-- /.row -->
+
+      <div class="row">
+        <div class="col-md-9">
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Schedule Instructor</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Class</th>
+                  <th>Level</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                      
+                <tbody>
+                <tr>
+                  <td>ads</td>
+                  <td>ads</td>
+                  <td>ads</td>
+                  <td>ads</td>
+                  <td>ads</td>
+                  <td>ads</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+      <!-- /.col -->
+      </div>
+      <!-- /.row -->
 @endif
 
 @if(Auth::user()->level == 'student')

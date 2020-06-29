@@ -84,6 +84,11 @@ class ScheduleController extends Controller
         return view('session.index', compact('data','role'));
     }
 
+    public function detail()
+    {
+        return view('schedule.detail');
+    }
+
     /**
      * Store a newly created resource in storage.
      *

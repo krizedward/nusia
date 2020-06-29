@@ -31,7 +31,41 @@
             <div class="row">
               <div class="col-md-12">
 
-                @if($errors->has('class_id'))
+                @if($errors->has('type'))
+                <div class="form-group">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="type" value="private" checked="">
+                      Private Class
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="type" value="group">
+                      Group Class
+                    </label>
+                  </div>
+                </div>
+                <!-- /.form-group -->
+                @else
+                <div class="form-group">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="type" value="private" checked="">
+                      Private Class
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="type" value="group">
+                      Group Class
+                    </label>
+                  </div>
+                </div>
+                <!-- /.form-group -->
+                @endif
+
+                @if($errors->has('class'))
                 <div class="form-group has-error">
                   <label>Class</label>
                   <select class="form-control select2" style="width: 100%;" name="class">
@@ -124,7 +158,6 @@
           </form>
         </div>
       </div>
-
       <!-- /.col -->
       <div class="col-md-9">
         <div class="box box-info">
@@ -136,7 +169,7 @@
             <table id="example1" class="table table-bordered table-striped">
               <thead>
               <tr>
-                <th>Student Name</th>
+                <th>Name</th>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Class</th>
@@ -155,7 +188,7 @@
                   <td>{{ $dt->class->name }}</td>
                   <td>{{ $dt->class->level }}</td>
                   <td>
-                    <a class="btn btn-flat btn-xs btn-info" href="#"><i class="fa fa-list"></i></a>
+                    <a class="btn btn-flat btn-xs btn-info" href="{{ route('schedule.detail',Auth::user()->id) }}"><i class="fa fa-list"></i></a>
                     <a class="btn btn-flat btn-xs btn-warning" href="#"><i class="fa fa-pencil"></i></a>
                     <a class="btn btn-flat btn-xs btn-danger" href="#"><i class="fa fa-trash"></i></a>
                   </td>
@@ -172,7 +205,9 @@
           </div>
           <!-- /.box -->
       </div>
-      <!-- /.row -->
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
   @endsection
 @endif
 

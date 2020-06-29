@@ -67,15 +67,20 @@
                   <!-- /.form-group -->
                   
                   <div class="form-group">
-                    <label>Session</label>
+                    <label>Class</label>
                       <select class="form-control select2" name="class">
-                          <option selected="" disabled="">Choose Session</option>
+                          <option selected="" disabled="">Choose Class</option>
                           @foreach($class as $dt)
                           <option value="{{$dt->id}}">{{$dt->name}}</option>
                           @endforeach
                       </select>
                   </div>
                   <!-- /.form-group -->
+
+                  <div class="form-group">
+                    <label>Session</label>
+                    <input type="text" name="session" class="form-control">
+                  </div>
 
                   <div class="form-group">
                     <label>Upload File</label>
