@@ -3,34 +3,34 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\User;
-use App\Models\Student;
-use App\Models\Instructors;
-use App\Models\Classroom;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Schedule extends Model
 {
+    use SoftDeletes;
+
+    protected $table = "schedules";
+    protected $primaryKey = 'id';
+
     protected $fillable = [
-    	'student_id',
-        'instructor_id',
-        'class_id',
-        'time_meet',
-        'date_meet',
-        'zoom_link',
+        'user_id',
+        'schedule_time',
+        'status'
     ];
 
-    public function student()
+    /**
+     * Define a relationship.
+     */
+    public function user()
     {
-    	return $this->belongsTo(Student::class);
+    	return $this->belongsTo('App\User', 'id');
     }
 
-    public function instructor()
+    /**
+     * Define a relationship.
+     */
+    public function session()
     {
-    	return $this->belongsTo(Instructors::class);
-    }
-
-    public function class()
-    {
-    	return $this->belongsTo(Classroom::class);
+    	return $this->hasOne('App\Models\Session', 'schedule_id');
     }
 }
