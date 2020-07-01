@@ -16,6 +16,15 @@ class CreateSessionsTable extends Migration
         Schema::create('sessions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('slug')->unique();
+            $table->unsignedBigInteger('course_id');
+            $table->unsignedBigInteger('schedule_id');
+            $table->string('title')->nullable();
+            $table->text('description')->nullable();
+            $table->text('requirement')->nullable();
+            $table->text('link_zoom')->nullable();
+            $table->timestamps();
+            $table->softDeletes()->nullable();
+
             $table->foreign('course_id')
                 ->references('id')->on('courses')
                 ->onUpdate('cascade')
@@ -24,12 +33,6 @@ class CreateSessionsTable extends Migration
                 ->references('id')->on('schedules')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string('title')->nullable();
-            $table->text('description')->nullable();
-            $table->text('requirement')->nullable();
-            $table->text('link_zoom')->nullable();
-            $table->timestamps();
-            $table->softDeletes()->nullable();
         });
     }
 

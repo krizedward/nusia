@@ -15,11 +15,8 @@ class CreateUserSurveysTable extends Migration
     {
         Schema::create('user_surveys', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
             $table->string('slug')->unique();
-            $table->foreign('user_id')
-                ->references('id')->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
             $table->integer('age')->unsigned()->nullable();
             $table->enum('status_job', ['Professional', 'Student']);
             $table->text('status_description')->nullable();
@@ -32,6 +29,11 @@ class CreateUserSurveysTable extends Migration
             $table->text('learning_objective')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
+
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

@@ -16,15 +16,17 @@ class CreateMaterialPublicsTable extends Migration
         Schema::create('material_publics', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('slug')->unique();
-            $table->foreign('course_package_id')
-                ->references('id')->on('course_packages')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('course_package_id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->text('path')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
+
+            $table->foreign('course_package_id')
+                ->references('id')->on('course_packages')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

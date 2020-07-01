@@ -15,6 +15,11 @@ class CreateCourseRegistrationsTable extends Migration
     {
         Schema::create('course_registrations', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('course_id');
+            $table->unsignedBigInteger('user_id');
+            $table->timestamps();
+            $table->softDeletes()->nullable();
+
             $table->foreign('course_id')
                 ->references('id')->on('courses')
                 ->onUpdate('cascade')
@@ -23,8 +28,6 @@ class CreateCourseRegistrationsTable extends Migration
                 ->references('id')->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->timestamps();
-            $table->softDeletes()->nullable();
         });
     }
 

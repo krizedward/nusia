@@ -15,6 +15,13 @@ class CreateSessionRegistrationsTable extends Migration
     {
         Schema::create('session_registrations', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('session_id');
+            $table->unsignedBigInteger('course_registration_id');
+            $table->timestamp('registration_time')->nullable();
+            $table->enum('status', ['Not Present', 'Present']);
+            $table->timestamps();
+            $table->softDeletes()->nullable();
+
             $table->foreign('session_id')
                 ->references('id')->on('sessions')
                 ->onUpdate('cascade')
@@ -23,10 +30,6 @@ class CreateSessionRegistrationsTable extends Migration
                 ->references('id')->on('course_registrations')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->timestamp('registration_time')->nullable();
-            $table->enum('status', ['Not Present', 'Present']);
-            $table->timestamps();
-            $table->softDeletes()->nullable();
         });
     }
 

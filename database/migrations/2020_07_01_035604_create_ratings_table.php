@@ -15,14 +15,16 @@ class CreateRatingsTable extends Migration
     {
         Schema::create('ratings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreign('session_id')
-                ->references('id')->on('sessions')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('session_id');
             $table->integer('rating')->unsigned();
             $table->text('comment')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
+
+            $table->foreign('session_id')
+                ->references('id')->on('sessions')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

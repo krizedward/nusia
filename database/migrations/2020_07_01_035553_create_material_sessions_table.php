@@ -16,15 +16,17 @@ class CreateMaterialSessionsTable extends Migration
         Schema::create('material_sessions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('slug')->unique();
-            $table->foreign('session_id')
-                ->references('id')->on('sessions')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('session_id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->text('path')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
+
+            $table->foreign('session_id')
+                ->references('id')->on('sessions')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

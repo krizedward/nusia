@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return redirect('login');
-});
+Route::redirect('/', 'login');
 
 Route::group(['middleware'=>'auth'], function() {
 
