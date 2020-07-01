@@ -1,0 +1,46 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateScheduleInstructorsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('schedule_instructors', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('instructor_id');
+            $table->unsignedBigInteger('class_id');
+            $table->time('time_meet')->nullable();
+            $table->date('date_meet')->nullable();
+            $table->timestamps();
+
+            $table->foreign('instructor_id')
+            ->references('id')
+            ->on('instructors')
+            ->onDelete('cascade');
+
+            $table->foreign('class_id')
+            ->references('id')
+            ->on('classrooms')
+            ->onDelete('cascade');
+            
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('schedule_instructors');
+    }
+}
