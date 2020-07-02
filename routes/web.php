@@ -27,21 +27,21 @@ Route::group(['middleware'=>'auth'], function() {
             | Izin Akses "MaterialType"
             |-------------------------------------------------
             | ADMIN
-            | .index   -> Akses semua row dalam satu tampilan yang sama.
-            | .create  -> Membuat jenis materi baru.
-            | .store   -> Mengirim request pembuatan jenis materi baru.
-            | .show    -> 
-            | .edit    -> 
-            | .update  -> 
-            | .destroy -> 
+            | .index   -> code, name, description (simple)
+            | .create  -> (+) code, name, description
+            | .store   -> (+) id, slug, created_at
+            | .show    -> code, name, description (full)
+            | .edit    -> code, name, description (full)
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at
             |
             | INSTRUCTOR
-            | .index   -> Akses semua row dalam satu tampilan yang sama.
-            | .show    -> 
+            | .index   -> code, name, description (simple)
+            | .show    -> code, name, description (full)
             |
             | STUDENT
-            | .index   -> Akses semua row dalam satu tampilan yang sama.
-            | .show    -> 
+            | .index   -> code, name, description (simple)
+            | .show    -> code, name, description (full)
             */
 
             'material_types'       => 'MaterialTypeController',
@@ -50,24 +50,269 @@ Route::group(['middleware'=>'auth'], function() {
             |-------------------------------------------------
             | Izin Akses "CourseType"
             |-------------------------------------------------
-            | .index   -> ADMIN, INSTRUCTOR, STUDENT
-            | .create  -> ADMIN
-            | .store   -> ADMIN
-            | .show    -> ADMIN, INSTRUCTOR, STUDENT
-            | .edit    -> ADMIN
-            | .update  -> ADMIN
-            | .destroy -> ADMIN
+            | ADMIN
+            | .index   -> code, name, description (simple), count_student_min, count_student_max
+            | .create  -> (+) code, name, description, count_student_min, count_student_max
+            | .store   -> (+) id, slug, created_at
+            | .show    -> code, name, description (full), count_student_min, count_student_max
+            | .edit    -> code, name, description (full), count_student_min, count_student_max
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at
+            |
+            | INSTRUCTOR
+            | .index   -> code, name, description (simple), count_student_min, count_student_max
+            | .show    -> code, name, description (full), count_student_min, count_student_max
+            |
+            | STUDENT
+            | .index   -> code, name, description (simple), count_student_min, count_student_max
+            | .show    -> code, name, description (full), count_student_min, count_student_max
             */
 
             'course_types'         => 'CourseTypeController',
+
+            /*
+            |-------------------------------------------------
+            | Izin Akses "CourseLevel"
+            |-------------------------------------------------
+            | ADMIN
+            | .index   -> code, name, description (simple)
+            | .create  -> (+) code, name, description
+            | .store   -> (+) id, slug, created_at
+            | .show    -> code, name, description (full)
+            | .edit    -> code, name, description (full)
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at
+            |
+            | INSTRUCTOR
+            | .index   -> code, name, description (simple)
+            | .show    -> code, name, description (full)
+            |
+            | STUDENT
+            | .index   -> code, name, description (simple)
+            | .show    -> code, name, description (full)
+            */
+
             'course_levels'        => 'CourseLevelController',
+
+            /*
+            |-------------------------------------------------
+            | Izin Akses "CourseLevelDetail"
+            |-------------------------------------------------
+            | ADMIN
+            | .index   -> code, name, description (simple)
+            | .create  -> (+) code, name, description
+            | .store   -> (+) id, slug, created_at
+            | .show    -> code, name, description (full)
+            | .edit    -> code, name, description (full)
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at
+            |
+            | INSTRUCTOR
+            | .index   -> code, name, description (simple)
+            | .show    -> code, name, description (full)
+            |
+            | STUDENT
+            | .index   -> code, name, description (simple)
+            | .show    -> code, name, description (full)
+            */
+
             'course_level_details' => 'CourseLevelDetailController',
+
+            /*
+            |-------------------------------------------------
+            | Izin Akses "CoursePackage"
+            |-------------------------------------------------
+            | ADMIN
+            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (simple), count_session, price
+            | .create  -> (+) material_type_id, course_type_id, course_level_id, course_level_detail_id, title, description (full), requirement (full), count_session, price
+            | .store   -> (+) id, slug, created_at
+            | .show    -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (full), requirement (full), count_session, price
+            | .edit    -> material_type_id, course_type_id, course_level_id, course_level_detail_id, title, description (full), requirement (full), count_session, price
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at
+            |
+            | INSTRUCTOR
+            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (simple), count_session, price
+            | .show    -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (full), requirement (full), count_session, price
+            |
+            | STUDENT
+            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (simple), count_session, price
+            | .show    -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (full), requirement (full), count_session, price
+            */
+
             'course_packages'      => 'CoursePackageController',
+
+            /*
+            |-------------------------------------------------
+            | Izin Akses "Course"
+            |-------------------------------------------------
+            | ADMIN
+            | .index   -> course_packages.title, title, description (simple)
+            | .create  -> (+) course_package_id FROM [material_types.name, course_types.name, course_levels.name, course_level_details.name], title, description (full), requirement (full)
+            | .store   -> (+) id, slug, created_at
+            | .show    -> course_packages.title, title, description (full), requirement (full)
+            | .edit    -> course_package_id FROM [material_types.name, course_types.name, course_levels.name, course_level_details.name], title, description (full), requirement (full)
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at
+            |
+            | INSTRUCTOR
+            | .index   -> course_packages.title, title, description (simple)
+            | .create  -> (+) course_package_id FROM [material_types.name, course_types.name, course_levels.name, course_level_details.name], title, description (full), requirement (full)
+            | .store   -> (+) id, slug, created_at
+            | .show    -> course_packages.title, title, description (full), requirement (full)
+            | .edit    -> course_package_id FROM [material_types.name, course_types.name, course_levels.name, course_level_details.name], title, description (full), requirement (full)
+            | .update  -> (+) updated_at
+            | .destroy -> (requested_to_ADMIN)
+            |
+            | STUDENT
+            | .index   -> course_packages.title, title, description (simple)
+            | .show    -> course_packages.title, title, description (full), requirement (full)
+            */
+
             'courses'              => 'CourseController',
+
+            /*
+            |-------------------------------------------------
+            | Izin Akses "Session"
+            |-------------------------------------------------
+            | ADMIN
+            | .index   -> users.name FROM [users.first_name, users.last_name], courses.title, schedules.schedule_time, title, description (simple), link_zoom
+            | .create  -> (+) course_id, users.id FROM [users.first_name, users.last_name], schedule_id FROM INPUT(DATE, TIME), title, description (full), requirement (full), link_zoom
+            | .store   -> (+) id, slug, created_at
+            | .show    -> users.name FROM [users.first_name, users.last_name], courses.title, schedules.schedule_time, title, description (full), requirement (full), link_zoom
+            | .edit    -> course_id, users.id FROM [users.first_name, users.last_name], schedule_id FROM INPUT(DATE, TIME), title, description (full), requirement (full), link_zoom
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at
+            |
+            | INSTRUCTOR
+            | .index   -> courses.title, schedules.schedule_time, title, description (simple), link_zoom
+            | .create  -> (+) course_id, schedule_id FROM INPUT(DATE, TIME), title, description (full), requirement (full), link_zoom
+            | .store   -> (+) id, slug, created_at
+            | .show    -> courses.title, schedules.schedule_time, title, description (full), requirement (full), link_zoom
+            | .edit    -> course_id, schedule_id FROM INPUT(DATE, TIME), title, description (full), requirement (full), link_zoom
+            | .update  -> (+) updated_at
+            | .destroy -> (requested_to_ADMIN)
+            |
+            | STUDENT
+            | .index   -> courses.title, schedules.schedule_time, title, description (simple), link_zoom
+            | .show    -> courses.title, schedules.schedule_time, title, description (full), requirement (full), link_zoom
+            */
+
             'sessions'             => 'SessionController',
+
+            /*
+            |-------------------------------------------------
+            | Izin Akses "CourseCertificate"
+            |-------------------------------------------------
+            | ADMIN
+            | .index   -> courses.name, users.name FROM [users.first_name, users.last_name], image FROM path
+            | .create  -> (+) course_registration_id FROM [courses.name, users.name FROM [users.first_name, users.last_name]], path FROM IMAGE
+            | .store   -> (+) id, slug, created_at
+            | .show    -> courses.name, users.name FROM [users.first_name, users.last_name], image FROM path
+            | .edit    -> course_registration_id FROM [courses.name, users.name FROM [users.first_name, users.last_name]], path FROM IMAGE
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at
+            |
+            | INSTRUCTOR
+            | .index   -> courses.name, users.name FROM [users.first_name, users.last_name], image FROM path
+            | .create  -> (+) course_registration_id FROM [courses.name, users.name FROM [users.first_name, users.last_name]], path FROM IMAGE
+            | .store   -> (+) id, slug, created_at
+            | .show    -> courses.name, users.name FROM [users.first_name, users.last_name], image FROM path
+            | .edit    -> course_registration_id FROM [courses.name, users.name FROM [users.first_name, users.last_name]], path FROM IMAGE
+            | .update  -> (requested_to_ADMIN)
+            |
+            | STUDENT
+            | .index   -> courses.name, image FROM path
+            | .show    -> courses.name, image FROM path
+            */
+
             'course_certificates'  => 'CourseCertificateController',
+
+            /*
+            |-------------------------------------------------
+            | Izin Akses "MaterialPublic"
+            |-------------------------------------------------
+            | ADMIN
+            | .index   -> course_packages.title, name, description (simple), image FROM path
+            | .create  -> (+) course_package_id FROM [material_types.name, course_types.name, course_levels.name, course_level_details.name], name, description (full), path FROM IMAGE
+            | .store   -> (+) id, slug, created_at
+            | .show    -> course_packages.title, name, description (full), image FROM path
+            | .edit    -> course_package_id FROM [material_types.name, course_types.name, course_levels.name, course_level_details.name], name, description (full), path FROM IMAGE
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at
+            |
+            | INSTRUCTOR
+            | .index   -> course_packages.title, name, description (simple), image FROM path
+            | .create  -> (+) course_package_id FROM [material_types.name, course_types.name, course_levels.name, course_level_details.name], name, description (full), path FROM IMAGE
+            | .store   -> (requested_to_ADMIN)
+            | .show    -> course_packages.title, name, description (full), image FROM path
+            | .edit    -> course_package_id FROM [material_types.name, course_types.name, course_levels.name, course_level_details.name], name, description (full), path FROM IMAGE
+            | .update  -> (requested_to_ADMIN)
+            | .destroy -> (requested_to_ADMIN)
+            |
+            | STUDENT
+            | .index   -> name, description (simple), image FROM path
+            | .show    -> name, description (full), image FROM path
+            */
+
             'material_publics'     => 'MaterialPublicController',
+
+            /*
+            |-------------------------------------------------
+            | Izin Akses "MaterialSession"
+            |-------------------------------------------------
+            | ADMIN
+            | .index   -> courses.title, sessions.title, users.name FROM [users.first_name, users.last_name], name, description (simple), image FROM path
+            | .create  -> (+) courses.id, sessions.id, name, description (full), path FROM IMAGE
+            | .store   -> (+) id, slug, created_at
+            | .show    -> courses.title, sessions.title, users.name FROM [users.first_name, users.last_name], name, description (full), image FROM path
+            | .edit    -> courses.id, sessions.id, name, description (full), path FROM IMAGE
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at
+            |
+            | INSTRUCTOR
+            | .index   -> courses.title, sessions.title, name, description (simple), image FROM path
+            | .create  -> (+) courses.id, sessions.id, name, description (full), path FROM IMAGE
+            | .store   -> (+) id, slug, created_at
+            | .show    -> courses.title, sessions.title, name, description (full), image FROM path
+            | .edit    -> courses.id, sessions.id, name, description (full), path FROM IMAGE
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at
+            |
+            | STUDENT
+            | .index   -> courses.title, sessions.title, users.name FROM INSTRUCTOR[users.first_name, users.last_name], name, description (simple), image FROM path
+            | .show    -> courses.title, sessions.title, users.name FROM INSTRUCTOR[users.first_name, users.last_name], name, description (full), image FROM path
+            */
+
             'material_sessions'    => 'MaterialSessionController',
+
+            /*
+            |-------------------------------------------------
+            | ----------------------------Izin Akses "User"
+            |-------------------------------------------------
+            | ADMIN
+            | .index   -> courses.title, sessions.title, users.name FROM [users.first_name, users.last_name], name, description (simple), image FROM path
+            | .create  -> (+) courses.id, sessions.id, name, description (full), path FROM IMAGE
+            | .store   -> (+) id, slug, created_at
+            | .show    -> courses.title, sessions.title, users.name FROM [users.first_name, users.last_name], name, description (full), image FROM path
+            | .edit    -> courses.id, sessions.id, name, description (full), path FROM IMAGE
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at
+            |
+            | INSTRUCTOR
+            | .index   -> courses.title, sessions.title, name, description (simple), image FROM path
+            | .create  -> (+) courses.id, sessions.id, name, description (full), path FROM IMAGE
+            | .store   -> (+) id, slug, created_at
+            | .show    -> courses.title, sessions.title, name, description (full), image FROM path
+            | .edit    -> courses.id, sessions.id, name, description (full), path FROM IMAGE
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at
+            |
+            | STUDENT
+            | .index   -> courses.title, sessions.title, users.name FROM INSTRUCTOR[users.first_name, users.last_name], name, description (simple), image FROM path
+            | .show    -> courses.title, sessions.title, users.name FROM INSTRUCTOR[users.first_name, users.last_name], name, description (full), image FROM path
+            */
+
             'users'                => 'UserController'
         ]);
 
