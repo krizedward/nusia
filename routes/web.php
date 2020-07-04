@@ -15,12 +15,15 @@ Route::redirect('/', 'login');
 
 Route::group(['middleware'=>'auth'], function() {
 
-	Route::get('/home',function() {
-		return view('home');
+	Route::get('/home', function() {
+            return view('home');
 	})->name('home');
 
 	//Route::get('/home/{id}', 'HomeController@index')->name('home');
 
+        // Apabila berencana membuat routing
+        // selain Route::resource(s) (pada keyword yang sama),
+        // lakukan deklarasi SEBELUM menulis baris kode Route::resource(s).
         Route::resources([
             /*
             |-------------------------------------------------
@@ -176,26 +179,26 @@ Route::group(['middleware'=>'auth'], function() {
             | Izin Akses "Session"
             |-------------------------------------------------
             | ADMIN
-            | .index   -> users.name FROM [users.first_name, users.last_name], courses.title, schedules.schedule_time, title, description (simple), link_zoom
-            | .create  -> (+) course_id, users.id FROM [users.first_name, users.last_name], schedule_id FROM INPUT(DATE, TIME), title, description (full), requirement (full), link_zoom
+            | .index   -> users.name FROM INSTRUCTOR[users.first_name, users.last_name], courses.title (OR course_packages.title), schedules.schedule_time, title, description (simple), link_zoom
+            | .create  -> (+) course_id, users.id FROM INSTRUCTOR[users.first_name, users.last_name], schedule_id FROM INPUT(DATE, TIME), title, description (full), requirement (full), link_zoom
             | .store   -> (+) id, slug, created_at
-            | .show    -> users.name FROM [users.first_name, users.last_name], courses.title, schedules.schedule_time, title, description (full), requirement (full), link_zoom
-            | .edit    -> course_id, users.id FROM [users.first_name, users.last_name], schedule_id FROM INPUT(DATE, TIME), title, description (full), requirement (full), link_zoom
+            | .show    -> users.name FROM INSTRUCTOR[users.first_name, users.last_name], courses.title (OR course_packages.title), schedules.schedule_time, title, description (full), requirement (full), link_zoom
+            | .edit    -> course_id, users.id FROM INSTRUCTOR[users.first_name, users.last_name], schedule_id FROM INPUT(DATE, TIME), title, description (full), requirement (full), link_zoom
             | .update  -> (+) updated_at
             | .destroy -> (+) deleted_at
             |
             | INSTRUCTOR
-            | .index   -> courses.title, schedules.schedule_time, title, description (simple), link_zoom
+            | .index   -> courses.title (OR course_packages.title), schedules.schedule_time, title, description (simple), link_zoom
             | .create  -> (+) course_id, schedule_id FROM INPUT(DATE, TIME), title, description (full), requirement (full), link_zoom
             | .store   -> (+) id, slug, created_at
-            | .show    -> courses.title, schedules.schedule_time, title, description (full), requirement (full), link_zoom
+            | .show    -> courses.title (OR course_packages.title), schedules.schedule_time, title, description (full), requirement (full), link_zoom
             | .edit    -> course_id, schedule_id FROM INPUT(DATE, TIME), title, description (full), requirement (full), link_zoom
             | .update  -> (+) updated_at
             | .destroy -> (requested_to_ADMIN)
             |
             | STUDENT
-            | .index   -> courses.title, schedules.schedule_time, title, description (simple), link_zoom
-            | .show    -> courses.title, schedules.schedule_time, title, description (full), requirement (full), link_zoom
+            | .index   -> courses.title (OR course_packages.title), schedules.schedule_time, title, description (simple), link_zoom
+            | .show    -> courses.title (OR course_packages.title), schedules.schedule_time, title, description (full), requirement (full), link_zoom
             */
 
             'sessions'             => 'SessionController',
@@ -205,20 +208,20 @@ Route::group(['middleware'=>'auth'], function() {
             | Izin Akses "CourseCertificate"
             |-------------------------------------------------
             | ADMIN
-            | .index   -> courses.name, users.name FROM [users.first_name, users.last_name], image FROM path
-            | .create  -> (+) course_registration_id FROM [courses.name, users.name FROM [users.first_name, users.last_name]], path FROM IMAGE
+            | .index   -> courses.name, users.name FROM STUDENT[users.first_name, users.last_name], image FROM path
+            | .create  -> (+) course_registration_id FROM [courses.name, users.name FROM STUDENT[users.first_name, users.last_name]], path FROM IMAGE
             | .store   -> (+) id, slug, created_at
-            | .show    -> courses.name, users.name FROM [users.first_name, users.last_name], image FROM path
-            | .edit    -> course_registration_id FROM [courses.name, users.name FROM [users.first_name, users.last_name]], path FROM IMAGE
+            | .show    -> courses.name, users.name FROM STUDENT[users.first_name, users.last_name], image FROM path
+            | .edit    -> course_registration_id FROM [courses.name, users.name FROM STUDENT[users.first_name, users.last_name]], path FROM IMAGE
             | .update  -> (+) updated_at
             | .destroy -> (+) deleted_at
             |
             | INSTRUCTOR
-            | .index   -> courses.name, users.name FROM [users.first_name, users.last_name], image FROM path
-            | .create  -> (+) course_registration_id FROM [courses.name, users.name FROM [users.first_name, users.last_name]], path FROM IMAGE
+            | .index   -> courses.name, users.name FROM STUDENT[users.first_name, users.last_name], image FROM path
+            | .create  -> (+) course_registration_id FROM [courses.name, users.name FROM STUDENT[users.first_name, users.last_name]], path FROM IMAGE
             | .store   -> (+) id, slug, created_at
-            | .show    -> courses.name, users.name FROM [users.first_name, users.last_name], image FROM path
-            | .edit    -> course_registration_id FROM [courses.name, users.name FROM [users.first_name, users.last_name]], path FROM IMAGE
+            | .show    -> courses.name, users.name FROM STUDENT[users.first_name, users.last_name], image FROM path
+            | .edit    -> course_registration_id FROM [courses.name, users.name FROM STUDENT[users.first_name, users.last_name]], path FROM IMAGE
             | .update  -> (requested_to_ADMIN)
             |
             | STUDENT
@@ -262,59 +265,113 @@ Route::group(['middleware'=>'auth'], function() {
             | Izin Akses "MaterialSession"
             |-------------------------------------------------
             | ADMIN
-            | .index   -> courses.title, sessions.title, users.name FROM [users.first_name, users.last_name], name, description (simple), image FROM path
+            | .index   -> courses.title (OR course_packages.title), sessions.title, users.name FROM INSTRUCTOR[users.first_name, users.last_name], name, description (simple), image FROM path
             | .create  -> (+) courses.id, sessions.id, name, description (full), path FROM IMAGE
             | .store   -> (+) id, slug, created_at
-            | .show    -> courses.title, sessions.title, users.name FROM [users.first_name, users.last_name], name, description (full), image FROM path
+            | .show    -> courses.title (OR course_packages.title), sessions.title, users.name FROM INSTRUCTOR[users.first_name, users.last_name], name, description (full), image FROM path
             | .edit    -> courses.id, sessions.id, name, description (full), path FROM IMAGE
             | .update  -> (+) updated_at
             | .destroy -> (+) deleted_at
             |
             | INSTRUCTOR
-            | .index   -> courses.title, sessions.title, name, description (simple), image FROM path
+            | .index   -> courses.title (OR course_packages.title), sessions.title, name, description (simple), image FROM path
             | .create  -> (+) courses.id, sessions.id, name, description (full), path FROM IMAGE
             | .store   -> (+) id, slug, created_at
-            | .show    -> courses.title, sessions.title, name, description (full), image FROM path
+            | .show    -> courses.title (OR course_packages.title), sessions.title, name, description (full), image FROM path
             | .edit    -> courses.id, sessions.id, name, description (full), path FROM IMAGE
             | .update  -> (+) updated_at
             | .destroy -> (+) deleted_at
             |
             | STUDENT
-            | .index   -> courses.title, sessions.title, users.name FROM INSTRUCTOR[users.first_name, users.last_name], name, description (simple), image FROM path
-            | .show    -> courses.title, sessions.title, users.name FROM INSTRUCTOR[users.first_name, users.last_name], name, description (full), image FROM path
+            | .index   -> courses.title (OR course_packages.title), sessions.title, users.name FROM INSTRUCTOR[users.first_name, users.last_name], name, description (simple), image FROM path
+            | .show    -> courses.title (OR course_packages.title), sessions.title, users.name FROM INSTRUCTOR[users.first_name, users.last_name], name, description (full), image FROM path
             */
 
             'material_sessions'    => 'MaterialSessionController',
 
             /*
             |-------------------------------------------------
-            | ----------------------------Izin Akses "User"
+            | Izin Akses "User"
             |-------------------------------------------------
             | ADMIN
-            | .index   -> courses.title, sessions.title, users.name FROM [users.first_name, users.last_name], name, description (simple), image FROM path
-            | .create  -> (+) courses.id, sessions.id, name, description (full), path FROM IMAGE
+            | .index   -> roles, image FROM image_profile, name FROM [first_name, last_name], email, phone
+            | .create  -> (+) email, password, roles, citizenship, first_name, last_name, gender, birthdate, phone, image_profile FROM IMAGE
             | .store   -> (+) id, slug, created_at
-            | .show    -> courses.title, sessions.title, users.name FROM [users.first_name, users.last_name], name, description (full), image FROM path
-            | .edit    -> courses.id, sessions.id, name, description (full), path FROM IMAGE
-            | .update  -> (+) updated_at
+            | .show    -> image FROM image_profile, roles, first_name, last_name, gender, birthdate, citizenship, email, email_verification_status FROM email_verified_at, OPTIONAL FOR (password), phone
+            | .edit    -> email, password, roles, citizenship, first_name, last_name, gender, birthdate, phone, image_profile FROM IMAGE
+            | .update  -> (+) updated_at, CONDITIONAL FOR (email_verified_at)
             | .destroy -> (+) deleted_at
             |
             | INSTRUCTOR
-            | .index   -> courses.title, sessions.title, name, description (simple), image FROM path
-            | .create  -> (+) courses.id, sessions.id, name, description (full), path FROM IMAGE
+            | .index   -> image FROM image_profile, first_name, last_name, email
+            | .create  -> (+) email, password, roles, citizenship, first_name, last_name, gender, birthdate, phone, image_profile FROM IMAGE
             | .store   -> (+) id, slug, created_at
-            | .show    -> courses.title, sessions.title, name, description (full), image FROM path
-            | .edit    -> courses.id, sessions.id, name, description (full), path FROM IMAGE
-            | .update  -> (+) updated_at
+            | .show    -> roles, image FROM image_profile, first_name, last_name, gender, birthdate, citizenship, email, email_verification_status FROM email_verified_at, HIDDEN FOR (password), phone
+            | .edit    -> email, password, roles, citizenship, first_name, last_name, gender, birthdate, phone, image_profile FROM IMAGE
+            | .update  -> (+) updated_at, CONDITIONAL FOR (email_verified_at)
             | .destroy -> (+) deleted_at
             |
             | STUDENT
-            | .index   -> courses.title, sessions.title, users.name FROM INSTRUCTOR[users.first_name, users.last_name], name, description (simple), image FROM path
-            | .show    -> courses.title, sessions.title, users.name FROM INSTRUCTOR[users.first_name, users.last_name], name, description (full), image FROM path
+            | .index   -> image FROM image_profile, first_name, last_name, email
+            | .create  -> (+) email, password, roles, citizenship, first_name, last_name, gender, birthdate, phone, image_profile FROM IMAGE
+            | .store   -> (+) id, slug, created_at
+            | .show    -> roles, image FROM image_profile, first_name, last_name, gender, birthdate, citizenship, email, email_verification_status FROM email_verified_at, HIDDEN FOR (password), phone
+            | .edit    -> email, password, roles, citizenship, first_name, last_name, gender, birthdate, phone, image_profile FROM IMAGE
+            | .update  -> (+) updated_at, CONDITIONAL FOR (email_verified_at)
+            | .destroy -> (+) deleted_at
             */
 
-            'users'                => 'UserController'
+            'users'                => 'UserController',
+
+            /*
+            |-------------------------------------------------
+            | Izin Akses "UserSurvey"
+            |-------------------------------------------------
+            | ADMIN
+            | .index   -> users.name FROM STUDENT[users.first_name, users.last_name], age, status_job, interest, target_language_experience (ALSO COMPACT(target_language_experience_value)), indonesian_language_proficiency
+            | .create  -> (+) user_id FROM STUDENT[users.first_name, users.last_name], age, status_job, status_description, status_value, interest, target_language_experience, target_language_experience_value, description_of_course_taken, indonesian_language_proficiency, learning_objective
+            | .store   -> (+) id, slug, created_at
+            | .show    -> users.name FROM STUDENT[users.first_name, users.last_name], age, status_job, status_description, status_value, interest, target_language_experience, target_language_experience_value, description_of_course_taken, indonesian_language_proficiency, learning_objective
+            | .edit    -> user_id FROM STUDENT[users.first_name, users.last_name], age, status_job, status_description, status_value, interest, target_language_experience, target_language_experience_value, description_of_course_taken, indonesian_language_proficiency, learning_objective
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at (INCLUSIVE WITH users SO CANNOT DELETE ALONE)
+            |
+            | INSTRUCTOR
+            | .index   -> users.name FROM STUDENT[users.first_name, users.last_name], age, status_job, interest, target_language_experience (ALSO COMPACT(target_language_experience_value)), indonesian_language_proficiency
+            | .show    -> users.name FROM STUDENT[users.first_name, users.last_name], age, status_job, status_description, status_value, interest, target_language_experience, target_language_experience_value, description_of_course_taken, indonesian_language_proficiency, learning_objective
+            |
+            | STUDENT
+            | .index   -> age, status_job, interest, target_language_experience (ALSO COMPACT(target_language_experience_value)), indonesian_language_proficiency
+            | .create  -> (+) age, status_job, status_description, status_value, interest, target_language_experience, target_language_experience_value, description_of_course_taken, indonesian_language_proficiency, learning_objective
+            | .store   -> (+) id, slug, user_id, created_at
+            | .show    -> users.name FROM STUDENT[users.first_name, users.last_name], age, status_job, status_description, status_value, interest, target_language_experience, target_language_experience_value, description_of_course_taken, indonesian_language_proficiency, learning_objective
+            | .edit    -> age, status_job, status_description, status_value, interest, target_language_experience, target_language_experience_value, description_of_course_taken, indonesian_language_proficiency, learning_objective
+            | .update  -> (+) updated_at
+            | .destroy -> (+) deleted_at (INCLUSIVE WITH users SO CANNOT DELETE ALONE)
+            */
+
+            'user_surveys'         => 'UserSurveyController',
         ]);
+
+        /*
+        |-------------------------------------------------
+        | Izin Akses "CourseRegistration"
+        |-------------------------------------------------
+        | ADMIN
+        | .index   -> courses.title (OR course_packages.title), users.name FROM STUDENT[users.first_name, users.last_name], course_registration_time FROM created_at, course_payments.status
+        | .create  -> (+) course_id FROM courses.title (OR course_packages.title), user_id FROM STUDENT[users.first_name, users.last_name]
+        | .store   -> (+) id, created_at
+        | .destroy -> (+) deleted_at
+        |
+        | INSTRUCTOR
+        | .index   -> courses.title (OR course_packages.title), users.name FROM STUDENT[users.first_name, users.last_name], course_registration_time FROM created_at
+        | .destroy -> (requested_to_ADMIN)
+        |
+        | STUDENT
+        | .index   -> courses.title (OR course_packages.title), course_registration_time FROM created_at, course_payments.status
+        | .store   -> (+) id, created_at, course_id, user_id
+        | .destroy -> (requested_to_INSTRUCTOR_then_to_ADMIN)
+        */
 
         // menggunakan nested resources: /courses/{course}/registrations/{user}
         Route::resource('courses.registrations', 'CourseRegistrationController')
@@ -328,6 +385,30 @@ Route::group(['middleware'=>'auth'], function() {
             ->parameters([
                 'registrations' => 'user'
             ]);
+
+        /*
+        |-------------------------------------------------
+        | Izin Akses "CoursePayment"
+        |-------------------------------------------------
+        | ADMIN
+        | .index   -> courses.title (OR course_packages.title), users.name FROM STUDENT[users.first_name, users.last_name], method, amount, status, payment_time
+        | .create  -> (+) course_registration_id FROM [courses.title (OR course_registrations.title), users.name FROM STUDENT[users.first_name, users.last_name]], method, amount, status, payment_time, path FROM IMAGE
+        | .store   -> (+) id, slug, created_at
+        | .show    -> courses.title (OR course_packages.title), users.name FROM STUDENT[users.first_name, users.last_name], method, amount, status, payment_time, image FROM path
+        | .edit    -> course_registration_id FROM [courses.title (OR course_registrations.title), users.name FROM STUDENT[users.first_name, users.last_name]], method, amount, status, payment_time, path FROM IMAGE
+        | .update  -> (+) updated_at
+        | .destroy -> (+) deleted_at
+        |
+        | INSTRUCTOR (none)
+        |
+        | STUDENT
+        | .index   -> courses.title (OR course_packages.title), method, amount, status, payment_time
+        | .create  -> (+) course_registration_id FROM courses.title (OR course_registrations.title), method, amount, status, payment_time, path FROM IMAGE
+        | .store   -> (+) id, slug, created_at
+        | .show    -> courses.title (OR course_packages.title), method, amount, status, payment_time, image FROM path
+        | .edit    -> course_registration_id FROM courses.title (OR course_registrations.title), method, amount, status, payment_time, path FROM IMAGE
+        | .update  -> (+) updated_at
+        */
 
         // menggunakan nested resources: /courses/{course}/payments/{user}
         Route::resource('courses.payments', 'CoursePaymentController')
@@ -344,12 +425,35 @@ Route::group(['middleware'=>'auth'], function() {
                 'payments' => 'user'
             ]);
 
+        /*
+        |-------------------------------------------------
+        | Izin Akses "SessionRegistration"
+        |-------------------------------------------------
+        | ADMIN
+        | .index   -> courses.title (OR course_packages.title), sessions.title, users.name FROM STUDENT[users.first_name, users.last_name], registration_time, status
+        | .create  -> (+) course_registration_id FROM [courses.title (OR course_registrations.title), users.name FROM STUDENT[users.first_name, users.last_name]], session_id FROM sessions.title, registration_time, status
+        | .store   -> (+) id, created_at
+        | .edit    -> course_registration_id FROM [courses.title (OR course_registrations.title), users.name FROM STUDENT[users.first_name, users.last_name]], session_id FROM sessions.title, registration_time, status
+        | .update  -> (+) updated_at
+        | .destroy -> (+) deleted_at
+        |
+        | INSTRUCTOR
+        | .index   -> courses.title (OR course_packages.title), sessions.title, users.name FROM STUDENT[users.first_name, users.last_name], registration_time, status
+        | .update  -> (+) updated_at, CHANGE (status)
+        |
+        | STUDENT
+        | .index   -> courses.title (OR course_packages.title), sessions.title, registration_time, status
+        | .store   -> (+) id, status, created_at
+        */
+
         // menggunakan nested resources: /sessions/{session}/registrations/{user}
         Route::resource('sessions.registrations', 'SessionRegistrationController')
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
             ->names([
                 'index'   => 'session_registrations.index',
                 'create'  => 'session_registrations.create',
                 'store'   => 'session_registrations.store',
+                'edit'    => 'session_registrations.edit',
                 'update'  => 'session_registrations.update',
                 'destroy' => 'session_registrations.destroy'
             ])
@@ -357,20 +461,55 @@ Route::group(['middleware'=>'auth'], function() {
                 'registrations' => 'user'
             ]);
 
-	Route::get ('/session/registration', 'SessionRegistrationController@index')   ->name('session_registration.index');
-	Route::post('/session/registration', 'SessionRegistrationController@store')   ->name('session_registration.store');
-	Route::put ('/session/registration', 'SessionRegistrationController@update')  ->name('session_registration.update');
-	Route::post('/session/registration', 'SessionRegistrationController@destroy') ->name('session_registration.destroy');
-	Route::get ('/schedule', 'ScheduleController@index')   ->name('schedule.index');
-	Route::post('/schedule', 'ScheduleController@store')   ->name('schedule.store');
-	Route::put ('/schedule', 'ScheduleController@update')  ->name('schedule.update');
-	Route::post('/schedule', 'ScheduleController@destroy') ->name('schedule.destroy');
-	Route::get ('/session/{session_id}/rating', 'RatingController@index')   ->name('rating.index');
-	Route::post('/session/{session_id}/rating', 'RatingController@store')   ->name('rating.store');
-	Route::put ('/session/{session_id}/rating', 'RatingController@update')  ->name('rating.update');
-	Route::post('/session/{session_id}/rating', 'RatingController@destroy') ->name('rating.destroy');
-	//Route::get ('/user/survey', 'UserSurveyController@index')   ->name('user_survey.index');
-	//Route::get ('/user/survey/create', 'UserSurveyController@index')   ->name('user_survey.index');
+        /*
+        |-------------------------------------------------
+        | Izin Akses "Schedule"
+        |-------------------------------------------------
+        | ADMIN
+        | .index   -> users.name FROM INSTRUCTOR[users.first_name, users.last_name], schedule_time, status CHECK ON ALL (sessions)
+        | .create  -> (+) user_id FROM INSTRUCTOR[users.first_name, users.last_name], schedule_time, status CHECK ON ALL (sessions)
+        | .store   -> (+) id, created_at
+        | .edit    -> (+) user_id FROM INSTRUCTOR[users.first_name, users.last_name], schedule_time, status CHECK ON ALL (sessions)
+        | .update  -> (+) updated_at
+        | .destroy -> (+) deleted_at
+        |
+        | INSTRUCTOR
+        | .index   -> schedule_time, status CHECK ON ALL (sessions)
+        | .store   -> (+) id, user_id, schedule_time, status, created_at
+        | .update  -> (requested_to_ADMIN)
+        |
+        | STUDENT
+        | .index   -> users.name FROM INSTRUCTOR[users.first_name, users.last_name], schedule_time, status CHECK ON ALL (CURRENT_STUDENT_ALREADY_REGISTERED(sessions))
+        */
+
+        // menggunakan resources: /schedules/{user}
+        Route::resource('schedules', 'ScheduleController')
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
+            ->parameters([
+                'schedules' => 'user'
+            ]);
+
+        /*
+        |-------------------------------------------------
+        | Izin Akses "Rating"
+        |-------------------------------------------------
+        | ADMIN
+        | .index   -> sessions.title, rating, comment, created_at
+        | .destroy -> (+) deleted_at (INCLUSIVE WITH sessions SO CANNOT DELETE ALONE)
+        |
+        | INSTRUCTOR
+        | .index   -> sessions.title, rating, comment, created_at
+        |
+        | STUDENT
+        | .store   -> (+) session_id, rating, comment, created_at
+        */
+
+        // menggunakan resources: /ratings/{session}
+        Route::resource('ratings', 'RatingController')
+            ->only(['index', 'store', 'destroy'])
+            ->parameters([
+                'ratings' => 'session'
+            ]);
 
 	//menampilkan detail dari schedule
 	//Route::get('/schedule/detail/{id_schedule}','ScheduleController@detail')->name('schedule.detail');
