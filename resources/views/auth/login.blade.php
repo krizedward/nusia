@@ -34,7 +34,7 @@
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <p class="login-box-msg">Please enter your email and password at below</p>
+    <p class="login-box-msg">Please enter your email and password.</p>
 
     <form action="{{ route('login') }}" method="post">
       @csrf

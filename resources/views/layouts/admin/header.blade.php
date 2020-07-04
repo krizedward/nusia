@@ -44,7 +44,7 @@
                 <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="img-circle" alt="User Image">
 
                 <p>
-                  {{ Auth::user()->name }} - {{ Auth::user()->level }}
+                  {{ Auth::user()->name }} - {{ Auth::user()->roles }}
                   <small>{{ Auth::user()->created_at }}</small>
                 </p>
               </li>

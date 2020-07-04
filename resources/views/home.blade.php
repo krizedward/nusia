@@ -4,7 +4,7 @@
 
 @section('content')
 
-@if(Auth::user()->level == 'instructor')
+@if(Auth::check() && Auth::user()->roles == 'instructor')
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-lg-3 col-xs-6">
@@ -111,7 +111,7 @@
       <!-- /.row -->
 @endif
 
-@if(Auth::user()->level == 'student')
+@if(Auth::check() && Auth::user()->level == 'student')
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-lg-6 col-xs-6">
@@ -166,7 +166,7 @@
       
 @endif
 
-@if(Auth::user()->level == 'admin')
+@if(Auth::check() && Auth::user()->level == 'admin')
 <p>Hello Admin</p>
 @endif
 @endsection
