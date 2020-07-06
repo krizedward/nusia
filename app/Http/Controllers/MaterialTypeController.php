@@ -13,15 +13,6 @@ use Illuminate\Support\Facades\Auth;
 class MaterialTypeController extends Controller
 {
     /**
-     * Memeriksa koneksi DB.
-     * 1: True
-     * 0: False
-     */
-    public function DB_is_connected() {
-        return Controller::db_try_connect();
-    }
-
-    /**
      * Memeriksa role User saat ini.
      * Return user.roles atau null.
      */
@@ -51,20 +42,16 @@ class MaterialTypeController extends Controller
      */
     public function index()
     {
-        if($this->DB_is_connected()) {
-            $material_types = MaterialType::all()
-                ->select(
-                    'slug',
-                    'code',
-                    'name',
-                    'description'
-                );
-            return view('material_types.index', compact(
-                'material_types'
-            ));
-        } else {
-            // DB tidak terhubung.
-        }
+        $material_types = MaterialType::all()
+            ->select(
+                'slug',
+                'code',
+                'name',
+                'description'
+            );
+        return view('material_types.index', compact(
+            'material_types'
+        ));
     }
 
     /**
@@ -74,14 +61,10 @@ class MaterialTypeController extends Controller
      */
     public function create()
     {
-        if($this->DB_is_connected()) {
-            if($this->is_admin()) {
-                return view('material_types.create');
-            } else {
-                // Tidak memiliki hak akses.
-            }
+        if($this->is_admin()) {
+            return view('material_types.create');
         } else {
-            // DB tidak terhubung.
+            // Tidak memiliki hak akses.
         }
     }
 
@@ -93,73 +76,69 @@ class MaterialTypeController extends Controller
      */
     public function store(Request $request)
     {
-        if($this->DB_is_connected()) {
-            $data = $request->all();
+        $data = $request->all();
 
-            $validator = Validator::make($data, [
-                'code' => [
-                    'bail', 'required',
-                    Rule::unique('material_types', 'code')
-                        ->where(function($query) {
-                            return $query->where('deleted_at', null);
-                        }
-                    ),
-                    'size:1'
-                ],
-                'name' => [
-                    'bail', 'required',
-                    Rule::unique('material_types', 'name')
-                        ->where(function($query) {
-                            return $query->where('deleted_at', null);
-                        }
-                    ),
-                    'max:100'
-                ],
-                'description' => [
-                    'bail', 'sometimes',
-                    'max:5000'
-                ]
-            ]);
+        $validator = Validator::make($data, [
+            'code' => [
+                'bail', 'required',
+                Rule::unique('material_types', 'code')
+                    ->where(function($query) {
+                        return $query->where('deleted_at', null);
+                    }
+                ),
+                'size:1'
+            ],
+            'name' => [
+                'bail', 'required',
+                Rule::unique('material_types', 'name')
+                    ->where(function($query) {
+                        return $query->where('deleted_at', null);
+                    }
+                ),
+                'max:100'
+            ],
+            'description' => [
+                'bail', 'sometimes',
+                'max:5000'
+            ]
+        ]);
 
-            if($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
-
-            // Membuat slug baru.
-            $slug = "";
-            while(1) {
-                $slug = Str::random(255);
-                $material_type = MaterialType
-                    ::firstWhere('slug', $slug);
-                if($material_type === null) break;
-            }
-
-            if($this->is_admin()) {
-                MaterialType::create([
-                    'slug' => $slug,
-                    'code' => $request->code,
-                    'name' => $request->name,
-                    'description' => $request->description
-                ]);
-            } else {
-                // Tidak memiliki hak akses.
-            }
-
-            $material_types = MaterialType::all()
-                ->select(
-                    'slug',
-                    'code',
-                    'name',
-                    'description'
-                );
-            return view('material_types.index', compact(
-                'material_types'
-            ));
-        } else {
-            // DB tidak terhubung.
+        if($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
         }
+
+        // Membuat slug baru.
+        $slug = "";
+        while(1) {
+            $slug = Str::random(255);
+            $material_type = MaterialType
+                ::firstWhere('slug', $slug);
+            if($material_type === null) break;
+        }
+
+        if($this->is_admin()) {
+            MaterialType::create([
+                'slug' => $slug,
+                'code' => $request->code,
+                'name' => $request->name,
+                'description' => $request->description
+            ]);
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        $material_types = MaterialType::all()
+            ->select(
+                'slug',
+                'code',
+                'name',
+                'description'
+            );
+        return view('material_types.index', compact(
+            'material_types'
+        ));
     }
 
     /**
@@ -170,19 +149,15 @@ class MaterialTypeController extends Controller
      */
     public function show($id)
     {
-        if($this->DB_is_connected()) {
-            $material_type = MaterialType::firstOrFail($id);
-            $slug = $material_type->slug;
-            $code = $material_type->code;
-            $name = $material_type->name;
-            $description = $material_type->description;
+        $material_type = MaterialType::firstOrFail($id);
+        $slug = $material_type->slug;
+        $code = $material_type->code;
+        $name = $material_type->name;
+        $description = $material_type->description;
 
-            return view('material_types.show', compact(
-                'slug', 'code', 'name', 'description'
-            ));
-        } else {
-            // DB tidak terhubung.
-        }
+        return view('material_types.show', compact(
+            'slug', 'code', 'name', 'description'
+        ));
     }
 
     /**
@@ -193,22 +168,18 @@ class MaterialTypeController extends Controller
      */
     public function edit($id)
     {
-        if($this->DB_is_connected()) {
-            if($this->is_admin()) {
-                $material_type = MaterialType::firstOrFail($id);
-                $slug = $material_type->slug;
-                $code = $material_type->code;
-                $name = $material_type->name;
-                $description = $material_type->description;
+        if($this->is_admin()) {
+            $material_type = MaterialType::firstOrFail($id);
+            $slug = $material_type->slug;
+            $code = $material_type->code;
+            $name = $material_type->name;
+            $description = $material_type->description;
 
-                return view('material_types.edit', compact(
-                    'slug', 'code', 'name', 'description'
-                ));
-            } else {
-                // Tidak memiliki hak akses.
-            }
+            return view('material_types.edit', compact(
+                'slug', 'code', 'name', 'description'
+            ));
         } else {
-            // DB tidak terhubung.
+            // Tidak memiliki hak akses.
         }
     }
 
@@ -221,64 +192,60 @@ class MaterialTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if($this->DB_is_connected()) {
-            $material_type = MaterialType::firstOrFail($id);
-            $data = $request->all();
+        $material_type = MaterialType::firstOrFail($id);
+        $data = $request->all();
 
-            $validator = Validator::make($data, [
-                'code' => [
-                    'bail', 'required',
-                    Rule::unique('material_types', 'code')
-                        ->ignore($id, 'id')
-                        ->where(function($query) {
-                            return $query->where('deleted_at', null);
-                        }
-                    ),
-                    'size:1'
-                ],
-                'name' => [
-                    'bail', 'required',
-                    Rule::unique('material_types', 'name')
-                        ->ignore($id, 'id')
-                        ->where(function($query) {
-                            return $query->where('deleted_at', null);
-                        }
-                    ),
-                    'max:100'
-                ],
-                'description' => [
-                    'bail', 'sometimes',
-                    'max:5000'
-                ]
-            ]);
+        $validator = Validator::make($data, [
+            'code' => [
+                'bail', 'required',
+                Rule::unique('material_types', 'code')
+                    ->ignore($id, 'id')
+                    ->where(function($query) {
+                        return $query->where('deleted_at', null);
+                    }
+                ),
+                'size:1'
+            ],
+            'name' => [
+                'bail', 'required',
+                Rule::unique('material_types', 'name')
+                    ->ignore($id, 'id')
+                    ->where(function($query) {
+                        return $query->where('deleted_at', null);
+                    }
+                ),
+                'max:100'
+            ],
+            'description' => [
+                'bail', 'sometimes',
+                'max:5000'
+            ]
+        ]);
 
-            if($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
-
-            if($this->is_admin()) {
-                $material_type->update([
-                    'code' => $request->code,
-                    'name' => $request->name,
-                    'description' => $request->description
-                ]);
-            } else {
-                // Tidak memiliki hak akses.
-            }
-
-            $slug = $material_type->slug;
-            $code = $material_type->code;
-            $name = $material_type->name;
-            $description = $material_type->description;
-
-            return view('material_types.show', compact(
-                'slug', 'code', 'name', 'description'
-            ));
-        } else {
-            // DB tidak terhubung.
+        if($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
         }
+
+        if($this->is_admin()) {
+            $material_type->update([
+                'code' => $request->code,
+                'name' => $request->name,
+                'description' => $request->description
+            ]);
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        $slug = $material_type->slug;
+        $code = $material_type->code;
+        $name = $material_type->name;
+        $description = $material_type->description;
+
+        return view('material_types.show', compact(
+            'slug', 'code', 'name', 'description'
+        ));
     }
 
     /**
@@ -289,26 +256,22 @@ class MaterialTypeController extends Controller
      */
     public function destroy($id)
     {
-        if($this->DB_is_connected()) {
-            $material_type = MaterialType::firstOrFail($id);
-            if($this->is_admin()) {
-                $material_type->delete();
-            } else {
-                // Tidak memiliki hak akses.
-            }
-
-            $material_types = MaterialType::all()
-                ->select(
-                    'slug',
-                    'code',
-                    'name',
-                    'description'
-                );
-            return view('material_types.index', compact(
-                'material_types'
-            ));
+        $material_type = MaterialType::firstOrFail($id);
+        if($this->is_admin()) {
+            $material_type->delete();
         } else {
-            // DB tidak terhubung.
+            // Tidak memiliki hak akses.
         }
+
+        $material_types = MaterialType::all()
+            ->select(
+                'slug',
+                'code',
+                'name',
+                'description'
+            );
+        return view('material_types.index', compact(
+            'material_types'
+        ));
     }
 }

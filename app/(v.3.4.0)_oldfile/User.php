@@ -70,11 +70,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the owning imageable model (for "Instructor" and "Student" model).
+     * Define a relationship.
      */
-    public function imageable()
+    public function user_survey()
     {
-        return $this->morphTo();
+    	return $this->hasOne('App\Models\UserSurvey', 'user_id');
     }
 
     /**

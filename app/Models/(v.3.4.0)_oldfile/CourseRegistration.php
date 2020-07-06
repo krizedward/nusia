@@ -14,7 +14,7 @@ class CourseRegistration extends Model
 
     protected $fillable = [
         'course_id',
-        'student_id'
+        'user_id'
     ];
 
     /**
@@ -28,9 +28,9 @@ class CourseRegistration extends Model
     /**
      * Define a relationship.
      */
-    public function student()
+    public function user()
     {
-    	return $this->belongsTo('App\Models\Student', 'id');
+    	return $this->belongsTo('App\User', 'id');
     }
 
     /**

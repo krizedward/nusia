@@ -13,7 +13,7 @@ class Schedule extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'instructor_id',
+        'user_id',
         'schedule_time',
         'status'
     ];
@@ -21,9 +21,9 @@ class Schedule extends Model
     /**
      * Define a relationship.
      */
-    public function instructor()
+    public function user()
     {
-    	return $this->belongsTo('App\Models\Instructor', 'id');
+    	return $this->belongsTo('App\User', 'id');
     }
 
     /**
