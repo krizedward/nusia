@@ -56,25 +56,17 @@ class User extends Authenticatable
     /**
      * Define a relationship.
      */
-    public function course_registrations()
+    public function instructor()
     {
-    	return $this->hasMany('App\Models\CourseRegistration', 'user_id');
+    	return $this->hasOne('App\Models\Instructor', 'user_id');
     }
 
     /**
      * Define a relationship.
      */
-    public function schedules()
+    public function student()
     {
-    	return $this->hasMany('App\Models\Schedule', 'user_id');
-    }
-
-    /**
-     * Get the owning imageable model (for "Instructor" and "Student" model).
-     */
-    public function imageable()
-    {
-        return $this->morphTo();
+    	return $this->hasOne('App\Models\Student', 'user_id');
     }
 
     /**

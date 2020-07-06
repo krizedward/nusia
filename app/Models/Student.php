@@ -31,7 +31,7 @@ class Student extends Model
      */
     public function user()
     {
-        return $this->morphOne('App\User', 'imageable');
+        return $this->belongsTo('App\User', 'id');
     }
 
     /**

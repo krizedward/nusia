@@ -2,6 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 use App\User;
+use App\Models\Instructor;
 use Illuminate\Support\Str;
 //use Faker\Generator as Faker;
 use Faker\Generator;
@@ -22,25 +23,48 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     // referensi: https://github.com/fzaninotto/Faker
     $faker = Faker\Factory::create('id_ID'); // Membuat faker lokal dalam Bahasa Indonesia.
 
+    $param_full = ($faker->boolean($chanceOfGettingTrue = 50))? 'Full' : null;
+    $param_roles = function($faker) {
+        if($faker->boolean($chanceOfGettingTrue = 30)) return 'RolesAdmin';
+        else return ($faker->boolean($chanceOfGettingTrue = 40))? 'RolesInstructor' : 'RolesStudent';
+    };
+    $param_gender = ($faker->boolean($chanceOfGettingTrue = 50))? 'GenderMale' : 'GenderFemale';
+
+    // Optional parameter(s).
+    $param_email_verified_at = '';
+    $param_citizenship = '';
+    $param_birthdate = '';
+    $param_phone = '';
+    $param_image_profile = '';
+    $param_created_at = '';
+    if($param_full == null) {
+        $param_email_verified_at = ($faker->boolean($chanceOfGettingTrue = 50))? 'EmailVerifiedAt' : null;
+        $param_citizenship = ($faker->boolean($chanceOfGettingTrue = 50))? 'Citizenship' : null;
+        $param_birthdate = ($faker->boolean($chanceOfGettingTrue = 50))? 'BirthDate' : null;
+        $param_phone = ($faker->boolean($chanceOfGettingTrue = 50))? 'Phone' : null;
+        $param_image_profile = ($faker->boolean($chanceOfGettingTrue = 50))? 'ImageProfile' : null;
+        $param_created_at = ($faker->boolean($chanceOfGettingTrue = 50))? 'CreatedAt' : null;
+    }
+
+    /*$userable = [
+        App\Models\Instructor::class,
+        App\Models\Student::class
+    ];
+    $userable_type = $faker->randomElement($array = $userable);
+    $userable = factory($userable_type)->create();*/
+
     return [
-        'slug'  => Str::random(255),
-        'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => null,
-        'remember_token' => Str::random(10),
-        'password' => bcrypt('password'), // Password (boleh menggunakan $faker->password, tetapi jangan menggunakan bcrypt()).
-        'roles' => 'Admin',
-        'citizenship' => null,
-        'first_name' => $faker->firstName,
-        'last_name' => $faker->lastName,
-        'gender' => 'Male',
-        'birthdate' => null,
-        'phone' => null,
-        'image_profile' => null,
+        'user_id'  => factory(App\User::class),
+        'interest' => null,
+        'working_experience' => null,
+        'educational_experience' => null,
         'created_at' => now(),
         'updated_at' => null,
         'deleted_at' => null
     ];
 });
+
+/////////////////////////////////// EDIT SAMPAI DI BARIS INI ///////////////////////////////////
 
 // Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
 $factory->state(App\User::class, 'Full', function ($faker) {
