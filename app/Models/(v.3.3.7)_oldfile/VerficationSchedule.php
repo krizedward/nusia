@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Schedule;
 
-class VerficationSchedule extends Model
+class oldVerficationSchedule extends Model
 {
     protected $fillable = [
     	'schedule_id',

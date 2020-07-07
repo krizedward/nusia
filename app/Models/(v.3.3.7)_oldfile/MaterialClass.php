@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Instructors;
 use App\Models\Classroom;
 
-class MaterialClass extends Model
+class oldMaterialClass extends Model
 {
     protected $fillable = [
     	'instructor_id',

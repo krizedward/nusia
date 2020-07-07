@@ -13,53 +13,19 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         factory(App\User::class, 1)
-            ->states('RolesAdmin', 'GenderMale', 'EmailVerifiedAt', 'CreatedAt')
-            ->create()
-            ->each(function ($user) {
-                $user->imageable()->save(factory(App\Models\Instructor::class)->make());
-            })
-            ->make();
-        factory(App\User::class, 1)
-            ->states('RolesAdmin', 'GenderMale', 'EmailVerifiedAt', 'ImageProfile')
+            ->states('GenderMale', 'EmailVerifiedAt', 'CreatedAt')
             ->create()->make();
         factory(App\User::class, 1)
-            ->states('RolesAdmin', 'GenderMale', 'EmailVerifiedAt', 'Citizenship', 'CreatedAt')
+            ->states('GenderMale', 'EmailVerifiedAt', 'ImageProfile', 'UpdatedAt')
             ->create()->make();
         factory(App\User::class, 1)
-            ->states('RolesAdmin', 'GenderFemale', 'EmailVerifiedAt', 'CreatedAt')
+            ->states('GenderMale', 'EmailVerifiedAt', 'Citizenship', 'CreatedAt')
             ->create()->make();
         factory(App\User::class, 1)
-            ->states('RolesAdmin', 'GenderFemale', 'EmailVerifiedAt', 'Citizenship')
+            ->states('GenderFemale', 'EmailVerifiedAt', 'CreatedAt')
             ->create()->make();
-        factory(App\User::class, 2)
-            ->states('RolesInstructor', 'GenderMale', 'EmailVerifiedAt', 'Phone', 'CreatedAt')
-            ->create()->make();
-        factory(App\User::class, 2)
-            ->states('RolesInstructor', 'GenderMale', 'EmailVerifiedAt', 'ImageProfile')
-            ->create()->make();
-        factory(App\User::class, 2)
-            ->states('RolesInstructor', 'GenderMale', 'Citizenship', 'CreatedAt')
-            ->create()->make();
-        factory(App\User::class, 2)
-            ->states('RolesInstructor', 'GenderFemale', 'EmailVerifiedAt', 'CreatedAt')
-            ->create()->make();
-        factory(App\User::class, 2)
-            ->states('RolesInstructor', 'GenderFemale', 'Citizenship')
-            ->create()->make();
-        factory(App\User::class, 3)
-            ->states('RolesStudent', 'GenderMale', 'EmailVerifiedAt', 'CreatedAt')
-            ->create()->make();
-        factory(App\User::class, 3)
-            ->states('RolesStudent', 'GenderMale', 'ImageProfile')
-            ->create()->make();
-        factory(App\User::class, 3)
-            ->states('RolesStudent', 'GenderMale', 'Phone', 'Citizenship', 'CreatedAt')
-            ->create()->make();
-        factory(App\User::class, 3)
-            ->states('RolesStudent', 'GenderFemale', 'EmailVerifiedAt', 'CreatedAt')
-            ->create()->make();
-        factory(App\User::class, 3)
-            ->states('RolesStudent', 'GenderFemale', 'Citizenship')
+        factory(App\User::class, 1)
+            ->states('GenderFemale', 'EmailVerifiedAt', 'Citizenship', 'UpdatedAt')
             ->create()->make();
         factory(App\User::class, 3)
             ->states('Full', 'RolesAdmin', 'GenderMale')
@@ -67,17 +33,14 @@ class UsersTableSeeder extends Seeder
         factory(App\User::class, 2)
             ->states('Full', 'RolesAdmin', 'GenderFemale')
             ->create()->make();
-        factory(App\User::class, 4)
-            ->states('Full', 'RolesInstructor', 'GenderMale')
+        factory(App\User::class, 2)
+            ->states('Full', 'RolesAdmin', 'GenderMale', 'DeletedAt')
             ->create()->make();
-        factory(App\User::class, 3)
-            ->states('Full', 'RolesInstructor', 'GenderFemale')
+        factory(App\User::class, 1)
+            ->states('Full', 'RolesAdmin', 'GenderFemale', 'DeletedAt')
             ->create()->make();
-        factory(App\User::class, 5)
-            ->states('Full', 'RolesStudent', 'GenderMale')
-            ->create()->make();
-        factory(App\User::class, 4)
-            ->states('Full', 'RolesStudent', 'GenderFemale')
+        factory(App\User::class, 1)
+            ->states('Full', 'RolesAdmin', 'GenderMale', 'DeletedAtNoUpdate')
             ->create()->make();
     }
 }

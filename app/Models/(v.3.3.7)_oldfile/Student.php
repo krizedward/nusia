@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\User;
 
 
-class Student extends Model
+class oldStudent extends Model
 {
     public function user()
     {

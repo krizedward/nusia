@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\Schedule;
 
-class SchedulesTableSeeder extends Seeder
+class oldSchedulesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

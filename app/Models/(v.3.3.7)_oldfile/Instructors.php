@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
 
-class Instructors extends Model
+class oldInstructors extends Model
 {
     public function user()
     {

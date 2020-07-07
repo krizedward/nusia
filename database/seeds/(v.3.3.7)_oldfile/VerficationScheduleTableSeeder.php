@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\VerficationSchedule;
 
-class VerficationScheduleTableSeeder extends Seeder
+class oldVerficationScheduleTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

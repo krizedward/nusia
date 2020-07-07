@@ -7,7 +7,7 @@ use App\Models\Student;
 use App\Models\Instructors;
 use App\Models\Classroom;
 
-class ScheduleInstructor extends Model
+class oldScheduleInstructor extends Model
 {
     protected $fillable = ['instructor_id','class_id','time_meet','date_meet'];
 
