@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Models\Schedule;
+use App\Models\CourseLevel;
 
-class SchedulesTableSeeder extends Seeder
+class CourseLevelsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,8 +12,9 @@ class SchedulesTableSeeder extends Seeder
      */
     public function run()
     {
-        /*factory(App\Models\Schedule::class, 50)
+        factory(App\Models\CourseLevel::class, 5)
             ->states('Randomized')
-            ->create()->make();*/
+            ->create()
+            ->make();
     }
 }

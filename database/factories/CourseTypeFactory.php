@@ -1,8 +1,7 @@
 <?php
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
-use App\Models\Schedule;
-use App\Models\Instructor;
+use App\Models\CourseType;
 use Illuminate\Support\Str;
 //use Faker\Generator as Faker;
 use Faker\Generator;
@@ -28,34 +27,60 @@ use Faker\Factory;
 |
 */
 
-$factory->define(App\Models\Schedule::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\CourseType::class, function (Faker\Generator $faker) {
+    $code = $faker->randomLetter;
+
     return [
-        'instructor_id' => factory(App\Instructor::class)->states('Randomized'),
-        'schedule_time' => null,
-        'status'        => 'Available',
-        'created_at'    => now(),
-        'updated_at'    => null
+        'slug'              => Str::random(255),
+        'code'              => $faker->randomLetter,
+        'name'              => 'Course Type '.$code,
+        'description'       => null,
+        'count_student_min' => null,
+        'count_student_max' => null,
+        'created_at'        => now(),
+        'updated_at'        => null
     ];
 });
 
 // Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
 // STATE INI DIGUNAKAN UNTUK MENGGANTIKAN NILAI null PADA STATE PARAMETER.
-$factory->state(App\Models\Schedule::class, 'NULL', function ($faker) { return []; });
+$factory->state(App\Models\CourseType::class, 'NULL', function ($faker) { return []; });
 
 // Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\Models\Schedule::class, 'Full', function ($faker) {
+$factory->state(App\Models\CourseType::class, 'Full', function ($faker) {
+    // Deklarasi array.
+    $descriptions = ['This is a description.', 'Hi. This describes something.', 'Description...', 'Description here.'];
+
+    $code = $faker->randomLetter;
+    $count_student_min = $faker->numberBetween($min = 1, $max = 10);
+    $count_student_max = $faker->numberBetween($min = $count_student_min, $max = 10);
+
     return [
-        'instructor_id' => factory(App\Instructor::class)->states('Randomized'),
-        'schedule_time' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = '+2 years', $timezone = null),
-        'status'        => 'Available',
-        'created_at'    => $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null),
-        'updated_at'    => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
+        'code'              => $code,
+        'name'              => 'Course Type '.$code,
+        'description'       => $faker->randomElement($array = $descriptions),
+        'count_student_min' => $count_student_min,
+        'count_student_max' => $count_student_max,
+        'created_at'        => $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null),
+        'updated_at'        => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
     ];
 });
 
 // Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\Models\Schedule::class, 'Randomized', function ($faker) {
-    $status = ($faker->boolean($chanceOfGettingTrue = 35))? 'Available' : 'Busy';
+$factory->state(App\Models\CourseType::class, 'Randomized', function ($faker) {
+    // Deklarasi array.
+    $descriptions = ['This is a description.', 'Hi. This describes something.', 'Description...', 'Description here.'];
+
+    $code = $faker->randomLetter;
+    $description =
+        ($faker->boolean($chanceOfGettingTrue = 50))?
+            $faker->randomElement($array = $descriptions) : null;
+    $count_student_min =
+        ($faker->boolean($chanceOfGettingTrue = 50))?
+            $faker->numberBetween($min = 1, $max = 10) : null;
+    $count_student_max =
+        ($faker->boolean($chanceOfGettingTrue = 50 && ($count_student_min != null)))?
+            $faker->numberBetween($min = $count_student_min, $max = 10) : null;
 
     $may_have_created_at = ($faker->boolean($chanceOfGettingTrue = 90))? 1 : 0;
     $may_have_updated_at = ($faker->boolean($chanceOfGettingTrue = 50))? 1 : 0;
@@ -85,24 +110,26 @@ $factory->state(App\Models\Schedule::class, 'Randomized', function ($faker) {
         ) : null;
 
     return [
-        'instructor_id' => factory(App\Instructor::class)->states('Randomized'),
-        'schedule_time' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = '+2 years', $timezone = null),
-        'status'        => $status,
-        'created_at'    => $created_at,
-        'updated_at'    => $updated_at,
-        'deleted_at'    => $deleted_at
+        'code'              => $code,
+        'name'              => 'Course Type '.$code,
+        'description'       => $description,
+        'count_student_min' => $count_student_min,
+        'count_student_max' => $count_student_max,
+        'created_at'        => $created_at,
+        'updated_at'        => $updated_at,
+        'deleted_at'        => $deleted_at
     ];
 });
 
 // Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\Models\Schedule::class, 'CreatedAt', function ($faker) {
+$factory->state(App\Models\CourseType::class, 'CreatedAt', function ($faker) {
     return [
         'created_at' => $faker->dateTimeBetween($startDate = '-3 years', $endDate = 'now', $timezone = null)
     ];
 });
 
 // Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\Models\Schedule::class, 'UpdatedAt', function ($faker) {
+$factory->state(App\Models\CourseType::class, 'UpdatedAt', function ($faker) {
     return [
         'created_at' => $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null),
         'updated_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
@@ -110,7 +137,7 @@ $factory->state(App\Models\Schedule::class, 'UpdatedAt', function ($faker) {
 });
 
 // Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\Models\Schedule::class, 'DeletedAt', function ($faker) {
+$factory->state(App\Models\CourseType::class, 'DeletedAt', function ($faker) {
     return [
         'created_at' => $faker->dateTimeBetween($startDate = '-4 years', $endDate = '-3 years', $timezone = null),
         'updated_at' => $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null),
@@ -119,7 +146,7 @@ $factory->state(App\Models\Schedule::class, 'DeletedAt', function ($faker) {
 });
 
 // Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\Models\Schedule::class, 'DeletedAtNoUpdate', function ($faker) {
+$factory->state(App\Models\CourseType::class, 'DeletedAtNoUpdate', function ($faker) {
     return [
         'created_at' => $faker->dateTimeBetween($startDate = '-4 years', $endDate = '-2 years', $timezone = null),
         'deleted_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
