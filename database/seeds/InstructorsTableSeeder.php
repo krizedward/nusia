@@ -12,6 +12,9 @@ class InstructorsTableSeeder extends Seeder
      */
     public function run()
     {
+        factory(App\Models\Instructor::class, 50)
+            ->states('Randomized')
+            ->create()->make();
         factory(App\Models\Instructor::class, 3)
             ->states('Full', 'CreatedAt')
             ->create()->make();

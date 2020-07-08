@@ -20,7 +20,7 @@ class CreateStudentsTable extends Migration
             $table->enum('status_job', ['Professional', 'Student']);
             $table->text('status_description')->nullable();
             $table->text('status_value')->nullable();
-            $table->text('interest');
+            $table->text('interest')->nullable();
             $table->enum('target_language_experience', ['Never (no experience)', '< 6 months', '<= 1 year', 'Others']);
             $table->integer('target_language_experience_value')->nullable();
             $table->text('description_of_course_taken')->nullable();
