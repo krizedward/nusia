@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\VerficationSchedule;
 use Illuminate\Http\Request;
 
-class VerficationScheduleController extends Controller
+class oldVerficationScheduleController extends Controller
 {
     /**
      * Display a listing of the resource.

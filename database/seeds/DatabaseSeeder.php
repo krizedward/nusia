@@ -9,7 +9,7 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run() // Sedang dikerjakan.
+    public function run()
     {
         $this->call(UsersTableSeeder::class);
         $this->call(InstructorsTableSeeder::class);
@@ -19,9 +19,9 @@ class DatabaseSeeder extends Seeder
         $this->call(CourseTypesTableSeeder::class);
         $this->call(CourseLevelsTableSeeder::class);
         $this->call(CourseLevelDetailsTableSeeder::class);
-        /*$this->call(CoursePackagesTableSeeder::class);
+        $this->call(CoursePackagesTableSeeder::class);
         $this->call(CoursesTableSeeder::class);
-        $this->call(CourseRegistrationsTableSeeder::class);
+        /*$this->call(CourseRegistrationsTableSeeder::class); // Sedang dikerjakan.
         $this->call(CoursePaymentsTableSeeder::class);
         $this->call(CourseCertificatesTableSeeder::class);
         $this->call(SessionsTableSeeder::class);

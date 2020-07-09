@@ -11,7 +11,7 @@ use App\Models\Student;
 use App\Models\Instructors;
 use App\Models\ScheduleInstructor;
 
-class HomeController extends Controller
+class oldHomeController extends Controller
 {
     /**
      * Create a new controller instance.

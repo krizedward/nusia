@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
-class UserSurveyController extends Controller
+class oldUserSurveyController extends Controller
 {
     /**
      * Display a listing of the resource.

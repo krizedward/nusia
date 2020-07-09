@@ -7,7 +7,7 @@ use App\Models\MaterialClass;
 use App\Models\Classroom;
 use Illuminate\Http\Request;
 
-class MaterialClassController extends Controller
+class oldMaterialClassController extends Controller
 {
     /**
      * Display a listing of the resource.

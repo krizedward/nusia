@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TrialClass;
 use Illuminate\Http\Request;
 
-class TrialClassController extends Controller
+class oldTrialClassController extends Controller
 {
     /**
      * Display a listing of the resource.

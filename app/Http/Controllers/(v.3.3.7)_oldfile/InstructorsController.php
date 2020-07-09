@@ -7,7 +7,7 @@ use App\Models\Classroom;
 use App\Models\ScheduleInstructor;
 use Illuminate\Http\Request;
 
-class InstructorsController extends Controller
+class oldInstructorsController extends Controller
 {
     /**
      * Display a listing of the resource.

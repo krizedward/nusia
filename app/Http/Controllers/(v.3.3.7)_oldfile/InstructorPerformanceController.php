@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\InstructorPerformance;
 use Illuminate\Http\Request;
 
-class InstructorPerformanceController extends Controller
+class oldInstructorPerformanceController extends Controller
 {
     /**
      * Display a listing of the resource.

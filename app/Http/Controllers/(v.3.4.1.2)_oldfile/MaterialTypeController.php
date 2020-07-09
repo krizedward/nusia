@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
-class MaterialTypeController extends Controller
+class oldMaterialTypeController extends Controller
 {
     /**
      * Memeriksa role User saat ini.

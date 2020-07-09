@@ -28,11 +28,14 @@ use Faker\Factory;
 */
 
 $factory->define(App\Models\CourseLevel::class, function (Faker\Generator $faker) {
-    $code = $faker->randomLetter;
+    // Deklarasi array.
+    $codes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '!', '#', '_', '=', '?', ',', '.'];
+
+    $code = $faker->randomElement($array = $codes);
 
     return [
         'slug'        => Str::random(255),
-        'code'        => $faker->randomLetter,
+        'code'        => $code,
         'name'        => 'Course Level '.$code,
         'description' => null,
         'created_at'  => now(),
@@ -49,11 +52,7 @@ $factory->state(App\Models\CourseLevel::class, 'Full', function ($faker) {
     // Deklarasi array.
     $descriptions = ['This is a description.', 'Hi. This describes something.', 'Description...', 'Description here.'];
 
-    $code = $faker->randomLetter;
-
     return [
-        'code'        => $code,
-        'name'        => 'Course Level '.$code,
         'description' => $faker->randomElement($array = $descriptions),
         'created_at'  => $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null),
         'updated_at'  => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
@@ -65,7 +64,6 @@ $factory->state(App\Models\CourseLevel::class, 'Randomized', function ($faker) {
     // Deklarasi array.
     $descriptions = ['This is a description.', 'Hi. This describes something.', 'Description...', 'Description here.'];
 
-    $code = $faker->randomLetter;
     $description =
         ($faker->boolean($chanceOfGettingTrue = 50))?
             $faker->randomElement($array = $descriptions) : null;
@@ -98,8 +96,6 @@ $factory->state(App\Models\CourseLevel::class, 'Randomized', function ($faker) {
         ) : null;
 
     return [
-        'code'        => $code,
-        'name'        => 'Course Level '.$code,
         'description' => $description,
         'created_at'  => $created_at,
         'updated_at'  => $updated_at,

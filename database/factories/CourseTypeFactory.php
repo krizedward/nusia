@@ -28,11 +28,14 @@ use Faker\Factory;
 */
 
 $factory->define(App\Models\CourseType::class, function (Faker\Generator $faker) {
-    $code = $faker->randomLetter;
+    // Deklarasi array.
+    $codes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '!', '#', '_', '=', '?', ',', '.'];
+
+    $code = $faker->randomElement($array = $codes);
 
     return [
         'slug'              => Str::random(255),
-        'code'              => $faker->randomLetter,
+        'code'              => $code,
         'name'              => 'Course Type '.$code,
         'description'       => null,
         'count_student_min' => null,
@@ -51,13 +54,10 @@ $factory->state(App\Models\CourseType::class, 'Full', function ($faker) {
     // Deklarasi array.
     $descriptions = ['This is a description.', 'Hi. This describes something.', 'Description...', 'Description here.'];
 
-    $code = $faker->randomLetter;
     $count_student_min = $faker->numberBetween($min = 1, $max = 10);
     $count_student_max = $faker->numberBetween($min = $count_student_min, $max = 10);
 
     return [
-        'code'              => $code,
-        'name'              => 'Course Type '.$code,
         'description'       => $faker->randomElement($array = $descriptions),
         'count_student_min' => $count_student_min,
         'count_student_max' => $count_student_max,
@@ -71,7 +71,6 @@ $factory->state(App\Models\CourseType::class, 'Randomized', function ($faker) {
     // Deklarasi array.
     $descriptions = ['This is a description.', 'Hi. This describes something.', 'Description...', 'Description here.'];
 
-    $code = $faker->randomLetter;
     $description =
         ($faker->boolean($chanceOfGettingTrue = 50))?
             $faker->randomElement($array = $descriptions) : null;
@@ -110,8 +109,6 @@ $factory->state(App\Models\CourseType::class, 'Randomized', function ($faker) {
         ) : null;
 
     return [
-        'code'              => $code,
-        'name'              => 'Course Type '.$code,
         'description'       => $description,
         'count_student_min' => $count_student_min,
         'count_student_max' => $count_student_max,

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
-class CourseLevelController extends Controller
+class oldCourseLevelController extends Controller
 {
     /**
      * Display a listing of the resource.
