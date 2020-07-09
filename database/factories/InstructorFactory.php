@@ -26,8 +26,6 @@ use Faker\Factory;
 | 'EducationalExperience' => Specify a value for educational_experience.
 | 'CreatedAt'             => Specify a value for created_at.
 | 'UpdatedAt'             => Specify a value for created_at and updated_at.
-| 'DeletedAt'             => Specify a value for created_at, updated_at, and deleted_at.
-| 'DeletedAtNoUpdate'     => Specify a value for created_at and deleted_at (excluding updated_at).
 |
 */
 
@@ -44,7 +42,6 @@ $factory->define(App\Models\Instructor::class, function (Faker\Generator $faker)
     $param_image_profile     = 'NULL';
     $param_created_at        = 'NULL';
     $param_updated_at        = 'NULL';
-    $param_deleted_at        = 'NULL';
     if($param_full == 'NULL') {
         $param_email_verified_at = ($faker->boolean($chanceOfGettingTrue = 50))? 'EmailVerifiedAt' : 'NULL';
         $param_citizenship       = ($faker->boolean($chanceOfGettingTrue = 50))? 'Citizenship' : 'NULL';
@@ -53,9 +50,6 @@ $factory->define(App\Models\Instructor::class, function (Faker\Generator $faker)
         $param_image_profile     = ($faker->boolean($chanceOfGettingTrue = 50))? 'ImageProfile' : 'NULL';
         $param_created_at        = ($faker->boolean($chanceOfGettingTrue = 50))? 'CreatedAt' : 'NULL';
         $param_updated_at        = ($faker->boolean($chanceOfGettingTrue = 40))? 'UpdatedAt' : 'NULL';
-        $param_deleted_at        = ($faker->boolean($chanceOfGettingTrue = 30))? 'DeletedAt' : (
-            ($faker->boolean($chanceOfGettingTrue = 20))? 'DeletedAtNoUpdate' : 'NULL'
-        );
     }
 
     return [
@@ -70,15 +64,13 @@ $factory->define(App\Models\Instructor::class, function (Faker\Generator $faker)
                 $param_phone,
                 $param_image_profile,
                 $param_created_at,
-                $param_updated_at,
-                $param_deleted_at
+                $param_updated_at
             ),
         'interest'               => null,
         'working_experience'     => null,
         'educational_experience' => null,
         'created_at'             => now(),
-        'updated_at'             => null,
-        'deleted_at'             => null
+        'updated_at'             => null
     ];
 });
 
@@ -142,29 +134,16 @@ $factory->state(App\Models\Instructor::class, 'Randomized', function ($faker) {
 
     $may_have_created_at = ($faker->boolean($chanceOfGettingTrue = 90))? 1 : 0;
     $may_have_updated_at = ($faker->boolean($chanceOfGettingTrue = 50))? 1 : 0;
-    $may_have_deleted_at = ($faker->boolean($chanceOfGettingTrue = 20))? 1 : 0;
 
     $created_at =
         ($may_have_created_at)? (
-            ($may_have_updated_at && $may_have_deleted_at)? (
-                $faker->dateTimeBetween($startDate = '-4 years', $endDate = '-3 years', $timezone = null)
-            ) : (
-                    ($may_have_updated_at || $may_have_deleted_at)? (
-                        $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null)
-                    ) : $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-            )
-        ) : null;
-    $updated_at =
-        ($may_have_updated_at)? (
-            ($may_have_deleted_at)? (
-                $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null)
-            ) : $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-        ) : null;
-    $deleted_at =
-        ($may_have_deleted_at)? (
             ($may_have_updated_at)? (
                 $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null)
             ) : $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
+        ) : null;
+    $updated_at =
+        ($may_have_updated_at)? (
+            $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
         ) : null;
 
     return [
@@ -172,8 +151,7 @@ $factory->state(App\Models\Instructor::class, 'Randomized', function ($faker) {
         'working_experience' => $working_experience,
         'educational_experience' => $educational_experience,
         'created_at' => $created_at,
-        'updated_at' => $updated_at,
-        'deleted_at' => $deleted_at
+        'updated_at' => $updated_at
     ];
 });
 
@@ -228,22 +206,5 @@ $factory->state(App\Models\Instructor::class, 'UpdatedAt', function ($faker) {
     return [
         'created_at' => $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null),
         'updated_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-    ];
-});
-
-// Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\Models\Instructor::class, 'DeletedAt', function ($faker) {
-    return [
-        'created_at' => $faker->dateTimeBetween($startDate = '-4 years', $endDate = '-3 years', $timezone = null),
-        'updated_at' => $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null),
-        'deleted_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-    ];
-});
-
-// Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\Models\Instructor::class, 'DeletedAtNoUpdate', function ($faker) {
-    return [
-        'created_at' => $faker->dateTimeBetween($startDate = '-4 years', $endDate = '-2 years', $timezone = null),
-        'deleted_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
     ];
 });

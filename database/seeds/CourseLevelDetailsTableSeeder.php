@@ -12,7 +12,23 @@ class CourseLevelDetailsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\CourseLevelDetail::class, 5)
+        factory(App\Models\CourseLevelDetail::class, 1)
+            ->states('Randomized')
+            ->create()
+            ->make();
+        factory(App\Models\CourseLevelDetail::class, 1)
+            ->states('Randomized')
+            ->create()
+            ->make();
+        factory(App\Models\CourseLevelDetail::class, 1)
+            ->states('Randomized')
+            ->create()
+            ->make();
+        factory(App\Models\CourseLevelDetail::class, 1)
+            ->states('Randomized')
+            ->create()
+            ->make();
+        factory(App\Models\CourseLevelDetail::class, 1)
             ->states('Randomized')
             ->create()
             ->make();

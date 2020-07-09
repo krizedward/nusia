@@ -31,8 +31,6 @@ use Faker\Factory;
 | 'ImageProfile'      => Specify a value for image_profile.
 | 'CreatedAt'         => Specify a value for created_at.
 | 'UpdatedAt'         => Specify a value for created_at and updated_at.
-| 'DeletedAt'         => Specify a value for created_at, updated_at, and deleted_at.
-| 'DeletedAtNoUpdate' => Specify a value for created_at and deleted_at (excluding updated_at).
 |
 */
 
@@ -58,8 +56,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'phone'             => null,
         'image_profile'     => null,
         'created_at'        => now(),
-        'updated_at'        => null,
-        'deleted_at'        => null
+        'updated_at'        => null
     ];
 });
 
@@ -173,22 +170,5 @@ $factory->state(App\User::class, 'UpdatedAt', function ($faker) {
     return [
         'created_at' => $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null),
         'updated_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-    ];
-});
-
-// Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\User::class, 'DeletedAt', function ($faker) {
-    return [
-        'created_at' => $faker->dateTimeBetween($startDate = '-4 years', $endDate = '-3 years', $timezone = null),
-        'updated_at' => $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null),
-        'deleted_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-    ];
-});
-
-// Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\User::class, 'DeletedAtNoUpdate', function ($faker) {
-    return [
-        'created_at' => $faker->dateTimeBetween($startDate = '-4 years', $endDate = '-2 years', $timezone = null),
-        'deleted_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
     ];
 });

@@ -23,8 +23,6 @@ use Faker\Factory;
 | 'Randomized'        => Specify random combination for all parameter(s).
 | 'CreatedAt'         => Specify a value for created_at.
 | 'UpdatedAt'         => Specify a value for created_at and updated_at.
-| 'DeletedAt'         => Specify a value for created_at, updated_at, and deleted_at.
-| 'DeletedAtNoUpdate' => Specify a value for created_at and deleted_at (excluding updated_at).
 |
 */
 
@@ -59,29 +57,16 @@ $factory->state(App\Models\Schedule::class, 'Randomized', function ($faker) {
 
     $may_have_created_at = ($faker->boolean($chanceOfGettingTrue = 90))? 1 : 0;
     $may_have_updated_at = ($faker->boolean($chanceOfGettingTrue = 50))? 1 : 0;
-    $may_have_deleted_at = ($faker->boolean($chanceOfGettingTrue = 20))? 1 : 0;
 
     $created_at =
         ($may_have_created_at)? (
-            ($may_have_updated_at && $may_have_deleted_at)? (
-                $faker->dateTimeBetween($startDate = '-4 years', $endDate = '-3 years', $timezone = null)
-            ) : (
-                    ($may_have_updated_at || $may_have_deleted_at)? (
-                        $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null)
-                    ) : $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-            )
-        ) : null;
-    $updated_at =
-        ($may_have_updated_at)? (
-            ($may_have_deleted_at)? (
-                $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null)
-            ) : $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-        ) : null;
-    $deleted_at =
-        ($may_have_deleted_at)? (
             ($may_have_updated_at)? (
                 $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null)
             ) : $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
+        ) : null;
+    $updated_at =
+        ($may_have_updated_at)? (
+            $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
         ) : null;
 
     return [
@@ -89,8 +74,7 @@ $factory->state(App\Models\Schedule::class, 'Randomized', function ($faker) {
         'schedule_time' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = '+2 years', $timezone = null),
         'status'        => $status,
         'created_at'    => $created_at,
-        'updated_at'    => $updated_at,
-        'deleted_at'    => $deleted_at
+        'updated_at'    => $updated_at
     ];
 });
 
@@ -106,22 +90,5 @@ $factory->state(App\Models\Schedule::class, 'UpdatedAt', function ($faker) {
     return [
         'created_at' => $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null),
         'updated_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-    ];
-});
-
-// Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\Models\Schedule::class, 'DeletedAt', function ($faker) {
-    return [
-        'created_at' => $faker->dateTimeBetween($startDate = '-4 years', $endDate = '-3 years', $timezone = null),
-        'updated_at' => $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null),
-        'deleted_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-    ];
-});
-
-// Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\Models\Schedule::class, 'DeletedAtNoUpdate', function ($faker) {
-    return [
-        'created_at' => $faker->dateTimeBetween($startDate = '-4 years', $endDate = '-2 years', $timezone = null),
-        'deleted_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
     ];
 });

@@ -27,20 +27,11 @@ class UsersTableSeeder extends Seeder
         factory(App\User::class, 1)
             ->states('GenderFemale', 'EmailVerifiedAt', 'Citizenship', 'UpdatedAt')
             ->create()->make();
-        factory(App\User::class, 3)
+        factory(App\User::class, 6)
             ->states('Full', 'RolesAdmin', 'GenderMale')
             ->create()->make();
-        factory(App\User::class, 2)
+        factory(App\User::class, 3)
             ->states('Full', 'RolesAdmin', 'GenderFemale')
-            ->create()->make();
-        factory(App\User::class, 2)
-            ->states('Full', 'RolesAdmin', 'GenderMale', 'DeletedAt')
-            ->create()->make();
-        factory(App\User::class, 1)
-            ->states('Full', 'RolesAdmin', 'GenderFemale', 'DeletedAt')
-            ->create()->make();
-        factory(App\User::class, 1)
-            ->states('Full', 'RolesAdmin', 'GenderMale', 'DeletedAtNoUpdate')
             ->create()->make();
     }
 }

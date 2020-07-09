@@ -12,7 +12,23 @@ class MaterialTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\MaterialType::class, 5)
+        factory(App\Models\MaterialType::class, 1)
+            ->states('Randomized')
+            ->create()
+            ->make();
+        factory(App\Models\MaterialType::class, 1)
+            ->states('Randomized')
+            ->create()
+            ->make();
+        factory(App\Models\MaterialType::class, 1)
+            ->states('Randomized')
+            ->create()
+            ->make();
+        factory(App\Models\MaterialType::class, 1)
+            ->states('Randomized')
+            ->create()
+            ->make();
+        factory(App\Models\MaterialType::class, 1)
             ->states('Randomized')
             ->create()
             ->make();

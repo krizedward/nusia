@@ -12,7 +12,23 @@ class CourseTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\CourseType::class, 5)
+        factory(App\Models\CourseType::class, 1)
+            ->states('Randomized')
+            ->create()
+            ->make();
+        factory(App\Models\CourseType::class, 1)
+            ->states('Randomized')
+            ->create()
+            ->make();
+        factory(App\Models\CourseType::class, 1)
+            ->states('Randomized')
+            ->create()
+            ->make();
+        factory(App\Models\CourseType::class, 1)
+            ->states('Randomized')
+            ->create()
+            ->make();
+        factory(App\Models\CourseType::class, 1)
             ->states('Randomized')
             ->create()
             ->make();

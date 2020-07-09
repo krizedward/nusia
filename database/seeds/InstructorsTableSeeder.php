@@ -43,26 +43,6 @@ class InstructorsTableSeeder extends Seeder
                     ->make();
             })
             ->make();
-        factory(App\Models\Instructor::class, 3)
-            ->states('Full', 'DeletedAt')
-            ->create()
-            ->each(function($instructor) {
-                factory(App\Models\Schedule::class, 50)
-                    ->states('Randomized')
-                    ->create(['instructor_id' => $instructor->id])
-                    ->make();
-            })
-            ->make();
-        factory(App\Models\Instructor::class, 3)
-            ->states('Full', 'DeletedAtNoUpdate')
-            ->create()
-            ->each(function($instructor) {
-                factory(App\Models\Schedule::class, 50)
-                    ->states('Randomized')
-                    ->create(['instructor_id' => $instructor->id])
-                    ->make();
-            })
-            ->make();
         factory(App\Models\Instructor::class, 2)
             ->states('Interest', 'WorkingExperience')
             ->create()

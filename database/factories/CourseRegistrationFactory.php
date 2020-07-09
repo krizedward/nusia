@@ -24,8 +24,6 @@ use Faker\Factory;
 | 'Randomized'        => Specify random combination for all parameter(s).
 | 'CreatedAt'         => Specify a value for created_at.
 | 'UpdatedAt'         => Specify a value for created_at and updated_at.
-| 'DeletedAt'         => Specify a value for created_at, updated_at, and deleted_at.
-| 'DeletedAtNoUpdate' => Specify a value for created_at and deleted_at (excluding updated_at).
 |
 */
 
@@ -39,23 +37,34 @@ $factory->define(App\Models\CourseRegistration::class, function (Faker\Generator
     // Possible infinite loop when all courses are full.
     while(1) {
         $course_id = $faker->numberBetween($min = 1, $max = $courses->count());
-        $course_registration_count = CourseRegistration::where('course_id', $course_id)->count();
+        $course_registrations_count = CourseRegistration::where('course_id', $course_id)->count();
 
         $course = $courses->firstWhere('id', $course_id);
-        $course_count_student_max = $course->course_package->course_type->count_student_max;
+        $course_count_student_max = -1;
+        if(
+            $course != null
+            && $course->course_package != null
+            && $course->course_package->course_type != null
+            && $course->course_package->course_type->count_student_max != null
+        ) $course_count_student_max = $course->course_package->course_type->count_student_max;
+/*echo $course_id.' '.$course->course_package->id.' '.$course->course_package->course_type->id.' ';*/
 
-        if($course_registration_count + 1 > $course_count_student_max) continue;
+        if($course_registrations_count + 1 > $course_count_student_max) continue;
 
         // Possible infinite loop when all students have been registered in a specific course.
         while(1) {
             $student_id = $faker->numberBetween($min = 1, $max = $students->count());
 
-            $course_registrations = CourseRegistration::where('course_id', $course_id);
-            $has_registered_before = ($course_registrations->firstWhere('student_id', $student_id) != null)? 1 : 0;
+            $course_registration = CourseRegistration
+                ::where('course_id', $course_id)
+                ->where('student_id', $student_id)
+                ->count();
+            $has_registered_before = ($course_registration)? 1 : 0;
 
             if($has_registered_before) continue;
-            else break;
+            break;
         }
+        break;
     }
 
     return [
@@ -82,35 +91,21 @@ $factory->state(App\Models\CourseRegistration::class, 'Full', function ($faker) 
 $factory->state(App\Models\CourseRegistration::class, 'Randomized', function ($faker) {
     $may_have_created_at = ($faker->boolean($chanceOfGettingTrue = 90))? 1 : 0;
     $may_have_updated_at = ($faker->boolean($chanceOfGettingTrue = 50))? 1 : 0;
-    $may_have_deleted_at = ($faker->boolean($chanceOfGettingTrue = 20))? 1 : 0;
 
     $created_at =
         ($may_have_created_at)? (
-            ($may_have_updated_at && $may_have_deleted_at)? (
-                $faker->dateTimeBetween($startDate = '-4 years', $endDate = '-3 years', $timezone = null)
-            ) : (
-                    ($may_have_updated_at || $may_have_deleted_at)? (
-                        $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null)
-                    ) : $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-            )
-        ) : null;
-    $updated_at =
-        ($may_have_updated_at)? (
-            ($may_have_deleted_at)? (
-                $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null)
-            ) : $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-        ) : null;
-    $deleted_at =
-        ($may_have_deleted_at)? (
             ($may_have_updated_at)? (
                 $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null)
             ) : $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
         ) : null;
+    $updated_at =
+        ($may_have_updated_at)? (
+            $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
+        ) : null;
 
     return [
         'created_at'    => $created_at,
-        'updated_at'    => $updated_at,
-        'deleted_at'    => $deleted_at
+        'updated_at'    => $updated_at
     ];
 });
 
@@ -126,22 +121,5 @@ $factory->state(App\Models\CourseRegistration::class, 'UpdatedAt', function ($fa
     return [
         'created_at' => $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null),
         'updated_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-    ];
-});
-
-// Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\Models\CourseRegistration::class, 'DeletedAt', function ($faker) {
-    return [
-        'created_at' => $faker->dateTimeBetween($startDate = '-4 years', $endDate = '-3 years', $timezone = null),
-        'updated_at' => $faker->dateTimeBetween($startDate = '-3 years', $endDate = '-2 years', $timezone = null),
-        'deleted_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
-    ];
-});
-
-// Gunakan fungsi ini apabila memerlukan variabel $faker pada waktu melakukan update state.
-$factory->state(App\Models\CourseRegistration::class, 'DeletedAtNoUpdate', function ($faker) {
-    return [
-        'created_at' => $faker->dateTimeBetween($startDate = '-4 years', $endDate = '-2 years', $timezone = null),
-        'deleted_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = null)
     ];
 });
