@@ -275,6 +275,7 @@ class MaterialTypeController extends Controller
         if($material_type == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
+        }
 
         if($this->is_admin()) {
             $material_type->delete();
