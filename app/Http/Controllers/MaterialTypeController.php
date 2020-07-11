@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\MaterialType;
+use App\Models\CoursePackage;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -81,26 +82,15 @@ class MaterialTypeController extends Controller
         $validator = Validator::make($data, [
             'code' => [
                 'bail', 'required',
-                Rule::unique('material_types', 'code')
-                    ->where(function($query) {
-                        return $query->where('deleted_at', null);
-                    }
-                ),
+                Rule::unique('material_types', 'code'),
                 'size:1'
             ],
             'name' => [
                 'bail', 'required',
-                Rule::unique('material_types', 'name')
-                    ->where(function($query) {
-                        return $query->where('deleted_at', null);
-                    }
-                ),
+                Rule::unique('material_types', 'name'),
                 'max:100'
             ],
-            'description' => [
-                'bail', 'sometimes',
-                'max:5000'
-            ]
+            'description' => ['bail', 'sometimes', 'max:5000']
         ]);
 
         if($validator->fails()) {
@@ -113,8 +103,7 @@ class MaterialTypeController extends Controller
         $slug = "";
         while(1) {
             $slug = Str::random(255);
-            $material_type = MaterialType
-                ::firstWhere('slug', $slug);
+            $material_type = MaterialType::firstWhere('slug', $slug);
             if($material_type === null) break;
         }
 
@@ -213,28 +202,15 @@ class MaterialTypeController extends Controller
         $validator = Validator::make($data, [
             'code' => [
                 'bail', 'required',
-                Rule::unique('material_types', 'code')
-                    ->ignore($id, 'id')
-                    ->where(function($query) {
-                        return $query->where('deleted_at', null);
-                    }
-                ),
+                Rule::unique('material_types', 'code')->ignore($id, 'id'),
                 'size:1'
             ],
             'name' => [
                 'bail', 'required',
-                Rule::unique('material_types', 'name')
-                    ->ignore($id, 'id')
-                    ->where(function($query) {
-                        return $query->where('deleted_at', null);
-                    }
-                ),
+                Rule::unique('material_types', 'name')->ignore($id, 'id'),
                 'max:100'
             ],
-            'description' => [
-                'bail', 'sometimes',
-                'max:5000'
-            ]
+            'description' => ['bail', 'sometimes', 'max:5000']
         ]);
 
         if($validator->fails()) {
@@ -274,6 +250,12 @@ class MaterialTypeController extends Controller
         $material_type = MaterialType::firstOrFail($id);
         if($material_type == null) {
             // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        $course_package = CoursePackage::firstWhere('material_type_id', $id);
+        if($course_package != null) {
+            // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
             // Return?
         }
 

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Course;
+use App\Models\CourseRegistration;
+use App\Models\Session;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -41,7 +44,17 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        $courses = Course::all()
+            ->join('course_packages', 'course_package_id', '=', 'course_packages.id')
+            ->select(
+                'slug',
+                'course_packages.title',
+                'title',
+                'description'
+            )->paginate(10);
+        return view('courses.index', compact(
+            'courses'
+        ));
     }
 
     /**
@@ -51,7 +64,11 @@ class CourseController extends Controller
      */
     public function create()
     {
-        //
+        if($this->is_admin() || $this->is_instructor()) {
+            return view('courses.create');
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -62,7 +79,52 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'course_package_id' => ['bail', 'required'],
+            'title' => ['bail', 'sometimes', 'max:255'],
+            'description' => ['bail', 'sometimes', 'max:5000'],
+            'requirement' => ['bail', 'sometimes', 'max:5000']
+        ]);
+
+        if($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Membuat slug baru.
+        $slug = "";
+        while(1) {
+            $slug = Str::random(255);
+            $course = Course::firstWhere('slug', $slug);
+            if($course === null) break;
+        }
+
+        if($this->is_admin() || $this->is_instructor()) {
+            Course::create([
+                'slug' => $slug,
+                'course_package_id' => $request->course_package_id,
+                'title' => $request->title,
+                'description' => $request->description,
+                'requirement' => $request->requirement
+            ]);
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        $courses = Course::all()
+            ->join('course_packages', 'course_package_id', '=', 'course_packages.id')
+            ->select(
+                'slug',
+                'course_packages.title',
+                'title',
+                'description'
+            )->paginate(10);
+        return view('courses.index', compact(
+            'courses'
+        ));
     }
 
     /**
@@ -73,7 +135,23 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        //
+        $course = Course::firstOrFail($id);
+        if($course == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        $slug = $course->slug;
+        $course_package_slug = $course->course_package->slug;
+        $course_package_title = $course->course_package->title;
+        $title = $course->title;
+        $description = $course->description;
+        $requirement = $course->requirement;
+
+        return view('courses.show', compact(
+            'slug', 'course_package_slug', 'course_package_title',
+            'title', 'description', 'requirement'
+        ));
     }
 
     /**
@@ -84,7 +162,27 @@ class CourseController extends Controller
      */
     public function edit($id)
     {
-        //
+        if($this->is_admin() || $this->is_instructor()) {
+            $course = Course::firstOrFail($id);
+            if($course == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+
+            $slug = $course->slug;
+            $course_package_slug = $course->course_package->slug;
+            $course_package_title = $course->course_package->title;
+            $title = $course->title;
+            $description = $course->description;
+            $requirement = $course->requirement;
+
+            return view('courses.edit', compact(
+                'slug', 'course_package_slug', 'course_package_title',
+                'title', 'description', 'requirement'
+            ));
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -96,7 +194,49 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $course = Course::firstOrFail($id);
+        if($course == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'course_package_id' => ['bail', 'required'],
+            'title' => ['bail', 'sometimes', 'max:255'],
+            'description' => ['bail', 'sometimes', 'max:5000'],
+            'requirement' => ['bail', 'sometimes', 'max:5000']
+        ]);
+
+        if($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        if($this->is_admin() || $this->is_instructor()) {
+            $course->update([
+                'course_package_id' => $request->course_package_id,
+                'title' => $request->title,
+                'description' => $request->description,
+                'requirement' => $request->requirement
+            ]);
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        $slug = $course->slug;
+        $course_package_slug = $course->course_package->slug;
+        $course_package_title = $course->course_package->title;
+        $title = $course->title;
+        $description = $course->description;
+        $requirement = $course->requirement;
+
+        return view('courses.show', compact(
+            'slug', 'course_package_slug', 'course_package_title',
+            'title', 'description', 'requirement'
+        ));
     }
 
     /**
@@ -107,6 +247,42 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $course = Course::firstOrFail($id);
+        if($course == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        $course_registration = CourseRegistration::firstWhere('course_id', $id);
+        if($course_registration != null) {
+            // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
+            // Return?
+        }
+
+        $session = Session::firstWhere('course_id', $id);
+        if($session != null) {
+            // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
+            // Return?
+        }
+
+        if($this->is_admin()) {
+            $course->delete();
+        } else if($this->is_instructor()) {
+            // Melakukan request ke Admin.
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        $courses = Course::all()
+            ->join('course_packages', 'course_package_id', '=', 'course_packages.id')
+            ->select(
+                'slug',
+                'course_packages.title',
+                'title',
+                'description'
+            )->paginate(10);
+        return view('courses.index', compact(
+            'courses'
+        ));
     }
 }

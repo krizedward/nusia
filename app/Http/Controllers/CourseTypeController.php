@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\CourseType;
+use App\Models\CoursePackage;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -83,34 +84,17 @@ class CourseTypeController extends Controller
         $validator = Validator::make($data, [
             'code' => [
                 'bail', 'required',
-                Rule::unique('course_types', 'code')
-                    ->where(function($query) {
-                        return $query->where('deleted_at', null);
-                    }
-                ),
+                Rule::unique('course_types', 'code'),
                 'size:1'
             ],
             'name' => [
                 'bail', 'required',
-                Rule::unique('course_types', 'name')
-                    ->where(function($query) {
-                        return $query->where('deleted_at', null);
-                    }
-                ),
+                Rule::unique('course_types', 'name'),
                 'max:100'
             ],
-            'description' => [
-                'bail', 'sometimes',
-                'max:5000'
-            ],
-            'count_student_min' => [
-                'bail', 'sometimes',
-                'min:0', 'max:1000'
-            ],
-            'count_student_max' => [
-                'bail', 'sometimes',
-                'min:0', 'max:1000'
-            ]
+            'description' => ['bail', 'sometimes', 'max:5000'],
+            'count_student_min' => ['bail', 'sometimes', 'min:0', 'max:1000'],
+            'count_student_max' => ['bail', 'sometimes', 'min:0', 'max:1000']
         ]);
 
         if($validator->fails()) {
@@ -123,8 +107,7 @@ class CourseTypeController extends Controller
         $slug = "";
         while(1) {
             $slug = Str::random(255);
-            $course_type = CourseType
-                ::firstWhere('slug', $slug);
+            $course_type = CourseType::firstWhere('slug', $slug);
             if($course_type === null) break;
         }
 
@@ -233,36 +216,17 @@ class CourseTypeController extends Controller
         $validator = Validator::make($data, [
             'code' => [
                 'bail', 'required',
-                Rule::unique('course_types', 'code')
-                    ->ignore($id, 'id')
-                    ->where(function($query) {
-                        return $query->where('deleted_at', null);
-                    }
-                ),
+                Rule::unique('course_types', 'code')->ignore($id, 'id'),
                 'size:1'
             ],
             'name' => [
                 'bail', 'required',
-                Rule::unique('course_types', 'name')
-                    ->ignore($id, 'id')
-                    ->where(function($query) {
-                        return $query->where('deleted_at', null);
-                    }
-                ),
+                Rule::unique('course_types', 'name')->ignore($id, 'id'),
                 'max:100'
             ],
-            'description' => [
-                'bail', 'sometimes',
-                'max:5000'
-            ],
-            'count_student_min' => [
-                'bail', 'sometimes',
-                'min:0', 'max:1000'
-            ],
-            'count_student_max' => [
-                'bail', 'sometimes',
-                'min:0', 'max:1000'
-            ]
+            'description' => ['bail', 'sometimes', 'max:5000'],
+            'count_student_min' => ['bail', 'sometimes', 'min:0', 'max:1000'],
+            'count_student_max' => ['bail', 'sometimes', 'min:0', 'max:1000']
         ]);
 
         if($validator->fails()) {
@@ -305,9 +269,14 @@ class CourseTypeController extends Controller
     public function destroy($id)
     {
         $course_type = CourseType::firstOrFail($id);
-
         if($course_type == null) {
             // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        $course_package = CoursePackage::firstWhere('course_type_id', $id);
+        if($course_package != null) {
+            // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
             // Return?
         }
 

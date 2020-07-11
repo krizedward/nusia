@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\CourseLevelDetail;
+use App\Models\CoursePackage;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -81,26 +82,15 @@ class CourseLevelDetailController extends Controller
         $validator = Validator::make($data, [
             'code' => [
                 'bail', 'required',
-                Rule::unique('course_level_details', 'code')
-                    ->where(function($query) {
-                        return $query->where('deleted_at', null);
-                    }
-                ),
+                Rule::unique('course_level_details', 'code'),
                 'size:1'
             ],
             'name' => [
                 'bail', 'required',
-                Rule::unique('course_level_details', 'name')
-                    ->where(function($query) {
-                        return $query->where('deleted_at', null);
-                    }
-                ),
+                Rule::unique('course_level_details', 'name'),
                 'max:100'
             ],
-            'description' => [
-                'bail', 'sometimes',
-                'max:5000'
-            ]
+            'description' => ['bail', 'sometimes', 'max:5000']
         ]);
 
         if($validator->fails()) {
@@ -113,8 +103,7 @@ class CourseLevelDetailController extends Controller
         $slug = "";
         while(1) {
             $slug = Str::random(255);
-            $course_level_detail = CourseLevelDetail
-                ::firstWhere('slug', $slug);
+            $course_level_detail = CourseLevelDetail::firstWhere('slug', $slug);
             if($course_level_detail === null) break;
         }
 
@@ -213,28 +202,15 @@ class CourseLevelDetailController extends Controller
         $validator = Validator::make($data, [
             'code' => [
                 'bail', 'required',
-                Rule::unique('course_level_details', 'code')
-                    ->ignore($id, 'id')
-                    ->where(function($query) {
-                        return $query->where('deleted_at', null);
-                    }
-                ),
+                Rule::unique('course_level_details', 'code')->ignore($id, 'id'),
                 'size:1'
             ],
             'name' => [
                 'bail', 'required',
-                Rule::unique('course_level_details', 'name')
-                    ->ignore($id, 'id')
-                    ->where(function($query) {
-                        return $query->where('deleted_at', null);
-                    }
-                ),
+                Rule::unique('course_level_details', 'name')->ignore($id, 'id'),
                 'max:100'
             ],
-            'description' => [
-                'bail', 'sometimes',
-                'max:5000'
-            ]
+            'description' => ['bail', 'sometimes', 'max:5000']
         ]);
 
         if($validator->fails()) {
@@ -274,6 +250,12 @@ class CourseLevelDetailController extends Controller
         $course_level_detail = CourseLevelDetail::firstOrFail($id);
         if($course_level_detail == null) {
             // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        $course_package = CoursePackage::firstWhere('course_level_detail_id', $id);
+        if($course_package != null) {
+            // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
             // Return?
         }
 
