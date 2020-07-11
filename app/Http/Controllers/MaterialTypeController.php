@@ -48,7 +48,7 @@ class MaterialTypeController extends Controller
                 'code',
                 'name',
                 'description'
-            );
+            )->paginate(10);
         return view('material_types.index', compact(
             'material_types'
         ));
@@ -135,7 +135,7 @@ class MaterialTypeController extends Controller
                 'code',
                 'name',
                 'description'
-            );
+            )->paginate(10);
         return view('material_types.index', compact(
             'material_types'
         ));
@@ -150,6 +150,11 @@ class MaterialTypeController extends Controller
     public function show($id)
     {
         $material_type = MaterialType::firstOrFail($id);
+        if($material_type == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
         $slug = $material_type->slug;
         $code = $material_type->code;
         $name = $material_type->name;
@@ -170,6 +175,11 @@ class MaterialTypeController extends Controller
     {
         if($this->is_admin()) {
             $material_type = MaterialType::firstOrFail($id);
+            if($material_type == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+
             $slug = $material_type->slug;
             $code = $material_type->code;
             $name = $material_type->name;
@@ -193,6 +203,11 @@ class MaterialTypeController extends Controller
     public function update(Request $request, $id)
     {
         $material_type = MaterialType::firstOrFail($id);
+        if($material_type == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
         $data = $request->all();
 
         $validator = Validator::make($data, [
@@ -257,6 +272,10 @@ class MaterialTypeController extends Controller
     public function destroy($id)
     {
         $material_type = MaterialType::firstOrFail($id);
+        if($material_type == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+
         if($this->is_admin()) {
             $material_type->delete();
         } else {
@@ -269,7 +288,7 @@ class MaterialTypeController extends Controller
                 'code',
                 'name',
                 'description'
-            );
+            )->paginate(10);
         return view('material_types.index', compact(
             'material_types'
         ));

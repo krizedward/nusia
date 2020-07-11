@@ -50,7 +50,7 @@ class CourseTypeController extends Controller
                 'description',
                 'count_student_min',
                 'count_student_max'
-            );
+            )->paginate(10);
         return view('course_types.index', compact(
             'course_types'
         ));
@@ -149,7 +149,7 @@ class CourseTypeController extends Controller
                 'description',
                 'count_student_min',
                 'count_student_max'
-            );
+            )->paginate(10);
         return view('course_types.index', compact(
             'course_types'
         ));
@@ -164,6 +164,11 @@ class CourseTypeController extends Controller
     public function show($id)
     {
         $course_type = CourseType::firstOrFail($id);
+        if($course_type == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
         $slug = $course_type->slug;
         $code = $course_type->code;
         $name = $course_type->name;
@@ -187,6 +192,11 @@ class CourseTypeController extends Controller
     {
         if($this->is_admin()) {
             $course_type = CourseType::firstOrFail($id);
+            if($course_type == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+
             $slug = $course_type->slug;
             $code = $course_type->code;
             $name = $course_type->name;
@@ -213,6 +223,11 @@ class CourseTypeController extends Controller
     public function update(Request $request, $id)
     {
         $course_type = CourseType::firstOrFail($id);
+        if($course_type == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
         $data = $request->all();
 
         $validator = Validator::make($data, [
@@ -290,6 +305,12 @@ class CourseTypeController extends Controller
     public function destroy($id)
     {
         $course_type = CourseType::firstOrFail($id);
+
+        if($course_type == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
         if($this->is_admin()) {
             $course_type->delete();
         } else {
@@ -304,7 +325,7 @@ class CourseTypeController extends Controller
                 'description',
                 'count_student_min',
                 'count_student_max'
-            );
+            )->paginate(10);
         return view('course_types.index', compact(
             'course_types'
         ));
