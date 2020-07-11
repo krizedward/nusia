@@ -3,6 +3,8 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 use App\Models\CourseRegistration;
 use App\Models\Course;
+use App\Models\CoursePackage;
+use App\Models\CourseType;
 use App\Models\Student;
 use Illuminate\Support\Str;
 //use Faker\Generator as Faker;
@@ -28,26 +30,47 @@ use Faker\Factory;
 */
 
 $factory->define(App\Models\CourseRegistration::class, function (Faker\Generator $faker) {
+    $course_types = CourseType::all();
+    $course_packages = CoursePackage::all();
     $courses = Course::all();
     $students = Student::all();
+
+    $course_types_count = $course_types->count();
+    $course_packages_count = $course_packages->count();
+    $courses_count = $courses->count();
+    $students_count = $students->count();
+
+    $course_type = null;
+    $course_package = null;
+    $course = null;
 
     $course_id = 0;
     $student_id = 0;
 
     // Possible infinite loop when all courses are full.
     while(1) {
-        $course_id = $faker->numberBetween($min = 1, $max = $courses->count());
-        $course_registrations_count = CourseRegistration::where('course_id', $course_id)->count();
+        $id = $faker->numberBetween($min = 1, $max = $course_types_count);
+        $course_type = $course_types->firstWhere('id', $id);
+        $course_count_student_max = $course_type->count_student_max;
+        if($course_count_student_max == null) continue;
 
-        $course = $courses->firstWhere('id', $course_id);
-        $course_count_student_max = -1;
-        if(
-            $course != null
-            && $course->course_package != null
-            && $course->course_package->course_type != null
-            && $course->course_package->course_type->count_student_max != null
-        ) $course_count_student_max = $course->course_package->course_type->count_student_max;
-/*echo $course_id.' '.$course->course_package->id.' '.$course->course_package->course_type->id.' ';*/
+        $id = $faker->numberBetween($min = 1, $max = $course_packages_count);
+        $course_packages_temp = $course_packages->where('course_type_id', $id);
+        if($course_packages_temp == null) continue;
+
+        $id = $faker->numberBetween($min = 1, $max = $course_packages_count);
+        $course_package = $course_packages_temp->firstWhere('id', $id);
+        if($course_package == null) continue;
+
+        $courses_temp = $courses->where('course_package_id', $id);
+        if($courses_temp == null) continue;
+
+        $id = $faker->numberBetween($min = 1, $max = $courses_count);
+        $course = $courses_temp->firstWhere('id', $id);
+        if($course == null) continue;
+
+        $course_id = $id;
+        $course_registrations_count = CourseRegistration::where('course_id', $course_id)->count();
 
         if($course_registrations_count + 1 > $course_count_student_max) continue;
 

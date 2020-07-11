@@ -21,13 +21,13 @@ class DatabaseSeeder extends Seeder
         $this->call(CourseLevelDetailsTableSeeder::class);
         $this->call(CoursePackagesTableSeeder::class);
         $this->call(CoursesTableSeeder::class);
-        $this->call(CourseRegistrationsTableSeeder::class); // Sedang dikerjakan.
-        /*$this->call(CoursePaymentsTableSeeder::class);
+        $this->call(CourseRegistrationsTableSeeder::class);
+        $this->call(CoursePaymentsTableSeeder::class);
         $this->call(CourseCertificatesTableSeeder::class);
         $this->call(SessionsTableSeeder::class);
         $this->call(SessionRegistrationsTableSeeder::class);
         $this->call(MaterialPublicsTableSeeder::class);
         $this->call(MaterialSessionsTableSeeder::class);
-        $this->call(RatingsTableSeeder::class);*/
+        $this->call(RatingsTableSeeder::class);
     }
 }
