@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Str;
+use App\Models\MaterialPublic;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +42,8 @@ class MaterialPublicController extends Controller
      */
     public function index()
     {
-        //
+        $data = MaterialPublic::all();
+        return view('materials.publics.index', compact('data'));
     }
 
     /**

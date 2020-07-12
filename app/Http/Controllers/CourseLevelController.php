@@ -43,6 +43,7 @@ class CourseLevelController extends Controller
      */
     public function index()
     {
+        /*
         $course_levels = CourseLevel::all()
             ->select(
                 'slug',
@@ -53,6 +54,9 @@ class CourseLevelController extends Controller
         return view('course_levels.index', compact(
             'course_levels'
         ));
+        */
+        $data = CourseLevel::all();
+        return view('courses.levels.index', compact('data'));
     }
 
     /**

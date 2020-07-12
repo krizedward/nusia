@@ -43,6 +43,7 @@ class CourseTypeController extends Controller
      */
     public function index()
     {
+        /*
         $course_types = CourseType::all()
             ->select(
                 'slug',
@@ -55,6 +56,9 @@ class CourseTypeController extends Controller
         return view('course_types.index', compact(
             'course_types'
         ));
+        */
+        $data = CourseType::all();
+        return view('courses.types.index', compact('data'));
     }
 
     /**

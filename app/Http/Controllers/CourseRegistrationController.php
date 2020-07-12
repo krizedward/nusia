@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Str;
+use App\Models\CourseRegistration;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +42,8 @@ class CourseRegistrationController extends Controller
      */
     public function index()
     {
-        //
+        $data = CourseRegistration::all();
+        return view('registrations.courses.index', compact('data'));
     }
 
     /**

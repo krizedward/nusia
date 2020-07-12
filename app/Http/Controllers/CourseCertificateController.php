@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Str;
+use App\Models\CourseCertificate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +42,8 @@ class CourseCertificateController extends Controller
      */
     public function index()
     {
-        //
+        $data = CourseCertificate::all();
+        return view('courses.certificates.index', compact('data'));
     }
 
     /**

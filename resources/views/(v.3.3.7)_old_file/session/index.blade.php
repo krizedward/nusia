@@ -65,7 +65,7 @@
 @endsection
 
 @push('style')
-<!-- Bootstrap 3.3.7 -->
+  <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="{{ asset('adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{ asset('adminlte/bower_components/font-awesome/css/font-awesome.min.css')}}">
@@ -92,33 +92,33 @@
 @endpush
 
 @push('script')
-<!-- jQuery 3 -->
-<script src="{{ asset('adminlte/bower_components/jquery/dist/jquery.min.js')}}"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="{{ asset('adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
-<!-- DataTables -->
-<script src="{{ asset('adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{ asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
-<!-- SlimScroll -->
-<script src="{{ asset('adminlte/bower_components/jquery-slimscroll/jquery.slimscroll.min.js')}}"></script>
-<!-- FastClick -->
-<script src="{{ asset('adminlte/bower_components/fastclick/lib/fastclick.js')}}"></script>
-<!-- AdminLTE App -->
-<script src="{{ asset('adminlte/dist/js/adminlte.min.js')}}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{{ asset('adminlte/dist/js/demo.js')}}"></script>
-<!-- page script -->
-<script>
-  $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
+  <!-- jQuery 3 -->
+  <script src="{{ asset('adminlte/bower_components/jquery/dist/jquery.min.js')}}"></script>
+  <!-- Bootstrap 3.3.7 -->
+  <script src="{{ asset('adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+  <!-- DataTables -->
+  <script src="{{ asset('adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+  <script src="{{ asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
+  <!-- SlimScroll -->
+  <script src="{{ asset('adminlte/bower_components/jquery-slimscroll/jquery.slimscroll.min.js')}}"></script>
+  <!-- FastClick -->
+  <script src="{{ asset('adminlte/bower_components/fastclick/lib/fastclick.js')}}"></script>
+  <!-- AdminLTE App -->
+  <script src="{{ asset('adminlte/dist/js/adminlte.min.js')}}"></script>
+  <!-- AdminLTE for demo purposes -->
+  <script src="{{ asset('adminlte/dist/js/demo.js')}}"></script>
+  <!-- page script -->
+  <script>
+    $(function () {
+      $('#example1').DataTable()
+      $('#example2').DataTable({
+        'paging'      : true,
+        'lengthChange': false,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : true,
+        'autoWidth'   : false
+      })
     })
-  })
-</script>
+  </script>
 @endpush

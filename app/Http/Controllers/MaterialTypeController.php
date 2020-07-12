@@ -43,6 +43,7 @@ class MaterialTypeController extends Controller
      */
     public function index()
     {
+        /*
         $material_types = MaterialType::all()
             ->select(
                 'slug',
@@ -53,6 +54,9 @@ class MaterialTypeController extends Controller
         return view('material_types.index', compact(
             'material_types'
         ));
+        */
+        $data = MaterialType::all();
+        return view('materials.types.index', compact('data'));
     }
 
     /**

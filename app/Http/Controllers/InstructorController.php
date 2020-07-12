@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Str;
+use App\Models\Instructor;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +42,8 @@ class InstructorController extends Controller
      */
     public function index()
     {
-        //
+        $data = Instructor::all();
+        return view('users.Instructors.index', compact('data'));
     }
 
     /**

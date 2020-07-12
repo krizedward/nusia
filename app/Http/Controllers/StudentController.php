@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Str;
+use App\Models\Student;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +42,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $data = Student::all();
+        return view('users.students.index', compact('data'));
     }
 
     /**

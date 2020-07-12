@@ -47,6 +47,7 @@ class CoursePackageController extends Controller
      */
     public function index()
     {
+        /*
         $course_packages = CoursePackage::all()
             ->join('material_types', 'material_type_id', '=', 'material_types.id')
             ->join('course_types', 'course_type_id', '=', 'course_types.id')
@@ -66,6 +67,9 @@ class CoursePackageController extends Controller
         return view('course_packages.index', compact(
             'course_packages'
         ));
+        */
+        $data = CoursePackage::all();
+        return view('courses.packages.index', compact('data'));
     }
 
     /**
