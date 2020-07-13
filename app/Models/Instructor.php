@@ -33,6 +33,6 @@ class Instructor extends Model
      */
     public function schedules()
     {
-    	return $this->hasMany('App\Models\Schedule', 'instructor_id');
+    	return $this->hasMany(App\Models\Schedule::class);
     }
 }

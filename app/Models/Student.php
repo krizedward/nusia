@@ -40,6 +40,6 @@ class Student extends Model
      */
     public function course_registrations()
     {
-    	return $this->hasMany('App\Models\CourseRegistration', 'student_id');
+    	return $this->hasMany(App\Models\CourseRegistration::class);
     }
 }

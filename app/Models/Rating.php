@@ -23,6 +23,6 @@ class Rating extends Model
      */
     public function session()
     {
-    	return $this->belongsTo('App\Models\Session', 'id');
+    	return $this->belongsTo(App\Models\Session::class);
     }
 }

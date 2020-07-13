@@ -23,7 +23,7 @@ class CourseCertificate extends Model
      */
     public function course_registration()
     {
-    	return $this->belongsTo('App\Models\CourseRegistration', 'id');
+    	return $this->belongsTo(App\Models\CourseRegistration::class);
     }
 
     /**

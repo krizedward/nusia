@@ -24,7 +24,7 @@ class MaterialType extends Model
      */
     public function course_packages()
     {
-    	return $this->hasMany('App\Models\CoursePackage', 'material_type_id');
+    	return $this->hasMany(App\Models\CoursePackage::class);
     }
 
     /**

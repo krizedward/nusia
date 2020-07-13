@@ -23,7 +23,7 @@ class Schedule extends Model
      */
     public function instructor()
     {
-    	return $this->belongsTo('App\Models\Instructor', 'id');
+    	return $this->belongsTo(App\Models\Instructor::class);
     }
 
     /**
@@ -31,6 +31,6 @@ class Schedule extends Model
      */
     public function session()
     {
-    	return $this->hasOne('App\Models\Session', 'schedule_id');
+    	return $this->hasOne(App\Models\Session::class);
     }
 }

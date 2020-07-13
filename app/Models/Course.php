@@ -25,7 +25,7 @@ class Course extends Model
      */
     public function course_package()
     {
-    	return $this->belongsTo('App\Models\CoursePackage', 'id');
+    	return $this->belongsTo(App\Models\CoursePackage::class);
     }
 
     /**
@@ -33,7 +33,7 @@ class Course extends Model
      */
     public function course_registrations()
     {
-    	return $this->hasMany('App\Models\CourseRegistration', 'course_id');
+    	return $this->hasMany(App\Models\CourseRegistration::class);
     }
 
     /**
@@ -41,7 +41,7 @@ class Course extends Model
      */
     public function sessions()
     {
-    	return $this->hasMany('App\Models\Session', 'course_id');
+    	return $this->hasMany(App\Models\Session::class);
     }
 
     /**

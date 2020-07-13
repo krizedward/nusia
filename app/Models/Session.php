@@ -27,7 +27,7 @@ class Session extends Model
      */
     public function course()
     {
-    	return $this->belongsTo('App\Models\Course', 'id');
+    	return $this->belongsTo(App\Models\Course::class);
     }
 
     /**
@@ -35,7 +35,7 @@ class Session extends Model
      */
     public function schedule()
     {
-    	return $this->belongsTo('App\Models\Schedule', 'id');
+    	return $this->belongsTo(App\Models\Schedule::class);
     }
 
     /**
@@ -43,7 +43,7 @@ class Session extends Model
      */
     public function material_sessions()
     {
-    	return $this->hasMany('App\Models\MaterialSession', 'session_id');
+    	return $this->hasMany(App\Models\MaterialSession::class);
     }
 
     /**
@@ -51,7 +51,7 @@ class Session extends Model
      */
     public function ratings()
     {
-    	return $this->hasMany('App\Models\Rating', 'session_id');
+    	return $this->hasMany(App\Models\Rating::class);
     }
 
     /**
@@ -59,7 +59,7 @@ class Session extends Model
      */
     public function session_registrations()
     {
-    	return $this->hasMany('App\Models\SessionRegistration', 'session_id');
+    	return $this->hasMany(App\Models\SessionRegistration::class);
     }
 
     /**

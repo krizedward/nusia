@@ -24,7 +24,7 @@ class SessionRegistration extends Model
      */
     public function session()
     {
-    	return $this->belongsTo('App\Models\Session', 'id');
+    	return $this->belongsTo(App\Models\Session::class);
     }
 
     /**
@@ -32,6 +32,6 @@ class SessionRegistration extends Model
      */
     public function course_registration()
     {
-    	return $this->belongsTo('App\Models\CourseRegistration', 'id');
+    	return $this->belongsTo(App\Models\CourseRegistration::class);
     }
 }

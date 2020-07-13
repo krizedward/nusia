@@ -30,7 +30,7 @@ class CoursePackage extends Model
      */
     public function material_type()
     {
-    	return $this->belongsTo('App\Models\MaterialType', 'id');
+    	return $this->belongsTo(App\Models\MaterialType::class);
     }
 
     /**
@@ -38,7 +38,7 @@ class CoursePackage extends Model
      */
     public function course_type()
     {
-    	return $this->belongsTo('App\Models\CourseType', 'id');
+    	return $this->belongsTo(App\Models\CourseType::class);
     }
 
     /**
@@ -46,7 +46,7 @@ class CoursePackage extends Model
      */
     public function course_level()
     {
-    	return $this->belongsTo('App\Models\CourseLevel', 'id');
+    	return $this->belongsTo(App\Models\CourseLevel::class);
     }
 
     /**
@@ -54,7 +54,7 @@ class CoursePackage extends Model
      */
     public function course_level_detail()
     {
-    	return $this->belongsTo('App\Models\CourseLevelDetail', 'id');
+    	return $this->belongsTo(App\Models\CourseLevelDetail::class);
     }
 
     /**
@@ -62,7 +62,7 @@ class CoursePackage extends Model
      */
     public function courses()
     {
-    	return $this->hasMany('App\Models\Course', 'course_package_id');
+    	return $this->hasMany(App\Models\Course::class);
     }
 
     /**
@@ -70,7 +70,7 @@ class CoursePackage extends Model
      */
     public function material_publics()
     {
-    	return $this->hasMany('App\Models\MaterialPublic', 'course_package_id');
+    	return $this->hasMany(App\Models\MaterialPublic::class);
     }
 
     /**

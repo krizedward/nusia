@@ -22,7 +22,7 @@ class CourseRegistration extends Model
      */
     public function course()
     {
-    	return $this->belongsTo('App\Models\Course', 'id');
+    	return $this->belongsTo(App\Models\Course::class);
     }
 
     /**
@@ -30,7 +30,7 @@ class CourseRegistration extends Model
      */
     public function student()
     {
-    	return $this->belongsTo('App\Models\Student', 'id');
+    	return $this->belongsTo(App\Models\Student::class);
     }
 
     /**
@@ -38,7 +38,7 @@ class CourseRegistration extends Model
      */
     public function course_certificate()
     {
-    	return $this->hasOne('App\Models\CourseCertificate', 'course_registration_id');
+    	return $this->hasOne(App\Models\CourseCertificate::class);
     }
 
     /**
@@ -46,7 +46,7 @@ class CourseRegistration extends Model
      */
     public function course_payment()
     {
-    	return $this->hasOne('App\Models\CoursePayment', 'course_registration_id');
+    	return $this->hasOne(App\Models\CoursePayment::class);
     }
 
     /**
@@ -54,6 +54,6 @@ class CourseRegistration extends Model
      */
     public function session_registrations()
     {
-    	return $this->hasMany('App\Models\SessionRegistration', 'course_registration_id');
+    	return $this->hasMany(App\Models\SessionRegistration::class);
     }
 }

@@ -26,7 +26,7 @@ class CourseType extends Model
      */
     public function course_packages()
     {
-    	return $this->hasMany('App\Models\CoursePackage', 'course_type_id');
+    	return $this->hasMany(App\Models\CoursePackage::class);
     }
 
     /**

@@ -24,7 +24,7 @@ class CourseLevel extends Model
      */
     public function course_packages()
     {
-    	return $this->hasMany('App\Models\CoursePackage', 'course_level_id');
+    	return $this->hasMany(App\Models\CoursePackage::class);
     }
 
     /**

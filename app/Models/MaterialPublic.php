@@ -25,7 +25,7 @@ class MaterialPublic extends Model
      */
     public function course_package()
     {
-    	return $this->belongsTo('App\Models\CoursePackage', 'id');
+    	return $this->belongsTo(App\Models\CoursePackage::class);
     }
 
     /**
