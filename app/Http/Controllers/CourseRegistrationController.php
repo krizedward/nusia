@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Str;
 use App\Models\CourseRegistration;
+use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +43,7 @@ class CourseRegistrationController extends Controller
     public function index()
     {
         $data = CourseRegistration::all();
-        return view('registrations.courses.index', compact('data'));
+        return view('course_registrations.index', compact('data'));
     }
 
     /**
@@ -53,7 +53,11 @@ class CourseRegistrationController extends Controller
      */
     public function create()
     {
-        //
+        if($this->is_admin()) {
+            return view('course_registrations.create');
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -64,7 +68,37 @@ class CourseRegistrationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $data = Validator::make($data, [
+            'course_id' => [
+                'bail', 'required',
+                Rule::unique('course_registrations', 'course_id')
+                    ->where('student_id', $request->student_id)
+            ],
+            'student_id' => [
+                'bail', 'required',
+                Rule::unique('course_registrations', 'student_id')
+                    ->where('course_id', $request->course_id)
+            ]
+        ]);
+
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+
+        if($this->is_admin() || $this->is_student()) {
+            CourseRegistration::create([
+                'course_id' => $request->course_id,
+                'student_id' => $request->student_id
+            ]);
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        $data = CourseRegistration::all();
+        return view('course_registrations.index', compact('data'));
     }
 
     /**
@@ -75,6 +109,38 @@ class CourseRegistrationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = CourseRegistration::findOrFail($id);
+        if($data == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        if($data->course_certificate() != null) {
+            // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
+            // Return?
+        }
+
+        if($data->course_payment() != null) {
+            // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
+            // Return?
+        }
+
+        if($data->session_registrations() != null) {
+            // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
+            // Return?
+        }
+
+        if($this->is_admin()) {
+            $data->delete();
+        } else if($this->is_instructor()) {
+            // Melakukan request ke Admin.
+        } else if($this->is_student()) {
+            // Melakukan request ke Instructor, kemudian ke Admin.
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        $data = CourseRegistration::all();
+        return view('course_registrations.index', compact('data'));
     }
 }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\MaterialType;
-use App\Models\CoursePackage;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -43,20 +42,8 @@ class MaterialTypeController extends Controller
      */
     public function index()
     {
-        /*
-        $material_types = MaterialType::all()
-            ->select(
-                'slug',
-                'code',
-                'name',
-                'description'
-            )->paginate(10);
-        return view('material_types.index', compact(
-            'material_types'
-        ));
-        */
         $data = MaterialType::all();
-        return view('materials.types.index', compact('data'));
+        return view('material_types.index', compact('data'));
     }
 
     /**
@@ -82,8 +69,7 @@ class MaterialTypeController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
-        $validator = Validator::make($data, [
+        $data = Validator::make($data, [
             'code' => [
                 'bail', 'required',
                 Rule::unique('material_types', 'code'),
@@ -97,23 +83,22 @@ class MaterialTypeController extends Controller
             'description' => ['bail', 'sometimes', 'max:5000']
         ]);
 
-        if($validator->fails()) {
+        if($data->fails()) {
             return redirect()->back()
-                ->withErrors($validator)
+                ->withErrors($data)
                 ->withInput();
         }
 
         // Membuat slug baru.
-        $slug = "";
+        $data = "";
         while(1) {
-            $slug = Str::random(255);
-            $material_type = MaterialType::firstWhere('slug', $slug);
-            if($material_type === null) break;
+            $data = Str::random(255);
+            if(MaterialType::where('slug', $data)->first() === null) break;
         }
 
         if($this->is_admin()) {
             MaterialType::create([
-                'slug' => $slug,
+                'slug' => $data,
                 'code' => $request->code,
                 'name' => $request->name,
                 'description' => $request->description
@@ -122,16 +107,8 @@ class MaterialTypeController extends Controller
             // Tidak memiliki hak akses.
         }
 
-        $material_types = MaterialType::all()
-            ->select(
-                'slug',
-                'code',
-                'name',
-                'description'
-            )->paginate(10);
-        return view('material_types.index', compact(
-            'material_types'
-        ));
+        $data = MaterialType::all();
+        return view('material_types.index', compact('data'));
     }
 
     /**
@@ -142,20 +119,12 @@ class MaterialTypeController extends Controller
      */
     public function show($id)
     {
-        $material_type = MaterialType::firstOrFail($id);
-        if($material_type == null) {
+        $data = MaterialType::findOrFail($id);
+        if($data == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
         }
-
-        $slug = $material_type->slug;
-        $code = $material_type->code;
-        $name = $material_type->name;
-        $description = $material_type->description;
-
-        return view('material_types.show', compact(
-            'slug', 'code', 'name', 'description'
-        ));
+        return view('material_types.show', compact('data'));
     }
 
     /**
@@ -167,20 +136,12 @@ class MaterialTypeController extends Controller
     public function edit($id)
     {
         if($this->is_admin()) {
-            $material_type = MaterialType::firstOrFail($id);
-            if($material_type == null) {
+            $data = MaterialType::findOrFail($id);
+            if($data == null) {
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-
-            $slug = $material_type->slug;
-            $code = $material_type->code;
-            $name = $material_type->name;
-            $description = $material_type->description;
-
-            return view('material_types.edit', compact(
-                'slug', 'code', 'name', 'description'
-            ));
+            return view('material_types.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -195,15 +156,14 @@ class MaterialTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $material_type = MaterialType::firstOrFail($id);
+        $material_type = MaterialType::findOrFail($id);
         if($material_type == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
         }
 
         $data = $request->all();
-
-        $validator = Validator::make($data, [
+        $data = Validator::make($data, [
             'code' => [
                 'bail', 'required',
                 Rule::unique('material_types', 'code')->ignore($id, 'id'),
@@ -217,9 +177,9 @@ class MaterialTypeController extends Controller
             'description' => ['bail', 'sometimes', 'max:5000']
         ]);
 
-        if($validator->fails()) {
+        if($data->fails()) {
             return redirect()->back()
-                ->withErrors($validator)
+                ->withErrors($data)
                 ->withInput();
         }
 
@@ -233,14 +193,8 @@ class MaterialTypeController extends Controller
             // Tidak memiliki hak akses.
         }
 
-        $slug = $material_type->slug;
-        $code = $material_type->code;
-        $name = $material_type->name;
-        $description = $material_type->description;
-
-        return view('material_types.show', compact(
-            'slug', 'code', 'name', 'description'
-        ));
+        $data = $material_type;
+        return view('material_types.show', compact('data'));
     }
 
     /**
@@ -251,33 +205,24 @@ class MaterialTypeController extends Controller
      */
     public function destroy($id)
     {
-        $material_type = MaterialType::firstOrFail($id);
-        if($material_type == null) {
+        $data = MaterialType::findOrFail($id);
+        if($data == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
         }
 
-        $course_package = CoursePackage::firstWhere('material_type_id', $id);
-        if($course_package != null) {
+        if($data->course_packages() != null) {
             // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
             // Return?
         }
 
         if($this->is_admin()) {
-            $material_type->delete();
+            $data->delete();
         } else {
             // Tidak memiliki hak akses.
         }
 
-        $material_types = MaterialType::all()
-            ->select(
-                'slug',
-                'code',
-                'name',
-                'description'
-            )->paginate(10);
-        return view('material_types.index', compact(
-            'material_types'
-        ));
+        $data = MaterialType::all();
+        return view('material_types.index', compact('data'));
     }
 }

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Str;
 use App\Models\CoursePayment;
+use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -42,8 +42,12 @@ class CoursePaymentController extends Controller
      */
     public function index()
     {
-        $data = CoursePayment::all();
-        return view('courses.payments.index', compact('data'));
+        if($this->is_admin() || $this->is_student()) {
+            $data = CoursePayment::all();
+            return view('course_payments.index', compact('data'));
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -53,7 +57,11 @@ class CoursePaymentController extends Controller
      */
     public function create()
     {
-        //
+        if($this->is_admin() || $this->is_student()) {
+            return view('course_payments.create');
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -64,7 +72,44 @@ class CoursePaymentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $data = Validator::make($data, [
+            'course_registration_id' => [
+                'bail', 'required',
+                Rule::unique('course_payments', 'course_registration_id')
+            ],
+            'method' => ['bail', 'required', 'max:20'],
+            'payment_time' => ['bail', 'required', 'date'],
+            'amount' => ['bail', 'sometimes', 'integer', 'max:1000000000'],
+            'status' => ['bail', 'required'],
+            'path' => ['bail', 'sometimes', 'max:1000']
+        ]);
+
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+
+        if($this->is_admin() || $this->is_student()) {
+            CoursePayment::create([
+                'course_registration_id' => $request->course_registration_id,
+                'method' => $request->method,
+                'payment_time' => $request->payment_time,
+                'amount' => $request->amount,
+                'status' => $request->status,
+                'path' => $request->path
+            ]);
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        if($this->is_admin() || $this->is_student()) {
+            $data = CoursePayment::all();
+            return view('course_payments.index', compact('data'));
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -75,7 +120,16 @@ class CoursePaymentController extends Controller
      */
     public function show($id)
     {
-        //
+        if($this->is_admin() || $this->is_student()) {
+            $data = CoursePayment::findOrFail($id);
+            if($data == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+            return view('course_payments.show', compact('data'));
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -86,7 +140,16 @@ class CoursePaymentController extends Controller
      */
     public function edit($id)
     {
-        //
+        if($this->is_admin() || $this->is_student()) {
+            $data = CoursePayment::findOrFail($id);
+            if($data == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+            return view('course_payments.edit', compact('data'));
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -98,7 +161,50 @@ class CoursePaymentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $course_payment = CoursePayment::findOrFail($id);
+        if($course_payment == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        $data = $request->all();
+        $data = Validator::make($data, [
+            'course_registration_id' => [
+                'bail', 'required',
+                Rule::unique('course_payments', 'course_registration_id')->ignore($id, 'id')
+            ],
+            'method' => ['bail', 'required', 'max:20'],
+            'payment_time' => ['bail', 'required', 'date'],
+            'amount' => ['bail', 'sometimes', 'integer', 'max:1000000000'],
+            'status' => ['bail', 'required'],
+            'path' => ['bail', 'sometimes', 'max:1000']
+        ]);
+
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+
+        if($this->is_admin() || $this->is_student()) {
+            $course_payment->update([
+                'course_registration_id' => $request->course_registration_id,
+                'method' => $request->method,
+                'payment_time' => $request->payment_time,
+                'amount' => $request->amount,
+                'status' => $request->status,
+                'path' => $request->path
+            ]);
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        if($this->is_admin() || $this->is_student()) {
+            $data = $course_payment;
+            return view('course_payments.show', compact('data'));
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -109,6 +215,23 @@ class CoursePaymentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = CoursePayment::findOrFail($id);
+        if($data == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        if($this->is_admin()) {
+            $data->delete();
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        if($this->is_admin() || $this->is_student()) {
+            $data = CoursePayment::all();
+            return view('course_payments.index', compact('data'));
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 }

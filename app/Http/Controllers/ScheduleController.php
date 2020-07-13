@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Str;
 use App\Models\Schedule;
+use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -53,7 +53,11 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        //
+        if($this->is_admin()) {
+            return view('schedules.create');
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -64,7 +68,55 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $data = Validator::make($data, [
+            'instructor_id' => ['bail', 'required'],
+            'schedule_time' => [
+                'bail', 'sometimes', 'date',
+                Rule::unique('schedules', 'schedule_time')
+                    ->where('instructor_id', $request->instructor_id)
+            ],
+            'status' => ['bail', 'required']
+        ]);
+
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+
+        if($this->is_admin() || $this->is_instructor()) {
+            Schedule::create([
+                'instructor_id' => $request->instructor_id,
+                'schedule_time' => $request->schedule_time,
+                'status' => $request->status
+            ]);
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        $data = Schedule::all();
+        return view('schedules.index', compact('data'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        if($this->is_admin()) {
+            $data = Schedule::findOrFail($id);
+            if($data == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+            return view('schedules.edit', compact('data'));
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -76,7 +128,45 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $schedule = Schedule::findOrFail($id);
+        if($schedule == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        $data = $request->all();
+        $data = Validator::make($data, [
+            'instructor_id' => ['bail', 'required'],
+            'schedule_time' => [
+                'bail', 'sometimes', 'date',
+                Rule::unique('schedules', 'schedule_time')
+                    ->ignore($id, 'id')
+                    ->where('instructor_id', $request->instructor_id)
+            ],
+            'status' => ['bail', 'required']
+        ]);
+
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+
+        if($this->is_admin()) {
+            $session_registration->update([
+                'session_id' => $request->session_id,
+                'course_registration_id' => $request->course_registration_id,
+                'registration_time' => $request->registration_time,
+                'status' => $request->status
+            ]);
+        } else if($this->is_instructor()) {
+            // Melakukan request ke Admin.
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        $data = Schedule::all();
+        return view('schedules.index', compact('data'));
     }
 
     /**
@@ -87,6 +177,24 @@ class ScheduleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Schedule::findOrFail($id);
+        if($data == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        if($data->session() != null) {
+            // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
+            // Return?
+        }
+
+        if($this->is_admin()) {
+            $data->delete();
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        $data = Schedule::all();
+        return view('schedules.index', compact('data'));
     }
 }

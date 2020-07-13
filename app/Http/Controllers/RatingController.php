@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Str;
 use App\Models\Rating;
+use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -42,8 +42,12 @@ class RatingController extends Controller
      */
     public function index()
     {
-        $data = Rating::all();
-        return view('ratings.index', compact('data'));
+        if($this->is_admin() || $this->is_instructor()) {
+            $data = Rating::all();
+            return view('ratings.index', compact('data'));
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -54,19 +58,35 @@ class RatingController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $data = $request->all();
+        $data = Validator::make($data, [
+            'session_id' => ['bail', 'required'],
+            'rating' => ['bail', 'required', 'integer'],
+            'comment' => ['bail', 'sometimes', 'max:5000']
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+
+        if($this->is_student()) {
+            Rating::create([
+                'session_id' => $request->session_id,
+                'rating' => $request->rating,
+                'comment' => $request->comment
+            ]);
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        if($this->is_admin() || $this->is_instructor()) {
+            $data = Rating::all();
+            return view('ratings.index', compact('data'));
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -77,6 +97,23 @@ class RatingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Rating::findOrFail($id);
+        if($data == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        if($this->is_admin()) {
+            $data->delete();
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        if($this->is_admin() || $this->is_instructor()) {
+            $data = Rating::all();
+            return view('ratings.index', compact('data'));
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 }

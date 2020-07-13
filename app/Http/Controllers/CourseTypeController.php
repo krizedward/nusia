@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\CourseType;
-use App\Models\CoursePackage;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -43,22 +42,8 @@ class CourseTypeController extends Controller
      */
     public function index()
     {
-        /*
-        $course_types = CourseType::all()
-            ->select(
-                'slug',
-                'code',
-                'name',
-                'description',
-                'count_student_min',
-                'count_student_max'
-            )->paginate(10);
-        return view('course_types.index', compact(
-            'course_types'
-        ));
-        */
         $data = CourseType::all();
-        return view('courses.types.index', compact('data'));
+        return view('course_types.index', compact('data'));
     }
 
     /**
@@ -84,8 +69,7 @@ class CourseTypeController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
-        $validator = Validator::make($data, [
+        $data = Validator::make($data, [
             'code' => [
                 'bail', 'required',
                 Rule::unique('course_types', 'code'),
@@ -101,23 +85,22 @@ class CourseTypeController extends Controller
             'count_student_max' => ['bail', 'sometimes', 'min:0', 'max:1000']
         ]);
 
-        if($validator->fails()) {
+        if($data->fails()) {
             return redirect()->back()
-                ->withErrors($validator)
+                ->withErrors($data)
                 ->withInput();
         }
 
         // Membuat slug baru.
-        $slug = "";
+        $data = "";
         while(1) {
-            $slug = Str::random(255);
-            $course_type = CourseType::firstWhere('slug', $slug);
-            if($course_type === null) break;
+            $data = Str::random(255);
+            if(CourseType::where('slug', $data)->first() === null) break;
         }
 
         if($this->is_admin()) {
             CourseType::create([
-                'slug' => $slug,
+                'slug' => $data,
                 'code' => $request->code,
                 'name' => $request->name,
                 'description' => $request->description,
@@ -128,18 +111,8 @@ class CourseTypeController extends Controller
             // Tidak memiliki hak akses.
         }
 
-        $course_types = CourseType::all()
-            ->select(
-                'slug',
-                'code',
-                'name',
-                'description',
-                'count_student_min',
-                'count_student_max'
-            )->paginate(10);
-        return view('course_types.index', compact(
-            'course_types'
-        ));
+        $data = CourseType::all();
+        return view('course_types.index', compact('data'));
     }
 
     /**
@@ -150,23 +123,12 @@ class CourseTypeController extends Controller
      */
     public function show($id)
     {
-        $course_type = CourseType::firstOrFail($id);
-        if($course_type == null) {
+        $data = CourseType::findOrFail($id);
+        if($data == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
         }
-
-        $slug = $course_type->slug;
-        $code = $course_type->code;
-        $name = $course_type->name;
-        $description = $course_type->description;
-        $count_student_min = $course_type->count_student_min;
-        $count_student_max = $course_type->count_student_max;
-
-        return view('course_types.show', compact(
-            'slug', 'code', 'name', 'description',
-            'count_student_min', 'count_student_max'
-        ));
+        return view('course_types.show', compact('data'));
     }
 
     /**
@@ -178,23 +140,12 @@ class CourseTypeController extends Controller
     public function edit($id)
     {
         if($this->is_admin()) {
-            $course_type = CourseType::firstOrFail($id);
-            if($course_type == null) {
+            $data = CourseType::findOrFail($id);
+            if($data == null) {
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-
-            $slug = $course_type->slug;
-            $code = $course_type->code;
-            $name = $course_type->name;
-            $description = $course_type->description;
-            $count_student_min = $course_type->count_student_min;
-            $count_student_max = $course_type->count_student_max;
-
-            return view('course_types.edit', compact(
-                'slug', 'code', 'name', 'description',
-                'count_student_min', 'count_student_max'
-            ));
+            return view('course_types.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -209,15 +160,14 @@ class CourseTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $course_type = CourseType::firstOrFail($id);
+        $course_type = CourseType::findOrFail($id);
         if($course_type == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
         }
 
         $data = $request->all();
-
-        $validator = Validator::make($data, [
+        $data = Validator::make($data, [
             'code' => [
                 'bail', 'required',
                 Rule::unique('course_types', 'code')->ignore($id, 'id'),
@@ -233,9 +183,9 @@ class CourseTypeController extends Controller
             'count_student_max' => ['bail', 'sometimes', 'min:0', 'max:1000']
         ]);
 
-        if($validator->fails()) {
+        if($data->fails()) {
             return redirect()->back()
-                ->withErrors($validator)
+                ->withErrors($data)
                 ->withInput();
         }
 
@@ -251,17 +201,8 @@ class CourseTypeController extends Controller
             // Tidak memiliki hak akses.
         }
 
-        $slug = $course_type->slug;
-        $code = $course_type->code;
-        $name = $course_type->name;
-        $description = $course_type->description;
-        $count_student_min = $course_type->count_student_min;
-        $count_student_max = $course_type->count_student_max;
-
-        return view('course_types.show', compact(
-            'slug', 'code', 'name', 'description',
-            'count_student_min', 'count_student_max'
-        ));
+        $data = $course_type;
+        return view('course_types.show', compact('data'));
     }
 
     /**
@@ -272,35 +213,24 @@ class CourseTypeController extends Controller
      */
     public function destroy($id)
     {
-        $course_type = CourseType::firstOrFail($id);
-        if($course_type == null) {
+        $data = CourseType::findOrFail($id);
+        if($data == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
         }
 
-        $course_package = CoursePackage::firstWhere('course_type_id', $id);
-        if($course_package != null) {
+        if($data->course_packages() != null) {
             // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
             // Return?
         }
 
         if($this->is_admin()) {
-            $course_type->delete();
+            $data->delete();
         } else {
             // Tidak memiliki hak akses.
         }
 
-        $course_types = CourseType::all()
-            ->select(
-                'slug',
-                'code',
-                'name',
-                'description',
-                'count_student_min',
-                'count_student_max'
-            )->paginate(10);
-        return view('course_types.index', compact(
-            'course_types'
-        ));
+        $data = CourseType::all();
+        return view('course_types.index', compact('data'));
     }
 }

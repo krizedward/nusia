@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\CourseLevel;
-use App\Models\CoursePackage;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -43,20 +42,8 @@ class CourseLevelController extends Controller
      */
     public function index()
     {
-        /*
-        $course_levels = CourseLevel::all()
-            ->select(
-                'slug',
-                'code',
-                'name',
-                'description'
-            )->paginate(10);
-        return view('course_levels.index', compact(
-            'course_levels'
-        ));
-        */
         $data = CourseLevel::all();
-        return view('courses.levels.index', compact('data'));
+        return view('course_levels.index', compact('data'));
     }
 
     /**
@@ -82,8 +69,7 @@ class CourseLevelController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
-        $validator = Validator::make($data, [
+        $data = Validator::make($data, [
             'code' => [
                 'bail', 'required',
                 Rule::unique('course_levels', 'code'),
@@ -97,23 +83,22 @@ class CourseLevelController extends Controller
             'description' => ['bail', 'sometimes', 'max:5000']
         ]);
 
-        if($validator->fails()) {
+        if($data->fails()) {
             return redirect()->back()
-                ->withErrors($validator)
+                ->withErrors($data)
                 ->withInput();
         }
 
         // Membuat slug baru.
-        $slug = "";
+        $data = "";
         while(1) {
-            $slug = Str::random(255);
-            $course_level = CourseLevel::firstWhere('slug', $slug);
-            if($course_level === null) break;
+            $data = Str::random(255);
+            if(CourseLevel::where('slug', $slug)->first() === null) break;
         }
 
         if($this->is_admin()) {
             CourseLevel::create([
-                'slug' => $slug,
+                'slug' => $data,
                 'code' => $request->code,
                 'name' => $request->name,
                 'description' => $request->description
@@ -122,16 +107,8 @@ class CourseLevelController extends Controller
             // Tidak memiliki hak akses.
         }
 
-        $course_levels = CourseLevel::all()
-            ->select(
-                'slug',
-                'code',
-                'name',
-                'description'
-            )->paginate(10);
-        return view('course_levels.index', compact(
-            'course_levels'
-        ));
+        $data = CourseLevel::all();
+        return view('course_levels.index', compact('data'));
     }
 
     /**
@@ -142,20 +119,12 @@ class CourseLevelController extends Controller
      */
     public function show($id)
     {
-        $course_level = CourseLevel::firstOrFail($id);
-        if($course_level == null) {
+        $data = CourseLevel::findOrFail($id);
+        if($data == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
         }
-
-        $slug = $course_level->slug;
-        $code = $course_level->code;
-        $name = $course_level->name;
-        $description = $course_level->description;
-
-        return view('course_levels.show', compact(
-            'slug', 'code', 'name', 'description'
-        ));
+        return view('course_levels.show', compact('data'));
     }
 
     /**
@@ -167,20 +136,12 @@ class CourseLevelController extends Controller
     public function edit($id)
     {
         if($this->is_admin()) {
-            $course_level = CourseLevel::firstOrFail($id);
-            if($course_level == null) {
+            $data = CourseLevel::findOrFail($id);
+            if($data == null) {
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-
-            $slug = $course_level->slug;
-            $code = $course_level->code;
-            $name = $course_level->name;
-            $description = $course_level->description;
-
-            return view('course_levels.edit', compact(
-                'slug', 'code', 'name', 'description'
-            ));
+            return view('course_levels.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -195,7 +156,7 @@ class CourseLevelController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $course_level = CourseLevel::firstOrFail($id);
+        $course_level = CourseLevel::findOrFail($id);
         if($course_level == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
@@ -203,7 +164,7 @@ class CourseLevelController extends Controller
 
         $data = $request->all();
 
-        $validator = Validator::make($data, [
+        $data = Validator::make($data, [
             'code' => [
                 'bail', 'required',
                 Rule::unique('course_levels', 'code')->ignore($id, 'id'),
@@ -217,9 +178,9 @@ class CourseLevelController extends Controller
             'description' => ['bail', 'sometimes', 'max:5000']
         ]);
 
-        if($validator->fails()) {
+        if($data->fails()) {
             return redirect()->back()
-                ->withErrors($validator)
+                ->withErrors($data)
                 ->withInput();
         }
 
@@ -233,14 +194,8 @@ class CourseLevelController extends Controller
             // Tidak memiliki hak akses.
         }
 
-        $slug = $course_level->slug;
-        $code = $course_level->code;
-        $name = $course_level->name;
-        $description = $course_level->description;
-
-        return view('course_levels.show', compact(
-            'slug', 'code', 'name', 'description'
-        ));
+        $data = $course_level;
+        return view('course_levels.show', compact('data'));
     }
 
     /**
@@ -251,33 +206,24 @@ class CourseLevelController extends Controller
      */
     public function destroy($id)
     {
-        $course_level = CourseLevel::firstOrFail($id);
-        if($course_level == null) {
+        $data = CourseLevel::findOrFail($id);
+        if($data == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
         }
 
-        $course_package = CoursePackage::firstWhere('course_level_id', $id);
-        if($course_package != null) {
+        if($data->course_packages() != null) {
             // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
             // Return?
         }
 
         if($this->is_admin()) {
-            $course_level->delete();
+            $data->delete();
         } else {
             // Tidak memiliki hak akses.
         }
 
-        $course_levels = CourseLevel::all()
-            ->select(
-                'slug',
-                'code',
-                'name',
-                'description'
-            )->paginate(10);
-        return view('course_levels.index', compact(
-            'course_levels'
-        ));
+        $data = CourseLevel::all();
+        return view('course_levels.index', compact('data'));
     }
 }

@@ -364,7 +364,7 @@ Route::group(['middleware'=>'auth'], function() {
         | ADMIN
         | .index   -> courses.title (OR course_packages.title), users.name FROM STUDENT[users.first_name, users.last_name], method, amount, status, payment_time
         | .create  -> (+) course_registration_id FROM [courses.title (OR course_registrations.title), users.name FROM STUDENT[users.first_name, users.last_name]], method, amount, status, payment_time, path FROM IMAGE
-        | .store   -> (+) id, slug, created_at
+        | .store   -> (+) id, created_at
         | .show    -> courses.title (OR course_packages.title), users.name FROM STUDENT[users.first_name, users.last_name], method, amount, status, payment_time, image FROM path
         | .edit    -> course_registration_id FROM [courses.title (OR course_registrations.title), users.name FROM STUDENT[users.first_name, users.last_name]], method, amount, status, payment_time, path FROM IMAGE
         | .update  -> (+) updated_at
@@ -375,7 +375,7 @@ Route::group(['middleware'=>'auth'], function() {
         | STUDENT
         | .index   -> courses.title (OR course_packages.title), method, amount, status, payment_time
         | .create  -> (+) course_registration_id FROM courses.title (OR course_registrations.title), method, amount, status, payment_time, path FROM IMAGE
-        | .store   -> (+) id, slug, created_at
+        | .store   -> (+) id, created_at
         | .show    -> courses.title (OR course_packages.title), method, amount, status, payment_time, image FROM path
         | .edit    -> course_registration_id FROM courses.title (OR course_registrations.title), method, amount, status, payment_time, path FROM IMAGE
         | .update  -> (+) updated_at
@@ -466,7 +466,7 @@ Route::group(['middleware'=>'auth'], function() {
         |-------------------------------------------------
         | ADMIN
         | .index   -> sessions.title, rating, comment, created_at
-        | .destroy -> (+) deleted_at (INCLUSIVE WITH sessions SO CANNOT DELETE ALONE)
+        | .destroy -> (+) deleted_at
         |
         | INSTRUCTOR
         | .index   -> sessions.title, rating, comment, created_at

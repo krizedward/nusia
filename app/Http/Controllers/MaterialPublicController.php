@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Str;
 use App\Models\MaterialPublic;
+use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +43,7 @@ class MaterialPublicController extends Controller
     public function index()
     {
         $data = MaterialPublic::all();
-        return view('materials.publics.index', compact('data'));
+        return view('material_publics.index', compact('data'));
     }
 
     /**
@@ -53,7 +53,11 @@ class MaterialPublicController extends Controller
      */
     public function create()
     {
-        //
+        if($this->is_admin() || $this->is_instructor()) {
+            return view('material_publics.create');
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -64,7 +68,43 @@ class MaterialPublicController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $data = Validator::make($data, [
+            'course_package_id' => ['bail', 'required'],
+            'name' => ['bail', 'required', 'max:255'],
+            'description' => ['bail', 'sometimes', 'max:5000'],
+            'path' => ['bail', 'sometimes', 'max:1000']
+        ]);
+
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+
+        // Membuat slug baru.
+        $data = "";
+        while(1) {
+            $data = Str::random(255);
+            if(MaterialPublic::where('slug', $slug)->first() === null) break;
+        }
+
+        if($this->is_admin()) {
+            MaterialPublic::create([
+                'slug' => $data,
+                'course_package_id' => $request->course_package_id,
+                'name' => $request->name,
+                'description' => $request->description,
+                'path' => $request->path
+            ]);
+        } else if($this->is_instructor()) {
+            // Melakukan request ke Admin.
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        $data = MaterialPublic::all();
+        return view('material_publics.index', compact('data'));
     }
 
     /**
@@ -75,7 +115,12 @@ class MaterialPublicController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = MaterialPublic::findOrFail($id);
+        if($data == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+        return view('material_publics.show', compact('data'));
     }
 
     /**
@@ -86,7 +131,16 @@ class MaterialPublicController extends Controller
      */
     public function edit($id)
     {
-        //
+        if($this->is_admin()) {
+            $data = MaterialPublic::findOrFail($id);
+            if($data == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+            return view('material_publics.edit', compact('data'));
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -98,7 +152,41 @@ class MaterialPublicController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $material_public = MaterialPublic::findOrFail($id);
+        if($material_public == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        $data = $request->all();
+        $data = Validator::make($data, [
+            'course_package_id' => ['bail', 'required'],
+            'name' => ['bail', 'required', 'max:255'],
+            'description' => ['bail', 'sometimes', 'max:5000'],
+            'path' => ['bail', 'sometimes', 'max:1000']
+        ]);
+
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+
+        if($this->is_admin()) {
+            $material_public->update([
+                'course_package_id' => $request->course_package_id,
+                'name' => $request->name,
+                'description' => $request->description,
+                'path' => $request->path
+            ]);
+        } else if($this->is_instructor()) {
+            // Melakukan request ke Admin.
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        $data = $material_public;
+        return view('material_publics.show', compact('data'));
     }
 
     /**
@@ -109,6 +197,21 @@ class MaterialPublicController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = MaterialPublic::findOrFail($id);
+        if($data == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        if($this->is_admin()) {
+            $data->delete();
+        } else if($this->is_instructor()) {
+            // Melakukan request ke Admin.
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        $data = MaterialPublic::all();
+        return view('material_publics.index', compact('data'));
     }
 }

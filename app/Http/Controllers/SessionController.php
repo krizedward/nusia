@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Session;
-use App\Models\SessionRegistration;
-use App\Models\MaterialSession;
-use App\Models\Rating;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -46,45 +43,11 @@ class Session extends Controller
     public function index()
     {
         if($this->is_admin()) {
-            $sessions = Session::all()
-                ->join('schedules', 'sessions.schedule_id', '=', 'schedules.id')
-                ->join('instructors', 'schedules.instructor_id', '=', 'instructors.id')
-                ->join('users', 'instructors.user_id', '=', 'users.id')
-                ->join('courses', 'sessions.course_id', '=', 'courses.id')
-                ->join('course_packages', 'courses.course_package_id', '=', 'course_packages.id')
-                ->distinct()
-                ->select(
-                    'users.first_name',
-                    'users.last_name',
-                    'courses.title',
-                    'course_packages.title',
-                    'schedules.schedule_time',
-                    'title',
-                    'description',
-                    'link_zoom'
-                )->paginate(10);
-
-            return view('sessions.index', compact(
-                'sessions'
-            ));
+            $data = Session::all();
+            return view('sessions.index', compact('data'));
         } else if($this->is_instructor() || $this->is_student()) {
-            $sessions = Session::all()
-                ->join('schedules', 'sessions.schedule_id', '=', 'schedules.id')
-                ->join('courses', 'sessions.course_id', '=', 'courses.id')
-                ->join('course_packages', 'courses.course_package_id', '=', 'course_packages.id')
-                ->distinct()
-                ->select(
-                    'courses.title',
-                    'course_packages.title',
-                    'schedules.schedule_time',
-                    'title',
-                    'description',
-                    'link_zoom'
-                )->paginate(10);
-
-            return view('sessions.index', compact(
-                'sessions'
-            ));
+            $data = Session::all();
+            return view('sessions.index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -113,8 +76,7 @@ class Session extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
-        $validator = Validator::make($data, [
+        $data = Validator::make($data, [
             'course_id' => ['bail', 'required'],
             'schedule_id' => [
                 'bail', 'required',
@@ -126,23 +88,22 @@ class Session extends Controller
             'link_zoom' => ['bail', 'sometimes', 'max:1000']
         ]);
 
-        if($validator->fails()) {
+        if($data->fails()) {
             return redirect()->back()
-                ->withErrors($validator)
+                ->withErrors($data)
                 ->withInput();
         }
 
         // Membuat slug baru.
-        $slug = "";
+        $data = "";
         while(1) {
-            $slug = Str::random(255);
-            $session = Session::firstWhere('slug', $slug);
-            if($session === null) break;
+            $data = Str::random(255);
+            if(Session::where('slug', $slug)->first() === null) break;
         }
 
         if($this->is_admin() || $this->is_instructor()) {
             Session::create([
-                'slug' => $slug,
+                'slug' => $data,
                 'course_id' => $request->course_id,
                 'schedule_id' => $request->schedule_id,
                 'title' => $request->title,
@@ -155,45 +116,11 @@ class Session extends Controller
         }
 
         if($this->is_admin()) {
-            $sessions = Session::all()
-                ->join('schedules', 'sessions.schedule_id', '=', 'schedules.id')
-                ->join('instructors', 'schedules.instructor_id', '=', 'instructors.id')
-                ->join('users', 'instructors.user_id', '=', 'users.id')
-                ->join('courses', 'sessions.course_id', '=', 'courses.id')
-                ->join('course_packages', 'courses.course_package_id', '=', 'course_packages.id')
-                ->distinct()
-                ->select(
-                    'users.first_name',
-                    'users.last_name',
-                    'courses.title',
-                    'course_packages.title',
-                    'schedules.schedule_time',
-                    'title',
-                    'description',
-                    'link_zoom'
-                )->paginate(10);
-
-            return view('sessions.index', compact(
-                'sessions'
-            ));
+            $data = Session::all();
+            return view('sessions.index', compact('data'));
         } else if($this->is_instructor() || $this->is_student()) {
-            $sessions = Session::all()
-                ->join('schedules', 'sessions.schedule_id', '=', 'schedules.id')
-                ->join('courses', 'sessions.course_id', '=', 'courses.id')
-                ->join('course_packages', 'courses.course_package_id', '=', 'course_packages.id')
-                ->distinct()
-                ->select(
-                    'courses.title',
-                    'course_packages.title',
-                    'schedules.schedule_time',
-                    'title',
-                    'description',
-                    'link_zoom'
-                )->paginate(10);
-
-            return view('sessions.index', compact(
-                'sessions'
-            ));
+            $data = Session::all();
+            return view('sessions.index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -207,48 +134,16 @@ class Session extends Controller
      */
     public function show($id)
     {
-        $session = Session::firstOrFail($id);
-        if($session == null) {
+        $data = Session::findOrFail($id);
+        if($data == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
         }
 
         if($this->is_admin()) {
-            $slug = $session->slug;
-            $schedule = $session->schedule();
-
-            $user = $schedule->instructor()->user();
-            $user_name = $user->first_name.' '.$user->last_name;
-
-            $course_title = ($session->course()->title != null)?
-                $session->course()->title : $session->course()->course_package()->title;
-
-            $schedule_time = $schedule->schedule_time;
-            $title = $session->title;
-            $description = $session->description;
-            $requirement = $session->requirement;
-            $link_zoom = $session->link_zoom;
-
-            return view('sessions.show', compact(
-                'slug', 'user_name', 'course_title', 'schedule_time',
-                'title', 'description', 'requirement', 'link_zoom'
-            ));
+            return view('sessions.show', compact('data'));
         } else if($this->is_instructor() || $this->is_student()) {
-            $slug = $session->slug;
-
-            $course_title = ($session->course()->title != null)?
-                $session->course()->title : $session->course()->course_package()->title;
-
-            $schedule_time = $session->schedule()->schedule_time;
-            $title = $session->title;
-            $description = $session->description;
-            $requirement = $session->requirement;
-            $link_zoom = $session->link_zoom;
-
-            return view('sessions.show', compact(
-                'slug', 'course_title', 'schedule_time',
-                'title', 'description', 'requirement', 'link_zoom'
-            ));
+            return view('sessions.show', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -262,48 +157,16 @@ class Session extends Controller
      */
     public function edit($id)
     {
-        $session = Session::firstOrFail($id);
-        if($session == null) {
+        $data = Session::findOrFail($id);
+        if($data == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
         }
 
         if($this->is_admin()) {
-            $slug = $session->slug;
-            $schedule = $session->schedule();
-
-            $user = $schedule->instructor()->user();
-            $user_name = $user->first_name.' '.$user->last_name;
-
-            $course_title = ($session->course()->title != null)?
-                $session->course()->title : $session->course()->course_package()->title;
-
-            $schedule_time = $schedule->schedule_time;
-            $title = $session->title;
-            $description = $session->description;
-            $requirement = $session->requirement;
-            $link_zoom = $session->link_zoom;
-
-            return view('sessions.edit', compact(
-                'slug', 'user_name', 'course_title', 'schedule_time',
-                'title', 'description', 'requirement', 'link_zoom'
-            ));
+            return view('sessions.edit', compact('data'));
         } else if($this->is_instructor() || $this->is_student()) {
-            $slug = $session->slug;
-
-            $course_title = ($session->course()->title != null)?
-                $session->course()->title : $session->course()->course_package()->title;
-
-            $schedule_time = $session->schedule()->schedule_time;
-            $title = $session->title;
-            $description = $session->description;
-            $requirement = $session->requirement;
-            $link_zoom = $session->link_zoom;
-
-            return view('sessions.edit', compact(
-                'slug', 'course_title', 'schedule_time',
-                'title', 'description', 'requirement', 'link_zoom'
-            ));
+            return view('sessions.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -318,15 +181,14 @@ class Session extends Controller
      */
     public function update(Request $request, $id)
     {
-        $session = Session::firstOrFail($id);
+        $session = Session::findOrFail($id);
         if($session == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
         }
 
         $data = $request->all();
-
-        $validator = Validator::make($data, [
+        $data = Validator::make($data, [
             'course_id' => ['bail', 'required'],
             'schedule_id' => [
                 'bail', 'required',
@@ -338,9 +200,9 @@ class Session extends Controller
             'link_zoom' => ['bail', 'sometimes', 'max:1000']
         ]);
 
-        if($validator->fails()) {
+        if($data->fails()) {
             return redirect()->back()
-                ->withErrors($validator)
+                ->withErrors($data)
                 ->withInput();
         }
 
@@ -358,41 +220,9 @@ class Session extends Controller
         }
 
         if($this->is_admin()) {
-            $slug = $session->slug;
-            $schedule = $session->schedule();
-
-            $user = $schedule->instructor()->user();
-            $user_name = $user->first_name.' '.$user->last_name;
-
-            $course_title = ($session->course()->title != null)?
-                $session->course()->title : $session->course()->course_package()->title;
-
-            $schedule_time = $schedule->schedule_time;
-            $title = $session->title;
-            $description = $session->description;
-            $requirement = $session->requirement;
-            $link_zoom = $session->link_zoom;
-
-            return view('sessions.show', compact(
-                'slug', 'user_name', 'course_title', 'schedule_time',
-                'title', 'description', 'requirement', 'link_zoom'
-            ));
+            return view('sessions.show', compact('data'));
         } else if($this->is_instructor() || $this->is_student()) {
-            $slug = $session->slug;
-
-            $course_title = ($session->course()->title != null)?
-                $session->course()->title : $session->course()->course_package()->title;
-
-            $schedule_time = $session->schedule()->schedule_time;
-            $title = $session->title;
-            $description = $session->description;
-            $requirement = $session->requirement;
-            $link_zoom = $session->link_zoom;
-
-            return view('sessions.show', compact(
-                'slug', 'course_title', 'schedule_time',
-                'title', 'description', 'requirement', 'link_zoom'
-            ));
+            return view('sessions.show', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -406,32 +236,29 @@ class Session extends Controller
      */
     public function destroy($id)
     {
-        $session = Session::firstOrFail($id);
-        if($session == null) {
+        $data = Session::findOrFail($id);
+        if($data == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
         }
 
-        $session_registration = SessionRegistration::firstWhere('session_id', $id);
-        if($session_registration != null) {
+        if($data->session_registrations() != null) {
             // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
             // Return?
         }
 
-        $material_session = MaterialSession::firstWhere('session_id', $id);
-        if($material_session != null) {
+        if($data->material_sessions() != null) {
             // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
             // Return?
         }
 
-        $rating = Rating::firstWhere('session_id', $id);
-        if($rating != null) {
+        if($data->ratings() != null) {
             // Data yang dicari masih terhubung dengan data lain, sehingga tidak dapat dihapus.
             // Return?
         }
 
         if($this->is_admin()) {
-            $session->delete();
+            $data->delete();
         } else if($this->is_instructor()) {
             // Melakukan request ke Admin.
         } else {
@@ -439,45 +266,11 @@ class Session extends Controller
         }
 
         if($this->is_admin()) {
-            $sessions = Session::all()
-                ->join('schedules', 'sessions.schedule_id', '=', 'schedules.id')
-                ->join('instructors', 'schedules.instructor_id', '=', 'instructors.id')
-                ->join('users', 'instructors.user_id', '=', 'users.id')
-                ->join('courses', 'sessions.course_id', '=', 'courses.id')
-                ->join('course_packages', 'courses.course_package_id', '=', 'course_packages.id')
-                ->distinct()
-                ->select(
-                    'users.first_name',
-                    'users.last_name',
-                    'courses.title',
-                    'course_packages.title',
-                    'schedules.schedule_time',
-                    'title',
-                    'description',
-                    'link_zoom'
-                )->paginate(10);
-
-            return view('sessions.index', compact(
-                'sessions'
-            ));
+            $data = Session::all();
+            return view('sessions.index', compact('data'));
         } else if($this->is_instructor() || $this->is_student()) {
-            $sessions = Session::all()
-                ->join('schedules', 'sessions.schedule_id', '=', 'schedules.id')
-                ->join('courses', 'sessions.course_id', '=', 'courses.id')
-                ->join('course_packages', 'courses.course_package_id', '=', 'course_packages.id')
-                ->distinct()
-                ->select(
-                    'courses.title',
-                    'course_packages.title',
-                    'schedules.schedule_time',
-                    'title',
-                    'description',
-                    'link_zoom'
-                )->paginate(10);
-
-            return view('sessions.index', compact(
-                'sessions'
-            ));
+            $data = Session::all();
+            return view('sessions.index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
