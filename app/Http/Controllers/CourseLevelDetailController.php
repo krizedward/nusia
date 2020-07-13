@@ -43,7 +43,7 @@ class CourseLevelDetailController extends Controller
     public function index()
     {
         $data = CourseLevelDetail::all();
-        return view('course_level_details.index', compact('data'));
+        return view('courses.level_details.index', compact('data'));
     }
 
     /**
@@ -54,7 +54,7 @@ class CourseLevelDetailController extends Controller
     public function create()
     {
         if($this->is_admin()) {
-            return view('course_level_details.create');
+            return view('courses.level_details.create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -108,7 +108,7 @@ class CourseLevelDetailController extends Controller
         }
 
         $data = CourseLevelDetail::all();
-        return view('course_level_details.index', compact('data'));
+        return view('courses.level_details.index', compact('data'));
     }
 
     /**
@@ -124,7 +124,7 @@ class CourseLevelDetailController extends Controller
             // Data yang dicari tidak ditemukan.
             // Return?
         }
-        return view('course_level_details.show', compact('data'));
+        return view('courses.level_details.show', compact('data'));
     }
 
     /**
@@ -141,7 +141,7 @@ class CourseLevelDetailController extends Controller
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-            return view('course_level_details.edit', compact('data'));
+            return view('courses.level_details.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -194,7 +194,7 @@ class CourseLevelDetailController extends Controller
         }
 
         $data = $course_level_detail;
-        return view('course_level_details.show', compact('data'));
+        return view('courses.level_details.show', compact('data'));
     }
 
     /**
@@ -223,6 +223,6 @@ class CourseLevelDetailController extends Controller
         }
 
         $data = CourseLevelDetail::all();
-        return view('course_level_details.index', compact('data'));
+        return view('courses.level_details.index', compact('data'));
     }
 }

@@ -44,7 +44,7 @@ class CoursePaymentController extends Controller
     {
         if($this->is_admin() || $this->is_student()) {
             $data = CoursePayment::all();
-            return view('course_payments.index', compact('data'));
+            return view('courses.payments.index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -58,7 +58,7 @@ class CoursePaymentController extends Controller
     public function create()
     {
         if($this->is_admin() || $this->is_student()) {
-            return view('course_payments.create');
+            return view('courses.payments.create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -106,7 +106,7 @@ class CoursePaymentController extends Controller
 
         if($this->is_admin() || $this->is_student()) {
             $data = CoursePayment::all();
-            return view('course_payments.index', compact('data'));
+            return view('courses.payments.index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -126,7 +126,7 @@ class CoursePaymentController extends Controller
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-            return view('course_payments.show', compact('data'));
+            return view('courses.payments.show', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -146,7 +146,7 @@ class CoursePaymentController extends Controller
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-            return view('course_payments.edit', compact('data'));
+            return view('courses.payments.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -201,7 +201,7 @@ class CoursePaymentController extends Controller
 
         if($this->is_admin() || $this->is_student()) {
             $data = $course_payment;
-            return view('course_payments.show', compact('data'));
+            return view('courses.payments.show', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -229,7 +229,7 @@ class CoursePaymentController extends Controller
 
         if($this->is_admin() || $this->is_student()) {
             $data = CoursePayment::all();
-            return view('course_payments.index', compact('data'));
+            return view('courses.payments.index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }

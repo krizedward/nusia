@@ -43,7 +43,7 @@ class MaterialTypeController extends Controller
     public function index()
     {
         $data = MaterialType::all();
-        return view('material_types.index', compact('data'));
+        return view('materials.types.index', compact('data'));
     }
 
     /**
@@ -54,7 +54,7 @@ class MaterialTypeController extends Controller
     public function create()
     {
         if($this->is_admin()) {
-            return view('material_types.create');
+            return view('materials.types.create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -108,7 +108,7 @@ class MaterialTypeController extends Controller
         }
 
         $data = MaterialType::all();
-        return view('material_types.index', compact('data'));
+        return view('materials.types.index', compact('data'));
     }
 
     /**
@@ -124,7 +124,7 @@ class MaterialTypeController extends Controller
             // Data yang dicari tidak ditemukan.
             // Return?
         }
-        return view('material_types.show', compact('data'));
+        return view('materials.types.show', compact('data'));
     }
 
     /**
@@ -141,7 +141,7 @@ class MaterialTypeController extends Controller
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-            return view('material_types.edit', compact('data'));
+            return view('materials.types.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -194,7 +194,7 @@ class MaterialTypeController extends Controller
         }
 
         $data = $material_type;
-        return view('material_types.show', compact('data'));
+        return view('materials.types.show', compact('data'));
     }
 
     /**
@@ -223,6 +223,6 @@ class MaterialTypeController extends Controller
         }
 
         $data = MaterialType::all();
-        return view('material_types.index', compact('data'));
+        return view('materials.types.index', compact('data'));
     }
 }

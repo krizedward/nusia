@@ -44,10 +44,10 @@ class CourseCertificateController extends Controller
     {
         if($this->is_admin() || $this->is_instructor()) {
             $data = CourseCertificate::all();
-            return view('course_certificates.index', compact('data'));
+            return view('courses.certificates.index', compact('data'));
         } else if($this->is_student()) {
             $data = CourseCertificate::all();
-            return view('course_certificates.index', compact('data'));
+            return view('courses.certificates.index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -61,7 +61,7 @@ class CourseCertificateController extends Controller
     public function create()
     {
         if($this->is_admin() || $this->is_instructor()) {
-            return view('course_certificates.create');
+            return view('courses.certificates.create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -109,10 +109,10 @@ class CourseCertificateController extends Controller
 
         if($this->is_admin() || $this->is_instructor()) {
             $data = CourseCertificate::all();
-            return view('course_certificates.index', compact('data'));
+            return view('courses.certificates.index', compact('data'));
         } else if($this->is_student()) {
             $data = CourseCertificate::all();
-            return view('course_certificates.index', compact('data'));
+            return view('courses.certificates.index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -133,9 +133,9 @@ class CourseCertificateController extends Controller
         }
 
         if($this->is_admin() || $this->is_instructor()) {
-            return view('course_certificates.show', compact('data'));
+            return view('courses.certificates.show', compact('data'));
         } else if($this->is_student()) {
-            return view('course_certificates.show', compact('data'));
+            return view('courses.certificates.show', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -156,7 +156,7 @@ class CourseCertificateController extends Controller
         }
 
         if($this->is_admin() || $this->is_instructor()) {
-            return view('course_certificates.edit', compact('data'));
+            return view('courses.certificates.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -205,9 +205,9 @@ class CourseCertificateController extends Controller
 
         $data = $course_certificate;
         if($this->is_admin() || $this->is_instructor()) {
-            return view('course_certificates.show', compact('data'));
+            return view('courses.certificates.show', compact('data'));
         } else if($this->is_student()) {
-            return view('course_certificates.show', compact('data'));
+            return view('courses.certificates.show', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -235,10 +235,10 @@ class CourseCertificateController extends Controller
 
         if($this->is_admin() || $this->is_instructor()) {
             $data = CourseCertificate::all();
-            return view('course_certificates.index', compact('data'));
+            return view('courses.certificates.index', compact('data'));
         } else if($this->is_student()) {
             $data = CourseCertificate::all();
-            return view('course_certificates.index', compact('data'));
+            return view('courses.certificates.index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }

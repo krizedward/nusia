@@ -43,7 +43,7 @@ class CoursePackageController extends Controller
     public function index()
     {
         $data = CoursePackage::all();
-        return view('course_packages.index', compact('data'));
+        return view('courses.packages.index', compact('data'));
     }
 
     /**
@@ -54,7 +54,7 @@ class CoursePackageController extends Controller
     public function create()
     {
         if($this->is_admin()) {
-            return view('course_packages.create');
+            return view('courses.packages.create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -136,7 +136,7 @@ class CoursePackageController extends Controller
         }
 
         $data = CoursePackage::all();
-        return view('course_packages.index', compact('data'));
+        return view('courses.packages.index', compact('data'));
     }
 
     /**
@@ -152,7 +152,7 @@ class CoursePackageController extends Controller
             // Data yang dicari tidak ditemukan.
             // Return?
         }
-        return view('course_packages.show', compact('data'));
+        return view('courses.packages.show', compact('data'));
     }
 
     /**
@@ -169,7 +169,7 @@ class CoursePackageController extends Controller
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-            return view('course_packages.edit', compact('data'));
+            return view('courses.packages.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -254,7 +254,7 @@ class CoursePackageController extends Controller
         }
 
         $data = $course_package;
-        return view('course_packages.show', compact('data'));
+        return view('courses.packages.show', compact('data'));
     }
 
     /**
@@ -283,6 +283,6 @@ class CoursePackageController extends Controller
         }
 
         $data = CoursePackage::all();
-        return view('course_packages.index', compact('data'));
+        return view('courses.packages.index', compact('data'));
     }
 }

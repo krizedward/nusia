@@ -43,7 +43,7 @@ class MaterialSessionController extends Controller
     public function index()
     {
         $data = MaterialSession::all();
-        return view('material_sessions.index', compact('data'));
+        return view('materials.sessions.index', compact('data'));
     }
 
     /**
@@ -54,7 +54,7 @@ class MaterialSessionController extends Controller
     public function create()
     {
         if($this->is_admin() || $this->is_instructor()) {
-            return view('material_sessions.create');
+            return view('materials.sessions.create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -102,7 +102,7 @@ class MaterialSessionController extends Controller
         }
 
         $data = MaterialSession::all();
-        return view('material_sessions.index', compact('data'));
+        return view('materials.sessions.index', compact('data'));
     }
 
     /**
@@ -118,7 +118,7 @@ class MaterialSessionController extends Controller
             // Data yang dicari tidak ditemukan.
             // Return?
         }
-        return view('material_sessions.show', compact('data'));
+        return view('materials.sessions.show', compact('data'));
     }
 
     /**
@@ -135,7 +135,7 @@ class MaterialSessionController extends Controller
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-            return view('material_sessions.edit', compact('data'));
+            return view('materials.sessions.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -182,7 +182,7 @@ class MaterialSessionController extends Controller
         }
 
         $data = $material_session;
-        return view('material_sessions.show', compact('data'));
+        return view('materials.sessions.show', compact('data'));
     }
 
     /**
@@ -206,6 +206,6 @@ class MaterialSessionController extends Controller
         }
 
         $data = MaterialSession::all();
-        return view('material_sessions.index', compact('data'));
+        return view('materials.sessions.index', compact('data'));
     }
 }

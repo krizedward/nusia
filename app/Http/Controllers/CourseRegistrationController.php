@@ -43,7 +43,7 @@ class CourseRegistrationController extends Controller
     public function index()
     {
         $data = CourseRegistration::all();
-        return view('course_registrations.index', compact('data'));
+        return view('registrations.courses.index', compact('data'));
     }
 
     /**
@@ -54,7 +54,7 @@ class CourseRegistrationController extends Controller
     public function create()
     {
         if($this->is_admin()) {
-            return view('course_registrations.create');
+            return view('registrations.courses.create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -98,7 +98,7 @@ class CourseRegistrationController extends Controller
         }
 
         $data = CourseRegistration::all();
-        return view('course_registrations.index', compact('data'));
+        return view('registrations.courses.index', compact('data'));
     }
 
     /**
@@ -141,6 +141,6 @@ class CourseRegistrationController extends Controller
         }
 
         $data = CourseRegistration::all();
-        return view('course_registrations.index', compact('data'));
+        return view('registrations.courses.index', compact('data'));
     }
 }

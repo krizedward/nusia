@@ -43,7 +43,7 @@ class CourseLevelController extends Controller
     public function index()
     {
         $data = CourseLevel::all();
-        return view('course_levels.index', compact('data'));
+        return view('courses.levels.index', compact('data'));
     }
 
     /**
@@ -54,7 +54,7 @@ class CourseLevelController extends Controller
     public function create()
     {
         if($this->is_admin()) {
-            return view('course_levels.create');
+            return view('courses.levels.create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -108,7 +108,7 @@ class CourseLevelController extends Controller
         }
 
         $data = CourseLevel::all();
-        return view('course_levels.index', compact('data'));
+        return view('courses.levels.index', compact('data'));
     }
 
     /**
@@ -124,7 +124,7 @@ class CourseLevelController extends Controller
             // Data yang dicari tidak ditemukan.
             // Return?
         }
-        return view('course_levels.show', compact('data'));
+        return view('courses.levels.show', compact('data'));
     }
 
     /**
@@ -141,7 +141,7 @@ class CourseLevelController extends Controller
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-            return view('course_levels.edit', compact('data'));
+            return view('courses.levels.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -195,7 +195,7 @@ class CourseLevelController extends Controller
         }
 
         $data = $course_level;
-        return view('course_levels.show', compact('data'));
+        return view('courses.levels.show', compact('data'));
     }
 
     /**
@@ -224,6 +224,6 @@ class CourseLevelController extends Controller
         }
 
         $data = CourseLevel::all();
-        return view('course_levels.index', compact('data'));
+        return view('courses.levels.index', compact('data'));
     }
 }

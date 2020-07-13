@@ -43,7 +43,7 @@ class MaterialPublicController extends Controller
     public function index()
     {
         $data = MaterialPublic::all();
-        return view('material_publics.index', compact('data'));
+        return view('materials.publics.index', compact('data'));
     }
 
     /**
@@ -54,7 +54,7 @@ class MaterialPublicController extends Controller
     public function create()
     {
         if($this->is_admin() || $this->is_instructor()) {
-            return view('material_publics.create');
+            return view('materials.publics.create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -104,7 +104,7 @@ class MaterialPublicController extends Controller
         }
 
         $data = MaterialPublic::all();
-        return view('material_publics.index', compact('data'));
+        return view('materials.publics.index', compact('data'));
     }
 
     /**
@@ -120,7 +120,7 @@ class MaterialPublicController extends Controller
             // Data yang dicari tidak ditemukan.
             // Return?
         }
-        return view('material_publics.show', compact('data'));
+        return view('materials.publics.show', compact('data'));
     }
 
     /**
@@ -137,7 +137,7 @@ class MaterialPublicController extends Controller
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-            return view('material_publics.edit', compact('data'));
+            return view('materials.publics.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -186,7 +186,7 @@ class MaterialPublicController extends Controller
         }
 
         $data = $material_public;
-        return view('material_publics.show', compact('data'));
+        return view('materials.publics.show', compact('data'));
     }
 
     /**
@@ -212,6 +212,6 @@ class MaterialPublicController extends Controller
         }
 
         $data = MaterialPublic::all();
-        return view('material_publics.index', compact('data'));
+        return view('materials.publics.index', compact('data'));
     }
 }

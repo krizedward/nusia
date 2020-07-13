@@ -43,7 +43,7 @@ class InstructorController extends Controller
     public function index()
     {
         $data = Instructor::all();
-        return view('users.Instructors.index', compact('data'));
+        return view('users.instructors.index', compact('data'));
     }
 
     /**

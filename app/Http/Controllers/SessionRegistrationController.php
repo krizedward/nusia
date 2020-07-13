@@ -43,7 +43,7 @@ class SessionRegistrationController extends Controller
     public function index()
     {
         $data = SessionRegistration::all();
-        return view('session_registrations.index', compact('data'));
+        return view('registrations.sessions.index', compact('data'));
     }
 
     /**
@@ -54,7 +54,7 @@ class SessionRegistrationController extends Controller
     public function create()
     {
         if($this->is_admin()) {
-            return view('session_registrations.create');
+            return view('registrations.sessions.create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -102,7 +102,7 @@ class SessionRegistrationController extends Controller
         }
 
         $data = SessionRegistration::all();
-        return view('session_registrations.index', compact('data'));
+        return view('registrations.sessions.index', compact('data'));
     }
 
     /**
@@ -119,7 +119,7 @@ class SessionRegistrationController extends Controller
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-            return view('session_registrations.edit', compact('data'));
+            return view('registrations.sessions.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -176,7 +176,7 @@ class SessionRegistrationController extends Controller
         }
 
         $data = SessionRegistration::all();
-        return view('session_registrations.index', compact('data'));
+        return view('registrations.sessions.index', compact('data'));
     }
 
     /**
@@ -200,6 +200,6 @@ class SessionRegistrationController extends Controller
         }
 
         $data = SessionRegistration::all();
-        return view('session_registrations.index', compact('data'));
+        return view('registrations.sessions.index', compact('data'));
     }
 }

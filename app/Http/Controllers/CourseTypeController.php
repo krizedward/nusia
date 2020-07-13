@@ -43,7 +43,7 @@ class CourseTypeController extends Controller
     public function index()
     {
         $data = CourseType::all();
-        return view('course_types.index', compact('data'));
+        return view('courses.types.index', compact('data'));
     }
 
     /**
@@ -54,7 +54,7 @@ class CourseTypeController extends Controller
     public function create()
     {
         if($this->is_admin()) {
-            return view('course_types.create');
+            return view('courses.types.create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -112,7 +112,7 @@ class CourseTypeController extends Controller
         }
 
         $data = CourseType::all();
-        return view('course_types.index', compact('data'));
+        return view('courses.types.index', compact('data'));
     }
 
     /**
@@ -128,7 +128,7 @@ class CourseTypeController extends Controller
             // Data yang dicari tidak ditemukan.
             // Return?
         }
-        return view('course_types.show', compact('data'));
+        return view('courses.types.show', compact('data'));
     }
 
     /**
@@ -145,7 +145,7 @@ class CourseTypeController extends Controller
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-            return view('course_types.edit', compact('data'));
+            return view('courses.types.edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -202,7 +202,7 @@ class CourseTypeController extends Controller
         }
 
         $data = $course_type;
-        return view('course_types.show', compact('data'));
+        return view('courses.types.show', compact('data'));
     }
 
     /**
@@ -231,6 +231,6 @@ class CourseTypeController extends Controller
         }
 
         $data = CourseType::all();
-        return view('course_types.index', compact('data'));
+        return view('courses.types.index', compact('data'));
     }
 }
