@@ -28,7 +28,7 @@
 								<th>description</th>
 								<th>count_student_min</th>
 								<th>count_student_max</th>
-								<th colspan="2" style="text-align: center;">Action</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -39,10 +39,8 @@
 								<td>{{ $dt->description }}</td>
 								<td>{{ $dt->count_student_min }}</td>
 								<td>{{ $dt->count_student_max }}</td>
-								<td style="text-align: center;">
+								<td>
 			                     <a class="btn btn-flat btn-xs btn-success" href="#">Detail</a>
-			                   	</td>
-			                   	<td style="text-align: center;">
 			                     <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>
 			                   	</td>
 							</tr>

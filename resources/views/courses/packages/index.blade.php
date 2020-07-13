@@ -29,7 +29,7 @@
 								<th>course_level_detail_id</th>
 								<th>status</th>
 								<th>title</th>
-								<th colspan="2" style="text-align: center;">Action</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -41,10 +41,8 @@
 								<td>{{ $dt->course_level_detail_id }}</td>
 								<td>{{ $dt->status }}</td>
 								<td>{{ $dt->title }}</td>
-								<td style="text-align: center;">
+								<td>
 			                     <a class="btn btn-flat btn-xs btn-success" href="#">Detail</a>
-			                   	</td>
-			                   	<td style="text-align: center;">
 			                     <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>
 			                   	</td>
 							</tr>

@@ -26,7 +26,7 @@
 								<th>Name</th>
 								<th>Email</th>
 								<th>Gender</th>
-								<th colspan="2" style="text-align: center;">Action</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -35,10 +35,8 @@
 								<td>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</td>
 								<td>{{ $dt->user->email }}</td>
 								<td>{{ $dt->user->gender }}</td>
-								<td style="text-align: center;">
+								<td>
 			                     <a class="btn btn-flat btn-xs btn-success" href="#">Detail</a>
-			                   	</td>
-			                   	<td style="text-align: center;">
 			                     <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>
 			                   	</td>
 							</tr>

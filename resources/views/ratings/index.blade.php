@@ -26,7 +26,7 @@
 								<th>session_id</th>
 								<th>rating</th>
 								<th>comment</th>
-								<th colspan="2" style="text-align: center;">Action</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -37,8 +37,6 @@
 								<td>{{ $dt->comment }}</td>
 								<td style="text-align: center;">
 			                     <a class="btn btn-flat btn-xs btn-success" href="#">Detail</a>
-			                   	</td>
-			                   	<td style="text-align: center;">
 			                     <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>
 			                   	</td>
 							</tr>

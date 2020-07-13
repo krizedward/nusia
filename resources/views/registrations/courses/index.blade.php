@@ -25,7 +25,7 @@
 							<tr>
 								<th>Course_id</th>
 								<th>Student_id</th>
-								<th colspan="2" style="text-align: center;">Action</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -33,10 +33,8 @@
 							<tr>
 								<td>{{ $dt->course_id }}</td>
 								<td>{{ $dt->student_id }}</td>
-								<td style="text-align: center;">
+								<td>
 			                     <a class="btn btn-flat btn-xs btn-success" href="#">Detail</a>
-			                   	</td>
-			                   	<td style="text-align: center;">
 			                     <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>
 			                   	</td>
 							</tr>

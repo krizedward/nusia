@@ -26,7 +26,7 @@
 								<th>instructor_id</th>
 								<th>rating</th>
 								<th>comment</th>
-								<th colspan="2" style="text-align: center;">Action</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -35,10 +35,8 @@
 								<td>{{ $dt->instructor_id }}</td>
 								<td>{{ $dt->schedule_time }}</td>
 								<td>{{ $dt->status }}</td>
-								<td style="text-align: center;">
+								<td>
 			                     <a class="btn btn-flat btn-xs btn-success" href="#">Detail</a>
-			                   	</td>
-			                   	<td style="text-align: center;">
 			                     <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>
 			                   	</td>
 							</tr>

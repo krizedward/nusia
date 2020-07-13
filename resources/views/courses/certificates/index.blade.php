@@ -26,7 +26,7 @@
 								<th>id</th>
 								<th>code</th>
 								<th>name</th>
-								<th colspan="2" style="text-align: center;">Action</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -35,10 +35,8 @@
 								<td>{{ $dt->id }}</td>
 								<td>{{ $dt->course_registration_id }}</td>
 								<td>{{ $dt->path }}</td>
-								<td style="text-align: center;">
+								<td>
 			                     <a class="btn btn-flat btn-xs btn-success" href="#">Detail</a>
-			                   	</td>
-			                   	<td style="text-align: center;">
 			                     <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>
 			                   	</td>
 							</tr>
