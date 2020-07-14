@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Instructor;
+use App\Models\Session;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -23,7 +25,7 @@ class Schedule extends Model
      */
     public function instructor()
     {
-    	return $this->belongsTo(App\Models\Instructor::class);
+    	return $this->belongsTo(Instructor::class);
     }
 
     /**
@@ -31,6 +33,6 @@ class Schedule extends Model
      */
     public function session()
     {
-    	return $this->hasOne(App\Models\Session::class);
+    	return $this->hasOne(Session::class);
     }
 }

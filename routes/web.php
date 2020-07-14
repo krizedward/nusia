@@ -126,7 +126,7 @@ Route::group(['middleware'=>'auth'], function() {
             | Izin Akses "CoursePackage"
             |-------------------------------------------------
             | ADMIN
-            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (simple), count_session, price
+            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, description (simple), count_session, price
             | .create  -> (+) material_type_id, course_type_id, course_level_id, course_level_detail_id, title, description (full), requirement (full), count_session, price
             | .store   -> (+) id, slug, created_at
             | .show    -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (full), requirement (full), count_session, price
@@ -135,11 +135,11 @@ Route::group(['middleware'=>'auth'], function() {
             | .destroy -> (+) deleted_at
             |
             | INSTRUCTOR
-            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (simple), count_session, price
+            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, description (simple), count_session, price
             | .show    -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (full), requirement (full), count_session, price
             |
             | STUDENT
-            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (simple), count_session, price
+            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, description (simple), count_session, price
             | .show    -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (full), requirement (full), count_session, price
             */
 

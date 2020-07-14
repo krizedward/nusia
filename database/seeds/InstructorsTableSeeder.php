@@ -23,7 +23,7 @@ class InstructorsTableSeeder extends Seeder
                     ->make();
             })
             ->make();
-        factory(App\Models\Instructor::class, 3)
+        /*factory(App\Models\Instructor::class, 3)
             ->states('Full', 'CreatedAt')
             ->create()
             ->each(function($instructor) {
@@ -102,6 +102,6 @@ class InstructorsTableSeeder extends Seeder
                     ->create(['instructor_id' => $instructor->id])
                     ->make();
             })
-            ->make();
+            ->make();*/
     }
 }

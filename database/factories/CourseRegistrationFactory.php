@@ -30,61 +30,44 @@ use Faker\Factory;
 */
 
 $factory->define(App\Models\CourseRegistration::class, function (Faker\Generator $faker) {
-    $course_types = CourseType::all();
-    $course_packages = CoursePackage::all();
     $courses = Course::all();
     $students = Student::all();
-
-    $course_types_count = $course_types->count();
-    $course_packages_count = $course_packages->count();
     $courses_count = $courses->count();
     $students_count = $students->count();
 
-    $course_type = null;
-    $course_package = null;
-    $course = null;
+    $flag_1 = 0; // After 1000 continuous loops, indicate possibility of having infinite loop (break this loop immediately).
+    $flag_2 = 0; // After 1000 continuous loops, indicate possibility of having infinite loop (break this loop immediately).
 
     $course_id = 0;
     $student_id = 0;
 
     // Possible infinite loop when all courses are full.
     while(1) {
-        $id = $faker->numberBetween($min = 1, $max = $course_types_count);
-        $course_type = $course_types->firstWhere('id', $id);
-        $course_count_student_max = $course_type->count_student_max;
-        if($course_count_student_max == null) continue;
+        $flag_1 = $flag_1 + 1; // This is a new loop.
+        if($flag_1 == 1001) break;
 
-        $id = $faker->numberBetween($min = 1, $max = $course_packages_count);
-        $course_packages_temp = $course_packages->where('course_type_id', $id);
-        if($course_packages_temp == null) continue;
-
-        $id = $faker->numberBetween($min = 1, $max = $course_packages_count);
-        $course_package = $course_packages_temp->firstWhere('id', $id);
-        if($course_package == null) continue;
-
-        $courses_temp = $courses->where('course_package_id', $id);
-        if($courses_temp == null) continue;
-
-        $id = $faker->numberBetween($min = 1, $max = $courses_count);
-        $course = $courses_temp->firstWhere('id', $id);
+        $course_id = $faker->numberBetween($min = 1, $max = $courses_count);
+        $course = $courses->firstWhere('id', $course_id);
         if($course == null) continue;
 
-        $course_id = $id;
-        $course_registrations_count = CourseRegistration::where('course_id', $course_id)->count();
-
-        if($course_registrations_count + 1 > $course_count_student_max) continue;
+        if(
+            CourseRegistration::where('course_id', $course_id)->count() + 1
+                > $course->course_package->course_type->count_student_max
+        ) continue;
 
         // Possible infinite loop when all students have been registered in a specific course.
         while(1) {
-            $student_id = $faker->numberBetween($min = 1, $max = $students->count());
+            $flag_2 = $flag_2 + 1; // This is a new loop.
+            if($flag_2 == 1001) break;
 
-            $course_registration = CourseRegistration
-                ::where('course_id', $course_id)
-                ->where('student_id', $student_id)
-                ->count();
-            $has_registered_before = ($course_registration)? 1 : 0;
+            $student_id = $faker->numberBetween($min = 1, $max = $students_count);
+            if(
+                CourseRegistration
+                    ::where('course_id', $course_id)
+                    ->where('student_id', $student_id)
+                    ->first() != null
+            ) continue;
 
-            if($has_registered_before) continue;
             break;
         }
         break;
