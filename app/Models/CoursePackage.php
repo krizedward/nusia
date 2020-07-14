@@ -2,6 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\MaterialType;
+use App\Models\CourseType;
+use App\Models\CourseLevel;
+use App\Models\CourseLevelDetail;
+use App\Models\Course;
+use App\Models\MaterialPublic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -30,7 +36,7 @@ class CoursePackage extends Model
      */
     public function material_type()
     {
-    	return $this->belongsTo(App\Models\MaterialType::class);
+    	return $this->belongsTo(MaterialType::class);
     }
 
     /**
@@ -38,7 +44,7 @@ class CoursePackage extends Model
      */
     public function course_type()
     {
-    	return $this->belongsTo(App\Models\CourseType::class);
+    	return $this->belongsTo(CourseType::class);
     }
 
     /**
@@ -46,7 +52,7 @@ class CoursePackage extends Model
      */
     public function course_level()
     {
-    	return $this->belongsTo(App\Models\CourseLevel::class);
+    	return $this->belongsTo(CourseLevel::class);
     }
 
     /**
@@ -54,7 +60,7 @@ class CoursePackage extends Model
      */
     public function course_level_detail()
     {
-    	return $this->belongsTo(App\Models\CourseLevelDetail::class);
+    	return $this->belongsTo(CourseLevelDetail::class);
     }
 
     /**
@@ -62,7 +68,7 @@ class CoursePackage extends Model
      */
     public function courses()
     {
-    	return $this->hasMany(App\Models\Course::class);
+    	return $this->hasMany(Course::class);
     }
 
     /**
@@ -70,7 +76,7 @@ class CoursePackage extends Model
      */
     public function material_publics()
     {
-    	return $this->hasMany(App\Models\MaterialPublic::class);
+    	return $this->hasMany(MaterialPublic::class);
     }
 
     /**

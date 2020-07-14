@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Course;
+use App\Models\Student;
+use App\Models\CourseCertificate;
+use App\Models\CoursePayment;
+use App\Models\SessionRegistration;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -22,7 +27,7 @@ class CourseRegistration extends Model
      */
     public function course()
     {
-    	return $this->belongsTo(App\Models\Course::class);
+    	return $this->belongsTo(Course::class);
     }
 
     /**
@@ -30,7 +35,7 @@ class CourseRegistration extends Model
      */
     public function student()
     {
-    	return $this->belongsTo(App\Models\Student::class);
+    	return $this->belongsTo(Student::class);
     }
 
     /**
@@ -38,7 +43,7 @@ class CourseRegistration extends Model
      */
     public function course_certificate()
     {
-    	return $this->hasOne(App\Models\CourseCertificate::class);
+    	return $this->hasOne(CourseCertificate::class);
     }
 
     /**
@@ -46,7 +51,7 @@ class CourseRegistration extends Model
      */
     public function course_payment()
     {
-    	return $this->hasOne(App\Models\CoursePayment::class);
+    	return $this->hasOne(CoursePayment::class);
     }
 
     /**
@@ -54,6 +59,6 @@ class CourseRegistration extends Model
      */
     public function session_registrations()
     {
-    	return $this->hasMany(App\Models\SessionRegistration::class);
+    	return $this->hasMany(SessionRegistration::class);
     }
 }

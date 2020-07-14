@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Course;
+use App\Models\Schedule;
+use App\Models\MaterialSession;
+use App\Models\Rating;
+use App\Models\SessionRegistration;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -25,9 +30,10 @@ class Session extends Model
     /**
      * Define a relationship.
      */
+     
     public function course()
     {
-    	return $this->belongsTo(App\Models\Course::class);
+    	return $this->belongsTo(Course::class);
     }
 
     /**
@@ -35,7 +41,7 @@ class Session extends Model
      */
     public function schedule()
     {
-    	return $this->belongsTo(App\Models\Schedule::class);
+    	return $this->belongsTo(Schedule::class);
     }
 
     /**
@@ -43,7 +49,7 @@ class Session extends Model
      */
     public function material_sessions()
     {
-    	return $this->hasMany(App\Models\MaterialSession::class);
+    	return $this->hasMany(MaterialSession::class);
     }
 
     /**
@@ -51,7 +57,7 @@ class Session extends Model
      */
     public function ratings()
     {
-    	return $this->hasMany(App\Models\Rating::class);
+    	return $this->hasMany(Rating::class);
     }
 
     /**
@@ -59,7 +65,7 @@ class Session extends Model
      */
     public function session_registrations()
     {
-    	return $this->hasMany(App\Models\SessionRegistration::class);
+    	return $this->hasMany(SessionRegistration::class);
     }
 
     /**

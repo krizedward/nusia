@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\CoursePackage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -24,7 +25,7 @@ class MaterialType extends Model
      */
     public function course_packages()
     {
-    	return $this->hasMany(App\Models\CoursePackage::class);
+    	return $this->hasMany(CoursePackage::class);
     }
 
     /**

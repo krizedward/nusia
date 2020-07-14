@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Session;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -25,7 +26,7 @@ class MaterialSession extends Model
      */
     public function session()
     {
-    	return $this->belongsTo(App\Models\Session::class);
+    	return $this->belongsTo(Session::class);
     }
 
     /**

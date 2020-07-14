@@ -24,19 +24,15 @@
 						<thead>
 							<tr>
 								<th>Session_id</th>
-								<th>Course_Registration_id</th>
-								<th>Registration_Time</th>
-								<th>Status</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
 						@foreach($data as $dt)
 							<tr>
-								<td>{{ $dt->session_id }}</td>
-								<td>{{ $dt->course_registration_id }}</td>
-								<td>{{ $dt->registration_time }}</td>
-								<td>{{ $dt->status }}</td>
+								<td>{{ $dt->session->title }}</td>
+								<td>{{ $dt->session->course_id }}</td>
+								<td>{{ $dt->session->schedule_id }}</td>
 								<td>
 			                     <a class="btn btn-flat btn-xs btn-success" href="#">Detail</a>
 			                     <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>

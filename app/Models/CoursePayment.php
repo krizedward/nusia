@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\CourseRegistration;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -26,6 +27,6 @@ class CoursePayment extends Model
      */
     public function course_registration()
     {
-    	return $this->belongsTo(App\Models\CourseRegistration::class);
+    	return $this->belongsTo(CourseRegistration::class);
     }
 }

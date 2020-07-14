@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\User;
+use App\Models\CourseRegistration;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -40,6 +41,6 @@ class Student extends Model
      */
     public function course_registrations()
     {
-    	return $this->hasMany(App\Models\CourseRegistration::class);
+    	return $this->hasMany(CourseRegistration::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\CoursePackage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -25,7 +26,7 @@ class MaterialPublic extends Model
      */
     public function course_package()
     {
-    	return $this->belongsTo(App\Models\CoursePackage::class);
+    	return $this->belongsTo(CoursePackage::class);
     }
 
     /**

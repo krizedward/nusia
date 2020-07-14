@@ -26,12 +26,6 @@
               <i class="fa fa-bell-o"></i>
             </a>
           </li>
-          <!-- Tasks: style can be found in dropdown.less -->
-          <li class="dropdown tasks-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-flag-o"></i>
-            </a>
-          </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -44,7 +38,7 @@
                 <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="img-circle" alt="User Image">
 
                 <p>
-                  {{ Auth::user()->name }} - {{ Auth::user()->roles }}
+                  {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} - {{ Auth::user()->roles }}
                   <small>{{ Auth::user()->created_at }}</small>
                 </p>
               </li>
@@ -69,9 +63,6 @@
             </ul>
           </li>
           <!-- Control Sidebar Toggle Button -->
-          <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-          </li>
         </ul>
       </div>
     </nav>

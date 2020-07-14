@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Session;
+use App\Models\CoursePackage;
+use App\Models\CourseRegistration;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -25,7 +28,7 @@ class Course extends Model
      */
     public function course_package()
     {
-    	return $this->belongsTo(App\Models\CoursePackage::class);
+    	return $this->belongsTo(CoursePackage::class);
     }
 
     /**
@@ -33,7 +36,7 @@ class Course extends Model
      */
     public function course_registrations()
     {
-    	return $this->hasMany(App\Models\CourseRegistration::class);
+    	return $this->hasMany(CourseRegistration::class);
     }
 
     /**
@@ -41,7 +44,7 @@ class Course extends Model
      */
     public function sessions()
     {
-    	return $this->hasMany(App\Models\Session::class);
+    	return $this->hasMany(Session::class);
     }
 
     /**

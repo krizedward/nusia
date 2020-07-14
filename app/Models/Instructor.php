@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\User;
+use App\Models\Schedule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -33,6 +34,6 @@ class Instructor extends Model
      */
     public function schedules()
     {
-    	return $this->hasMany(App\Models\Schedule::class);
+    	return $this->hasMany(Schedule::class);
     }
 }
