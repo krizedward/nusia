@@ -89,7 +89,7 @@
                   <th>Action</th>
                 </tr>
                 </thead>
-                      
+
                 <tbody>
                 <tr>
                   <td>ads</td>
@@ -163,16 +163,17 @@
           </table>
         </div>
       </div>
-      
+
 @endif
 
 @if(Auth::check() && Auth::user()->level == 'admin')
 <p>Hello Admin</p>
 @endif
-@endsection
+
+@stop
 
 @push('style')
-<!-- Tell the browser to be responsive to screen width -->
+  <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="{{ asset('adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">

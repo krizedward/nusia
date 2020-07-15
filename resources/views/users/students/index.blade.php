@@ -17,7 +17,7 @@
 		<div class="col-md-12">
 			<div class="box box-warning">
 				<div class="box-header">
-					<a href="#" class="btn btn-flat btn-sm btn-primary">+ Add Student</a>
+					<a href="{{ route('students.create') }}" class="btn btn-flat btn-sm btn-primary">+ Add Student</a>
 				</div>
 				<div class="box-body">
 					<table id="example1" class="table table-bordered table-striped">
@@ -43,7 +43,7 @@
 						@endforeach
 						</tbody>
 					</table>
-				</div>	
+				</div>
 			</div>
 		</div>
 	</div>
