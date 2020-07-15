@@ -30,7 +30,11 @@
                 <tr>
                   <td>{{ $dt->code }}</td>
                   <td>{{ $dt->name }}</td>
-                  <td>{{ $dt->description }}</td>
+                  @if($dt->description)
+                    <td>{{ $dt->description }}</td>
+                  @else
+                    <td><i>Not Available</i></td>
+                  @endif
                   <td>
                     <a class="btn btn-flat btn-xs btn-success" href="#">Detail</a>
                     <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>

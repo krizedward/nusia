@@ -34,9 +34,21 @@
                   <td>{{ $dt->material_type->name }}</td>
                   <td>{{ $dt->course_type->name }}</td>
                   <td>{{ $dt->course_level->name }}-{{ $dt->course_level_detail->name }}</td>
-                  <td>{{ $dt->description }}</td>
-                  <td>{{ $dt->count_session }}</td>
-                  <td>{{ $dt->price }}</td>
+                  @if($dt->description)
+                    <td>{{ $dt->description }}</td>
+                  @else
+                    <td><i>Not Available</i></td>
+                  @endif
+                  @if($dt->count_session)
+                    <td>{{ $dt->count_session }}</td>
+                  @else
+                    <td><i>Not Available</i></td>
+                  @endif
+                  @if($dt->price)
+                    <td>{{ $dt->price }}</td>
+                  @else
+                    <td><i>Not Available</i></td>
+                  @endif
                   <td>
                     <a class="btn btn-flat btn-xs btn-success" href="#">Detail</a>
                     <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>
