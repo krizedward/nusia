@@ -547,7 +547,13 @@ Route::group(['middleware'=>'auth'], function() {
             ->parameters([
                 'students' => 'user'
             ]);
+    /*link custom*/
+    Route::get('/schedules/private','ScheduleController@private')->name('schedules.private');
+    Route::get('/schedules/group','ScheduleController@group')->name('schedules.group');
 
+    Route::get('/session/private', 'SessionController@private')->name('session.private');
+    Route::get('/session/group', 'SessionController@group')->name('session.group');
+    /*end link*/
 	//menampilkan detail dari schedule
 	//Route::get('/schedule/detail/{id_schedule}','ScheduleController@detail')->name('schedule.detail');
 	//menampilkan halaman schedule
@@ -556,7 +562,7 @@ Route::group(['middleware'=>'auth'], function() {
 	//Route::post('/create/schedule/instuctor/{id}','InstructorsController@schedule');
 	//url pilih instructor
 	//Route::get('/schedule/{user_id}/{instructor_id}', 'ScheduleController@choose')->name('choose');
-	//url simpan data 
+	//url simpan data
 	//Route::post('/schedule/store', 'ScheduleController@store')->name('store');
 	//url halaman pilih instructor
 	//Route::get('/classroom/{id}/instructors/','InstructorsController@index')->name('instructors.index');
@@ -590,7 +596,7 @@ Route::group(['middleware'=>'auth'], function() {
 	//Route::get('/classroom/{id_class}/instructors/{id_instructors}/time/{id_time}/date/{id_date}/user/{id_user}','ScheduleController@savesummary')->name('schedule.savesummary');
 	/*
 	Route::get('/home', function() {
-		
+
 		$parameter =[
 			'id' 	=> Auth::user()->id,
 			'nama' 	=> Auth::user()->name,

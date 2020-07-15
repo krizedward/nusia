@@ -275,4 +275,29 @@ class SessionController extends Controller
             // Tidak memiliki hak akses.
         }
     }
+
+    /**
+     * Custom Link By Edward
+     */
+    public function private()
+    {
+        if ($this->is_student()) {
+            $data = Session::all();
+            return view('sessions.student.private', compact('data'));
+        } else if ($this->is_instructor()) {
+            $data = Session::all();
+            return view('sessions.instructor.private', compact('data'));
+        }
+    }
+
+    public function group()
+    {
+        if ($this->is_student()) {
+            $data = Session::all();
+            return view('sessions.student.group', compact('data'));
+        } else if ($this->is_instructor()) {
+            $data = Session::all();
+            return view('sessions.instructor.group', compact('data'));
+        }
+    }
 }

@@ -71,8 +71,9 @@
         @elseif(Auth::user()->roles == 'Instructor')
           <!-- Head_Navigasi -->
           <li class="header">INSTRUCTOR NAVIGATION</li>
-          
-          <li class="treeview">
+
+          <li class="{{ set_active(['schedules.index','schedules.private','schedules.group',
+          ]) }} treeview">
             <a href="#">
               <i class="fa fa-calendar"></i> <span>Schedule</span>
               <span class="pull-right-container">
@@ -80,12 +81,12 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="#"><i class="fa fa-circle-o"></i> Private</a></li>
-              <li><a href="#"><i class="fa fa-circle-o"></i> Grup</a></li>
+              <li class="{{ set_active(['schedules.private']) }}"><a href="{{ route('schedules.private') }}"><i class="fa fa-circle-o"></i> Private</a></li>
+              <li class="{{ set_active(['schedules.group']) }}"><a href="{{ route('schedules.group') }}"><i class="fa fa-circle-o"></i> Group</a></li>
             </ul>
           </li>
 
-          <li class="treeview">
+          <li class="{{ set_active(['session.private','session.group']) }} treeview">
             <a href="#">
               <i class="fa fa-calendar-check-o"></i> <span>Session</span>
               <span class="pull-right-container">
@@ -93,13 +94,13 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="#"><i class="fa fa-circle-o"></i> Private</a></li>
-              <li><a href="#"><i class="fa fa-circle-o"></i> Grup</a></li>
+              <li class="{{ set_active(['session.private']) }}"><a href="{{ route('session.private') }}"><i class="fa fa-circle-o"></i> Private</a></li>
+              <li class="{{ set_active(['session.group']) }}"><a href="{{ route('session.group') }}"><i class="fa fa-circle-o"></i> Group</a></li>
             </ul>
           </li>
 
-          <li>
-            <a href="#">
+          <li class="{{ set_active(['material_publics.index']) }}">
+            <a href="{{ route('material_publics.index') }}">
               <i class="fa fa-archive"> </i><span>Material</span>
             </a>
           </li>
@@ -227,7 +228,7 @@
     </section>
     <!-- /.sidebar -->
 
-        <!-- Old 
+        <!-- Old
           <li class="{{ set_active('classroom.index') }}">
             <a href="#">
               <i class="fa fa-home"></i> <span>Book Now</span>
@@ -239,7 +240,7 @@
               <i class="fa fa-th-large"></i> <span>Schedule</span>
             </a>
           </li>
-          
+
           <li class="{{ (Request::path() == 'schedule/'.Auth::user()->id)  ? 'active' : '' }}">
             <a href="{{ url('/schedule/'.Auth::user()->id) }}">
               <i class="fa fa-th-large"></i> <span>Schedule</span>

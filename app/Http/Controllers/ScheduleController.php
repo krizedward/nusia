@@ -197,4 +197,29 @@ class ScheduleController extends Controller
         $data = Schedule::all();
         return view('schedules.index', compact('data'));
     }
+
+    /**
+     * Custom Link By Edward
+     */
+    public function private()
+    {
+        if ($this->is_student()) {
+            $data = Schedule::all();
+            return view('schedules.student.private', compact('data'));
+        } else if ($this->is_instructor()) {
+            $data = Schedule::all();
+            return view('schedules.instructor.private', compact('data'));
+        }
+    }
+
+    public function group()
+    {
+        if ($this->is_student()) {
+            $data = Schedule::all();
+            return view('schedules.student.group', compact('data'));
+        } else if ($this->is_instructor()) {
+            $data = Schedule::all();
+            return view('schedules.instructor.group', compact('data'));
+        }
+    }
 }
