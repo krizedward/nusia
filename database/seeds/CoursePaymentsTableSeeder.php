@@ -12,7 +12,7 @@ class CoursePaymentsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\CoursePayment::class, 20)
+        factory(App\Models\CoursePayment::class, 350)
             ->states('Randomized')
             ->create()
             ->make();

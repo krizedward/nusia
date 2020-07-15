@@ -12,7 +12,7 @@ class RatingsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\Rating::class, 150)
+        factory(App\Models\Rating::class, 2000)
             ->states('Randomized')
             ->create()
             ->make();

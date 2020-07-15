@@ -12,10 +12,10 @@ class StudentsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\Student::class, 50)
+        factory(App\Models\Student::class, 200)
             ->states('Randomized')
             ->create()->make();
-        factory(App\Models\Student::class, 3)
+        /*factory(App\Models\Student::class, 3)
             ->states('Full', 'CreatedAt')
             ->create()->make();
         factory(App\Models\Student::class, 3)
@@ -62,6 +62,6 @@ class StudentsTableSeeder extends Seeder
             ->create()->make();
         factory(App\Models\Student::class, 3)
             ->states('Full', 'StatusJobProfessionalNoInfo', 'UpdatedAt')
-            ->create()->make();
+            ->create()->make();*/
     }
 }

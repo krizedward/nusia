@@ -12,7 +12,7 @@ class SessionRegistrationsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\SessionRegistration::class, 150)
+        factory(App\Models\SessionRegistration::class, 2500)
             ->states('Randomized')
             ->create()
             ->make();

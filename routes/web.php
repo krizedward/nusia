@@ -126,7 +126,7 @@ Route::group(['middleware'=>'auth'], function() {
             | Izin Akses "CoursePackage"
             |-------------------------------------------------
             | ADMIN
-            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (simple), count_session, price
+            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, description (simple), count_session, price
             | .create  -> (+) material_type_id, course_type_id, course_level_id, course_level_detail_id, title, description (full), requirement (full), count_session, price
             | .store   -> (+) id, slug, created_at
             | .show    -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (full), requirement (full), count_session, price
@@ -135,11 +135,11 @@ Route::group(['middleware'=>'auth'], function() {
             | .destroy -> (+) deleted_at
             |
             | INSTRUCTOR
-            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (simple), count_session, price
+            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, description (simple), count_session, price
             | .show    -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (full), requirement (full), count_session, price
             |
             | STUDENT
-            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (simple), count_session, price
+            | .index   -> material_types.name, course_types.name, course_levels.name, course_level_details.name, description (simple), count_session, price
             | .show    -> material_types.name, course_types.name, course_levels.name, course_level_details.name, title, description (full), requirement (full), count_session, price
             */
 
@@ -362,10 +362,10 @@ Route::group(['middleware'=>'auth'], function() {
         | Izin Akses "CoursePayment"
         |-------------------------------------------------
         | ADMIN
-        | .index   -> courses.title (OR course_packages.title), users.name FROM STUDENT[users.first_name, users.last_name], method, amount, status, payment_time
+        | .index   -> courses.title (OR course_packages.title), users.name FROM STUDENT[users.first_name, users.last_name], method, amount, payment_time, status
         | .create  -> (+) course_registration_id FROM [courses.title (OR course_registrations.title), users.name FROM STUDENT[users.first_name, users.last_name]], method, amount, status, payment_time, path FROM IMAGE
         | .store   -> (+) id, created_at
-        | .show    -> courses.title (OR course_packages.title), users.name FROM STUDENT[users.first_name, users.last_name], method, amount, status, payment_time, image FROM path
+        | .show    -> courses.title (OR course_packages.title), users.name FROM STUDENT[users.first_name, users.last_name], method, amount, payment_time, status, image FROM path
         | .edit    -> course_registration_id FROM [courses.title (OR course_registrations.title), users.name FROM STUDENT[users.first_name, users.last_name]], method, amount, status, payment_time, path FROM IMAGE
         | .update  -> (+) updated_at
         | .destroy -> (+) deleted_at
@@ -374,10 +374,10 @@ Route::group(['middleware'=>'auth'], function() {
         |
         | STUDENT
         | .index   -> courses.title (OR course_packages.title), method, amount, status, payment_time
-        | .create  -> (+) course_registration_id FROM courses.title (OR course_registrations.title), method, amount, status, payment_time, path FROM IMAGE
+        | .create  -> (+) course_registration_id FROM courses.title (OR course_registrations.title), method, amount, payment_time, status, path FROM IMAGE
         | .store   -> (+) id, created_at
         | .show    -> courses.title (OR course_packages.title), method, amount, status, payment_time, image FROM path
-        | .edit    -> course_registration_id FROM courses.title (OR course_registrations.title), method, amount, status, payment_time, path FROM IMAGE
+        | .edit    -> course_registration_id FROM courses.title (OR course_registrations.title), method, amount, payment_time, status, path FROM IMAGE
         | .update  -> (+) updated_at
         */
 
@@ -465,11 +465,11 @@ Route::group(['middleware'=>'auth'], function() {
         | Izin Akses "Rating"
         |-------------------------------------------------
         | ADMIN
-        | .index   -> sessions.title, rating, comment, created_at
+        | .index   -> courses.title (OR course_packages.title), sessions.title, rating, comment, created_at
         | .destroy -> (+) deleted_at
         |
         | INSTRUCTOR
-        | .index   -> sessions.title, rating, comment, created_at
+        | .index   -> courses.title (OR course_packages.title), sessions.title, rating, comment, created_at
         |
         | STUDENT
         | .store   -> (+) session_id, rating, comment, created_at

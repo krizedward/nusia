@@ -12,7 +12,7 @@ class MaterialSessionsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\MaterialSession::class, 100)
+        factory(App\Models\MaterialSession::class, 1500)
             ->states('Randomized')
             ->create()
             ->make();
