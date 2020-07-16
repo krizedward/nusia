@@ -25,19 +25,28 @@
                 <!-- /.box-header -->
 
                 <!-- form start -->
-                <form role="form">
+                <form role="form" method="post" action="{{ route('students.store') }}">
+                    @csrf
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="first_name">First Name</label>
-                                    <input type="text" class="form-control" placeholder="Enter First Name">
+                                    <input name="first_name" type="text" class="form-control" placeholder="Enter First Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input name="email" type="email" class="form-control" placeholder="Enter Email">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="last_name">Last Name</label>
-                                    <input type="text" class="form-control" placeholder="Enter Last Name">
+                                    <input name="last_name" type="text" class="form-control" placeholder="Enter Last Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input name="password" type="password" class="form-control" placeholder="Enter Password">
                                 </div>
                             </div>
                         </div>

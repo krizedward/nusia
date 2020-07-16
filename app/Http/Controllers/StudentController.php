@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 
 use Str;
@@ -59,12 +60,36 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
+        User::create([
+            'slug' => Str::random(255),
+            'email' => $request->email,
+            'password' => $request->password,
+            'gender' => 'Male',
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+        ]);
+        $temp = User::all()->last();
+
+        Student::create([
+            'user_id' => $temp->id,
+        ]);
+
+        \Session::flash('coba','Create Success !!!');
+
+        return redirect()->route('students.index');
     }
 
     /**
