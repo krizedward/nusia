@@ -31,7 +31,7 @@
               @foreach($data as $dt)
                 <tr>
                   @if($dt->user->image_profile)
-                    <td>{{ $dt->user->image_profile }}</td>
+                    <td><img src="{{ asset('uploads/user.jpg') }}" style="width: 50px"></td>
                   @else
                     <td><i>Not Available</i></td>
                   @endif
@@ -59,7 +59,7 @@
               @endforeach
             </tbody>
           </table>
-        </div>	
+        </div>
       </div>
     </div>
   </div>

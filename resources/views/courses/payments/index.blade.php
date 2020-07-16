@@ -43,7 +43,7 @@
                   @else
                     <td><i>Not Available</i></td>
                   @endif
-                  <td>{{ $dt->payment_time }}</td>
+                  <td>{{ date('d M Y | H:i:s', strtotime($dt->payment_time)) }}</td>
                   <td>{{ $dt->status }}</td>
                   <td>
                     <a class="btn btn-flat btn-xs btn-success" href="#">Detail</a>
@@ -53,7 +53,7 @@
               @endforeach
             </tbody>
           </table>
-        </div>	
+        </div>
       </div>
     </div>
   </div>

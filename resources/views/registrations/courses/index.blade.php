@@ -36,7 +36,7 @@
                   @endif
                   <td>{{ $dt->student->user->first_name }} {{ $dt->student->user->last_name }}</td>
                   @if($dt->created_at)
-                    <td>{{ $dt->created_at }}</td>
+                    <td>{{ date('d M Y | H:i:s', strtotime($dt->created_at)) }}</td>
                   @else
                     <td><i>Not Available</i></td>
                   @endif
@@ -53,7 +53,7 @@
               @endforeach
             </tbody>
           </table>
-        </div>	
+        </div>
       </div>
     </div>
   </div>

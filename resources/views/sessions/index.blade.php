@@ -49,14 +49,14 @@
                     ?>
                     <td>Session {{ $number }}</td>
                   @endif
-                  <td>{{ $dt->schedule->schedule_time }}</td>
+                  <td>{{ date('d M Y | H:i:s', strtotime($dt->schedule->schedule_time)) }}</td>
                   @if($dt->description)
                     <td>{{ $dt->description }}</td>
                   @else
                     <td><i>Not Available</i></td>
                   @endif
                   @if($dt->link_zoom)
-                    <td>{{ $dt->link_zoom }}</td>
+                    <td><a target="_blank" rel="noopener noreferrer" href="{{ $dt->link_zoom }}">Link Zoom</a></td>
                   @else
                     <td><i>Not Available</i></td>
                   @endif
@@ -68,7 +68,7 @@
               @endforeach
             </tbody>
           </table>
-        </div>	
+        </div>
       </div>
     </div>
   </div>

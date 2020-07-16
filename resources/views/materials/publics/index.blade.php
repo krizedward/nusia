@@ -37,7 +37,7 @@
                     <td><i>Not Available</i></td>
                   @endif
                   @if($dt->path)
-                    <td>{{ $dt->path }}</td>
+                    <td><a href="{{ $dt->path }}" class="btn btn-flat btn-xs btn-info"><i class="fa fa-download"></i></a></td>
                   @else
                     <td><i>Not Available</i></td>
                   @endif
@@ -49,7 +49,7 @@
               @endforeach
             </tbody>
           </table>
-        </div>	
+        </div>
       </div>
     </div>
   </div>

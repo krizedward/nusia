@@ -35,7 +35,7 @@
                   @endif
                   <td>{{ $dt->course_registration->student->user->first_name }} {{ $dt->course_registration->student->user->last_name }}</td>
                   @if($dt->path)
-                    <td>{{ $dt->path }}</td>
+                    <td><a target="_blank" rel="noopener noreferrer" href="{{ $dt->path }}">Link Certificates</td>
                   @else
                     <td><i>Not Available</i></td>
                   @endif
@@ -47,7 +47,7 @@
               @endforeach
             </tbody>
           </table>
-        </div>	
+        </div>
       </div>
     </div>
   </div>
