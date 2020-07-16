@@ -10,6 +10,9 @@ use App\Models\Student;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+use Carbon\Carbon;
 
 class StudentController extends Controller
 {
@@ -54,7 +57,37 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view('users.students.create');
+        $countries = [
+            'Afghanistan', 'Albania', 'Algeria', 'Antigua and Barbuda', 'Argentina',
+            'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Azores',
+            'Bahamas', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium',
+            'Belize', 'Bermuda', 'Bolivia', 'Bosnia & Herzegovina', 'Brazil',
+            'Bulgaria', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde',
+            'Chile', 'China', 'Columbia', 'Costa Rica', 'Croatia',
+            'Cuba', 'Cyprus', 'Czech Republic', 'Czechoslovakia', 'Denmark',
+            'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador',
+            'Eritrea', 'Ethiopia', 'Fiji', 'Finland', 'France',
+            'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada',
+            'Guam', 'Guatemala', 'Guyana', 'Haiti', 'Honduras',
+            'Hong Kong', 'Hungary', 'India', 'Indonesia', 'Iran',
+            'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica',
+            'Japan', 'Jordan', 'Kenya', 'Kosovo', 'Kuwait',
+            'Laos', 'Latvia', 'Lebanon', 'Liberia', 'Lithuania',
+            'Macedonia', 'Malaysia', 'Mexico', 'Moldova', 'Morocco',
+            'Myanmar (Burma)', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua',
+            'Nigeria', 'North Korea', 'Northern Ireland', 'Norway', 'Pakistan',
+            'Panama', 'Paraguay', 'Peru', 'Philippines', 'Poland',
+            'Portugal', 'Puerto Rico', 'Romania', 'Russia', 'Samoa',
+            'Saudi Arabia', 'Scotland', 'Senegal', 'Serbia', 'Sierra Leone',
+            'Singapore', 'Slovakia', 'Somalia', 'South Africa', 'South Korea',
+            'Spain', 'Sri Lanka', 'St. Kitts--Nevis', 'St. Lucia', 'St. Vincent and the Grenadines',
+            'Sudan', 'Sweden', 'Switzerland', 'Syria', 'Taiwan',
+            'Tanzania', 'Thailand', 'Tonga', 'Trinidad and Tobago', 'Turkey',
+            'U. S. Virgin Islands', 'Uganda', 'Ukraine', 'United Kingdom', 'United States',
+            'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam', 'Wales',
+            'Yemen', 'Yugoslavia', 'Zimbabwe'
+        ];
+        return view('users.students.create', compact('countries'));
     }
 
     /**
@@ -66,28 +99,76 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
+        $data = $request->all();
+        $data = Validator::make($data, [
+            'first_name' => ['bail', 'required'],
+            'last_name' => ['bail', 'required'],
+            'email' => ['bail', 'required', 'unique:users'],
+            'password' => ['bail', 'required', 'min:8'],
+            'phone' => ['bail', 'sometimes'],
+            'gender' => ['bail', 'required'],
+            'birthdate' => ['bail', 'sometimes'],
+            'citizenship' => ['bail', 'sometimes'],
+            /*'image_profile' => ['bail', 'sometimes', 'image', 'max:5000'],*/
+
+            /*'status_job' => ['bail', 'required'],
+            'status_description' => ['bail', 'sometimes'],
+            'status_value' => ['bail', 'sometimes'],
+            'interest' => ['bail', 'sometimes'],
+            'target_language_experience' => ['bail', 'required'],
+            'target_language_experience_value' => ['bail', 'sometimes'],
+            'description_of_course_taken' => ['bail', 'sometimes'],
+            'indonesian_language_proficiency' => ['bail', 'required'],
+            'learning_objective' => ['bail', 'sometimes'],*/
         ]);
 
-        User::create([
-            'slug' => Str::random(255),
-            'email' => $request->email,
-            'password' => $request->password,
-            'gender' => 'Male',
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-        ]);
-        $temp = User::all()->last();
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
 
-        Student::create([
-            'user_id' => $temp->id,
-        ]);
+        // Membuat slug baru.
+        $data = "";
+        while(1) {
+            $data = Str::random(255);
+            if(User::where('slug', $data)->first() === null) break;
+        }
 
-        \Session::flash('coba','Create Success !!!');
+        if($this->is_admin() || $this->is_student()) {
+            User::create([
+                'slug' => $data,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'phone' => $request->phone,
+                'gender' => $request->gender,
+                'birthdate' => $request->birthdate,
+                'citizenship' => $request->citizenship,
+                'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
+            ]);
+            $temp = User::all()->last();
+
+            Student::create([
+                'slug' => $data,
+                'user_id' => $temp->id,
+                'age' => Carbon::parse($request->birthdate)->age,
+                /*'status_job' => $request->status_job,
+                'status_description' => $request->status_description,
+                'status_value' => $request->status_value,
+                'interest' => $request->interest,
+                'target_language_experience' => $request->target_language_experience,
+                'target_language_experience_value' => $request->target_language_experience_value,
+                'description_of_course_taken' => $request->description_of_course_taken,
+                'indonesian_language_proficiency' => $request->indonesian_language_proficiency,
+                'learning_objective' => $request->learning_objective,*/
+            ]);
+
+            \Session::flash('coba','Create Success !!!');
+        } else {
+            // Tidak memiliki izin akses.
+        }
 
         return redirect()->route('students.index');
     }

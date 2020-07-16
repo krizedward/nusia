@@ -98,7 +98,7 @@ class SessionController extends Controller
         $data = "";
         while(1) {
             $data = Str::random(255);
-            if(Session::where('slug', $slug)->first() === null) break;
+            if(Session::where('slug', $data)->first() === null) break;
         }
 
         if($this->is_admin() || $this->is_instructor()) {
