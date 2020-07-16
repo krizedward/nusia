@@ -561,6 +561,11 @@ Route::group(['middleware'=>'auth'], function() {
 
     Route::get('schedules/student/private','ScheduleController@private')->name('schedules.student.private');
     Route::get('schedules/student/group','ScheduleController@group')->name('schedules.student.group');
+
+    //halaman questionnaire
+    Route::get('student/questionnaire', function() {
+        return view('layouts.questionnaire');
+    });
     /*end link*/
 	//menampilkan detail dari schedule
 	//Route::get('/schedule/detail/{id_schedule}','ScheduleController@detail')->name('schedule.detail');
