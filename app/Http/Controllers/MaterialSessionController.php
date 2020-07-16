@@ -86,7 +86,7 @@ class MaterialSessionController extends Controller
         $data = "";
         while(1) {
             $data = Str::random(255);
-            if(MaterialSession::where('slug', $slug)->first() === null) break;
+            if(MaterialSession::where('slug', $data)->first() === null) break;
         }
 
         if($this->is_admin() || $this->is_instructor()) {

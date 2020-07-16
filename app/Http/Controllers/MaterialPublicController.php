@@ -86,7 +86,7 @@ class MaterialPublicController extends Controller
         $data = "";
         while(1) {
             $data = Str::random(255);
-            if(MaterialPublic::where('slug', $slug)->first() === null) break;
+            if(MaterialPublic::where('slug', $data)->first() === null) break;
         }
 
         if($this->is_admin()) {

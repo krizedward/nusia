@@ -86,7 +86,7 @@ class CourseController extends Controller
         $data = "";
         while(1) {
             $data = Str::random(255);
-            if(Course::where('slug', $slug)->first() === null) break;
+            if(Course::where('slug', $data)->first() === null) break;
         }
 
         if($this->is_admin() || $this->is_instructor()) {
