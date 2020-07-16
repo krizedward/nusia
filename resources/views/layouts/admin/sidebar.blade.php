@@ -36,7 +36,7 @@
           <!-- Head_Navigasi -->
           <li class="header">STUDENT NAVIGATION</li>
 
-          <li class="treeview">
+          <li class="{{ set_active(['registration.private','registration.group']) }} treeview">
             <a href="#">
               <i class="fa fa-book"></i> <span>Registration</span>
               <span class="pull-right-container">
@@ -44,26 +44,38 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="#"><i class="fa fa-circle-o"></i> Private</a></li>
-              <li><a href="#"><i class="fa fa-circle-o"></i> Grup</a></li>
+              <li class="{{ set_active(['registration.private']) }}"><a href="{{ route('registration.private') }}"><i class="fa fa-circle-o"></i> Private</a></li>
+              <li class="{{ set_active(['registration.group']) }}"><a href="{{ route('registration.group') }}"><i class="fa fa-circle-o"></i> Group</a></li>
             </ul>
           </li>
 
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-book"></i> <span>Course</span>
-              <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-              </span>
-            </a>
-            <ul class="treeview-menu">
-              <li><a href="#"><i class="fa fa-circle-o"></i> Schedule</a></li>
-              <li><a href="#"><i class="fa fa-circle-o"></i> Material</a></li>
-            </ul>
+          <li class="{{ set_active(['material_publics.index','schedules.student.private',
+          'schedules.student.group']) }} treeview">
+              <a href="#">
+                  <i class="fa fa-book"></i> <span>Course</span>
+                  <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+              </a>
+
+              <ul class="treeview-menu">
+                  <li><a href="{{ route('material_publics.index') }}"><i class="fa fa-circle-o"></i> Material</a></li>
+                  <li class="{{ set_active(['schedules.student.private','schedules.student.group']) }} treeview">
+                      <a href="#"><i class="fa fa-circle-o"></i> Schedule
+                          <span class="pull-right-container">
+                              <i class="fa fa-angle-left pull-right"></i>
+                          </span>
+                      </a>
+                      <ul class="treeview-menu">
+                          <li class="{{ set_active(['schedules.student.private']) }}"><a href="{{ route('schedules.student.private') }}"><i class="fa fa-circle-o"></i> Private</a></li>
+                          <li class="{{ set_active(['schedules.student.group']) }}"><a href="{{ route('schedules.student.group') }}"><i class="fa fa-circle-o"></i> Group</a></li>
+                      </ul>
+                  </li>
+              </ul>
           </li>
 
-          <li>
-            <a href="#">
+          <li class="{{ set_active('course_payments.index') }}">
+            <a href="{{ route('course_payments.index',['1']) }}">
               <i class="fa fa-money"> </i><span> Payment</span>
             </a>
           </li>

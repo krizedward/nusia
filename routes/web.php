@@ -548,11 +548,19 @@ Route::group(['middleware'=>'auth'], function() {
                 'students' => 'user'
             ]);
     /*link custom*/
+    //halaman instructor
     Route::get('/schedules/private','ScheduleController@private')->name('schedules.private');
     Route::get('/schedules/group','ScheduleController@group')->name('schedules.group');
 
     Route::get('/session/private', 'SessionController@private')->name('session.private');
     Route::get('/session/group', 'SessionController@group')->name('session.group');
+
+    //halaman student
+    Route::get('/registration/student/private','RegistrationController@private')->name('registration.private');
+    Route::get('/registration/student/group','RegistrationController@group')->name('registration.group');
+
+    Route::get('schedules/student/private','ScheduleController@private')->name('schedules.student.private');
+    Route::get('schedules/student/group','ScheduleController@group')->name('schedules.student.group');
     /*end link*/
 	//menampilkan detail dari schedule
 	//Route::get('/schedule/detail/{id_schedule}','ScheduleController@detail')->name('schedule.detail');

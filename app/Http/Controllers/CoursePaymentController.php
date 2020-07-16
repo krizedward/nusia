@@ -92,6 +92,7 @@ class CoursePaymentController extends Controller
         }
 
         if($this->is_admin() || $this->is_student()) {
+            /*
             CoursePayment::create([
                 'course_registration_id' => $request->course_registration_id,
                 'method' => $request->method,
@@ -100,6 +101,7 @@ class CoursePaymentController extends Controller
                 'status' => $request->status,
                 'path' => $request->path
             ]);
+            */
         } else {
             // Tidak memiliki hak akses.
         }
@@ -187,6 +189,7 @@ class CoursePaymentController extends Controller
         }
 
         if($this->is_admin() || $this->is_student()) {
+            /*
             $course_payment->update([
                 'course_registration_id' => $request->course_registration_id,
                 'method' => $request->method,
@@ -195,6 +198,7 @@ class CoursePaymentController extends Controller
                 'status' => $request->status,
                 'path' => $request->path
             ]);
+            */
         } else {
             // Tidak memiliki hak akses.
         }
