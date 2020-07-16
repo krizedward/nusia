@@ -71,19 +71,19 @@
 	      //Random default events
 	      events    : [
 	      //mengambil data dari model
-	      	@foreach($data as $dt)
+              {{--@foreach($data as $dt)
             @if($dt->instructor_id == $instructor->id)
-    	       	{
-    	        	title 	: '{{ $dt->instructor->user->name }}',
-    	            start 	: '{{ $dt->date_meet }} {{ $dt->time_meet }}',
-    	            url 	: '{{ route('schedule.summary', [$class->id,$instructor->id,$dt->id,]) }}'
-    	        },
+                   {
+                    title 	: '{{ $dt->instructor->user->name }}',
+                    start 	: '{{ $dt->date_meet }} {{ $dt->time_meet }}',
+                    url 	: '{{ route('schedule.summary', [$class->id,$instructor->id,$dt->id,]) }}'
+                },
             @endif
-	        @endforeach
+            @endforeach--}}
 	      ],
 	      editable  : false,
 	      droppable : false, // this allows things to be dropped onto the calendar !!!
-	      
+
 	    })
 
 	  })//end

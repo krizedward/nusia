@@ -557,10 +557,12 @@ Route::group(['middleware'=>'auth'], function() {
 
     //halaman student
     Route::get('/registration/student/private','RegistrationController@private')->name('registration.private');
+    Route::get('/registration/student/private/instructor','RegistrationController@instructor')->name('registration.private-instructor');
+    Route::get('/registration/student/private/instructor/time','RegistrationController@time')->name('registration.private-time');
     Route::get('/registration/student/group','RegistrationController@group')->name('registration.group');
 
-    Route::get('schedules/student/private','ScheduleController@private')->name('schedules.student.private');
-    Route::get('schedules/student/group','ScheduleController@group')->name('schedules.student.group');
+    Route::get('/schedules/student/private','ScheduleController@private')->name('schedules.student.private');
+    Route::get('/schedules/student/group','ScheduleController@group')->name('schedules.student.group');
 
     //halaman questionnaire
     Route::get('student/questionnaire', function() {

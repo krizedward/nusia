@@ -36,7 +36,8 @@
           <!-- Head_Navigasi -->
           <li class="header">STUDENT NAVIGATION</li>
 
-          <li class="{{ set_active(['registration.private','registration.group']) }} treeview">
+          <li class="{{ set_active(['registration.private','registration.private-instructor',
+          'registration.private-time','registration.group']) }} treeview">
             <a href="#">
               <i class="fa fa-book"></i> <span>Registration</span>
               <span class="pull-right-container">
@@ -44,7 +45,7 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li class="{{ set_active(['registration.private']) }}"><a href="{{ route('registration.private') }}"><i class="fa fa-circle-o"></i> Private</a></li>
+              <li class="{{ set_active(['registration.private','registration.private-instructor','registration.private-time']) }}"><a href="{{ route('registration.private') }}"><i class="fa fa-circle-o"></i> Private</a></li>
               <li class="{{ set_active(['registration.group']) }}"><a href="{{ route('registration.group') }}"><i class="fa fa-circle-o"></i> Group</a></li>
             </ul>
           </li>

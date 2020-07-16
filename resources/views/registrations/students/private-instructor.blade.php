@@ -1,5 +1,5 @@
 @extends('layouts.admin.default')
-@section('title','Registration Class')
+@section('title','Registration Instructor')
 @include('layouts.css_and_js.table')
 @section('content-header')
     <h1>Registration Private Class</h1>
@@ -12,19 +12,19 @@
 @section('content')
     <div class="row">
         <div class="col-md-4">
-            <div class="callout callout-warning">
+            <div class="callout callout-info">
                 <h4>Class</h4>
-                <form action="{{ route('registration.private-instructor') }}">
-                    <button type="submit" class="btn btn-warning btn-block btn-flat">Select</button>
+                <form action="{{ route('registration.private') }}">
+                    <button type="submit" class="btn btn-info btn-block btn-flat">Select</button>
                 </form>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="callout callout-default">
+            <div class="callout callout-warning">
                 <h4>Instructor</h4>
-                <form action="{{ route('registration.private') }}">
-                    <button type="submit" class="btn btn-block btn-default disabled">Select</button>
+                <form action="{{ route('registration.private-instructor') }}">
+                    <button type="submit" class="btn btn-block btn-warning">Select</button>
                 </form>
             </div>
         </div>
@@ -45,11 +45,11 @@
             <!-- Box Comment -->
             <div class="box box-widget">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Trial - Class</h3>
+                    <h3 class="box-title">Instructor - Bela</h3>
                 </div>
                 <!-- /.box-header-->
                 <div class="box-body">
-                    <a href="{{ route('registration.private-instructor') }}">
+                    <a href="{{ route('registration.private-time') }}">
                         <img class="img-responsive pad" src="http://placehold.it/900x500/39CCCC/ffffff&text=I+Love+Bootstrap" alt="Photo">
                     </a>
                 </div>

@@ -13,6 +13,16 @@ class RegistrationController extends Controller
 
     public function group()
     {
-        return view('registrations.students.group');;
+        return view('registrations.students.group');
+    }
+
+    public function instructor()
+    {
+        return view('registrations.students.private-instructor');
+    }
+
+    public function time()
+    {
+        return view('registrations.students.private-time');
     }
 }
