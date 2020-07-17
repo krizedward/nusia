@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticatable
+class oldUser extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
@@ -29,6 +29,8 @@ class User extends Authenticatable
         'citizenship',
         'first_name',
         'last_name',
+        'gender',
+        'birthdate',
         'phone',
         'image_profile',
     ];

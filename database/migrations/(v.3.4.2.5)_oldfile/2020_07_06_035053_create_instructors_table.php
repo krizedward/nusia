@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStudentsTable extends Migration
+class oldCreateInstructorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,12 @@ class CreateStudentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('instructors', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->integer('age')->unsigned();
-            $table->enum('status_job', ['Professional', 'Student']);
-            $table->text('status_description')->nullable();
             $table->text('interest')->nullable();
-            $table->enum('target_language_experience', ['Never (no experience)', '< 6 months', '<= 1 year', 'Others']);
-            $table->integer('target_language_experience_value')->nullable();
-            $table->text('description_of_course_taken')->nullable();
-            $table->enum('indonesian_language_proficiency', ['Novice', 'Intermediate', 'Advanced']);
-            $table->text('learning_objective')->nullable();
+            $table->text('working_experience')->nullable();
+            $table->text('educational_experience')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 
@@ -42,6 +36,6 @@ class CreateStudentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('instructors');
     }
 }

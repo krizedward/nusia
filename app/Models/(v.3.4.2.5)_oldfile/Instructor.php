@@ -3,28 +3,22 @@
 namespace App\Models;
 
 use App\User;
-use App\Models\CourseRegistration;
+use App\Models\Schedule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Student extends Model
+class oldInstructor extends Model
 {
     use SoftDeletes;
 
-    protected $table = "students";
+    protected $table = "instructors";
     protected $primaryKey = 'id';
 
     protected $fillable = [
         'user_id',
-        'age',
-        'status_job',
-        'status_description',
         'interest',
-        'target_language_experience',
-        'target_language_experience_value',
-        'description_of_course_taken',
-        'indonesian_language_proficiency',
-        'learning_objective'
+        'working_experience',
+        'educational_experience'
     ];
 
     /**
@@ -38,8 +32,8 @@ class Student extends Model
     /**
      * Define a relationship.
      */
-    public function course_registrations()
+    public function schedules()
     {
-    	return $this->hasMany(CourseRegistration::class);
+    	return $this->hasMany(Schedule::class);
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStudentsTable extends Migration
+class oldCreateStudentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,9 +16,10 @@ class CreateStudentsTable extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->integer('age')->unsigned();
+            $table->integer('age')->unsigned()->nullable();
             $table->enum('status_job', ['Professional', 'Student']);
             $table->text('status_description')->nullable();
+            $table->text('status_value')->nullable();
             $table->text('interest')->nullable();
             $table->enum('target_language_experience', ['Never (no experience)', '< 6 months', '<= 1 year', 'Others']);
             $table->integer('target_language_experience_value')->nullable();
