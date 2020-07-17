@@ -7,7 +7,7 @@ use App\Models\CourseRegistration;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Student extends Model
+class oldStudent extends Model
 {
     use SoftDeletes;
 
@@ -19,6 +19,7 @@ class Student extends Model
         'age',
         'status_job',
         'status_description',
+        'status_value',
         'interest',
         'target_language_experience',
         'target_language_experience_value',

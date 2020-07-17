@@ -106,14 +106,11 @@ class StudentController extends Controller
             'email' => ['bail', 'required', 'unique:users'],
             'password' => ['bail', 'required', 'min:8'],
             'phone' => ['bail', 'sometimes'],
-            'gender' => ['bail', 'required'],
-            'birthdate' => ['bail', 'sometimes'],
-            'citizenship' => ['bail', 'sometimes'],
+            'citizenship' => ['bail', 'required'],
             /*'image_profile' => ['bail', 'sometimes', 'image', 'max:5000'],*/
 
             /*'status_job' => ['bail', 'required'],
             'status_description' => ['bail', 'sometimes'],
-            'status_value' => ['bail', 'sometimes'],
             'interest' => ['bail', 'sometimes'],
             'target_language_experience' => ['bail', 'required'],
             'target_language_experience_value' => ['bail', 'sometimes'],
@@ -143,8 +140,6 @@ class StudentController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'phone' => $request->phone,
-                'gender' => $request->gender,
-                'birthdate' => $request->birthdate,
                 'citizenship' => $request->citizenship,
                 'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
             ]);
@@ -156,7 +151,6 @@ class StudentController extends Controller
                 'age' => Carbon::parse($request->birthdate)->age,
                 /*'status_job' => $request->status_job,
                 'status_description' => $request->status_description,
-                'status_value' => $request->status_value,
                 'interest' => $request->interest,
                 'target_language_experience' => $request->target_language_experience,
                 'target_language_experience_value' => $request->target_language_experience_value,

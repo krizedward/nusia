@@ -32,15 +32,20 @@ use Faker\Factory;
 $factory->define(App\Models\Instructor::class, function (Faker\Generator $faker) {
     $param_full   = ($faker->boolean($chanceOfGettingTrue = 50))? 'Full' : 'NULL';
     $param_roles  = 'RolesInstructor';
+    $param_gender = ($faker->boolean($chanceOfGettingTrue = 50))? 'GenderMale' : 'GenderFemale';
 
     // Optional parameter(s).
     $param_email_verified_at = 'NULL';
+    $param_citizenship       = 'NULL';
+    $param_birthdate         = 'NULL';
     $param_phone             = 'NULL';
     $param_image_profile     = 'NULL';
     $param_created_at        = 'NULL';
     $param_updated_at        = 'NULL';
     if($param_full == 'NULL') {
         $param_email_verified_at = ($faker->boolean($chanceOfGettingTrue = 50))? 'EmailVerifiedAt' : 'NULL';
+        $param_citizenship       = ($faker->boolean($chanceOfGettingTrue = 50))? 'Citizenship' : 'NULL';
+        $param_birthdate         = ($faker->boolean($chanceOfGettingTrue = 50))? 'BirthDate' : 'NULL';
         $param_phone             = ($faker->boolean($chanceOfGettingTrue = 50))? 'Phone' : 'NULL';
         $param_image_profile     = ($faker->boolean($chanceOfGettingTrue = 50))? 'ImageProfile' : 'NULL';
         $param_created_at        = ($faker->boolean($chanceOfGettingTrue = 50))? 'CreatedAt' : 'NULL';
@@ -52,7 +57,10 @@ $factory->define(App\Models\Instructor::class, function (Faker\Generator $faker)
             ->states(
                 $param_full,
                 $param_roles,
+                $param_gender,
                 $param_email_verified_at,
+                $param_citizenship,
+                $param_birthdate,
                 $param_phone,
                 $param_image_profile,
                 $param_created_at,
