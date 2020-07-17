@@ -122,16 +122,21 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        $interest = implode( ', ' , array(
+        $interest = array(
             $request->interest_1,
             $request->interest_2,
             $request->interest_3,
             $request->interest_4,
             $request->interest_5,
             $request->interest_6
-        ) );
+        );
+        for($i = 0; $i < 6; $i = $i + 1) {
+            if($interest[$i] == null) unset($interest[$i]);
+        }
 
-        if($request->interest_1 || $request->interest_2 || $request->interest_3 || $request->interest_4 || $request->interest_5 || $request->interest_6) {
+        $interest = implode(', ', $interest);
+
+        if($interest != null) {
             $request->interest_1 = 'PASS';
         } else $request->interest_1 = null;
 
@@ -149,11 +154,6 @@ class StudentController extends Controller
             'status_job' => ['bail', 'required'],
             'status_description' => ['bail', 'required'],
             'interest_1' => ['bail', 'required'],
-            /*'interest_2' => ['bail', 'sometimes'],
-            'interest_3' => ['bail', 'sometimes'],
-            'interest_4' => ['bail', 'sometimes'],
-            'interest_5' => ['bail', 'sometimes'],
-            'interest_6' => ['bail', 'sometimes'],*/
             'target_language_experience' => ['bail', 'required'],
             'target_language_experience_value' => ['bail', 'sometimes'],
             'description_of_course_taken' => ['bail', 'sometimes'],
@@ -219,6 +219,30 @@ class StudentController extends Controller
     {
         //
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
 
     /**
      * Remove the specified resource from storage.
