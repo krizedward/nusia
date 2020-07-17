@@ -87,7 +87,30 @@ class StudentController extends Controller
             'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam', 'Wales',
             'Yemen', 'Yugoslavia', 'Zimbabwe'
         ];
-        return view('users.students.create', compact('countries'));
+        $interests = [
+            'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Aviation',
+            'Baseball', 'Basketball', 'Blogging', 'Boating', 'Bowling',
+            'Broadcasting', 'Business', 'Camping', 'Chess', 'Child caring',
+            'Clothing', 'Collecting', 'Community service', 'Cooking/baking', 'Cosmetics',
+            'Cycling', 'Dancing', 'Design', 'Discussion', 'Driving/racing',
+            'Electronics', 'Entrepreneurship', 'Event organizing', 'Fashion', 'Finance',
+            'Fishing', 'Foods & beverages', 'Football', 'Gardening', 'Golf',
+            'Hairstyling', 'Handicrafting', 'Health', 'Higher education', 'Hiking',
+            'History', 'Home decoration', 'Horseback riding', 'Housecleaning', 'Hunting',
+            'Ice hockey', 'Jogging', 'Lacrosse', 'Laundry/ironing', 'Law',
+            'Leadership', 'Leatherworking', 'Listening', 'Management', 'Marketing',
+            'Mechanics', 'Motivating', 'Movies', 'Music', 'Nursing',
+            'Outdoor recreation', 'Photographing', 'Physical exercise', 'Politics', 'Pottery',
+            'Programming', 'Reading', 'Real estate', 'Research', 'Retail',
+            'Running (marathon)', 'Running (sprint)', 'Scouting', 'Sewing/needle work', 'Shopping',
+            'Singing', 'Skiing', 'Snorkeling', 'Snowboarding', 'Soccer',
+            'Speaking (1-on-1)', 'Speaking (public)', 'Sports', 'Surfing', 'Swimming',
+            'Teaching/lecturing', 'Technology', 'Tennis', 'Travelling', 'Thriathlons',
+            'Videographing', 'Volleyball', 'Walking', 'Wrestling', 'Writing',
+            'Woodworking',
+        ];
+
+        return view('users.students.create', compact('countries', 'interests'));
     }
 
     /**
@@ -99,6 +122,19 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        $interest = implode( ', ' , array(
+            $request->interest_1,
+            $request->interest_2,
+            $request->interest_3,
+            $request->interest_4,
+            $request->interest_5,
+            $request->interest_6
+        ) );
+
+        if($request->interest_1 || $request->interest_2 || $request->interest_3 || $request->interest_4 || $request->interest_5 || $request->interest_6) {
+            $request->interest_1 = 'PASS';
+        } else $request->interest_1 = null;
+
         $data = $request->all();
         $data = Validator::make($data, [
             'first_name' => ['bail', 'required'],
@@ -107,16 +143,22 @@ class StudentController extends Controller
             'password' => ['bail', 'required', 'min:8'],
             'phone' => ['bail', 'sometimes'],
             'citizenship' => ['bail', 'required'],
-            /*'image_profile' => ['bail', 'sometimes', 'image', 'max:5000'],*/
+            'image_profile' => ['bail', 'sometimes', 'max:5000'],
 
-            /*'status_job' => ['bail', 'required'],
-            'status_description' => ['bail', 'sometimes'],
-            'interest' => ['bail', 'sometimes'],
+            'age' => ['bail', 'required', 'integer'],
+            'status_job' => ['bail', 'required'],
+            'status_description' => ['bail', 'required'],
+            'interest_1' => ['bail', 'required'],
+            /*'interest_2' => ['bail', 'sometimes'],
+            'interest_3' => ['bail', 'sometimes'],
+            'interest_4' => ['bail', 'sometimes'],
+            'interest_5' => ['bail', 'sometimes'],
+            'interest_6' => ['bail', 'sometimes'],*/
             'target_language_experience' => ['bail', 'required'],
             'target_language_experience_value' => ['bail', 'sometimes'],
             'description_of_course_taken' => ['bail', 'sometimes'],
             'indonesian_language_proficiency' => ['bail', 'required'],
-            'learning_objective' => ['bail', 'sometimes'],*/
+            'learning_objective' => ['bail', 'required'],
         ]);
 
         if($data->fails()) {
@@ -148,15 +190,15 @@ class StudentController extends Controller
             Student::create([
                 'slug' => $data,
                 'user_id' => $temp->id,
-                'age' => Carbon::parse($request->birthdate)->age,
-                /*'status_job' => $request->status_job,
+                'age' => $request->age,
+                'status_job' => $request->status_job,
                 'status_description' => $request->status_description,
-                'interest' => $request->interest,
+                'interest' => $interest,
                 'target_language_experience' => $request->target_language_experience,
                 'target_language_experience_value' => $request->target_language_experience_value,
                 'description_of_course_taken' => $request->description_of_course_taken,
                 'indonesian_language_proficiency' => $request->indonesian_language_proficiency,
-                'learning_objective' => $request->learning_objective,*/
+                'learning_objective' => $request->learning_objective,
             ]);
 
             \Session::flash('coba','Create Success !!!');
