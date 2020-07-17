@@ -556,6 +556,7 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('/session/group', 'SessionController@group')->name('session.group');
 
     //halaman student
+    Route::get('/registration/student/trial','RegistrationController@trial')->name('registration.trial');
     Route::get('/registration/student/private','RegistrationController@private')->name('registration.private');
     Route::get('/registration/student/private/instructor','RegistrationController@instructor')->name('registration.private-instructor');
     Route::get('/registration/student/private/instructor/time','RegistrationController@time')->name('registration.private-time');

@@ -41,6 +41,7 @@
     </div>
 
     <div class="row">
+        @foreach($data as $dt)
         <div class="col-md-4">
             <!-- Box Comment -->
             <div class="box box-widget">
@@ -68,5 +69,6 @@
             <!-- /.box -->
         </div>
         <!-- /.col -->
+        @endforeach
     </div>
 @stop

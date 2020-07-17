@@ -2,18 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class RegistrationController extends Controller
 {
+    public function trial()
+    {
+        return view('registrations.students.trial');
+    }
+
     public function private()
     {
-        return view('registrations.students.private');
+        $data = Course::all();
+        return view('registrations.students.private',compact('data'));
     }
 
     public function group()
     {
-        return view('registrations.students.group');
+        $data = Course::all();
+        return view('registrations.students.group',compact('data'));
     }
 
     public function instructor()
