@@ -184,6 +184,7 @@ class StudentController extends Controller
                 'last_name' => $request->last_name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'roles' => 'Student',
                 'citizenship' => $request->citizenship,
                 'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
             ]);
