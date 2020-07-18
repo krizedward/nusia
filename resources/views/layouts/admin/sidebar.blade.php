@@ -113,8 +113,8 @@
             </ul>
           </li>
 
-          <li class="{{ set_active(['material_publics.index']) }}">
-            <a href="{{ route('material_publics.index') }}">
+          <li class="{{ set_active(['materials.index']) }}">
+            <a href="{{ route('materials.index') }}">
               <i class="fa fa-archive"> </i><span>Material</span>
             </a>
           </li>

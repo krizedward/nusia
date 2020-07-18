@@ -555,6 +555,9 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('/session/private', 'SessionController@private')->name('session.private');
     Route::get('/session/group', 'SessionController@group')->name('session.group');
 
+    Route::get('/materials', 'MaterialController@index')->name('materials.index');
+    Route::get('/materials/create', 'MaterialController@create')->name('materials.create');
+
     //halaman student
     Route::get('/registration/student/trial','RegistrationController@trial')->name('registration.trial');
     Route::get('/registration/student/private','RegistrationController@private')->name('registration.private');
