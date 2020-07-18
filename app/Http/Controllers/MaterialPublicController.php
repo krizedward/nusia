@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\MaterialPublic;
+use App\Models\MaterialType;
+use App\Models\CourseType;
+use App\Models\CourseLevel;
+use App\Models\CourseLevelDetail;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -54,7 +58,15 @@ class MaterialPublicController extends Controller
     public function create()
     {
         if($this->is_admin() || $this->is_instructor()) {
-            return view('materials.publics.create');
+            $material_types = MaterialType::all();
+            $course_types = CourseType::all();
+            $course_levels = CourseLevel::all();
+            $course_level_details = CourseLevelDetail::all();
+
+            return view('materials.publics.create', compact(
+                'material_types', 'course_types',
+                'course_levels', 'course_level_details'
+            ));
         } else {
             // Tidak memiliki hak akses.
         }

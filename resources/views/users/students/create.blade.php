@@ -16,7 +16,7 @@
         <div class="box-header with-border">
           <h3 class="box-title">Create Form</h3>
         </div>
-        <form role="form" method="post" action="{{ route('students.store') }}">
+        <form role="form" method="post" action="{{ route('students.store') }}" enctype="multipart/form-data">
           @csrf
           <div class="box-body">
             <div class="row">
