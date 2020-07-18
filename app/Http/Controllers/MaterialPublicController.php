@@ -9,6 +9,7 @@ use App\Models\MaterialType;
 use App\Models\CourseType;
 use App\Models\CourseLevel;
 use App\Models\CourseLevelDetail;
+use App\Models\CoursePackage;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -82,7 +83,10 @@ class MaterialPublicController extends Controller
     {
         $data = $request->all();
         $data = Validator::make($data, [
-            'course_package_id' => ['bail', 'required'],
+            'material_types' => ['bail', 'required'],
+            'course_types' => ['bail', 'required'],
+            'course_levels' => ['bail', 'required'],
+            'course_level_details' => ['bail', 'required'],
             'name' => ['bail', 'required', 'max:255'],
             'description' => ['bail', 'sometimes', 'max:5000'],
             'path' => ['bail', 'sometimes', 'max:1000']
@@ -101,10 +105,22 @@ class MaterialPublicController extends Controller
             if(MaterialPublic::where('slug', $data)->first() === null) break;
         }
 
+        $material_type_id = MaterialType::where('code', $request->material_types)->first()->id;
+        $course_type_id = CourseType::where('code', $request->course_types)->first()->id;
+        $course_level_id = CourseLevel::where('code', $request->course_levels)->first()->id;
+        $course_level_detail_id = CourseLevelDetail::where('code', $request->course_level_details)->first()->id;
+
+        $course_package_id = CoursePackage
+            ::where('material_type_id', $material_type_id)
+            ->where('course_type_id', $course_type_id)
+            ->where('course_level_id', $course_level_id)
+            ->where('course_level_detail_id', $course_level_detail_id)
+            ->first()->id;
+
         if($this->is_admin()) {
             MaterialPublic::create([
                 'slug' => $data,
-                'course_package_id' => $request->course_package_id,
+                'course_package_id' => $course_package_id,
                 'name' => $request->name,
                 'description' => $request->description,
                 'path' => $request->path
@@ -115,8 +131,7 @@ class MaterialPublicController extends Controller
             // Tidak memiliki hak akses.
         }
 
-        $data = MaterialPublic::all();
-        return view('materials.publics.index', compact('data'));
+        return redirect()->route('material_publics.index');
     }
 
     /**

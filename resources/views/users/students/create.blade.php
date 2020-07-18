@@ -142,7 +142,7 @@
                   @else
                     <div class="form-group">
                   @endif
-                      <label for="indonesian_language_proficiency">Indonesian Language Proficiency</label>
+                      <label for="indonesian_language_proficiency">Indonesian Language Proficiency (Self-assessment)</label>
                       <select name="indonesian_language_proficiency" type="text" class="@error('indonesian_language_proficiency') is-invalid @enderror form-control">
                         <option selected="selected" value="">-- Enter Indonesian Language Proficiency --</option>
                         <option value="Novice">Novice</option>
@@ -163,7 +163,7 @@
                   @else
                     <div class="form-group" id="interest_1">
                   @endif
-                      <label for="interest_1">Interest #1</label>
+                      <label for="interest_1">Interest (Max. 6)</label>
                       <select name="interest_1" type="text" class="@error('interest_1') is-invalid @enderror form-control" id="interest_1_input" onChange="if(document.getElementById('interest_1_input').value != '') {document.getElementById('interest_2').className = 'form-group';} else {document.getElementById('interest_2').className = 'form-group hidden'; document.getElementById('interest_3').className = 'form-group hidden'; document.getElementById('interest_4').className = 'form-group hidden'; document.getElementById('interest_5').className = 'form-group hidden'; document.getElementById('interest_6').className = 'form-group hidden'; document.getElementById('interest_2_input').value = ''; document.getElementById('interest_3_input').value = ''; document.getElementById('interest_4_input').value = ''; document.getElementById('interest_5_input').value = ''; document.getElementById('interest_6_input').value = '';}">
                         <option selected="selected" value="">-- Enter Interest --</option>
                         @foreach($interests as $interest)
@@ -181,7 +181,7 @@
                   @else
                     <div class="form-group hidden" id="interest_2">
                   @endif
-                      <label for="interest_2">Interest #2</label>
+                      <label for="interest_2">&nbsp;</label>
                       <select name="interest_2" type="text" class="@error('interest_2') is-invalid @enderror form-control" id="interest_2_input" onChange="if(document.getElementById('interest_2_input').value != '') {document.getElementById('interest_3').className = 'form-group';} else {document.getElementById('interest_3').className = 'form-group hidden'; document.getElementById('interest_4').className = 'form-group hidden'; document.getElementById('interest_5').className = 'form-group hidden'; document.getElementById('interest_6').className = 'form-group hidden'; document.getElementById('interest_3_input').value = ''; document.getElementById('interest_4_input').value = ''; document.getElementById('interest_5_input').value = ''; document.getElementById('interest_6_input').value = '';}">
                         <option selected="selected" value="">-- Enter Interest --</option>
                         @foreach($interests as $interest)
@@ -199,7 +199,7 @@
                   @else
                     <div class="form-group hidden" id="interest_3">
                   @endif
-                      <label for="interest_3">Interest #3</label>
+                      <label for="interest_3">&nbsp;</label>
                       <select name="interest_3" type="text" class="@error('interest_3') is-invalid @enderror form-control" id="interest_3_input" onChange="if(document.getElementById('interest_3_input').value != '') {document.getElementById('interest_4').className = 'form-group';} else {document.getElementById('interest_4').className = 'form-group hidden'; document.getElementById('interest_5').className = 'form-group hidden'; document.getElementById('interest_6').className = 'form-group hidden'; document.getElementById('interest_4_input').value = ''; document.getElementById('interest_5_input').value = ''; document.getElementById('interest_6_input').value = '';}">
                         <option selected="selected" value="">-- Enter Interest --</option>
                         @foreach($interests as $interest)
@@ -217,7 +217,7 @@
                   @else
                     <div class="form-group hidden" id="interest_4">
                   @endif
-                      <label for="interest_4">Interest #4</label>
+                      <label for="interest_4">&nbsp;</label>
                       <select name="interest_4" type="text" class="@error('interest_4') is-invalid @enderror form-control" id="interest_4_input" onChange="if(document.getElementById('interest_4_input').value != '') {document.getElementById('interest_5').className = 'form-group';} else {document.getElementById('interest_5').className = 'form-group hidden'; document.getElementById('interest_6').className = 'form-group hidden'; document.getElementById('interest_5_input').value = ''; document.getElementById('interest_6_input').value = '';}">
                         <option selected="selected" value="">-- Enter Interest --</option>
                         @foreach($interests as $interest)
@@ -235,7 +235,7 @@
                   @else
                     <div class="form-group hidden" id="interest_5">
                   @endif
-                      <label for="interest_5">Interest #5</label>
+                      <label for="interest_5">&nbsp;</label>
                       <select name="interest_5" type="text" class="@error('interest_5') is-invalid @enderror form-control" id="interest_5_input" onChange="if(document.getElementById('interest_5_input').value != '') {document.getElementById('interest_6').className = 'form-group';} else {document.getElementById('interest_6').className = 'form-group hidden'; document.getElementById('interest_6_input').value = '';}">
                         <option selected="selected" value="">-- Enter Interest --</option>
                         @foreach($interests as $interest)
@@ -253,7 +253,7 @@
                   @else
                     <div class="form-group hidden" id="interest_6">
                   @endif
-                      <label for="interest_6">Interest #6</label>
+                      <label for="interest_6">&nbsp;</label>
                       <select name="interest_6" type="text" class="@error('interest_6') is-invalid @enderror form-control" id="interest_6_input">
                         <option selected="selected" value="">-- Enter Interest --</option>
                         @foreach($interests as $interest)
@@ -304,8 +304,8 @@
                   @else
                     <div class="form-group hidden" id="description_of_course_taken">
                   @endif
-                      <label for="description_of_course_taken">Description of Courses Taken (in Indonesian Language)</label>
-                      <textarea name="description_of_course_taken" class="@error('description_of_course_taken') is-invalid @enderror form-control" rows="5" placeholder="Describe any courses you have taken (in Indonesian language)"></textarea>
+                      <label for="description_of_course_taken">Your Learning Experiences</label>
+                      <textarea name="description_of_course_taken" class="@error('description_of_course_taken') is-invalid @enderror form-control" rows="5" placeholder="Briefly describe any courses you have taken! (in Indonesian language)"></textarea>
                       @error('description_of_course_taken')
                         <p style="color:red">{{ $message }}</p>
                       @enderror
@@ -317,8 +317,8 @@
                   @else
                     <div class="form-group" id="learning_objective">
                   @endif
-                      <label for="learning_objective">Your Learning Objectives (in Indonesian Language)</label>
-                      <textarea name="learning_objective" class="@error('learning_objective') is-invalid @enderror form-control" rows="5" placeholder="Describe your learning objectives (in Indonesian language)"></textarea>
+                      <label for="learning_objective">Your Learning Objectives</label>
+                      <textarea name="learning_objective" class="@error('learning_objective') is-invalid @enderror form-control" rows="5" placeholder="Why do you want to learn Indonesian language? Briefly describe your learning objectives! (in Indonesian language)"></textarea>
                       @error('learning_objective')
                         <p style="color:red">{{ $message }}</p>
                       @enderror
