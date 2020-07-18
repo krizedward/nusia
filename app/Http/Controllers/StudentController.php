@@ -146,7 +146,6 @@ class StudentController extends Controller
             'last_name' => ['bail', 'required'],
             'email' => ['bail', 'required', 'unique:users'],
             'password' => ['bail', 'required', 'min:8'],
-            'phone' => ['bail', 'sometimes'],
             'citizenship' => ['bail', 'required'],
             'image_profile' => ['bail', 'sometimes', 'max:5000'],
 
@@ -181,7 +180,6 @@ class StudentController extends Controller
                 'last_name' => $request->last_name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'phone' => $request->phone,
                 'citizenship' => $request->citizenship,
                 'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
             ]);
@@ -217,7 +215,12 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Student::findOrFail($id);
+        if($data == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+        return view('users.students.show', compact('data'));
     }
 
     /**
@@ -228,7 +231,16 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        //
+        if($this->is_admin() || $this->is_student()) {
+            $data = Student::findOrFail($id);
+            if($data == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+            return view('users.students.edit', compact('data'));
+        } else {
+            return redirect()->route('students.index');
+        }
     }
 
     /**
@@ -240,7 +252,82 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $student = Student::findOrFail($id);
+
+        $interest = array(
+            $request->interest_1,
+            $request->interest_2,
+            $request->interest_3,
+            $request->interest_4,
+            $request->interest_5,
+            $request->interest_6
+        );
+        for($i = 0; $i < 6; $i = $i + 1) {
+            if($interest[$i] == null) unset($interest[$i]);
+        }
+
+        $interest = implode(', ', $interest);
+
+        if($interest != null) {
+            $request->interest_1 = 'PASS';
+        } else $request->interest_1 = null;
+
+        $data = $request->all();
+        $data = Validator::make($data, [
+            'first_name' => ['bail', 'required'],
+            'last_name' => ['bail', 'required'],
+            'email' => ['bail', 'required', 'unique:users'],
+            'password' => ['bail', 'required', 'min:8'],
+            'phone' => ['bail', 'sometimes'],
+            'citizenship' => ['bail', 'required'],
+            'image_profile' => ['bail', 'sometimes', 'max:5000'],
+
+            'age' => ['bail', 'required', 'integer'],
+            'status_job' => ['bail', 'required'],
+            'status_description' => ['bail', 'required'],
+            'interest_1' => ['bail', 'required'],
+            'target_language_experience' => ['bail', 'required'],
+            'target_language_experience_value' => ['bail', 'sometimes'],
+            'description_of_course_taken' => ['bail', 'sometimes'],
+            'indonesian_language_proficiency' => ['bail', 'required'],
+            'learning_objective' => ['bail', 'required'],
+        ]);
+
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+
+        if($this->is_admin() || $this->is_student()) {
+            $student->user->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'phone' => $request->phone,
+                'citizenship' => $request->citizenship,
+                'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
+            ]);
+
+            $student->update([
+                'age' => $request->age,
+                'status_job' => $request->status_job,
+                'status_description' => $request->status_description,
+                'interest' => $interest,
+                'target_language_experience' => $request->target_language_experience,
+                'target_language_experience_value' => $request->target_language_experience_value,
+                'description_of_course_taken' => $request->description_of_course_taken,
+                'indonesian_language_proficiency' => $request->indonesian_language_proficiency,
+                'learning_objective' => $request->learning_objective,
+            ]);
+
+            \Session::flash('coba','Update Success !!!');
+        } else {
+            // Tidak memiliki izin akses.
+        }
+
+        return redirect()->route('students.index');
     }
 
 
@@ -252,6 +339,40 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Student::findOrFail($id);
+        if($data == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+
+        if($this->is_admin() || $this->is_student()) {
+            // Menghapus ini akan terhubung dengan model CourseRegistration.
+            // Menghapus CourseRegistration terhubung dengan model CourseCertificate, CoursePayment, SessionRegistration.
+            // Menghapus CourseCertificate tidak terhubung dengan model lain.
+            // Menghapus CoursePayment tidak terhubung dengan model lain.
+            // Menghapus SessionRegistration tidak terhubung dengan model lain.
+                // SEND CONFIRMATION ALERT FIRST?
+            if($data->course_registrations != null) {
+                foreach($data->course_registrations as $course_registration) {
+                    if($course_registration->course_certificate != null) {
+                        $course_registration->course_certificate->delete();
+                    }
+                    if($course_registration->course_payment != null) {
+                        $course_registration->course_payment->delete();
+                    }
+                    if($course_registration->session_registrations != null) {
+                        foreach($course_registration->session_registrations as $session_registration) {
+                            $session_registration->delete();
+                        }
+                    }
+                    $course_registration->delete();
+                }
+            }
+            $data->delete();
+        } else {
+            // Tidak memiliki hak akses.
+        }
+
+        return redirect()->route('students.index');
     }
 }
