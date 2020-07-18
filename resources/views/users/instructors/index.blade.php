@@ -13,7 +13,7 @@
     <div class="col-md-12">
       <div class="box box-warning">
         <div class="box-header">
-          <a href="#" class="btn btn-flat btn-sm btn-primary">+ Add Instructor</a>
+          <a href="{{ route('instructors.create') }}" class="btn btn-flat btn-sm btn-primary">+ Add Instructor</a>
         </div>
         <div class="box-body">
           <table id="example1" class="table table-bordered table-striped">
@@ -37,17 +37,47 @@
                   @endif
                   <td>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</td>
                   @if($dt->interest)
-                    <td>{{ $dt->interest }}</td>
+                    <?php
+                      $interest = explode(', ', $dt->interest);
+                    ?>
+                    <td>
+                      @for($i = 0; $i < count($interest); $i = $i + 1)
+                        {{ $interest[$i] }}
+                        @if($i + 1 != count($interest))
+                          ,<br>
+                        @endif
+                      @endfor
+                    </td>
                   @else
                     <td><i>Not Available</i></td>
                   @endif
                   @if($dt->working_experience)
-                    <td>{{ $dt->working_experience }}</td>
+                    <?php
+                      $working_experience = explode(', ', $dt->working_experience);
+                    ?>
+                    <td>
+                      @for($i = 0; $i < count($working_experience); $i = $i + 1)
+                        {{ $working_experience[$i] }}
+                        @if($i + 1 != count($working_experience))
+                          <br>
+                        @endif
+                      @endfor
+                    </td>
                   @else
                     <td><i>Not Available</i></td>
                   @endif
                   @if($dt->educational_experience)
-                    <td>{{ $dt->educational_experience }}</td>
+                    <?php
+                      $educational_experience = explode(', ', $dt->educational_experience);
+                    ?>
+                    <td>
+                      @for($i = 0; $i < count($educational_experience); $i = $i + 1)
+                        {{ $educational_experience[$i] }}
+                        @if($i + 1 != count($educational_experience))
+                          <br>
+                        @endif
+                      @endfor
+                    </td>
                   @else
                     <td><i>Not Available</i></td>
                   @endif

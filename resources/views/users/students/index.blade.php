@@ -39,7 +39,17 @@
                   @endif
                   <td>{{ $dt->status_job }}</td>
                   @if($dt->interest)
-                    <td>{{ $dt->interest }}</td>
+                    <?php
+                      $interest = explode(', ', $dt->interest);
+                    ?>
+                    <td>
+                      @for($i = 0; $i < count($interest); $i = $i + 1)
+                        {{ $interest[$i] }}
+                        @if($i + 1 != count($interest))
+                          ,<br>
+                        @endif
+                      @endfor
+                    </td>
                   @else
                     <td><i>Not Available</i></td>
                   @endif
