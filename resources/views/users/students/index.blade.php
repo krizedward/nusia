@@ -20,6 +20,7 @@
             <thead>
               <tr>
                 <th>Name</th>
+                <th>Profile Image</th>
                 <th>Age</th>
                 <th>Job Status</th>
                 <th>Interest</th>
@@ -33,6 +34,11 @@
               @foreach($data as $dt)
                 <tr>
                   <td>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</td>
+                  @if($dt->user->image_profile)
+                    <td><img src="{{ asset('uploads/user.jpg') }}" style="width: 50px"></td>
+                  @else
+                    <td><i>Not Available</i></td>
+                  @endif
                   @if($dt->age)
                     <td>{{ $dt->age }}</td>
                   @else
@@ -73,7 +79,7 @@
                     <td><i>Not Available</i></td>
                   @endif
                   <td>
-                    <a class="btn btn-flat btn-xs btn-success" href="#">Detail</a>
+                    <a class="btn btn-flat btn-xs btn-success" href="{{ route('students.show', $dt->id) }}">Detail</a>
                     <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>
                   </td>
                 </tr>

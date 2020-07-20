@@ -59,34 +59,36 @@ class StudentController extends Controller
     {
         if($this->is_admin() || $this->is_student()) {
             $countries = [
-                'Afghanistan', 'Albania', 'Algeria', 'Antigua and Barbuda', 'Argentina',
-                'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Azores',
-                'Bahamas', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium',
-                'Belize', 'Bermuda', 'Bolivia', 'Bosnia & Herzegovina', 'Brazil',
-                'Bulgaria', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde',
-                'Chile', 'China', 'Columbia', 'Costa Rica', 'Croatia',
-                'Cuba', 'Cyprus', 'Czech Republic', 'Czechoslovakia', 'Denmark',
-                'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador',
-                'Eritrea', 'Ethiopia', 'Fiji', 'Finland', 'France',
-                'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada',
-                'Guam', 'Guatemala', 'Guyana', 'Haiti', 'Honduras',
-                'Hong Kong', 'Hungary', 'India', 'Indonesia', 'Iran',
-                'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica',
-                'Japan', 'Jordan', 'Kenya', 'Kosovo', 'Kuwait',
-                'Laos', 'Latvia', 'Lebanon', 'Liberia', 'Lithuania',
-                'Macedonia', 'Malaysia', 'Mexico', 'Moldova', 'Morocco',
-                'Myanmar (Burma)', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua',
-                'Nigeria', 'North Korea', 'Northern Ireland', 'Norway', 'Pakistan',
-                'Panama', 'Paraguay', 'Peru', 'Philippines', 'Poland',
-                'Portugal', 'Puerto Rico', 'Romania', 'Russia', 'Samoa',
+                'Afghanistan', 'Albania', 'Algeria', 'Angola', 'Anguilla',
+                'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria',
+                'Azerbaijan', 'Azores', 'Bahamas', 'Bangladesh', 'Barbados',
+                'Belarus', 'Belgium', 'Belize', 'Bermuda', 'Bolivia',
+                'Bosnia & Herzegovina', 'Brazil', 'Bulgaria', 'Cambodia', 'Cameroon',
+                'Canada', 'Cape Verde', 'Cayman Islands', 'Chile', 'China',
+                'Columbia', 'Costa Rica', 'Croatia', 'Cuba', 'Cyprus',
+                'Czech Republic', 'Czechoslovakia', 'Denmark', 'Dominica', 'Dominican Republic',
+                'Ecuador', 'Egypt', 'El Salvador', 'Eritrea', 'Ethiopia',
+                'Fiji', 'Finland', 'France', 'Georgia', 'Germany',
+                'Ghana', 'Greece', 'Grenada', 'Guam', 'Guatemala',
+                'Guinea', 'Guyana', 'Haiti', 'Honduras', 'Hong Kong',
+                'Hungary', 'India', 'Indonesia', 'Iran', 'Iraq',
+                'Ireland', 'Israel', 'Italy', 'Jamaica', 'Japan',
+                'Jordan', 'Kazakhstan', 'Kenya', 'Kosovo', 'Kuwait',
+                'Laos', 'Latvia', 'Lebanon', 'Liberia', 'Liechtenstein',
+                'Lithuania', 'Macedonia', 'Madagascar', 'Malaysia', 'Mexico',
+                'Moldova', 'Montserrat', 'Morocco', 'Mozambique', 'Myanmar (Burma)',
+                'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua', 'Nigeria',
+                'North Korea', 'Northern Ireland', 'Norway', 'Pakistan', 'Panama',
+                'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal',
+                'Puerto Rico', 'Romania', 'Russia', 'Saint Barthelemy', 'Samoa',
                 'Saudi Arabia', 'Scotland', 'Senegal', 'Serbia', 'Sierra Leone',
                 'Singapore', 'Slovakia', 'Somalia', 'South Africa', 'South Korea',
                 'Spain', 'Sri Lanka', 'St. Kitts--Nevis', 'St. Lucia', 'St. Vincent and the Grenadines',
                 'Sudan', 'Sweden', 'Switzerland', 'Syria', 'Taiwan',
-                'Tanzania', 'Thailand', 'Tonga', 'Trinidad and Tobago', 'Turkey',
-                'U. S. Virgin Islands', 'Uganda', 'Ukraine', 'United Kingdom', 'United States',
-                'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam', 'Wales',
-                'Yemen', 'Yugoslavia', 'Zimbabwe'
+                'Tanzania', 'Thailand', 'Timor-Leste', 'Tonga', 'Trinidad and Tobago',
+                'Turkey', 'U. S. Virgin Islands', 'Uganda', 'Ukraine', 'United Kingdom',
+                'United States of America', 'United States Virgin Islands', 'Uruguay', 'Uzbekistan', 'Venezuela',
+                'Vietnam', 'Wales', 'Yemen', 'Yugoslavia', 'Zimbabwe'
             ];
             $interests = [
                 'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Aviation',
@@ -237,12 +239,67 @@ class StudentController extends Controller
     public function edit($id)
     {
         if($this->is_admin() || $this->is_student()) {
+            $countries = [
+                'Afghanistan', 'Albania', 'Algeria', 'Angola', 'Anguilla',
+                'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria',
+                'Azerbaijan', 'Azores', 'Bahamas', 'Bangladesh', 'Barbados',
+                'Belarus', 'Belgium', 'Belize', 'Bermuda', 'Bolivia',
+                'Bosnia & Herzegovina', 'Brazil', 'Bulgaria', 'Cambodia', 'Cameroon',
+                'Canada', 'Cape Verde', 'Cayman Islands', 'Chile', 'China',
+                'Columbia', 'Costa Rica', 'Croatia', 'Cuba', 'Cyprus',
+                'Czech Republic', 'Czechoslovakia', 'Denmark', 'Dominica', 'Dominican Republic',
+                'Ecuador', 'Egypt', 'El Salvador', 'Eritrea', 'Ethiopia',
+                'Fiji', 'Finland', 'France', 'Georgia', 'Germany',
+                'Ghana', 'Greece', 'Grenada', 'Guam', 'Guatemala',
+                'Guinea', 'Guyana', 'Haiti', 'Honduras', 'Hong Kong',
+                'Hungary', 'India', 'Indonesia', 'Iran', 'Iraq',
+                'Ireland', 'Israel', 'Italy', 'Jamaica', 'Japan',
+                'Jordan', 'Kazakhstan', 'Kenya', 'Kosovo', 'Kuwait',
+                'Laos', 'Latvia', 'Lebanon', 'Liberia', 'Liechtenstein',
+                'Lithuania', 'Macedonia', 'Madagascar', 'Malaysia', 'Mexico',
+                'Moldova', 'Montserrat', 'Morocco', 'Mozambique', 'Myanmar (Burma)',
+                'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua', 'Nigeria',
+                'North Korea', 'Northern Ireland', 'Norway', 'Pakistan', 'Panama',
+                'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal',
+                'Puerto Rico', 'Romania', 'Russia', 'Saint Barthelemy', 'Samoa',
+                'Saudi Arabia', 'Scotland', 'Senegal', 'Serbia', 'Sierra Leone',
+                'Singapore', 'Slovakia', 'Somalia', 'South Africa', 'South Korea',
+                'Spain', 'Sri Lanka', 'St. Kitts--Nevis', 'St. Lucia', 'St. Vincent and the Grenadines',
+                'Sudan', 'Sweden', 'Switzerland', 'Syria', 'Taiwan',
+                'Tanzania', 'Thailand', 'Timor-Leste', 'Tonga', 'Trinidad and Tobago',
+                'Turkey', 'U. S. Virgin Islands', 'Uganda', 'Ukraine', 'United Kingdom',
+                'United States of America', 'United States Virgin Islands', 'Uruguay', 'Uzbekistan', 'Venezuela',
+                'Vietnam', 'Wales', 'Yemen', 'Yugoslavia', 'Zimbabwe'
+            ];
+            $interests = [
+                'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Aviation',
+                'Baseball', 'Basketball', 'Blogging', 'Boating', 'Bowling',
+                'Broadcasting', 'Business', 'Camping', 'Chess', 'Child caring',
+                'Clothing', 'Collecting', 'Community service', 'Cooking/baking', 'Cosmetics',
+                'Cycling', 'Dancing', 'Design', 'Discussion', 'Driving/racing',
+                'Electronics', 'Entrepreneurship', 'Event organizing', 'Fashion', 'Finance',
+                'Fishing', 'Foods & beverages', 'Football', 'Gardening', 'Golf',
+                'Hairstyling', 'Handicrafting', 'Health', 'Higher education', 'Hiking',
+                'History', 'Home decoration', 'Horseback riding', 'Housecleaning', 'Hunting',
+                'Ice hockey', 'Jogging', 'Lacrosse', 'Laundry/ironing', 'Law',
+                'Leadership', 'Leatherworking', 'Listening', 'Management', 'Marketing',
+                'Mechanics', 'Motivating', 'Movies', 'Music', 'Nursing',
+                'Outdoor recreation', 'Photographing', 'Physical exercise', 'Politics', 'Pottery',
+                'Programming', 'Reading', 'Real estate', 'Research', 'Retail',
+                'Running (marathon)', 'Running (sprint)', 'Scouting', 'Sewing/needle work', 'Shopping',
+                'Singing', 'Skiing', 'Snorkeling', 'Snowboarding', 'Soccer',
+                'Speaking (1-on-1)', 'Speaking (public)', 'Sports', 'Surfing', 'Swimming',
+                'Teaching/lecturing', 'Technology', 'Tennis', 'Travelling', 'Thriathlons',
+                'Videographing', 'Volleyball', 'Walking', 'Wrestling', 'Writing',
+                'Woodworking',
+            ];
+
             $data = Student::findOrFail($id);
             if($data == null) {
                 // Data yang dicari tidak ditemukan.
                 // Return?
             }
-            return view('users.students.edit', compact('data'));
+            return view('users.students.edit', compact('countries', 'interests', 'data'));
         } else {
             return redirect()->route('students.index');
         }
@@ -281,7 +338,7 @@ class StudentController extends Controller
         $data = Validator::make($data, [
             'first_name' => ['bail', 'required'],
             'last_name' => ['bail', 'required'],
-            'email' => ['bail', 'required', Rule::unique('users')->ignore($id, 'id')],
+            'email' => ['bail', 'required', Rule::unique('users')->ignore($student->user->id, 'id')],
             'password' => ['bail', 'required', 'min:8'],
             'phone' => ['bail', 'sometimes'],
             'citizenship' => ['bail', 'required'],
