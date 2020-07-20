@@ -15,11 +15,13 @@ Route::redirect('/', 'login');
 
 Route::group(['middleware'=>'auth'], function() {
 
-	Route::get('/home', function() {
+	/*Route::get('/home', function() {
             return view('home');
-	})->name('home');
+	})->name('home');*/
 
 	//Route::get('/home/{id}', 'HomeController@index')->name('home');
+
+	Route::get('/home', 'HomeController@index')->name('home');
 
         // Apabila berencana membuat routing
         // selain Route::resource(s) (pada keyword yang sama),

@@ -23,8 +23,8 @@
                 <th>Session Title</th>
                 <th>Material Name</th>
                 <th>Instructor Name</th>
-                <th>Material Description</th>
-                <th>Material Path</th>
+                <th>Learning Objectives</th>
+                <th>Download</th>
                 <th>Action</th>
               </tr>
             </thead>

@@ -45,7 +45,7 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li class="{{ set_active(['registration.trial']) }}"><a href="{{ route('registration.trial') }}"><i class="fa fa-circle-o"></i> Trial</a></li>
+              <li class="{{ set_active(['registration.trial']) }}"><a href="{{ route('registration.trial') }}"><i class="fa fa-circle-o"></i> Free Trial</a></li>
               <li class="{{ set_active(['registration.private','registration.private-instructor','registration.private-time']) }}"><a href="{{ route('registration.private') }}"><i class="fa fa-circle-o"></i> Private</a></li>
               <li class="{{ set_active(['registration.group']) }}"><a href="{{ route('registration.group') }}"><i class="fa fa-circle-o"></i> Group</a></li>
             </ul>

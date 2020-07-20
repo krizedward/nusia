@@ -46,7 +46,7 @@
             <!-- Box Comment -->
             <div class="box box-widget">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Trial - Class</h3>
+                    <h3 class="box-title">Free Trial - Class</h3>
                 </div>
                 <!-- /.box-header-->
                 <div class="box-body">

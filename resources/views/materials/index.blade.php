@@ -22,8 +22,8 @@
                 <th>Course Package / Course / Session</th>
                 <th>Material Usage</th>
                 <th>Material Name</th>
-                <th>Material Description</th>
-                <th>Material Path</th>
+                <th>Learning Objectives</th>
+                <th>Download</th>
                 <th>Action</th>
               </tr>
             </thead>

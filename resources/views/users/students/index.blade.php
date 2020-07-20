@@ -25,6 +25,7 @@
                 <th>Interest</th>
                 <th>Target Language Experience</th>
                 <th>Indonesian Language Proficiency</th>
+                <th>Created At</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -44,9 +45,9 @@
                     ?>
                     <td>
                       @for($i = 0; $i < count($interest); $i = $i + 1)
-                        {{ $interest[$i] }}
+                        {{ $i + 1 }}. {{ $interest[$i] }}
                         @if($i + 1 != count($interest))
-                          ,<br>
+                          <br>
                         @endif
                       @endfor
                     </td>
@@ -66,6 +67,11 @@
                     </td>
                   @endif
                   <td>{{ $dt->indonesian_language_proficiency }}</td>
+                  @if($dt->created_at)
+                    <td>{{ $dt->created_at }} GMT+0</td>
+                  @else
+                    <td><i>Not Available</i></td>
+                  @endif
                   <td>
                     <a class="btn btn-flat btn-xs btn-success" href="#">Detail</a>
                     <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>

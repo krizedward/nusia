@@ -158,8 +158,8 @@ class StudentController extends Controller
             'status_description' => ['bail', 'required'],
             'interest_1' => ['bail', 'required'],
             'target_language_experience' => ['bail', 'required'],
-            'target_language_experience_value' => ['bail', 'sometimes'],
-            'description_of_course_taken' => ['bail', 'sometimes'],
+            'target_language_experience_value' => ['bail', 'required_if:target_language_experience,Others'],
+            'description_of_course_taken' => ['bail', 'required_unless:target_language_experience,Never (no experience)'],
             'indonesian_language_proficiency' => ['bail', 'required'],
             'learning_objective' => ['bail', 'required'],
         ]);
@@ -281,7 +281,7 @@ class StudentController extends Controller
         $data = Validator::make($data, [
             'first_name' => ['bail', 'required'],
             'last_name' => ['bail', 'required'],
-            'email' => ['bail', 'required', 'unique:users'],
+            'email' => ['bail', 'required', Rule::unique('users')->ignore($id, 'id')],
             'password' => ['bail', 'required', 'min:8'],
             'phone' => ['bail', 'sometimes'],
             'citizenship' => ['bail', 'required'],
@@ -292,8 +292,8 @@ class StudentController extends Controller
             'status_description' => ['bail', 'required'],
             'interest_1' => ['bail', 'required'],
             'target_language_experience' => ['bail', 'required'],
-            'target_language_experience_value' => ['bail', 'sometimes'],
-            'description_of_course_taken' => ['bail', 'sometimes'],
+            'target_language_experience_value' => ['bail', 'required_if:target_language_experience,Others'],
+            'description_of_course_taken' => ['bail', 'required_unless:target_language_experience,Never (no experience)'],
             'indonesian_language_proficiency' => ['bail', 'required'],
             'learning_objective' => ['bail', 'required'],
         ]);

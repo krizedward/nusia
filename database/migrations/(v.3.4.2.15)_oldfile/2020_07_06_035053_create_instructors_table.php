@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInstructorsTable extends Migration
+class oldCreateInstructorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,6 +18,7 @@ class CreateInstructorsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->text('interest')->nullable();
             $table->text('working_experience')->nullable();
+            $table->text('educational_experience')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

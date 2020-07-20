@@ -18,7 +18,6 @@ class Instructor extends Model
         'user_id',
         'interest',
         'working_experience',
-        'educational_experience'
     ];
 
     /**

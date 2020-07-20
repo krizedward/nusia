@@ -196,112 +196,7 @@ class InstructorController extends Controller
                 $working_experience[$i] = $working_experience_begin_year[$i].': '.$working_experience[$i];
             }
         }
-
-        if($flag == 1) {
-            $working_experience = implode(', ', $working_experience);
-
-            if($working_experience != null) {
-                $request->working_experience_begin_year_1 = 'PASS';
-            } else $request->working_experience_begin_year_1 = null;
-        } else if($flag == 0) {
-            // $working_experience should be filled when $working_experience_begin_year exists.
-            // Results in validation error.
-            $request->working_experience_begin_year_1 = null;
-        } else {
-            // $flag == -1
-            // No data in the arrays.
-            $request->working_experience_begin_year_1 = 'PASS';
-        }
-
-        $educational_experience_begin_year = array(
-            $request->educational_experience_begin_year_1,
-            $request->educational_experience_begin_year_2,
-            $request->educational_experience_begin_year_3,
-            $request->educational_experience_begin_year_4,
-            $request->educational_experience_begin_year_5,
-            $request->educational_experience_begin_year_6,
-            $request->educational_experience_begin_year_7,
-            $request->educational_experience_begin_year_8,
-            $request->educational_experience_begin_year_9,
-            $request->educational_experience_begin_year_10
-        );
-        $educational_experience_end_year = array(
-            $request->educational_experience_end_year_1,
-            $request->educational_experience_end_year_2,
-            $request->educational_experience_end_year_3,
-            $request->educational_experience_end_year_4,
-            $request->educational_experience_end_year_5,
-            $request->educational_experience_end_year_6,
-            $request->educational_experience_end_year_7,
-            $request->educational_experience_end_year_8,
-            $request->educational_experience_end_year_9,
-            $request->educational_experience_end_year_10
-        );
-        $educational_experience = array(
-            $request->educational_experience_1,
-            $request->educational_experience_2,
-            $request->educational_experience_3,
-            $request->educational_experience_4,
-            $request->educational_experience_5,
-            $request->educational_experience_6,
-            $request->educational_experience_7,
-            $request->educational_experience_8,
-            $request->educational_experience_9,
-            $request->educational_experience_10
-        );
-
-        $flag = 1;
-        for($i = 0; $i < 10; $i = $i + 1) {
-            if($request->educational_experience_begin_year_1 == null) {
-                // No data in the arrays.
-                $flag = -1;
-                break;
-            }
-            else if($educational_experience_begin_year[$i] == null) {
-                // No data after this index, so unset all index(es) that (be) not needed.
-                for(; $i < 10; $i = $i + 1) unset($educational_experience[$i]);
-                break; // Stop the repetition.
-            }
-
-            // SPECIAL CONDITION.
-            if($educational_experience_begin_year[$i] != null && $educational_experience[$i] == null) {
-                // $educational_experience should be filled when $educational_experience_begin_year exists.
-                $flag = 0;
-                break; // Validation will be error, so stop the repetition.
-            }
-
-            if($educational_experience_begin_year[$i] != null && $educational_experience_end_year[$i] != null) {
-                if($educational_experience_begin_year[$i] < $educational_experience_end_year[$i]) {
-                    // Completely filled.
-                    $educational_experience[$i] = $educational_experience_begin_year[$i].'-'.$educational_experience_end_year[$i].': '.$educational_experience[$i];
-                } else if($educational_experience_begin_year[$i] == $educational_experience_end_year[$i]) {
-                    // Write just a year (because both of them are same).
-                    $educational_experience[$i] = $educational_experience_begin_year[$i].': '.$educational_experience[$i];
-                } else {
-                    // Reverse the years.
-                    $educational_experience[$i] = $educational_experience_end_year[$i].'-'.$educational_experience_begin_year[$i].': '.$educational_experience[$i];
-                }
-            } else if($educational_experience_begin_year[$i] != null) {
-                // Here, $educational_experience_end_year is null.
-                $educational_experience[$i] = $educational_experience_begin_year[$i].': '.$educational_experience[$i];
-            }
-        }
-
-        if($flag == 1) {
-            $educational_experience = implode(', ', $educational_experience);
-
-            if($educational_experience != null) {
-                $request->educational_experience_begin_year_1 = 'PASS';
-            } else $request->educational_experience_begin_year_1 = null;
-        } else if($flag == 0) {
-            // $educational_experience should be filled when $educational_experience_begin_year exists.
-            // Results in validation error.
-            $request->educational_experience_begin_year_1 = null;
-        } else {
-            // $flag == -1
-            // No data in the arrays.
-            $request->educational_experience_begin_year_1 = 'PASS';
-        }
+        if($flag == 1) $working_experience = implode('|| ', $working_experience);
 
         $interest = array(
             $request->interest_1,
@@ -314,12 +209,7 @@ class InstructorController extends Controller
         for($i = 0; $i < 6; $i = $i + 1) {
             if($interest[$i] == null) unset($interest[$i]);
         }
-
         $interest = implode(', ', $interest);
-
-        if($interest != null) {
-            $request->interest_1 = 'PASS';
-        } else $request->interest_1 = null;
 
         $data = $request->all();
         $data = Validator::make($data, [
@@ -330,8 +220,21 @@ class InstructorController extends Controller
             'citizenship' => ['bail', 'required'],
             'image_profile' => ['bail', 'sometimes', 'max:5000'],
 
-            'working_experience_begin_year_1' => ['bail', 'sometimes'], // Bug: it should be that a special condition applies.
-            'educational_experience_begin_year_1' => ['bail', 'sometimes'], // Bug: it should be that a special condition applies.
+            'working_experience_1' => ['bail', 'required_unless:working_experience_begin_year_1,'],
+            'working_experience_2' => ['bail', 'required_unless:working_experience_begin_year_2,'],
+            'working_experience_3' => ['bail', 'required_unless:working_experience_begin_year_3,'],
+            'working_experience_4' => ['bail', 'required_unless:working_experience_begin_year_4,'],
+            'working_experience_5' => ['bail', 'required_unless:working_experience_begin_year_5,'],
+            'working_experience_6' => ['bail', 'required_unless:working_experience_begin_year_6,'],
+            'working_experience_7' => ['bail', 'required_unless:working_experience_begin_year_7,'],
+            'working_experience_8' => ['bail', 'required_unless:working_experience_begin_year_8,'],
+            'working_experience_9' => ['bail', 'required_unless:working_experience_begin_year_9,'],
+            'working_experience_10' => ['bail', 'required_unless:working_experience_begin_year_10,'],
+            'working_experience_11' => ['bail', 'required_unless:working_experience_begin_year_11,'],
+            'working_experience_12' => ['bail', 'required_unless:working_experience_begin_year_12,'],
+            'working_experience_13' => ['bail', 'required_unless:working_experience_begin_year_13,'],
+            'working_experience_14' => ['bail', 'required_unless:working_experience_begin_year_14,'],
+            'working_experience_15' => ['bail', 'required_unless:working_experience_begin_year_15,'],
             'interest_1' => ['bail', 'sometimes'],
         ]);
 
@@ -365,7 +268,6 @@ class InstructorController extends Controller
                 'slug' => $data,
                 'user_id' => $temp->id,
                 'working_experience' => $working_experience,
-                'educational_experience' => $educational_experience,
                 'interest' => $interest,
             ]);
 
@@ -385,7 +287,188 @@ class InstructorController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Instructor::findOrFail($id);
+        if($data == null) {
+            // Data yang dicari tidak ditemukan.
+            // Return?
+        }
+        return view('users.instructors.show', compact('data'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        if($this->is_admin() || $this->is_instructor()) {
+            $data = Instructor::findOrFail($id);
+            if($data == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+            return view('users.instructors.edit', compact('data'));
+        } else {
+            return redirect()->route('instructors.index');
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $instructor = Instructor::findOrFail($id);
+
+        $working_experience_begin_year = array(
+            $request->working_experience_begin_year_1,
+            $request->working_experience_begin_year_2,
+            $request->working_experience_begin_year_3,
+            $request->working_experience_begin_year_4,
+            $request->working_experience_begin_year_5,
+            $request->working_experience_begin_year_6,
+            $request->working_experience_begin_year_7,
+            $request->working_experience_begin_year_8,
+            $request->working_experience_begin_year_9,
+            $request->working_experience_begin_year_10
+        );
+        $working_experience_end_year = array(
+            $request->working_experience_end_year_1,
+            $request->working_experience_end_year_2,
+            $request->working_experience_end_year_3,
+            $request->working_experience_end_year_4,
+            $request->working_experience_end_year_5,
+            $request->working_experience_end_year_6,
+            $request->working_experience_end_year_7,
+            $request->working_experience_end_year_8,
+            $request->working_experience_end_year_9,
+            $request->working_experience_end_year_10
+        );
+        $working_experience = array(
+            $request->working_experience_1,
+            $request->working_experience_2,
+            $request->working_experience_3,
+            $request->working_experience_4,
+            $request->working_experience_5,
+            $request->working_experience_6,
+            $request->working_experience_7,
+            $request->working_experience_8,
+            $request->working_experience_9,
+            $request->working_experience_10
+        );
+
+        $flag = 1;
+        for($i = 0; $i < 10; $i = $i + 1) {
+            if($request->working_experience_begin_year_1 == null) {
+                // No data in the arrays.
+                $flag = -1;
+                break;
+            }
+            else if($working_experience_begin_year[$i] == null) {
+                // No data after this index, so unset all index(es) that (be) not needed.
+                for(; $i < 10; $i = $i + 1) unset($working_experience[$i]);
+                break; // Stop the repetition.
+            }
+
+            // SPECIAL CONDITION.
+            if($working_experience_begin_year[$i] != null && $working_experience[$i] == null) {
+                // $working_experience should be filled when $working_experience_begin_year exists.
+                $flag = 0;
+                break; // Validation will be error, so stop the repetition.
+            }
+
+            if($working_experience_begin_year[$i] != null && $working_experience_end_year[$i] != null) {
+                if($working_experience_begin_year[$i] < $working_experience_end_year[$i]) {
+                    // Completely filled.
+                    $working_experience[$i] = $working_experience_begin_year[$i].'-'.$working_experience_end_year[$i].': '.$working_experience[$i];
+                } else if($working_experience_begin_year[$i] == $working_experience_end_year[$i]) {
+                    // Write just a year (because both of them are same).
+                    $working_experience[$i] = $working_experience_begin_year[$i].': '.$working_experience[$i];
+                } else {
+                    // Reverse the years.
+                    $working_experience[$i] = $working_experience_end_year[$i].'-'.$working_experience_begin_year[$i].': '.$working_experience[$i];
+                }
+            } else if($working_experience_begin_year[$i] != null) {
+                // Here, $working_experience_end_year is null.
+                $working_experience[$i] = $working_experience_begin_year[$i].': '.$working_experience[$i];
+            }
+        }
+        if($flag == 1) $working_experience = implode('|| ', $working_experience);
+
+        $interest = array(
+            $request->interest_1,
+            $request->interest_2,
+            $request->interest_3,
+            $request->interest_4,
+            $request->interest_5,
+            $request->interest_6
+        );
+        for($i = 0; $i < 6; $i = $i + 1) {
+            if($interest[$i] == null) unset($interest[$i]);
+        }
+        $interest = implode(', ', $interest);
+
+        $data = $request->all();
+        $data = Validator::make($data, [
+            'first_name' => ['bail', 'required'],
+            'last_name' => ['bail', 'required'],
+            'email' => ['bail', 'required', Rule::unique('users')->ignore($id, 'id')],
+            'password' => ['bail', 'required', 'min:8'],
+            'citizenship' => ['bail', 'required'],
+            'image_profile' => ['bail', 'sometimes', 'max:5000'],
+
+            'working_experience_1' => ['bail', 'required_unless:working_experience_begin_year_1,'],
+            'working_experience_2' => ['bail', 'required_unless:working_experience_begin_year_2,'],
+            'working_experience_3' => ['bail', 'required_unless:working_experience_begin_year_3,'],
+            'working_experience_4' => ['bail', 'required_unless:working_experience_begin_year_4,'],
+            'working_experience_5' => ['bail', 'required_unless:working_experience_begin_year_5,'],
+            'working_experience_6' => ['bail', 'required_unless:working_experience_begin_year_6,'],
+            'working_experience_7' => ['bail', 'required_unless:working_experience_begin_year_7,'],
+            'working_experience_8' => ['bail', 'required_unless:working_experience_begin_year_8,'],
+            'working_experience_9' => ['bail', 'required_unless:working_experience_begin_year_9,'],
+            'working_experience_10' => ['bail', 'required_unless:working_experience_begin_year_10,'],
+            'working_experience_11' => ['bail', 'required_unless:working_experience_begin_year_11,'],
+            'working_experience_12' => ['bail', 'required_unless:working_experience_begin_year_12,'],
+            'working_experience_13' => ['bail', 'required_unless:working_experience_begin_year_13,'],
+            'working_experience_14' => ['bail', 'required_unless:working_experience_begin_year_14,'],
+            'working_experience_15' => ['bail', 'required_unless:working_experience_begin_year_15,'],
+            'interest_1' => ['bail', 'sometimes'],
+        ]);
+
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+
+        if($this->is_admin() || $this->is_instructor()) {
+            $instructor->user->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'phone' => $request->phone,
+                'citizenship' => $request->citizenship,
+                'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
+            ]);
+
+            $instructor->update([
+                'working_experience' => $working_experience,
+                'interest' => $interest,
+            ]);
+
+            \Session::flash('coba','Update Success !!!');
+        } else {
+            // Tidak memiliki izin akses.
+        }
+
+        return redirect()->route('instructors.index');
     }
 
     /**

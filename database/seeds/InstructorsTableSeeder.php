@@ -53,26 +53,6 @@ class InstructorsTableSeeder extends Seeder
                     ->make();
             })
             ->make();
-        factory(App\Models\Instructor::class, 2)
-            ->states('Interest', 'EducationalExperience')
-            ->create()
-            ->each(function($instructor) {
-                factory(App\Models\Schedule::class, 50)
-                    ->states('Randomized')
-                    ->create(['instructor_id' => $instructor->id])
-                    ->make();
-            })
-            ->make();
-        factory(App\Models\Instructor::class, 2)
-            ->states('WorkingExperience', 'EducationalExperience')
-            ->create()
-            ->each(function($instructor) {
-                factory(App\Models\Schedule::class, 50)
-                    ->states('Randomized')
-                    ->create(['instructor_id' => $instructor->id])
-                    ->make();
-            })
-            ->make();
         factory(App\Models\Instructor::class, 1)
             ->states('Interest')
             ->create()
@@ -85,16 +65,6 @@ class InstructorsTableSeeder extends Seeder
             ->make();
         factory(App\Models\Instructor::class, 1)
             ->states('WorkingExperience')
-            ->create()
-            ->each(function($instructor) {
-                factory(App\Models\Schedule::class, 50)
-                    ->states('Randomized')
-                    ->create(['instructor_id' => $instructor->id])
-                    ->make();
-            })
-            ->make();
-        factory(App\Models\Instructor::class, 1)
-            ->states('EducationalExperience')
             ->create()
             ->each(function($instructor) {
                 factory(App\Models\Schedule::class, 50)

@@ -19,32 +19,32 @@
           <table id="example1" class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th>Profile Image</th>
                 <th>Name</th>
+                <th>Profile Image</th>
                 <th>Interest</th>
                 <th>Working Experience</th>
-                <th>Educational Experience</th>
+                <th>Created At</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
               @foreach($data as $dt)
                 <tr>
+                  <td>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</td>
                   @if($dt->user->image_profile)
                     <td><img src="{{ asset('uploads/user.jpg') }}" style="width: 50px"></td>
                   @else
                     <td><i>Not Available</i></td>
                   @endif
-                  <td>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</td>
                   @if($dt->interest)
                     <?php
                       $interest = explode(', ', $dt->interest);
                     ?>
                     <td>
                       @for($i = 0; $i < count($interest); $i = $i + 1)
-                        {{ $interest[$i] }}
+                        {{ $i + 1 }}. {{ $interest[$i] }}
                         @if($i + 1 != count($interest))
-                          ,<br>
+                          <br>
                         @endif
                       @endfor
                     </td>
@@ -53,7 +53,7 @@
                   @endif
                   @if($dt->working_experience)
                     <?php
-                      $working_experience = explode(', ', $dt->working_experience);
+                      $working_experience = explode('|| ', $dt->working_experience);
                     ?>
                     <td>
                       @for($i = 0; $i < count($working_experience); $i = $i + 1)
@@ -66,18 +66,8 @@
                   @else
                     <td><i>Not Available</i></td>
                   @endif
-                  @if($dt->educational_experience)
-                    <?php
-                      $educational_experience = explode(', ', $dt->educational_experience);
-                    ?>
-                    <td>
-                      @for($i = 0; $i < count($educational_experience); $i = $i + 1)
-                        {{ $educational_experience[$i] }}
-                        @if($i + 1 != count($educational_experience))
-                          <br>
-                        @endif
-                      @endfor
-                    </td>
+                  @if($dt->created_at)
+                    <td>{{ $dt->created_at }} GMT+0</td>
                   @else
                     <td><i>Not Available</i></td>
                   @endif

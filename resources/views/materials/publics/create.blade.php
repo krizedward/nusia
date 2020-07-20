@@ -114,8 +114,8 @@
                   @else
                     <div class="form-group">
                   @endif
-                      <label for="description">Material Description</label>
-                      <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Describe Material Content"></textarea>
+                      <label for="description">Learning Objectives</label>
+                      <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Describe Learning Objectives"></textarea>
                       @error('description')
                         <p style="color:red">{{ $message }}</p>
                       @enderror
