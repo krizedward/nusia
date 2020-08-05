@@ -15,6 +15,7 @@ class CreateStudentsTable extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('code',20)->nullable();
             $table->unsignedBigInteger('user_id');
             $table->integer('age')->unsigned();
             $table->enum('status_job', ['Professional', 'Student']);

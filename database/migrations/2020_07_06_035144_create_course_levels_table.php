@@ -15,8 +15,7 @@ class CreateCourseLevelsTable extends Migration
     {
         Schema::create('course_levels', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('slug')->unique();
-            $table->char('code', 1)->unique();
+            $table->string('code',20)->nullable();
             $table->string('name', 100);
             $table->text('description')->nullable();
             $table->timestamps();

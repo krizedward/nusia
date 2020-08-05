@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMaterialSessionsTable extends Migration
+class CreateCourseTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,16 @@ class CreateMaterialSessionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('material_sessions', function (Blueprint $table) {
+        Schema::create('course_types', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code',20)->nullable();
-            $table->unsignedBigInteger('session_id');
-            $table->string('name');
+            $table->string('slug')->unique();
+            $table->char('code', 1)->unique();
+            $table->string('name', 100);
             $table->text('description')->nullable();
-            $table->text('path')->nullable();
+            $table->integer('count_student_min')->unsigned()->nullable();
+            $table->integer('count_student_max')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
-
-            $table->foreign('session_id')
-                ->references('id')->on('sessions')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
         });
     }
 
@@ -37,6 +33,6 @@ class CreateMaterialSessionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('material_sessions');
+        Schema::dropIfExists('course_types');
     }
 }

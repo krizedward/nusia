@@ -15,7 +15,7 @@ class CreateMaterialPublicsTable extends Migration
     {
         Schema::create('material_publics', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('slug')->unique();
+            $table->string('code',20)->nullable();
             $table->unsignedBigInteger('course_package_id');
             $table->string('name');
             $table->text('description')->nullable();

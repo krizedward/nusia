@@ -15,6 +15,7 @@ class CreateCoursePaymentsTable extends Migration
     {
         Schema::create('course_payments', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('code',20)->nullable();
             $table->unsignedBigInteger('course_registration_id');
             $table->string('method', 20);
             $table->timestamp('payment_time');

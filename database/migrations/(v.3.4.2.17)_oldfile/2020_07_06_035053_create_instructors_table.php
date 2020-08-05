@@ -15,7 +15,6 @@ class CreateInstructorsTable extends Migration
     {
         Schema::create('instructors', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code',20)->nullable();
             $table->unsignedBigInteger('user_id');
             $table->text('interest')->nullable();
             $table->text('working_experience')->nullable();

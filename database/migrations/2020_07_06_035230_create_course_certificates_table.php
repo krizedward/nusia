@@ -15,7 +15,7 @@ class CreateCourseCertificatesTable extends Migration
     {
         Schema::create('course_certificates', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('slug')->unique();
+            $table->string('code',20)->nullable();
             $table->unsignedBigInteger('course_registration_id');
             $table->text('path')->nullable();
             $table->timestamps();

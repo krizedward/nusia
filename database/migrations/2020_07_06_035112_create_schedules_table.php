@@ -15,6 +15,7 @@ class CreateSchedulesTable extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('code',20)->nullable();
             $table->unsignedBigInteger('instructor_id');
             $table->timestamp('schedule_time');
             $table->enum('status', ['Available', 'Busy']);

@@ -15,7 +15,7 @@ class CreateSessionsTable extends Migration
     {
         Schema::create('sessions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('slug')->unique();
+            $table->string('code',20)->nullable();
             $table->unsignedBigInteger('course_id');
             $table->unsignedBigInteger('schedule_id');
             $table->string('title')->nullable();

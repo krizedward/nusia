@@ -15,7 +15,7 @@ class CreateCoursePackagesTable extends Migration
     {
         Schema::create('course_packages', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code',20)->nullable();
+            $table->string('slug')->unique();
             $table->unsignedBigInteger('material_type_id');
             $table->unsignedBigInteger('course_type_id');
             $table->unsignedBigInteger('course_level_id');
