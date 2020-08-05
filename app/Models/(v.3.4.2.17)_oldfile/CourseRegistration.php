@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Alfa6661\AutoNumber\AutoNumberTrait;
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\CourseCertificate;
@@ -14,7 +13,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CourseRegistration extends Model
 {
     use SoftDeletes;
-    use AutoNumberTrait;
 
     protected $table = "course_registrations";
     protected $primaryKey = 'id';
@@ -23,17 +21,6 @@ class CourseRegistration extends Model
         'course_id',
         'student_id'
     ];
-
-    public function getAutoNumberOptions()
-    {
-        return [
-            'code' => [
-                'format' => 'CRR?', // Format kode yang akan digunakan.
-                'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
-                //refrensi : https://www.lab-informatika.com/membuat-kode-otomatis-di-laravel
-            ]
-        ];
-    }
 
     /**
      * Define a relationship.

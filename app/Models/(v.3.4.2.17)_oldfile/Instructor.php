@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Alfa6661\AutoNumber\AutoNumberTrait;
 use App\User;
 use App\Models\Schedule;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Instructor extends Model
 {
     use SoftDeletes;
-    use AutoNumberTrait;
 
     protected $table = "instructors";
     protected $primaryKey = 'id';
@@ -21,17 +19,6 @@ class Instructor extends Model
         'interest',
         'working_experience',
     ];
-
-    public function getAutoNumberOptions()
-    {
-        return [
-            'code' => [
-                'format' => 'INS?', // Format kode yang akan digunakan.
-                'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
-                //refrensi : https://www.lab-informatika.com/membuat-kode-otomatis-di-laravel
-            ]
-        ];
-    }
 
     /**
      * Get user information.

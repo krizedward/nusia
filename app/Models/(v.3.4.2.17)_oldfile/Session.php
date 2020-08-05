@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Alfa6661\AutoNumber\AutoNumberTrait;
 use App\Models\Course;
 use App\Models\Schedule;
 use App\Models\MaterialSession;
@@ -14,12 +13,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Session extends Model
 {
     use SoftDeletes;
-    use AutoNumberTrait;
 
     protected $table = "sessions";
     protected $primaryKey = 'id';
 
     protected $fillable = [
+        'slug',
         'course_id',
         'schedule_id',
         'title',
@@ -28,21 +27,10 @@ class Session extends Model
         'link_zoom'
     ];
 
-    public function getAutoNumberOptions()
-    {
-        return [
-            'code' => [
-                'format' => 'SNS?', // Format kode yang akan digunakan.
-                'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
-                //refrensi : https://www.lab-informatika.com/membuat-kode-otomatis-di-laravel
-            ]
-        ];
-    }
-
     /**
      * Define a relationship.
      */
-
+     
     public function course()
     {
     	return $this->belongsTo(Course::class);
