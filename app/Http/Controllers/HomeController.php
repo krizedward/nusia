@@ -44,9 +44,23 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $instructors = Instructor::all();
-        $students = Student::all();
-        return view('home', compact('instructors', 'students'));
+        if($this->is_admin()) {
+
+            $student = Student::all();
+            $instructor = Instructor::all();
+            return view('dashboard.admin_index',compact('student','instructor'));
+        }
+
+        if($this->is_instructor()) {
+            $session_reg = SessionRegistration::all();
+            return view('dashboard.instructor_index', compact('session_reg'));
+        }
+
+        if($this->is_student()) {
+            $session = Session::all();
+            $material = MaterialSession::all();
+            return view('dashboard.student_index', compact('session','material'));
+        }
     }
 
     /**
