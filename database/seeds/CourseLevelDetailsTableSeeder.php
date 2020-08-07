@@ -34,32 +34,21 @@ class CourseLevelDetailsTableSeeder extends Seeder
             ->make();*/
 
         CourseLevelDetail::create ([
-            'slug'        => Str::random(255),
-            'code'        => '0',
-            'name'        => 'Not Defined',
-            'description' => 'This describes a course level (detailed) that does not exist.',
-            'created_at'  => now(),
-            'updated_at'  => null
-        ]);
-        CourseLevelDetail::create ([
-            'slug'        => Str::random(255),
-            'code'        => 'L',
+            'code'        => 'CLD-001',
             'name'        => 'Low',
             'description' => 'This describes a difficulty that is lower than mid difficulty.',
             'created_at'  => now(),
             'updated_at'  => null
         ]);
         CourseLevelDetail::create ([
-            'slug'        => Str::random(255),
-            'code'        => 'M',
+            'code'        => 'CLD-002',
             'name'        => 'Mid',
             'description' => 'This describes a difficulty that is higher than low difficulty.',
             'created_at'  => now(),
             'updated_at'  => null
         ]);
         CourseLevelDetail::create ([
-            'slug'        => Str::random(255),
-            'code'        => 'H',
+            'code'        => 'CLD-003',
             'name'        => 'High',
             'description' => 'This describes a difficulty that is higher than mid difficulty.',
             'created_at'  => now(),

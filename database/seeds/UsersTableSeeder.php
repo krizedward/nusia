@@ -13,7 +13,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         App\User::create([
-            'code' => 'ADM-001',
+            'code' => 'USR-001',
             'first_name' => 'Nusantara Indonesia',
             'last_name' => 'Admin',
             'email' => 'admin@admin.com',
@@ -24,7 +24,7 @@ class UsersTableSeeder extends Seeder
         ]);
 
         App\User::create([
-            'code' => 'INS-001',
+            'code' => 'USR-002',
             'first_name' => 'Instructor',
             'last_name' => '001',
             'email' => 'instructor001@instructor.com',
@@ -35,10 +35,32 @@ class UsersTableSeeder extends Seeder
         ]);
 
         App\User::create([
-            'code' => 'STU-001',
+            'code' => 'USR-003',
+            'first_name' => 'Instructor',
+            'last_name' => '002',
+            'email' => 'instructor002@instructor.com',
+            'password' => Hash::make('12345678'),
+            'roles' => 'Instructor',
+            'citizenship' => 'Indonesia',
+            'image_profile' => null,
+        ]);
+
+        App\User::create([
+            'code' => 'USR-004',
             'first_name' => 'Student',
             'last_name' => '001',
             'email' => 'student001@student.com',
+            'password' => Hash::make('12345678'),
+            'roles' => 'Student',
+            'citizenship' => 'Indonesia',
+            'image_profile' => null,
+        ]);
+
+        App\User::create([
+            'code' => 'USR-005',
+            'first_name' => 'Student',
+            'last_name' => '002',
+            'email' => 'student002@student.com',
             'password' => Hash::make('12345678'),
             'roles' => 'Student',
             'citizenship' => 'Indonesia',

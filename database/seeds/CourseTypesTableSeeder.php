@@ -34,18 +34,7 @@ class CourseTypesTableSeeder extends Seeder
             ->make();*/
 
         CourseType::create ([
-            'slug'              => Str::random(255),
-            'code'              => '0',
-            'name'              => 'Not Defined',
-            'description'       => 'This describes a course type that does not exist.',
-            'count_student_min' => null,
-            'count_student_max' => null,
-            'created_at'        => now(),
-            'updated_at'        => null
-        ]);
-        CourseType::create ([
-            'slug'              => Str::random(255),
-            'code'              => 'P',
+            'code'              => 'CT-001',
             'name'              => 'Private',
             'description'       => 'This is an one-on-one course.',
             'count_student_min' => 1,
@@ -54,19 +43,8 @@ class CourseTypesTableSeeder extends Seeder
             'updated_at'        => null
         ]);
         CourseType::create ([
-            'slug'              => Str::random(255),
-            'code'              => 'G',
-            'name'              => 'Group (General)',
-            'description'       => 'This is a course consisting of more students than one.',
-            'count_student_min' => 2,
-            'count_student_max' => 4,
-            'created_at'        => now(),
-            'updated_at'        => null
-        ]);
-        CourseType::create ([
-            'slug'              => Str::random(255),
-            'code'              => 'N',
-            'name'              => 'Group (Novice)',
+            'code'              => 'CT-002',
+            'name'              => 'Group - Novice',
             'description'       => 'This is a course consisting of more students than one.',
             'count_student_min' => 2,
             'count_student_max' => 3,
@@ -74,9 +52,8 @@ class CourseTypesTableSeeder extends Seeder
             'updated_at'        => null
         ]);
         CourseType::create ([
-            'slug'              => Str::random(255),
-            'code'              => 'I',
-            'name'              => 'Group (Intermediate)',
+            'code'              => 'CT-003',
+            'name'              => 'Group - Intermediate',
             'description'       => 'This is a course consisting of more students than one.',
             'count_student_min' => 2,
             'count_student_max' => 4,
@@ -84,9 +61,8 @@ class CourseTypesTableSeeder extends Seeder
             'updated_at'        => null
         ]);
         CourseType::create ([
-            'slug'              => Str::random(255),
-            'code'              => 'A',
-            'name'              => 'Group (Advanced)',
+            'code'              => 'CT-004',
+            'name'              => 'Group - Advanced',
             'description'       => 'This is a course consisting of more students than one.',
             'count_student_min' => 2,
             'count_student_max' => 4,
@@ -94,9 +70,8 @@ class CourseTypesTableSeeder extends Seeder
             'updated_at'        => null
         ]);
         CourseType::create ([
-            'slug'              => Str::random(255),
-            'code'              => 'T',
-            'name'              => 'Trial',
+            'code'              => 'CT-005',
+            'name'              => 'Free Trial',
             'description'       => 'A group course limited to three days of learning.',
             'count_student_min' => 2,
             'count_student_max' => 4,
