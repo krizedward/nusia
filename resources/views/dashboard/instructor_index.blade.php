@@ -117,7 +117,7 @@
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer text-center">
-                            <a href="{{ route('show.instructor') }}" class="uppercase">View All Student</a>
+                            <a href="#" class="uppercase">View All Student</a>
                         </div>
                         <!-- /.box-footer -->
                     </div>

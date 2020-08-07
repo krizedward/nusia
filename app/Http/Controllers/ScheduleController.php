@@ -42,8 +42,11 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        $data = Schedule::all();
-        return view('schedules.index', compact('data'));
+        if ($this->is_instructor()) {
+          return view('schedules.instructor_index');
+        }
+        //$data = Schedule::all();
+        //return view('schedules.index', compact('data'));
     }
 
     /**

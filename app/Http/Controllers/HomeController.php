@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SessionRegistration;
 use Illuminate\Http\Request;
 
 use App\User;

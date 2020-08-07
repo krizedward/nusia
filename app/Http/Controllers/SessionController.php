@@ -42,6 +42,10 @@ class SessionController extends Controller
      */
     public function index()
     {
+        if ($this->is_instructor()){
+            return view('sessions.instructor_index');
+        }
+        /*
         if($this->is_admin()) {
             $data = Session::all();
             return view('sessions.index', compact('data'));
@@ -51,6 +55,7 @@ class SessionController extends Controller
         } else {
             // Tidak memiliki hak akses.
         }
+        */
     }
 
     /**
