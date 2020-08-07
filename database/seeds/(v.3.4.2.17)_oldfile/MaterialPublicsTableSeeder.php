@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\MaterialPublic;
 
-class MaterialPublicsTableSeeder extends Seeder
+class oldMaterialPublicsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

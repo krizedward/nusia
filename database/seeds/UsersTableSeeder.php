@@ -12,7 +12,40 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\User::class, 3)
+        App\User::create([
+            'code' => 'ADM-001',
+            'first_name' => 'Nusantara Indonesia',
+            'last_name' => 'Admin',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('12345678'),
+            'roles' => 'Admin',
+            'citizenship' => 'Indonesia',
+            'image_profile' => null,
+        ]);
+
+        App\User::create([
+            'code' => 'INS-001',
+            'first_name' => 'Instructor',
+            'last_name' => '001',
+            'email' => 'instructor001@instructor.com',
+            'password' => Hash::make('12345678'),
+            'roles' => 'Instructor',
+            'citizenship' => 'Indonesia',
+            'image_profile' => null,
+        ]);
+
+        App\User::create([
+            'code' => 'STU-001',
+            'first_name' => 'Student',
+            'last_name' => '001',
+            'email' => 'student001@student.com',
+            'password' => Hash::make('12345678'),
+            'roles' => 'Student',
+            'citizenship' => 'Indonesia',
+            'image_profile' => null,
+        ]);
+
+        /*factory(App\User::class, 3)
             ->states('EmailVerifiedAt', 'CreatedAt')
             ->create()->make();
         factory(App\User::class, 1)
@@ -23,6 +56,6 @@ class UsersTableSeeder extends Seeder
             ->create()->make();
         factory(App\User::class, 9)
             ->states('Full', 'RolesAdmin')
-            ->create()->make();
+            ->create()->make();*/
     }
 }

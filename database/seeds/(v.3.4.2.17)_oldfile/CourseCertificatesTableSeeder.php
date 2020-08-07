@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\CourseCertificate;
 
-class CourseCertificatesTableSeeder extends Seeder
+class oldCourseCertificatesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

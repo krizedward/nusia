@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Instructor;
 use App\Models\Schedule;
 
-class InstructorsTableSeeder extends Seeder
+class oldInstructorsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
