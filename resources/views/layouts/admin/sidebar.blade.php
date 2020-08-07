@@ -78,7 +78,7 @@
                     <a href="#"><i class="fa fa-users"> </i><span> Nusia Instructors</span></a>
                 </li>
 
-                <li class="treeview">
+                <li class="treeview {{ set_active(['materials.private_index', 'materials.free_trial_index', 'materials.group_index', 'materials.create', 'materials.edit']) }}">
                     <a href="#">
                         <i class="fa fa-archive"></i> <span>Materials</span>
                         <span class="pull-right-container">
@@ -86,9 +86,9 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class="#"><a href="#"><i class="fa fa-circle-o"></i> Free Trial</a></li>
-                        <li class="#"><a href="#"><i class="fa fa-circle-o"></i> Private</a></li>
-                        {{--<li class="#"><a href="#"><i class="fa fa-circle-o"></i> Group</a></li>--}}
+                        <li class="#"><a href="{{ route('materials.free_trial_index') }}"><i class="fa fa-circle-o"></i> Free Trial</a></li>
+                        <li class="#"><a href="{{ route('materials.private_index') }}"><i class="fa fa-circle-o"></i> Private</a></li>
+                        {{--<li class="#"><a href="{{ route('materials.group_index') }}"><i class="fa fa-circle-o"></i> Group</a></li>--}}
                     </ul>
                 </li>
             @endif

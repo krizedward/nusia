@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Models\MaterialPublic;
 use App\Models\MaterialSession;
+use App\Models\CoursePackage;
 use App\Models\Course;
+use App\Models\CourseType;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -37,27 +39,95 @@ class MaterialController extends Controller
         return ($this->user_roles() == "Student")? 1 : 0;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function private_index()
     {
-        if($this->is_admin() || $this->is_instructor()) {
-            $material_publics = MaterialPublic::all();
-            $material_sessions = MaterialSession::all();
-            /*$material_sessions = null;
-            if(Auth::user()->instructor->schedules) {
-                if(Auth::user()->instructor->schedules->session) {
-                    if(Auth::user()->instructor->schedules->session->material_sessions) {
-                        $material_sessions = Auth::user()->instructor->schedules->material_sessions;
-                    }
-                }
-            }*/
-            return view('materials.index', compact('material_publics', 'material_sessions'));
+        $material_publics = MaterialPublic
+            ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
+            ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+            ->distinct()
+            ->where('course_types.count_student_min', 1)
+            ->where('course_types.count_student_max', 1)
+            ->select('material_publics.id', 'material_publics.code', 'material_publics.name', 'material_publics.description', 'material_publics.path', 'course_packages.title as course_package_title')
+            ->get();
+        $material_sessions = MaterialSession
+            ::join('sessions', 'material_sessions.session_id', 'sessions.id')
+            ->join('courses', 'sessions.course_id', 'courses.id')
+            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+            ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+            ->distinct()
+            ->where('course_types.count_student_min', 1)
+            ->where('course_types.count_student_max', 1)
+            ->select('material_sessions.id', 'material_sessions.code', 'material_sessions.name', 'material_sessions.description', 'material_sessions.path', 'courses.id as course_id', 'sessions.title as session_title', 'courses.title as course_title', 'course_packages.title as course_package_title')
+            ->get();
+
+        if($this->is_admin()) {
+            return view('materials.admin_private_index', compact('material_publics', 'material_sessions'));
+        } else if($this->is_instructor()) {
+            return view('materials.instructor_private_index', compact('material_publics', 'material_sessions'));
+        } else if($this->is_student()) {
+            return view('materials.student_private_index', compact('material_publics', 'material_sessions'));
         } else {
-            return redirect()->route('home');
+            return redirect('/');
+        }
+    }
+
+    public function free_trial_index()
+    {
+        $material_publics = MaterialPublic
+            ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
+            ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+            ->distinct()
+            ->where('course_types.name', 'LIKE', '%Trial%')
+            ->select('material_publics.id', 'material_publics.code', 'material_publics.name', 'material_publics.description', 'material_publics.path', 'course_packages.title as course_package_title')
+            ->get();
+        $material_sessions = MaterialSession
+            ::join('sessions', 'material_sessions.session_id', 'sessions.id')
+            ->join('courses', 'sessions.course_id', 'courses.id')
+            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+            ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+            ->distinct()
+            ->where('course_types.name', 'LIKE', '%Trial%')
+            ->select('material_sessions.id', 'material_sessions.code', 'material_sessions.name', 'material_sessions.description', 'material_sessions.path', 'courses.id as course_id', 'sessions.title as session_title', 'courses.title as course_title', 'course_packages.title as course_package_title')
+            ->get();
+
+        if($this->is_admin()) {
+            return view('materials.admin_free_trial_index', compact('material_publics', 'material_sessions'));
+        } else if($this->is_instructor()) {
+            return view('materials.instructor_free_trial_index', compact('material_publics', 'material_sessions'));
+        } else if($this->is_student()) {
+            return view('materials.student_free_trial_index', compact('material_publics', 'material_sessions'));
+        } else {
+            return redirect('/');
+        }
+    }
+
+    public function group_index()
+    {
+        $material_publics = MaterialPublic
+            ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
+            ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+            ->distinct()
+            ->where('course_types.count_student_max', '<>', 1)
+            ->select('material_publics.id', 'material_publics.code', 'material_publics.name', 'material_publics.description', 'material_publics.path', 'course_packages.title as course_package_title')
+            ->get();
+        $material_sessions = MaterialSession
+            ::join('sessions', 'material_sessions.session_id', 'sessions.id')
+            ->join('courses', 'sessions.course_id', 'courses.id')
+            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+            ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+            ->distinct()
+            ->where('course_types.count_student_max', '<>', 1)
+            ->select('material_sessions.id', 'material_sessions.code', 'material_sessions.name', 'material_sessions.description', 'material_sessions.path', 'courses.id as course_id', 'sessions.title as session_title', 'courses.title as course_title', 'course_packages.title as course_package_title')
+            ->get();
+
+        if($this->is_admin()) {
+            return view('materials.admin_group_index', compact('material_publics', 'material_sessions'));
+        } else if($this->is_instructor()) {
+            return view('materials.instructor_group_index', compact('material_publics', 'material_sessions'));
+        } else if($this->is_student()) {
+            return view('materials.student_group_index', compact('material_publics', 'material_sessions'));
+        } else {
+            return redirect('/');
         }
     }
 
