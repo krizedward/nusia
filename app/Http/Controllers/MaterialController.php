@@ -9,10 +9,13 @@ use App\Models\MaterialSession;
 use App\Models\CoursePackage;
 use App\Models\Course;
 use App\Models\CourseType;
+use App\Models\CourseRegistration;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 
 class MaterialController extends Controller
 {
@@ -41,13 +44,13 @@ class MaterialController extends Controller
 
     public function private_index()
     {
-        $material_publics = MaterialPublic
+        /*$material_publics = MaterialPublic
             ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
             ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
             ->distinct()
             ->where('course_types.count_student_min', 1)
             ->where('course_types.count_student_max', 1)
-            ->select('material_publics.id', 'material_publics.code', 'material_publics.name', 'material_publics.description', 'material_publics.path', 'course_packages.title as course_package_title')
+            ->select('material_publics.id', 'material_publics.code', 'material_publics.name', 'material_publics.description', 'material_publics.path', 'course_packages.title as course_package_title', 'courses.id as course_id')
             ->get();
         $material_sessions = MaterialSession
             ::join('sessions', 'material_sessions.session_id', 'sessions.id')
@@ -58,13 +61,76 @@ class MaterialController extends Controller
             ->where('course_types.count_student_min', 1)
             ->where('course_types.count_student_max', 1)
             ->select('material_sessions.id', 'material_sessions.code', 'material_sessions.name', 'material_sessions.description', 'material_sessions.path', 'courses.id as course_id', 'sessions.title as session_title', 'courses.title as course_title', 'course_packages.title as course_package_title')
-            ->get();
+            ->get();*/
 
         if($this->is_admin()) {
             return view('materials.admin_private_index', compact('material_publics', 'material_sessions'));
         } else if($this->is_instructor()) {
             return view('materials.instructor_private_index', compact('material_publics', 'material_sessions'));
         } else if($this->is_student()) {
+            $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
+            if(Schema::hasColumn('material_publics', 'temp_flag') == 0) {
+                Schema::table('material_publics', function(Blueprint $table) {
+                    $table->boolean('temp_flag')->default(0)->nullable();
+                });
+            }
+            if(Schema::hasColumn('material_sessions', 'temp_flag') == 0) {
+                Schema::table('material_sessions', function(Blueprint $table) {
+                    $table->boolean('temp_flag')->default(0)->nullable();
+                });
+            }
+            foreach($course_registrations as $course_registration) {
+                $mps = MaterialPublic::where('course_package_id', $course_registration->course->course_package_id)->get();
+                foreach($mps as $mp) {
+                    $mp->update([
+                        'temp_flag' => 1,
+                    ]);
+                }
+            }
+            $material_publics = MaterialPublic
+                ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
+                ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                ->distinct()
+                ->where('material_publics.temp_flag', 1)
+                ->where('course_types.count_student_min', 1)
+                ->where('course_types.count_student_max', 1)
+                ->select('material_publics.id', 'material_publics.code', 'material_publics.name', 'material_publics.description', 'material_publics.path', 'course_packages.title as course_package_title')
+                ->get();
+            foreach(MaterialPublic::all() as $mp) {
+                $mp->update([
+                    'temp_flag' => 0,
+                ]);
+            }
+            // ambil atribut course_registrations.courses.title dst.
+
+            foreach($course_registrations as $course_registration) {
+                $mss = MaterialSession
+                    ::join('sessions', 'material_sessions.session_id', 'sessions.id')
+                    ->where('sessions.course_id', $course_registration->course_id)
+                    ->get();
+                foreach($mss as $ms) {
+                    $ms->update([
+                        'temp_flag' => 1,
+                    ]);
+                }
+            }
+            $material_sessions = MaterialSession
+                ::join('sessions', 'material_sessions.session_id', 'sessions.id')
+                ->join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                ->distinct()
+                ->where('material_sessions.temp_flag', 1)
+                ->where('course_types.count_student_min', 1)
+                ->where('course_types.count_student_max', 1)
+                ->select('material_sessions.id', 'material_sessions.code', 'material_sessions.name', 'material_sessions.description', 'material_sessions.path', 'courses.id as course_id', 'sessions.title as session_title', 'courses.title as course_title', 'course_packages.title as course_package_title')
+                ->get();
+            foreach(MaterialSession::all() as $ms) {
+                $ms->update([
+                    'temp_flag' => 0,
+                ]);
+            }
+
             return view('materials.student_private_index', compact('material_publics', 'material_sessions'));
         } else {
             return redirect('/');
