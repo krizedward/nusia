@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\CourseType;
 
-class CourseTypesTableSeeder extends Seeder
+class oldCourseTypesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

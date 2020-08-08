@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\Rating;
 
-class RatingsTableSeeder extends Seeder
+class oldRatingsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\Session;
 
-class SessionsTableSeeder extends Seeder
+class oldSessionsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

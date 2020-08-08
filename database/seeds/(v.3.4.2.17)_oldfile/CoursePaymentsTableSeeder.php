@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\CoursePayment;
 
-class CoursePaymentsTableSeeder extends Seeder
+class oldCoursePaymentsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
