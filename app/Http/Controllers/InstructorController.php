@@ -44,8 +44,14 @@ class InstructorController extends Controller
      */
     public function index()
     {
-        $data = Instructor::all();
-        return view('users.instructors.index', compact('data'));
+        if ($this->is_student()){
+            //halaman yang menampilkan data instructor yang
+            // akan mengajar student yang terdaftar
+            return view('instructors.student_index');
+        }
+
+        //$data = Instructor::all();
+        //return view('users.instructors.index', compact('data'));
     }
 
     /**

@@ -45,6 +45,12 @@ class ScheduleController extends Controller
         if ($this->is_instructor()) {
           return view('schedules.instructor_index');
         }
+
+        if ($this->is_student()){
+            //halaman yang menampilkan kelompok jadwal yang di tentukan
+            // oleh instructor kepada student nusia
+            return view('schedules.student_index');
+        }
         //$data = Schedule::all();
         //return view('schedules.index', compact('data'));
     }

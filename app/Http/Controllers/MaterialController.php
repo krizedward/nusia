@@ -40,6 +40,13 @@ class MaterialController extends Controller
         return ($this->user_roles() == "Student")? 1 : 0;
     }
 
+    public function index()
+    {
+        if ($this->is_student()){
+            return view('materials.student_index');
+        }
+    }
+
     public function private_index()
     {
         /*$material_publics = MaterialPublic
@@ -184,7 +191,7 @@ class MaterialController extends Controller
     public function create()
     {
         if($this->is_admin() || $this->is_instructor()) {
-            
+
             return view('materials.create');
         } else {
             // Tidak memiliki hak akses.
