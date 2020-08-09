@@ -120,7 +120,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer text-center">
-                    <a href="{{ route('show.instructor') }}" class="uppercase">View All Instructor</a>
+                    <a href="#  " class="uppercase">View All Instructor</a>
                 </div>
                 <!-- /.box-footer -->
             </div>
@@ -154,7 +154,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer text-center">
-                    <a href="{{ route('material.student') }}" class="uppercase">View All Data</a>
+                    <a href="#" class="uppercase">View All Data</a>
                 </div>
                 <!-- /.box-footer -->
             </div>

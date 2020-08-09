@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Models\Instructor;
 use App\Models\Student;
+use App\Models\Session;
+use App\Models\MaterialSession;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
