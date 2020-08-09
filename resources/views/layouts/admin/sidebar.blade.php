@@ -199,9 +199,71 @@
             @endif
             {{-- End Instructor --}}
             @if(Auth::user()->roles == 'Admin')
-            <!-- Head_Navigasi -->
+                <!-- Head_Navigasi -->
                 <li class="header">ADMIN NAVIGATION</li>
-                <!-- Navigasi_Menu -->
+                <li class="#">
+                    <a href="#"><i class="fa fa-users"> </i><span> Student</span></a>
+                </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-users"> </i><span> Instructor</span></a>
+                </li>
+                <!-- Head_Navigasi -->
+                <li class="header">COURSES NAVIGATION</li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> course_certificates</span></a>
+                </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> course_level_details</span></a>
+                </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> course_levels</span></a>
+                </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> course_packages</span></a>
+                </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> course_payments</span></a>
+                </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> course_registrations</span></a>
+                </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> course_types</span></a>
+                </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> courses</span></a>
+                </li>
+                <!-- Head_Navigasi -->
+                <li class="header">SESSIONS NAVIGATION</li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> sessions</span></a>
+                </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> session_registrations</span></a>
+                </li>
+                <li class="header">MATERIALS NAVIGATION</li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> material_publics</span></a>
+                </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> material_sessions</span></a>
+                </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> material_types</span></a>
+                </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> materials</span></a>
+                </li>
+                <li class="header">OTHER</li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> ratings</span></a>
+                </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> schedules</span></a>
+                </li>
+                <!--Navigasi_Menu_OLD
+                <li class="header">OLD NAVIGATION</li>
+
                 <li class="{{ set_active(['students.index','students.create','students.edit','instructors.index','instructors.create','instructors.edit',]) }} treeview">
                     <a href="#">
                         <i class="fa fa-user"></i> <span>User</span>
@@ -303,7 +365,7 @@
                         <i class="fa fa-calendar-check-o"></i> <span>Session</span>
                     </a>
                 </li>
-            <!-- End_Navigasi_Menu -->
+            End_Navigasi_Menu -->
             @endif
         </ul>
     </section>
