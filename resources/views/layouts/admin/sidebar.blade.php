@@ -146,15 +146,21 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li class="#"><a href="{{ route('sessions.index') }}"><i class="fa fa-circle-o"></i> Free Trial</a></li>
+                            <li class="#">
+                                <a href="{{ route('sessions.index') }}"><i class="fa fa-circle-o"></i> Private</a>
+                            </li>
+                            <li class="#">
+                                <a href="{{ route('sessions.index') }}"><i class="fa fa-circle-o"></i> Group</a>
+                            </li>
                             {{--
+                            <li class="#"><a href="{{ route('sessions.index') }}"><i class="fa fa-circle-o"></i> Free Trial</a></li>
                             <li class="#"><a href="#"><i class="fa fa-circle-o"></i> Private</a></li>
                             <li class="#"><a href="#"><i class="fa fa-circle-o"></i> Group</a></li>--}}
                         </ul>
                     </li>
 
                     <li class="#">
-                        <a href="#">
+                        <a href="{{ route('materials.index') }}">
                             <i class="fa fa-archive"> </i><span>Material Instructor</span>
                         </a>
                     </li>

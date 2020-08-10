@@ -45,6 +45,10 @@ class MaterialController extends Controller
         if ($this->is_student()){
             return view('materials.student_index');
         }
+
+        if ($this->is_instructor()){
+            return view('materials.instructor_index');
+        }
     }
 
     public function private_index()
