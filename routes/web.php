@@ -127,7 +127,7 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('/session/private', 'SessionController@private')->name('session.private');
     Route::get('/session/group', 'SessionController@group')->name('session.group');
 
-    Route::get('/materials', 'MaterialController@index')->name('materials.index');
+    Route::get('/materials/{course_type?}', 'MaterialController@index')->name('materials.index');
     Route::get('/materials/create', 'MaterialController@create')->name('materials.create');
 
     //halaman student

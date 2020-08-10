@@ -93,13 +93,13 @@
                     </a>
                     <ul class="treeview-menu">
                         <li class="#">
-                            <a href="{{ route('materials.index') }}"><i class="fa fa-circle-o"></i> Free Trial</a>
+                            <a href="{{ route('materials.index', ['Free Trial']) }}"><i class="fa fa-circle-o"></i> Free Trial</a>
                         </li>
                         <!--li class="#">
-                            <a href="{{ route('materials.index') }}"><i class="fa fa-circle-o"></i> Private</a>
+                            <a href="{{ route('materials.index', ['Private']) }}"><i class="fa fa-circle-o"></i> Private</a>
                         </li-->
                         <!--li class="#">
-                            <a href="{{ route('materials.index') }}"><i class="fa fa-circle-o"></i> Group</a>
+                            <a href="{{ route('materials.index', ['Group']) }}"><i class="fa fa-circle-o"></i> Group</a>
                         </li-->
                         {{--
                         <li class="#">
