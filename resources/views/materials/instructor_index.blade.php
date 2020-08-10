@@ -18,8 +18,8 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#activity" data-toggle="tab">Free Trial</a></li>
-                    <li><a href="#private" data-toggle="tab">Private</a></li>
-                    <li><a href="#group" data-toggle="tab">Group</a></li>
+                    <!--li><a href="#private" data-toggle="tab">Private</a></li-->
+                    <!--li><a href="#group" data-toggle="tab">Group</a></li-->
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">

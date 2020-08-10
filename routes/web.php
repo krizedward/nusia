@@ -23,8 +23,6 @@ Route::group(['middleware'=>'auth'], function() {
 
 	Route::get('/home', 'HomeController@index')->name('home');
 
-        // [NEW] YYYY_MM_DD: 2020_08_07
-        Route::redirect('/material', '/');
         Route::get('/material/private', 'MaterialController@private_index')->name('materials.private_index');
         Route::get('/material/free-trial', 'MaterialController@free_trial_index')->name('materials.free_trial_index');
         Route::get('/material/group', 'MaterialController@group_index')->name('materials.group_index');
@@ -33,6 +31,7 @@ Route::group(['middleware'=>'auth'], function() {
         Route::get('/material/edit/{id}', 'MaterialController@edit')->name('materials.edit');
         Route::put('/material/edit/{id}', 'MaterialController@update')->name('materials.update');
         Route::delete('/material/destroy/{id}', 'MaterialController@destroy')->name('materials.destroy');
+        Route::get('/material/download/{id}', 'MaterialController@download')->name('materials.download');
 
         // Apabila berencana membuat routing
         // selain Route::resource(s) (pada keyword yang sama),

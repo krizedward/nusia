@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-success alert-dismissible">
-                <h4><i class="icon fa fa-book"></i> Notification!</h4>
+                <h4><i class="icon fa fa-book"></i> Trial Class Available!</h4>
                 Nusia akan memberikan kesempatan 3 kelas gratis dengan memilih kelas bebas.
             </div>
         </div>
@@ -144,7 +144,7 @@
                             <div class="product-info">
                                 <div class="product-title">{{ $dt->session->course->course_level }} - {{ $dt->session->session_meet }}</div>
                                 <span class="product-description">
-                                    <a target="_blank" rel="noopener noreferrer" href="{{ route('material.download',$dt->id) }}">Download</a>
+                                    <a target="_blank" rel="noopener noreferrer" href="{{ route('materials.download',$dt->id) }}">Download</a>
                                 </span>
                             </div>
                         </li>

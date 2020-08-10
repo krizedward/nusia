@@ -48,7 +48,6 @@ class HomeController extends Controller
     public function index()
     {
         if($this->is_admin()) {
-
             $student = Student::all();
             $instructor = Instructor::all();
             return view('dashboard.admin_index',compact('student','instructor'));

@@ -12,7 +12,7 @@
     </ol>
 @stop
 
-@section('contents')
+@section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="nav-tabs-custom">
@@ -131,7 +131,7 @@
 @stop
 
 {{--contoh-lain-dari-material -> bisa diganti --}}
-@section('content')
+@section('contents')
     <div class="row">
         <div class="col-md-12">
             <div class="nav-tabs-custom">
