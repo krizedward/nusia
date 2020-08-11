@@ -12,9 +12,16 @@ class CourseCertificatesTableSeeder extends Seeder
      */
     public function run()
     {
+        CourseCertificate::create([
+            'code' => 'CCR-001',
+            'course_registration_id' => '1',
+            'path' => 'test',
+        ]);
+        /*
         factory(App\Models\CourseCertificate::class, 200)
             ->states('Randomized')
             ->create()
             ->make();
+        */
     }
 }

@@ -12,9 +12,16 @@ class CourseRegistrationsTableSeeder extends Seeder
      */
     public function run()
     {
+        CourseRegistration::create([
+            'code' => 'CRG-001',
+            'course_id' => 1,
+            'student_id' => 1,
+        ]);
+        /*
         factory(App\Models\CourseRegistration::class, 450)
             ->states('Randomized')
             ->create()
             ->make();
+        */
     }
 }
