@@ -52,6 +52,7 @@ class MaterialController extends Controller
                     $mps = MaterialPublic::where('course_package_id', $course_registration->course->course_package_id)->get();
                     foreach($mps as $mp) {
                         array_push($arr, $mp->id);
+                        array_unique($arr);
                     }
                 }
                 $material_publics = MaterialPublic
@@ -72,6 +73,7 @@ class MaterialController extends Controller
                         ->get();
                     foreach($mss as $ms) {
                         array_push($arr, $ms->id);
+                        array_unique($arr);
                     }
                 }
                 $material_sessions = MaterialSession
@@ -96,6 +98,7 @@ class MaterialController extends Controller
                     $mps = MaterialPublic::where('course_package_id', $course_registration->course->course_package_id)->get();
                     foreach($mps as $mp) {
                         array_push($arr, $mp->id);
+                        array_unique($arr);
                     }
                 }
                 $material_publics = MaterialPublic
@@ -117,6 +120,7 @@ class MaterialController extends Controller
                         ->get();
                     foreach($mss as $ms) {
                         array_push($arr, $ms->id);
+                        array_unique($arr);
                     }
                 }
                 $material_sessions = MaterialSession
@@ -142,6 +146,7 @@ class MaterialController extends Controller
                     $mps = MaterialPublic::where('course_package_id', $course_registration->course->course_package_id)->get();
                     foreach($mps as $mp) {
                         array_push($arr, $mp->id);
+                        array_unique($arr);
                     }
                 }
                 $material_publics = MaterialPublic
@@ -162,6 +167,7 @@ class MaterialController extends Controller
                         ->get();
                     foreach($mss as $ms) {
                         array_push($arr, $ms->id);
+                        array_unique($arr);
                     }
                 }
                 $material_sessions = MaterialSession
