@@ -139,7 +139,7 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li class="#"><a href="{{ route('schedules.index') }}"><i class="fa fa-circle-o"></i> Free Trial</a></li>
+                            <li class="#"><a href="{{ route('sessions.index') }}"><i class="fa fa-circle-o"></i> Free Trial</a></li>
                             <!--li class="#"><a href="{{ route('schedules.index') }}"><i class="fa fa-circle-o"></i> Private</a></li-->
                             <!--li class="#"><a href="{{ route('schedules.index') }}"><i class="fa fa-circle-o"></i> Group</a></li-->
                             {{--

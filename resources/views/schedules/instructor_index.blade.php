@@ -12,7 +12,8 @@
     </ol>
 @stop
 
-@section('content')
+{{--Schedule di Sidebar--}}
+@section('content-old')
     <div class="row">
         <div class="col-md-3">
             <div class="box">
@@ -72,4 +73,8 @@
             </div>
         </div>
     </div>
+@stop
+{{--Update--}}
+@section('content')
+
 @stop
