@@ -90,7 +90,7 @@
                                                     <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('materials.download', ['Public', $mp->id]) }}">Download</a></td>
                                                   @else
                                                     <td><i>Not Available</i></td>
-                                                    <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Download</a></td>
+                                                    <td><a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default disabled" href="#">Download</a></td>
                                                   @endif
                                                 </tr>
                                               @endforeach
@@ -151,7 +151,7 @@
                                                   <tr>
                                                     <td>{{ $i++ }}</td>
                                                     @if($s->title)
-                                                      <td>{{ $s->it }}</td>
+                                                      <td>{{ $s->title }}</td>
                                                     @elseif($s->course->title)
                                                       <td>{{ $s->course->title }}</td>
                                                     @else
@@ -168,7 +168,7 @@
                                                       <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('materials.download', ['Session', $ms->id]) }}">Download</a></td>
                                                     @else
                                                       <td><i>Not Available</i></td>
-                                                      <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Download</a></td>
+                                                      <td><a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default disabled" href="#">Download</a></td>
                                                     @endif
                                                   </tr>
                                                 @endforeach
