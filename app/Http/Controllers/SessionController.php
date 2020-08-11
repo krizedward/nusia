@@ -47,14 +47,10 @@ class SessionController extends Controller
         }
 
         if ($this->is_instructor()){
-            return view('sessions.instructor_index');
+            $data = Session::all();
+            return view('sessions.instructor_index', compact('data'));
         }
 
-        if ($this->is_student()){
-            //halaman yang menampilkan detail jadwal yang di tentukan
-            // oleh instructor kepada student nusia
-            return view('sessions.student_index');
-        }
         /*
         if($this->is_admin()) {
             $data = Session::all();

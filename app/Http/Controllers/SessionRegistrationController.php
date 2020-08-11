@@ -45,6 +45,19 @@ class SessionRegistrationController extends Controller
         if ($this->is_admin()){
             return view('session_registrations.admin_index');
         }
+
+        if ($this->is_instructor()){
+            $data = SessionRegistration::all();
+            return view('session_registrations.instructor_index',compact('data'));
+        }
+
+        if ($this->is_student()){
+            //halaman yang menampilkan detail jadwal yang di tentukan
+            // oleh instructor kepada student nusia
+            $data = SessionRegistration::all();
+            return view('session_registrations.student_index',compact('data'));
+        }
+
         //$data = SessionRegistration::all();
         //return view('registrations.sessions.index', compact('data'));
     }
@@ -106,6 +119,13 @@ class SessionRegistrationController extends Controller
 
         $data = SessionRegistration::all();
         return view('registrations.sessions.index', compact('data'));
+    }
+
+    public function show($a, $b)
+    {
+        if ($this->is_instructor()){
+            return view('session_registrations.instructor_show');
+        }
     }
 
     /**

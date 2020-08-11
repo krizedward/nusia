@@ -57,14 +57,20 @@
                         </tr>
                         </thead>
                         <tbody>
+                        {{--Menampilkan dara dari SessionRegistrattionController--}}
+                        @foreach($data as $dt)
                         <tr>
-                            <td>FR001</td>
-                            <td>Free</td>
-                            <td>Trial</td>
-                            <td>20 August 2020</td>
-                            <td>No Link</td>
-                            <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Detail</a></td>
+                            <td>{{ $dt->code }}</td>
+                            <td>{{ $dt->course_registration->course->course_package->course_level->name }}</td>
+                            <td>{{ $dt->course_registration->course->course_package->course_type->name }}</td>
+                            <td>{{ $dt->registration_time }}</td>
+                            {{--Status Jika Ada Link maka muncul Have Link jik tidak no link--}}
+                            <td>{{ __('Have Link') }}</td>
+                            <td>
+                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Detail</a>
+                            </td>
                         </tr>
+                        @endforeach
                         <tr>
                             <td>FR002</td>
                             <td>Free</td>

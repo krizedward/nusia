@@ -127,26 +127,20 @@
                                 <th style="width: 10px">Code</th>
                                 <th>Course</th>
                                 <th>Level</th>
-                                <th>Slot</th>
-                                <th>Session</th>
+                                <th>Description</th>
                                 <th style="width: 40px">Action</th>
                             </tr>
+                            @foreach($data as $dt)
                             <tr>
-                                <td>SREG001</td>
-                                <td>Novice</td>
-                                <td>Low</td>
-                                <td>2 Student</td>
-                                <td>2 Session</td>
-                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Detail</a></td>
+                                <td>{{ $dt->code }}</td>
+                                <td>{{ $dt->course->course_package->course_level->name }}</td>
+                                <td>{{ $dt->course->course_package->course_type->name }}</td>
+                                <td>{{ $dt->description }}</td>
+                                <td>
+                                    <a class="btn btn-flat btn-xs btn-success" href="{{ route('session_registrations.show',[1,1]) }}">Detail</a>
+                                </td>
                             </tr>
-                            <tr>
-                                <td>SREG002</td>
-                                <td>Novice</td>
-                                <td>Low</td>
-                                <td>2 Student</td>
-                                <td>3 Session</td>
-                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Detail</a></td>
-                            </tr>
+                            @endforeach
                         </table>
                     </div>
                 </form>

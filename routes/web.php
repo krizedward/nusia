@@ -80,11 +80,12 @@ Route::group(['middleware'=>'auth'], function() {
 
         // menggunakan nested resources: /sessions/{session}/registrations/{user}
         Route::resource('sessions.registrations', 'SessionRegistrationController')
-            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
+            ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])
             ->names([
                 'index'   => 'session_registrations.index',
                 'create'  => 'session_registrations.create',
                 'store'   => 'session_registrations.store',
+                'show'   => 'session_registrations.show',
                 'edit'    => 'session_registrations.edit',
                 'update'  => 'session_registrations.update',
                 'destroy' => 'session_registrations.destroy'
