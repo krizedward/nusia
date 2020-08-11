@@ -4,7 +4,7 @@
 
 @include('layouts.css_and_js.table')
 
-@section('content-header')
+@section('content-header-old')
     <h1>Schedule Group</h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
@@ -73,8 +73,4 @@
             </div>
         </div>
     </div>
-@stop
-{{--Update--}}
-@section('content')
-
 @stop
