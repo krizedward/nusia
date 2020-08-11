@@ -59,47 +59,6 @@
             <!-- /.box -->
         </div>
         <!-- /.col -->
-
-        <div class="col-md-4">
-            <!-- Session-Course Reminder -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Reminder for course sessions</h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <ul class="products-list product-list-in-box">
-                        @foreach($session as $dt)
-                        <li class="item">
-                            <div class="product-img">
-                                <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="Product Image">
-                            </div>
-                            <div class="product-info">
-                                <div class="product-title">{{ $dt->course->course_level }} - {{ $dt->session_meet }}
-                                    <span class="label label-info pull-right">{{ date('d M Y', strtotime($dt->schedule->schedule_time)) }}</span></div>
-                                <span class="product-description">
-                                    Note : don't forget to join class.
-                                </span>
-                            </div>
-                        </li>
-                        <!-- /.item -->
-                        @endforeach
-                    </ul>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer text-center">
-                    <a href="#" class="uppercase">View All Data</a>
-                </div>
-                <!-- /.box-footer -->
-            </div>
-            <!-- /.box -->
-        </div>
-        <!-- /.col -->
-    </div>
-    <!-- /.row -->
-
-    <!-- Main row -->
-    <div class="row">
         <div class="col-md-4">
             <!-- USERS LIST -->
             <div class="box box-danger">
@@ -110,10 +69,10 @@
                 <div class="box-body no-padding">
                     <ul class="users-list clearfix">
                         @foreach($session as $dt)
-                        <li>
-                            <img src="{{ asset('adminlte/dist/img/user1-128x128.jpg') }}" alt="User Image">
-                            <span class="users-list-name" href="#">{{ $dt->schedule->instructor->user->first_name }}</span>
-                        </li>
+                            <li>
+                                <img src="{{ asset('adminlte/dist/img/user1-128x128.jpg') }}" alt="User Image">
+                                <span class="users-list-name" href="#">{{ $dt->schedule->instructor->user->first_name }}</span>
+                            </li>
                         @endforeach
                     </ul>
                     <!-- /.users-list -->
@@ -137,18 +96,58 @@
                 <div class="box-body">
                     <ul class="products-list product-list-in-box">
                         @foreach($material as $dt)
-                        <li class="item">
-                            <div class="product-img">
-                                <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="Product Image">
-                            </div>
-                            <div class="product-info">
-                                <div class="product-title">{{ $dt->session->course->course_level }} - {{ $dt->session->session_meet }}</div>
-                                <span class="product-description">
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="Product Image">
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-title">{{ $dt->session->course->course_level }} - {{ $dt->session->session_meet }}</div>
+                                    <span class="product-description">
                                     <a target="_blank" rel="noopener noreferrer" href="{{ route('materials.download',$dt->id) }}">Download</a>
                                 </span>
-                            </div>
-                        </li>
-                        <!-- /.item -->
+                                </div>
+                            </li>
+                            <!-- /.item -->
+                        @endforeach
+                    </ul>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                    <a href="#" class="uppercase">View All Data</a>
+                </div>
+                <!-- /.box-footer -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+    <!-- Main row -->
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Session-Course Reminder -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Reminder for course sessions</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <ul class="products-list product-list-in-box">
+                        @foreach($session as $dt)
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="Product Image">
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-title">{{ $dt->course->course_level }} - {{ $dt->session_meet }}
+                                        <span class="label label-info pull-right">{{ date('d M Y', strtotime($dt->schedule->schedule_time)) }}</span></div>
+                                    <span class="product-description">
+                                    Note : don't forget to join class.
+                                </span>
+                                </div>
+                            </li>
+                            <!-- /.item -->
                         @endforeach
                     </ul>
                 </div>
