@@ -44,13 +44,39 @@
                         <table class="table table-bordered">
                             <tr>
                                 <th style="width: 10px">Code</th>
-                                <th>Course</th>
+                                <th>Course Name</th>
                                 <th>Level</th>
                                 <th>Slot</th>
                                 <th>Session</th>
                                 <th style="width: 40px">Action</th>
                             </tr>
-                            <tr>
+                            @foreach($course_registrations as $cr)
+                              <tr>
+                                @if($cr->code)
+                                  <td>{{ $cr->code }}</td>
+                                @else
+                                  <td><i>N/A</i></td>
+                                @endif
+                                @if($cr->course->title)
+                                  <td>{{ $cr->course->title }}</td>
+                                @else
+                                  <td>{{ $cr->course->course_package->title }}</td>
+                                @endif
+                                <td>{{ $cr->course->course_package->course_level->name.' '.$cr->course->course_package->course_level_detail->name }}</td>
+                                @if($cr->course->course_package->course_type->count_student_max)
+                                  <td>{{ $cr->course->course_package->course_type->count_student_max }}</td>
+                                @else
+                                  <td><i>N/A</i></td>
+                                @endif
+                                @if($cr->course->course_package->count_session)
+                                  <td>{{ $cr->course->course_package->count_session }}</td>
+                                @else
+                                  <td><i>N/A</i></td>
+                                @endif
+                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Detail</a></td>
+                              </tr>
+                            @endforeach
+                            <!--tr>
                                 <td>SREG001</td>
                                 <td>Novice</td>
                                 <td>Low</td>
@@ -65,7 +91,7 @@
                                 <td>2 Student</td>
                                 <td>3 Session</td>
                                 <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Detail</a></td>
-                            </tr>
+                            </tr-->
                         </table>
                     </div>
                 </form>

@@ -121,6 +121,7 @@ Route::group(['middleware'=>'auth'], function() {
 
     /*link custom*/
     //halaman instructor
+    Route::get('/schedules/{course_type?}', 'ScheduleController@index')->name('schedules.index');
     Route::get('/schedules/private','ScheduleController@private')->name('schedules.private');
     Route::get('/schedules/group','ScheduleController@group')->name('schedules.group');
 

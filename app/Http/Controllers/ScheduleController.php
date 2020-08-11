@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Schedule;
+use App\Models\CourseRegistration;
+use App\Models\Course;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -40,7 +42,7 @@ class ScheduleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($course_type = 'Free Trial')
     {
         if ($this->is_instructor()) {
           return view('schedules.instructor_index');
@@ -49,7 +51,130 @@ class ScheduleController extends Controller
         if ($this->is_student()){
             //halaman yang menampilkan kelompok jadwal yang di tentukan
             // oleh instructor kepada student nusia
-            return view('schedules.student_index');
+
+            if($course_type == 'Free Trial') {
+                $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
+                //dd($course_registrations);
+
+                $courses = Course
+                    ::join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                    ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                    ->distinct()
+                    ->where('course_types.name', 'LIKE', '%Trial%')
+                    ->select('courses.id')
+                    ->get();
+                //dd($courses);
+
+                $arr = [];
+                foreach($course_registrations as $course_registration) {
+                    foreach($courses as $course) {
+                        if($course_registration->course_id == $course->id) {
+                            array_push($arr, $course_registration->course_id);
+                            array_unique($arr);
+                            break;
+                        }
+                    }
+                }
+                $course_registrations = $course_registrations->whereIn('course_id', $arr);
+                //dd($course_registrations);
+
+                return view('schedules.student_index', compact('course_registrations'));
+            } else if($course_type == 'Private') {
+                $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
+                //dd($course_registrations);
+
+                $arr = [];
+                foreach($course_registrations as $course_registration) {
+                    $mps = MaterialPublic::where('course_package_id', $course_registration->course->course_package_id)->get();
+                    foreach($mps as $mp) {
+                        array_push($arr, $mp->id);
+                    }
+                }
+                $material_publics = MaterialPublic
+                    ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
+                    ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                    ->distinct()
+                    ->whereIn('material_publics.id', $arr)
+                    ->where('course_types.count_student_min', 1)
+                    ->where('course_types.count_student_max', 1)
+                    ->select('material_publics.id')
+                    ->get();
+                //dd($material_publics);
+
+                $arr = [];
+                foreach($course_registrations as $course_registration) {
+                    $mss = MaterialSession
+                        ::join('sessions', 'material_sessions.session_id', 'sessions.id')
+                        ->where('sessions.course_id', $course_registration->course_id)
+                        ->get();
+                    foreach($mss as $ms) {
+                        array_push($arr, $ms->id);
+                    }
+                }
+                $material_sessions = MaterialSession
+                    ::join('sessions', 'material_sessions.session_id', 'sessions.id')
+                    ->join('courses', 'sessions.course_id', 'courses.id')
+                    ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                    ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                    ->distinct()
+                    ->whereIn('material_sessions.id', $arr)
+                    ->where('course_types.count_student_min', 1)
+                    ->where('course_types.count_student_max', 1)
+                    ->select('material_sessions.id')
+                    ->get();
+                //dd($material_sessions);
+
+                return view('schedules.student_index', compact('course_registrations'));
+            } else if($course_type == 'Group') {
+                $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
+                //dd($course_registrations);
+
+                $arr = [];
+                foreach($course_registrations as $course_registration) {
+                    $mps = MaterialPublic::where('course_package_id', $course_registration->course->course_package_id)->get();
+                    foreach($mps as $mp) {
+                        array_push($arr, $mp->id);
+                    }
+                }
+                $material_publics = MaterialPublic
+                    ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
+                    ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                    ->distinct()
+                    ->whereIn('material_publics.id', $arr)
+                    ->where('course_types.count_student_max', '<>', 1)
+                    ->select('material_publics.id')
+                    ->get();
+                //dd($material_publics);
+
+                $arr = [];
+                foreach($course_registrations as $course_registration) {
+                    $mss = MaterialSession
+                        ::join('sessions', 'material_sessions.session_id', 'sessions.id')
+                        ->where('sessions.course_id', $course_registration->course_id)
+                        ->get();
+                    foreach($mss as $ms) {
+                        array_push($arr, $ms->id);
+                    }
+                }
+                $material_sessions = MaterialSession
+                    ::join('sessions', 'material_sessions.session_id', 'sessions.id')
+                    ->join('courses', 'sessions.course_id', 'courses.id')
+                    ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                    ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                    ->distinct()
+                    ->whereIn('material_sessions.id', $arr)
+                    ->where('course_types.count_student_max', '<>', 1)
+                    ->select('material_sessions.id')
+                    ->get();
+                //dd($material_sessions);
+
+                return view('schedules.student_index', compact('course_registrations'));
+            } else {
+                return redirect('/');
+            }
+
+            $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
+            return view('schedules.student_index', compact('course_registrations'));
         }
         //$data = Schedule::all();
         //return view('schedules.index', compact('data'));
