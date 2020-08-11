@@ -10,6 +10,7 @@ use App\Models\Instructor;
 use App\Models\Student;
 use App\Models\Session;
 use App\Models\MaterialSession;
+use App\Models\CourseRegistration;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -61,7 +62,8 @@ class HomeController extends Controller
         if($this->is_student()) {
             $session = Session::all();
             $material = MaterialSession::all();
-            return view('dashboard.student_index', compact('session','material'));
+            $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
+            return view('dashboard.student_index', compact('session','material','course_registrations'));
         }
     }
 
