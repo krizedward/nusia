@@ -42,9 +42,9 @@ class RatingController extends Controller
      */
     public function index()
     {
-        if($this->is_admin() || $this->is_instructor()) {
-            $data = Rating::all();
-            return view('ratings.index', compact('data'));
+        if($this->is_admin()) {
+            //$data = Rating::all();
+            return view('ratings.admin_index');
         } else {
             // Tidak memiliki hak akses.
         }

@@ -42,8 +42,11 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $data = Course::all();
-        return view('courses.index', compact('data'));
+        if ($this->is_admin()){
+            return view('courses.admin_index');
+        }
+        //$data = Course::all();
+        //return view('courses.index', compact('data'));
     }
 
     /**

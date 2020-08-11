@@ -42,8 +42,11 @@ class CourseLevelDetailController extends Controller
      */
     public function index()
     {
-        $data = CourseLevelDetail::all();
-        return view('courses.level_details.index', compact('data'));
+        if ($this->is_admin()){
+          return view('course_level_details.admin_index');
+        }
+        //$data = CourseLevelDetail::all();
+        //return view('courses.level_details.index', compact('data'));
     }
 
     /**

@@ -42,8 +42,9 @@ class CourseTypeController extends Controller
      */
     public function index()
     {
-        $data = CourseType::all();
-        return view('courses.types.index', compact('data'));
+        return view('course_types.admin_index');
+        //$data = CourseType::all();
+        //return view('courses.types.index', compact('data'));
     }
 
     /**

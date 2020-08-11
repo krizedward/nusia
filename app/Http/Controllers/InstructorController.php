@@ -50,6 +50,10 @@ class InstructorController extends Controller
             return view('instructors.student_index');
         }
 
+        if ($this->is_admin()){
+            return view('instructors.admin_index');
+        }
+
         //$data = Instructor::all();
         //return view('users.instructors.index', compact('data'));
     }

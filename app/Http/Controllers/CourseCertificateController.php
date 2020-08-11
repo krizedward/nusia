@@ -42,9 +42,9 @@ class CourseCertificateController extends Controller
      */
     public function index()
     {
-        if($this->is_admin() || $this->is_instructor()) {
+        if($this->is_admin()) {
             $data = CourseCertificate::all();
-            return view('courses.certificates.index', compact('data'));
+            return view('course_certificates.admin_index', compact('data'));
         } else if($this->is_student()) {
             $data = CourseCertificate::all();
             return view('courses.certificates.index', compact('data'));

@@ -42,8 +42,11 @@ class CoursePackageController extends Controller
      */
     public function index()
     {
-        $data = CoursePackage::all();
-        return view('courses.packages.index', compact('data'));
+        if ($this->is_admin()){
+            return view('course_packages.admin_index');
+        }
+        //$data = CoursePackage::all();
+        //return view('courses.packages.index', compact('data'));
     }
 
     /**

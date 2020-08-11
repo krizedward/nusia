@@ -47,8 +47,11 @@ class MaterialPublicController extends Controller
      */
     public function index()
     {
-        $data = MaterialPublic::all();
-        return view('materials.publics.index', compact('data'));
+        if ($this->is_admin()){
+            return view('material_publics.admin_index');
+        }
+        //$data = MaterialPublic::all();
+        //return view('materials.publics.index', compact('data'));
     }
 
     /**

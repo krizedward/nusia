@@ -46,8 +46,12 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $data = Student::all();
-        return view('users.students.index', compact('data'));
+        if ($this->is_admin()) {
+            $data = Student::all();
+            return view('students.admin_index', compact('data'));
+        }
+        //$data = Student::all();
+        //return view('users.students.index', compact('data'));
     }
 
     /**

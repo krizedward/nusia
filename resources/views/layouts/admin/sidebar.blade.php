@@ -221,24 +221,24 @@
                 <!-- Head_Navigasi -->
                 <li class="header">ADMIN NAVIGATION</li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-users"> </i><span> Student</span></a>
+                    <a href="{{ route('students.index') }}"><i class="fa fa-users"> </i><span> Student</span></a>
                 </li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-users"> </i><span> Instructor</span></a>
+                    <a href="{{ route('instructors.index') }}"><i class="fa fa-users"> </i><span> Instructor</span></a>
                 </li>
                 <!-- Head_Navigasi -->
                 <li class="header">COURSES NAVIGATION</li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> course_certificates</span></a>
+                    <a href="{{ route('course_certificates.index') }}"><i class="fa fa-book"> </i><span> course_certificates</span></a>
                 </li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> course_level_details</span></a>
+                    <a href="{{ route('course_level_details.index') }}"><i class="fa fa-book"> </i><span> course_level_details</span></a>
                 </li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> course_levels</span></a>
+                    <a href="{{ route('course_levels.index') }}"><i class="fa fa-book"> </i><span> course_levels</span></a>
                 </li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> course_packages</span></a>
+                    <a href="{{ route('course_packages.index') }}"><i class="fa fa-book"> </i><span> course_packages</span></a>
                 </li>
                 <li class="#">
                     <a href="#"><i class="fa fa-book"> </i><span> course_payments</span></a>
@@ -247,38 +247,38 @@
                     <a href="#"><i class="fa fa-book"> </i><span> course_registrations</span></a>
                 </li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> course_types</span></a>
+                    <a href="{{ route('course_types.index') }}"><i class="fa fa-book"> </i><span> course_types</span></a>
                 </li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> courses</span></a>
+                    <a href="{{ route('courses.index') }}"><i class="fa fa-book"> </i><span> courses</span></a>
                 </li>
                 <!-- Head_Navigasi -->
                 <li class="header">SESSIONS NAVIGATION</li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> sessions</span></a>
+                    <a href="{{ route('sessions.index') }}"><i class="fa fa-book"> </i><span> sessions</span></a>
                 </li>
                 <li class="#">
                     <a href="#"><i class="fa fa-book"> </i><span> session_registrations</span></a>
                 </li>
                 <li class="header">MATERIALS NAVIGATION</li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> material_publics</span></a>
+                    <a href="{{ route('material_publics.index') }}"><i class="fa fa-book"> </i><span> material_publics</span></a>
                 </li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> material_sessions</span></a>
+                    <a href="{{ route('material_sessions.index') }}"><i class="fa fa-book"> </i><span> material_sessions</span></a>
                 </li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> material_types</span></a>
+                    <a href="{{ route('material_types.index') }}"><i class="fa fa-book"> </i><span> material_types</span></a>
                 </li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> materials</span></a>
+                    <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> materials</span></a>
                 </li>
                 <li class="header">OTHER</li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> ratings</span></a>
+                    <a href="{{ route('ratings.index') }}"><i class="fa fa-book"> </i><span> ratings</span></a>
                 </li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> schedules</span></a>
+                    <a href="{{ route('schedules.index') }}"><i class="fa fa-book"> </i><span> schedules</span></a>
                 </li>
                 <!--Navigasi_Menu_OLD
                 <li class="header">OLD NAVIGATION</li>

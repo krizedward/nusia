@@ -44,6 +44,10 @@ class ScheduleController extends Controller
      */
     public function index($course_type = 'Free Trial')
     {
+        if ($this->is_admin()){
+            return view('schedules.admin_index');
+        }
+
         if ($this->is_instructor()) {
           return view('schedules.instructor_index');
         }

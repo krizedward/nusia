@@ -42,6 +42,10 @@ class MaterialController extends Controller
 
     public function index($course_type = 'Free Trial')
     {
+        if ($this->is_admin()){
+            return view('materials.admin_index');
+        }
+
         if ($this->is_student()){
             if($course_type == 'Free Trial') {
                 $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();

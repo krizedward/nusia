@@ -42,8 +42,11 @@ class MaterialTypeController extends Controller
      */
     public function index()
     {
-        $data = MaterialType::all();
-        return view('materials.types.index', compact('data'));
+        if ($this->is_admin()){
+            return view('material_types.admin_index');
+        }
+        //$data = MaterialType::all();
+        //return view('materials.types.index', compact('data'));
     }
 
     /**

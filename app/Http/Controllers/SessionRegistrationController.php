@@ -42,8 +42,11 @@ class SessionRegistrationController extends Controller
      */
     public function index()
     {
-        $data = SessionRegistration::all();
-        return view('registrations.sessions.index', compact('data'));
+        if ($this->is_admin()){
+            return view('session_registrations.admin_index');
+        }
+        //$data = SessionRegistration::all();
+        //return view('registrations.sessions.index', compact('data'));
     }
 
     /**

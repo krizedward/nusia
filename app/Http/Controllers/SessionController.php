@@ -42,6 +42,10 @@ class SessionController extends Controller
      */
     public function index()
     {
+        if ($this->is_admin()){
+            return view('sessions.admin_index');
+        }
+
         if ($this->is_instructor()){
             return view('sessions.instructor_index');
         }
