@@ -129,6 +129,7 @@ Route::group(['middleware'=>'auth'], function() {
 
     Route::get('/materials/{course_type?}', 'MaterialController@index')->name('materials.index');
     Route::get('/materials/create', 'MaterialController@create')->name('materials.create');
+    Route::get('/materials/download/{public_or_session}/{id}', 'MaterialController@download')->name('materials.download');
 
     //halaman student
     Route::get('/registration/student/trial','RegistrationController@trial')->name('registration.trial');

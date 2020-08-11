@@ -486,4 +486,29 @@ class MaterialController extends Controller
         $data = MaterialSession::all();
         return view('materials.sessions.index', compact('data'));
     }
+
+    /**
+     * Dowload a material from storage.
+     */
+    public function download($public_or_session = 'Public', $id)
+    {
+        if($public_or_session == 'Public') {
+            $data = MaterialPublic::find($id);
+        } else if($public_or_session == 'Session') {
+            $data = MaterialSession::find($id);
+        }
+
+        $path = public_path().'/uploads/material/'.$data->path;
+
+        if($this->is_admin()) {
+            //
+        } else if($this->is_instructor()) {
+            //
+        } else if($this->is_student()) {
+            return response()->download($path, $data->path);
+        } else {
+            //
+        }
+        return view('materials.sessions.index', compact('data'));
+    }
 }

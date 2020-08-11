@@ -87,7 +87,7 @@
                                                   @endif
                                                   @if($mp->path)
                                                     <td>{{ strtoupper( substr($mp->path, strrpos($mp->path, '.', 0) + 1) ) }}</td>
-                                                    <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ asset('uploads/material/'.$mp->path) }}">Download</a></td>
+                                                    <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('materials.download', ['Public', $mp->id]) }}">Download</a></td>
                                                   @else
                                                     <td><i>Not Available</i></td>
                                                     <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Download</a></td>
@@ -165,7 +165,7 @@
                                                     @endif
                                                     @if($ms->path)
                                                       <td>{{ strtoupper( substr($ms->path, strrpos($ms->path, '.', 0) + 1) ) }}</td>
-                                                      <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ asset('uploads/material/'.$ms->path) }}">Download</a></td>
+                                                      <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('materials.download', ['Session', $ms->id]) }}">Download</a></td>
                                                     @else
                                                       <td><i>Not Available</i></td>
                                                       <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Download</a></td>
