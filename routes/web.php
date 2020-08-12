@@ -203,3 +203,6 @@ Route::group(['middleware'=>'auth'], function() {
 });
 
 Auth::routes();
+
+//verifikasi email user
+Auth::routes(['verify' => true]);
