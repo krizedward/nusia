@@ -43,9 +43,9 @@
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
-                                <th style="width: 10px">Code</th>
+                                <th style="width: 120px">Registration ID</th>
                                 <th>Course Name</th>
-                                <th>Level</th>
+                                <th style="width: 135px">Level</th>
                                 <th>Slot</th>
                                 <th>Session</th>
                                 <th style="width: 40px">Action</th>
