@@ -83,7 +83,7 @@
         </div>
 
         <div class="register-box-body">
-            <p class="login-box-msg">New Registration</p>
+            <p class="login-box-msg">Registration Form</p>
 
             <form action="{{ route('register') }}" method="post">
                 @csrf
@@ -118,7 +118,7 @@
         </div>
         <!-- /.form-box -->
 
-        <p class="login-box-msg"><a href="{{ route('login') }}">Back</a></p>
+        <p class="login-box-msg">Already have an account? <a href="{{ route('login') }}">Login</a> here</p>
     </div>
     <!-- /.register-box -->
 @stop

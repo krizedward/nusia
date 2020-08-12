@@ -114,8 +114,6 @@
         </div>
         <!-- /.login-logo -->
         <div class="login-box-body">
-            <p class="login-box-msg">Click here for <a href="{{ route('register') }}">Registration</a></p>
-
             <form action="{{ route('login') }}" method="post">
                 @csrf
 
@@ -156,6 +154,8 @@
         <!-- /.login-box-body -->
 
         <p class="login-box-msg"><a href="{{ route('password.request') }}">Forget your password</a></p>
+
+        <p class="login-box-msg">Doesn't have an account? <a href="{{ route('register') }}">Register</a> here</p>
     </div>
     <!-- /.login-box -->
 @stop
