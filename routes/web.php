@@ -146,7 +146,7 @@ Route::group(['middleware'=>'auth'], function() {
     //halaman questionnaire
     Route::get('student/questionnaire', function() {
         return view('layouts.questionnaire');
-    });
+    })->name('layouts.questionnaire');
     /*end link*/
 	//menampilkan detail dari schedule
 	//Route::get('/schedule/detail/{id_schedule}','ScheduleController@detail')->name('schedule.detail');

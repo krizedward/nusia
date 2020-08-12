@@ -43,6 +43,11 @@
             @if(Auth::user()->roles == 'Student')
             <!-- Head_Navigasi -->
             <li class="header">STUDENT NAVIGATION</li>
+              @if(Auth::user()->citizenship == 'Not Available')
+                <li class="#">
+                    <a href="{{ route('layouts.questionnaire') }}"><i class="fa fa-book"> </i><span> Account Confirmation</span></a>
+                </li>
+              @else
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-book"></i> <span>Schedules</span>
@@ -111,6 +116,7 @@
                         {{--<li class="#"><a href="{{ route('materials.group_index') }}"><i class="fa fa-circle-o"></i> Group</a></li>--}}
                     </ul>
                 </li>
+              @endif
 
                 <!-- Other_Navigasi -->
                 <li class="header">OTHER</li>

@@ -5,6 +5,61 @@
 @include('layouts.css_and_js.dashboard')
 
 @section('content')
+  @if(Auth::user()->citizenship == 'Not Available')
+    <!-- Main row -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-success alert-dismissible">
+                <h4><i class="icon fa fa-book"></i> Trial Class Available!</h4>
+                Nusia akan memberikan kesempatan 3 kelas gratis dengan memilih kelas bebas.
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <!-- Main row -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning alert-dismissible">
+                <h4><i class="icon fa fa-book"></i> Account Confirmation Required</h4>
+                Sebelum melakukan pendaftaran kelas, Anda diwajibkan untuk mengisi formulir pada bagian "Account Confirmation".
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <!-- Main row -->
+    <div class="row">
+      <div class="col-md-12">
+        <!-- USERS LIST -->
+        <div class="box box-danger">
+          <div class="box-header with-border">
+            <h3 class="box-title">Nusia Instructor</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body no-padding">
+            <ul class="users-list clearfix">
+              @foreach($session as $dt)
+                <li>
+                  <img src="{{ asset('adminlte/dist/img/user1-128x128.jpg') }}" alt="User Image">
+                  <span class="users-list-name" href="#">{{ $dt->schedule->instructor->user->first_name }}</span>
+                </li>
+              @endforeach
+            </ul>
+            <!-- /.users-list -->
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer text-center">
+            <a href="#  " class="uppercase">View All Instructor</a>
+          </div>
+          <!-- /.box-footer -->
+        </div>
+        <!--/.box -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  @else
     <!-- Main row -->
     <div class="row">
         <div class="col-md-12">
@@ -215,4 +270,5 @@
         <!-- /.col -->
     </div>
     <!-- /.row -->
+  @endif
 @stop
