@@ -47,10 +47,11 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th style="width: 100px">Session ID</th>
-                                <th>Date</th>
-                                <th>Level</th>
-                                <th>Session</th>
+                                <th style="width: 120px">Registration ID</th>
+                                <th>Meeting Time</th>
+                                <th style="width: 135px">Level</th>
+                                <th>Session Name</th>
+                                <th>Status</th>
                                 <th style="width: 40px">Link</th>
                             </tr>
                             </thead>
@@ -58,14 +59,21 @@
                             @foreach($data as $dt)
                             <tr>
                                 <td>{{ $dt->code }}</td>
-                                <td>{{ $dt->registration_time }}</td>
-                                <td>{{ $dt->course_registration->course->course_package->course_level->name }}</td>
+                                <td>{{ $dt->session->schedule->schedule_time }}</td>
+                                <td>{{ $dt->course_registration->course->course_package->course_level->name }} {{ $dt->course_registration->course->course_package->course_level_detail->name }}</td>
                                 @if($dt->session->title)
                                   <td>{{ $dt->session->title }}</td>
                                 @elseif($dt->session->course->title)
                                   <td>{{ $dt->session->course->title }}</td>
                                 @else
                                   <td>{{ $dt->session->course->course_package->title }}</td>
+                                @endif
+                                @if(now() < $dt->session->schedule->schedule_time)
+                                  <td><label class="label label-warning">Upcoming</label></td>
+                                @elseif($dt->status == 'Present')
+                                  <td><label class="label label-success">Present</label></td>
+                                @elseif($dt->status == 'Not Present')
+                                  <td><label class="label label-danger">Not Present</label></td>
                                 @endif
                                 @if($dt->link_zoom)
                                   <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Link</a></td>
