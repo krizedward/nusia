@@ -148,6 +148,8 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('/schedules/student/private','ScheduleController@private')->name('schedules.student.private');
     Route::get('/schedules/student/group','ScheduleController@group')->name('schedules.student.group');
 
+    Route::get('/sessions/registrations/{course_type?}','SessionRegistrationController@index')->name('session_registrations.index');
+
     //halaman questionnaire
     Route::get('student/questionnaire', function() {
         return view('layouts.questionnaire');

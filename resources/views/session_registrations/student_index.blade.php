@@ -60,8 +60,18 @@
                                 <td>{{ $dt->code }}</td>
                                 <td>{{ $dt->registration_time }}</td>
                                 <td>{{ $dt->course_registration->course->course_package->course_level->name }}</td>
-                                <td>Session 1</td>
-                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Link</a></td>
+                                @if($dt->session->title)
+                                  <td>{{ $dt->session->title }}</td>
+                                @elseif($dt->session->course->title)
+                                  <td>{{ $dt->session->course->title }}</td>
+                                @else
+                                  <td>{{ $dt->session->course->course_package->title }}</td>
+                                @endif
+                                @if($dt->link_zoom)
+                                  <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Link</a></td>
+                                @else
+                                  <td><i>N/A</i></td>
+                                @endif
                             </tr>
                             @endforeach
                             </tbody>

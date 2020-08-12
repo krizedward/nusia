@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\SessionRegistration;
+use App\Models\CourseRegistration;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -40,7 +41,7 @@ class SessionRegistrationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($course_type = 'Free Trial')
     {
         if ($this->is_admin()){
             return view('session_registrations.admin_index');
@@ -54,7 +55,52 @@ class SessionRegistrationController extends Controller
         if ($this->is_student()){
             //halaman yang menampilkan detail jadwal yang di tentukan
             // oleh instructor kepada student nusia
-            $data = SessionRegistration::all();
+
+            $arr = [];
+            if($course_type == 'Free Trial') {
+                $course_registrations = CourseRegistration
+                    ::join('courses', 'course_registrations.course_id', 'courses.id')
+                    ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                    ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                    ->where('student_id', Auth::user()->student->id)
+                    ->where('course_types.name', 'LIKE', '%Trial%')
+                    ->select('course_registrations.id')
+                    ->get();
+                foreach($course_registrations as $cr) {
+                    array_push($arr, $cr->id);
+                }
+            } else if($course_type == 'Private') {
+                $course_registrations = CourseRegistration
+                    ::join('courses', 'course_registrations.course_id', 'courses.id')
+                    ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                    ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                    ->where('student_id', Auth::user()->student->id)
+                    ->where('course_types.count_student_min', 1)
+                    ->where('course_types.count_student_max', 1)
+                    ->select('course_registrations.id')
+                    ->get();
+                foreach($course_registrations as $cr) {
+                    array_push($arr, $cr->id);
+                }
+            } else if($course_type == 'Group') {
+                $course_registrations = CourseRegistration
+                    ::join('courses', 'course_registrations.course_id', 'courses.id')
+                    ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                    ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                    ->where('student_id', Auth::user()->student->id)
+                    ->where('course_types.count_student_max', '<>', 1)
+                    ->select('course_registrations.id')
+                    ->get();
+                foreach($course_registrations as $cr) {
+                    array_push($arr, $cr->id);
+                }
+            } else {
+                return redirect()->route('home');
+            }
+
+            $data = SessionRegistration
+                ::whereIn('course_registration_id', $arr)
+                ->get();
             return view('session_registrations.student_index',compact('data'));
         }
 
