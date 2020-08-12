@@ -51,7 +51,8 @@ class InstructorController extends Controller
         }
 
         if ($this->is_admin()){
-            return view('instructors.admin_index');
+            $data = Instructor::all();
+            return view('instructors.admin_index', compact('data'));
         }
 
         //$data = Instructor::all();

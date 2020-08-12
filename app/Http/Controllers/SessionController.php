@@ -43,7 +43,8 @@ class SessionController extends Controller
     public function index()
     {
         if ($this->is_admin()){
-            return view('sessions.admin_index');
+            $data = Session::all();
+            return view('sessions.admin_index',compact('data'));
         }
 
         if ($this->is_instructor()){

@@ -44,7 +44,8 @@ class SessionRegistrationController extends Controller
     public function index($course_type = 'Free Trial')
     {
         if ($this->is_admin()){
-            return view('session_registrations.admin_index');
+            $data = SessionRegistration::all();
+            return view('session_registrations.admin_index',compact('data'));
         }
 
         if ($this->is_instructor()){

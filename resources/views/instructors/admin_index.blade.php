@@ -22,18 +22,26 @@
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
-                        {{-- head table content
                         <tr>
-                            <th></th>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
                         </tr>
-                        --}}
+                        {{-- head table content --}}
                         </thead>
                         <tbody>
-                        {{-- body content
+                        @foreach($data as $dt)
                             <tr>
-                                <td></td>
+                                <td>{{ $dt->code }}</td>
+                                <td>{{ $dt->user->first_name }}</td>
+                                <td>{{ $dt->user->last_name }}</td>
+                                <td>{{ $dt->user->email }}</td>
+                                <td>{{ $dt->user->phone }}</td>
                             </tr>
-                        --}}
+                        @endforeach
+                        {{-- body content --}}
                         </tbody>
                     </table>
                 </div>

@@ -5,7 +5,7 @@
 @include('layouts.css_and_js.form_general')
 
 @section('content-header')
-    <h1>Schedule</h1>
+    <h1>Schedule Instructor</h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
         <li class="active">Schedule</li>
@@ -22,18 +22,24 @@
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
-                        {{-- head table content
                         <tr>
-                            <th></th>
+                            <th>ID</th>
+                            <th>Instructor Name</th>
+                            <th>Time</th>
+                            <th>Status</th>
                         </tr>
-                        --}}
+                        {{-- head table content --}}
                         </thead>
                         <tbody>
-                        {{-- body content
+                        @foreach($data as $dt)
                             <tr>
-                                <td></td>
+                                <td>{{ $dt->code }}</td>
+                                <td>{{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}</td>
+                                <td>{{ $dt->schedule_time }}</td>
+                                <td>{{ $dt->status }}</td>
                             </tr>
-                        --}}
+                        @endforeach
+                        {{-- body content --}}
                         </tbody>
                     </table>
                 </div>

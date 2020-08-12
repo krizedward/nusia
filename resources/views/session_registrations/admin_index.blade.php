@@ -22,18 +22,26 @@
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
-                        {{-- head table content
                         <tr>
-                            <th></th>
+                            <th>Registration ID</th>
+                            <th>Course Name</th>
+                            <th>Level</th>
+                            <th>Slot</th>
+                            <th>Session</th>
                         </tr>
-                        --}}
+                        {{-- head table content --}}
                         </thead>
                         <tbody>
-                        {{-- body content
+                        @foreach($data as $dt)
                             <tr>
-                                <td></td>
+                                <td>{{ $dt->code }}</td>
+                                <td>{{ $dt->course_registration->course->title }}</td>
+                                <td>{{ $dt->course_registration->course->course_package->course_level->name }} {{ $dt->course_registration->course->course_package->course_level_detail->name }}</td>
+                                <td>{{ __('3 Student') }}</td>
+                                <td>{{ $dt->registration_time }}</td>
                             </tr>
-                        --}}
+                        @endforeach
+                        {{-- body content --}}
                         </tbody>
                     </table>
                 </div>
