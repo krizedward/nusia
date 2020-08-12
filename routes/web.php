@@ -23,6 +23,11 @@ Route::group(['middleware'=>'auth'], function() {
 
 	Route::get('/home', 'HomeController@index')->name('home');
 
+        // bug apabila proses logout error, maka metode GET tidak didukung.
+        Route::get('/logout', function() {
+            return redirect()->route('home');
+        });
+
         Route::get('/material/private', 'MaterialController@private_index')->name('materials.private_index');
         Route::get('/material/free-trial', 'MaterialController@free_trial_index')->name('materials.free_trial_index');
         Route::get('/material/group', 'MaterialController@group_index')->name('materials.group_index');
