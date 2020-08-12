@@ -39,7 +39,7 @@
 
                 <p>
                   {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} - {{ Auth::user()->roles }}
-                  <small>{{ Auth::user()->created_at }}</small>
+                  <small>{{ Auth::user()->created_at }}&nbsp;&nbsp;UTC+0</small>
                 </p>
               </li>
               <!-- Menu Footer-->
