@@ -12,7 +12,7 @@ class CoursePaymentsTableSeeder extends Seeder
      */
     public function run()
     {
-        CoursePayment::create([
+        /*CoursePayment::create([
             'code' => 'CPY-001',
             'course_registration_id' => 1,
             'method' => 'Cash',
@@ -20,7 +20,7 @@ class CoursePaymentsTableSeeder extends Seeder
             'amount' => '25',
             'status' => 'Confirmed',
             'path' => 'test',
-        ]);
+        ]);*/
         /*
         factory(App\Models\CoursePayment::class, 350)
             ->states('Randomized')

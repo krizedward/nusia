@@ -37,21 +37,21 @@ class CourseLevelsTableSeeder extends Seeder
             'code'        => 'CL-001',
             'name'        => 'Novice',
             'description' => 'This level consists of novice-low, novice-mid, and novice-high difficulties.',
-            'created_at'  => now(),
+            'created_at'  => '2020-08-07 05:12:10',
             'updated_at'  => null
         ]);
         CourseLevel::create ([
             'code'        => 'CL-002',
             'name'        => 'Intermediate',
             'description' => 'This level consists of intermediate-low, intermediate-mid, and intermediate-high difficulties.',
-            'created_at'  => now(),
+            'created_at'  => '2020-08-07 05:12:10',
             'updated_at'  => null
         ]);
         CourseLevel::create ([
             'code'        => 'CL-003',
             'name'        => 'Advanced',
             'description' => 'This level consists of advanced-low, advanced-mid, and advanced-high difficulties.',
-            'created_at'  => now(),
+            'created_at'  => '2020-08-07 05:12:10',
             'updated_at'  => null
         ]);
     }
