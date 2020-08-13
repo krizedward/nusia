@@ -28,7 +28,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:10',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -42,7 +42,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -56,7 +56,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -70,7 +70,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -84,7 +84,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -98,7 +98,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -112,7 +112,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -126,7 +126,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -140,7 +140,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -154,7 +154,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -168,7 +168,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -182,7 +182,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -196,7 +196,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -210,7 +210,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -224,7 +224,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -238,7 +238,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -252,7 +252,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -266,7 +266,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -280,7 +280,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -294,7 +294,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -308,7 +308,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -322,7 +322,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -336,7 +336,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -350,7 +350,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -364,7 +364,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -378,7 +378,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -392,7 +392,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -406,7 +406,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 30,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -420,7 +420,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 30,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -434,7 +434,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 30,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -448,7 +448,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 30,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -462,7 +462,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 30,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -476,7 +476,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 30,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -490,7 +490,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 30,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -504,7 +504,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 30,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -518,7 +518,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 30,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -532,7 +532,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -546,7 +546,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -560,7 +560,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -574,7 +574,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -588,7 +588,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -602,7 +602,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -616,7 +616,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -630,7 +630,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -644,7 +644,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -658,7 +658,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -672,7 +672,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -686,7 +686,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -700,7 +700,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -714,7 +714,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -728,7 +728,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -742,7 +742,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -756,7 +756,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -770,7 +770,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -784,7 +784,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -798,7 +798,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -812,7 +812,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -826,7 +826,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -840,7 +840,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -854,7 +854,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -868,7 +868,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -882,7 +882,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -896,7 +896,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 25,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -910,7 +910,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -924,7 +924,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -938,7 +938,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -952,7 +952,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -966,7 +966,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -980,7 +980,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -994,7 +994,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -1008,7 +1008,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -1022,7 +1022,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 15,
             'price'                  => 20,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -1036,7 +1036,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -1050,7 +1050,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -1064,7 +1064,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -1078,7 +1078,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -1092,7 +1092,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -1106,7 +1106,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -1120,7 +1120,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -1134,7 +1134,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
         CoursePackage::create ([
@@ -1148,7 +1148,7 @@ class CoursePackagesTableSeeder extends Seeder
             'requirement'            => 'This states a course package requirement.',
             'count_session'          => 3,
             'price'                  => 0,
-            'created_at'             => now(),
+            'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
         ]);
     }

@@ -12,12 +12,12 @@ class RatingsTableSeeder extends Seeder
      */
     public function run()
     {
-        Rating::create([
+        /*Rating::create([
             'code' => 'RTG-001',
             'session_id' => 1,
             'rating' => 1,
             'comment' => 'test',
-        ]);
+        ]);*/
         /*
         factory(App\Models\Rating::class, 2000)
             ->states('Randomized')
