@@ -207,6 +207,17 @@ class SessionController extends Controller
     public function update(Request $request, $id)
     {
         $session = Session::findOrFail($id);
+
+        if($this->is_instructor()) {
+            $session->update([
+                'link_zoom' => 'new link',
+            ]);
+
+            return redirect()->route('sessions.index');
+        }
+
+        /*
+        $session = Session::findOrFail($id);
         if($session == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
@@ -251,6 +262,7 @@ class SessionController extends Controller
         } else {
             // Tidak memiliki hak akses.
         }
+        */
     }
 
     /**

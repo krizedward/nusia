@@ -21,8 +21,9 @@
                     <h3 class="box-title">Add Link Zoom Session</h3>
                 </div>
                 <div class="box-body">
-                    <form action="#" method="post">
+                    <form action="{{ route('sessions.update',1) }}" method="post">
                         @csrf
+                        @method('PUT')
                         <div class="form-group">
                             <label>Session In</label>
                             <select class="form-control select2" name="user">
