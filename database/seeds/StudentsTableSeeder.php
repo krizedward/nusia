@@ -24,8 +24,6 @@ class StudentsTableSeeder extends Seeder
             'description_of_course_taken'      => 'Deskripsi.',
             'indonesian_language_proficiency'  => 'Novice',
             'learning_objective'               => 'Learning objective.',
-            'created_at'                       => '2020-08-07 05:12:10',
-            'updated_at'                       => null
         ]);
 
         Student::create([
@@ -40,8 +38,6 @@ class StudentsTableSeeder extends Seeder
             'description_of_course_taken'      => 'Deskripsi.',
             'indonesian_language_proficiency'  => 'Intermediate',
             'learning_objective'               => 'Learning objective.',
-            'created_at'                       => '2020-08-07 05:12:10',
-            'updated_at'                       => null
         ]);
 
         Student::create([
@@ -56,8 +52,6 @@ class StudentsTableSeeder extends Seeder
             'description_of_course_taken'      => null,
             'indonesian_language_proficiency'  => 'Novice',
             'learning_objective'               => 'null',
-            'created_at'                       => '0000-00-00 00:00:00',
-            'updated_at'                       => null
         ]);
 
         Student::create([
@@ -72,8 +66,6 @@ class StudentsTableSeeder extends Seeder
             'description_of_course_taken'      => null,
             'indonesian_language_proficiency'  => 'Novice',
             'learning_objective'               => 'null',
-            'created_at'                       => '2020-08-12 08:28:32',
-            'updated_at'                       => '2020-08-12 08:28:32'
         ]);
 
         Student::create([
@@ -88,8 +80,6 @@ class StudentsTableSeeder extends Seeder
             'description_of_course_taken'      => null,
             'indonesian_language_proficiency'  => 'Novice',
             'learning_objective'               => 'null',
-            'created_at'                       => '2020-08-12 08:32:58',
-            'updated_at'                       => '2020-08-12 08:32:58'
         ]);
 
         Student::create([
@@ -104,8 +94,6 @@ class StudentsTableSeeder extends Seeder
             'description_of_course_taken'      => null,
             'indonesian_language_proficiency'  => 'Novice',
             'learning_objective'               => 'null',
-            'created_at'                       => '2020-08-12 08:34:07',
-            'updated_at'                       => '2020-08-12 08:34:07'
         ]);
 
         Student::create([
@@ -120,8 +108,6 @@ class StudentsTableSeeder extends Seeder
             'description_of_course_taken'      => null,
             'indonesian_language_proficiency'  => 'Novice',
             'learning_objective'               => 'null',
-            'created_at'                       => '2020-08-12 08:36:07',
-            'updated_at'                       => '2020-08-12 08:36:07'
         ]);
 
         Student::create([
@@ -136,8 +122,6 @@ class StudentsTableSeeder extends Seeder
             'description_of_course_taken'      => null,
             'indonesian_language_proficiency'  => 'Novice',
             'learning_objective'               => 'null',
-            'created_at'                       => '2020-08-12 08:40:15',
-            'updated_at'                       => '2020-08-12 08:40:15'
         ]);
 
         Student::create([
@@ -152,8 +136,6 @@ class StudentsTableSeeder extends Seeder
             'description_of_course_taken'      => null,
             'indonesian_language_proficiency'  => 'Novice',
             'learning_objective'               => 'null',
-            'created_at'                       => '2020-08-12 08:46:59',
-            'updated_at'                       => '2020-08-12 08:46:59'
         ]);
 
         Student::create([
@@ -168,8 +150,6 @@ class StudentsTableSeeder extends Seeder
             'description_of_course_taken'      => null,
             'indonesian_language_proficiency'  => 'Novice',
             'learning_objective'               => 'null',
-            'created_at'                       => '2020-08-12 08:48:01',
-            'updated_at'                       => '2020-08-12 08:48:01'
         ]);
 
         Student::create([
@@ -184,8 +164,6 @@ class StudentsTableSeeder extends Seeder
             'description_of_course_taken'      => null,
             'indonesian_language_proficiency'  => 'Novice',
             'learning_objective'               => 'null',
-            'created_at'                       => '2020-08-12 08:48:01',
-            'updated_at'                       => '2020-08-12 08:48:01'
         ]);
 
         Student::create([
@@ -200,8 +178,6 @@ class StudentsTableSeeder extends Seeder
             'description_of_course_taken'      => null,
             'indonesian_language_proficiency'  => 'Novice',
             'learning_objective'               => 'null',
-            'created_at'                       => '2020-08-12 08:48:01',
-            'updated_at'                       => '2020-08-12 08:48:01'
         ]);
 
         Student::create([
@@ -216,8 +192,6 @@ class StudentsTableSeeder extends Seeder
             'description_of_course_taken'      => null,
             'indonesian_language_proficiency'  => 'Novice',
             'learning_objective'               => 'null',
-            'created_at'                       => '2020-08-12 09:24:48',
-            'updated_at'                       => '2020-08-12 09:24:48'
         ]);
 
         /*factory(App\Models\Student::class, 200)
