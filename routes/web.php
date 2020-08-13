@@ -150,6 +150,8 @@ Route::group(['middleware'=>'auth'], function() {
 
     Route::get('/sessions/registrations/{course_type?}','SessionRegistrationController@index')->name('session_registrations.index');
 
+    Route::get('/courses','CourseController@index')->name('courses.index');
+
     //halaman questionnaire
     Route::get('student/questionnaire', function() {
         return view('layouts.questionnaire');

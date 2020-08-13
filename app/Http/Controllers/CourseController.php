@@ -44,6 +44,9 @@ class CourseController extends Controller
     {
         if ($this->is_admin()){
             return view('courses.admin_index');
+        } else if ($this->is_student()) {
+            $data = Course::all();
+            return view('courses.student_index', compact('data'));
         }
         //$data = Course::all();
         //return view('courses.index', compact('data'));
