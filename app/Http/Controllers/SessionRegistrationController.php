@@ -116,11 +116,16 @@ class SessionRegistrationController extends Controller
      */
     public function create()
     {
+        if ($this->is_admin()){
+            return view('session_registrations.admin_create');
+        }
+        /*
         if($this->is_admin()) {
             return view('registrations.sessions.create');
         } else {
             // Tidak memiliki hak akses.
         }
+        */
     }
 
     /**
@@ -131,6 +136,15 @@ class SessionRegistrationController extends Controller
      */
     public function store(Request $request)
     {
+        if($this->is_admin()) {
+            SessionRegistration::create([
+                'session_id' => 1,
+                'course_registration_id' => 1,
+                'registration_time' => '2020-08-11 06:56:12',
+                'status' => 'Present',
+            ]);
+        }
+        /*
         $data = $request->all();
         $data = Validator::make($data, [
             'session_id' => [
@@ -163,9 +177,9 @@ class SessionRegistrationController extends Controller
         } else {
             // Tidak memiliki hak akses.
         }
-
-        $data = SessionRegistration::all();
-        return view('registrations.sessions.index', compact('data'));
+        */
+        \Session::flash('store_student','Success Save Data');
+        return redirect()->route('session_registrations.index',[1] );
     }
 
     public function show($a, $b)

@@ -17,7 +17,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header">
-                    <a href="#" class="btn btn-flat btn-sm btn-primary">+ Add</a>
+                    <a href="{{ route('session_registrations.create',[1]) }}" class="btn btn-flat btn-sm btn-primary">+ Add</a>
                 </div>
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
@@ -38,7 +38,7 @@
                                 <td>{{ $dt->course_registration->course->title }}</td>
                                 <td>{{ $dt->course_registration->course->course_package->course_level->name }} {{ $dt->course_registration->course->course_package->course_level_detail->name }}</td>
                                 <td>{{ __('3 Student') }}</td>
-                                <td>{{ $dt->registration_time }}</td>
+                                <td>{{ $dt->session->title }}</td>
                             </tr>
                         @endforeach
                         {{-- body content --}}

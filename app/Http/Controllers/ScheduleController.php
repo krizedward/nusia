@@ -193,7 +193,7 @@ class ScheduleController extends Controller
     public function create()
     {
         if($this->is_admin()) {
-            return view('schedules.create');
+            return view('schedules.admin_create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -207,6 +207,14 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
+        if ($this->is_admin()){
+            Schedule::create([
+                'instructor_id' => 1,
+                'schedule_time' => '2020-08-11 06:19:41',
+                'status' => 'Available',
+            ]);
+        }
+        /*
         $data = $request->all();
         $data = Validator::make($data, [
             'instructor_id' => ['bail', 'required'],
@@ -233,9 +241,9 @@ class ScheduleController extends Controller
         } else {
             // Tidak memiliki hak akses.
         }
-
-        $data = Schedule::all();
-        return view('schedules.index', compact('data'));
+        */
+        \Session::flash('sukses','Success Save Data');
+        return redirect()->route('schedules.index');
     }
 
     /**

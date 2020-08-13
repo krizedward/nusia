@@ -73,7 +73,7 @@ class SessionController extends Controller
     public function create()
     {
         if($this->is_admin() || $this->is_instructor()) {
-            return view('sessions.create');
+            return view('sessions.admin_create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -87,6 +87,17 @@ class SessionController extends Controller
      */
     public function store(Request $request)
     {
+        if($this->is_admin()) {
+            Session::create([
+                'course_id' => 1,
+                'schedule_id' => 1,
+                'title' => 'Test',
+                'description' => 'Test',
+                'requirement' => 'Test',
+                'link_zoom' => 'Test'
+            ]);
+        }
+        /*
         $data = $request->all();
         $data = Validator::make($data, [
             'course_id' => ['bail', 'required'],
@@ -126,10 +137,12 @@ class SessionController extends Controller
         } else {
             // Tidak memiliki hak akses.
         }
-
+        */
         if($this->is_admin()) {
-            $data = Session::all();
-            return view('sessions.index', compact('data'));
+            //$data = Session::all();
+            //return view('sessions.index', compact('data'));
+            \Session::flash('store_student','Success Save Data');
+            return redirect()->route('sessions.index');
         } else if($this->is_instructor() || $this->is_student()) {
             $data = Session::all();
             return view('sessions.index', compact('data'));
