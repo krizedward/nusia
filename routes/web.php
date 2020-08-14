@@ -154,7 +154,9 @@ Route::group(['middleware'=>'auth'], function() {
     //questionnaire aku taruh di HomeController
     Route::get('student/questionnaire', 'HomeController@questionnaire')->name('layouts.questionnaire');
     Route::post('student/questionnaire/store', 'HomeController@store')->name('questionnaire.store');
+    Route::get('profile/{id}', 'HomeController@profile')->name('profile');
     /*end link*/
+
 	//menampilkan detail dari schedule
 	//Route::get('/schedule/detail/{id_schedule}','ScheduleController@detail')->name('schedule.detail');
 	//menampilkan halaman schedule

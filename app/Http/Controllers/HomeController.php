@@ -263,4 +263,12 @@ class HomeController extends Controller
 
         return view('layouts.questionnaire', compact('countries', 'interests'));
     }
+
+    public function profile($id)
+    {
+        if($this->is_student()){
+            $student = Student::where('user_id',$id)->get();
+            return view('profile.student',compact('student'));
+        }
+    }
 }

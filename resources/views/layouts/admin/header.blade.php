@@ -45,13 +45,7 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  @if(Auth::user()->level == 'student')
-                  <a href="{{ url('/profile/student/'.Auth::user()->id)}}" class="btn btn-default btn-flat">Profile</a>
-                  @elseif(Auth::user()->level == 'instructor')
-                  <a href="{{ url('/profile/instructor/'.Auth::user()->id)}}" class="btn btn-default btn-flat">Profile</a>
-                  @else
-                  <a href="{{ url('/profile')}}" class="btn btn-default btn-flat">Profile</a>
-                  @endif
+                  <a href="{{ url('profile',Auth::user()->id) }}" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
                   <form id="logout-form" action="{{ route('logout') }}" method="POST">
