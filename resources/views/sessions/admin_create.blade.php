@@ -26,21 +26,21 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="#text">Text</label>
+                                <label>Course</label>
                                 <input name="text" type="text" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="#text">Text</label>
+                                <label>Title</label>
                                 <input name="text" type="text" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="#text">Text</label>
+                                <label>Schedule</label>
                                 <input name="text" type="text" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="#text">Text</label>
+                                <label>Descriptions</label>
                                 <input name="text" type="text" class="form-control">
                             </div>
                         </div>
