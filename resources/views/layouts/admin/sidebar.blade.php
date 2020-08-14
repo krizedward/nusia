@@ -146,6 +146,17 @@
                         </a>
                     </li>
 
+                    <!-- Other_Navigasi -->
+                    <li class="header">OTHER</li>
+
+                    <li class="#">
+                        <a href="{{ route('courses.index') }}"><i class="fa fa-book"> </i><span> Nusia Courses</span></a>
+                    </li>
+
+                    <li class="#">
+                        <a href="{{ route('instructors.index') }}"><i class="fa fa-users"> </i><span> Nusia Student</span></a>
+                    </li>
+
                     {{--
                     <li class="{{ set_active(['material.student','material.public.student']) }} treeview">
                         <a href="#">

@@ -270,6 +270,11 @@ class HomeController extends Controller
             return view('profile.admin');
         }
 
+        if($this->is_instructor()){
+            $instructor = Instructor::where('user_id',$id)->get();
+            return view('profile.instructor',compact('instructor'));
+        }
+
         if($this->is_student()){
             $student = Student::where('user_id',$id)->get();
             return view('profile.student',compact('student'));

@@ -43,9 +43,10 @@
                                 @foreach($session_reg as $dt)
                                 <tr>
                                     <td>{{ $dt->code }}</td>
-                                    <td>{{ $dt->session->course->course_level }}</td>
-                                    <td>{{ $dt->session->course->course_level_detail }}</td>
-                                    <td>{{ $dt->session->session_meet }}</td>
+                                    <td>{{ $dt->session->course->course_package->course_level->name }}</td>
+                                    <td>{{ $dt->session->course->course_package->course_level_detail->name }}</td>
+                                    {{--session pakai attribut title untuk penamaan persession di halaman dashboard--}}
+                                    <td>{{ $dt->session->title }}</td>
                                     <td>{{ date('d M Y', strtotime($dt->session->schedule->schedule_time)) }}</td>
                                     <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
                                 </tr>
@@ -77,7 +78,7 @@
                                             <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="Product Image">
                                         </div>
                                         <div class="product-info">
-                                            <div class="product-title">{{ $dt->session->course->course_level }} - {{ $dt->session->session_meet }}
+                                            <div class="product-title">{{ $dt->session->course->course_package->title }} - {{ $dt->session->name }}
                                                 <span class="label label-info pull-right">{{ date('d M Y', strtotime($dt->session->schedule->schedule_time)) }}</span></div>
                                             <span class="product-description">
                                                 Note : don't forget to join class.
