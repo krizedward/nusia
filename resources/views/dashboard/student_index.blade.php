@@ -112,7 +112,7 @@
           </div>
           <!-- /.box-body -->
           <div class="box-footer clearfix">
-            <a href="{{ route('session_registrations.index', ['Free Trial']) }}" class="btn btn-sm btn-info btn-flat pull-left">View All Data</a>
+            <a href="{{ route('session_registrations.index') }}" class="btn btn-sm btn-info btn-flat pull-left">View All Data</a>
           </div>
           <!-- /.box-footer -->
         </div>
@@ -270,7 +270,7 @@
           </div>
           <!-- /.box-body -->
           <div class="box-footer text-center">
-            <a href="{{ route('session_registrations.index', ['Free Trial']) }}" class="uppercase">View All Data</a>
+            <a href="{{ route('session_registrations.index') }}" class="uppercase">View All Data</a>
           </div>
           <!-- /.box-footer -->
         </div>

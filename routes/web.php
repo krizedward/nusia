@@ -42,17 +42,17 @@ Route::group(['middleware'=>'auth'], function() {
         // selain Route::resource(s) (pada keyword yang sama),
         // lakukan deklarasi SEBELUM menulis baris kode Route::resource(s).
         Route::resources([
-            'material_types'       => 'MaterialTypeController',
-            'course_types'         => 'CourseTypeController',
-            'course_levels'        => 'CourseLevelController',
-            'course_level_details' => 'CourseLevelDetailController',
-            'course_packages'      => 'CoursePackageController',
-            'courses'              => 'CourseController',
-            'sessions'             => 'SessionController',
-            'course_certificates'  => 'CourseCertificateController',
-            'material_publics'     => 'MaterialPublicController',
-            'material_sessions'    => 'MaterialSessionController',
-            'users'                => 'UserController'
+            'material_types'        => 'MaterialTypeController',
+            'course_types'          => 'CourseTypeController',
+            'course_levels'         => 'CourseLevelController',
+            'course_level_details'  => 'CourseLevelDetailController',
+            'course_packages'       => 'CoursePackageController',
+            'courses'               => 'CourseController',
+            'sessions'              => 'SessionController',
+            'course_certificates'   => 'CourseCertificateController',
+            'material_publics'      => 'MaterialPublicController',
+            'material_sessions'     => 'MaterialSessionController',
+            'users'                 => 'UserController'
         ]);
 
         // menggunakan nested resources: /courses/{course}/registrations/{user}
@@ -83,14 +83,14 @@ Route::group(['middleware'=>'auth'], function() {
                 'payments' => 'user'
             ]);
 
-        // menggunakan nested resources: /sessions/{session}/registrations/{user}
-        Route::resource('sessions.registrations', 'SessionRegistrationController')
+        // menggunakan nested resources: /session-registrations/{session_registration}
+        Route::resource('session-registrations', 'SessionRegistrationController')
             ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])
             ->names([
                 'index'   => 'session_registrations.index',
                 'create'  => 'session_registrations.create',
                 'store'   => 'session_registrations.store',
-                'show'   => 'session_registrations.show',
+                'show'    => 'session_registrations.show',
                 'edit'    => 'session_registrations.edit',
                 'update'  => 'session_registrations.update',
                 'destroy' => 'session_registrations.destroy'
@@ -134,7 +134,7 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('/session/private', 'SessionController@private')->name('session.private');
     Route::get('/session/group', 'SessionController@group')->name('session.group');
 
-    Route::get('/materials/{course_type?}', 'MaterialController@index')->name('materials.index');
+    Route::get('/materials', 'MaterialController@index')->name('materials.index');
     Route::get('/materials/create', 'MaterialController@create')->name('materials.create');
     Route::get('/materials/download/{public_or_session}/{id}', 'MaterialController@download')->name('materials.download');
 
@@ -147,8 +147,6 @@ Route::group(['middleware'=>'auth'], function() {
 
     Route::get('/schedules/student/private','ScheduleController@private')->name('schedules.student.private');
     Route::get('/schedules/student/group','ScheduleController@group')->name('schedules.student.group');
-
-    Route::get('/sessions/registrations/{course_type?}','SessionRegistrationController@index')->name('session_registrations.index');
 
     Route::get('/courses','CourseController@index')->name('courses.index');
 

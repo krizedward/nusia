@@ -48,12 +48,12 @@ class SessionRegistrationController extends Controller
             return view('session_registrations.admin_index',compact('data'));
         }
 
-        if ($this->is_instructor()){
+        else if ($this->is_instructor()){
             $data = SessionRegistration::all();
             return view('session_registrations.instructor_index',compact('data'));
         }
 
-        if ($this->is_student()){
+        else if ($this->is_student()){
             //halaman yang menampilkan detail jadwal yang di tentukan
             // oleh instructor kepada student nusia
 
@@ -103,6 +103,8 @@ class SessionRegistrationController extends Controller
                 ::whereIn('course_registration_id', $arr)
                 ->get();
             return view('session_registrations.student_index',compact('data'));
+        } else {
+            return redirect()->route('home');
         }
 
         //$data = SessionRegistration::all();

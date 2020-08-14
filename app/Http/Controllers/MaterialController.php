@@ -40,16 +40,100 @@ class MaterialController extends Controller
         return ($this->user_roles() == "Student")? 1 : 0;
     }
 
-    public function index($course_type = 'Free Trial')
+    public function index()
     {
         if ($this->is_admin()){
             return view('materials.admin_index');
         }
 
-        if ($this->is_student()){
-            if($course_type == 'Free Trial') {
+        else if ($this->is_student()){
+            $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
+
+            $arr = [];
+            foreach($course_registrations as $course_registration) {
+                $mps = MaterialPublic::where('course_package_id', $course_registration->course->course_package_id)->get();
+                foreach($mps as $mp) {
+                    array_push($arr, $mp->id);
+                    array_unique($arr);
+                }
+            }
+            $mps_free_trial = MaterialPublic
+                ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
+                ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                ->distinct()
+                ->whereIn('material_publics.id', $arr)
+                ->where('course_types.name', 'LIKE', '%Trial%')
+                ->select('material_publics.id as id')
+                ->get();
+            $mps_private = MaterialPublic
+                ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
+                ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                ->distinct()
+                ->whereIn('material_publics.id', $arr)
+                ->where('course_types.count_student_min', 1)
+                ->where('course_types.count_student_max', 1)
+                ->select('material_publics.id as id')
+                ->get();
+            $mps_group = MaterialPublic
+                ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
+                ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                ->distinct()
+                ->whereIn('material_publics.id', $arr)
+                ->where('course_types.count_student_max', '<>', 1)
+                ->select('material_publics.id as id')
+                ->get();
+
+            $arr = [];
+            foreach($course_registrations as $course_registration) {
+                $mss = MaterialSession
+                    ::join('sessions', 'material_sessions.session_id', 'sessions.id')
+                    ->where('sessions.course_id', $course_registration->course_id)
+                    ->get();
+                foreach($mss as $ms) {
+                    array_push($arr, $ms->id);
+                    array_unique($arr);
+                }
+            }
+            $mss_free_trial = MaterialSession
+                ::join('sessions', 'material_sessions.session_id', 'sessions.id')
+                ->join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                ->distinct()
+                ->whereIn('material_sessions.id', $arr)
+                ->where('course_types.name', 'LIKE', '%Trial%')
+                ->select('material_sessions.id as id')
+                ->get();
+            $mss_private = MaterialSession
+                ::join('sessions', 'material_sessions.session_id', 'sessions.id')
+                ->join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                ->distinct()
+                ->whereIn('material_sessions.id', $arr)
+                ->where('course_types.count_student_min', 1)
+                ->where('course_types.count_student_max', 1)
+                ->select('material_sessions.id as id')
+                ->get();
+            $mss_group = MaterialSession
+                ::join('sessions', 'material_sessions.session_id', 'sessions.id')
+                ->join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                ->distinct()
+                ->whereIn('material_sessions.id', $arr)
+                ->where('course_types.count_student_max', '<>', 1)
+                ->select('material_sessions.id as id')
+                ->get();
+
+            return view('materials.student_index', compact(
+                'course_registrations',
+                'mps_free_trial', 'mps_private', 'mps_group',
+                'mss_free_trial', 'mss_private', 'mss_group',
+            ));
+
+            /*if($course_type == 'Free Trial') {
                 $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
-                //dd($course_registrations);
 
                 $arr = [];
                 foreach($course_registrations as $course_registration) {
@@ -67,7 +151,6 @@ class MaterialController extends Controller
                     ->where('course_types.name', 'LIKE', '%Trial%')
                     ->select('material_publics.id')
                     ->get();
-                //dd($material_publics);
 
                 $arr = [];
                 foreach($course_registrations as $course_registration) {
@@ -90,12 +173,10 @@ class MaterialController extends Controller
                     ->where('course_types.name', 'LIKE', '%Trial%')
                     ->select('material_sessions.id')
                     ->get();
-                //dd($material_sessions);
 
                 return view('materials.student_index', compact('course_registrations', 'material_publics', 'material_sessions'));
             } else if($course_type == 'Private') {
                 $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
-                //dd($course_registrations);
 
                 $arr = [];
                 foreach($course_registrations as $course_registration) {
@@ -114,7 +195,6 @@ class MaterialController extends Controller
                     ->where('course_types.count_student_max', 1)
                     ->select('material_publics.id')
                     ->get();
-                //dd($material_publics);
 
                 $arr = [];
                 foreach($course_registrations as $course_registration) {
@@ -138,12 +218,10 @@ class MaterialController extends Controller
                     ->where('course_types.count_student_max', 1)
                     ->select('material_sessions.id')
                     ->get();
-                //dd($material_sessions);
 
                 return view('materials.student_index', compact('course_registrations', 'material_publics', 'material_sessions'));
             } else if($course_type == 'Group') {
                 $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
-                //dd($course_registrations);
 
                 $arr = [];
                 foreach($course_registrations as $course_registration) {
@@ -161,7 +239,6 @@ class MaterialController extends Controller
                     ->where('course_types.count_student_max', '<>', 1)
                     ->select('material_publics.id')
                     ->get();
-                //dd($material_publics);
 
                 $arr = [];
                 foreach($course_registrations as $course_registration) {
@@ -184,19 +261,17 @@ class MaterialController extends Controller
                     ->where('course_types.count_student_max', '<>', 1)
                     ->select('material_sessions.id')
                     ->get();
-                //dd($material_sessions);
 
                 return view('materials.student_index', compact('course_registrations', 'material_publics', 'material_sessions'));
             } else {
                 return redirect('/');
-            }
+            }*/
         }
 
-        if ($this->is_instructor()){
+        else if ($this->is_instructor()){
             //return view('materials.instructor_index');
             if($course_type == 'Free Trial') {
                 $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
-                //dd($course_registrations);
 
                 $arr = [];
                 foreach($course_registrations as $course_registration) {
@@ -214,7 +289,6 @@ class MaterialController extends Controller
                     ->where('course_types.name', 'LIKE', '%Trial%')
                     ->select('material_publics.id')
                     ->get();
-                //dd($material_publics);
 
                 $arr = [];
                 foreach($course_registrations as $course_registration) {
@@ -237,12 +311,10 @@ class MaterialController extends Controller
                     ->where('course_types.name', 'LIKE', '%Trial%')
                     ->select('material_sessions.id')
                     ->get();
-                //dd($material_sessions);
 
                 return view('materials.student_index', compact('course_registrations', 'material_publics', 'material_sessions'));
             } else if($course_type == 'Private') {
                 $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
-                //dd($course_registrations);
 
                 $arr = [];
                 foreach($course_registrations as $course_registration) {
@@ -261,7 +333,6 @@ class MaterialController extends Controller
                     ->where('course_types.count_student_max', 1)
                     ->select('material_publics.id')
                     ->get();
-                //dd($material_publics);
 
                 $arr = [];
                 foreach($course_registrations as $course_registration) {
@@ -285,12 +356,10 @@ class MaterialController extends Controller
                     ->where('course_types.count_student_max', 1)
                     ->select('material_sessions.id')
                     ->get();
-                //dd($material_sessions);
 
                 return view('materials.student_index', compact('course_registrations', 'material_publics', 'material_sessions'));
             } else if($course_type == 'Group') {
                 $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
-                //dd($course_registrations);
 
                 $arr = [];
                 foreach($course_registrations as $course_registration) {
@@ -308,7 +377,6 @@ class MaterialController extends Controller
                     ->where('course_types.count_student_max', '<>', 1)
                     ->select('material_publics.id')
                     ->get();
-                //dd($material_publics);
 
                 $arr = [];
                 foreach($course_registrations as $course_registration) {
@@ -331,7 +399,6 @@ class MaterialController extends Controller
                     ->where('course_types.count_student_max', '<>', 1)
                     ->select('material_sessions.id')
                     ->get();
-                //dd($material_sessions);
 
                 return view('materials.instructor_index', compact('course_registrations', 'material_publics', 'material_sessions'));
             } else {
