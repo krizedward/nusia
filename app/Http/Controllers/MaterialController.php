@@ -129,7 +129,7 @@ class MaterialController extends Controller
             return view('materials.student_index', compact(
                 'course_registrations',
                 'mps_free_trial', 'mps_private', 'mps_group',
-                'mss_free_trial', 'mss_private', 'mss_group',
+                'mss_free_trial', 'mss_private', 'mss_group'
             ));
 
             /*if($course_type == 'Free Trial') {
