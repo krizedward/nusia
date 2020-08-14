@@ -218,6 +218,10 @@
                     </ul>
                 </li>
 
+                <li class="#">
+                    <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> Materials</span></a>
+                </li>
+
                 <!-- Head_Schedule -->
                 <li class="header">COURSES SCHEDULE</li>
 

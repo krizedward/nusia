@@ -44,7 +44,9 @@ class MaterialController extends Controller
     public function index()
     {
         if ($this->is_admin()){
-            return view('materials.admin_index');
+            $public = MaterialPublic::all();
+            $session = MaterialSession::all();
+            return view('materials.admin_index',compact('public','session'));
         }
 
         else if ($this->is_student()){

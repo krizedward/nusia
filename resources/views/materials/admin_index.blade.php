@@ -17,27 +17,68 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header">
-                    <a href="#" class="btn btn-flat btn-sm btn-primary">+ Add</a>
+                    <a href="{{ route('material_publics.create') }}" class="btn btn-flat btn-sm btn-primary">+ Add Material Public</a>
                 </div>
                 <div class="box-body">
-                    <table id="example1" class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped">
                         <thead>
-                        {{-- head table content
                         <tr>
-                            <th></th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Path</th>
                         </tr>
-                        --}}
+                        {{-- head table content --}}
                         </thead>
                         <tbody>
-                        {{-- body content
+                        @foreach($public as $dt)
                             <tr>
-                                <td></td>
+                                <td>{{ $dt->code }}</td>
+                                <td>{{ $dt->name }}</td>
+                                <td>{{ $dt->description }}</td>
+                                <td>{{ $dt->path }}</td>
                             </tr>
-                        --}}
+                            {{-- body content --}}
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+    {{--End Material Public--}}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-warning">
+                <div class="box-header">
+                    <a href="{{ route('material_publics.create') }}" class="btn btn-flat btn-sm btn-primary">+ Add Material Sessions</a>
+                </div>
+                <div class="box-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Path</th>
+                        </tr>
+                        {{-- head table content --}}
+                        </thead>
+                        <tbody>
+                        @foreach($session as $dt)
+                            <tr>
+                                <td>{{ $dt->code }}</td>
+                                <td>{{ $dt->name }}</td>
+                                <td>{{ $dt->description }}</td>
+                                <td>{{ $dt->path }}</td>
+                            </tr>
+                            {{-- body content --}}
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{--End Material Session--}}
 @stop

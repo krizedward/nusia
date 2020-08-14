@@ -61,18 +61,28 @@ class MaterialPublicController extends Controller
      */
     public function create()
     {
-        if($this->is_admin() || $this->is_instructor()) {
+        if($this->is_admin()) {
             $material_types = MaterialType::all();
             $course_types = CourseType::all();
             $course_levels = CourseLevel::all();
             $course_level_details = CourseLevelDetail::all();
 
-            return view('materials.publics.create', compact(
+            return view('material_publics.admin_create', compact(
                 'material_types', 'course_types',
                 'course_levels', 'course_level_details'
             ));
-        } else {
-            // Tidak memiliki hak akses.
+        }
+
+        if($this->is_instructor()) {
+            $material_types = MaterialType::all();
+            $course_types = CourseType::all();
+            $course_levels = CourseLevel::all();
+            $course_level_details = CourseLevelDetail::all();
+
+            return view('material_publics.admin_create', compact(
+                'material_types', 'course_types',
+                'course_levels', 'course_level_details'
+            ));
         }
     }
 

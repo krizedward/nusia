@@ -56,10 +56,12 @@ class MaterialSessionController extends Controller
      */
     public function create()
     {
-        if($this->is_admin() || $this->is_instructor()) {
-            return view('materials.sessions.create');
-        } else {
-            // Tidak memiliki hak akses.
+        if($this->is_admin()) {
+            return view('material_sessions.admin_create');
+        }
+
+        if($this->is_instructor()) {
+            return view('material_sessions.admin_create');
         }
     }
 
