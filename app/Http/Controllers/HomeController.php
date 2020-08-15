@@ -56,7 +56,13 @@ class HomeController extends Controller
 
         if($this->is_instructor()) {
             $session_reg = SessionRegistration::all();
-            return view('dashboard.instructor_index', compact('session_reg'));
+            $session_reg_order_by_schedule_time = SessionRegistration
+                ::join('sessions', 'session_registrations.session_id', 'sessions.id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->orderBy('schedule_time')
+                ->select('session_registrations.id', 'session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
+                ->get();
+            return view('dashboard.instructor_index', compact('session_reg', 'session_reg_order_by_schedule_time'));
         }
 
         if($this->is_student()) {

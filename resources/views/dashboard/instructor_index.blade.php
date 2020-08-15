@@ -4,6 +4,8 @@
 
 @include('layouts.css_and_js.dashboard')
 
+@include('layouts.css_and_js.table')
+
 @section('content')
     <!-- Main row -->
     <div class="row">
@@ -28,13 +30,12 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
-                        <table class="table no-margin">
+                        <table id="example1" class="table no-margin">
                             <thead>
                             <tr>
-                                <th>Session ID</th>
-                                <th>Course</th>
+                                <th style="width:65px;">Session ID</th>
                                 <th>Level</th>
-                                <th>Session</th>
+                                <th>Session Name</th>
                                 <th>Schedule</th>
                                 <th>Link</th>
                             </tr>
@@ -43,12 +44,21 @@
                                 @foreach($session_reg as $dt)
                                 <tr>
                                     <td>{{ $dt->code }}</td>
-                                    <td>{{ $dt->session->course->course_package->course_level->name }}</td>
-                                    <td>{{ $dt->session->course->course_package->course_level_detail->name }}</td>
+                                    <td>{{ $dt->session->course->course_package->course_level->name }} {{ $dt->session->course->course_package->course_level_detail->name }}</td>
                                     {{--session pakai attribut title untuk penamaan persession di halaman dashboard--}}
-                                    <td>{{ $dt->session->title }}</td>
+                                    @if($dt->session->title)
+                                      <td>{{ $dt->session->title }}</td>
+                                    @elseif($dt->session->course->title)
+                                      <td>{{ $dt->session->course->title }}</td>
+                                    @else
+                                      <td>{{ $dt->session->course->course_package->title }}</td>
+                                    @endif
                                     <td>{{ date('d M Y', strtotime($dt->session->schedule->schedule_time)) }}</td>
-                                    <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
+                                    @if($dt->session->link_zoom)
+                                      <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
+                                    @else
+                                      <td><i>N/A</i></td>
+                                    @endif
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -72,7 +82,8 @@
                         <!-- /.box-header -->
                         <div class="box-body">
                             <ul class="products-list product-list-in-box">
-                                @foreach($session_reg as $dt)
+                              @if($session_reg_order_by_schedule_time)
+                                @foreach($session_reg_order_by_schedule_time as $dt)
                                     <li class="item">
                                         <div class="product-img">
                                             <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="Product Image">
@@ -81,12 +92,17 @@
                                             <div class="product-title">{{ $dt->session->course->course_package->title }} - {{ $dt->session->name }}
                                                 <span class="label label-info pull-right">{{ date('d M Y', strtotime($dt->session->schedule->schedule_time)) }}</span></div>
                                             <span class="product-description">
-                                                Note : don't forget to join class.
+                                                Note : Don't forget to get in touch soon!
                                             </span>
                                         </div>
                                     </li>
                                     <!-- /.item -->
                                 @endforeach
+                              @else
+                                <div style="color:#555555">
+                                  No courses available. You may join one first!
+                                </div>
+                              @endif
                             </ul>
                         </div>
                         <!-- /.box-body -->
