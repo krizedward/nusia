@@ -160,6 +160,10 @@ class HomeController extends Controller
                 'learning_objective' => $request->learning_objective,
             ]);
 
+            User::where('id',$request->id)->update([
+                'citizenship' => $request->citizenship,
+            ]);
+
             \Session::flash('coba','Create Success !!!');
         }
 
