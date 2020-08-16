@@ -214,6 +214,10 @@ class HomeController extends Controller
     //Menampilkan form questionnaire
     public function questionnaire()
     {
+        if(Auth::user()->citizenship != 'Not Available') {
+            return redirect()->route('home');
+        }
+
         $countries = [
             'Afghanistan', 'Albania', 'Algeria', 'Antigua and Barbuda', 'Argentina',
             'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Azores',
