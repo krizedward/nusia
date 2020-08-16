@@ -14,38 +14,87 @@
 
 @section('content')
     <div class="row">
+        <div class="col-md-6">
+          <div class="alert alert-success alert-dismissable">
+            <h4>
+              <i class="icon fa fa-book"></i>
+              Note 1
+            </h4>
+            You can join 3 sessions of free trial courses with NUSIA.
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="alert alert-success alert-dismissable">
+            <h4>
+              <i class="icon fa fa-book"></i>
+              Note 2
+            </h4>
+            Before starting each session, you must download the main materials.
+          </div>
+        </div>
         <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#activity" data-toggle="tab">Free Trial</a></li>
+                  <?php $i = 1; ?>
+                  @foreach($data as $dt)
+                    @if($i++ == 1)
+                      @if($dt->code)
+                        <li class="active"><a href="#activity{{$dt->id}}" data-toggle="tab">{{$dt->code}}</a></li>
+                      @elseif($dt->title)
+                        <li class="active"><a href="#activity{{$dt->id}}" data-toggle="tab">{{$dt->title}}</a></li>
+                      @else
+                        <li class="active"><a href="#activity{{$dt->id}}" data-toggle="tab">{{$dt->course_package->title}}</a></li>
+                      @endif
+                    @else
+                      @if($dt->code)
+                        <li><a href="#activity{{$dt->id}}" data-toggle="tab">{{$dt->code}}</a></li>
+                      @elseif($dt->title)
+                        <li><a href="#activity{{$dt->id}}" data-toggle="tab">{{$dt->title}}</a></li>
+                      @else
+                        <li><a href="#activity{{$dt->id}}" data-toggle="tab">{{$dt->course_package->title}}</a></li>
+                      @endif
+                    @endif
+                  @endforeach
                 </ul>
                 <div class="tab-content">
-                    <div class="active tab-pane" id="activity">
+                  <?php $i = 1; $arr = []; ?>
+                  @foreach($data as $dt)
+                    @if($i++ == 1)
+                    <div class="active tab-pane" id="activity{{$dt->id}}">
+                    @else
+                    <div class="tab-pane" id="activity{{$dt->id}}">
+                    @endif
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="box">
                                     <div class="box-header">
-                                        <h3 class="box-title">Free Trial Course</h3>
+                                        @if($dt->title)
+                                          <h3 class="box-title">{{$dt->title}}</h3>
+                                        @else
+                                          <h3 class="box-title">{{$dt->course_package->title}}</h3>
+                                        @endif
                                     </div>
-                                    <form>
+                                    <form action="#" method="POST">
+                                      @csrf
                                         <div class="box-body">
                                             <dl>
                                                 <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
-                                                <dd>You can join 3 sessions of free trial courses with NUSIA.</dd>
+                                                <dd>{{$dt->description}}</dd>
                                             </dl>
                                             <hr>
                                             <dl>
-                                                <dt><i class="fa fa-file-text-o margin-r-5"></i> Note</dt>
-                                                <dd>Before starting each session, you must download the main materials.</dd>
+                                                <dt><i class="fa fa-file-text-o margin-r-5"></i> Requirement</dt>
+                                                <dd>{{$dt->requirement}}</dd>
                                             </dl>
                                         </div>
+                                        <button type="submit" class="btn btn-s btn-primary">Choose This Class</button>
                                     </form>
                                 </div>
                             </div>
                             <div class="col-md-9">
                                 <div class="box">
                                     <div class="box-header">
-                                        <h3 class="box-title">List of Available Courses</h3>
+                                        <h3 class="box-title">Schedules</h3>
                                         <div class="box-tools pull-right">
                                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                             </button>
@@ -55,47 +104,32 @@
                                         <table class="table table-bordered">
                                             <tr>
                                                 <th style="width: 10px">#</th>
-                                                <th>Course Name</th>
-                                                <th>Available Slot</th>
-                                                <th>Number of Session</th>
-                                                <th style="width: 40px">Action</th>
+                                                <th>Session ID</th>
+                                                <th>Session Name</th>
+                                                <th>Meeting Time</th>
                                             </tr>
-                                            <?php $i = 1; $arr = []; ?>
-                                            @foreach($data as $dt)
+                                            <?php $j = 1; ?>
+                                            @foreach($dt->sessions as $s)
                                                 <tr>
-                                                  <td>{{ $i++ }}</td>
-                                                  @if($dt->title)
-                                                    <td>{{ $dt->title }}</td>
-                                                  @else
-                                                    <td>{{ $dt->course_package->title }}</td>
-                                                  @endif
-                                                  @if($dt->course_package->course_type->count_student_max)
-                                                    <td>{{ $dt->course_package->course_type->count_student_max }}</td>
+                                                  <td>{{ $j }}</td>
+                                                  @if($s->code)
+                                                    <td>{{ $s->code }}</td>
                                                   @else
                                                     <td><i>Not Available</i></td>
                                                   @endif
-                                                  @if($dt->course_package->count_session)
-                                                    <td>{{ $dt->course_package->count_session }}</td>
+                                                  @if($s->title)
+                                                    <td>{{ $s->title }}</td>
+                                                  @else
+                                                    <td>Session {{ $s->j }}</td>
+                                                  @endif
+                                                  @if($s->schedule->schedule_time)
+                                                    <td>{{ $s->schedule->schedule_time }}</td>
                                                   @else
                                                     <td><i>Not Available</i></td>
                                                   @endif
-                                                  <td><i>N/A</i></td>
                                                 </tr>
+                                              <?php $j++; ?>
                                             @endforeach
-                                            <!--tr>
-                                                <td>1.</td>
-                                                <td>Introduce</td>
-                                                <td>Introduce</td>
-                                                <td>PDF</td>
-                                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Download</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2.</td>
-                                                <td>Introduce</td>
-                                                <td>Introduce</td>
-                                                <td>PDF</td>
-                                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Download</a></td>
-                                            </tr-->
                                         </table>
                                     </div>
                                 </div>
@@ -103,6 +137,7 @@
                         </div>
                     </div>
                     <!-- /.tab-pane -->
+                  @endforeach
                 </div>
                 <!-- /.tab-content -->
             </div>
