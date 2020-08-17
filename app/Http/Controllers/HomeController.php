@@ -15,6 +15,7 @@ use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
 {
@@ -141,15 +142,13 @@ class HomeController extends Controller
                 'password' => Hash::make($request->password),
                 'roles' => 'Student',
                 'citizenship' => $request->citizenship,
-                'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
+                'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', Hash::make(Auth::user()->id)) : null,
             ]);
         }
 
         if($this->is_student()){
-            $temp = User::all()->last();
-
-            Student::create([
-                'user_id' => $temp->id,
+            Student::where('user_id', Auth::user()->id)->update([
+                'user_id' => Auth::user()->id,
                 'age' => $request->age,
                 'status_job' => $request->status_job,
                 'status_description' => $request->status_description,
@@ -161,9 +160,9 @@ class HomeController extends Controller
                 'learning_objective' => $request->learning_objective,
             ]);
 
-            User::where('id',$request->id)->update([
+            User::find(Auth::user()->id)->update([
                 'citizenship' => $request->citizenship,
-                'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
+                'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', Hash::make(Auth::user()->student->id)) : null,
             ]);
 
             // \Session::flash('coba','Create Success !!!');

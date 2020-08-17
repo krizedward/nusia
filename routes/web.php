@@ -153,7 +153,7 @@ Route::group(['middleware'=>'auth'], function() {
     //halaman questionnaire
     //questionnaire aku taruh di HomeController
     Route::get('student/questionnaire', 'HomeController@questionnaire')->name('layouts.questionnaire');
-    Route::post('student/questionnaire/store', 'HomeController@store')->name('questionnaire.store');
+    Route::post('student/questionnaire', 'HomeController@store')->name('questionnaire.store');
     Route::get('profile/{id}', 'HomeController@profile')->name('profile');
     /*end link*/
 

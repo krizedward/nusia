@@ -13,7 +13,6 @@
                     @csrf
                     <div class="box-body">
                         <div class="row">
-                            <input type="hidden" value="{{ Auth::user()->id }}" name="id">
                             <div class="col-md-6">
                                 {{--Form Kiri--}}
                                 <div class="col-md-6">
