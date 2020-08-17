@@ -14,12 +14,17 @@
 
 @section('content')
     <div class="row">
+      @foreach($instructors as $dt)
         <div class="col-md-4">
             <!-- Box Comment -->
             <div class="box box-widget">
                 <div class="box-body">
-                    <a href="#" data-toggle="modal" data-target="#1">
-                        <img class="img-responsive pad" src="{{ url('uploads/instructor/pic1.png') }}" alt="Photo">
+                    <a href="#" data-toggle="modal" data-target="#{{$dt->id}}">
+                      @if($dt->user->image_profile)
+                        <img class="img-responsive pad" src="{{ url('uploads/instructor/'.$dt->user->image_profile) }}" alt="User profile picture">
+                      @else
+                        <img class="img-responsive pad" src="{{ asset('adminlte/dist/img/avatar5.png') }}" alt="User profile picture">
+                      @endif
                     </a>
                 </div>
                 <!-- /.box-body -->
@@ -28,30 +33,38 @@
         </div>
         <!-- /.col -->
 
-        <div class="modal fade" id="1">
+        <div class="modal fade" id="{{$dt->id}}">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <!-- Profile Image -->
                     <div class="box box-primary">
                         <div class="box-body box-profile">
-                            <img class="profile-user-img img-responsive img-circle" src="{{ url('uploads/instructor/pic1.png') }}" alt="User profile picture">
+                          @if($dt->user->image_profile)
+                            <img class="profile-user-img img-responsive img-circle" src="{{ url('uploads/instructor/'.$dt->user->image_profile) }}" alt="User profile picture">
+                          @else
+                            <img class="profile-user-img img-responsive img-circle" src="{{ asset('adminlte/dist/img/avatar5.png') }}" alt="User profile picture">
+                          @endif
 
-                            <h3 class="profile-username text-center">name</h3>
+                            <h3 class="profile-username text-center">{{$dt->user->first_name}} {{$dt->user->last_name}}</h3>
 
-                            <p class="text-muted text-center">I am Your Instructor</p>
+                            <p class="text-muted text-center">This box describes the professional experience(s) and interest(s) of {{$dt->user->first_name}} {{$dt->user->last_name}}</p>
 
                             <ul class="list-group list-group-unbordered">
                                 <li class="list-group-item">
                                     <b>Professional Experiences</b>
-                                    <p>
-                                        Description
-                                    </p>
+                                    @foreach(explode('|| ', $dt->working_experience) as $we)
+                                      <p>
+                                        {{$we}}
+                                      </p>
+                                    @endforeach
                                 </li>
                                 <li class="list-group-item">
                                     <b>Interest</b>
-                                    <p>
-                                        Interest
-                                    </p>
+                                    @foreach(explode(', ', $dt->interest) as $in)
+                                      <p>
+                                        {{$in}}
+                                      </p>
+                                    @endforeach
                                 </li>
                             </ul>
 
@@ -70,5 +83,6 @@
             <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
+      @endforeach
     </div>
 @stop

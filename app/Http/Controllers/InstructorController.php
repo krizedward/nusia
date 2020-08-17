@@ -47,7 +47,8 @@ class InstructorController extends Controller
         if ($this->is_student()){
             //halaman yang menampilkan data instructor yang
             // akan mengajar student yang terdaftar
-            return view('instructors.student_index');
+            $instructors = Instructor::all();
+            return view('instructors.student_index', compact('instructors'));
         }
 
         if ($this->is_admin()){

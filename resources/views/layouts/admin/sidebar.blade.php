@@ -44,8 +44,15 @@
             <!-- Head_Navigasi -->
             <li class="header">STUDENT NAVIGATION</li>
               @if(Auth::user()->citizenship == 'Not Available')
-                <li class="#">
+                <li class="{{ set_active('layouts.questionnaire') }}">
                     <a href="{{ route('layouts.questionnaire') }}"><i class="fa fa-book"> </i><span> Account Confirmation</span></a>
+                </li>
+
+                <!-- Other_Navigasi -->
+                <li class="header">OTHER</li>
+
+                <li class="{{ set_active('instructors.index') }}">
+                    <a href="{{ route('instructors.index') }}"><i class="fa fa-users"> </i><span> Nusia Instructors</span></a>
                 </li>
               @else
                 <li class="treeview">
@@ -79,7 +86,6 @@
                 <li class="#">
                     <a href="{{ route('materials.index') }}"><i class="fa fa-archive"> </i><span> Materials</span></a>
                 </li>
-              @endif
 
                 <!-- Other_Navigasi -->
                 <li class="header">OTHER</li>
@@ -91,6 +97,7 @@
                 <li class="#">
                     <a href="{{ route('instructors.index') }}"><i class="fa fa-users"> </i><span> Nusia Instructors</span></a>
                 </li>
+              @endif
             @endif
             {{-- End Student --}}
             @if(Auth::user()->roles == 'Instructor')
