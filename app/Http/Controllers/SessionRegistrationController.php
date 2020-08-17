@@ -57,7 +57,7 @@ class SessionRegistrationController extends Controller
         else if ($this->is_student()){
             //halaman yang menampilkan detail jadwal yang di tentukan
             // oleh instructor kepada student nusia
-
+            /*
             $arr = [];
             if($course_type == 'Free Trial') {
                 $course_registrations = CourseRegistration
@@ -103,6 +103,10 @@ class SessionRegistrationController extends Controller
             $data = SessionRegistration
                 ::whereIn('course_registration_id', $arr)
                 ->get();
+
+            return view('session_registrations.student_index',compact('data'));
+            */
+            $data = SessionRegistration::all();
             return view('session_registrations.student_index',compact('data'));
         } else {
             return redirect()->route('home');
@@ -147,6 +151,23 @@ class SessionRegistrationController extends Controller
                 'course_registration_id' => $request->course_id,
             ]);
         }
+
+        if($this->is_student()) {
+            CourseRegistration::create([
+                'course_id' => $request->course_id,
+                'student_id' => $request->student_id
+            ]);
+
+            $temp = CourseRegistration::all()->last();
+
+            SessionRegistration::create([
+                'session_id' => $request->session_id,
+                'course_registration_id' => $temp->id,
+            ]);
+
+            return redirect()->route('session_registrations.index',[1] );
+        }
+
         /*
         $data = $request->all();
         $data = Validator::make($data, [

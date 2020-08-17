@@ -78,7 +78,9 @@
                                 @if($dt->link_zoom)
                                   <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Link</a></td>
                                 @else
-                                  <td><i>N/A</i></td>
+                                  {{--
+                                  <td><i>N/A</i></td>--}}
+                                  <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Link</a></td>
                                 @endif
                             </tr>
                             @endforeach

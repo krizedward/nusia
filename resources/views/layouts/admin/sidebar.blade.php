@@ -57,8 +57,12 @@
                     </a>
                     <ul class="treeview-menu">
                         <li class="#">
-                            <a href="{{ route('schedules.index', ['Free Trial']) }}"><i class="fa fa-circle-o"></i> Free Trial</a>
+                            <a href="{{ route('sessions.index') }}"><i class="fa fa-circle-o"></i> Free Trial</a>
                         </li>
+                        {{--
+                        <li class="#">
+                            <a href="{{ route('schedules.index', ['Free Trial']) }}"><i class="fa fa-circle-o"></i> Free Trial</a>
+                        </li>--}}
                         <!--li class="#">
                             <a href="{{ route('schedules.index', ['Private']) }}"><i class="fa fa-circle-o"></i> Private</a>
                         </li-->

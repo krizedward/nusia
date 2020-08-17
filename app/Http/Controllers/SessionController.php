@@ -54,6 +54,11 @@ class SessionController extends Controller
             return view('sessions.instructor_index', compact('data'));
         }
 
+        if ($this->is_student()){
+            $session = Session::all();
+            return view('sessions.student_index', compact('session'));
+        }
+
         /*
         if($this->is_admin()) {
             $data = Session::all();
