@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\SessionRegistration;
 use App\Models\CourseRegistration;
+use App\Models\Session;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -119,7 +120,9 @@ class SessionRegistrationController extends Controller
     public function create()
     {
         if ($this->is_admin()){
-            return view('session_registrations.admin_create');
+            $session = Session::all();
+            $course_registration = CourseRegistration::all();
+            return view('session_registrations.admin_create', compact('session', 'course_registration'));
         }
         /*
         if($this->is_admin()) {
@@ -140,10 +143,8 @@ class SessionRegistrationController extends Controller
     {
         if($this->is_admin()) {
             SessionRegistration::create([
-                'session_id' => 1,
-                'course_registration_id' => 1,
-                'registration_time' => '2020-08-11 06:56:12',
-                'status' => 'Present',
+                'session_id' => $request->session_id,
+                'course_registration_id' => $request->course_id,
             ]);
         }
         /*

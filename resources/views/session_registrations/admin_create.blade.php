@@ -8,7 +8,7 @@
     <h1>Session Registrations</h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="{{ route('instructors.index') }}">Schedule</a></li>
+        <li><a href="{{ route('session_registrations.index') }}">Session Registrations</a></li>
         <li class="active">Create</li>
     </ol>
 @stop
@@ -25,15 +25,35 @@
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-6">
+                            {{--
                             <div class="form-group">
                                 <label>Session</label>
                                 <input name="text" type="text" class="form-control">
+                            </div>--}}
+                            <div class="form-group">
+                                <label>Session</label>
+                                <select name="session_id" class="form-control select2">
+                                    <option selected="" disabled="">Choose Session</option>
+                                    @foreach($session as $dt)
+                                        <option value="{{ $dt->id }}">{{ $dt->id }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
+                            {{--
                             <div class="form-group">
                                 <label for="#text">Course Register</label>
                                 <input name="text" type="text" class="form-control">
+                            </div>--}}
+                            <div class="form-group">
+                                <label>Course</label>
+                                <select name="course_id" class="form-control select2">
+                                    <option selected="" disabled="">Choose Course</option>
+                                    @foreach($course_registration as $dt)
+                                        <option value="{{ $dt->id }}">{{ $dt->id }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>

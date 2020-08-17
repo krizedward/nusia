@@ -23,9 +23,9 @@
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>Registration ID</th>
-                            <th>Course Name</th>
-                            <th>Level</th>
+                            <th>ID</th>
+                            <th>Student</th>
+                            <th>Course</th>
                             <th>Slot</th>
                             <th>Session</th>
                         </tr>
@@ -34,8 +34,8 @@
                         <tbody>
                         @foreach($data as $dt)
                             <tr>
-                                <td>{{ $dt->code }}</td>
-                                <td>{{ $dt->course_registration->course->title }}</td>
+                                <td>#</td>
+                                <td>{{ $dt->course_registration->student->user->first_name }}</td>
                                 <td>{{ $dt->course_registration->course->course_package->course_level->name }} {{ $dt->course_registration->course->course_package->course_level_detail->name }}</td>
                                 <td>{{ __('3 Student') }}</td>
                                 <td>{{ $dt->session->title }}</td>
