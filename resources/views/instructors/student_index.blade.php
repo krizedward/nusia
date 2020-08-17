@@ -66,6 +66,10 @@
                                       </p>
                                     @endforeach
                                 </li>
+                                <li class="list-group-item">
+                                    <b>Email</b>
+                                    <p>{{$dt->user->email}}</p>
+                                </li>
                             </ul>
 
                             @if(Auth::user()->citizenship == 'Not Available')
