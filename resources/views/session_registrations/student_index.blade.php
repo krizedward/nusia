@@ -75,7 +75,7 @@
                                 @elseif($dt->status == 'Not Present')
                                   <td><label class="label label-danger">Not Present</label></td>
                                 @endif
-                                @if($dt->link_zoom)
+                                @if($dt->session->link_zoom)
                                   <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Link</a></td>
                                 @else
                                   <td><i>N/A</i></td>

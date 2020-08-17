@@ -82,12 +82,13 @@
                 <li class="#">
                     <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Sessions</span></a>
                 </li>
-
+                {{--
                 <li class="#">
                     <a href="{{ route('materials.index') }}"><i class="fa fa-archive"> </i><span> Materials</span></a>
-                </li>
+                </li>--}}
 
                 <!-- Other_Navigasi -->
+                {{--
                 <li class="header">OTHER</li>
 
                 <li class="#">
@@ -97,6 +98,7 @@
                 <li class="#">
                     <a href="{{ route('instructors.index') }}"><i class="fa fa-users"> </i><span> Nusia Instructors</span></a>
                 </li>
+                --}}
               @endif
             @endif
             {{-- End Student --}}
@@ -151,13 +153,15 @@
                         </ul>
                     </li>
 
+                    {{--
                     <li class="#">
                         <a href="{{ route('materials.index') }}">
                             <i class="fa fa-archive"> </i><span>Material Instructor</span>
                         </a>
                     </li>
-
+                    --}}
                     <!-- Other_Navigasi -->
+                    {{--
                     <li class="header">OTHER</li>
 
                     <li class="#">
@@ -167,7 +171,7 @@
                     <li class="#">
                         <a href="{{ route('instructors.index') }}"><i class="fa fa-users"> </i><span> Nusia Student</span></a>
                     </li>
-
+                    --}}
                     {{--
                     <li class="{{ set_active(['material.student','material.public.student']) }} treeview">
                         <a href="#">
