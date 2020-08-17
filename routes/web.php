@@ -56,7 +56,7 @@ Route::group(['middleware'=>'auth'], function() {
         ]);
 
         // menggunakan nested resources: /courses/{course}/registrations/{user}
-        Route::resource('courses.registrations', 'CourseRegistrationController')
+        Route::resource('courses-registrations', 'CourseRegistrationController')
             ->only(['index', 'create', 'store', 'destroy'])
             ->names([
                 'index'   => 'course_registrations.index',
@@ -149,11 +149,12 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('/schedules/student/group','ScheduleController@group')->name('schedules.student.group');
 
     Route::get('/courses','CourseController@index')->name('courses.index');
+    Route::post('/courses','CourseRegistrationController@store')->name('course_registrations.store');
 
     //halaman questionnaire
     //questionnaire aku taruh di HomeController
     Route::get('student/questionnaire', 'HomeController@questionnaire')->name('layouts.questionnaire');
-    Route::post('student/questionnaire/store', 'HomeController@store')->name('questionnaire.store');
+    Route::post('student/questionnaire', 'HomeController@store')->name('questionnaire.store');
     Route::get('profile/{id}', 'HomeController@profile')->name('profile');
     /*end link*/
 

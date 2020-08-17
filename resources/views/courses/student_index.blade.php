@@ -74,8 +74,10 @@
                                           <h3 class="box-title">{{$dt->course_package->title}}</h3>
                                         @endif
                                     </div>
-                                    <form action="#" method="POST">
+                                    <form action="{{ route('course_registrations.store') }}" method="POST">
                                       @csrf
+                                        <input type="hidden" value="{{ $dt->id }}" name="course_id">
+                                        <input type="hidden" value="{{ Auth::user()->student->id }}" name="student_id">
                                         <div class="box-body">
                                             <dl>
                                                 <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
