@@ -97,6 +97,10 @@ class CourseRegistrationController extends Controller
             // Tidak memiliki hak akses.
         }
 
+        if($this->is_student()) {
+            return redirect()->route('home');
+        }
+
         $data = CourseRegistration::all();
         return view('registrations.courses.index', compact('data'));
     }
