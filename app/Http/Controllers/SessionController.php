@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
 
 use App\Models\Session;
@@ -72,8 +74,10 @@ class SessionController extends Controller
      */
     public function create()
     {
-        if($this->is_admin() || $this->is_instructor()) {
-            return view('sessions.admin_create');
+        if($this->is_admin()) {
+            $course = Course::all();
+            $schedule = Schedule::all();
+            return view('sessions.admin_create', compact('course','schedule'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -89,12 +93,10 @@ class SessionController extends Controller
     {
         if($this->is_admin()) {
             Session::create([
-                'course_id' => 1,
-                'schedule_id' => 1,
-                'title' => 'Test',
-                'description' => 'Test',
-                'requirement' => 'Test',
-                'link_zoom' => 'Test'
+                'course_id' => $request->course,
+                'schedule_id' => $request->schedule,
+                'title' => $request->title,
+                'description' => $request->description,
             ]);
         }
         /*

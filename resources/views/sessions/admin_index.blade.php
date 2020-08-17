@@ -23,9 +23,10 @@
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>Registration ID</th>
+                            <th>ID</th>
+                            <th>Instructor</th>
                             <th>Meeting Time</th>
-                            <th>Level</th>
+                            <th>Course</th>
                             <th>Session Name</th>
                         </tr>
                         {{-- head table content --}}
@@ -34,9 +35,10 @@
 
                         @foreach($data as $dt)
                             <tr>
-                                <td>{{ $dt->code }}</td>
+                                <td>#</td>
+                                <td>{{ $dt->schedule->instructor->user->first_name }} {{ $dt->schedule->instructor->user->last_name }}</td>
                                 <td>{{ $dt->schedule->schedule_time }}</td>
-                                <td>{{ $dt->course->course_package->course_level->name }}</td>
+                                <td>{{ $dt->course->course_package->course_level->name }}-{{ $dt->course->course_package->course_level_detail->name }}</td>
                                 <td>{{ $dt->title }}</td>
                             </tr>
                         @endforeach
