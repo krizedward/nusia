@@ -5,6 +5,30 @@
 @include('layouts.css_and_js.dashboard')
 
 @section('content')
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Language Proficiency Description</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <b>Novice</b>
+                                <p>You are categorized as a novice learner when you have no or limited prior Indonesian language knowledge. In this free online classes, you are going to learn about greetings, how to introduce yourself and someone else, as well as how to ask someone’s information.</p>
+                            </div>
+                            <div class="col-md-12">
+                                <b>Intermediate</b>
+                                <p>You are identified as an intermediate learner when you can handle a simple situation or transaction in Indonesian language. In this free online classes, you will learn about introduction, diseases and its symptoms, as well as Indonesian traditional culinary.</p>
+                            </div>
+                            <div class="col-md-12">
+                                <b>Advanced</b>
+                                <p>You are categorized as an advanced learner when you are able to handle a complicated situation or transaction in Indonesian language. You are going to learn about introduction and a general knowledge of Indonesia, Indonesian culinary, and the current world’s phenomenon in this free online classes.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+
                 <div class="box box-default">
                     <div class="box-header with-border">
                         <h3 class="box-title">Questionnaire New Student</h3>
