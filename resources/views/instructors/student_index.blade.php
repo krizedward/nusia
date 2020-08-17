@@ -14,12 +14,17 @@
 
 @section('content')
     <div class="row">
+      @foreach($instructors as $dt)
         <div class="col-md-4">
             <!-- Box Comment -->
             <div class="box box-widget">
                 <div class="box-body">
-                    <a href="#" data-toggle="modal" data-target="#1">
-                        <img class="img-responsive pad" src="{{ url('uploads/instructor/pic1.png') }}" alt="Photo">
+                    <a href="#" data-toggle="modal" data-target="#{{$dt->id}}">
+                      @if($dt->user->image_profile)
+                        <img class="img-responsive pad" src="{{ url('uploads/instructor/'.$dt->user->image_profile) }}" alt="User profile picture">
+                      @else
+                        <img class="img-responsive pad" src="{{ asset('adminlte/dist/img/avatar5.png') }}" alt="User profile picture">
+                      @endif
                     </a>
                 </div>
                 <!-- /.box-body -->
@@ -27,6 +32,7 @@
             <!-- /.box -->
         </div>
         <!-- /.col -->
+      @endforeach
 
         <div class="modal fade" id="1">
             <div class="modal-dialog">

@@ -69,7 +69,8 @@ class HomeController extends Controller
             $session = Session::all();
             $material = MaterialSession::all();
             $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
-            return view('dashboard.student_index', compact('session','material','course_registrations'));
+            $instructors = Instructor::all();
+            return view('dashboard.student_index', compact('session','material','course_registrations','instructors'));
         }
     }
 
