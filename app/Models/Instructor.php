@@ -26,8 +26,8 @@ class Instructor extends Model
     {
         return [
             'code' => [
-                'format' => 'INS?', // Format kode yang akan digunakan.
-                'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
+                'format' => 'INS-?', // Format kode yang akan digunakan.
+                'length' => 3 // Jumlah digit yang akan digunakan sebagai nomor urut
                 //refrensi : https://www.lab-informatika.com/membuat-kode-otomatis-di-laravel
             ]
         ];

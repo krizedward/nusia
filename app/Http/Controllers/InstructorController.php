@@ -122,7 +122,7 @@ class InstructorController extends Controller
                 'Woodworking',
             ];
 
-            return view('users.instructors.create', compact('countries', 'interests'));
+            return view('instructors.admin_create', compact('countries', 'interests'));
         } else {
             return redirect()->route('instructors.index');
         }
@@ -257,16 +257,9 @@ class InstructorController extends Controller
                 ->withInput();
         }
 
-        // Membuat slug baru.
-        $data = "";
-        while(1) {
-            $data = Str::random(255);
-            if(User::where('slug', $data)->first() === null) break;
-        }
 
         if($this->is_admin() || $this->is_instructor()) {
             User::create([
-                'slug' => $data,
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
@@ -278,7 +271,6 @@ class InstructorController extends Controller
             $temp = User::all()->last();
 
             Instructor::create([
-                'slug' => $data,
                 'user_id' => $temp->id,
                 'working_experience' => $working_experience,
                 'interest' => $interest,
