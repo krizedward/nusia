@@ -163,12 +163,13 @@ class HomeController extends Controller
 
             User::where('id',$request->id)->update([
                 'citizenship' => $request->citizenship,
+                'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
             ]);
 
-            \Session::flash('coba','Create Success !!!');
+            // \Session::flash('coba','Create Success !!!');
         }
 
-        return redirect()->route('home');
+        return redirect()->route('courses.index');
     }
 
     /**
