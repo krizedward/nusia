@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instructor;
 use Illuminate\Http\Request;
 
 use App\Models\Schedule;
@@ -193,7 +194,8 @@ class ScheduleController extends Controller
     public function create()
     {
         if($this->is_admin()) {
-            return view('schedules.admin_create');
+            $instructor = Instructor::all();
+            return view('schedules.admin_create', compact('instructor'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -209,8 +211,8 @@ class ScheduleController extends Controller
     {
         if ($this->is_admin()){
             Schedule::create([
-                'instructor_id' => 1,
-                'schedule_time' => '2020-08-11 06:19:41',
+                'instructor_id' => $request->instructor,
+                'schedule_time' => $request->date,
                 'status' => 'Available',
             ]);
         }

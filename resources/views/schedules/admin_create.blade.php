@@ -25,15 +25,25 @@
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-6">
+                            {{--
                             <div class="form-group">
                                 <label>Instructor</label>
                                 <input name="text" type="text" class="form-control">
+                            </div>--}}
+                            <div class="form-group">
+                                <label>Instructor</label>
+                                <select name="instructor" class="form-control select2">
+                                    <option selected="" disabled="">Choose Instructor</option>
+                                    @foreach($instructor as $dt)
+                                        <option value="{{$dt->id}}">{{$dt->user->first_name}} {{$dt->user->last_name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="#text">Schedule Time</label>
-                                <input name="text" type="text" class="form-control">
+                                <input name="date" type="date" class="form-control">
                             </div>
                         </div>
                     </div>
