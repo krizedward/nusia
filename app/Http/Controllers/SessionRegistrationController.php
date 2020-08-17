@@ -46,12 +46,13 @@ class SessionRegistrationController extends Controller
     {
         if ($this->is_admin()){
             $data = SessionRegistration::all();
-            return view('session_registrations.admin_index',compact('data'));
+            return view('session_registrations.admin_index',compact('data','session'));
         }
 
         else if ($this->is_instructor()){
             $data = SessionRegistration::all();
-            return view('session_registrations.instructor_index',compact('data'));
+            $session = Session::all();
+            return view('session_registrations.instructor_index',compact('data','session'));
         }
 
         else if ($this->is_student()){

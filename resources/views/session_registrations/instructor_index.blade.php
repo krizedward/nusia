@@ -35,10 +35,12 @@
                             --}}
                             <select name="session_registration" class="form-control select2">
                                 <option selected="" disabled="">Choose Schedule</option>
-                                @foreach($data as $dt)
-                                    <option value="{{ $dt->session_id }}">
-                                        {{ $dt->course_registration->course->course_package->course_level->name }} {{ $dt->course_registration->course->course_package->course_type->name }}
+                                @foreach($session as $dt)
+                                    @if($dt->link_zoom == NULL)
+                                    <option value="{{ $dt->id }}">
+                                        {{ $dt->course->course_package->course_level->name }} {{ $dt->course->course_package->course_type->name }}
                                     </option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
@@ -63,8 +65,7 @@
                             <th>Course Level</th>
                             <th>Course Type</th>
                             <th>Date Meet</th>
-                            <th>Status</th>
-                            <th style="width: 40px">Detail</th>
+                            <th style="width: 40px">Status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -75,21 +76,13 @@
                             <td>{{ $dt->course_registration->course->course_package->course_level->name }}</td>
                             <td>{{ $dt->course_registration->course->course_package->course_type->name }}</td>
                             <td>{{ $dt->registration_time }}</td>
-                            {{--Status Jika Ada Link maka muncul Have Link jik tidak no link--}}
-                            <td>{{ __('Have Link') }}</td>
-                            <td>
-                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Detail</a>
-                            </td>
+                            @if($dt->session->link_zoom)
+                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
+                            @else
+                                <td><i>N/A</i></td>
+                            @endif
                         </tr>
                         @endforeach
-                        <tr>
-                            <td>FR002</td>
-                            <td>Free</td>
-                            <td>Trial</td>
-                            <td>20 August 2020</td>
-                            <td>No Link</td>
-                            <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Detail</a></td>
-                        </tr>
                         </tbody>
                     </table>
                 </div>

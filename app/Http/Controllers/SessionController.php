@@ -225,7 +225,7 @@ class SessionController extends Controller
                 'link_zoom' => $request->link_zoom,
             ]);
 
-            return redirect()->route('sessions.index');
+            return redirect()->route('session_registrations.index');
         }
 
         /*

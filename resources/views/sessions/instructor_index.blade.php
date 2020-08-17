@@ -124,21 +124,17 @@
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
-                                <th style="width: 10px">Code</th>
-                                <th>Course</th>
+                                <th>ID</th>
+                                <th>Course Name</th>
                                 <th>Level</th>
-                                <th>Description</th>
-                                <th style="width: 40px">Action</th>
+                                <th>Slot</th>
                             </tr>
                             @foreach($data as $dt)
                             <tr>
                                 <td>{{ $dt->code }}</td>
                                 <td>{{ $dt->course->course_package->course_level->name }}</td>
                                 <td>{{ $dt->course->course_package->course_type->name }}</td>
-                                <td>{{ $dt->description }}</td>
-                                <td>
-                                    <a class="btn btn-flat btn-xs btn-success" href="{{ route('session_registrations.show',[1,1]) }}">Detail</a>
-                                </td>
+                                <td>{{ $dt->course->course_package->course_type->count_student_max }} Student</td>
                             </tr>
                             @endforeach
                         </table>
