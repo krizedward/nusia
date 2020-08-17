@@ -219,7 +219,9 @@ class HomeController extends Controller
     //Menampilkan form questionnaire
     public function questionnaire()
     {
-        if(Auth::user()->citizenship != 'Not Available') {
+        if(Auth::user()->student->course_registrations->count() == 0) {
+            return redirect()->route('courses.index');
+        } else if(Auth::user()->citizenship != 'Not Available') {
             return redirect()->route('home');
         }
 
