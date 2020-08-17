@@ -216,8 +216,13 @@ class SessionController extends Controller
         $session = Session::findOrFail($id);
 
         if($this->is_instructor()) {
+            /*
             $session->update([
                 'link_zoom' => 'new link',
+            ]);*/
+
+            Session::where('id',$request->session_registration)->update([
+                'link_zoom' => $request->link_zoom,
             ]);
 
             return redirect()->route('sessions.index');

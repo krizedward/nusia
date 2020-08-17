@@ -26,15 +26,25 @@
                         @method('PUT')
                         <div class="form-group">
                             <label>Session In</label>
+                            {{--
                             <select class="form-control select2" name="user">
                                 <option selected="" disabled="">Session In</option>
                                 <option>[kode] - Free Trial Course</option>
                                 <option>[kode] - Novice-Low Private</option>
                             </select>
+                            --}}
+                            <select name="session_registration" class="form-control select2">
+                                <option selected="" disabled="">Choose Schedule</option>
+                                @foreach($data as $dt)
+                                    <option value="{{ $dt->session_id }}">
+                                        {{ $dt->course_registration->course->course_package->course_level->name }} {{ $dt->course_registration->course->course_package->course_type->name }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label>Link Zoom</label>
-                            <input type="text" name="name" class="form-control" placeholder="Link Zoom.." value="{{ old('name') }}">
+                            <input name="link_zoom" type="text" class="form-control" placeholder="Link Zoom.." value="{{ old('name') }}">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

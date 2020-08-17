@@ -4,7 +4,7 @@
 
 @include('layouts.css_and_js.dashboard')
 
-@include('layouts.css_and_js.table')
+{{--@include('layouts.css_and_js.table')--}}
 
 @section('content')
     <!-- Main row -->
