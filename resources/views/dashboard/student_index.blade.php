@@ -67,20 +67,18 @@
     <!-- /.row -->
   @else
 
-    <div class="row">
+    <!--div class="row">
         <div class="col-md-6">
             <div class="alert alert-dismissible">
                 <h4><i class="icon fa fa-clock-o"></i> Our time: {{ $timeNusia->isoFormat('h:mm a') }} {{ $timeNusia->tzName }}</h4>
-                <!--Nusia akan memberikan kesempatan 3 kelas gratis dengan memilih kelas bebas.-->
             </div>
         </div>
         <div class="col-md-6">
             <div class="alert alert-dismissible">
                 <h4><i class="icon fa fa-clock-o"></i> Your time: {{ $timeStudent->isoFormat('h:mm a') }} {{ $timeStudent->tzName }}</h4>
-                <!--Nusia akan memberikan kesempatan 3 kelas gratis dengan memilih kelas bebas.-->
             </div>
         </div>
-    </div>
+    </div-->
     <!-- /.row -->
 
     <!-- Notification row -->
@@ -321,7 +319,14 @@
                           {{ $dt->course->course_package->title }}
                         @endif
                       @endif
-                      <span class="label label-info pull-right">{{ date('d M Y', strtotime($dt->schedule->schedule_time)) }}</span>
+                      @if($dt->schedule->schedule_time)
+                        <?php
+                          $schedule_time = \Carbon\Carbon::parse(strtotime($dt->schedule->schedule_time));
+                        ?>
+                        <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMMM Do YYYY') }}</span>
+                      @else
+                        <span class="label label-danger pull-right">Not Available</span>
+                      @endif
                     </div>
                     <span class="product-description">
                       <!--Note : don't forget to join class.-->
@@ -331,7 +336,7 @@
                           Join <a href="{{ $dt->link_zoom }}" target="_blank">here</a>.
                         @endif
                       @else
-                        Meeting time: {{ date('h:i:s', strtotime($dt->schedule->schedule_time)) }}
+                        Meeting time: {{ $schedule_time->isoFormat('hh:mm') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
                       @endif
                     </span>
                   </div>
