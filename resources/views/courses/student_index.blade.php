@@ -53,9 +53,12 @@
                     </div-->
                     <?php $i = $dt->course_package->count_session; ?>
                     @foreach($dt->sessions as $j => $s)
+                      <?php
+                        $schedule_time = \Carbon\Carbon::parse(strtotime($s->schedule->schedule_time));
+                      ?>
                       <div class="col-md-12">
                         <b>Session {{ $j + 1 }}</b>
-                        <p>{{ date('l, M d Y, h:i \- h:i A', strtotime($s->schedule->schedule_time)) }}</p>
+                        <p>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</p>
                       </div>
                       <?php $i--; ?>
                     @endforeach
@@ -102,7 +105,7 @@
                               @csrf
                               <input type="hidden" value="{{ $dt->id }}" name="course_id">
                               <input type="hidden" value="{{ Auth::user()->student->id }}" name="student_id">
-                              <input type="checkbox" value="1" onchange="if(document.getElementById("flag").value == 0) { document.getElementById("flag").value = 1; } else { document.getElementById("flag").value = 0; }" id="flag" name="flag" class="minimal">&nbsp;&nbsp;I have read and agree to the Terms and Conditions
+                              <input type="checkbox" value="false" onclick="checkboxClick(this);" id="flag" name="flag" class="minimal">&nbsp;&nbsp;I have read and agree to the Terms and Conditions
                               <br>
                               <br>
                               <button type="submit" class="btn btn-s btn-primary" style="width:100%;">Agree and Continue</button>
@@ -121,17 +124,11 @@
           @endif
         @endforeach
     </div>
-
-                            <script>
-                              $("#flag").on('change', function() {
-                                  if($(this).is(':checked')) {
-                                      $(this).attr('value', 1);
-                                  } else {
-                                      $(this).attr('value', 0);
-                                  }
-                              });
-                            </script>
-
+    <script>
+      function checkboxClick(cb) {
+          document.getElementById("flag").value = cb.checked;
+      }
+    </script>
 @stop
 
 {{--contoh-lain-dari-material -> bisa diganti --}}
