@@ -34,27 +34,29 @@
 
             <li class="header">MAIN NAVIGATION</li>
 
+            @if(Auth::user()->roles == 'Admin' || Auth::user()->roles == 'Instructor')
             <li class="{{ set_active('home') }}">
                 <a href="{{ route('home')}}">
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                 </a>
             </li>
+            @elseif(Auth::user()->citizenship != 'Not Available')
+            <li class="{{ set_active('home') }}">
+                <a href="{{ route('home')}}">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            @else
+            <li class="{{ set_active('layouts.questionnaire', 'courses.index') }}">
+                <a href="{{ route('home')}}">
+                    <i class="fa fa-book"></i> <span>Registration</span>
+                </a>
+            </li>
+            @endif
 
-            @if(Auth::user()->roles == 'Student')
+            @if(Auth::user()->roles == 'Student' && Auth::user()->citizenship != 'Not Available')
             <!-- Head_Navigasi -->
             <li class="header">STUDENT NAVIGATION</li>
-              @if(Auth::user()->citizenship == 'Not Available')
-                <li class="{{ set_active('layouts.questionnaire') }}">
-                    <a href="{{ route('layouts.questionnaire') }}"><i class="fa fa-book"> </i><span> Account Confirmation</span></a>
-                </li>
-
-                <!-- Other_Navigasi -->
-                <li class="header">OTHER</li>
-
-                <li class="{{ set_active('instructors.index') }}">
-                    <a href="{{ route('instructors.index') }}"><i class="fa fa-users"> </i><span> Nusia Instructors</span></a>
-                </li>
-              @else
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-book"></i> <span>Schedules</span>
@@ -99,7 +101,6 @@
                     <a href="{{ route('instructors.index') }}"><i class="fa fa-users"> </i><span> Nusia Instructors</span></a>
                 </li>
                 --}}
-              @endif
             @endif
             {{-- End Student --}}
             @if(Auth::user()->roles == 'Instructor')
