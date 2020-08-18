@@ -47,7 +47,7 @@
                 </a>
             </li>
             @else
-            <li class="{{ set_active('layouts.questionnaire', 'courses.index') }}">
+            <li class="{{ set_active(['layouts.questionnaire', 'courses.index']) }}">
                 <a href="{{ route('home')}}">
                     <i class="fa fa-book"></i> <span>Registration</span>
                 </a>
