@@ -14,7 +14,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="alert alert-success alert-dismissable">
             <h4>
               <i class="icon fa fa-book"></i>
@@ -23,7 +23,7 @@
             You can join 3 sessions of free trial courses with NUSIA.
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="alert alert-success alert-dismissable">
             <h4>
               <i class="icon fa fa-book"></i>
@@ -32,6 +32,54 @@
             Before starting each session, you must download the main materials.
           </div>
         </div>
+        @foreach($data as $dt)
+          @if($dt->course_registrations->count() < $dt->course_package->course_type->count_student_max)
+            <div class="col-md-4">
+              <div class="box box-default">
+                <div class="box-header with-border">
+                  <h3 class="box-title">{{ $dt->code }}</h3>
+                </div>
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <b>Description</b>
+                      <p>{{ $dt->description }}</p>
+                    </div>
+                    <div class="col-md-12">
+                      <b>Requirement</b>
+                      <p>{{ $dt->requirement }}</p>
+                    </div>
+                    <?php $i = $dt->course_package->count_session; ?>
+                    @foreach($dt->sessions as $j => $s)
+                      <div class="col-md-12">
+                        <b>Session {{ $j + 1 }}</b>
+                        <p>{{ $s->schedule->schedule_time }}</p>
+                      </div>
+                      <?php $i--; ?>
+                    @endforeach
+                    @while($i--)
+                      <div class="col-md-12">
+                        <b>&nbsp;</b>
+                        <p>&nbsp;</p>
+                      </div>
+                    @endwhile
+                    <div class="col-md-12">
+                      <form action="{{ route('course_registrations.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" value="{{ $dt->id }}" name="course_id">
+                        <input type="hidden" value="{{ Auth::user()->student->id }}" name="student_id">
+                        <button type="submit" class="btn btn-s btn-primary" style="width:100%;">Choose This Class</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+              <!-- /.box -->
+            </div>
+            <!-- /.col -->
+          @endif
+        @endforeach
         <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">

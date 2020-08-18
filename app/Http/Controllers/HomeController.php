@@ -219,9 +219,13 @@ class HomeController extends Controller
     //Menampilkan form questionnaire
     public function questionnaire()
     {
-        if(Auth::user()->student->course_registrations->count() == 0) {
-            return redirect()->route('courses.index');
-        } else if(Auth::user()->citizenship != 'Not Available') {
+        if(Auth::user()->citizenship != 'Not Available') {
+            if(Auth::user()->student->course_registrations->count() == 0) {
+                // Jika Student belum terdaftar dalam class manapun,
+                // tetapi sudah melakukan pengisian kuisioner.
+                // Contoh kasus: Student mengumpulkan kuisioner, kemudian logout, kemudian login lagi.
+                return redirect()->route('courses.index');
+            }
             return redirect()->route('home');
         }
 
