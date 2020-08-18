@@ -102,7 +102,7 @@
                                                                 <div class="form-group">
                                                                     @endif
                                                                     <label for="password">Password</label>
-                                                                    <input name="password" value="password" type="password" class="@error('password') is-invalid @enderror form-control" placeholder="Enter Password">
+                                                                    <input name="password" type="password" class="@error('password') is-invalid @enderror form-control" placeholder="Enter Password">
                                                                     @error('password')
                                                                     <p style="color:red">{{ $message }}</p>
                                                                     @enderror

@@ -19,7 +19,7 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle" src="{{ asset('adminlte/dist/img/user4-128x128.jpg') }}" alt="User profile picture">
+                    <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/user.jpg') }}" alt="User profile picture">
 
                     <h3 class="profile-username text-center">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h3>
 
@@ -35,9 +35,6 @@
                 <div class="box-body">
                     <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
                     <p>{{ Auth::user()->email }}</p>
-                    <hr>
-                    <strong><i class="fa  fa-phone margin-r-5"></i> Phone</strong>
-                    <p class="text-muted">{{ Auth::user()->phone }}</p>
                     <hr>
                     <strong><i class="fa fa-map-marker margin-r-5"></i> Citizenship</strong>
                     <p class="text-muted">{{ Auth::user()->citizenship }}</p>
@@ -56,32 +53,35 @@
         <div class="col-md-9">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#student" data-toggle="tab">Detail</a></li>
+                    <li class="active"><a href="#activity" data-toggle="tab">Detail</a></li>
+                    <li><a href="#form" data-toggle="tab">Form</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="active tab-pane" id="student">
-
-
-                        <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>age</th>
-                                <th>status_job</th>
-                                <th>status_description</th>
-                                <th>status_value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div class="active tab-pane" id="activity">
+                        {{--None--}}
                         @foreach($student as $dt)
-                            <tr>
-                                <td>{{ $dt->age }}</td>
-                                <td>{{ $dt->status_job }}</td>
-                                <td>{{ $dt->status_description }}</td>
-                                <td>{{ $dt->status_value }}</td>
-                            </tr>
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Email</strong>
+                            <p>{{ $dt->user->email }}</p>
+                            <hr>
+
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship</strong>
+                            <p>{{ $dt->user->citizenship }}</p>
+                            <hr>
+
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
+                            <p>{{ $dt->interest }}</p>
+                            <hr>
+
                         @endforeach
-                        </tbody>
-                        </table>
+                    </div>
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane" id="form">
+                        <form role="form" method="post" action="{{ route('instructors.update',$dt->id) }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            {{--none--}}
+                            <p>On Progress</p>
+                        </form>
                     </div>
                     <!-- /.tab-pane -->
                 </div>
