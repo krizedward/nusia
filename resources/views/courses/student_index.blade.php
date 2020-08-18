@@ -80,6 +80,12 @@
             <!-- /.col -->
           @endif
         @endforeach
+    </div>
+@stop
+
+{{--contoh-lain-dari-material -> bisa diganti --}}
+@section('contents')
+    <div class="row">
         <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
@@ -195,10 +201,7 @@
         </div>
         <!-- /.col -->
     </div>
-@stop
 
-{{--contoh-lain-dari-material -> bisa diganti --}}
-@section('contents')
     <div class="row">
         <div class="col-md-12">
             <div class="nav-tabs-custom">

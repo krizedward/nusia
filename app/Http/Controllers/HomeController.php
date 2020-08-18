@@ -67,11 +67,27 @@ class HomeController extends Controller
         }
 
         if($this->is_student()) {
-            $session = Session::all();
+            $session = Session
+                ::join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')
+                ->get();
+            $session_order_by_schedule_time = Session
+                ::join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->orderBy('schedule_time')
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')
+                ->get();
             $material = MaterialSession::all();
             $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
             $instructors = Instructor::all();
-            return view('dashboard.student_index', compact('session','material','course_registrations','instructors'));
+            return view('dashboard.student_index', compact(
+                'session', 'session_order_by_schedule_time',
+                'material', 'course_registrations', 'instructors'
+            ));
         }
     }
 

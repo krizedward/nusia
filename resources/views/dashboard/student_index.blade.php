@@ -2,7 +2,9 @@
 
 @section('title','Dashboard')
 
-@include('layouts.css_and_js.dashboard')
+{{--@include('layouts.css_and_js.dashboard')--}}
+
+@include('layouts.css_and_js.table')
 
 @section('content')
   @if(Auth::user()->citizenship == 'Not Available')
@@ -87,7 +89,7 @@
           <!-- /.box-header -->
           <div class="box-body">
             <div class="table-responsive">
-              <table class="table no-margin">
+              <table id="example1" class="table no-margin">
                 <thead>
                   <tr>
                     <th>Session ID</th>
@@ -132,10 +134,14 @@
               <!-- /.box-header -->
               <div class="box-body no-padding">
                 <ul class="users-list clearfix">
-                  @foreach($session as $dt)
+                  @foreach($instructors as $dt)
                     <li>
-                      <img src="{{ asset('adminlte/dist/img/user1-128x128.jpg') }}" alt="User Image">
-                      <span class="users-list-name" href="#">{{ $dt->schedule->instructor->user->first_name }}</span>
+                      @if($dt->user->image_profile)
+                        <img src="{{ url('uploads/instructor/'.$dt->user->image_profile) }}" alt="User profile picture">
+                      @else
+                        <img src="{{ asset('adminlte/dist/img/avatar5.png') }}" alt="User profile picture">
+                      @endif
+                      <span class="users-list-name" href="#">{{ $dt->user->first_name }} {{ $dt->user->last_name }}</span>
                     </li>
                   @endforeach
                 </ul>
@@ -255,7 +261,7 @@
           <!-- /.box-header -->
           <div class="box-body">
             <ul class="products-list product-list-in-box">
-              @foreach($session as $dt)
+              @foreach($session_order_by_schedule_time as $dt)
                 <li class="item">
                   <div class="product-img">
                     <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="Product Image">
