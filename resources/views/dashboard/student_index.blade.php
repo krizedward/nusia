@@ -70,13 +70,13 @@
     <div class="row">
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4><i class="icon fa fa-clock-o"></i> Our time: {{ $timeNusia->isoFormat('h:mm a') }} Asia/Jakarta</h4>
+                <h4><i class="icon fa fa-clock-o"></i> Our time: {{ $timeNusia->isoFormat('h:mm a') }} {{ $timeNusia->tzName }}</h4>
                 <!--Nusia akan memberikan kesempatan 3 kelas gratis dengan memilih kelas bebas.-->
             </div>
         </div>
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4><i class="icon fa fa-clock-o"></i> Your time: {{ $timeStudent->isoFormat('h:mm a','Europe/London') }} Europe/London</h4>
+                <h4><i class="icon fa fa-clock-o"></i> Your time: {{ $timeStudent->isoFormat('h:mm a') }} {{ $timeStudent->tzName }}</h4>
                 <!--Nusia akan memberikan kesempatan 3 kelas gratis dengan memilih kelas bebas.-->
             </div>
         </div>

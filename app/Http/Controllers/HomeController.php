@@ -69,7 +69,7 @@ class HomeController extends Controller
 
         if($this->is_student()) {
             $timeNusia = Carbon::now();
-            $timeStudent = Carbon::now('Europe/London');
+            $timeStudent = Carbon::now('Europe/Paris');
             //untuk mengubah zona waktu isi didalam dengan lokasi
             $session = Session
                 ::join('courses', 'sessions.course_id', 'courses.id')
