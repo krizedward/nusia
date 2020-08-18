@@ -362,7 +362,7 @@ class HomeController extends Controller
                 'Woodworking',
             ];
 
-            return view('profile.instructor',compact('instructor','countries','interests'));
+            return view('profile.instructor',compact('instructor','countries', 'interests', 'instructor'));
         }
 
         if($this->is_student()){

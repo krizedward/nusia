@@ -20,11 +20,8 @@
             <div class="box box-primary">
                 <div class="box-body box-profile">
                     <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/user.jpg') }}" alt="User profile picture">
-
                     <h3 class="profile-username text-center">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h3>
-
                     <p class="text-muted text-center">{{ Auth::user()->roles }} Nusia</p>
-
                 </div>
                 <!-- About Me Box -->
                 <!-- /.box-body -->
@@ -35,9 +32,6 @@
                 <div class="box-body">
                     <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
                     <p>{{ Auth::user()->email }}</p>
-                    <hr>
-                    <strong><i class="fa  fa-phone margin-r-5"></i> Phone</strong>
-                    <p class="text-muted">{{ Auth::user()->phone }}</p>
                     <hr>
                     <strong><i class="fa fa-map-marker margin-r-5"></i> Citizenship</strong>
                     <p class="text-muted">{{ Auth::user()->citizenship }}</p>
@@ -56,12 +50,35 @@
         <div class="col-md-9">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#form" data-toggle="tab">Form</a></li>
+                    <li class="active"><a href="#activity" data-toggle="tab">Detail</a></li>
+                    <li><a href="#form" data-toggle="tab">Form</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="active tab-pane" id="form">
-                        <form role="form" method="post" action="{{ route('instructors.store') }}" enctype="multipart/form-data">
+                    <div class="active tab-pane" id="activity">
+                       {{--None--}}
+                        @foreach($instructor as $dt)
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Email</strong>
+                            <p>{{ $dt->user->email }}</p>
+                            <hr>
+
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship</strong>
+                            <p>{{ $dt->user->citizenship }}</p>
+                            <hr>
+
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
+                            <p>{{ $dt->interest }}</p>
+                            <hr>
+
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Working Experience</strong>
+                            <p>{{ $dt->working_experience }}</p>
+                            <hr>
+                        @endforeach
+                    </div>
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane" id="form">
+                        <form role="form" method="post" action="{{ route('instructors.update',$dt->id) }}" enctype="multipart/form-data">
                             @csrf
+                            @method('PUT')
                             <div class="box-body">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -72,7 +89,7 @@
                                                         <div class="form-group">
                                                             @endif
                                                             <label for="email">Email</label>
-                                                            <input name="email" type="email" class="@error('email') is-invalid @enderror form-control" placeholder="Enter Email">
+                                                            <input name="email" value="{{ $dt->user->email }}" type="email" class="@error('email') is-invalid @enderror form-control" placeholder="Enter Email">
                                                             @error('email')
                                                             <p style="color:red">{{ $message }}</p>
                                                             @enderror
@@ -85,7 +102,7 @@
                                                                 <div class="form-group">
                                                                     @endif
                                                                     <label for="password">Password</label>
-                                                                    <input name="password" type="password" class="@error('password') is-invalid @enderror form-control" placeholder="Enter Password">
+                                                                    <input name="password" value="password" type="password" class="@error('password') is-invalid @enderror form-control" placeholder="Enter Password">
                                                                     @error('password')
                                                                     <p style="color:red">{{ $message }}</p>
                                                                     @enderror
@@ -98,7 +115,7 @@
                                                                         <div class="form-group">
                                                                             @endif
                                                                             <label for="first_name">First Name</label>
-                                                                            <input name="first_name" type="text" class="@error('first_name') is-invalid @enderror form-control" placeholder="Enter First Name">
+                                                                            <input name="first_name" value="{{ $dt->user->first_name }}" type="text" class="@error('first_name') is-invalid @enderror form-control" placeholder="Enter First Name">
                                                                             @error('first_name')
                                                                             <p style="color:red">{{ $message }}</p>
                                                                             @enderror
@@ -111,7 +128,7 @@
                                                                                 <div class="form-group">
                                                                                     @endif
                                                                                     <label for="last_name">Last Name</label>
-                                                                                    <input name="last_name" type="text" class="@error('last_name') is-invalid @enderror form-control" placeholder="Enter Last Name">
+                                                                                    <input name="last_name" value="{{ $dt->user->last_name }}" type="text" class="@error('last_name') is-invalid @enderror form-control" placeholder="Enter Last Name">
                                                                                     @error('last_name')
                                                                                     <p style="color:red">{{ $message }}</p>
                                                                                     @enderror

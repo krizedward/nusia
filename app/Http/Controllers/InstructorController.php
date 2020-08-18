@@ -453,7 +453,26 @@ class InstructorController extends Controller
                 ->withInput();
         }
 
-        if($this->is_admin() || $this->is_instructor()) {
+        if($this->is_instructor()){
+            $instructor->user->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'phone' => $request->phone,
+                'citizenship' => $request->citizenship,
+                'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
+            ]);
+
+            $instructor->update([
+                'working_experience' => $working_experience,
+                'interest' => $interest,
+            ]);
+
+            return redirect()->route('home');
+        }
+
+        if($this->is_admin()) {
             $instructor->user->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
