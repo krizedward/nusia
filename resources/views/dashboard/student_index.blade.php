@@ -36,7 +36,7 @@
         <!-- USERS LIST -->
         <div class="box box-danger">
           <div class="box-header with-border">
-            <h3 class="box-title">Nusia Instructor</h3>
+            <h3 class="box-title">Nusia Instructors</h3>
           </div>
           <!-- /.box-header -->
           <div class="box-body no-padding">
@@ -56,7 +56,7 @@
           </div>
           <!-- /.box-body -->
           <div class="box-footer text-center">
-            <a href="{{ route('instructors.index') }}" class="uppercase">View All Instructor</a>
+            <a href="{{ route('instructors.index') }}" class="uppercase">View All Instructors</a>
           </div>
           <!-- /.box-footer -->
         </div>
@@ -84,7 +84,7 @@
         <!-- TABLE: LATEST ORDERS -->
         <div class="box box-info">
           <div class="box-header with-border">
-            <h3 class="box-title">Courses</h3>
+            <h3 class="box-title">Sessions</h3>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
@@ -92,24 +92,35 @@
               <table id="example1" class="table no-margin">
                 <thead>
                   <tr>
-                    <th>Session ID</th>
-                    <th>Course</th>
-                    <th>Level</th>
-                    <th>Session</th>
-                    <th>Schedule</th>
-                    <th>Link</th>
+                    <th>Code</th>
+                    <th>Class</th>
+                    <th>Proficiency Level</th>
+                    <th>Meeting Time</th>
+                    <th>Zoom Link</th>
                   </tr>
                 </thead>
                 <tbody>
                   @foreach($session as $dt)
                     <tr>
                       <td>{{ $dt->code }}</td>
-                      <td>{{ $dt->course->course_package->course_level->name }}</td>
-                      <td>{{ $dt->course->course_package->course_level_detail->name }}</td>
+                      @if($dt->course->title)
+                        <td>{{ $dt->course->title }}</td>
+                      @else
+                        <td>{{ $dt->course->course_package->title }}</td>
+                      @endif
+                      <td>{{ $dt->course->course_package->course_level->name }} {{ $dt->course->course_package->course_level_detail->name }}</td>
                       {{--session pakai attribut title untuk penamaan persession di halaman dashboard--}}
-                      <td>{{ $dt->title }}</td>
-                      <td>{{ date('d M Y', strtotime($dt->schedule->schedule_time)) }}</td>
-                      <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Link</a></td>
+                      <!--td>{{ date('d M Y', strtotime($dt->schedule->schedule_time)) }}</td-->
+                      @if($dt->schedule->schedule_time)
+                        <td>{{ $dt->schedule->schedule_time }}</td>
+                      @else
+                        <td><i>Not Available</i></td>
+                      @endif
+                      @if($dt->link_zoom)
+                        <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Join</a></td>
+                      @else
+                        <td><i>N/A</i></td>
+                      @endif
                     </tr>
                   @endforeach
                 </tbody>
@@ -118,9 +129,12 @@
             <!-- /.table-responsive -->
           </div>
           <!-- /.box-body -->
-          <div class="box-footer clearfix">
-            <a href="{{ route('session_registrations.index') }}" class="btn btn-sm btn-info btn-flat pull-left">View All Data</a>
-          </div>
+          <!--div class="box-footer clearfix">
+            <a href="{{ route('session_registrations.index') }}" class="btn btn-sm btn-info btn-flat pull-left">View All Sessions</a>
+          </div-->
+          <!--div class="box-footer text-center">
+            <a href="{{ route('session_registrations.index') }}" class="uppercase">View All Sessions</a>
+          </div-->
           <!-- /.box-footer -->
         </div>
         <!-- /.box -->
@@ -129,7 +143,7 @@
             <!-- USERS LIST -->
             <div class="box box-danger">
               <div class="box-header with-border">
-                <h3 class="box-title">Nusia Instructor</h3>
+                <h3 class="box-title">Nusia Instructors</h3>
               </div>
               <!-- /.box-header -->
               <div class="box-body no-padding">
@@ -141,7 +155,7 @@
                       @else
                         <img src="{{ asset('adminlte/dist/img/avatar5.png') }}" alt="User profile picture">
                       @endif
-                      <span class="users-list-name" href="#">{{ $dt->user->first_name }} {{ $dt->user->last_name }}</span>
+                      <span class="users-list-name" href="#">{{ $dt->user->first_name }} {{-- $dt->user->last_name --}}</span>
                     </li>
                   @endforeach
                 </ul>
@@ -149,7 +163,7 @@
               </div>
               <!-- /.box-body -->
               <div class="box-footer text-center">
-                <a href="{{ route('instructors.index') }}" class="uppercase">View All Instructor</a>
+                <a href="{{ route('instructors.index') }}" class="uppercase">View All Instructors</a>
               </div>
               <!-- /.box-footer -->
             </div>
@@ -157,10 +171,10 @@
           </div>
           <!-- /.col -->
           <div class="col-md-6">
-            <!-- Session-Course Reminder -->
+            <!-- Download Class Materials -->
             <div class="box box-success">
               <div class="box-header with-border">
-                <h3 class="box-title">Download Course Materials</h3>
+                <h3 class="box-title">Download Class Materials</h3>
               </div>
               <!-- /.box-header -->
               <div class="box-body">
@@ -242,7 +256,7 @@
               </div>
               <!-- /.box-body -->
               <div class="box-footer text-center">
-                <a href="{{ route('materials.index') }}" class="uppercase">View All Data</a>
+                <a href="{{ route('materials.index') }}" class="uppercase">View All Materials</a>
               </div>
               <!-- /.box-footer -->
             </div>
@@ -256,33 +270,60 @@
         <!-- Session-Course Reminder -->
         <div class="box box-primary">
           <div class="box-header with-border">
-            <h3 class="box-title">Reminder for course sessions</h3>
+            <h3 class="box-title">Upcoming Sessions</h3>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
             <ul class="products-list product-list-in-box">
               @foreach($session_order_by_schedule_time as $dt)
+                @if($dt->schedule->schedule_time > now())
                 <li class="item">
                   <div class="product-img">
-                    <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="Product Image">
+                    @if($dt->schedule->instructor->user->image_profile)
+                      <img src="{{ url('uploads/instructor/'.$dt->schedule->instructor->user->image_profile) }}" alt="User profile picture">
+                    @else
+                      <img src="{{ asset('adminlte/dist/img/avatar5.png') }}" alt="User profile picture">
+                    @endif
                   </div>
                   <div class="product-info">
                     {{--session pakai attribut title untuk penamaan persession di halaman dashboard--}}
-                    <div class="product-title">{{ $dt->course->course_package->course_level->name }} - {{ $dt->title }}
+                    <div class="product-title">
+                      @if($dt->title)
+                        @if($dt->course->title)
+                          {{ $dt->course->title }} - {{ $dt->title }}
+                        @else
+                          {{ $dt->course->course_package->title }} - {{ $dt->title }}
+                        @endif
+                      @else
+                        @if($dt->course->title)
+                          {{ $dt->course->title }}
+                        @else
+                          {{ $dt->course->course_package->title }}
+                        @endif
+                      @endif
                       <span class="label label-info pull-right">{{ date('d M Y', strtotime($dt->schedule->schedule_time)) }}</span>
                     </div>
                     <span class="product-description">
-                      Note : don't forget to join class.
+                      <!--Note : don't forget to join class.-->
+                      @if($dt->schedule->schedule_time < now())
+                        Class has been started!
+                        @if($dt->link_zoom)
+                          Join <a href="{{ $dt->link_zoom }}" target="_blank">here</a>.
+                        @endif
+                      @else
+                        Meeting time: {{ date('h:i:s', strtotime($dt->schedule->schedule_time)) }}
+                      @endif
                     </span>
                   </div>
                 </li>
                 <!-- /.item -->
+                @endif
               @endforeach
             </ul>
           </div>
           <!-- /.box-body -->
           <div class="box-footer text-center">
-            <a href="{{ route('session_registrations.index') }}" class="uppercase">View All Data</a>
+            <a href="{{ route('session_registrations.index') }}" class="uppercase">View All Sessions</a>
           </div>
           <!-- /.box-footer -->
         </div>
