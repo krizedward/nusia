@@ -41,20 +41,28 @@
                 </a>
             </li>
             @elseif(Auth::user()->citizenship != 'Not Available')
-            <li class="{{ set_active('home') }}">
-                <a href="{{ route('home')}}">
+              @if(Auth::user()->student->course_registrations->count() == 0)
+                <li class="{{ set_active(['courses.index']) }}">
+                  <a href="{{ route('courses.index')}}">
+                    <i class="fa fa-book"></i> <span>Registration</span>
+                  </a>
+                </li>
+              @else
+                <li class="{{ set_active('home') }}">
+                  <a href="{{ route('home')}}">
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                </a>
-            </li>
+                  </a>
+                </li>
+              @endif
             @else
-            <li class="{{ set_active(['layouts.questionnaire', 'courses.index']) }}">
-                <a href="{{ route('home')}}">
+            <li class="{{ set_active(['layouts.questionnaire']) }}">
+                <a href="{{ route('layouts.questionnaire')}}">
                     <i class="fa fa-book"></i> <span>Registration</span>
                 </a>
             </li>
             @endif
 
-            @if(Auth::user()->roles == 'Student' && Auth::user()->citizenship != 'Not Available')
+            @if(Auth::user()->roles == 'Student' && Auth::user()->citizenship != 'Not Available' && Auth::user()->student->course_registrations->count() > 0)
             <!-- Head_Navigasi -->
             <li class="header">STUDENT NAVIGATION</li>
                 <li class="treeview">
