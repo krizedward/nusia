@@ -3,7 +3,11 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="img-circle" alt="User Image">
+                @if(Auth::user()->roles == 'Student')
+                    <img src="{{ asset('uploads/student/profile/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
+                @else
+                    <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="img-circle" alt="User Image">
+                @endif
             </div>
             <div class="pull-left info">
                 @if(Auth::user()->roles == 'Student')
@@ -57,6 +61,7 @@
             @if(Auth::user()->roles == 'Student' && Auth::user()->citizenship != 'Not Available')
             <!-- Head_Navigasi -->
             <li class="header">STUDENT NAVIGATION</li>
+                {{--
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-book"></i> <span>Schedules</span>
@@ -71,7 +76,7 @@
                         {{--
                         <li class="#">
                             <a href="{{ route('schedules.index', ['Free Trial']) }}"><i class="fa fa-circle-o"></i> Free Trial</a>
-                        </li>--}}
+                        </li>
                         <!--li class="#">
                             <a href="{{ route('schedules.index', ['Private']) }}"><i class="fa fa-circle-o"></i> Private</a>
                         </li-->
@@ -79,7 +84,7 @@
                             <a href="{{ route('schedules.index', ['Group']) }}"><i class="fa fa-circle-o"></i> Group</a>
                         </li-->
                     </ul>
-                </li>
+                </li>--}}
 
                 <li class="#">
                     <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Sessions</span></a>

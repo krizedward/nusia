@@ -29,14 +29,21 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              @if(Auth::user()->roles == 'Student')
+              <img src="{{ asset('uploads/student/profile/'. Auth::user()->image_profile) }}" class="user-image" alt="User Image">
+              @else
               <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="user-image" alt="User Image">
+              @endif
               <span class="hidden-xs">{{ Auth::user()->name }}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="img-circle" alt="User Image">
-
+                  @if(Auth::user()->roles == 'Student')
+                      <img src="{{ asset('uploads/student/profile/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
+                  @else
+                      <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="img-circle" alt="User Image">
+                  @endif
                 <p>
                   {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} - {{ Auth::user()->roles }}
                   <small>{{ Auth::user()->created_at }}&nbsp;&nbsp;UTC+0</small>

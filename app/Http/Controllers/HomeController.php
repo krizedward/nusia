@@ -135,6 +135,7 @@ class HomeController extends Controller
         } else $request->interest_1 = null;
 
         $data = $request->all();
+        $file = $request->file('image_profile');
         $data = Validator::make($data, [
             'citizenship' => ['bail', 'required'],
             'image_profile' => ['bail', 'sometimes', 'max:5000'],
@@ -170,6 +171,7 @@ class HomeController extends Controller
         }
 
         if($this->is_student()){
+            if ($file){
             Student::where('user_id', Auth::user()->id)->update([
                 'user_id' => Auth::user()->id,
                 'age' => $request->age,
@@ -185,10 +187,34 @@ class HomeController extends Controller
 
             User::find(Auth::user()->id)->update([
                 'citizenship' => $request->citizenship,
-                'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', Hash::make(Auth::user()->student->id)) : null,
+                //'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', Hash::make(Auth::user()->student->id)) : null,
+                'image_profile'   => $file->getClientOriginalName(),
             ]);
 
+            //Move Uploaded File
+            $destinationPath = 'uploads/student/profile';
+            $file->move($destinationPath,$file->getClientOriginalName());
             // \Session::flash('coba','Create Success !!!');
+            } else {
+                Student::where('user_id', Auth::user()->id)->update([
+                    'user_id' => Auth::user()->id,
+                    'age' => $request->age,
+                    'status_job' => $request->status_job,
+                    'status_description' => $request->status_description,
+                    'interest' => $interest,
+                    'target_language_experience' => $request->target_language_experience,
+                    'target_language_experience_value' => $request->target_language_experience_value,
+                    'description_of_course_taken' => $request->description_of_course_taken,
+                    'indonesian_language_proficiency' => $request->indonesian_language_proficiency,
+                    'learning_objective' => $request->learning_objective,
+                ]);
+
+                User::find(Auth::user()->id)->update([
+                    'citizenship' => $request->citizenship,
+                    //'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', Hash::make(Auth::user()->student->id)) : null,
+                    'image_profile'   => 'user.jpg',
+                ]);
+            }
         }
 
         return redirect()->route('courses.index');
