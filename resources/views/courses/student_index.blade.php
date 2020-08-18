@@ -64,12 +64,9 @@
                       </div>
                     @endwhile
                     <div class="col-md-12">
-                      <form action="{{ route('course_registrations.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" value="{{ $dt->id }}" name="course_id">
-                        <input type="hidden" value="{{ Auth::user()->student->id }}" name="student_id">
-                        <button type="submit" class="btn btn-s btn-primary" style="width:100%;">Choose This Class</button>
-                      </form>
+                      <a href="#" data-toggle="modal" data-target="#{{$dt->id}}" class="btn btn-s btn-primary" style="width:100%;">
+                        Choose This Class
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -78,9 +75,70 @@
               <!-- /.box -->
             </div>
             <!-- /.col -->
+
+        <div class="modal fade" id="{{$dt->id}}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Profile Image -->
+                    <div class="box box-primary">
+                        <div class="box-body box-profile">
+                            <h3 class="profile-username text-center">Terms and Conditions</h3>
+
+                            <p class="text-muted text-center">More description here...</p>
+
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item">
+                                    <b>Text</b>
+                                    <p>Learners must attend all sessions. If learners cannot attend some of them, they cannot reschedule the sessions.</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Text</b>
+                                    <p>Learners must read the learning materials on the dashboard before joining each session.</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Text</b>
+                                    <p>Learners must give feedback on the link provided in the dashboard after finishing each session.</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Text</b>
+                                    <p>All session are recorded. Learners allow NUSIA to employ the video recordings for research and marketing purposes (If you disagree, please contact us via email and click the “agree” button below)</p>
+                                </li>
+                            </ul>
+
+                            <form action="{{ route('course_registrations.store') }}" method="POST">
+                              @csrf
+                              <input type="hidden" value="{{ $dt->id }}" name="course_id">
+                              <input type="hidden" value="{{ Auth::user()->student->id }}" name="student_id">
+                              <input type="checkbox" value="1" onchange="if(document.getElementById("flag").value == 0) { document.getElementById("flag").value = 1; } else { document.getElementById("flag").value = 0; }" id="flag" name="flag" class="minimal">&nbsp;&nbsp;I have read and agree to the Terms and Conditions
+                              <br>
+                              <br>
+                              <button type="submit" class="btn btn-s btn-primary" style="width:100%;">Agree and Continue</button>
+                            </form>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
           @endif
         @endforeach
     </div>
+
+                            <script>
+                              $("#flag").on('change', function() {
+                                  if($(this).is(':checked')) {
+                                      $(this).attr('value', 1);
+                                  } else {
+                                      $(this).attr('value', 0);
+                                  }
+                              });
+                            </script>
+
 @stop
 
 {{--contoh-lain-dari-material -> bisa diganti --}}

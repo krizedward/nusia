@@ -13,15 +13,15 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <b>Novice</b>
-                                <p>You are categorized as a novice learner when you have no or limited prior Indonesian language knowledge. In this free online classes, you are going to learn about greetings, how to introduce yourself and someone else, as well as how to ask someone’s information.</p>
+                                <p>You are categorized as a novice learner when you have no or limited prior Indonesian language knowledge. In free online classes, you are going to learn about greetings, how to introduce yourself and someone else, as well as how to ask someone’s information.</p>
                             </div>
                             <div class="col-md-12">
                                 <b>Intermediate</b>
-                                <p>You are identified as an intermediate learner when you can handle a simple situation or transaction in Indonesian language. In this free online classes, you will learn about introduction, diseases and its symptoms, as well as Indonesian traditional culinary.</p>
+                                <p>You are identified as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language. In free online classes, you will learn about introduction, diseases and its symptoms, as well as Indonesian traditional culinary.</p>
                             </div>
                             <div class="col-md-12">
                                 <b>Advanced</b>
-                                <p>You are categorized as an advanced learner when you are able to handle a complicated situation or transaction in Indonesian language. You are going to learn about introduction and a general knowledge of Indonesia, Indonesian culinary, and the current world’s phenomenon in this free online classes.</p>
+                                <p>You are categorized as an advanced learner when you are able to handle a complicated situation or transaction in the Indonesian language. You are going to learn about introduction and a general knowledge of Indonesia, Indonesian culinary, and the current world’s phenomenon in free online classes.</p>
                             </div>
                         </div>
                     </div>
