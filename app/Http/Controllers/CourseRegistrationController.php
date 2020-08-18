@@ -68,7 +68,7 @@ class CourseRegistrationController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->flag == 0) return redirect()->route('courses.index');
+        if($request->flag == false) return redirect()->route('courses.index');
 
         $data = $request->all();
         $data = Validator::make($data, [
