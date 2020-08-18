@@ -17,6 +17,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use PragmaRX\Countries\Package\Countries;
 
 class HomeController extends Controller
 {
@@ -68,8 +69,10 @@ class HomeController extends Controller
         }
 
         if($this->is_student()) {
+            $countries = new Countries();
+            $temp_nation = $countries->where('name.common', Auth::user()->citizenship)->first()->hydrate('timezones')->timezones->first()->zone_name;
             $timeNusia = Carbon::now();
-            $timeStudent = Carbon::now('Europe/Paris');
+            $timeStudent = Carbon::now($temp_nation);
             //untuk mengubah zona waktu isi didalam dengan lokasi
             $session = Session
                 ::join('courses', 'sessions.course_id', 'courses.id')
