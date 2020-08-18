@@ -12,7 +12,7 @@ class SessionRegistrationsTableSeeder extends Seeder
      */
     public function run()
     {
-        SessionRegistration::create([
+        /*SessionRegistration::create([
             'code' => 'SR-001',
             'session_id' => 1,
             'course_registration_id' => 1,
@@ -39,7 +39,7 @@ class SessionRegistrationsTableSeeder extends Seeder
             'course_registration_id' => 3,
             'registration_time' => null,
             'status' => 'Not Present',
-        ]);
+        ]);*/
         /*SessionRegistration::create([
             'code' => 'SRG-001',
             'session_id' => 1,

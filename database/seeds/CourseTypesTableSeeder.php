@@ -39,34 +39,34 @@ class CourseTypesTableSeeder extends Seeder
             'description'       => 'This is an one-on-one course.',
             'count_student_min' => 1,
             'count_student_max' => 1,
-            'created_at'        => '2020-08-07 05:12:10',
+            'created_at'        => now(),
             'updated_at'        => null
         ]);
         CourseType::create ([
             'code'              => 'CT-002',
             'name'              => 'Group - Novice',
-            'description'       => 'This is a course consisting of more students than one.',
+            'description'       => 'You are categorized as a novice learner when you have no or limited prior Indonesian language knowledge. In free online classes, you are going to learn about greetings, how to introduce yourself and someone else, as well as how to ask someone’s information.',
             'count_student_min' => 2,
             'count_student_max' => 3,
-            'created_at'        => '2020-08-07 05:12:10',
+            'created_at'        => now(),
             'updated_at'        => null
         ]);
         CourseType::create ([
             'code'              => 'CT-003',
             'name'              => 'Group - Intermediate',
-            'description'       => 'This is a course consisting of more students than one.',
+            'description'       => 'You are identified as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language. In free online classes, you will learn about introduction, diseases and its symptoms, as well as Indonesian traditional culinary.',
             'count_student_min' => 2,
             'count_student_max' => 4,
-            'created_at'        => '2020-08-07 05:12:10',
+            'created_at'        => now(),
             'updated_at'        => null
         ]);
         CourseType::create ([
             'code'              => 'CT-004',
             'name'              => 'Group - Advanced',
-            'description'       => 'This is a course consisting of more students than one.',
+            'description'       => 'You are categorized as an advanced learner when you are able to handle a complicated situation or transaction in the Indonesian language. You are going to learn about introduction and a general knowledge of Indonesia, Indonesian culinary, and the current world’s phenomenon in free online classes.',
             'count_student_min' => 2,
             'count_student_max' => 4,
-            'created_at'        => '2020-08-07 05:12:10',
+            'created_at'        => now(),
             'updated_at'        => null
         ]);
         CourseType::create ([
@@ -75,7 +75,7 @@ class CourseTypesTableSeeder extends Seeder
             'description'       => 'A group course limited to three days of learning.',
             'count_student_min' => 2,
             'count_student_max' => 4,
-            'created_at'        => '2020-08-07 05:12:10',
+            'created_at'        => now(),
             'updated_at'        => null
         ]);
     }
