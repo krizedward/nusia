@@ -12,7 +12,7 @@ class MaterialSessionsTableSeeder extends Seeder
      */
     public function run()
     {
-        MaterialSession::create([
+        /*MaterialSession::create([
             'code' => 'MS-001',
             'session_id' => 1,
             'name' => 'Material Session 001',
@@ -46,7 +46,7 @@ class MaterialSessionsTableSeeder extends Seeder
             'name' => 'Material Session 005',
             'description' => null,
             'path' => null,
-        ]);
+        ]);*/
         /*MaterialSession::create([
             'code' => 'MS-001',
             'session_id' => 1,

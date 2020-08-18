@@ -16,18 +16,144 @@ class InstructorsTableSeeder extends Seeder
         Instructor::create([
             'code'               => 'INS-001',
             'user_id'            => 2,
-            'interest'           => 'Interest 1',
-            'working_experience' => '2016-2017: Language partner, Critical Language Scholarship—CLS (American Student Exchange Program), Universitas Negeri Malang',
-            'created_at'         => '2020-08-07 05:12:10',
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
             'updated_at'         => null
         ]);
 
         Instructor::create([
             'code'               => 'INS-002',
             'user_id'            => 3,
-            'interest'           => 'Interest 1, Interest 3, Interest 4, Interest 5',
-            'working_experience' => '2016-2017: Language partner, Critical Language Scholarship—CLS (American Student Exchange Program), Universitas Negeri Malang|| 2018: Instructor, Teaching of BIPA abroad assigned by the Ministry of Education and Culture in Ateneo de Davao University (AdDU), University of Southeastern Philippines (USeP), Mindanao Kokusai Daigaku (Mindanao International College), University of Mindanao (UM), Philippine National Police (PNP), Naval Forces Eastern Mindanao (NFEM), and Consulate General of the Republic of Indonesia, Davao City, Philippines',
-            'created_at'         => '2020-08-07 05:12:10',
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-003',
+            'user_id'            => 4,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-004',
+            'user_id'            => 5,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-005',
+            'user_id'            => 6,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-006',
+            'user_id'            => 7,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-007',
+            'user_id'            => 8,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-008',
+            'user_id'            => 9,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-009',
+            'user_id'            => 10,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-010',
+            'user_id'            => 11,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-011',
+            'user_id'            => 12,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-012',
+            'user_id'            => 13,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-013',
+            'user_id'            => 14,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-014',
+            'user_id'            => 15,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-015',
+            'user_id'            => 16,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
+            'updated_at'         => null
+        ]);
+
+        Instructor::create([
+            'code'               => 'INS-016',
+            'user_id'            => 17,
+            'interest'           => null,
+            'working_experience' => null,
+            'created_at'         => now(),
             'updated_at'         => null
         ]);
 

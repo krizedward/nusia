@@ -12,7 +12,7 @@ class CourseRegistrationsTableSeeder extends Seeder
      */
     public function run()
     {
-        CourseRegistration::create([
+        /*CourseRegistration::create([
             'code' => null,
             'course_id' => 1,
             'student_id' => 1,
@@ -31,7 +31,7 @@ class CourseRegistrationsTableSeeder extends Seeder
             'code' => 'CR-004',
             'course_id' => 4,
             'student_id' => 2,
-        ]);
+        ]);*/
         /*CourseRegistration::create([
             'code' => 'CRG-001',
             'course_id' => 1,

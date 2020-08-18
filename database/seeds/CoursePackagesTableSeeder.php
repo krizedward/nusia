@@ -20,12 +20,55 @@ class CoursePackagesTableSeeder extends Seeder
         CoursePackage::create ([
             'code'                   => 'CP-001',
             'material_type_id'       => 1,
+            'course_type_id'         => 5,
+            'course_level_id'        => 1,
+            'course_level_detail_id' => 1,
+            'title'                  => 'Free Classes for Novice Proficiency',
+            'description'            => null,
+            'requirement'            => null,
+            'count_session'          => 3,
+            'price'                  => 0,
+            'created_at'             => now(),
+            'updated_at'             => null
+        ]);
+        CoursePackage::create ([
+            'code'                   => 'CP-002',
+            'material_type_id'       => 1,
+            'course_type_id'         => 5,
+            'course_level_id'        => 2,
+            'course_level_detail_id' => 1,
+            'title'                  => 'Free Classes for Intermediate Proficiency',
+            'description'            => null,
+            'requirement'            => null,
+            'count_session'          => 3,
+            'price'                  => 0,
+            'created_at'             => now(),
+            'updated_at'             => null
+        ]);
+        CoursePackage::create ([
+            'code'                   => 'CP-003',
+            'material_type_id'       => 1,
+            'course_type_id'         => 5,
+            'course_level_id'        => 3,
+            'course_level_detail_id' => 1,
+            'title'                  => 'Free Classes for Advanced Proficiency',
+            'description'            => null,
+            'requirement'            => null,
+            'count_session'          => 3,
+            'price'                  => 0,
+            'created_at'             => now(),
+            'updated_at'             => null
+        ]);
+
+        /*CoursePackage::create ([
+            'code'                   => 'CP-001',
+            'material_type_id'       => 1,
             'course_type_id'         => 1,
             'course_level_id'        => 1,
             'course_level_detail_id' => 1,
-            'title'                  => 'Private Course with Fixed Materials for Novice-Low Difficulty',
-            'description'            => 'This states a course package description.',
-            'requirement'            => 'This states a course package requirement.',
+            'title'                  => null,
+            'description'            => null,
+            'requirement'            => null,
             'count_session'          => 15,
             'price'                  => 25,
             'created_at'             => '2020-08-07 05:12:10',
@@ -1150,6 +1193,6 @@ class CoursePackagesTableSeeder extends Seeder
             'price'                  => 0,
             'created_at'             => '2020-08-07 05:12:11',
             'updated_at'             => null
-        ]);
+        ]);*/
     }
 }

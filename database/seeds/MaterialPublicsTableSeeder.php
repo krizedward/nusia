@@ -12,7 +12,7 @@ class MaterialPublicsTableSeeder extends Seeder
      */
     public function run()
     {
-        MaterialPublic::create([
+        /*MaterialPublic::create([
             'code' => 'MP-001',
             'course_package_id' => 1,
             'name' => 'Material Public 001',
@@ -46,7 +46,7 @@ class MaterialPublicsTableSeeder extends Seeder
             'name' => 'Material Public 005',
             'description' => null,
             'path' => null,
-        ]);
+        ]);*/
         /*MaterialPublic::create([
             'code' => 'MP-001',
             'course_package_id' => 1,
