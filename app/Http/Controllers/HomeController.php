@@ -69,6 +69,10 @@ class HomeController extends Controller
         }
 
         if($this->is_student()) {
+            if(Auth::user()->citizenship == 'Not Available') {
+                return redirect()->route('layouts.questionnaire');
+            }
+
             $countries = new Countries();
             $temp_nation = $countries->where('name.common', Auth::user()->citizenship)->first()->hydrate('timezones')->timezones->first()->zone_name;
             $timeNusia = Carbon::now();
