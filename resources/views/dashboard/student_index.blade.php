@@ -124,12 +124,15 @@
                       @else
                         <td>{{ $dt->course->course_package->title }}</td>
                       @endif
-                      <td>{{ $dt->course->course_package->course_level->name }} {{ $dt->course->course_package->course_level_detail->name }}</td>
+                      <td>{{ $dt->course->course_package->course_level->name }}</td>
                       <td>{{ $dt->title }}</td>
                       {{--session pakai attribut title untuk penamaan persession di halaman dashboard--}}
                       <!--td>{{ date('l, M d Y', strtotime($dt->schedule->schedule_time)) }}</td-->
                       @if($dt->schedule->schedule_time)
-                        <td>{{ date('l, M d Y, h:i \- h:i A', strtotime($dt->schedule->schedule_time)) }}</td>
+                        <?php
+                          $schedule_time = \Carbon\Carbon::parse(strtotime($dt->schedule->schedule_time));
+                        ?>
+                        <td>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
                       @else
                         <td><i>Not Available</i></td>
                       @endif
