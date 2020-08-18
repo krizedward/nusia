@@ -7,7 +7,7 @@
 @section('content')
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Language Proficiency Description</h3>
+                        <h3 class="box-title">Indonesian Language Proficiency Guidelines</h3>
                     </div>
                     <div class="box-body">
                         <div class="row">
@@ -31,7 +31,7 @@
 
                 <div class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Questionnaire New Student</h3>
+                        <h3 class="box-title"><b>New Student Registration Form</b></h3>
                     </div>
                     <form role="form" method="post" action="{{ route('questionnaire.store') }}" enctype="multipart/form-data">
                     @csrf
@@ -162,6 +162,7 @@
                                         <div class="form-group">
                                     @endif
                                         <label for="indonesian_language_proficiency">Indonesian Language Proficiency (Self-assessment)</label>
+                                        <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Check the proficiency guidelines above</p>
                                             <select name="indonesian_language_proficiency" type="text" class="@error('indonesian_language_proficiency') is-invalid @enderror form-control">
                                                 <option selected="selected" value="">-- Enter Indonesian Language Proficiency --</option>
                                                 <option value="Novice">Novice</option>
@@ -326,7 +327,7 @@
                                     <div class="form-group hidden" id="description_of_course_taken">
                                 @endif
                                     <label for="description_of_course_taken">Your Learning Experiences</label>
-                                        <textarea name="description_of_course_taken" class="@error('description_of_course_taken') is-invalid @enderror form-control" rows="5" placeholder="Briefly describe any courses you have taken! (in Indonesian language)"></textarea>
+                                        <textarea name="description_of_course_taken" class="@error('description_of_course_taken') is-invalid @enderror form-control" rows="5" placeholder="If you have studied the Indonesian language, briefly describe any courses you have taken! (write in the Indonesian language—if possible)"></textarea>
                                         @error('description_of_course_taken')
                                         <p style="color:red">{{ $message }}</p>
                                         @enderror
@@ -339,7 +340,7 @@
                                     <div class="form-group" id="learning_objective">
                                 @endif
                                     <label for="learning_objective">Your Learning Objectives</label>
-                                        <textarea name="learning_objective" class="@error('learning_objective') is-invalid @enderror form-control" rows="5" placeholder="Why do you want to learn Indonesian language? Briefly describe your learning objectives! (in Indonesian language)"></textarea>
+                                        <textarea name="learning_objective" class="@error('learning_objective') is-invalid @enderror form-control" rows="5" placeholder="Why do you want to learn the Indonesian language? (Briefly describe your learning objectives in the Indonesian language—if possible!)"></textarea>
                                         @error('learning_objective')
                                         <p style="color:red">{{ $message }}</p>
                                         @enderror

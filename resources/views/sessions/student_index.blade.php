@@ -1,11 +1,13 @@
 @extends('layouts.admin.default')
 
-@section('title','Student | Sessions')
+@section('title','Student | Schedules')
 
-@include('layouts.css_and_js.form_general')
+<!-- @include('layouts.css_and_js.form_general') -->
+
+@include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Session</h1>
+    <h1>Schedule</h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
         <li class="active">Group</li>
@@ -17,18 +19,18 @@
         <div class="col-md-3">
             <div class="box box-warning">
                 <div class="box-header">
-                    <h3 class="box-title">Free Trial Course</h3>
+                    <h3 class="box-title">Free Classes</h3>
                 </div>
                 <form>
                     <div class="box-body">
                         <dl>
                             <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
-                            <dd>You can join 3 sessions of free trial courses with NUSIA.</dd>
+                            <dd>According to the Terms and Conditions, you must attend all sessions since you cannot reschedule them.</dd>
                         </dl>
                         <hr>
                         <dl>
                             <dt><i class="fa fa-file-text-o margin-r-5"></i> Note</dt>
-                            <dd>Before starting each session, you must download the main materials.</dd>
+                            <dd>Before joining each session, you must download the main materials.</dd>
                         </dl>
                     </div>
                 </form>
@@ -37,29 +39,29 @@
         <div class="col-md-9">
             <div class="box box-warning">
                 <div class="box-header">
-                    <h3 class="box-title">Course Sessions</h3>
+                    <h3 class="box-title">Class Sessions</h3>
                 </div>
                 <form>
                     <div class="box-body">
-                        <table class="table table-bordered">
+                        <table id="example1" class="table table-bordered">
                             <thead>
                             <tr>
                                 <th style="width: 120px">ID</th>
-                                <th>Course Name</th>
+                                <th>Class</th>
                                 <th style="width: 135px">Level</th>
-                                <th>Slot</th>
                                 <th>Session</th>
+                                <th>Slot</th>
                                 <th style="width: 40px">Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($session as $dt)
                             <tr>
-                                <td>#</td>
-                                <td>{{ $dt->course->course_package->course_level->name }}</td>
-                                <td>{{ $dt->course->course_package->course_level_detail->name }}</td>
-                                <td>{{ $dt->course->course_package->course_type->count_student_max }}</td>
+                                <td>{{ $dt->id }}</td>
+                                <td>{{ $dt->course->title }}</td>
+                                <td>{{ $dt->course->course_package->course_level->name }} {{ $dt->course->course_package->course_level_detail->name }}</td>
                                 <td>{{ $dt->course->course_package->count_session }}</td>
+                                <td>{{ $dt->course->course_package->course_type->count_student_max }}</td>
                                 <td>
                                     <form method="post" action="{{ route('session_registrations.store',[1]) }}">
                                         @csrf

@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="alert alert-success alert-dismissible">
-          <h4><i class="icon fa fa-book"></i> Trial Class Available!</h4>
+          <h4><i class="icon fa fa-book"></i> Free Class Available!</h4>
           Nusia akan memberikan kesempatan 3 kelas gratis dengan memilih kelas bebas.
         </div>
       </div>
@@ -70,8 +70,8 @@
     <div class="row">
       <div class="col-md-12">
         <div class="alert alert-success alert-dismissible">
-          <h4><i class="icon fa fa-book"></i> Trial Class Available!</h4>
-          Nusia akan memberikan kesempatan 3 kelas gratis dengan memilih kelas bebas.
+          <h4><i class="icon fa fa-book"></i> Free Classes Available!</h4>
+          <!--Nusia akan memberikan kesempatan 3 kelas gratis dengan memilih kelas bebas.-->
         </div>
       </div>
     </div>
@@ -92,9 +92,9 @@
               <table id="example1" class="table no-margin">
                 <thead>
                   <tr>
-                    <th>Code</th>
                     <th>Class</th>
-                    <th>Proficiency Level</th>
+                    <th>Level</th>
+                    <th>Session</th>
                     <th>Meeting Time</th>
                     <th>Zoom Link</th>
                   </tr>
@@ -102,17 +102,17 @@
                 <tbody>
                   @foreach($session as $dt)
                     <tr>
-                      <td>{{ $dt->code }}</td>
                       @if($dt->course->title)
                         <td>{{ $dt->course->title }}</td>
                       @else
                         <td>{{ $dt->course->course_package->title }}</td>
                       @endif
                       <td>{{ $dt->course->course_package->course_level->name }} {{ $dt->course->course_package->course_level_detail->name }}</td>
+                      <td>{{ $dt->title }}</td>
                       {{--session pakai attribut title untuk penamaan persession di halaman dashboard--}}
-                      <!--td>{{ date('d M Y', strtotime($dt->schedule->schedule_time)) }}</td-->
+                      <!--td>{{ date('l, M d Y', strtotime($dt->schedule->schedule_time)) }}</td-->
                       @if($dt->schedule->schedule_time)
-                        <td>{{ $dt->schedule->schedule_time }}</td>
+                        <td>{{ date('l, M d Y, h:i \- h:i A', strtotime($dt->schedule->schedule_time)) }}</td>
                       @else
                         <td><i>Not Available</i></td>
                       @endif
@@ -171,10 +171,10 @@
           </div>
           <!-- /.col -->
           <div class="col-md-6">
-            <!-- Download Class Materials -->
+            <!-- Download Materials -->
             <div class="box box-success">
               <div class="box-header with-border">
-                <h3 class="box-title">Download Class Materials</h3>
+                <h3 class="box-title">Download Materials</h3>
               </div>
               <!-- /.box-header -->
               <div class="box-body">

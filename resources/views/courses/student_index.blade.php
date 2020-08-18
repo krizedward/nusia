@@ -5,10 +5,10 @@
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Nusia Course</h1>
+    <h1>Nusia Free Classes</h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li class="active">Course</li>
+        <li class="active">NUSIA Free Classes</li>
     </ol>
 @stop
 
@@ -20,7 +20,8 @@
               <i class="icon fa fa-book"></i>
               Note 1
             </h4>
-            You can join 3 sessions of free trial courses with NUSIA.
+            You can join <b>3 sessions</b> of free trial classes with NUSIA.<br>
+            Per session lasts for <b>80 minutes</b>.
           </div>
         </div>
         <div class="col-md-12">
@@ -29,7 +30,8 @@
               <i class="icon fa fa-book"></i>
               Note 2
             </h4>
-            Before starting each session, you must download the main materials.
+            Before joining each session, you must download the main materials.<br>
+            You can access the materials on <b>August 21, 2020</b>.
           </div>
         </div>
         @foreach($data as $dt)
@@ -37,7 +39,7 @@
             <div class="col-md-4">
               <div class="box box-default">
                 <div class="box-header with-border">
-                  <h3 class="box-title">{{ $dt->code }}</h3>
+                  <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;&nbsp;{{ $dt->code }} - {{ $dt->title }}</h3>
                 </div>
                 <div class="box-body">
                   <div class="row">
@@ -45,15 +47,15 @@
                       <b>Description</b>
                       <p>{{ $dt->description }}</p>
                     </div>
-                    <div class="col-md-12">
+                    <!--div class="col-md-12">
                       <b>Requirement</b>
                       <p>{{ $dt->requirement }}</p>
-                    </div>
+                    </div-->
                     <?php $i = $dt->course_package->count_session; ?>
                     @foreach($dt->sessions as $j => $s)
                       <div class="col-md-12">
                         <b>Session {{ $j + 1 }}</b>
-                        <p>{{ $s->schedule->schedule_time }}</p>
+                        <p>{{ date('l, M d Y, h:i \- h:i A', strtotime($s->schedule->schedule_time)) }}</p>
                       </div>
                       <?php $i--; ?>
                     @endforeach
@@ -84,24 +86,15 @@
                         <div class="box-body box-profile">
                             <h3 class="profile-username text-center">Terms and Conditions</h3>
 
-                            <p class="text-muted text-center">More description here...</p>
+                            <!--p class="text-muted text-center">More description here...</p-->
 
                             <ul class="list-group list-group-unbordered">
                                 <li class="list-group-item">
-                                    <b>Text</b>
-                                    <p>Learners must attend all sessions. If learners cannot attend some of them, they cannot reschedule the sessions.</p>
-                                </li>
-                                <li class="list-group-item">
-                                    <b>Text</b>
-                                    <p>Learners must read the learning materials on the dashboard before joining each session.</p>
-                                </li>
-                                <li class="list-group-item">
-                                    <b>Text</b>
-                                    <p>Learners must give feedback on the link provided in the dashboard after finishing each session.</p>
-                                </li>
-                                <li class="list-group-item">
-                                    <b>Text</b>
-                                    <p>All session are recorded. Learners allow NUSIA to employ the video recordings for research and marketing purposes (If you disagree, please contact us via email and click the “agree” button below)</p>
+                                    <!--b>Text</b-->
+                                    <p>1. Learners must attend all sessions. If learners cannot attend some of them, they cannot reschedule the sessions.</p>
+                                    <p>2. Learners must read the learning materials on the dashboard before joining each session.</p>
+                                    <p>3. Learners must give feedback on the link provided in the dashboard after finishing each session.</p>
+                                    <p>4. All session are recorded. Learners allow NUSIA to employ the video recordings for research and marketing purposes (If you disagree, please contact us via email and click the “agree” button below)</p>
                                 </li>
                             </ul>
 
