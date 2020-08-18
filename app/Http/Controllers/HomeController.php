@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -67,6 +68,9 @@ class HomeController extends Controller
         }
 
         if($this->is_student()) {
+            $timeNusia = Carbon::now();
+            $timeStudent = Carbon::now('Europe/London');
+            //untuk mengubah zona waktu isi didalam dengan lokasi
             $session = Session
                 ::join('courses', 'sessions.course_id', 'courses.id')
                 ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
@@ -86,7 +90,7 @@ class HomeController extends Controller
             $instructors = Instructor::all();
             return view('dashboard.student_index', compact(
                 'session', 'session_order_by_schedule_time',
-                'material', 'course_registrations', 'instructors'
+                'material', 'course_registrations', 'instructors','timeNusia','timeStudent'
             ));
         }
     }
