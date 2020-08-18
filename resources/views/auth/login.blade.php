@@ -116,31 +116,30 @@
         <div class="login-box-body">
             <form action="{{ route('login') }}" method="post">
                 @csrf
-
                 @if($errors->has('email'))
-                    <div class="form-group has-error">
-                        <label>Email</label>
-                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
-                        <span class="help-block">{{ $errors->first('email')}}</span>
-                    </div>
+                  <div class="form-group has-error has-feedback">
+                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Email" value="{{ old('email') }}">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    <p style="color:#ff0000;">{{ $errors->first('email') }}</p>
+                  </div>
                 @else
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
-                    </div>
+                  <div class="form-group has-feedback">
+                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Email" value="{{ old('email') }}">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                  </div>
                 @endif
 
                 @if($errors->has('password'))
-                    <div class="form-group has-error">
-                        <label>Password</label>
-                        <input id="password" type="password" class="form-control" name="password">
-                        <span class="help-block">{{ $errors->first('password')}}</span>
-                    </div>
+                  <div class="form-group has-error has-feedback">
+                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password"  placeholder="Password">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <p style="color:#ff0000;">{{ $errors->first('password') }}</p>
+                  </div>
                 @else
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input id="password" type="password" class="form-control" name="password">
-                    </div>
+                  <div class="form-group has-feedback">
+                    <input id="password" type="password" class="form-control" name="password" required autocomplete="new-password"  placeholder="Password">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                  </div>
                 @endif
                 <div class="row">
                     <div class="col-xs-12">
