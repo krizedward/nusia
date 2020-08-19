@@ -162,7 +162,7 @@
         </div>
         <!-- /.box -->
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-6 hidden">
             <!-- USERS LIST -->
             <div class="box box-danger">
               <div class="box-header with-border">
@@ -178,7 +178,7 @@
                       @else
                         <img src="{{ asset('adminlte/dist/img/avatar5.png') }}" alt="User profile picture">
                       @endif
-                      <span class="users-list-name" href="#">{{ $dt->user->first_name }} {{-- $dt->user->last_name --}}</span>
+                      <span class="users-list-name" href="#">{{ $dt->user->first_name }} <!-- $dt->user->last_name --></span>
                     </li>
                   @endforeach
                 </ul>
@@ -193,7 +193,7 @@
             <!--/.box -->
           </div>
           <!-- /.col -->
-          <div class="col-md-6">
+          <div class="col-md-6 hidden">
             <!-- Materials -->
             <div class="box box-success">
               <div class="box-header with-border">
