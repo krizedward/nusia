@@ -74,7 +74,7 @@ class HomeController extends Controller
             }
 
             $countries = new Countries();
-            $temp_nation = $countries->where('name.common', Auth::user()->citizenship)->first()->hydrate('timezones')->timezones->first()->zone_name;
+            $temp_nation = $countries->where('name.common', Auth::user()->timezone)->first()->hydrate('timezones')->timezones->first()->zone_name;
             $timeNusia = Carbon::now();
             $timeStudent = Carbon::now($temp_nation);
             //untuk mengubah zona waktu isi didalam dengan lokasi
@@ -142,6 +142,7 @@ class HomeController extends Controller
         $file = $request->file('image_profile');
         $data = Validator::make($data, [
             'citizenship' => ['bail', 'required'],
+            'timezone' => ['bail', 'required'],
             'image_profile' => ['bail', 'sometimes', 'max:5000'],
 
             'age' => ['bail', 'required', 'integer'],
@@ -170,6 +171,7 @@ class HomeController extends Controller
                 'password' => Hash::make($request->password),
                 'roles' => 'Student',
                 'citizenship' => $request->citizenship,
+                'timezone' => $request->timezone,
                 'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', Hash::make(Auth::user()->id)) : null,
             ]);
         }
@@ -191,6 +193,7 @@ class HomeController extends Controller
 
             User::find(Auth::user()->id)->update([
                 'citizenship' => $request->citizenship,
+                'timezone' => $request->timezone,
                 //'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', Hash::make(Auth::user()->student->id)) : null,
                 'image_profile'   => $file->getClientOriginalName(),
             ]);
@@ -215,6 +218,7 @@ class HomeController extends Controller
 
                 User::find(Auth::user()->id)->update([
                     'citizenship' => $request->citizenship,
+                    'timezone' => $request->timezone,
                     //'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', Hash::make(Auth::user()->student->id)) : null,
                     'image_profile'   => 'user.jpg',
                 ]);
@@ -359,8 +363,16 @@ class HomeController extends Controller
                 array_push($countries, $country . ' - ' . $c_timezone['zone_name'] /*. ' ' . $c_abbr*/);
             }
         }
+        $timezones = [];
+        foreach($list_of_countries as $country) {
+            $c_timezones = $c->where('name.common', $country)->first()->hydrate('timezones')->timezones;
+            foreach($c_timezones as $c_timezone) {
+                array_push($timezones, $c_timezone['zone_name']);
+            }
+        }
+        sort($timezones);
 
-        return view('layouts.questionnaire', compact('countries', 'interests'));
+        return view('layouts.questionnaire', compact('countries', 'interests', 'timezones'));
     }
 
     public function profile($id)
