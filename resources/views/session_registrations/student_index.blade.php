@@ -35,7 +35,7 @@
                             <hr>
                             <dt style="font-size:18px;"><i class="fa fa-pencil margin-r-5"></i> Feedback</dt>
                             <dd>After participating in EACH session, please give us your feedback by clicking this
-                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-info" href="https://www.google.com/intl/id_id/forms/about/">Link</a>
+                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-info" href="https://docs.google.com/forms/d/e/1FAIpQLSeQcLORmDvpAuN-l0OmV5h5xRq0TkRpBbgCI-haYyl3cqCWrQ/viewform?usp=sf_link">Link</a>
                             </dd>
                         </dl>
                     </div>
