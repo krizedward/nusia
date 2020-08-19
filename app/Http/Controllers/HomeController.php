@@ -73,10 +73,9 @@ class HomeController extends Controller
                 return redirect()->route('layouts.questionnaire');
             }
 
-            $countries = new Countries();
-            $temp_nation = $countries->where('name.common', Auth::user()->timezone)->first()->hydrate('timezones')->timezones->first()->zone_name;
+            //$temp_nation = $c->where('name.common', Auth::user()->timezone)->first()->hydrate('timezones')->timezones->first()->zone_name;
             $timeNusia = Carbon::now();
-            $timeStudent = Carbon::now($temp_nation);
+            $timeStudent = Carbon::now(Auth::user()->timezone);
             //untuk mengubah zona waktu isi didalam dengan lokasi
             $session = Session
                 ::join('courses', 'sessions.course_id', 'courses.id')
@@ -97,7 +96,7 @@ class HomeController extends Controller
             $instructors = Instructor::where('id',Auth::user()->id);
             return view('dashboard.student_index', compact(
                 'session', 'session_order_by_schedule_time',
-                'material', 'course_registrations', 'instructors','timeNusia','timeStudent', 'temp_nation'
+                'material', 'course_registrations', 'instructors','timeNusia','timeStudent'
             ));
         }
     }
