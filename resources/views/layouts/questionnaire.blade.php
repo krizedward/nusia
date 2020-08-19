@@ -168,7 +168,7 @@
                                         <label for="timezone">Please state your current timezone</label>
                                         <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*This information is needed to adjust Indonesian time to your local time<br>for scheduling your sessions</p>
                                             <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control">
-                                                <option selected="selected" value="">-- Enter Current Location --</option>
+                                                <option selected="selected" value="">-- Enter Current Time Zone --</option>
                                                 @foreach($timezones as $timezone)
                                                     @if(old('timezone') == $timezone)
                                                       <option selected="selected" value="{{ $timezone }}">{{ $timezone }}</option>
