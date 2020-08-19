@@ -12,6 +12,7 @@ class SessionsTableSeeder extends Seeder
      */
     public function run()
     {
+// BATCH 1 WEEK 1
         Session::create([
             'code' => 'S-001',
             'course_id' => 1,
@@ -385,6 +386,385 @@ class SessionsTableSeeder extends Seeder
             'code' => 'S-042',
             'course_id' => 14,
             'schedule_id' => 81,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+// BATCH 1 WEEK 2
+        Session::create([
+            'code' => 'S-043',
+            'course_id' => 15,
+            'schedule_id' => 85,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-044',
+            'course_id' => 15,
+            'schedule_id' => 86,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-045',
+            'course_id' => 15,
+            'schedule_id' => 87,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-046',
+            'course_id' => 16,
+            'schedule_id' => 91,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-047',
+            'course_id' => 16,
+            'schedule_id' => 92,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-048',
+            'course_id' => 16,
+            'schedule_id' => 93,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-049',
+            'course_id' => 17,
+            'schedule_id' => 97,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-050',
+            'course_id' => 17,
+            'schedule_id' => 98,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-051',
+            'course_id' => 17,
+            'schedule_id' => 99,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-052',
+            'course_id' => 18,
+            'schedule_id' => 103,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-053',
+            'course_id' => 18,
+            'schedule_id' => 104,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-054',
+            'course_id' => 18,
+            'schedule_id' => 105,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-055',
+            'course_id' => 19,
+            'schedule_id' => 109,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-056',
+            'course_id' => 19,
+            'schedule_id' => 110,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-057',
+            'course_id' => 19,
+            'schedule_id' => 111,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-058',
+            'course_id' => 20,
+            'schedule_id' => 115,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-059',
+            'course_id' => 20,
+            'schedule_id' => 116,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-060',
+            'course_id' => 20,
+            'schedule_id' => 117,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-061',
+            'course_id' => 21,
+            'schedule_id' => 121,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-062',
+            'course_id' => 21,
+            'schedule_id' => 122,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-063',
+            'course_id' => 21,
+            'schedule_id' => 123,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-064',
+            'course_id' => 22,
+            'schedule_id' => 127,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-065',
+            'course_id' => 22,
+            'schedule_id' => 128,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-066',
+            'course_id' => 22,
+            'schedule_id' => 129,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-067',
+            'course_id' => 23,
+            'schedule_id' => 133,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-068',
+            'course_id' => 23,
+            'schedule_id' => 134,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-069',
+            'course_id' => 23,
+            'schedule_id' => 135,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-070',
+            'course_id' => 24,
+            'schedule_id' => 139,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-071',
+            'course_id' => 24,
+            'schedule_id' => 140,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-072',
+            'course_id' => 24,
+            'schedule_id' => 141,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-073',
+            'course_id' => 25,
+            'schedule_id' => 145,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-074',
+            'course_id' => 25,
+            'schedule_id' => 146,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-075',
+            'course_id' => 25,
+            'schedule_id' => 147,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-076',
+            'course_id' => 26,
+            'schedule_id' => 151,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-077',
+            'course_id' => 26,
+            'schedule_id' => 152,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-078',
+            'course_id' => 26,
+            'schedule_id' => 153,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-079',
+            'course_id' => 27,
+            'schedule_id' => 157,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-080',
+            'course_id' => 27,
+            'schedule_id' => 158,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-081',
+            'course_id' => 27,
+            'schedule_id' => 159,
+            'title' => 'Session 3',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-082',
+            'course_id' => 28,
+            'schedule_id' => 163,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-083',
+            'course_id' => 28,
+            'schedule_id' => 164,
+            'title' => 'Session 2',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+        ]);
+        Session::create([
+            'code' => 'S-084',
+            'course_id' => 28,
+            'schedule_id' => 165,
             'title' => 'Session 3',
             'description' => null,
             'requirement' => null,

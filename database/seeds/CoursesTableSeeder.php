@@ -110,6 +110,104 @@ class CoursesTableSeeder extends Seeder
             'description' => 'You are categorized as an advanced learner when you are able to handle a complicated situation or transaction in the Indonesian language. You are going to learn about introduction and a general knowledge of Indonesia, Indonesian culinary, and the current world’s phenomenon in free online classes.',
             'requirement' => null,
         ]);
+        Course::create([
+            'code' => 'C-015',
+            'course_package_id' => 1,
+            'title' => 'Class E',
+            'description' => 'You are categorized as a novice learner when you have no or limited prior Indonesian language knowledge. In free online classes, you are going to learn about greetings, how to introduce yourself and someone else, as well as how to ask someone’s information.',
+            'requirement' => null,
+        ]);
+        Course::create([
+            'code' => 'C-016',
+            'course_package_id' => 1,
+            'title' => 'Class F',
+            'description' => 'You are categorized as a novice learner when you have no or limited prior Indonesian language knowledge. In free online classes, you are going to learn about greetings, how to introduce yourself and someone else, as well as how to ask someone’s information.',
+            'requirement' => null,
+        ]);
+        Course::create([
+            'code' => 'C-017',
+            'course_package_id' => 1,
+            'title' => 'Class G',
+            'description' => 'You are categorized as a novice learner when you have no or limited prior Indonesian language knowledge. In free online classes, you are going to learn about greetings, how to introduce yourself and someone else, as well as how to ask someone’s information.',
+            'requirement' => null,
+        ]);
+        Course::create([
+            'code' => 'C-018',
+            'course_package_id' => 1,
+            'title' => 'Class H',
+            'description' => 'You are categorized as a novice learner when you have no or limited prior Indonesian language knowledge. In free online classes, you are going to learn about greetings, how to introduce yourself and someone else, as well as how to ask someone’s information.',
+            'requirement' => null,
+        ]);
+        Course::create([
+            'code' => 'C-019',
+            'course_package_id' => 2,
+            'title' => 'Class G',
+            'description' => 'You are identified as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language. In free online classes, you will learn about introduction, diseases and its symptoms, as well as Indonesian traditional culinary.',
+            'requirement' => null,
+        ]);
+        Course::create([
+            'code' => 'C-020',
+            'course_package_id' => 2,
+            'title' => 'Class H',
+            'description' => 'You are identified as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language. In free online classes, you will learn about introduction, diseases and its symptoms, as well as Indonesian traditional culinary.',
+            'requirement' => null,
+        ]);
+        Course::create([
+            'code' => 'C-021',
+            'course_package_id' => 2,
+            'title' => 'Class I',
+            'description' => 'You are identified as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language. In free online classes, you will learn about introduction, diseases and its symptoms, as well as Indonesian traditional culinary.',
+            'requirement' => null,
+        ]);
+        Course::create([
+            'code' => 'C-022',
+            'course_package_id' => 2,
+            'title' => 'Class J',
+            'description' => 'You are identified as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language. In free online classes, you will learn about introduction, diseases and its symptoms, as well as Indonesian traditional culinary.',
+            'requirement' => null,
+        ]);
+        Course::create([
+            'code' => 'C-023',
+            'course_package_id' => 2,
+            'title' => 'Class K',
+            'description' => 'You are identified as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language. In free online classes, you will learn about introduction, diseases and its symptoms, as well as Indonesian traditional culinary.',
+            'requirement' => null,
+        ]);
+        Course::create([
+            'code' => 'C-024',
+            'course_package_id' => 2,
+            'title' => 'Class L',
+            'description' => 'You are identified as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language. In free online classes, you will learn about introduction, diseases and its symptoms, as well as Indonesian traditional culinary.',
+            'requirement' => null,
+        ]);
+        Course::create([
+            'code' => 'C-025',
+            'course_package_id' => 3,
+            'title' => 'Class A',
+            'description' => 'You are categorized as an advanced learner when you are able to handle a complicated situation or transaction in the Indonesian language. You are going to learn about introduction and a general knowledge of Indonesia, Indonesian culinary, and the current world’s phenomenon in free online classes.',
+            'requirement' => null,
+        ]);
+        Course::create([
+            'code' => 'C-026',
+            'course_package_id' => 3,
+            'title' => 'Class B',
+            'description' => 'You are categorized as an advanced learner when you are able to handle a complicated situation or transaction in the Indonesian language. You are going to learn about introduction and a general knowledge of Indonesia, Indonesian culinary, and the current world’s phenomenon in free online classes.',
+            'requirement' => null,
+        ]);
+        Course::create([
+            'code' => 'C-027',
+            'course_package_id' => 3,
+            'title' => 'Class C',
+            'description' => 'You are categorized as an advanced learner when you are able to handle a complicated situation or transaction in the Indonesian language. You are going to learn about introduction and a general knowledge of Indonesia, Indonesian culinary, and the current world’s phenomenon in free online classes.',
+            'requirement' => null,
+        ]);
+        Course::create([
+            'code' => 'C-028',
+            'course_package_id' => 3,
+            'title' => 'Class D',
+            'description' => 'You are categorized as an advanced learner when you are able to handle a complicated situation or transaction in the Indonesian language. You are going to learn about introduction and a general knowledge of Indonesia, Indonesian culinary, and the current world’s phenomenon in free online classes.',
+            'requirement' => null,
+        ]);
         /*
         factory(App\Models\Course::class, 150)
             ->states('Randomized')
