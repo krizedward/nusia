@@ -71,6 +71,8 @@ class HomeController extends Controller
         if($this->is_student()) {
             if(Auth::user()->citizenship == 'Not Available') {
                 return redirect()->route('layouts.questionnaire');
+            } else if(Auth::user()->student->course_registrations->count() == 0) {
+                return redirect()->route('courses.index'); // KHUSUS UNTUK FREE CLASSES, mungkin ada bug di CLASS PRIVATE DAN/ATAU GROUP.
             }
 
             //$temp_nation = $c->where('name.common', Auth::user()->timezone)->first()->hydrate('timezones')->timezones->first()->zone_name;
