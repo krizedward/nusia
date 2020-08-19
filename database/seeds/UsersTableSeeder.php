@@ -35,7 +35,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-002.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -49,7 +49,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-003.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -63,7 +63,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-004.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -77,7 +77,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-005.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -91,7 +91,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-006.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -105,7 +105,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-007.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -119,7 +119,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-008.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -133,7 +133,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-009.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -147,7 +147,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-010.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -161,7 +161,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-011.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -175,7 +175,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-012.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -189,7 +189,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-013.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -203,7 +203,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-014.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -217,7 +217,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-015.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -231,7 +231,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-016.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
@@ -245,7 +245,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => null,
+            'image_profile' => 'usr-017.jpg',
             'created_at' => now(),
             'updated_at' => null,
         ]);
