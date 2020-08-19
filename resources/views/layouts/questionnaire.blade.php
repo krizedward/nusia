@@ -5,7 +5,7 @@
 @include('layouts.css_and_js.dashboard')
 
 @section('content')
-                <div class="box box-primary">
+                <div class="box box-primary" id="guidelines">
                     <div class="box-header with-border">
                         <h3 class="box-title">Indonesian Language Proficiency Guidelines</h3>
                     </div>
@@ -166,7 +166,7 @@
                                         <div class="form-group">
                                     @endif
                                         <label for="timezone">Please state your current timezone</label>
-                                        <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*This information is needed to adjust your local time with Indonesian time.</p>
+                                        <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*This information is needed to adjust Indonesian time to your local time<br>for scheduling your sessions.</p>
                                             <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control">
                                                 <option selected="selected" value="">-- Enter Current Location --</option>
                                                 @foreach($timezones as $timezone)
@@ -189,7 +189,7 @@
                                         <div class="form-group">
                                     @endif
                                         <label for="indonesian_language_proficiency">Indonesian Language Proficiency (Self-assessment)</label>
-                                        <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Check the proficiency guidelines above</p>
+                                        <p style="color:#ff0000; padding-top:0px; margin-top:0px;"><a href="#guidelines" style="color:#ff0000;">*Check the proficiency guidelines above</a></p>
                                             <select name="indonesian_language_proficiency" type="text" class="@error('indonesian_language_proficiency') is-invalid @enderror form-control">
                                                 <option selected="selected" value="">-- Enter Indonesian Language Proficiency --</option>
                                                 @if(old('indonesian_language_proficiency') == 'Novice')

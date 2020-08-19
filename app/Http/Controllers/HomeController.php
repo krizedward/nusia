@@ -347,11 +347,12 @@ class HomeController extends Controller
         $list_of_countries = $c->all()->pluck('name.common')->toArray();
         sort($list_of_countries);
 
-        $countries = [];
+        $countries = $list_of_countries;
+        /* $countries = [];
         foreach($list_of_countries as $country) {
             $c_timezones = $c->where('name.common', $country)->first()->hydrate('timezones')->timezones;
             foreach($c_timezones as $c_timezone) {
-                /*$c_abbr = "";
+                $c_abbr = "";
                 foreach($c_timezone['abbreviations'] as $abbr) {
                     if($abbr[0] == '+' || $abbr[0] == '-') {
                         if(strlen($abbr) == 3 || strlen($abbr) == 5) {
@@ -359,10 +360,10 @@ class HomeController extends Controller
                             break;
                         }
                     }
-                }*/
-                array_push($countries, $country . ' - ' . $c_timezone['zone_name'] /*. ' ' . $c_abbr*/);
+                }
+                array_push($countries, $country . ' - ' . $c_timezone['zone_name'] . ' ' . $c_abbr);
             }
-        }
+        }*/
         $timezones = [];
         foreach($list_of_countries as $country) {
             $c_timezones = $c->where('name.common', $country)->first()->hydrate('timezones')->timezones;
