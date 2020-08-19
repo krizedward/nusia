@@ -97,7 +97,7 @@ class HomeController extends Controller
             $instructors = Instructor::all();
             return view('dashboard.student_index', compact(
                 'session', 'session_order_by_schedule_time',
-                'material', 'course_registrations', 'instructors','timeNusia','timeStudent'
+                'material', 'course_registrations', 'instructors','timeNusia','timeStudent', 'temp_nation'
             ));
         }
     }
@@ -286,7 +286,7 @@ class HomeController extends Controller
             return redirect()->route('home');
         }
 
-        $countries = [
+        /*$countries = [
             'Afghanistan', 'Albania', 'Algeria', 'Antigua and Barbuda', 'Argentina',
             'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Azores',
             'Bahamas', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium',
@@ -315,7 +315,7 @@ class HomeController extends Controller
             'U. S. Virgin Islands', 'Uganda', 'Ukraine', 'United Kingdom', 'United States',
             'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam', 'Wales',
             'Yemen', 'Yugoslavia', 'Zimbabwe'
-        ];
+        ];*/
         $interests = [
             'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Aviation',
             'Baseball', 'Basketball', 'Blogging', 'Boating', 'Bowling',
@@ -338,6 +338,27 @@ class HomeController extends Controller
             'Videographing', 'Volleyball', 'Walking', 'Wrestling', 'Writing',
             'Woodworking',
         ];
+
+        $c = new Countries();
+        $list_of_countries = $c->all()->pluck('name.common')->toArray();
+        sort($list_of_countries);
+
+        $countries = [];
+        foreach($list_of_countries as $country) {
+            $c_timezones = $c->where('name.common', $country)->first()->hydrate('timezones')->timezones;
+            foreach($c_timezones as $c_timezone) {
+                /*$c_abbr = "";
+                foreach($c_timezone['abbreviations'] as $abbr) {
+                    if($abbr[0] == '+' || $abbr[0] == '-') {
+                        if(strlen($abbr) == 3 || strlen($abbr) == 5) {
+                            $c_abbr = '(GMT' . $abbr . ')';
+                            break;
+                        }
+                    }
+                }*/
+                array_push($countries, $country . ' - ' . $c_timezone['zone_name'] /*. ' ' . $c_abbr*/);
+            }
+        }
 
         return view('layouts.questionnaire', compact('countries', 'interests'));
     }

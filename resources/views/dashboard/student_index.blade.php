@@ -70,12 +70,12 @@
     <div class="row">
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Our time: {{ $timeNusia->isoFormat('h:mm a') }} {{ $timeNusia->tzName }}</h4>
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Our time: <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm a') }}</span> {{ $timeNusia->tzName }}</h4>
             </div>
         </div>
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Your time: {{ $timeStudent->isoFormat('h:mm a') }} {{ $timeStudent->tzName }}</h4>
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Your time: <span id="time_student">{{ $timeStudent->isoFormat('h:mm a') }}</span> {{ $timeStudent->tzName }}</h4>
             </div>
         </div>
     </div>
@@ -363,4 +363,23 @@
     </div>
     <!-- /.row -->
   @endif
+  <script>
+    /*function getTimeNusia() {
+        return "{{ \Carbon\Carbon::now()->isoFormat('h:mm:ss a') }}";
+    }
+    function getTimeStudent() {
+        return "{{ \Carbon\Carbon::now($temp_nation)->isoFormat('h:mm:ss a') }}";
+    }
+    setInterval(function() {
+        getTimeNusia();
+        getTimeStudent();
+    }, 1000);
+    setInterval(function() {
+        var timeNusia = getTimeNusia();
+        var timeStudent = getTimeStudent();
+
+        document.getElementById('time_nusia').innerHTML = timeNusia;
+        document.getElementById('time_student').innerHTML = timeStudent;
+    }, 60 * 1000);*/
+  </script>
 @stop
