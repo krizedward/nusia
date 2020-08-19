@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\CourseRegistration;
+use App\Models\Course;
+use App\Models\SessionRegistration;
+use App\Models\Session;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -95,6 +98,16 @@ class CourseRegistrationController extends Controller
                 'course_id' => $request->course_id,
                 'student_id' => $request->student_id
             ]);
+
+            $course = Course::findOrFail($request->course_id);
+            $course_registration_id = CourseRegistration::all()->last();
+            foreach($course->sessions as $s) {
+                SessionRegistration::create([
+                    'session_id' => $s->id,
+                    'course_registration_id' => $course_registration_id,
+                    'status' => 'Not Present',
+                ]);
+            }
         } else {
             // Tidak memiliki hak akses.
         }
