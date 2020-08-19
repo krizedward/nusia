@@ -56,7 +56,7 @@ Route::group(['middleware'=>'auth'], function() {
         ]);
 
         // menggunakan nested resources: /courses/{course}/registrations/{user}
-        Route::resource('courses-registrations', 'CourseRegistrationController')
+        /*Route::resource('courses-registrations', 'CourseRegistrationController')
             ->only(['index', 'create', 'store', 'destroy'])
             ->names([
                 'index'   => 'course_registrations.index',
@@ -66,7 +66,7 @@ Route::group(['middleware'=>'auth'], function() {
             ])
             ->parameters([
                 'registrations' => 'user'
-            ]);
+            ]);*/
 
         // menggunakan nested resources: /courses/{course}/payments/{user}
         Route::resource('courses.payments', 'CoursePaymentController')
