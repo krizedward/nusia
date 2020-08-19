@@ -2,7 +2,9 @@
 
 @section('title','Student | Sessions')
 
-@include('layouts.css_and_js.form_general')
+{{-- @include('layouts.css_and_js.form_general') --}}
+
+@include('layouts.css_and_js.table')
 
 @section('content-header')
     <h1><b>Sessions</b></h1>
@@ -47,12 +49,11 @@
                 </div>
                 <form>
                     <div class="box-body">
-                        <table class="table table-bordered">
+                        <table id="example1" class="table table-bordered">
                             <thead>
                             <tr>
-                                <th style="width: 120px">Registration ID</th>
                                 <th>Class</th>
-                                <th style="width: 135px">Level</th>
+                                <th>Level</th>
                                 <th>Session</th>
                                 <th>Meeting Time</th>
                                 <th>Status</th>
@@ -62,17 +63,18 @@
                             <tbody>
                             @foreach($data as $dt)
                             <tr>
-                                <td>{{ $dt->code }}</td>
-                                <td>{{ $dt->session->schedule->schedule_time }}</td>
-                                <td>{{ $dt->course_registration->course->course_package->course_level->name }} {{ $dt->course_registration->course->course_package->course_level_detail->name }}</td>
-                                @if($dt->session->title)
-                                  <td>{{ $dt->session->title }}</td>
-                                @elseif($dt->session->course->title)
-                                  <td>{{ $dt->session->course->title }}</td>
+                                <td>{{ $dt->session->course->title }}</td>
+                                <td>{{ $dt->session->course->course_package->course_level->name }}</td>
+                                <td>{{ $dt->session->title }}</td>
+                                @if($dt->session->schedule->schedule_time)
+                                  <?php
+                                    $schedule_time = \Carbon\Carbon::parse(strtotime($dt->session->schedule->schedule_time));
+                                  ?>
+                                  <td>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
                                 @else
-                                  <td>{{ $dt->session->course->course_package->title }}</td>
+                                  <td><i>N/A</i></td>
                                 @endif
-                                @if(now() < $dt->session->schedule->schedule_time)
+                                @if(now() < $schedule_time)
                                   <td><label class="label label-warning">Upcoming</label></td>
                                 @elseif($dt->status == 'Present')
                                   <td><label class="label label-success">Present</label></td>
