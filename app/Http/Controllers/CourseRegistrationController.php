@@ -100,7 +100,7 @@ class CourseRegistrationController extends Controller
             ]);
 
             $course = Course::findOrFail($request->course_id);
-            $course_registration_id = CourseRegistration::all()->last();
+            $course_registration_id = CourseRegistration::all()->last()->id;
             foreach($course->sessions as $s) {
                 SessionRegistration::create([
                     'session_id' => $s->id,
