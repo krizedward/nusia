@@ -496,4 +496,9 @@ class HomeController extends Controller
             return view('profile.student',compact('student','countries', 'interests','student'));
         }
     }
+
+    public function contact()
+    {
+        return view('layouts.contact');
+    }
 }

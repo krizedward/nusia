@@ -16,7 +16,7 @@
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="{{ route('contact') }}" class="dropdown-toggle">
               <i class="fa fa-envelope-o"></i>
             </a>
           </li>
@@ -25,6 +25,14 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
             </a>
+            <ul class="dropdown-menu">
+              <li class="header">You don't have notifications</li>
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <ul class="menu">
+                </ul>
+              </li>
+            </ul>
           </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">

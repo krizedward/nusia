@@ -156,6 +156,7 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('student/registration-form', 'HomeController@questionnaire')->name('layouts.questionnaire');
     Route::post('student/registration-form', 'HomeController@store')->name('questionnaire.store');
     Route::get('profile/{id}', 'HomeController@profile')->name('profile');
+    Route::get('contact/', 'HomeController@contact')->name('contact');
     /*end link*/
 
 	//menampilkan detail dari schedule
