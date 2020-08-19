@@ -63,15 +63,21 @@
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Email</strong>
                             <p>{{ $dt->user->email }}</p>
                             <hr>
-
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship</strong>
                             <p>{{ $dt->user->citizenship }}</p>
                             <hr>
-
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
                             <p>{{ $dt->interest }}</p>
                             <hr>
-
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Age</strong>
+                            <p>{{ $dt->age }}</p>
+                            <hr>
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Job Status</strong>
+                            <p>{{ $dt->status_job }} - {{ $dt->status_description }}</p>
+                            <hr>
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesia Language Proficiency</strong>
+                            <p>{{ $dt->indonesian_language_proficiency }}</p>
+                            <hr>
                         @endforeach
                     </div>
                     <!-- /.tab-pane -->
