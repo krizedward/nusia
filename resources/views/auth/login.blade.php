@@ -154,7 +154,7 @@
 
         <p class="login-box-msg"><a href="{{ route('password.request') }}">Forget your password</a></p>
 
-        <p class="login-box-msg">Doesn't have an account? <a href="{{ route('register') }}">Register</a> here</p>
+        <p class="login-box-msg">Don't have an account? <a href="{{ route('register') }}">Register</a> here</p>
     </div>
     <!-- /.login-box -->
 @stop
