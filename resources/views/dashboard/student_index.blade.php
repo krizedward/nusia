@@ -363,23 +363,4 @@
     </div>
     <!-- /.row -->
   @endif
-  <script>
-    /*function getTimeNusia() {
-        return "{{ \Carbon\Carbon::now()->isoFormat('h:mm:ss a') }}";
-    }
-    function getTimeStudent() {
-        return "{{ \Carbon\Carbon::now($temp_nation)->isoFormat('h:mm:ss a') }}";
-    }
-    setInterval(function() {
-        getTimeNusia();
-        getTimeStudent();
-    }, 1000);
-    setInterval(function() {
-        var timeNusia = getTimeNusia();
-        var timeStudent = getTimeStudent();
-
-        document.getElementById('time_nusia').innerHTML = timeNusia;
-        document.getElementById('time_student').innerHTML = timeStudent;
-    }, 60 * 1000);*/
-  </script>
 @stop
