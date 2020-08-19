@@ -94,7 +94,7 @@ class HomeController extends Controller
                 ->get();
             $material = MaterialSession::all();
             $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
-            $instructors = Instructor::all();
+            $instructors = Instructor::where('id',Auth::user()->id);
             return view('dashboard.student_index', compact(
                 'session', 'session_order_by_schedule_time',
                 'material', 'course_registrations', 'instructors','timeNusia','timeStudent', 'temp_nation'
