@@ -5,10 +5,10 @@
 @include('layouts.css_and_js.form_general')
 
 @section('content-header')
-    <h1>Session</h1>
+    <h1><b>Sessions</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li class="active">Group</li>
+        <li class="active">Sessions</li>
     </ol>
 @stop
 
@@ -16,20 +16,23 @@
     <div class="row">
         <div class="col-md-4">
             <div class="box box-warning">
-                <div class="box-header">
-                    <h3 class="box-title">Free Trial Course</h3>
-                </div>
+                <!--div class="box-header">
+                    <h3 class="box-title">&nbsp;</h3>
+                </div-->
                 <form>
                     <div class="box-body">
                         <dl>
-                            <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
-                            <dd>You can join 3 sessions of free trial courses with NUSIA.</dd>
+                            <dt style="font-size:18px;"><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
+                            <dd>
+                              Click "link" button to join your session!<br>
+                              <span style="color:#ff0000;">* Contact your instructors if you have a problem joining the sessions.</span>
+                            </dd>
                             <hr>
-                            <dt><i class="fa fa-book margin-r-5"></i> Note</dt>
-                            <dd>If you miss one meeting session, you cannot reschedule the session.</dd>
+                            <dt style="font-size:18px;"><i class="fa fa-book margin-r-5"></i> Note</dt>
+                            <dd>If cannot attend a session, you cannot reschedule it.</dd>
                             <hr>
-                            <dt><i class="fa fa-pencil margin-r-5"></i> Feedback</dt>
-                            <dd>After participating in EACH course session, please give us your feedback by clicking this
+                            <dt style="font-size:18px;"><i class="fa fa-pencil margin-r-5"></i> Feedback</dt>
+                            <dd>After participating in EACH session, please give us your feedback by clicking this
                                 <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-info" href="https://www.google.com/intl/id_id/forms/about/">Link</a>
                             </dd>
                         </dl>
@@ -40,7 +43,7 @@
         <div class="col-md-8">
             <div class="box box-warning">
                 <div class="box-header">
-                    <h3 class="box-title">Course Sessions</h3>
+                    <h3 class="box-title">Class Sessions</h3>
                 </div>
                 <form>
                     <div class="box-body">
@@ -48,9 +51,10 @@
                             <thead>
                             <tr>
                                 <th style="width: 120px">Registration ID</th>
-                                <th>Meeting Time</th>
+                                <th>Class</th>
                                 <th style="width: 135px">Level</th>
-                                <th>Session Name</th>
+                                <th>Session</th>
+                                <th>Meeting Time</th>
                                 <th>Status</th>
                                 <th style="width: 40px">Link</th>
                             </tr>

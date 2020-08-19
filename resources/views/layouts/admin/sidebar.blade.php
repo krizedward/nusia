@@ -94,7 +94,7 @@
                     </ul>
                 </li>--}}
 
-                <li class="#">
+                <li class="{{ set_active('session_registrations.index') }}">
                     <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Sessions</span></a>
                 </li>
                 {{--

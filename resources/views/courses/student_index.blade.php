@@ -5,11 +5,11 @@
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Nusia Free Classes</h1>
-    <ol class="breadcrumb">
+    <h1>Choose Your Class!</h1>
+    <!--ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li class="active">NUSIA Free Classes</li>
-    </ol>
+        <li class="active">Choose Your Class!</li>
+    </ol-->
 @stop
 
 @section('content')
@@ -17,21 +17,25 @@
         <div class="col-md-12">
           <div class="alert alert-success alert-dismissable">
             <h4>
-              <i class="icon fa fa-book"></i>
-              Note 1
+              <i class="icon fa fa-comments"></i>
+              Choose the schedule at your convenience!
             </h4>
-            You can join <b>3 sessions</b> of free trial classes with NUSIA.<br>
-            Per session lasts for <b>80 minutes</b>.
+            Join <b>3 sessions</b> of NUSIA'S free classes! Per session lasts <b>80 minutes</b>.
           </div>
         </div>
-        <div class="col-md-12">
-          <div class="alert alert-success alert-dismissable">
+        <div class="col-md-12" style="margin:0;">
+          <div class="alert alert-primary alert-dismissable">
             <h4>
               <i class="icon fa fa-book"></i>
-              Note 2
+              What to learn in free online classes?
             </h4>
-            Before joining each session, you must download the main materials.<br>
-            You can access the materials on <b>August 21, 2020</b>.
+            @if(Auth::user()->student->indonesian_language_proficiency == 'Novice')
+              You are going to learn about <b>greetings, how to introduce yourself and someone else, as well as how to ask someone’s information.</b>
+            @elseif(Auth::user()->student->indonesian_language_proficiency == 'Intermediate')
+              You are going to learn about <b>introduction, diseases and its symptoms, as well as Indonesian traditional culinary.</b>
+            @else
+              You are going to learn about <b>introduction and a general knowledge of Indonesia, Indonesian culinary, and the current world’s phenomenon in free online classes.</b>
+            @endif
           </div>
         </div>
         @foreach($data as $dt)
@@ -39,14 +43,14 @@
             <div class="col-md-4">
               <div class="box box-default">
                 <div class="box-header with-border">
-                  <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;&nbsp;{{ $dt->code }} - {{ $dt->title }}</h3>
+                  <h3 class="box-title"><i class="fa fa-group"></i>&nbsp;&nbsp;{{ $dt->code }} - {{ $dt->title }}</h3>
                 </div>
                 <div class="box-body">
                   <div class="row">
-                    <div class="col-md-12">
+                    <!--div class="col-md-12">
                       <b>Description</b>
                       <p>{{ $dt->description }}</p>
-                    </div>
+                    </div-->
                     <!--div class="col-md-12">
                       <b>Requirement</b>
                       <p>{{ $dt->requirement }}</p>

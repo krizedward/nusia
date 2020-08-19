@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="alert alert-success alert-dismissible">
-          <h4><i class="icon fa fa-book"></i> Free Class Available!</h4>
+          <h4><i class="icon fa fa-comments"></i> You have successfully registered!</h4>
           Nusia akan memberikan kesempatan 3 kelas gratis dengan memilih kelas bebas.
         </div>
       </div>
@@ -67,26 +67,31 @@
     <!-- /.row -->
   @else
 
-    <!--div class="row">
+    <div class="row">
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4><i class="icon fa fa-clock-o"></i> Our time: {{ $timeNusia->isoFormat('h:mm a') }} {{ $timeNusia->tzName }}</h4>
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Our time: {{ $timeNusia->isoFormat('h:mm a') }} {{ $timeNusia->tzName }}</h4>
             </div>
         </div>
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4><i class="icon fa fa-clock-o"></i> Your time: {{ $timeStudent->isoFormat('h:mm a') }} {{ $timeStudent->tzName }}</h4>
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Your time: {{ $timeStudent->isoFormat('h:mm a') }} {{ $timeStudent->tzName }}</h4>
             </div>
         </div>
-    </div-->
+    </div>
     <!-- /.row -->
 
     <!-- Notification row -->
     <div class="row">
       <div class="col-md-12">
         <div class="alert alert-success alert-dismissible">
-          <h4><i class="icon fa fa-book"></i> Free Classes Available!</h4>
-          <!--Nusia akan memberikan kesempatan 3 kelas gratis dengan memilih kelas bebas.-->
+          <h4><i class="icon fa fa-comments"></i> You have successfully registered!</h4>
+          Thank you for registering for this free online class! :)<br>
+          Here are a few things to remember:<br>
+          1. Before joining your class session, <b>please read all the materials</b>.<br>
+          2. When it is time for the session to start, click the Zoom link to join the class.<br>
+          3. You should join the class <b>five minutes before it starts</b>.<br>
+          4. Be sure to join the session from laptop or desktop computer.
         </div>
       </div>
     </div>
@@ -189,10 +194,10 @@
           </div>
           <!-- /.col -->
           <div class="col-md-6">
-            <!-- Download Materials -->
+            <!-- Materials -->
             <div class="box box-success">
               <div class="box-header with-border">
-                <h3 class="box-title">Download Materials</h3>
+                <h3 class="box-title">Materials</h3>
               </div>
               <!-- /.box-header -->
               <div class="box-body">

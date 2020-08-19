@@ -5,10 +5,10 @@
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Course Materials</h1>
+    <h1>Materials</h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li class="active">Course Materials</li>
+        <li class="active">Materials</li>
     </ol>
 @stop
 
@@ -17,28 +17,28 @@
         <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#free_trial" data-toggle="tab">Free Trial</a></li>
-                    <li><a href="#private" data-toggle="tab">Private</a></li>
-                    <li><a href="#group" data-toggle="tab">Group</a></li>
+                    <li class="active"><a href="#free_trial" data-toggle="tab">Free Classes</a></li>
+                    <!--li><a href="#private" data-toggle="tab">Private</a></li>
+                    <li><a href="#group" data-toggle="tab">Group</a></li-->
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="free_trial">
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="box">
-                                    <div class="box-header">
-                                        <h3 class="box-title">Free Trial Course</h3>
-                                    </div>
+                                    <!--div class="box-header">
+                                        <h3 class="box-title">Free Classes</h3>
+                                    </div-->
                                     <form>
                                         <div class="box-body">
                                             <dl>
                                                 <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
-                                                <dd>You can join 3 sessions of free trial courses with NUSIA.</dd>
+                                                <dd>You must download the materials before each session starts.</dd>
                                             </dl>
                                             <hr>
                                             <dl>
                                                 <dt><i class="fa fa-file-text-o margin-r-5"></i> Note</dt>
-                                                <dd>Before starting each session, you must download the main materials.</dd>
+                                                <dd>You can access the materials<br>on <b style="color:#ff0000;">August 21, 2020</b>.</dd>
                                             </dl>
                                         </div>
                                     </form>
@@ -199,7 +199,7 @@
                         </div>
                     </div>
                     <!-- /.tab-pane -->
-                    <div class="tab-pane" id="private">
+                    <div class="tab-pane" id="private_UNAVAILABLE">
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="box">
@@ -376,7 +376,7 @@
                         </div>
                     </div>
                     <!-- /.tab-pane -->
-                    <div class="tab-pane" id="group">
+                    <div class="tab-pane" id="group_UNAVAILABLE">
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="box">

@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title','Nusia | Questionnaire')
+@section('title','Registration Form')
 
 @include('layouts.css_and_js.dashboard')
 
@@ -115,7 +115,7 @@
                                         <div class="form-group hidden" id="status_description">
                                     @endif
                                         <label for="status_description" id="status_description_label">School / University / Working Place</label>
-                                            <input name="status_description" type="text" class="@error('status_description') is-invalid @enderror form-control" placeholder="Enter Value" id="status_description_input">
+                                            <input name="status_description" type="text" class="@error('status_description') is-invalid @enderror form-control" placeholder="Enter Value" id="status_description_input" value="{{ old('status_description') }}">
                                             @error('status_description')
                                             <p style="color:red">{{ $message }}</p>
                                             @enderror
@@ -131,7 +131,7 @@
                                         <div class="form-group">
                                     @endif
                                         <label for="age">Age</label>
-                                            <input name="age" type="text" class="@error('age') is-invalid @enderror form-control" placeholder="Enter Age">
+                                            <input name="age" type="text" class="@error('age') is-invalid @enderror form-control" placeholder="Enter Age" value="{{ old('age') }}">
                                             @error('age')
                                             <p style="color:red">{{ $message }}</p>
                                             @enderror
@@ -147,7 +147,11 @@
                                             <select name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control">
                                                 <option selected="selected" value="">-- Enter Citizenship --</option>
                                                 @foreach($countries as $country)
-                                                    <option value="{{ $country }}">{{ $country }}</option>
+                                                    @if(old('citizenship') == $country)
+                                                      <option selected="selected" value="{{ $country }}">{{ $country }}</option>
+                                                    @else
+                                                      <option value="{{ $country }}">{{ $country }}</option>
+                                                    @endif
                                                 @endforeach
                                             </select>
                                             @error('citizenship')
@@ -165,9 +169,21 @@
                                         <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Check the proficiency guidelines above</p>
                                             <select name="indonesian_language_proficiency" type="text" class="@error('indonesian_language_proficiency') is-invalid @enderror form-control">
                                                 <option selected="selected" value="">-- Enter Indonesian Language Proficiency --</option>
-                                                <option value="Novice">Novice</option>
-                                                <option value="Intermediate">Intermediate</option>
-                                                <option value="Advanced">Advanced</option>
+                                                @if(old('indonesian_language_proficiency') == 'Novice')
+                                                  <option selected="selected" value="Novice">Novice</option>
+                                                @else
+                                                  <option value="Novice">Novice</option>
+                                                @endif
+                                                @if(old('indonesian_language_proficiency') == 'Intermediate')
+                                                  <option selected="selected" value="Intermediate">Intermediate</option>
+                                                @else
+                                                  <option value="Intermediate">Intermediate</option>
+                                                @endif
+                                                @if(old('indonesian_language_proficiency') == 'Advanced')
+                                                  <option selected="selected" value="Advanced">Advanced</option>
+                                                @else
+                                                  <option value="Advanced">Advanced</option>
+                                                @endif
                                             </select>
                                             @error('indonesian_language_proficiency')
                                             <p style="color:red">{{ $message }}</p>
@@ -188,7 +204,7 @@
                                             <select name="interest_1" type="text" class="@error('interest_1') is-invalid @enderror form-control" id="interest_1_input" onChange="if(document.getElementById('interest_1_input').value != '') {document.getElementById('interest_2').className = 'form-group';} else {document.getElementById('interest_2').className = 'form-group hidden'; document.getElementById('interest_3').className = 'form-group hidden'; document.getElementById('interest_4').className = 'form-group hidden'; document.getElementById('interest_5').className = 'form-group hidden'; document.getElementById('interest_6').className = 'form-group hidden'; document.getElementById('interest_2_input').value = ''; document.getElementById('interest_3_input').value = ''; document.getElementById('interest_4_input').value = ''; document.getElementById('interest_5_input').value = ''; document.getElementById('interest_6_input').value = '';}">
                                                 <option selected="selected" value="">-- Enter Interest --</option>
                                                 @foreach($interests as $interest)
-                                                    <option value="{{ $interest }}">{{ $interest }}</option>
+                                                  <option value="{{ $interest }}">{{ $interest }}</option>
                                                 @endforeach
                                             </select>
                                             @error('interest_1')
@@ -206,7 +222,7 @@
                                             <select name="interest_2" type="text" class="@error('interest_2') is-invalid @enderror form-control" id="interest_2_input" onChange="if(document.getElementById('interest_2_input').value != '') {document.getElementById('interest_3').className = 'form-group';} else {document.getElementById('interest_3').className = 'form-group hidden'; document.getElementById('interest_4').className = 'form-group hidden'; document.getElementById('interest_5').className = 'form-group hidden'; document.getElementById('interest_6').className = 'form-group hidden'; document.getElementById('interest_3_input').value = ''; document.getElementById('interest_4_input').value = ''; document.getElementById('interest_5_input').value = ''; document.getElementById('interest_6_input').value = '';}">
                                                 <option selected="selected" value="">-- Enter Interest --</option>
                                                 @foreach($interests as $interest)
-                                                    <option value="{{ $interest }}">{{ $interest }}</option>
+                                                  <option value="{{ $interest }}">{{ $interest }}</option>
                                                 @endforeach
                                             </select>
                                             @error('interest_2')
@@ -314,7 +330,7 @@
                                     <div class="form-group hidden" id="target_language_experience_value">
                                 @endif
                                     <label for="target_language_experience_value">I have learned Indonesian for .... years</label>
-                                        <input name="target_language_experience_value" type="text" class="@error('target_language_experience_value') is-invalid @enderror form-control" placeholder="Enter Value">
+                                        <input name="target_language_experience_value" type="text" class="@error('target_language_experience_value') is-invalid @enderror form-control" placeholder="Enter Value" value="{{ old('target_language_experience_value') }}">
                                         @error('target_language_experience_value')
                                         <p style="color:red">{{ $message }}</p>
                                         @enderror
@@ -327,7 +343,7 @@
                                     <div class="form-group hidden" id="description_of_course_taken">
                                 @endif
                                     <label for="description_of_course_taken">Your Learning Experiences</label>
-                                        <textarea name="description_of_course_taken" class="@error('description_of_course_taken') is-invalid @enderror form-control" rows="5" placeholder="If you have studied the Indonesian language, briefly describe any courses you have taken! (write in the Indonesian language—if possible)"></textarea>
+                                        <textarea name="description_of_course_taken" class="@error('description_of_course_taken') is-invalid @enderror form-control" rows="5" placeholder="If you have studied the Indonesian language, briefly describe any courses you have taken! (write in the Indonesian language—if possible)">{{ old('description_of_course_taken') }}</textarea>
                                         @error('description_of_course_taken')
                                         <p style="color:red">{{ $message }}</p>
                                         @enderror
@@ -340,7 +356,7 @@
                                     <div class="form-group" id="learning_objective">
                                 @endif
                                     <label for="learning_objective">Your Learning Objectives</label>
-                                        <textarea name="learning_objective" class="@error('learning_objective') is-invalid @enderror form-control" rows="5" placeholder="Why do you want to learn the Indonesian language? (Briefly describe your learning objectives in the Indonesian language—if possible!)"></textarea>
+                                        <textarea name="learning_objective" class="@error('learning_objective') is-invalid @enderror form-control" rows="5" placeholder="Why do you want to learn the Indonesian language? (Briefly describe your learning objectives in the Indonesian language—if possible!)">{{ old('learning_objective') }}</textarea>
                                         @error('learning_objective')
                                         <p style="color:red">{{ $message }}</p>
                                         @enderror
