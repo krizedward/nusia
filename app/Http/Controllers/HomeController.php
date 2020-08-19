@@ -162,6 +162,16 @@ class HomeController extends Controller
                 ->withInput();
         }
 
+        if($request->target_language_experience == 'Never (no experience)') {
+            $request->target_language_experience_value = null;
+            $request->description_of_course_taken = null;
+        } else if($request->target_language_experience == '< 6 months') {
+            $request->target_language_experience_value = null;
+        } else if($request->target_language_experience == '<= 1 year') {
+            $request->target_language_experience_value = null;
+        } else {
+            // all information should be filled.
+        }
 
         if($this->is_admin()) {
             User::create([
