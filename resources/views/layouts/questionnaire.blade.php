@@ -160,6 +160,29 @@
                                         </div>
                                 </div>
                                 <div class="col-md-12">
+                                    @if ($errors->get('timezone'))
+                                        <div class="form-group has-error">
+                                    @else
+                                        <div class="form-group">
+                                    @endif
+                                        <label for="timezone">Please state your current timezone</label>
+                                        <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*This information is needed to adjust your local time with Indonesian time.</p>
+                                            <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control">
+                                                <option selected="selected" value="">-- Enter Current Location --</option>
+                                                @foreach($timezones as $timezone)
+                                                    @if(old('timezone') == $timezone)
+                                                      <option selected="selected" value="{{ $timezone }}">{{ $timezone }}</option>
+                                                    @else
+                                                      <option value="{{ $timezone }}">{{ $timezone }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                            @error('timezone')
+                                            <p style="color:red">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                </div>
+                                <div class="col-md-12">
                                     @if ($errors->get('indonesian_language_proficiency'))
                                         <div class="form-group has-error">
                                     @else
