@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->enum('roles', ['Student', 'Instructor', 'Admin']);
             $table->string('citizenship');
+            $table->string('timezone')->nullable();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone', 15)->nullable();
