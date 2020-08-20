@@ -65,7 +65,7 @@
                                     <?php
                                       $schedule_time = \Carbon\Carbon::parse($schedule->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                     ?>
-                                    <td>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
+                                    <td>{{ $schedule_time->addHour()->isoFormat('dddd, MMMM Do YYYY, hh:mm') }} {{ $schedule_time->add(80, 'minutes')->addHour()->isoFormat('[-] hh:mm A') }}</td>
                                     @if($schedule->session->link_zoom)
                                       <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $schedule->session->link_zoom }}">Link</a></td>
                                     @else
@@ -145,7 +145,7 @@
                                       $schedule_time = \Carbon\Carbon::parse($dt->schedule_time)->setTimezone(Auth::user()->timezone);
                                     ?>
                                     <div class="product-title">{{ $dt->session->course->title }} - {{ $dt->session->title }}
-                                      <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMMM Do YYYY') }}</span>
+                                      <span class="label label-info pull-right">{{ $schedule_time->addHour()->isoFormat('MMMM Do YYYY') }}</span>
                                     </div>
                                     <span class="product-description">
                                       @if($dt->schedule_time < now())

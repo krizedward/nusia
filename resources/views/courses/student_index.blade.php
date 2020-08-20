@@ -41,7 +41,7 @@
         @foreach($data as $dt)
           @if($dt->course_registrations->count() < $dt->course_package->course_type->count_student_max)
             <div class="col-md-4">
-              <div class="box box-default">
+              <div class="box box-primary">
                 <div class="box-header with-border">
                   <h3 class="box-title"><i class="fa fa-group"></i>&nbsp;&nbsp;{{ $dt->code }} - {{ $dt->title }}</h3>
                 </div>
@@ -62,7 +62,7 @@
                       ?>
                       <div class="col-md-12">
                         <b>Session {{ $j + 1 }}</b>
-                        <p>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</p>
+                        <p>{{ $schedule_time->addHour()->isoFormat('dddd, MMMM Do YYYY, hh:mm') }} {{ $schedule_time->add(80, 'minutes')->addHour()->isoFormat('[-] hh:mm A') }}</p>
                       </div>
                       <?php $i--; ?>
                     @endforeach
