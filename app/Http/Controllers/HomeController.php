@@ -145,16 +145,19 @@ class HomeController extends Controller
         } else $request->interest_1 = null;
 
         // FOR TIMEZONE
-        $c = new Countries();
-        $countries = $c->all()->pluck('name.common')->toArray();
-        sort($countries);
+        $c = (new Countries())->all();
+        $countries = $c->pluck('name.common')->toArray();
+        //sort($countries);
 
         $flag = 0;
         foreach($countries as $country) {
             $c_cities = $c->where('name.common', $country)->first()->hydrate('cities')->cities;
-            foreach($c_cities as $c_city) {
-                if($request->timezone == $c_city['name']) {
-                    $request->timezone = $c_city['timezone'];
+            $c_timezone = $c_cities->pluck('timezone')->toArray();
+            $c_cities = $c_cities->pluck('name')->toArray();
+            foreach($c_cities as $i => $c_city) {
+                if($request->timezone == $c_city) {
+//dd($c_city.' '.$c_timezone[$i].' '.$i);
+                    $request->timezone = $c_timezone[$i];
                     $flag = 1;
                     break;
                 }
@@ -378,66 +381,20 @@ class HomeController extends Controller
                 'Woodworking',
             ];
 
-        $c = new Countries();
-        $list_of_countries = $c->all()->pluck('name.common')->toArray();
-        sort($list_of_countries);
+        $c = (new Countries())->all();
+        $countries = $c->pluck('name.common')->toArray();
+        sort($countries);
 
-        $countries = $list_of_countries;
-        /* $countries = [];
-        foreach($list_of_countries as $country) {
-            $c_timezones = $c->where('name.common', $country)->first()->hydrate('timezones')->timezones;
-            foreach($c_timezones as $c_timezone) {
-                $c_abbr = "";
-                foreach($c_timezone['abbreviations'] as $abbr) {
-                    if($abbr[0] == '+' || $abbr[0] == '-') {
-                        if(strlen($abbr) == 3 || strlen($abbr) == 5) {
-                            $c_abbr = '(GMT' . $abbr . ')';
-                            break;
-                        }
-                    }
-                }
-                array_push($countries, $country . ' - ' . $c_timezone['zone_name'] . ' ' . $c_abbr);
-            }
-        }*/
         $timezones = [];
-        foreach($list_of_countries as $country) {
-            /*$c_timezones = $c->where('name.common', $country)->first()->hydrate('timezones')->timezones;
-            foreach($c_timezones as $c_timezone) {
-                array_push($timezones, $c_timezone['zone_name']);
-            }*/
-            $c_cities = $c->where('name.common', $country)->first()->hydrate('cities')->cities->pluck('name');;
+        foreach($countries as $country) {
+            $c_cities = $c->where('name.common', $country)->first()->hydrate('cities')->cities->pluck('name')->toArray();
             foreach($c_cities as $c_city) {
                 // Menghapus nama kota yang tidak dideteksi atau bernilai "null".
-                if($c_city) array_push($timezones, $c_city);
-
-                // BUG (untuk metode 1-3): Ini akan menghapus beberapa nama kota yang tidak dideteksi oleh UTF-8.
-
-                // Metode 1: Deteksi karakter ASCII atau bukan.
-                /*if(mb_check_encoding($c_city, 'ASCII')) {
+                if($c_city) {
                     array_push($timezones, $c_city);
-                }*/
-
-                // Metode 2: Deteksi karakter UTF-8 atau bukan.
-                /*if( (bool) preg_match('//u', $c_city) ) {
-                    array_push($timezones, $c_city);
-                }*/
-
-                // Metode 3: Manual menyesuaikan (TIDAK BERHASIL).
-                /*$flag = 1;
-                for($i = 0; $i < strlen($c_city); $i++) {
-                    if($c_city[$i] >= 'a' && $c_city[$i] <= 'z') continue;
-                    else if($c_city[$i] >= 'A' && $c_city[$i] <= 'Z') continue;
-                    else if($c_city[$i] >= '0' && $c_city[$i] <= '9') continue;
-                    else if($c_city[$i] == ' ' || $c_city[$i] == '-' || $c_city[$i] == '\'') continue;
-                    else if($c_city[$i] == 'Ã' || $c_city[$i] == 'Ä' || $c_city[$i] == 'È' || $c_city[$i] == '©') continue;
-                    else {
-                        $flag = 0;
-                        break;
-                    }
+                    //array_unique($timezones);
+                    //sort($timezones);
                 }
-                if($flag == 1) {
-                    array_push($timezones, $c_city);
-                }*/
             }
         }
         sort($timezones);
