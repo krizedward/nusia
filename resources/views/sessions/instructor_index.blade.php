@@ -86,7 +86,7 @@
 
 {{--Schedule di Sidebar--}}
 @section('content-header')
-    <h1>Schedule Group</h1>
+    <h1><b>Schedule Group</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
         <li class="active">Schedule Group</li>
@@ -103,12 +103,12 @@
                 <form>
                     <div class="box-body">
                         <dl>
-                            <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
+                            <dt style="font-size:18px;"><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
                             <dd>You can join 3 sessions of free trial courses with NUSIA.</dd>
                         </dl>
                         <hr>
                         <dl>
-                            <dt><i class="fa fa-file-text-o margin-r-5"></i> Note</dt>
+                            <dt style="font-size:18px;"><i class="fa fa-file-text-o margin-r-5"></i> Note</dt>
                             <dd>Before starting each session, you must download the main materials.</dd>
                         </dl>
                     </div>
@@ -118,17 +118,20 @@
         <div class="col-md-9">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Courses</h3>
+                    <h3 class="box-title">Courses Class</h3>
                 </div>
                 <form>
                     <div class="box-body">
-                        <table class="table table-bordered">
+                        <table id="example1" class="table no-margin">
+                            <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Course Name</th>
                                 <th>Level</th>
                                 <th>Slot</th>
                             </tr>
+                            </thead>
+                            <tbody>
                             @foreach($data as $dt)
                             <tr>
                                 <td>{{ $dt->code }}</td>
@@ -137,6 +140,7 @@
                                 <td>{{ $dt->course->course_package->course_type->count_student_max }} Student</td>
                             </tr>
                             @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </form>

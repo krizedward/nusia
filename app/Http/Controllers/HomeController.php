@@ -58,6 +58,8 @@ class HomeController extends Controller
         }
 
         if($this->is_instructor()) {
+            $timeNusia = Carbon::now();
+            $timeStudent = Carbon::now(Auth::user()->timezone);
             $session_reg = SessionRegistration::all();
             $session_reg_order_by_schedule_time = SessionRegistration
                 ::join('sessions', 'session_registrations.session_id', 'sessions.id')
@@ -65,7 +67,7 @@ class HomeController extends Controller
                 ->orderBy('schedule_time')
                 ->select('session_registrations.id', 'session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
                 ->get();
-            return view('dashboard.instructor_index', compact('session_reg', 'session_reg_order_by_schedule_time'));
+            return view('dashboard.instructor_index', compact('session_reg', 'session_reg_order_by_schedule_time','timeNusia','timeStudent'));
         }
 
         if($this->is_student()) {

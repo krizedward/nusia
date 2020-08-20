@@ -9,6 +9,21 @@
 @section('content')
     <!-- Main row -->
     <div class="row">
+        <div class="col-md-6">
+            <div class="alert alert-dismissible">
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Our time: <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm a') }}</span> {{ $timeNusia->tzName }}</h4>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="alert alert-dismissible">
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Your time: <span id="time_student">{{ $timeStudent->isoFormat('h:mm a') }}</span> {{ $timeStudent->tzName }}</h4>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <!-- Main row -->
+    <div class="row">
         <div class="col-md-12">
             <div class="alert alert-success alert-dismissible">
                 <h4><i class="icon fa fa-book"></i> Notification!</h4>

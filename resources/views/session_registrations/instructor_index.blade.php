@@ -6,7 +6,7 @@
 
 {{--Session di Sidebar--}}
 @section('content-header')
-    <h1>Session</h1>
+    <h1><b>Session</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
         <li class="active">Free Trial</li>
@@ -72,10 +72,10 @@
                         {{--Menampilkan dara dari SessionRegistrattionController--}}
                         @foreach($data as $dt)
                         <tr>
-                            <td>{{ $dt->code }}</td>
+                            <td>{{ $dt->id }}</td>
                             <td>{{ $dt->course_registration->course->course_package->course_level->name }}</td>
                             <td>{{ $dt->course_registration->course->course_package->course_type->name }}</td>
-                            <td>{{ $dt->registration_time }}</td>
+                            <td>{{ $dt->session->schedule->schedule_time }}</td>
                             @if($dt->session->link_zoom)
                                 <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
                             @else
