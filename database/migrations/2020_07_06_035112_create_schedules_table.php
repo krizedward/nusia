@@ -17,6 +17,7 @@ class CreateSchedulesTable extends Migration
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('instructor_id');
+            $table->unsignedBigInteger('instructor_id_2');
             $table->timestamp('schedule_time');
             $table->enum('status', ['Available', 'Busy']);
             $table->timestamps();
