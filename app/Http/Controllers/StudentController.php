@@ -319,7 +319,25 @@ class StudentController extends Controller
     public function update(Request $request, $id)
     {
         $student = Student::findOrFail($id);
-        /*
+        $file = $request->file('image_profile');
+
+        if ($this->is_student()){
+
+            if ($file) {
+                $student->user->update([
+                    'image_profile' => $file->getClientOriginalName(),
+                ]);
+
+                //Move Uploaded File
+                $destinationPath = 'uploads/student/profile/';
+                $file->move($destinationPath,$file->getClientOriginalName());
+            }
+
+            return redirect()->route('profile',$student->user->id);
+        }
+
+        if($this->is_admin()) {
+
         $interest = array(
             $request->interest_1,
             $request->interest_2,
@@ -364,16 +382,6 @@ class StudentController extends Controller
                 ->withErrors($data)
                 ->withInput();
         }
-        */
-        if ($this->is_student()){
-            $student->user->update([
-                'image_profile' => $request->image_profile,
-            ]);
-
-            return redirect()->route('profile',$student->user->id);
-        }
-
-        if($this->is_admin()) {
             $student->user->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -401,7 +409,7 @@ class StudentController extends Controller
             // Tidak memiliki izin akses.
         }
 
-        //return redirect()->route('students.index');
+        return redirect()->route('students.index');
     }
 
 
