@@ -78,8 +78,8 @@ class HomeController extends Controller
             }
 
             //$temp_nation = $c->where('name.common', Auth::user()->timezone)->first()->hydrate('timezones')->timezones->first()->zone_name;
-            $timeNusia = Carbon::now();
-            $timeStudent = Carbon::now(Auth::user()->timezone);
+            $timeNusia = Carbon::now()->setTimezone('Asia/Jakarta');
+            $timeStudent = Carbon::now()->setTimezone(Auth::user()->timezone);
             //untuk mengubah zona waktu isi didalam dengan lokasi
             $session = Session
                 ::join('courses', 'sessions.course_id', 'courses.id')
@@ -140,6 +140,25 @@ class HomeController extends Controller
         if($interest != null) {
             $request->interest_1 = 'PASS';
         } else $request->interest_1 = null;
+
+        // FOR TIMEZONE
+        $c = new Countries();
+        $countries = $c->all()->pluck('name.common')->toArray();
+        sort($countries);
+
+        $flag = 0;
+        foreach($countries as $country) {
+            $c_cities = $c->where('name.common', $country)->first()->hydrate('cities')->cities;
+            foreach($c_cities as $c_city) {
+                if($request->timezone == $c_city['name']) {
+                    $request->timezone = $c_city['timezone'];
+                    $flag = 1;
+                    break;
+                }
+            }
+            if($flag == 1) break;
+        }
+        if($flag == 0) $request->timezone = null;
 
         $data = $request->all();
         $file = $request->file('image_profile');
@@ -379,9 +398,43 @@ class HomeController extends Controller
         }*/
         $timezones = [];
         foreach($list_of_countries as $country) {
-            $c_timezones = $c->where('name.common', $country)->first()->hydrate('timezones')->timezones;
+            /*$c_timezones = $c->where('name.common', $country)->first()->hydrate('timezones')->timezones;
             foreach($c_timezones as $c_timezone) {
                 array_push($timezones, $c_timezone['zone_name']);
+            }*/
+            $c_cities = $c->where('name.common', $country)->first()->hydrate('cities')->cities->pluck('name');;
+            foreach($c_cities as $c_city) {
+                // Menghapus nama kota yang tidak dideteksi atau bernilai "null".
+                if($c_city) array_push($timezones, $c_city);
+
+                // BUG (untuk metode 1-3): Ini akan menghapus beberapa nama kota yang tidak dideteksi oleh UTF-8.
+
+                // Metode 1: Deteksi karakter ASCII atau bukan.
+                /*if(mb_check_encoding($c_city, 'ASCII')) {
+                    array_push($timezones, $c_city);
+                }*/
+
+                // Metode 2: Deteksi karakter UTF-8 atau bukan.
+                /*if( (bool) preg_match('//u', $c_city) ) {
+                    array_push($timezones, $c_city);
+                }*/
+
+                // Metode 3: Manual menyesuaikan (TIDAK BERHASIL).
+                /*$flag = 1;
+                for($i = 0; $i < strlen($c_city); $i++) {
+                    if($c_city[$i] >= 'a' && $c_city[$i] <= 'z') continue;
+                    else if($c_city[$i] >= 'A' && $c_city[$i] <= 'Z') continue;
+                    else if($c_city[$i] >= '0' && $c_city[$i] <= '9') continue;
+                    else if($c_city[$i] == ' ' || $c_city[$i] == '-' || $c_city[$i] == '\'') continue;
+                    else if($c_city[$i] == 'Ã' || $c_city[$i] == 'Ä' || $c_city[$i] == 'È' || $c_city[$i] == '©') continue;
+                    else {
+                        $flag = 0;
+                        break;
+                    }
+                }
+                if($flag == 1) {
+                    array_push($timezones, $c_city);
+                }*/
             }
         }
         sort($timezones);
