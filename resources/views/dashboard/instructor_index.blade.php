@@ -25,9 +25,9 @@
     <!-- Main row -->
     <div class="row">
         <div class="col-md-12">
-            <div class="alert alert-success alert-dismissible">
-                <h4><i class="icon fa fa-book"></i> Notification!</h4>
-                Pengajar Instructor harus mengisi link zoom untuk mengajar.
+            <div class="alert alert-warning alert-dismissible">
+                <h4><i class="icon fa fa-book"></i> Please Consider :)</h4>
+                Before teaching, don't forget to attach a Zoom link for each session, so the students may join the session.
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
             <!-- TABLE: Sessions Instructor -->
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Courses</h3>
+                    <h3 class="box-title">Classes</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -48,29 +48,26 @@
                         <table id="example1" class="table no-margin">
                             <thead>
                             <tr>
-                                <th style="width:65px;">Session ID</th>
                                 <th>Level</th>
-                                <th>Session Name</th>
-                                <th>Schedule</th>
-                                <th>Link</th>
+                                <th>Class</th>
+                                <th>Session</th>
+                                <th>Meeting Time</th>
+                                <th>Zoom Link</th>
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach($session_reg as $dt)
+                                @foreach(Auth::user()->instructor->schedules as $schedule)
                                 <tr>
-                                    <td>{{ $dt->code }}</td>
-                                    <td>{{ $dt->session->course->course_package->course_level->name }} {{ $dt->session->course->course_package->course_level_detail->name }}</td>
+                                    <td>{{ $schedule->session->course->course_package->course_level->name }}</td>
+                                    <td>{{ $schedule->session->course->title }}</td>
                                     {{--session pakai attribut title untuk penamaan persession di halaman dashboard--}}
-                                    @if($dt->session->title)
-                                      <td>{{ $dt->session->title }}</td>
-                                    @elseif($dt->session->course->title)
-                                      <td>{{ $dt->session->course->title }}</td>
-                                    @else
-                                      <td>{{ $dt->session->course->course_package->title }}</td>
-                                    @endif
-                                    <td>{{ date('d M Y', strtotime($dt->session->schedule->schedule_time)) }}</td>
-                                    @if($dt->session->link_zoom)
-                                      <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
+                                    <td>{{ $schedule->session->title }}</td>
+                                    <?php
+                                      $schedule_time = \Carbon\Carbon::parse(strtotime($schedule->session->schedule->schedule_time))->setTimezone(Auth::user()->timezone);
+                                    ?>
+                                    <td>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
+                                    @if($schedule->session->link_zoom)
+                                      <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $schedule->session->link_zoom }}">Link</a></td>
                                     @else
                                       <td><i>N/A</i></td>
                                     @endif
@@ -82,54 +79,14 @@
                     <!-- /.table-responsive -->
                 </div>
                 <!-- /.box-body -->
-                <div class="box-footer clearfix">
-                    <a href="#" class="btn btn-sm btn-info btn-flat pull-left">View All Data</a>
-                </div>
+                <!--div class="box-footer text-center">
+                  <a href="{{ route('session_registrations.index') }}" class="uppercase">View All Sessions</a>
+                </div-->
                 <!-- /.box-footer -->
             </div>
             <!-- /.box -->
             <div class="row">
-                <div class="col-md-6">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Reminder for course sessions</h3>
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-                            <ul class="products-list product-list-in-box">
-                              @if($session_reg_order_by_schedule_time)
-                                @foreach($session_reg_order_by_schedule_time as $dt)
-                                    <li class="item">
-                                        <div class="product-img">
-                                            <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="Product Image">
-                                        </div>
-                                        <div class="product-info">
-                                            <div class="product-title">{{ $dt->session->course->course_package->title }} - {{ $dt->session->name }}
-                                                <span class="label label-info pull-right">{{ date('d M Y', strtotime($dt->session->schedule->schedule_time)) }}</span></div>
-                                            <span class="product-description">
-                                                Note : Don't forget to get in touch soon!
-                                            </span>
-                                        </div>
-                                    </li>
-                                    <!-- /.item -->
-                                @endforeach
-                              @else
-                                <div style="color:#555555">
-                                  No courses available. You may join one first!
-                                </div>
-                              @endif
-                            </ul>
-                        </div>
-                        <!-- /.box-body -->
-                        <div class="box-footer text-center">
-                            <a href="#" class="uppercase">View All Data</a>
-                        </div>
-                        <!-- /.box-footer -->
-                    </div>
-                    <!-- /.box -->
-                </div>
-                <!-- /.col -->
-                <div class="col-md-6">
+                <div class="col-md-6 hidden">
                     <!-- STUDENT LIST -->
                     <div class="box box-danger">
                         <div class="box-header with-border">
@@ -160,7 +117,70 @@
         </div>
         <!-- /.col -->
 
-        <div class="col-md-4">
+                <div class="col-md-4">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Upcoming Sessions</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <ul class="products-list product-list-in-box">
+                              <?php $i = 0; ?>
+                              @foreach($session_reg_order_by_schedule_time as $dt)
+                               @if($dt->schedule_time >= now())
+                                <li class="item">
+                                  <div class="product-img">
+                                    @if($dt->instructor_id == Auth::user()->instructor->id)
+                                      @if($dt->instructor_id_2)
+                                        <img src="{{ asset('uploads/instructor/'.$dt->image_profile) }}" alt="User Image">
+                                      @else
+                                        <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="User Image">
+                                      @endif
+                                    @elseif($dt->instructor_id_2 == Auth::user()->instructor->id)
+                                      <img src="{{ asset('uploads/instructor/'.$dt->instructor->user->image_profile) }}" alt="User Image">
+                                    @endif
+                                  </div>
+                                  <div class="product-info">
+                                    <?php
+                                      $schedule_time = \Carbon\Carbon::parse(strtotime($dt->schedule_time))->setTimezone(Auth::user()->timezone);
+                                    ?>
+                                    <div class="product-title">{{ $dt->session->course->title }} - {{ $dt->session->title }}
+                                      <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMMM Do YYYY') }}</span>
+                                    </div>
+                                    <span class="product-description">
+                                      @if($dt->schedule_time < now())
+                                        Class has been started!
+                                        @if($dt->session->link_zoom)
+                                          Join <a href="{{ $dt->session->link_zoom }}" target="_blank">here</a>.
+                                        @endif
+                                      @else
+                                        Meeting time: {{ $schedule_time->isoFormat('hh:mm') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                      @endif
+                                    </span>
+                                  </div>
+                                </li>
+                                <!-- /.item -->
+                               @endif
+                               <?php $i++; ?>
+                              @endforeach
+                              @if($i == 0)
+                                <div style="color:#555555">
+                                  No courses available. You may join one first!
+                                </div>
+                              @endif
+                            </ul>
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer text-center">
+                          <a href="{{ route('session_registrations.index') }}" class="uppercase">View All Sessions</a>
+                        </div>
+                        <!-- /.box-footer -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+
+        <div class="col-md-4" hidden>
             <!-- Info Boxes Style 2 -->
             <div class="info-box bg-yellow">
                 <span class="info-box-icon"><i class="fa fa-star"></i></span>
