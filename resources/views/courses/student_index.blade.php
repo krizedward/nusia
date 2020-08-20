@@ -58,7 +58,7 @@
                     <?php $i = $dt->course_package->count_session; ?>
                     @foreach($dt->sessions as $j => $s)
                       <?php
-                        $schedule_time = \Carbon\Carbon::parse(strtotime($s->schedule->schedule_time));
+                        $schedule_time = \Carbon\Carbon::parse(strtotime($s->schedule->schedule_time))->setTimezone(Auth::user()->timezone);
                       ?>
                       <div class="col-md-12">
                         <b>Session {{ $j + 1 }}</b>
