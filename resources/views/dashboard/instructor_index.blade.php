@@ -63,7 +63,7 @@
                                     {{--session pakai attribut title untuk penamaan persession di halaman dashboard--}}
                                     <td>{{ $schedule->session->title }}</td>
                                     <?php
-                                      $schedule_time = \Carbon\Carbon::parse(strtotime($schedule->session->schedule->schedule_time))->setTimezone(Auth::user()->timezone);
+                                      $schedule_time = \Carbon\Carbon::parse($schedule->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                     ?>
                                     <td>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
                                     @if($schedule->session->link_zoom)
@@ -142,7 +142,7 @@
                                   </div>
                                   <div class="product-info">
                                     <?php
-                                      $schedule_time = \Carbon\Carbon::parse(strtotime($dt->schedule_time))->setTimezone(Auth::user()->timezone);
+                                      $schedule_time = \Carbon\Carbon::parse($dt->schedule_time)->setTimezone(Auth::user()->timezone);
                                     ?>
                                     <div class="product-title">{{ $dt->session->course->title }} - {{ $dt->session->title }}
                                       <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMMM Do YYYY') }}</span>

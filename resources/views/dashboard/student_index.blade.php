@@ -133,7 +133,7 @@
                       <!--td>{{ date('l, M d Y', strtotime($dt->schedule->schedule_time)) }}</td-->
                       @if($dt->schedule->schedule_time)
                         <?php
-                          $schedule_time = \Carbon\Carbon::parse(strtotime($dt->schedule->schedule_time))->setTimezone(Auth::user()->timezone);
+                          $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                         ?>
                         <td>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
                       @else
@@ -326,7 +326,7 @@
                       @endif
                       @if($dt->schedule->schedule_time)
                         <?php
-                          $schedule_time = \Carbon\Carbon::parse(strtotime($dt->schedule->schedule_time))->setTimezone(Auth::user()->timezone);
+                          $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                         ?>
                         <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMMM Do YYYY') }}</span>
                       @else

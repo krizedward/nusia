@@ -68,7 +68,7 @@
                                 <td>{{ $dt->session->title }}</td>
                                 @if($dt->session->schedule->schedule_time)
                                   <?php
-                                    $schedule_time = \Carbon\Carbon::parse(strtotime($dt->session->schedule->schedule_time))->setTimezone(Auth::user()->timezone);
+                                    $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                   ?>
                                   <td>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
                                 @else
