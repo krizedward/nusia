@@ -135,7 +135,7 @@
                         <?php
                           $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                         ?>
-                        <td>{{ $schedule_time->addHour()->isoFormat('dddd, MMMM Do YYYY, hh:mm') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
+                        <td>{{ $schedule_time->addHour()->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
                       @else
                         <td><i>Not Available</i></td>
                       @endif
@@ -341,7 +341,7 @@
                           Join <a href="{{ $dt->link_zoom }}" target="_blank">here</a>.
                         @endif
                       @else
-                        Meeting time: {{ $schedule_time->isoFormat('hh:mm') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                        Meeting time: {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
                       @endif
                     </span>
                   </div>
