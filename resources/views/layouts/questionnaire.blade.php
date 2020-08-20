@@ -2,7 +2,7 @@
 
 @section('title','Registration Form')
 
-@include('layouts.css_and_js.dashboard')
+@include('layouts.css_and_js.form_advanced')
 
 @section('content')
                 <div class="box box-primary" id="guidelines">
@@ -144,7 +144,7 @@
                                         <div class="form-group">
                                     @endif
                                         <label for="citizenship">Citizenship</label>
-                                            <select name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control">
+                                            <select name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control select2">
                                                 <option selected="selected" value="">-- Enter Citizenship --</option>
                                                 @foreach($countries as $country)
                                                     @if(old('citizenship') == $country)
@@ -167,7 +167,7 @@
                                     @endif
                                         <label for="timezone">Please state your current timezone</label>
                                         <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*This information is needed to adjust Indonesian time to your local time<br>for scheduling your sessions</p>
-                                            <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control">
+                                            <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control select2">
                                                 <option selected="selected" value="">-- Enter Current Time Zone --</option>
                                                 @foreach($timezones as $timezone)
                                                     @if(old('timezone') == $timezone)
