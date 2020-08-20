@@ -115,14 +115,14 @@
                         <form class="form-horizontal" role="form" method="post" action="{{ route('students.update',$dt->id) }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
-                            {{--none--}}
+                            {{--none
                             <div class="form-group">
                                 <label for="inputName" class="col-sm-2 control-label">Email</label>
 
                                 <div class="col-sm-10">
                                     <input type="email" value="{{ $dt->user->email }}" class="form-control" id="inputName" placeholder="Name">
                                 </div>
-                            </div>
+                            </div>--}}
                             <div class="form-group">
                                 <label for="inputSkills" class="col-sm-2 control-label">Image Profile</label>
 

@@ -350,23 +350,6 @@
                     </ul>
                 </li>
 
-                <li class="{{ set_active(['course_registrations.index','course_registrations.create','session_registrations.index','session_registrations.create','session_registrations.update',]) }} treeview">
-                    <a href="#">
-                        <i class="fa fa-book"></i> <span>Registration</span>
-                        <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-              </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="{{ set_active(['course_registrations.index','course_registrations.create']) }}">
-                            <a href="{{ route('course_registrations.index',['1']) }}"><i class="fa fa-circle-o"></i> Course</a>
-                        </li>
-                        <li class="{{ set_active(['session_registrations.index']) }}">
-                            <a href="{{ route('session_registrations.index') }}"><i class="fa fa-circle-o"></i> Session</a>
-                        </li>
-                    </ul>
-                </li>
-
                 <li class="{{ set_active(['course_payments.index','course_payments.create','course_payments.edit','course_packages.index','course_packages.create','course_packages.edit','course_types.index','course_types.create','course_types.edit','course_levels.index','course_levels.create','course_levels.edit','course_level_details.index','course_level_details.create','course_level_details.edit','course_certificates.index','course_certificates.create','course_level_details.edit']) }} treeview">
                     <a href="#">
                         <i class="fa fa-book"></i> <span>Course</span>
