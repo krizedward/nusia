@@ -326,7 +326,7 @@
                       @endif
                       @if($dt->schedule->schedule_time)
                         <?php
-                          $schedule_time = \Carbon\Carbon::parse(strtotime($dt->schedule->schedule_time));
+                          $schedule_time = \Carbon\Carbon::parse(strtotime($dt->schedule->schedule_time))->setTimezone(Auth::user()->timezone);
                         ?>
                         <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMMM Do YYYY') }}</span>
                       @else
