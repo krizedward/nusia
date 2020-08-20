@@ -82,11 +82,29 @@
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="form">
-                        <form role="form" method="post" action="{{ route('instructors.update',$dt->id) }}" enctype="multipart/form-data">
+                        <form class="form-horizontal" role="form" method="post" action="{{ route('students.update',$dt->id) }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             {{--none--}}
-                            <p>On Progress</p>
+                            <div class="form-group">
+                                <label for="inputName" class="col-sm-2 control-label">Email</label>
+
+                                <div class="col-sm-10">
+                                    <input type="email" value="{{ $dt->user->email }}" class="form-control" id="inputName" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSkills" class="col-sm-2 control-label">Image Profile</label>
+
+                                <div class="col-sm-10">
+                                    <input name="image_profile" type="file" class="@error('image_profile') is-invalid @enderror form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-danger">Submit</button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <!-- /.tab-pane -->
