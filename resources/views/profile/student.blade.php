@@ -19,7 +19,7 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/user.jpg') }}" alt="User profile picture">
+                    <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/student/profile/'.Auth::user()->image_profile) }}" alt="User profile picture">
 
                     <h3 class="profile-username text-center">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h3>
 
@@ -40,10 +40,23 @@
                     <p class="text-muted">{{ Auth::user()->citizenship }}</p>
                     <hr>
                     <strong><i class="fa fa-pencil margin-r-5"></i> Interest</strong>
-                    <p>
-                        <span class="label label-success">Reading</span>
-                        <span class="label label-success">Swimming</span>
-                    </p>
+
+                                @if(Auth::user()->student->interest)
+                                    <?php
+                                    $interest = explode(', ', Auth::user()->student->interest);
+                                    ?>
+                                    <p>
+                                      @for($i = 0; $i < count($interest); $i = $i + 1)
+                                        <span class="label label-success">{{ $interest[$i] }}</span>
+                                      @endfor
+                                    </p>
+                                @else
+                                    <p><i>Not Available</i></p>
+                                @endif
+
+                    <!--p>
+                        <span class="label label-success">{{ Auth::user()->student->interest }}</span>
+                    </p-->
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -67,7 +80,24 @@
                             <p>{{ $dt->user->citizenship }}</p>
                             <hr>
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
-                            <p>{{ $dt->interest }}</p>
+
+                                @if(Auth::user()->student->interest)
+                                    <?php
+                                    $interest = explode(', ', Auth::user()->student->interest);
+                                    ?>
+                                    <p>
+                                      @for($i = 0; $i < count($interest); $i = $i + 1)
+                                        {{ $i + 1 }}. {{ $interest[$i] }}
+                                        @if($i + 1 != count($interest))
+                                          <br>
+                                        @endif
+                                      @endfor
+                                    </p>
+                                @else
+                                    <p><i>Not Available</i></p>
+                                @endif
+
+                            <!--p>{{ $dt->interest }}</p-->
                             <hr>
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Age</strong>
                             <p>{{ $dt->age }}</p>
