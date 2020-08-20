@@ -9,6 +9,7 @@ use App\User;
 use App\Models\Instructor;
 use App\Models\Student;
 use App\Models\Session;
+use App\Models\Schedule;
 use App\Models\MaterialSession;
 use App\Models\CourseRegistration;
 use Str;
@@ -61,11 +62,13 @@ class HomeController extends Controller
             $timeNusia = Carbon::now();
             $timeStudent = Carbon::now(Auth::user()->timezone);
             $session_reg = SessionRegistration::all();
-            $session_reg_order_by_schedule_time = SessionRegistration
-                ::join('sessions', 'session_registrations.session_id', 'sessions.id')
-                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+            $session_reg_order_by_schedule_time = Schedule
+                ::join('instructors', 'schedules.instructor_id_2', 'instructors.id')
+                ->join('users', 'instructors.user_id', 'users.id')
+                ->where('instructor_id', Auth::user()->instructor->id)
+                ->orWhere('instructor_id_2', Auth::user()->instructor->id)
                 ->orderBy('schedule_time')
-                ->select('session_registrations.id', 'session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
+                ->select('schedules.id', 'schedules.code', 'schedules.instructor_id', 'schedules.instructor_id_2', 'schedules.schedule_time', 'schedules.status', 'schedules.created_at', 'schedules.updated_at', 'users.image_profile')
                 ->get();
             return view('dashboard.instructor_index', compact('session_reg', 'session_reg_order_by_schedule_time','timeNusia','timeStudent'));
         }
