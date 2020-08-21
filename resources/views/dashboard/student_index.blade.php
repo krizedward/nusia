@@ -135,7 +135,8 @@
                         <?php
                           $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                         ?>
-                        <td>{{ $schedule_time->addHour()->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
+                        //aku tambah 2 jam biar sama jadwalnya di web dengan di punya kita
+                        <td>{{ $schedule_time->addHour(2)->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
                       @else
                         <td><i>Not Available</i></td>
                       @endif
