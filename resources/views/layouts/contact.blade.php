@@ -10,7 +10,7 @@
         <div class="alert alert-success alert-dismissable">
             <h4>
                 <i class="icon fa fa-comments"></i>
-                Email : Nusia.id@gmail.com
+                Email : nusia.id@gmail.com
             </h4>
             Jika mengalami kendala atau ada pertanyaan silahkan hubungi ke email kami
         </div>
