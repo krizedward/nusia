@@ -134,10 +134,10 @@
                             <tbody>
                             @foreach($data as $dt)
                             <tr>
-                                <td>{{ $dt->code }}</td>
-                                <td>{{ $dt->course->course_package->course_level->name }}</td>
-                                <td>{{ $dt->course->course_package->course_type->name }}</td>
-                                <td>{{ $dt->course->course_package->course_type->count_student_max }} Student</td>
+                                <td>{{ $dt->session->code }}</td>
+                                <td>{{ $dt->session->course->course_package->course_level->name }}</td>
+                                <td>{{ $dt->session->course->course_package->course_type->name }}</td>
+                                <td>{{ $dt->session->course->course_package->course_type->count_student_max }} Student</td>
                             </tr>
                             @endforeach
                             </tbody>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Schedule;
+use App\Models\SessionRegistration;
 use Illuminate\Http\Request;
 
 use App\Models\Session;
@@ -50,7 +51,11 @@ class SessionController extends Controller
         }
 
         if ($this->is_instructor()){
-            $data = Session::all();
+            $data = SessionRegistration
+                ::join('course_registrations', 'session_registrations.course_registration_id', 'course_registrations.id')
+                ->where('course_registrations.student_id', Auth::user()->instructor->id)
+                ->select('session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
+                ->get();
             return view('sessions.instructor_index', compact('data'));
         }
 

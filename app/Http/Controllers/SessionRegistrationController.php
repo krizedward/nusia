@@ -51,7 +51,11 @@ class SessionRegistrationController extends Controller
         }
 
         else if ($this->is_instructor()){
-            $data = SessionRegistration::all();
+            $data = SessionRegistration
+                ::join('course_registrations', 'session_registrations.course_registration_id', 'course_registrations.id')
+                ->where('course_registrations.student_id', Auth::user()->instructor->id)
+                ->select('session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
+                ->get();
             $session = Session::all();
             return view('session_registrations.instructor_index',compact('data','session'));
         }

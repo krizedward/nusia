@@ -61,7 +61,11 @@ class HomeController extends Controller
         if($this->is_instructor()) {
             $timeNusia = Carbon::now();
             $timeStudent = Carbon::now(Auth::user()->timezone);
-            $session_reg = SessionRegistration::all();
+            $session_reg = SessionRegistration
+                ::join('course_registrations', 'session_registrations.course_registration_id', 'course_registrations.id')
+                ->where('course_registrations.student_id', Auth::user()->instructor->id)
+                ->select('session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
+                ->get();
             $session_reg_order_by_schedule_time = Schedule
                 ::join('instructors', 'schedules.instructor_id_2', 'instructors.id')
                 ->join('users', 'instructors.user_id', 'users.id')

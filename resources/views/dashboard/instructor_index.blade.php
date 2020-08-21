@@ -26,12 +26,12 @@
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-warning alert-dismissible">
-                <h4><i class="icon fa fa-book"></i> Please Consider :)</h4>
-                Before teaching, don't forget to attach a Zoom link for each session, so the students may join the session.
+                <h4 style="color: #000;"><i class="icon fa fa-book"></i> Please Consider :)</h4>
+                <span style="color: #000;">Before teaching, don't forget to attach a Zoom link for each session, so the students may join the session.</span>
             </div>
             <div class="alert alert-warning alert-dismissible">
-                <h4><i class="icon fa fa-clock-o"></i> Please check whether your local time zone shown in the dashboard is correct.</h4>
-                If not, you can change your local time zone in the profile.
+                <h4 style="color: #000;"><i class="icon fa fa-clock-o"></i> Please check whether your local time zone shown in the dashboard is correct.</h4>
+                <span style="color: #000">If not, you can change your local time zone in the profile.</span>
             </div>
         </div>
     </div>
@@ -44,7 +44,7 @@
             <!-- TABLE: Sessions Instructor -->
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Classes</h3>
+                    <h3 class="box-title">Sessions</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -60,7 +60,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach(Auth::user()->instructor->schedules as $schedule)
+                                @foreach($session_reg as $schedule)
                                 <tr>
                                     <td>{{ $schedule->session->course->course_package->course_level->name }}</td>
                                     <td>{{ $schedule->session->course->title }}</td>
@@ -183,6 +183,7 @@
                     <!-- /.box -->
                 </div>
                 <!-- /.col -->
+
 
         <div class="col-md-4" hidden>
             <!-- Info Boxes Style 2 -->

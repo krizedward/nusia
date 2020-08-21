@@ -35,12 +35,10 @@
                             --}}
                             <select name="session_registration" class="form-control select2">
                                 <option selected="" disabled="">Choose Schedule</option>
-                                @foreach($session as $dt)
-                                    @if($dt->link_zoom == NULL)
-                                    <option value="{{ $dt->id }}">
-                                        {{ $dt->course->course_package->course_level->name }} {{ $dt->course->course_package->course_type->name }}
+                                @foreach($data as $dt)
+                                    <option value="{{ $dt->session_id }}">
+                                      [ {{ $dt->session->code }} ] {{ $dt->session->course->course_package->course_level->name }} {{ $dt->session->course->course_package->course_type->name }}
                                     </option>
-                                    @endif
                                 @endforeach
                             </select>
                         </div>
@@ -72,7 +70,7 @@
                         {{--Menampilkan dara dari SessionRegistrattionController--}}
                         @foreach($data as $dt)
                         <tr>
-                            <td>{{ $dt->id }}</td>
+                            <td>{{ $dt->session->code }}</td>
                             <td>{{ $dt->course_registration->course->course_package->course_level->name }}</td>
                             <td>{{ $dt->course_registration->course->course_package->course_type->name }}</td>
                             <td>{{ $dt->session->schedule->schedule_time }}</td>
