@@ -74,7 +74,8 @@ class HomeController extends Controller
                 ->orderBy('schedule_time')
                 ->select('schedules.id', 'schedules.code', 'schedules.instructor_id', 'schedules.instructor_id_2', 'schedules.schedule_time', 'schedules.status', 'schedules.created_at', 'schedules.updated_at', 'users.image_profile')
                 ->get();
-            return view('dashboard.instructor_index', compact('session_reg', 'session_reg_order_by_schedule_time','timeNusia','timeStudent'));
+            $is_local_access = config('database.connections.mysql.username') == 'root';
+            return view('dashboard.instructor_index', compact('session_reg', 'session_reg_order_by_schedule_time','timeNusia','timeStudent', 'is_local_access'));
         }
 
         if($this->is_student()) {
@@ -105,9 +106,10 @@ class HomeController extends Controller
             $material = MaterialSession::all();
             $course_registrations = CourseRegistration::where('student_id', Auth::user()->student->id)->get();
             $instructors = Instructor::where('id',Auth::user()->id);
+            $is_local_access = config('database.connections.mysql.username') == 'root';
             return view('dashboard.student_index', compact(
                 'session', 'session_order_by_schedule_time',
-                'material', 'course_registrations', 'instructors','timeNusia','timeStudent'
+                'material', 'course_registrations', 'instructors','timeNusia','timeStudent', 'is_local_access'
             ));
         }
     }

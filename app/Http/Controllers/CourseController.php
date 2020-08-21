@@ -70,7 +70,8 @@ class CourseController extends Controller
                     ->where('course_types.name', 'LIKE', '%Trial%')
                     ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at')
                     ->get();
-                return view('courses.student_index', compact('data'));
+                $is_local_access = config('database.connections.mysql.username') == 'root';
+                return view('courses.student_index', compact('data', 'is_local_access'));
             } else {
                 // jika Student sedang mengikuti Free Trial class,
                 // maka Student tidak diperbolehkan untuk mendaftar dalam class lain.

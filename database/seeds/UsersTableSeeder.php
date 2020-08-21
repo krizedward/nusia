@@ -203,7 +203,7 @@ class UsersTableSeeder extends Seeder
             'roles' => 'Instructor',
             'citizenship' => 'Indonesia',
             'timezone' => 'Asia/Jakarta',
-            'image_profile' => 'usr-014.jpg',
+            'image_profile' => 'usr-014.png',
             'created_at' => now(),
             'updated_at' => null,
         ]);
