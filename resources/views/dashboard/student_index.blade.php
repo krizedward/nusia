@@ -70,12 +70,12 @@
     <div class="row">
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Our time: <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm a') }}</span></h4>
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Our time: <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm A') }}</span></h4>
             </div>
         </div>
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Your time: <span id="time_student">{{ $timeStudent->isoFormat('h:mm a') }}</span></h4>
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Your time: <span id="time_student">{{ $timeStudent->isoFormat('h:mm A') }}</span></h4>
             </div>
         </div>
     </div>
@@ -94,7 +94,8 @@
                 4. Be sure to join the session from laptop or desktop computer.
             </div>
             <div class="alert alert-success alert-dismissible">
-                <h4><i class="icon fa fa-clock-o"></i> Please check whether your local time zone shown in the dashboard is correct. If not, you can change your local time zone in the profile.</h4>
+                <h4><i class="icon fa fa-clock-o"></i> Please check whether your local time zone shown in the dashboard is correct.</h4>
+                If not, you can change your local time zone in the profile.
             </div>
         </div>
     </div>
