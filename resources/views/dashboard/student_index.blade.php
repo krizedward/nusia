@@ -93,7 +93,7 @@
                 3. You should join the class <b>five minutes before it starts</b>.<br>
                 4. Be sure to join the session from laptop or desktop computer.
             </div>
-            <div class="alert alert-success alert-dismissible">
+            <div class="alert alert-warning alert-dismissible">
                 <h4><i class="icon fa fa-clock-o"></i> Please check whether your local time zone shown in the dashboard is correct.</h4>
                 If not, you can change your local time zone in the profile.
             </div>

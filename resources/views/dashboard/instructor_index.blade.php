@@ -29,6 +29,10 @@
                 <h4><i class="icon fa fa-book"></i> Please Consider :)</h4>
                 Before teaching, don't forget to attach a Zoom link for each session, so the students may join the session.
             </div>
+            <div class="alert alert-warning alert-dismissible">
+                <h4><i class="icon fa fa-clock-o"></i> Please check whether your local time zone shown in the dashboard is correct.</h4>
+                If not, you can change your local time zone in the profile.
+            </div>
         </div>
     </div>
     <!-- /.row -->
