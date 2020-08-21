@@ -165,15 +165,16 @@
                                     @else
                                         <div class="form-group">
                                     @endif
-                                          <label for="timezone">Please state your current location</label>
+                                          <label for="timezone">What is your local time zone?</label>
                                           <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*This information is needed to adjust Indonesian time to your local time<br>for scheduling your sessions</p>
+                                          <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*You can check on Time.is before inputting your local time zone.</p>
                                           <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control select2">
-                                            <option selected="selected" value="">-- Enter Current Location --</option>
+                                            <option selected="selected" value="">-- Enter Current Time Zone --</option>
                                               @foreach($timezones as $timezone)
                                                 @if(old('timezone') == $timezone)
-                                                  <option selected="selected" value="{{ $timezone }}">{{ $timezone }}</option>
+                                                  <option selected="selected" value="{{ $timezone }}">UTC/GMT{{ $timezone }}</option>
                                                 @else
-                                                  <option value="{{ $timezone }}">{{ $timezone }}</option>
+                                                  <option value="{{ $timezone }}">UTC/GMT{{ $timezone }}</option>
                                                 @endif
                                               @endforeach
                                           </select>

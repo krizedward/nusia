@@ -151,16 +151,16 @@ class HomeController extends Controller
 
         $flag = 0;
         foreach($countries as $country) {
-            $c_cities = $c->where('name.common', $country)->first()->hydrate('cities')->cities;
-            $c_timezone = $c_cities->pluck('timezone')->toArray();
-            $c_cities = $c_cities->pluck('name')->toArray();
-            foreach($c_cities as $i => $c_city) {
-                if($request->timezone == $c_city) {
-//dd($c_city.' '.$c_timezone[$i].' '.$i);
-                    $request->timezone = $c_timezone[$i];
-                    $flag = 1;
-                    break;
+            $c_timezones = $c->where('name.common', $country)->first()->hydrate('timezones')->timezones;
+            foreach($c_timezones as $c_timezone) {
+                foreach($c_timezone['abbreviations'] as $cta) {
+                    if($cta == $request->timezone) {
+                        $request->timezone = $c_timezone['zone_name'];
+                        $flag = 1;
+                        $break;
+                    }
                 }
+                if($flag == 1) break;
             }
             if($flag == 1) break;
         }
@@ -383,17 +383,31 @@ class HomeController extends Controller
 
         $c = (new Countries())->all();
         $countries = $c->pluck('name.common')->toArray();
-        sort($countries);
+        //sort($countries);
 
         $timezones = [];
         foreach($countries as $country) {
-            $c_cities = $c->where('name.common', $country)->first()->hydrate('cities')->cities->pluck('name')->toArray();
-            foreach($c_cities as $c_city) {
-                // Menghapus nama kota yang tidak dideteksi atau bernilai "null".
-                if($c_city) {
-                    array_push($timezones, $c_city);
-                    //array_unique($timezones);
-                    //sort($timezones);
+            $c_abbrs = $c
+                ->where('name.common', $country)
+                ->first()
+                ->hydrateTimezones()
+                ->timezones
+                ->map(function($timezone) {
+                    return $timezone->abbreviations;
+                })
+                ->values()
+                ->unique()
+                ->toArray();
+            foreach($c_abbrs as $c_abbr) {
+                foreach($c_abbr as $ca) {
+                    if($ca[0] == '+' || $ca[0] == '-') {
+                        //if(strlen($ca) == 5) $ca = substr($ca, 0, 3) . '.' . substr($ca, 3);
+                        //else if(strlen($ca) == 3) $ca = $ca . '.00';
+
+                        if(!in_array($ca, $timezones)) {
+                            array_push($timezones, $ca);
+                        }
+                    }
                 }
             }
         }
