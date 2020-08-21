@@ -144,7 +144,7 @@
                                         <div class="form-group">
                                     @endif
                                         <label for="citizenship">Citizenship</label>
-                                            {{--<select name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control select2">
+                                            {{--<select name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control">
                                                 <option selected="selected" value="">-- Enter Citizenship --</option>
                                                 @foreach($countries as $country)
                                                     @if(old('citizenship') == $country)
@@ -168,7 +168,7 @@
                                     @endif
                                           <label for="timezone">What is your local time zone?</label>
                                           <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*This information is needed to adjust Indonesian time to your local time<br>for scheduling your sessions</p>
-                                          <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*You can check on <b><a target="_blank" rel="noopener noreferrer" href="https://time.is/">Time</a></b>.is before inputting your local time zone.</p>
+                                          <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*You can check on <b><a target="_blank" rel="noopener noreferrer" href="https://time.is/">Time.is</a></b> before inputting your local time zone.</p>
                                           <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control select2">
                                             <option selected="selected" value="">-- Enter Current Time Zone --</option>
                                               @foreach($timezones as $timezone)

@@ -323,26 +323,55 @@ class StudentController extends Controller
         $file = $request->file('image_profile');
 
         // FOR TIMEZONE
-        $c = (new Countries())->all();
-        $countries = $c->pluck('name.common')->toArray();
-        //sort($countries);
+        $timezones = [
+            '-11', '-10', '-09:30', '-09', '-08', '-07',
+            '-06', '-05', '-04', '-03', '-02', '-01',
+            '+00', '+01', '+02', '+03', '+04', '+04:30', '+05', '+05:30', '+05:45', '+06',
+            '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
+        ];
 
-        $flag = 0;
-        foreach($countries as $country) {
-            $c_timezones = $c->where('name.common', $country)->first()->hydrate('timezones')->timezones;
-            foreach($c_timezones as $c_timezone) {
-                foreach($c_timezone['abbreviations'] as $cta) {
-                    if($cta == $request->timezone) {
-                        $request->timezone = $c_timezone['zone_name'];
-                        $flag = 1;
-                        $break;
-                    }
-                }
-                if($flag == 1) break;
+        $zone_names = [
+            'Pacific/Pago_Pago',      // -11
+            'Pacific/Rarotonga',      // -10
+            'Pacific/Marquesas',      // -09:30
+            'Pacific/Gambier',        // -09
+            'Pacific/Pitcairn',       // -08
+            'America/Phoenix',        // -07
+            'America/Costa_Rica',     // -06
+            'America/Panama',         // -05
+            'America/Port_of_Spain',  // -04
+            'America/Montevideo',     // -03
+            'Atlantic/South_Georgia', // -02
+            'Atlantic/Cape_Verde',    // -01
+            'Africa/Abidjan',         // +00
+            'Africa/Lagos',           // +01
+            'Africa/Maputo',          // +02
+            'Africa/Nairobi',         // +03
+            'Asia/Dubai',             // +04
+            'Asia/Kabul',             // +04:30
+            'Asia/Ashgabat',          // +05
+            'Asia/Colombo',           // +05:30
+            'Asia/Kathmandu',         // +05:45
+            'Asia/Dhaka',             // +06
+            'Asia/Yangon',            // +06:30
+            'Asia/Bangkok',           // +07
+            'Asia/Macau',             // +08
+            'Australia/Eucla',        // +08:45
+            'Asia/Tokyo',             // +09
+            'Australia/Darwin',       // +09:30
+            'Asia/Vladivostok',       // +10
+            'Pacific/Pohnpei',        // +11
+            'Pacific/Nauru',          // +12
+            'Pacific/Fakaofo',        // +13
+            'Pacific/Kiritimati',     // +14
+        ];
+
+        for($i = 0; $i < count($timezones); $i++) {
+            if($request->timezone == $timezones[$i]) {
+                $request->timezone = $zone_names[$i];
+                break;
             }
-            if($flag == 1) break;
         }
-        if($flag == 0) $request->timezone = null;
 
         if ($this->is_student()){
 

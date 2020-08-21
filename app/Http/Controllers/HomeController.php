@@ -145,11 +145,61 @@ class HomeController extends Controller
         } else $request->interest_1 = null;
 
         // FOR TIMEZONE
-        $c = (new Countries())->all();
-        $countries = $c->pluck('name.common')->toArray();
+        $timezones = [
+            '-11', '-10', '-09:30', '-09', '-08', '-07',
+            '-06', '-05', '-04', '-03', '-02', '-01',
+            '+00', '+01', '+02', '+03', '+04', '+04:30', '+05', '+05:30', '+05:45', '+06',
+            '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
+        ];
+
+        $zone_names = [
+            'Pacific/Pago_Pago',      // -11
+            'Pacific/Rarotonga',      // -10
+            'Pacific/Marquesas',      // -09:30
+            'Pacific/Gambier',        // -09
+            'Pacific/Pitcairn',       // -08
+            'America/Phoenix',        // -07
+            'America/Costa_Rica',     // -06
+            'America/Panama',         // -05
+            'America/Port_of_Spain',  // -04
+            'America/Montevideo',     // -03
+            'Atlantic/South_Georgia', // -02
+            'Atlantic/Cape_Verde',    // -01
+            'Africa/Abidjan',         // +00
+            'Africa/Lagos',           // +01
+            'Africa/Maputo',          // +02
+            'Africa/Nairobi',         // +03
+            'Asia/Dubai',             // +04
+            'Asia/Kabul',             // +04:30
+            'Asia/Ashgabat',          // +05
+            'Asia/Colombo',           // +05:30
+            'Asia/Kathmandu',         // +05:45
+            'Asia/Dhaka',             // +06
+            'Asia/Yangon',            // +06:30
+            'Asia/Bangkok',           // +07
+            'Asia/Macau',             // +08
+            'Australia/Eucla',        // +08:45
+            'Asia/Tokyo',             // +09
+            'Australia/Darwin',       // +09:30
+            'Asia/Vladivostok',       // +10
+            'Pacific/Pohnpei',        // +11
+            'Pacific/Nauru',          // +12
+            'Pacific/Fakaofo',        // +13
+            'Pacific/Kiritimati',     // +14
+        ];
+
+        for($i = 0; $i < count($timezones); $i++) {
+            if($request->timezone == $timezones[$i]) {
+                $request->timezone = $zone_names[$i];
+                break;
+            }
+        }
+
+        //$c = (new Countries())->all();
+        //$countries = $c->pluck('name.common')->toArray();
         //sort($countries);
 
-        $flag = 0;
+        /*$flag = 0;
         foreach($countries as $country) {
             $c_timezones = $c->where('name.common', $country)->first()->hydrate('timezones')->timezones;
             foreach($c_timezones as $c_timezone) {
@@ -164,7 +214,7 @@ class HomeController extends Controller
             }
             if($flag == 1) break;
         }
-        if($flag == 0) $request->timezone = null;
+        if($flag == 0) $request->timezone = null;*/
 
         $data = $request->all();
         $file = $request->file('image_profile');
@@ -381,39 +431,18 @@ class HomeController extends Controller
                 'Woodworking',
             ];
 
-        $c = (new Countries())->all();
-        $countries = $c->pluck('name.common')->toArray();
+        //$c = (new Countries())->all();
+        //$countries = $c->pluck('name.common')->toArray();
         //sort($countries);
 
-        $timezones = [];
-        foreach($countries as $country) {
-            $c_abbrs = $c
-                ->where('name.common', $country)
-                ->first()
-                ->hydrateTimezones()
-                ->timezones
-                ->map(function($timezone) {
-                    return $timezone->abbreviations;
-                })
-                ->values()
-                ->unique()
-                ->toArray();
-            foreach($c_abbrs as $c_abbr) {
-                foreach($c_abbr as $ca) {
-                    if($ca[0] == '+' || $ca[0] == '-') {
-                        //if(strlen($ca) == 5) $ca = substr($ca, 0, 3) . '.' . substr($ca, 3);
-                        //else if(strlen($ca) == 3) $ca = $ca . '.00';
+        $timezones = [
+            '-11', '-10', '-09:30', '-09', '-08', '-07',
+            '-06', '-05', '-04', '-03', '-02', '-01',
+            '+00', '+01', '+02', '+03', '+04', '+04:30', '+05', '+05:30', '+05:45', '+06',
+            '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
+        ];
 
-                        if(!in_array($ca, $timezones)) {
-                            array_push($timezones, $ca);
-                        }
-                    }
-                }
-            }
-        }
-        sort($timezones);
-
-        return view('layouts.questionnaire', compact('countries', 'interests', 'timezones'));
+        return view('layouts.questionnaire', compact(/*'countries',*/ 'interests', 'timezones'));
     }
 
     public function profile($id)
@@ -477,15 +506,15 @@ class HomeController extends Controller
                 'Woodworking',
             ];
 
-            return view('profile.instructor',compact('instructor','countries', 'interests', 'instructor'));
+            return view('profile.instructor',compact('instructor','countries', 'interests'));
         }
 
         if($this->is_student()){
-            $c = (new Countries())->all();
-            $countries = $c->pluck('name.common')->toArray();
+            //$c = (new Countries())->all();
+            //$countries = $c->pluck('name.common')->toArray();
             //sort($countries);
 
-            $timezones = [];
+            /*$timezones = [];
             foreach($countries as $country) {
                 $c_abbrs = $c
                     ->where('name.common', $country)
@@ -501,8 +530,8 @@ class HomeController extends Controller
                 foreach($c_abbrs as $c_abbr) {
                     foreach($c_abbr as $ca) {
                         if($ca[0] == '+' || $ca[0] == '-') {
-                            //if(strlen($ca) == 5) $ca = substr($ca, 0, 3) . '.' . substr($ca, 3);
-                            //else if(strlen($ca) == 3) $ca = $ca . '.00';
+                            if(strlen($ca) == 5) $ca = substr($ca, 0, 3) . '.' . substr($ca, 3);
+                            else if(strlen($ca) == 3) $ca = $ca . '.00';
 
                             if(!in_array($ca, $timezones)) {
                                 array_push($timezones, $ca);
@@ -511,10 +540,10 @@ class HomeController extends Controller
                     }
                 }
             }
-            sort($timezones);
+            sort($timezones);*/
 
             $student = Student::where('user_id',$id)->get();
-            $countries = [
+            /*$countries = [
                 'Afghanistan', 'Albania', 'Algeria', 'Antigua and Barbuda', 'Argentina',
                 'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Azores',
                 'Bahamas', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium',
@@ -543,7 +572,7 @@ class HomeController extends Controller
                 'U. S. Virgin Islands', 'Uganda', 'Ukraine', 'United Kingdom', 'United States',
                 'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam', 'Wales',
                 'Yemen', 'Yugoslavia', 'Zimbabwe'
-            ];
+            ];*/
             $interests = [
                 'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Art', 'Aviation',
                 'Baking', 'Baseball', 'Basketball', 'Blogging', 'Boating', 'Bowling',
@@ -566,7 +595,14 @@ class HomeController extends Controller
                 'Videographing', 'Volleyball', 'Volunteering', 'Walking', 'Wrestling', 'Writing',
                 'Woodworking',
             ];
-            return view('profile.student',compact('student','countries', 'interests','student','timezones'));
+
+            $timezones = [
+                '-11', '-10', '-09:30', '-09', '-08', '-07',
+                '-06', '-05', '-04', '-03', '-02', '-01',
+                '+00', '+01', '+02', '+03', '+04', '+04:30', '+05', '+05:30', '+05:45', '+06',
+                '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
+            ];
+            return view('profile.student',compact('student',/*'countries',*/ 'interests','student','timezones'));
         }
     }
 

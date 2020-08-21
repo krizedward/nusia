@@ -458,21 +458,21 @@ class SchedulesTableSeeder extends Seeder
         ]);
         Schedule::create([
             'code' => 'SCH-064',
-            'instructor_id' => 15,
+            'instructor_id' => 11,
             'instructor_id_2' => 8,
             'schedule_time' => '2020-09-03 09:00:00',
             'status' => 'Busy',
         ]);
         Schedule::create([
             'code' => 'SCH-065',
-            'instructor_id' => 15,
+            'instructor_id' => 11,
             'instructor_id_2' => 8,
             'schedule_time' => '2020-09-04 09:00:00',
             'status' => 'Busy',
         ]);
         Schedule::create([
             'code' => 'SCH-066',
-            'instructor_id' => 15,
+            'instructor_id' => 11,
             'instructor_id_2' => 8,
             'schedule_time' => '2020-09-05 09:00:00',
             'status' => 'Busy',
