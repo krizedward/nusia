@@ -58,7 +58,7 @@
                   @endif
                 <p>
                   {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} - {{ Auth::user()->roles }}
-                  <small>Joined {{ \Carbon\Carbon::parse(Auth::user()->created_at)->setTimezone(Auth::user()->timezone) }} {{ \Carbon\Carbon::parse(Auth::user()->created_at)->setTimezone(Auth::user()->timezone)->tzName }}</small>
+                  <small>Joined {{ \Carbon\Carbon::parse(Auth::user()->created_at)->setTimezone(Auth::user()->timezone) }}</small>
                 </p>
               </li>
               <!-- Menu Footer-->
