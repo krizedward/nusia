@@ -481,6 +481,38 @@ class HomeController extends Controller
         }
 
         if($this->is_student()){
+            $c = (new Countries())->all();
+            $countries = $c->pluck('name.common')->toArray();
+            //sort($countries);
+
+            $timezones = [];
+            foreach($countries as $country) {
+                $c_abbrs = $c
+                    ->where('name.common', $country)
+                    ->first()
+                    ->hydrateTimezones()
+                    ->timezones
+                    ->map(function($timezone) {
+                        return $timezone->abbreviations;
+                    })
+                    ->values()
+                    ->unique()
+                    ->toArray();
+                foreach($c_abbrs as $c_abbr) {
+                    foreach($c_abbr as $ca) {
+                        if($ca[0] == '+' || $ca[0] == '-') {
+                            //if(strlen($ca) == 5) $ca = substr($ca, 0, 3) . '.' . substr($ca, 3);
+                            //else if(strlen($ca) == 3) $ca = $ca . '.00';
+
+                            if(!in_array($ca, $timezones)) {
+                                array_push($timezones, $ca);
+                            }
+                        }
+                    }
+                }
+            }
+            sort($timezones);
+
             $student = Student::where('user_id',$id)->get();
             $countries = [
                 'Afghanistan', 'Albania', 'Algeria', 'Antigua and Barbuda', 'Argentina',
@@ -534,7 +566,7 @@ class HomeController extends Controller
                 'Videographing', 'Volleyball', 'Volunteering', 'Walking', 'Wrestling', 'Writing',
                 'Woodworking',
             ];
-            return view('profile.student',compact('student','countries', 'interests','student'));
+            return view('profile.student',compact('student','countries', 'interests','student','timezones'));
         }
     }
 

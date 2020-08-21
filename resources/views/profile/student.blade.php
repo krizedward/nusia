@@ -131,6 +131,23 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label for="inputSkills" class="col-sm-2 control-label">Time Zone</label>
+
+                                <div class="col-sm-10">
+                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*You can check on <b><a target="_blank" rel="noopener noreferrer" href="https://time.is/">Time</a></b>.is before inputting your local time zone.</p>
+                                    <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control select2">
+                                        <option selected="selected" value="">-- Enter Current Time Zone --</option>
+                                        @foreach($timezones as $timezone)
+                                            @if(old('timezone') == $timezone)
+                                                <option selected="selected" value="{{ $timezone }}">UTC/GMT{{ $timezone }}</option>
+                                            @else
+                                                <option value="{{ $timezone }}">UTC/GMT{{ $timezone }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <button type="submit" class="btn btn-danger">Submit</button>
                                 </div>

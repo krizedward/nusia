@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 
+use PragmaRX\Countries\Package\Countries;
 use Str;
 use App\Models\Student;
 use Illuminate\Support\Facades\Validator;
@@ -321,6 +322,28 @@ class StudentController extends Controller
         $student = Student::findOrFail($id);
         $file = $request->file('image_profile');
 
+        // FOR TIMEZONE
+        $c = (new Countries())->all();
+        $countries = $c->pluck('name.common')->toArray();
+        //sort($countries);
+
+        $flag = 0;
+        foreach($countries as $country) {
+            $c_timezones = $c->where('name.common', $country)->first()->hydrate('timezones')->timezones;
+            foreach($c_timezones as $c_timezone) {
+                foreach($c_timezone['abbreviations'] as $cta) {
+                    if($cta == $request->timezone) {
+                        $request->timezone = $c_timezone['zone_name'];
+                        $flag = 1;
+                        $break;
+                    }
+                }
+                if($flag == 1) break;
+            }
+            if($flag == 1) break;
+        }
+        if($flag == 0) $request->timezone = null;
+
         if ($this->is_student()){
 
             if ($file) {
@@ -331,6 +354,12 @@ class StudentController extends Controller
                 //Move Uploaded File
                 $destinationPath = 'uploads/student/profile/';
                 $file->move($destinationPath,$file->getClientOriginalName());
+            } else {
+                $student->user->update([
+                    'timezone' => $request->timezone,
+                ]);
+
+                return redirect()->route('home');
             }
 
             return redirect()->route('profile',$student->user->id);

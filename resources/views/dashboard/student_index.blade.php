@@ -70,12 +70,12 @@
     <div class="row">
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Our time: <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm a') }}</span> {{ $timeNusia->tzName }}</h4>
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Our time: <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm a') }}</span></h4>
             </div>
         </div>
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Your time: <span id="time_student">{{ $timeStudent->isoFormat('h:mm a') }}</span> {{ $timeStudent->tzName }}</h4>
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Your time: <span id="time_student">{{ $timeStudent->isoFormat('h:mm a') }}</span></h4>
             </div>
         </div>
     </div>
@@ -83,17 +83,20 @@
 
     <!-- Notification row -->
     <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-success alert-dismissible">
-          <h4><i class="icon fa fa-comments"></i> You have successfully registered!</h4>
-          Thank you for registering for this free online class! :)<br>
-          Here are a few things to remember:<br>
-          1. Before joining your class session, <b>please read all the materials</b>.<br>
-          2. When it is time for the session to start, click the Zoom link to join the class.<br>
-          3. You should join the class <b>five minutes before it starts</b>.<br>
-          4. Be sure to join the session from laptop or desktop computer.
+        <div class="col-md-12">
+            <div class="alert alert-success alert-dismissible">
+                <h4><i class="icon fa fa-comments"></i> You have successfully registered!</h4>
+                Thank you for registering for this free online class! :)<br>
+                Here are a few things to remember:<br>
+                1. Before joining your class session, <b>please read all the materials</b>.<br>
+                2. When it is time for the session to start, click the Zoom link to join the class.<br>
+                3. You should join the class <b>five minutes before it starts</b>.<br>
+                4. Be sure to join the session from laptop or desktop computer.
+            </div>
+            <div class="alert alert-success alert-dismissible">
+                <h4><i class="icon fa fa-clock-o"></i> You can change your local time zone in profile.</h4>
+            </div>
         </div>
-      </div>
     </div>
     <!-- /.row -->
 
@@ -135,7 +138,7 @@
                         <?php
                           $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                         ?>
-                        //aku tambah 2 jam biar sama jadwalnya di web dengan di punya kita
+                        {{--aku tambah 2 jam biar sama jadwalnya di web dengan di punya kita--}}
                         <td>{{ $schedule_time->addHour(2)->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
                       @else
                         <td><i>Not Available</i></td>
@@ -329,7 +332,7 @@
                         <?php
                           $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                         ?>
-                        <span class="label label-info pull-right">{{ $schedule_time->addHour()->isoFormat('MMMM Do YYYY') }}</span>
+                        <span class="label label-info pull-right">{{ $schedule_time->addHour(2)->isoFormat('MMMM Do YYYY') }}</span>
                       @else
                         <span class="label label-danger pull-right">Not Available</span>
                       @endif
