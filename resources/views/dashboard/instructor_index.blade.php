@@ -69,7 +69,11 @@
                                     <?php
                                       $schedule_time = \Carbon\Carbon::parse($schedule->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                     ?>
+                                    @if($is_local_access)
+                                    <td>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
+                                    @else
                                     <td>{{ $schedule_time->addHour()->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
+                                    @endif
                                     @if($schedule->session->link_zoom)
                                       <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $schedule->session->link_zoom }}">Link</a></td>
                                     @else
@@ -149,7 +153,11 @@
                                       $schedule_time = \Carbon\Carbon::parse($dt->schedule_time)->setTimezone(Auth::user()->timezone);
                                     ?>
                                     <div class="product-title">{{ $dt->session->course->title }} - {{ $dt->session->title }}
-                                      <span class="label label-info pull-right">{{ $schedule_time->addHour()->isoFormat('MMMM Do YYYY') }}</span>
+                                      @if($is_local_access)
+                                        <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMMM Do YYYY') }}</span>
+                                      @else
+                                        <span class="label label-info pull-right">{{ $schedule_time->addHour()->isoFormat('MMMM Do YYYY') }}</span>
+                                      @endif
                                     </div>
                                     <span class="product-description">
                                       @if($dt->schedule_time < now())

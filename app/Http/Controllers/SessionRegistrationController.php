@@ -110,13 +110,13 @@ class SessionRegistrationController extends Controller
             */
 
             $timeStudent = Carbon::now(Auth::user()->timezone);
-
+            $is_local_access = config('database.connections.mysql.username') == 'root';
             $data = SessionRegistration
                 ::join('course_registrations', 'session_registrations.course_registration_id', 'course_registrations.id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
                 ->select('session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
                 ->get();
-            return view('session_registrations.student_index',compact('data', 'timeStudent'));
+            return view('session_registrations.student_index',compact('data', 'timeStudent', 'is_local_access'));
         } else {
             return redirect()->route('home');
         }

@@ -62,7 +62,11 @@
                       ?>
                       <div class="col-md-12">
                         <b>Session {{ $j + 1 }}</b>
-                        <p>{{ $schedule_time->addHour()->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</p>
+                        @if($is_local_access)
+                          <p>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</p>
+                        @else
+                          <p>{{ $schedule_time->addHour()->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</p>
+                        @endif
                       </div>
                       <?php $i--; ?>
                     @endforeach
