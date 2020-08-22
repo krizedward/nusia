@@ -179,7 +179,7 @@
                                                 @endif
                                               @endforeach
                                           </select>
-                                            @error('citizenship')
+                                            @error('timezone')
                                             <p style="color:red">{{ $message }}</p>
                                             @enderror
                                         </div>
