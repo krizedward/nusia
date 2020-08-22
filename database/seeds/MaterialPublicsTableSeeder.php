@@ -12,6 +12,20 @@ class MaterialPublicsTableSeeder extends Seeder
      */
     public function run()
     {
+        MaterialPublic::create([
+            'code' => 'MP-0000001',
+            'course_package_id' => 1,
+            'name' => 'CLASSROOM INSTRUCTIONS',
+            'description' => null,
+            'path' => '1_CLASSROOM INSTRUCTIONS.pdf',
+        ]);
+        MaterialPublic::create([
+            'code' => 'MP-0000002',
+            'course_package_id' => 1,
+            'name' => 'PRONUNCIATION',
+            'description' => null,
+            'path' => '2_PRONUNCIATION.pdf',
+        ]);
         /*MaterialPublic::create([
             'code' => 'MP-001',
             'course_package_id' => 1,
