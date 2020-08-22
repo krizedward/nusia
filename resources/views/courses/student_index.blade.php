@@ -20,7 +20,7 @@
               <i class="icon fa fa-comments"></i>
               Choose the schedule at your convenience!
             </h4>
-            Join <b>3 sessions</b> of NUSIA'S free classes! Per session lasts <b>80 minutes</b>.
+            Join one of NUSIA's free classes consisting of <b>3 sessions per class</b>! Per session lasts <b>80 minutes</b>.
           </div>
         </div>
         <div class="col-md-12" style="margin:0;">
