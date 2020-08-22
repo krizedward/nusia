@@ -76,6 +76,7 @@ class HomeController extends Controller
                 ->where('schedules.instructor_id', Auth::user()->instructor->id)
                 ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id)
                 ->orderBy('schedule_time')
+                ->take(5)
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at', 'schedules.instructor_id_2', 'users.image_profile')
                 ->get();
             $is_local_access = config('database.connections.mysql.username') == 'root';
@@ -105,6 +106,7 @@ class HomeController extends Controller
                 ->join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
                 ->orderBy('schedule_time')
+                ->take(5)
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')
                 ->get();
             $material = MaterialSession::all();
