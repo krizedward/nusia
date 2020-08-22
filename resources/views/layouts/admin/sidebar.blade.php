@@ -104,10 +104,10 @@
                 <li class="{{ set_active('session_registrations.index') }}">
                     <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Sessions</span></a>
                 </li>
-                {{--
+                
                 <li class="#">
-                    <a href="{{ route('materials.index') }}"><i class="fa fa-archive"> </i><span> Materials</span></a>
-                </li>--}}
+                    <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> Material</span></a>
+                </li>
 
                 <!-- Other_Navigasi -->
                 {{--
@@ -133,34 +133,36 @@
                         </a>
                     </li>
                     --}}
-                    <li class="treeview">
-                        <a href="#">
+                    <!--li class="treeview"-->
+                    <li class="#">
+                        <a href="{{ route('sessions.index') }}">
                             <i class="fa fa-calendar"></i> <span>Schedule</span>
-                            <span class="pull-right-container">
+                            <!--span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
-                            </span>
+                            </span-->
                         </a>
-                        <ul class="treeview-menu">
-                            <li class="#"><a href="{{ route('sessions.index') }}"><i class="fa fa-circle-o"></i> Free Trial</a></li>
+                        <!--ul class="treeview-menu"-->
+                            <!--li class="#"><a href="{{ route('sessions.index') }}"><i class="fa fa-circle-o"></i> Free Trial</a></li-->
                             <!--li class="#"><a href="{{ route('schedules.index') }}"><i class="fa fa-circle-o"></i> Private</a></li-->
                             <!--li class="#"><a href="{{ route('schedules.index') }}"><i class="fa fa-circle-o"></i> Group</a></li-->
                             {{--
                             <li class="#"><a href="#"><i class="fa fa-circle-o"></i> Private</a></li>
                             <li class="#"><a href="#"><i class="fa fa-circle-o"></i> Group</a></li>--}}
-                        </ul>
+                        <!--/ul-->
                     </li>
 
-                    <li class="treeview">
-                        <a href="#">
+                    <!--li class="treeview"-->
+                    <li class="#">
+                        <a href="{{ route('session_registrations.index') }}">
                             <i class="fa fa-calendar-check-o"></i> <span>Session</span>
-                            <span class="pull-right-container">
+                            <!--span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
-                            </span>
+                            </span-->
                         </a>
-                        <ul class="treeview-menu">
-                            <li class="#">
+                        <!--ul class="treeview-menu"-->
+                            <!--li class="#">
                                 <a href="{{ route('session_registrations.index') }}"><i class="fa fa-circle-o"></i> Free Trial</a>
-                            </li>
+                            </li-->
                             <!--li class="#">
                                 <a href="{{ route('sessions.index') }}"><i class="fa fa-circle-o"></i> Private</a>
                             </li-->
@@ -171,16 +173,15 @@
                             <li class="#"><a href="{{ route('sessions.index') }}"><i class="fa fa-circle-o"></i> Free Trial</a></li>
                             <li class="#"><a href="#"><i class="fa fa-circle-o"></i> Private</a></li>
                             <li class="#"><a href="#"><i class="fa fa-circle-o"></i> Group</a></li>--}}
-                        </ul>
+                        <!--/ul-->
                     </li>
 
-                    {{--
                     <li class="#">
                         <a href="{{ route('materials.index') }}">
-                            <i class="fa fa-archive"> </i><span>Material Instructor</span>
+                            <i class="fa fa-book"> </i><span> Material</span>
                         </a>
                     </li>
-                    --}}
+
                     <!-- Other_Navigasi -->
                     {{--
                     <li class="header">OTHER</li>
