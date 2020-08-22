@@ -4,6 +4,8 @@
 
 @include('layouts.css_and_js.table')
 
+{{-- @include('layouts.css_and_js.form_advanced') --}}
+
 {{--Session di Sidebar--}}
 @section('content-header')
     <h1><b>Session</b></h1>
@@ -36,8 +38,8 @@
                             <select name="session_registration" class="form-control select2">
                                 <option selected="" disabled="">Choose Schedule</option>
                                 @foreach($data as $dt)
-                                    <option value="{{ $dt->session_id }}">
-                                      [ {{ $dt->session->code }} ] {{ $dt->session->course->course_package->course_level->name }} {{ $dt->session->course->course_package->course_type->name }}
+                                    <option value="{{ $dt->id }}">
+                                      [ {{ $dt->course->course_package->course_level->name }} ] {{ $dt->course->title }} - {{ $dt->title }}
                                     </option>
                                 @endforeach
                             </select>
@@ -59,23 +61,33 @@
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th style="width: 100px">Session ID</th>
-                            <th>Course Level</th>
-                            <th>Course Type</th>
-                            <th>Date Meet</th>
-                            <th style="width: 40px">Status</th>
+                            <th>Class</th>
+                            <th>Level</th>
+                            <th>Session</th>
+                            <th>Meeting Time</th>
+                            <th style="width: 40px">Link</th>
                         </tr>
                         </thead>
                         <tbody>
                         {{--Menampilkan dara dari SessionRegistrattionController--}}
                         @foreach($data as $dt)
                         <tr>
-                            <td>{{ $dt->session->code }}</td>
-                            <td>{{ $dt->course_registration->course->course_package->course_level->name }}</td>
-                            <td>{{ $dt->course_registration->course->course_package->course_type->name }}</td>
-                            <td>{{ $dt->session->schedule->schedule_time }}</td>
-                            @if($dt->session->link_zoom)
-                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
+                            <td>{{ $dt->course->title }}</td>
+                            <td>{{ $dt->course->course_package->course_level->name }}</td>
+                            <td>{{ $dt->title }}</td>
+                            @if($dt->schedule->schedule_time)
+                              <?php
+                                $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                              ?>
+                              <td>
+                                <span class="hidden">{{ $schedule_time->isoFormat('YYMMDD') }}</span>
+                                {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                              </td>
+                            @else
+                              <td><i>N/A</i></td>
+                            @endif
+                            @if($dt->link_zoom)
+                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Link</a></td>
                             @else
                                 <td><i>N/A</i></td>
                             @endif

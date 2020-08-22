@@ -51,13 +51,19 @@ class SessionRegistrationController extends Controller
         }
 
         else if ($this->is_instructor()){
-            $data = SessionRegistration
+            /*$data = SessionRegistration
                 ::join('course_registrations', 'session_registrations.course_registration_id', 'course_registrations.id')
                 ->where('course_registrations.student_id', Auth::user()->instructor->id)
                 ->select('session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
                 ->get();
-            $session = Session::all();
-            return view('session_registrations.instructor_index',compact('data','session'));
+            $session = Session::all();*/
+            $data = Session // mungkin $sessions (?)
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where('schedules.instructor_id', Auth::user()->instructor->id)
+                ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id)
+                ->get();
+            // BUG: Cara menampilkan di formulir <select>, hanya Session yang belum dimulai. Jika sudah selesai, untuk apa mengganti link Zoom ?
+            return view('session_registrations.instructor_index',compact('data'/*,'session'*/));
         }
 
         else if ($this->is_student()){
