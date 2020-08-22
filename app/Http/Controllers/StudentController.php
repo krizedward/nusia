@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
 
 use Carbon\Carbon;
 
@@ -158,7 +159,7 @@ class StudentController extends Controller
             'email' => ['bail', 'required', 'unique:users'],
             'password' => ['bail', 'required', 'min:8'],
             'citizenship' => ['bail', 'required'],
-            'image_profile' => ['bail', 'sometimes', 'max:5000'],
+            'image_profile' => ['bail', 'sometimes', 'max:8000'],
 
             'age' => ['bail', 'required', 'integer'],
             'status_job' => ['bail', 'required'],
@@ -322,6 +323,12 @@ class StudentController extends Controller
         $student = Student::findOrFail($id);
         $file = $request->file('image_profile');
 
+        $data = $request->all();
+        $data = Validator::make($data, [
+            'timezone' => ['bail', 'sometimes'],
+            'image_profile' => ['bail', 'sometimes', 'max:8000'],
+        ]);
+
         // FOR TIMEZONE
         $timezones = [
             '-11', '-10', '-09:30', '-09', '-08', '-07',
@@ -375,23 +382,28 @@ class StudentController extends Controller
 
         if ($this->is_student()){
 
-            if ($file) {
+            if(Auth::user()->image_profile != 'user.jpg') {
+                $destinationPath = 'uploads/student/profile/';
+                File::delete($destinationPath . Auth::user()->image_profile);
+            }
+
+            if($file) {
+                $file_name = Str::random(50).'.'.$file->extension();
+
                 $student->user->update([
-                    'image_profile' => $file->getClientOriginalName(),
+                    'image_profile' => $file_name,
                 ]);
 
                 //Move Uploaded File
                 $destinationPath = 'uploads/student/profile/';
-                $file->move($destinationPath,$file->getClientOriginalName());
-            } else {
-                $student->user->update([
-                    'timezone' => $request->timezone,
-                ]);
-
-                return redirect()->route('home');
+                $file->move($destinationPath, $file_name);
             }
 
-            return redirect()->route('profile',$student->user->id);
+            $student->user->update([
+                'timezone' => $request->timezone,
+            ]);
+
+            return redirect()->route('profile', $student->user->id);
         }
 
         if($this->is_admin()) {
@@ -422,7 +434,7 @@ class StudentController extends Controller
             'password' => ['bail', 'required', 'min:8'],
             'phone' => ['bail', 'sometimes'],
             'citizenship' => ['bail', 'required'],
-            'image_profile' => ['bail', 'sometimes', 'max:5000'],
+            'image_profile' => ['bail', 'sometimes', 'max:8000'],
 
             'age' => ['bail', 'required', 'integer'],
             'status_job' => ['bail', 'required'],
@@ -440,6 +452,11 @@ class StudentController extends Controller
                 ->withErrors($data)
                 ->withInput();
         }
+
+        if($file) {
+            $file_name = Str::random(50).'.'.$file->extension();
+        }
+
             $student->user->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -447,7 +464,7 @@ class StudentController extends Controller
                 'password' => Hash::make($request->password),
                 'phone' => $request->phone,
                 'citizenship' => $request->citizenship,
-                'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
+                'image_profile' => ($file)? $file_name : 'user.jpg',
             ]);
 
             $student->update([

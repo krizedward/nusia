@@ -410,7 +410,9 @@ class MaterialController extends Controller
             if(MaterialSession::where('slug', $data)->first() === null) break;
         }
 
-        $file_name = Str::random(50).'.'.$file->extension();
+        if($file) {
+            $file_name = Str::random(50).'.'.$file->extension();
+        }
 
         if($this->is_admin() || $this->is_instructor()) {
             $str_random = Str::random(50);
@@ -423,7 +425,7 @@ class MaterialController extends Controller
             ]);
             if($file) {
                 $destinationPath = 'uploads/material/';
-                $file->move($destinationPath,$destinationPath.$file_name);
+                $file->move($destinationPath, $file_name);
             }
         } else {
             // Tidak memiliki hak akses.
@@ -478,17 +480,14 @@ class MaterialController extends Controller
     public function update(Request $request, $id)
     {
         $material_session = MaterialSession::findOrFail($id);
-        if($material_session == null) {
-            // Data yang dicari tidak ditemukan.
-            // Return?
-        }
+        $file = $request->file('path');
 
         $data = $request->all();
         $data = Validator::make($data, [
             'session_id' => ['bail', 'required'],
             'name' => ['bail', 'required', 'max:255'],
             'description' => ['bail', 'sometimes', 'max:5000'],
-            'path' => ['bail', 'sometimes', 'max:1000']
+            'path' => ['bail', 'sometimes', 'max:8000']
         ]);
 
         if($data->fails()) {
@@ -497,19 +496,30 @@ class MaterialController extends Controller
                 ->withInput();
         }
 
+        if($material_session->path != null) {
+            $destinationPath = 'uploads/material/';
+            File::delete($destinationPath . $material_session->path);
+        }
+
         if($this->is_admin() || $this->is_instructor()) {
+            if($file) {
+                $file_name = Str::random(50).'.'.$file->extension();
+            }
             $material_session->update([
                 'session_id' => $request->session_id,
                 'name' => $request->name,
                 'description' => $request->description,
-                'path' => $request->path
+                'path' => ($file)? $file_name : null,
             ]);
+
+            //Move Uploaded File
+            $destinationPath = 'uploads/material/';
+            $file->move($destinationPath, $file_name);
         } else {
             // Tidak memiliki hak akses.
         }
 
-        $data = $material_session;
-        return view('materials.sessions.show', compact('data'));
+        return redirect()->route('materials.index');
     }
 
     /**
@@ -521,19 +531,18 @@ class MaterialController extends Controller
     public function destroy($id)
     {
         $data = MaterialSession::findOrFail($id);
-        if($data == null) {
-            // Data yang dicari tidak ditemukan.
-            // Return?
-        }
 
         if($this->is_admin() || $this->is_instructor()) {
+            if($data->path != null) {
+                $destinationPath = 'uploads/material/';
+                File::delete($destinationPath . $data->path);
+            }
             $data->delete();
         } else {
             // Tidak memiliki hak akses.
         }
 
-        $data = MaterialSession::all();
-        return view('materials.sessions.index', compact('data'));
+        return redirect()->route('materials.index');
     }
 
     /**

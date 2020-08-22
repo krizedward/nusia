@@ -123,17 +123,21 @@
                                     <input type="email" value="{{ $dt->user->email }}" class="form-control" id="inputName" placeholder="Name">
                                 </div>
                             </div>--}}
-                            <div class="form-group">
-                                <label for="inputSkills" class="col-sm-2 control-label">Image Profile</label>
-
-                                <div class="col-sm-10">
-                                    <input name="image_profile" type="file" class="@error('image_profile') is-invalid @enderror form-control">
-                                </div>
+                            <div class="form-group col-md-12">
+                              <div class="col-md-4">
+                                <label for="image_profile" class="control-label">Image Profile</label>
+                              </div>
+                              <div class="col-md-8">
+                                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
+                                <input name="image_profile" type="file" class="@error('image_profile') is-invalid @enderror form-control">
+                              </div>
                             </div>
-                            <div class="form-group">
-                                <label for="inputSkills" class="col-sm-2 control-label">Time Zone</label>
 
-                                <div class="col-sm-10">
+                            <div class="form-group col-md-12">
+                                <div class="col-md-4">
+                                  <label for="timezone" class="control-label">Time Zone</label>
+                                </div>
+                                <div class="col-md-8">
                                     <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Reference: <b><a target="_blank" rel="noopener noreferrer" href="https://www.timeanddate.com/">timeanddate.com</a></b></p>
                                     <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control select2">
                                         <option selected="selected" value="">-- Enter Current Time Zone --</option>
@@ -148,7 +152,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
+                                <div class="col-md-12 text-center">
                                     <button type="submit" class="btn btn-danger">Submit</button>
                                 </div>
                             </div>

@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use PragmaRX\Countries\Package\Countries;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class HomeController extends Controller
 {
@@ -273,7 +273,9 @@ class HomeController extends Controller
             // all information should be filled.
         }
 
-        $file_name = Str::random(50).'.'.$file->extension();
+        if($file) {
+            $file_name = Str::random(50).'.'.$file->extension();
+        }
 
         if($this->is_admin()) {
             User::create([
@@ -311,7 +313,7 @@ class HomeController extends Controller
 
             //Move Uploaded File
             $destinationPath = 'uploads/student/profile/';
-            $file->move($destinationPath,$destinationPath.$file_name);
+            $file->move($destinationPath, $file_name);
             // \Session::flash('coba','Create Success !!!');
             } else {
                 Student::where('user_id', Auth::user()->id)->update([
@@ -330,7 +332,6 @@ class HomeController extends Controller
                 User::find(Auth::user()->id)->update([
                     'citizenship' => $request->citizenship,
                     'timezone' => $request->timezone,
-                    //'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', Hash::make(Auth::user()->student->id)) : null,
                     'image_profile'   => 'user.jpg',
                 ]);
             }
@@ -468,7 +469,7 @@ class HomeController extends Controller
         return view('layouts.questionnaire', compact(/*'countries',*/ 'interests', 'timezones'));
     }
 
-    public function profile($id)
+    public function profile()
     {
         if($this->is_admin()){
             return view('profile.admin');
@@ -571,7 +572,7 @@ class HomeController extends Controller
             }
             sort($timezones);*/
 
-            $student = Student::where('user_id',$id)->get();
+            $student = Student::where('user_id',Auth::user()->id)->get();
             /*$countries = [
                 'Afghanistan', 'Albania', 'Algeria', 'Antigua and Barbuda', 'Argentina',
                 'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Azores',
