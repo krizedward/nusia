@@ -516,6 +516,12 @@ class HomeController extends Controller
         }
 
         if($this->is_student()){
+            if(Auth::user()->citizenship == 'Not Available') {
+                return redirect()->route('layouts.questionnaire');
+            } else if(Auth::user()->student->course_registrations->count() == 0) {
+                return redirect()->route('courses.index'); // KHUSUS UNTUK FREE CLASSES, mungkin ada bug di CLASS PRIVATE DAN/ATAU GROUP.
+            }
+
             //$c = (new Countries())->all();
             //$countries = $c->pluck('name.common')->toArray();
             //sort($countries);
