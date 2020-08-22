@@ -1,14 +1,14 @@
 @extends('layouts.admin.default')
 
-@section('title','Student | Free Trial')
+@section('title','Student | Materials')
 
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Materials</h1>
+    <h1><b>Material</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li class="active">Materials</li>
+        <li class="active">Material</li>
     </ol>
 @stop
 
@@ -54,64 +54,37 @@
                                         </div>
                                     </div>
                                     <div class="box-body">
+                                      @if($mps_free_trial->toArray())
                                         <table class="table table-bordered">
                                             <tr>
-                                                <th style="width: 10px">#</th>
+                                                <th>Level</th>
                                                 <th>File Name</th>
                                                 <th>Learning Outcome</th>
                                                 <th>Data Type</th>
                                                 <th style="width: 40px">Link</th>
                                             </tr>
-                                            <?php $i = 1; $arr = []; ?>
-                                            @foreach($course_registrations as $cr)
-                                              @foreach($cr->course->course_package->material_publics as $mp)
-                                                <?php
-                                                  $flag = 0;
-                                                  foreach($mps_free_trial as $mp_free_trial) {
-                                                    if($mp->id == $mp_free_trial->id) { $flag = 1; break; }
-                                                  }
-                                                  if($flag == 0) continue;
-
-                                                  $flag = 0;
-                                                  for($j = 0; $j < count($arr); $j++) {
-                                                    if($mp->id == $arr[$j]) { $flag = 1; break; }
-                                                  }
-                                                  if($flag) continue;
-                                                  else array_push($arr, $mp->id);
-                                                ?>
-                                                <tr>
-                                                  <td>{{ $i++ }}</td>
-                                                  <td>{{ $mp->name }}</td>
-                                                  @if($mp->description)
-                                                    <td>{{ $mp->description }}</td>
-                                                  @else
-                                                    <td><i>Not Available</i></td>
-                                                  @endif
-                                                  @if($mp->path)
-                                                    <td>{{ strtoupper( substr($mp->path, strrpos($mp->path, '.', 0) + 1) ) }}</td>
-                                                    <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('materials.download', ['Public', $mp->id]) }}">Download</a></td>
-                                                  @else
-                                                    <td><i>Not Available</i></td>
-                                                    <td><a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default disabled" href="#">Download</a></td>
-                                                  @endif
-                                                </tr>
-                                              @endforeach
+                                            @foreach($mps_free_trial as $i => $mp)
+                                              <tr>
+                                                <td>{{ $mp->course_package->course_level->name }}</td>
+                                                <td>{{ $mp->name }}</td>
+                                                @if($mp->description)
+                                                  <td>{{ $mp->description }}</td>
+                                                @else
+                                                  <td><i>Not Available</i></td>
+                                                @endif
+                                                @if($mp->path)
+                                                  <td>{{ strtoupper( substr($mp->path, strrpos($mp->path, '.', 0) + 1) ) }}</td>
+                                                  <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('materials.download', ['Public', $mp->id]) }}">Download</a></td>
+                                                @else
+                                                  <td><i>Not Available</i></td>
+                                                  <td><a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default disabled" href="#">Download</a></td>
+                                                @endif
+                                              </tr>
                                             @endforeach
-                                            <!--tr>
-                                                <td>1.</td>
-                                                <td>Introduce</td>
-                                                <td>Introduce</td>
-                                                <td>PDF</td>
-                                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Download</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2.</td>
-                                                <td>Introduce</td>
-                                                <td>Introduce</td>
-                                                <td>PDF</td>
-                                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Download</a></td>
-                                            </tr-->
                                         </table>
+                                      @else
+                                        <div class="text-center">No available materials.</div>
+                                      @endif
                                     </div>
                                 </div>
                                 <div class="box">
@@ -123,76 +96,41 @@
                                         </div>
                                     </div>
                                     <div class="box-body">
+                                      @if($mss_free_trial->toArray())
                                         <table class="table table-bordered">
                                             <tr>
-                                                <th style="width: 10px">#</th>
+                                                <th>Class</th>
+                                                <th>Level</th>
                                                 <th>Session</th>
                                                 <th>File Name</th>
                                                 <th>Learning Outcome</th>
                                                 <th>Data Type</th>
                                                 <th style="width: 40px">Link</th>
                                             </tr>
-                                            <?php $i = 1; $arr = []; ?>
-                                            @foreach($course_registrations as $cr)
-                                              @foreach($cr->course->sessions as $s)
-                                                @foreach($s->material_sessions as $ms)
-                                                  <?php
-                                                    $flag = 0;
-                                                    foreach($mss_free_trial as $ms_free_trial) {
-                                                      if($ms->id == $ms_free_trial->id) { $flag = 1; break; }
-                                                    }
-                                                    if($flag == 0) continue;
-
-                                                    $flag = 0;
-                                                    for($j = 0; $j < count($arr); $j++) {
-                                                      if($ms->id == $arr[$j]) { $flag = 1; break; }
-                                                    }
-                                                    if($flag) continue;
-                                                    else array_push($arr, $ms->id);
-                                                  ?>
-                                                  <tr>
-                                                    <td>{{ $i++ }}</td>
-                                                    @if($s->title)
-                                                      <td>{{ $s->title }}</td>
-                                                    @elseif($s->course->title)
-                                                      <td>{{ $s->course->title }}</td>
-                                                    @else
-                                                      <td>{{ $s->course->course_package->title }}</td>
-                                                    @endif
-                                                    <td>{{ $ms->name }}</td>
-                                                    @if($ms->description)
-                                                      <td>{{ $ms->description }}</td>
-                                                    @else
-                                                      <td><i>Not Available</i></td>
-                                                    @endif
-                                                    @if($ms->path)
-                                                      <td>{{ strtoupper( substr($ms->path, strrpos($ms->path, '.', 0) + 1) ) }}</td>
-                                                      <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('materials.download', ['Session', $ms->id]) }}">Download</a></td>
-                                                    @else
-                                                      <td><i>Not Available</i></td>
-                                                      <td><a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default disabled" href="#">Download</a></td>
-                                                    @endif
-                                                  </tr>
-                                                @endforeach
-                                              @endforeach
+                                            @foreach($mss_free_trial as $i => $ms)
+                                              <tr>
+                                                <td>{{ $ms->session->course->title }}</td>
+                                                <td>{{ $ms->session->course->course_package->course_level->name }}</td>
+                                                <td>{{ $ms->session->title }}</td>
+                                                <td>{{ $ms->name }}</td>
+                                                @if($ms->description)
+                                                  <td>{{ $ms->description }}</td>
+                                                @else
+                                                  <td><i>Not Available</i></td>
+                                                @endif
+                                                @if($ms->path)
+                                                  <td>{{ strtoupper( substr($ms->path, strrpos($ms->path, '.', 0) + 1) ) }}</td>
+                                                  <td><a {{--target="_blank" rel="noopener noreferrer"--}} class="btn btn-flat btn-xs btn-success" href="{{ route('materials.download', ['Session', $ms->id]) }}">Download</a></td>
+                                                @else
+                                                  <td><i>Not Available</i></td>
+                                                  <td><a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default disabled" href="#">Download</a></td>
+                                                @endif
+                                              </tr>
                                             @endforeach
-                                            <!--tr>
-                                                <td>1.</td>
-                                                <td>Session 1</td>
-                                                <td>Introduce</td>
-                                                <td>Learning Outcome</td>
-                                                <td>PDF</td>
-                                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Download</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2.</td>
-                                                <td>Session 2</td>
-                                                <td>Introduce</td>
-                                                <td>Learning Outcome</td>
-                                                <td>PDF</td>
-                                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Download</a></td>
-                                            </tr-->
                                         </table>
+                                      @else
+                                        <div class="text-center">No available materials.</div>
+                                      @endif
                                     </div>
                                 </div>
                             </div>

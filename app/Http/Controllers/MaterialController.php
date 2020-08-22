@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class MaterialController extends Controller
 {
@@ -56,10 +57,7 @@ class MaterialController extends Controller
             $arr = [];
             foreach($course_registrations as $course_registration) {
                 $mps = MaterialPublic::where('course_package_id', $course_registration->course->course_package_id)->get();
-                foreach($mps as $mp) {
-                    array_push($arr, $mp->id);
-                    array_unique($arr);
-                }
+                foreach($mps as $mp) if(!in_array($mp->id, $arr)) array_push($arr, $mp->id);
             }
             $mps_free_trial = MaterialPublic
                 ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
@@ -67,7 +65,7 @@ class MaterialController extends Controller
                 ->distinct()
                 ->whereIn('material_publics.id', $arr)
                 ->where('course_types.name', 'LIKE', '%Trial%')
-                ->select('material_publics.id as id')
+                ->select('material_publics.id', 'material_publics.code', 'material_publics.course_package_id', 'material_publics.name', 'material_publics.description', 'material_publics.path', 'material_publics.created_at', 'material_publics.updated_at')
                 ->get();
             $mps_private = MaterialPublic
                 ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
@@ -76,7 +74,7 @@ class MaterialController extends Controller
                 ->whereIn('material_publics.id', $arr)
                 ->where('course_types.count_student_min', 1)
                 ->where('course_types.count_student_max', 1)
-                ->select('material_publics.id as id')
+                ->select('material_publics.id', 'material_publics.code', 'material_publics.course_package_id', 'material_publics.name', 'material_publics.description', 'material_publics.path', 'material_publics.created_at', 'material_publics.updated_at')
                 ->get();
             $mps_group = MaterialPublic
                 ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
@@ -84,7 +82,7 @@ class MaterialController extends Controller
                 ->distinct()
                 ->whereIn('material_publics.id', $arr)
                 ->where('course_types.count_student_max', '<>', 1)
-                ->select('material_publics.id as id')
+                ->select('material_publics.id', 'material_publics.code', 'material_publics.course_package_id', 'material_publics.name', 'material_publics.description', 'material_publics.path', 'material_publics.created_at', 'material_publics.updated_at')
                 ->get();
 
             $arr = [];
@@ -92,11 +90,9 @@ class MaterialController extends Controller
                 $mss = MaterialSession
                     ::join('sessions', 'material_sessions.session_id', 'sessions.id')
                     ->where('sessions.course_id', $course_registration->course_id)
+                    ->select('material_sessions.id')
                     ->get();
-                foreach($mss as $ms) {
-                    array_push($arr, $ms->id);
-                    array_unique($arr);
-                }
+                foreach($mss as $ms) if(!in_array($ms->id, $arr)) array_push($arr, $ms->id);
             }
             $mss_free_trial = MaterialSession
                 ::join('sessions', 'material_sessions.session_id', 'sessions.id')
@@ -106,7 +102,7 @@ class MaterialController extends Controller
                 ->distinct()
                 ->whereIn('material_sessions.id', $arr)
                 ->where('course_types.name', 'LIKE', '%Trial%')
-                ->select('material_sessions.id as id')
+                ->select('material_sessions.id', 'material_sessions.code', 'material_sessions.session_id', 'material_sessions.name', 'material_sessions.description', 'material_sessions.path', 'material_sessions.created_at', 'material_sessions.updated_at')
                 ->get();
             $mss_private = MaterialSession
                 ::join('sessions', 'material_sessions.session_id', 'sessions.id')
@@ -117,7 +113,7 @@ class MaterialController extends Controller
                 ->whereIn('material_sessions.id', $arr)
                 ->where('course_types.count_student_min', 1)
                 ->where('course_types.count_student_max', 1)
-                ->select('material_sessions.id as id')
+                ->select('material_sessions.id', 'material_sessions.code', 'material_sessions.session_id', 'material_sessions.name', 'material_sessions.description', 'material_sessions.path', 'material_sessions.created_at', 'material_sessions.updated_at')
                 ->get();
             $mss_group = MaterialSession
                 ::join('sessions', 'material_sessions.session_id', 'sessions.id')
@@ -127,7 +123,7 @@ class MaterialController extends Controller
                 ->distinct()
                 ->whereIn('material_sessions.id', $arr)
                 ->where('course_types.count_student_max', '<>', 1)
-                ->select('material_sessions.id as id')
+                ->select('material_sessions.id', 'material_sessions.code', 'material_sessions.session_id', 'material_sessions.name', 'material_sessions.description', 'material_sessions.path', 'material_sessions.created_at', 'material_sessions.updated_at')
                 ->get();
 
             return view('materials.student_index', compact(
@@ -411,7 +407,8 @@ class MaterialController extends Controller
         }
 
         if($file) {
-            $file_name = Str::random(50).'.'.$file->extension();
+            //$file_name = Str::random(50).'.'.$file->extension();
+            $file_name = MaterialSession::all()->last()->id . '_' . $request->name . '.' . $file->extension();
         }
 
         if($this->is_admin() || $this->is_instructor()) {
@@ -503,7 +500,8 @@ class MaterialController extends Controller
 
         if($this->is_admin() || $this->is_instructor()) {
             if($file) {
-                $file_name = Str::random(50).'.'.$file->extension();
+                //$file_name = Str::random(50).'.'.$file->extension();
+                $file_name = $id . '_' . $request->name . '.' . $file->extension();
             }
             $material_session->update([
                 'session_id' => $request->session_id,
@@ -556,17 +554,20 @@ class MaterialController extends Controller
             $data = MaterialSession::find($id);
         }
 
+        //$file_name = Carbon::now()->setTimezone(Auth::user()->timezone)->isoFormat('YYYYMMDD') . '_' . $data->path;
         $path = public_path().'/uploads/material/'.$data->path;
 
         if($this->is_admin()) {
             //
         } else if($this->is_instructor()) {
-            //
+            return response()->download($path, $data->path);
+            //return response()->download($path, $file_name);
         } else if($this->is_student()) {
             return response()->download($path, $data->path);
+            //return response()->download($path, $file_name);
         } else {
             //
         }
-        return view('materials.sessions.index', compact('data'));
+        return redirect()->route('materials.index');
     }
 }
