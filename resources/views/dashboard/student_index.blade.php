@@ -140,11 +140,7 @@
                           $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                         ?>
                         {{--aku tambah 2 jam biar sama jadwalnya di web dengan di punya kita--}}
-                        @if($is_local_access)
-                          <td>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
-                        @else
-                          <td>{{ $schedule_time->addHour()->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
-                        @endif
+                        <td>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
                       @else
                         <td><i>Not Available</i></td>
                       @endif
@@ -337,11 +333,7 @@
                         <?php
                           $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                         ?>
-                        @if($is_local_access)
-                          <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMMM Do YYYY') }}</span>
-                        @else
-                          <span class="label label-info pull-right">{{ $schedule_time->addHour()->isoFormat('MMMM Do YYYY') }}</span>
-                        @endif
+                        <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMMM Do YYYY') }}</span>
                       @else
                         <span class="label label-danger pull-right">Not Available</span>
                       @endif
