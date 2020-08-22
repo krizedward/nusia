@@ -336,9 +336,9 @@
                         <?php
                           $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                         ?>
-                        <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM Do YYYY') }}</span>
+                        <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM DD \'YY') }}</span>
                       @else
-                        <span class="label label-danger pull-right">Not Available</span>
+                        <span class="label label-danger pull-right">N/A</span>
                       @endif
                     </div>
                     <span class="product-description">

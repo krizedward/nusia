@@ -155,7 +155,7 @@
                                     ?>
                                     <div class="product-title">
                                       {{ $s->course->course_package->course_level->name }} - {{ $s->course->title }} - {{ $s->title }}
-                                      <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM Do YYYY') }}</span>
+                                      <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM DD \'YY') }}</span>
                                     </div>
                                     <span class="product-description">
                                       @if($s->schedule->schedule_time < now())
