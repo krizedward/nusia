@@ -150,8 +150,9 @@
                                     <?php
                                       $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                     ?>
-                                    <div class="product-title">{{ $s->course->title }} - {{ $s->title }}
-                                      <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMMM Do YYYY') }}</span>
+                                    <div class="product-title">
+                                      {{ $s->course->course_package->course_level->name }} - {{ $s->course->title }} - {{ $s->title }}
+                                      <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM Do YYYY') }}</span>
                                     </div>
                                     <span class="product-description">
                                       @if($s->schedule->schedule_time < now())
@@ -160,7 +161,7 @@
                                           Join <a href="{{ $s->link_zoom }}" target="_blank">here</a>.
                                         @endif
                                       @else
-                                        Meeting time: {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                        {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
                                       @endif
                                     </span>
                                   </div>

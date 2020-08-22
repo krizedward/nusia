@@ -318,22 +318,22 @@
                     <div class="product-title">
                       @if($dt->title)
                         @if($dt->course->title)
-                          {{ $dt->course->title }} - {{ $dt->title }}
+                          {{ $dt->course->course_package->course_level->name }} - {{ $dt->course->title }} - {{ $dt->title }}
                         @else
-                          {{ $dt->course->course_package->title }} - {{ $dt->title }}
+                          {{ $dt->course->course_package->course_level->name }} - {{ $dt->course->course_package->title }} - {{ $dt->title }}
                         @endif
                       @else
                         @if($dt->course->title)
-                          {{ $dt->course->title }}
+                          {{ $dt->course->course_package->course_level->name }} - {{ $dt->course->title }}
                         @else
-                          {{ $dt->course->course_package->title }}
+                          {{ $dt->course->course_package->course_level->name }} - {{ $dt->course->course_package->title }}
                         @endif
                       @endif
                       @if($dt->schedule->schedule_time)
                         <?php
                           $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                         ?>
-                        <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMMM Do YYYY') }}</span>
+                        <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM Do YYYY') }}</span>
                       @else
                         <span class="label label-danger pull-right">Not Available</span>
                       @endif
@@ -346,7 +346,7 @@
                           Join <a href="{{ $dt->link_zoom }}" target="_blank">here</a>.
                         @endif
                       @else
-                        Meeting time: {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                        {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
                       @endif
                     </span>
                   </div>
