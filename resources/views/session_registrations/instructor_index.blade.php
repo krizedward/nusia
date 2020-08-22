@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title','Instructor | Schedule')
+@section('title','Instructor | Session')
 
 @include('layouts.css_and_js.table')
 
@@ -11,7 +11,7 @@
     <h1><b>Session</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li class="active">Free Trial</li>
+        <li class="active">Session</li>
     </ol>
 @stop
 
@@ -20,14 +20,14 @@
         <div class="col-md-3">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Add Link Zoom Session</h3>
+                    <h3 class="box-title">Add Zoom Meeting Link</h3>
                 </div>
                 <div class="box-body">
                     <form action="{{ route('sessions.update',1) }}" method="post">
                         @csrf
                         @method('PUT')
                         <div class="form-group">
-                            <label>Session In</label>
+                            <label>Session</label>
                             {{--
                             <select class="form-control select2" name="user">
                                 <option selected="" disabled="">Session In</option>
@@ -36,7 +36,7 @@
                             </select>
                             --}}
                             <select name="session_registration" class="form-control select2">
-                                <option selected="" disabled="">Choose Schedule</option>
+                                <option selected="" disabled="">-- choose a session --</option>
                                 @foreach($data as $dt)
                                     <option value="{{ $dt->id }}">
                                       [ {{ $dt->course->course_package->course_level->name }} ] {{ $dt->course->title }} - {{ $dt->title }}
@@ -45,8 +45,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Link Zoom</label>
-                            <input name="link_zoom" type="text" class="form-control" placeholder="Link Zoom.." value="{{ old('name') }}">
+                            <label>Meeting Link</label>
+                            <input name="link_zoom" type="text" class="form-control" placeholder="insert a meeting link" value="{{ old('name') }}">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
