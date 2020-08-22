@@ -38,9 +38,9 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              @if(Auth::user()->roles == 'Student')
+              @if(Auth::user()->roles == 'Student' && Auth::user()->image_profile != 'user.jpg')
               <img src="{{ asset('uploads/student/profile/'. Auth::user()->image_profile) }}" class="user-image" alt="User Image">
-              @elseif(Auth::user()->roles == 'Instructor')
+              @elseif(Auth::user()->roles == 'Instructor' && Auth::user()->image_profile != 'user.jpg')
               <img src="{{ asset('uploads/instructor/'. Auth::user()->image_profile) }}" class="user-image" alt="User Image">
               @else
               <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="user-image" alt="User Image">
@@ -50,9 +50,9 @@
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                  @if(Auth::user()->roles == 'Student')
+                  @if(Auth::user()->roles == 'Student' && Auth::user()->image_profile != 'user.jpg')
                       <img src="{{ asset('uploads/student/profile/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
-                  @elseif(Auth::user()->roles == 'Instructor')
+                  @elseif(Auth::user()->roles == 'Instructor' && Auth::user()->image_profile != 'user.jpg')
                       <img src="{{ asset('uploads/instructor/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
                   @else
                       <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="img-circle" alt="User Image">

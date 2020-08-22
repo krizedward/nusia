@@ -3,9 +3,9 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                @if(Auth::user()->roles == 'Student')
+                @if(Auth::user()->roles == 'Student' && Auth::user()->image_profile != 'user.jpg')
                     <img src="{{ asset('uploads/student/profile/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
-                @elseif(Auth::user()->roles == 'Instructor')
+                @elseif(Auth::user()->roles == 'Instructor' && Auth::user()->image_profile != 'user.jpg')
                     <img src="{{ asset('uploads/instructor/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
                 @else
                     <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="img-circle" alt="User Image">
