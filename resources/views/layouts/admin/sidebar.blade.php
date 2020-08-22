@@ -21,7 +21,12 @@
                 @if(Auth::user()->roles == 'Admin')
                     <p>Admin Account</p>
                 @endif
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                <!--a href="#"><i class="fa fa-circle text-success"></i> Online</a-->
+                @if(Auth::user()->roles == 'Student' && (Auth::user()->citizenship == 'Not Available' || Auth::user()->student->course_registrations->count() == 0))
+                  <a href="{{ route('home') }}"><i class="fa fa-circle text-info"></i> Registering</a>
+                @else
+                  <a href="{{ route('profile', Auth::user()->id) }}"><i class="fa fa-circle text-success"></i> Online</a>
+                @endif
             </div>
         </div>
         <!-- search form -->
