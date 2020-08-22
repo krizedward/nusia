@@ -555,7 +555,7 @@ class MaterialController extends Controller
         }
 
         //$file_name = Carbon::now()->setTimezone(Auth::user()->timezone)->isoFormat('YYYYMMDD') . '_' . $data->path;
-        $path = public_path().'/uploads/material/'.$data->path;
+        $path = '/uploads/material/'.$data->path;
 
         if($this->is_admin()) {
             //
