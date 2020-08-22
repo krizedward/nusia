@@ -13,13 +13,13 @@
             </div>
             <div class="pull-left info">
                 @if(Auth::user()->roles == 'Student')
-                    <p>Student Account</p>
+                    <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
                 @endif
                 @if(Auth::user()->roles == 'Instructor')
-                    <p>Instructor Account</p>
+                    <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
                 @endif
                 @if(Auth::user()->roles == 'Admin')
-                    <p>Admin Account</p>
+                    <p>Admin</p>
                 @endif
                 <!--a href="#"><i class="fa fa-circle text-success"></i> Online</a-->
                 @if(Auth::user()->roles == 'Student' && (Auth::user()->citizenship == 'Not Available' || Auth::user()->student->course_registrations->count() == 0))
