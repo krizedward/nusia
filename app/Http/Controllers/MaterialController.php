@@ -554,17 +554,18 @@ class MaterialController extends Controller
             $data = MaterialSession::find($id);
         }
 
-        //$file_name = Carbon::now()->setTimezone(Auth::user()->timezone)->isoFormat('YYYYMMDD') . '_' . $data->path;
-        $path = '/uploads/material/'.$data->path;
+        $file_name = Carbon::now()->setTimezone(Auth::user()->timezone)->isoFormat('YYYY_MM_DD') . '_' . $data->path;
+        $path = 'uploads/material/' . $data->path;
 
         if($this->is_admin()) {
-            //
+            //return response()->download($path, $data->path);
+            return response()->download($path, $file_name);
         } else if($this->is_instructor()) {
-            return response()->download($path, $data->path);
-            //return response()->download($path, $file_name);
+            //return response()->download($path, $data->path);
+            return response()->download($path, $file_name);
         } else if($this->is_student()) {
-            return response()->download($path, $data->path);
-            //return response()->download($path, $file_name);
+            //return response()->download($path, $data->path);
+            return response()->download($path, $file_name);
         } else {
             //
         }
