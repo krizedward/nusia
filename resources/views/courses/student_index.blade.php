@@ -39,7 +39,6 @@
           </div>
         </div>
         @foreach($data as $dt)
-          @if($dt->course_registrations->count() < $dt->course_package->course_type->count_student_max)
             <div class="col-md-4">
               <div class="box box-primary">
                 <div class="box-header with-border">
@@ -77,9 +76,19 @@
                       </div>
                     @endwhile
                     <div class="col-md-12">
-                      <a href="#" data-toggle="modal" data-target="#{{$dt->id}}" class="btn btn-s btn-primary" style="width:100%;">
-                        Choose This Class
-                      </a>
+                      <b>Number of Students Registered</b>
+                      <p>{{ $dt->course_registrations->count() }}/{{ $dt->course_package->course_type->count_student_max }}</p>
+                    </div>
+                    <div class="col-md-12">
+                      @if($dt->course_registrations->count() < $dt->course_package->course_type->count_student_max)
+                        <a href="#" data-toggle="modal" data-target="#{{$dt->id}}" class="btn btn-s btn-primary" style="width:100%;">
+                          Choose This Class
+                        </a>
+                      @else
+                        <a href="#" data-toggle="modal" data-target="#{{$dt->id}}" class="btn btn-s btn-default disabled" style="width:100%;">
+                          Choose This Class
+                        </a>
+                      @endif
                     </div>
                   </div>
                 </div>
@@ -128,8 +137,6 @@
             <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
-
-          @endif
         @endforeach
     </div>
     <script>
