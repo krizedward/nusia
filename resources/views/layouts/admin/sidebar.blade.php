@@ -104,7 +104,7 @@
                 <li class="{{ set_active('session_registrations.index') }}">
                     <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Sessions</span></a>
                 </li>
-                
+
                 <li class="{{ set_active('materials.index') }}">
                     <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> Material</span></a>
                 </li>
@@ -249,6 +249,7 @@
                         </li>
                     </ul>
                 </li>
+                {{-- End Tree --}}
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-users"></i> <span>Instructor</span>
@@ -265,10 +266,27 @@
                         </li>
                     </ul>
                 </li>
-
+                {{-- End Tree --}}
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-book"></i> <span>Materials</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="#">
+                            <a href="{{ route('material_publics.index') }}"><i class="fa fa-circle-o"></i> Public Data</a>
+                        </li>
+                        <li class="#">
+                            <a href="{{ route('material_sessions.index') }}"><i class="fa fa-circle-o"></i> Session Data</a>
+                        </li>
+                    </ul>
+                </li>
+                {{--
                 <li class="#">
                     <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> Materials</span></a>
-                </li>
+                </li> --}}
 
                 <!-- Head_Schedule -->
                 <li class="header">COURSES SCHEDULE</li>
