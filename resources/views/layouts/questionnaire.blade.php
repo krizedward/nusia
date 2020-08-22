@@ -394,7 +394,7 @@
                                     <div class="form-group">
                                 @endif
                                     <label for="image_profile">Upload Profile Picture</label>
-                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 5 MB</p>
+                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
                                         <input name="image_profile" type="file" accept="image/*" class="@error('image_profile') is-invalid @enderror form-control">
                                         @error('image_profile')
                                         <p style="color:red">{{ $message }}</p>

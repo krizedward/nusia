@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use PragmaRX\Countries\Package\Countries;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -233,7 +234,7 @@ class HomeController extends Controller
         $data = Validator::make($data, [
             'citizenship' => ['bail', 'required'],
             'timezone' => ['bail', 'required'],
-            'image_profile' => ['bail', 'sometimes', 'max:5000'],
+            'image_profile' => ['bail', 'sometimes', 'max:8000'],
 
             'age' => ['bail', 'required', 'integer'],
             'status_job' => ['bail', 'required'],
@@ -263,6 +264,8 @@ class HomeController extends Controller
             // all information should be filled.
         }
 
+        $file_name = Str::random(50).'.'.$file->extension();
+
         if($this->is_admin()) {
             User::create([
                 'first_name' => $request->first_name,
@@ -272,7 +275,7 @@ class HomeController extends Controller
                 'roles' => 'Student',
                 'citizenship' => $request->citizenship,
                 'timezone' => $request->timezone,
-                'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', Hash::make(Auth::user()->id)) : null,
+                'image_profile' => ($file)? $file_name : 'user.jpg',
             ]);
         }
 
@@ -294,13 +297,12 @@ class HomeController extends Controller
             User::find(Auth::user()->id)->update([
                 'citizenship' => $request->citizenship,
                 'timezone' => $request->timezone,
-                //'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', Hash::make(Auth::user()->student->id)) : null,
-                'image_profile'   => $file->getClientOriginalName(),
+                'image_profile'   => $file_name,
             ]);
 
             //Move Uploaded File
-            $destinationPath = 'uploads/student/profile';
-            $file->move($destinationPath,$file->getClientOriginalName());
+            $destinationPath = 'uploads/student/profile/';
+            $file->move($destinationPath,$destinationPath.$file_name);
             // \Session::flash('coba','Create Success !!!');
             } else {
                 Student::where('user_id', Auth::user()->id)->update([

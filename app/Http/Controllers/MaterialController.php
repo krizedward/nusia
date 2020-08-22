@@ -15,6 +15,7 @@ use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class MaterialController extends Controller
 {
@@ -388,11 +389,12 @@ class MaterialController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        $file = $request->file('path');
         $data = Validator::make($data, [
             'session_id' => ['bail', 'required'],
             'name' => ['bail', 'required', 'max:255'],
             'description' => ['bail', 'sometimes', 'max:5000'],
-            'path' => ['bail', 'sometimes', 'max:1000']
+            'path' => ['bail', 'sometimes', 'max:8000']
         ]);
 
         if($data->fails()) {
@@ -408,20 +410,26 @@ class MaterialController extends Controller
             if(MaterialSession::where('slug', $data)->first() === null) break;
         }
 
+        $file_name = Str::random(50).'.'.$file->extension();
+
         if($this->is_admin() || $this->is_instructor()) {
+            $str_random = Str::random(50);
             MaterialSession::create([
                 'slug' => $data,
                 'session_id' => $request->session_id,
                 'name' => $request->name,
                 'description' => $request->description,
-                'path' => $request->path
+                'path' => ($file)? $file_name : null,
             ]);
+            if($file) {
+                $destinationPath = 'uploads/material/';
+                $file->move($destinationPath,$destinationPath.$file_name);
+            }
         } else {
             // Tidak memiliki hak akses.
         }
 
-        $data = MaterialSession::all();
-        return view('materials.sessions.index', compact('data'));
+        return redirect()->route('materials.index');
     }
 
     /**
