@@ -56,7 +56,10 @@ class MaterialController extends Controller
 
             $arr = [];
             foreach($course_registrations as $course_registration) {
-                $mps = MaterialPublic::where('course_package_id', $course_registration->course->course_package_id)->get();
+                $mps = MaterialPublic
+                    ::where('course_package_id', $course_registration->course->course_package_id)
+                    ->select('material_publics.id')
+                    ->get();
                 foreach($mps as $mp) if(!in_array($mp->id, $arr)) array_push($arr, $mp->id);
             }
             $mps_free_trial = MaterialPublic
@@ -134,20 +137,19 @@ class MaterialController extends Controller
         }
 
         else if ($this->is_instructor()){
-            //return view('materials.instructor_index');
-
             $sessions = Session
                 ::join('schedules', 'sessions.schedule_id', 'schedules.id')
-                ->join('instructors', 'schedules.instructor_id', 'instructors.id')
-                ->where('instructor_id', Auth::user()->instructor->id)->get();
+                ->where('schedules.instructor_id', Auth::user()->instructor->id)
+                ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id)
+                ->get();
 
             $arr = [];
             foreach($sessions as $session) {
-                $mps = MaterialPublic::where('course_package_id', $session->course->course_package_id)->get();
-                foreach($mps as $mp) {
-                    array_push($arr, $mp->id);
-                    array_unique($arr);
-                }
+                $mps = MaterialPublic
+                    ::where('course_package_id', $session->course->course_package_id)
+                    ->select('material_publics.id')
+                    ->get();
+                foreach($mps as $mp) if(!in_array($mp->id, $arr)) array_push($arr, $mp->id);
             }
             $mps_free_trial = MaterialPublic
                 ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
@@ -155,7 +157,7 @@ class MaterialController extends Controller
                 ->distinct()
                 ->whereIn('material_publics.id', $arr)
                 ->where('course_types.name', 'LIKE', '%Trial%')
-                ->select('material_publics.id as id')
+                ->select('material_publics.id', 'material_publics.code', 'material_publics.course_package_id', 'material_publics.name', 'material_publics.description', 'material_publics.path', 'material_publics.created_at', 'material_publics.updated_at')
                 ->get();
             $mps_private = MaterialPublic
                 ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
@@ -164,7 +166,7 @@ class MaterialController extends Controller
                 ->whereIn('material_publics.id', $arr)
                 ->where('course_types.count_student_min', 1)
                 ->where('course_types.count_student_max', 1)
-                ->select('material_publics.id as id')
+                ->select('material_publics.id', 'material_publics.code', 'material_publics.course_package_id', 'material_publics.name', 'material_publics.description', 'material_publics.path', 'material_publics.created_at', 'material_publics.updated_at')
                 ->get();
             $mps_group = MaterialPublic
                 ::join('course_packages', 'material_publics.course_package_id', 'course_packages.id')
@@ -172,16 +174,16 @@ class MaterialController extends Controller
                 ->distinct()
                 ->whereIn('material_publics.id', $arr)
                 ->where('course_types.count_student_max', '<>', 1)
-                ->select('material_publics.id as id')
+                ->select('material_publics.id', 'material_publics.code', 'material_publics.course_package_id', 'material_publics.name', 'material_publics.description', 'material_publics.path', 'material_publics.created_at', 'material_publics.updated_at')
                 ->get();
 
             $arr = [];
             foreach($sessions as $session) {
-                $mss = MaterialSession::where('material_sessions.session_id', $session->id)->get();
-                foreach($mss as $ms) {
-                    array_push($arr, $ms->id);
-                    array_unique($arr);
-                }
+                $mss = MaterialSession
+                    ::where('material_sessions.session_id', $session->id)
+                    ->select('material_sessions.id')
+                    ->get();
+                foreach($mss as $ms) if(!in_array($ms->id, $arr)) array_push($arr, $ms->id);
             }
             $mss_free_trial = MaterialSession
                 ::join('sessions', 'material_sessions.session_id', 'sessions.id')
@@ -191,7 +193,7 @@ class MaterialController extends Controller
                 ->distinct()
                 ->whereIn('material_sessions.id', $arr)
                 ->where('course_types.name', 'LIKE', '%Trial%')
-                ->select('material_sessions.id as id')
+                ->select('material_sessions.id', 'material_sessions.code', 'material_sessions.session_id', 'material_sessions.name', 'material_sessions.description', 'material_sessions.path', 'material_sessions.created_at', 'material_sessions.updated_at')
                 ->get();
             $mss_private = MaterialSession
                 ::join('sessions', 'material_sessions.session_id', 'sessions.id')
@@ -202,7 +204,7 @@ class MaterialController extends Controller
                 ->whereIn('material_sessions.id', $arr)
                 ->where('course_types.count_student_min', 1)
                 ->where('course_types.count_student_max', 1)
-                ->select('material_sessions.id as id')
+                ->select('material_sessions.id', 'material_sessions.code', 'material_sessions.session_id', 'material_sessions.name', 'material_sessions.description', 'material_sessions.path', 'material_sessions.created_at', 'material_sessions.updated_at')
                 ->get();
             $mss_group = MaterialSession
                 ::join('sessions', 'material_sessions.session_id', 'sessions.id')
@@ -212,7 +214,7 @@ class MaterialController extends Controller
                 ->distinct()
                 ->whereIn('material_sessions.id', $arr)
                 ->where('course_types.count_student_max', '<>', 1)
-                ->select('material_sessions.id as id')
+                ->select('material_sessions.id', 'material_sessions.code', 'material_sessions.session_id', 'material_sessions.name', 'material_sessions.description', 'material_sessions.path', 'material_sessions.created_at', 'material_sessions.updated_at')
                 ->get();
 
             return view('materials.instructor_index', compact(
