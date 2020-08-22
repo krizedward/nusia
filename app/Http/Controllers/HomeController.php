@@ -54,9 +54,18 @@ class HomeController extends Controller
     public function index()
     {
         if($this->is_admin()) {
-            $student = Student::all();
-            $instructor = Instructor::all();
-            return view('dashboard.admin_index',compact('student','instructor'));
+            //$temp_nation = $c->where('name.common', Auth::user()->timezone)->first()->hydrate('timezones')->timezones->first()->zone_name;
+            $timeNusia = Carbon::now()->setTimezone('Asia/Jakarta');
+            $timeStudent = Carbon::now()->setTimezone(Auth::user()->timezone);
+            $student = Student::paginate(5);
+            $instructor = Instructor::paginate(5);
+            $session = Session::paginate(5);
+            $session_reg = SessionRegistration::paginate(5);
+            //return value
+            return view('dashboard.admin_index',compact(
+                'student','instructor','timeNusia','timeStudent',
+                'session', 'session_reg'
+            ));
         }
 
         if($this->is_instructor()) {
