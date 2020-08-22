@@ -69,7 +69,10 @@
                                     <?php
                                       $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                     ?>
-                                    <td>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
+                                    <td>
+                                      <span class="hidden">{{ $schedule_time->isoFormat('YYMMDDAhhmm') }}</span>
+                                      {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                    </td>
                                     @if($s->link_zoom)
                                       <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $s->link_zoom }}">Link</a></td>
                                     @else

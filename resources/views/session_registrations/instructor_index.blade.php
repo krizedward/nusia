@@ -80,7 +80,7 @@
                                 $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                               ?>
                               <td>
-                                <span class="hidden">{{ $schedule_time->isoFormat('YYMMDD') }}</span>
+                                <span class="hidden">{{ $schedule_time->isoFormat('YYMMDDAhhmm') }}</span>
                                 {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
                               </td>
                             @else
