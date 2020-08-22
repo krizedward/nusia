@@ -61,21 +61,25 @@ class HomeController extends Controller
         if($this->is_instructor()) {
             $timeNusia = Carbon::now();
             $timeStudent = Carbon::now(Auth::user()->timezone);
-            $session_reg = SessionRegistration
-                ::join('course_registrations', 'session_registrations.course_registration_id', 'course_registrations.id')
-                ->where('course_registrations.student_id', Auth::user()->instructor->id)
-                ->select('session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
-                ->get();
-            $session_reg_order_by_schedule_time = Schedule
-                ::join('instructors', 'schedules.instructor_id_2', 'instructors.id')
+            $sessions = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructors', 'schedules.instructor_id_2', 'instructors.id')
                 ->join('users', 'instructors.user_id', 'users.id')
-                ->where('instructor_id', Auth::user()->instructor->id)
-                ->orWhere('instructor_id_2', Auth::user()->instructor->id)
+                ->where('schedules.instructor_id', Auth::user()->instructor->id)
+                ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id)
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at', 'schedules.instructor_id_2', 'users.image_profile')
+                ->get();
+            $sessions_order_by_schedule_time = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructors', 'schedules.instructor_id_2', 'instructors.id')
+                ->join('users', 'instructors.user_id', 'users.id')
+                ->where('schedules.instructor_id', Auth::user()->instructor->id)
+                ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id)
                 ->orderBy('schedule_time')
-                ->select('schedules.id', 'schedules.code', 'schedules.instructor_id', 'schedules.instructor_id_2', 'schedules.schedule_time', 'schedules.status', 'schedules.created_at', 'schedules.updated_at', 'users.image_profile')
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at', 'schedules.instructor_id_2', 'users.image_profile')
                 ->get();
             $is_local_access = config('database.connections.mysql.username') == 'root';
-            return view('dashboard.instructor_index', compact('session_reg', 'session_reg_order_by_schedule_time','timeNusia','timeStudent', 'is_local_access'));
+            return view('dashboard.instructor_index', compact('sessions', 'sessions_order_by_schedule_time', 'timeNusia', 'timeStudent', 'is_local_access'));
         }
 
         if($this->is_student()) {

@@ -60,22 +60,22 @@
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach($session_reg as $schedule)
+                                @foreach($sessions as $s)
                                 <tr>
-                                    <td>{{ $schedule->session->course->course_package->course_level->name }}</td>
-                                    <td>{{ $schedule->session->course->title }}</td>
+                                    <td>{{ $s->course->course_package->course_level->name }}</td>
+                                    <td>{{ $s->course->title }}</td>
                                     {{--session pakai attribut title untuk penamaan persession di halaman dashboard--}}
-                                    <td>{{ $schedule->session->title }}</td>
+                                    <td>{{ $s->title }}</td>
                                     <?php
-                                      $schedule_time = \Carbon\Carbon::parse($schedule->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                      $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                     ?>
                                     @if($is_local_access)
                                     <td>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
                                     @else
                                     <td>{{ $schedule_time->addHour()->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</td>
                                     @endif
-                                    @if($schedule->session->link_zoom)
-                                      <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $schedule->session->link_zoom }}">Link</a></td>
+                                    @if($s->link_zoom)
+                                      <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $s->link_zoom }}">Link</a></td>
                                     @else
                                       <td><i>N/A</i></td>
                                     @endif
@@ -103,11 +103,13 @@
                         <!-- /.box-header -->
                         <div class="box-body no-padding">
                             <ul class="users-list clearfix">
-                                @foreach($session_reg as $dt)
+                                @foreach($sessions as $s)
+                                  @foreach($s->course->course_registrations as $cr)
                                     <li>
                                         <img src="{{ asset('adminlte/dist/img/user1-128x128.jpg') }}" alt="User Image">
-                                        <span class="users-list-name" href="#">{{ $dt->course_registration->student->user->first_name }}</span>
+                                        <span class="users-list-name" href="#">{{ $cr->student->user->first_name }}</span>
                                     </li>
+                                  @endforeach
                                 @endforeach
                             </ul>
                             <!-- /.users-list -->
@@ -134,25 +136,25 @@
                         <div class="box-body">
                             <ul class="products-list product-list-in-box">
                               <?php $i = 0; ?>
-                              @foreach($session_reg_order_by_schedule_time as $dt)
-                               @if($dt->schedule_time >= now())
+                              @foreach($sessions_order_by_schedule_time as $s)
+                               @if($s->schedule->schedule_time >= now())
                                 <li class="item">
                                   <div class="product-img">
-                                    @if($dt->instructor_id == Auth::user()->instructor->id)
-                                      @if($dt->instructor_id_2)
-                                        <img src="{{ asset('uploads/instructor/'.$dt->image_profile) }}" alt="User Image">
+                                    @if($s->schedule->instructor_id == Auth::user()->instructor->id)
+                                      @if($s->schedule->instructor_id_2)
+                                        <img src="{{ asset('uploads/instructor/'.$s->image_profile) }}" alt="User Image">
                                       @else
                                         <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="User Image">
                                       @endif
-                                    @elseif($dt->instructor_id_2 == Auth::user()->instructor->id)
-                                      <img src="{{ asset('uploads/instructor/'.$dt->instructor->user->image_profile) }}" alt="User Image">
+                                    @elseif($s->schedule->instructor_id_2 == Auth::user()->instructor->id)
+                                      <img src="{{ asset('uploads/instructor/'.$s->schedule->instructor->user->image_profile) }}" alt="User Image">
                                     @endif
                                   </div>
                                   <div class="product-info">
                                     <?php
-                                      $schedule_time = \Carbon\Carbon::parse($dt->schedule_time)->setTimezone(Auth::user()->timezone);
+                                      $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                     ?>
-                                    <div class="product-title">{{ $dt->session->course->title }} - {{ $dt->session->title }}
+                                    <div class="product-title">{{ $s->course->title }} - {{ $s->title }}
                                       @if($is_local_access)
                                         <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMMM Do YYYY') }}</span>
                                       @else
@@ -160,10 +162,10 @@
                                       @endif
                                     </div>
                                     <span class="product-description">
-                                      @if($dt->schedule_time < now())
+                                      @if($s->schedule->schedule_time < now())
                                         Class has been started!
-                                        @if($dt->session->link_zoom)
-                                          Join <a href="{{ $dt->session->link_zoom }}" target="_blank">here</a>.
+                                        @if($s->link_zoom)
+                                          Join <a href="{{ $s->link_zoom }}" target="_blank">here</a>.
                                         @endif
                                       @else
                                         Meeting time: {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
