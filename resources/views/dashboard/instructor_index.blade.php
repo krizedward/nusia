@@ -26,7 +26,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-warning alert-dismissible">
-                <h4 style="color: #000;"><i class="icon fa fa-book"></i> Please Consider :)</h4>
+                <h4 style="color: #000;"><i class="icon fa fa-link"></i> Please Consider :)</h4>
                 <span style="color: #000;">Before teaching, don't forget to attach a Zoom link for each session, so the students may join the session.</span>
             </div>
             <div class="alert alert-warning alert-dismissible">
