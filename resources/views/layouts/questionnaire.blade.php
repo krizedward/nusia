@@ -169,7 +169,7 @@
                                           <label for="timezone">What is your local time zone?</label>
                                           <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*This information is needed to adjust Indonesian time to your local time<br>for scheduling your sessions</p>
                                           <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Reference: <b><a target="_blank" rel="noopener noreferrer" href="https://www.timeanddate.com/">timeanddate.com</a></b></p>
-                                          <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control select2">
+                                          <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control">
                                             <option selected="selected" value="">-- Enter Current Time Zone --</option>
                                               @foreach($timezones as $timezone)
                                                 @if(old('timezone') == $timezone)
