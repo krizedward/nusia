@@ -105,7 +105,7 @@
                     <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Sessions</span></a>
                 </li>
                 
-                <li class="#">
+                <li class="{{ set_active('materials.index') }}">
                     <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> Material</span></a>
                 </li>
 
@@ -176,7 +176,7 @@
                         <!--/ul-->
                     </li>
 
-                    <li class="#">
+                    <li class="{{ set_active('materials.index') }}">
                         <a href="{{ route('materials.index') }}">
                             <i class="fa fa-book"> </i><span> Material</span>
                         </a>
