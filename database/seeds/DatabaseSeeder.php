@@ -31,6 +31,9 @@ class DatabaseSeeder extends Seeder
         $this->call(RatingsTableSeeder::class);
         $this->call(SessionRegistrationsTableSeeder::class);
 
+        // add FORMS
+        $this->call(FormsTableSeeder::class);
+
 
         /*
         $this->call(UsersTableSeeder::class);
