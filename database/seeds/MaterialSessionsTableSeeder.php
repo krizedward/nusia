@@ -12,6 +12,20 @@ class MaterialSessionsTableSeeder extends Seeder
      */
     public function run()
     {
+        MaterialSession::create([
+            'code' => 'MS-0000001',
+            'session_id' => 1,
+            'name' => 'CLASSROOM INSTRUCTIONS',
+            'description' => null,
+            'path' => '1_CLASSROOM INSTRUCTIONS.pdf',
+        ]);
+        MaterialSession::create([
+            'code' => 'MS-0000002',
+            'session_id' => 1,
+            'name' => 'PRONUNCIATION',
+            'description' => null,
+            'path' => '2_PRONUNCIATION.pdf',
+        ]);
         /*MaterialSession::create([
             'code' => 'MS-001',
             'session_id' => 1,
