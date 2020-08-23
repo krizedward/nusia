@@ -68,10 +68,15 @@
                                     <td>{{ $s->title }}</td>
                                     <?php
                                       $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                      $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                                     ?>
                                     <td>
                                       <span class="hidden">{{ $schedule_time->isoFormat('YYMMDDAhhmm') }}</span>
-                                      {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                      @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                        Today, {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                      @else
+                                        {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                      @endif
                                     </td>
                                     @if($s->link_zoom)
                                       <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $s->link_zoom }}">Link</a></td>
@@ -152,10 +157,15 @@
                                   <div class="product-info">
                                     <?php
                                       $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                      $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                                     ?>
                                     <div class="product-title">
                                       {{ $s->course->course_package->course_level->name }} - {{ $s->course->title }} - {{ $s->title }}
-                                      <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM DD \'YY') }}</span>
+                                      @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                        <span class="label label-success pull-right">Today</span>
+                                      @else
+                                        <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM DD \'YY') }}</span>
+                                      @endif
                                     </div>
                                     <span class="product-description">
                                       @if($s->schedule->schedule_time < now())

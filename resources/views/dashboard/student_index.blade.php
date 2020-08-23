@@ -138,11 +138,16 @@
                       @if($dt->schedule->schedule_time)
                         <?php
                           $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                          $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                         ?>
                         {{--aku tambah 2 jam biar sama jadwalnya di web dengan di punya kita--}}
                         <td>
                           <span class="hidden">{{ $schedule_time->isoFormat('YYMMDDAhhmm') }}</span>
-                          {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                          @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                            Today, {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                          @else
+                            {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                          @endif
                         </td>
                       @else
                         <td><i>Not Available</i></td>
@@ -335,8 +340,13 @@
                       @if($dt->schedule->schedule_time)
                         <?php
                           $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                          $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                         ?>
-                        <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM DD \'YY') }}</span>
+                        @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                          <span class="label label-success pull-right">Today</span>
+                        @else
+                          <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM DD \'YY') }}</span>
+                        @endif
                       @else
                         <span class="label label-danger pull-right">N/A</span>
                       @endif
