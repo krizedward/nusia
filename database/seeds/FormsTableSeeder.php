@@ -16,6 +16,8 @@ class FormsTableSeeder extends Seeder
      */
     public function run()
     {
+
+// FORM ID 1
         Form::create([
             'id' => 1,
             'title' => 'CUSTOMER SATISFACTION SURVEY (Meeting 1)',
@@ -101,7 +103,7 @@ class FormsTableSeeder extends Seeder
             'id' => 5,
             'form_id' => 1,
             'is_required' => 'required',
-            'code' => 'instructor_overall_performance',
+            'code' => 'instructor_rating',
             'question' => '2. How would you rate the instructors’ overall performance?',
             'placeholder' => null,
             'answer_type' => 'radio',
@@ -125,7 +127,7 @@ class FormsTableSeeder extends Seeder
             'id' => 6,
             'form_id' => 1,
             'is_required' => 'required',
-            'code' => 'instructor_overall_performance_reason',
+            'code' => 'instructor_rating_reason',
             'question' => 'Reasons why you answered so',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
@@ -200,6 +202,380 @@ class FormsTableSeeder extends Seeder
             'id' => 18,
             'form_question_id' => 10,
             'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 11,
+            'form_id' => 1,
+            'is_required' => 'required',
+            'code' => 'materials_rating',
+            'question' => '6. Overall, how would you rate our teaching materials?',
+            'placeholder' => null,
+            'answer_type' => 'radio',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 19,
+            'form_question_id' => 11,
+            'answer' => 'Poor',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 20,
+            'form_question_id' => 11,
+            'answer' => 'Good',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 21,
+            'form_question_id' => 11,
+            'answer' => 'Great',
+        ]);
+        FormQuestion::create([
+            'id' => 12,
+            'form_id' => 1,
+            'is_required' => 'required',
+            'code' => 'materials_rating_reason',
+            'question' => 'Reasons why you answered so',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 22,
+            'form_question_id' => 12,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 13,
+            'form_id' => 1,
+            'is_required' => 'required',
+            'code' => 'cs_rating',
+            'question' => '7. How would you rate our customer service?',
+            'placeholder' => null,
+            'answer_type' => 'radio',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 23,
+            'form_question_id' => 13,
+            'answer' => 'Poor',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 24,
+            'form_question_id' => 13,
+            'answer' => 'Good',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 25,
+            'form_question_id' => 13,
+            'answer' => 'Great',
+        ]);
+        FormQuestion::create([
+            'id' => 14,
+            'form_id' => 1,
+            'is_required' => 'sometimes',
+            'code' => 'cs_rating_reason',
+            'question' => 'Reasons why you answered so',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 26,
+            'form_question_id' => 14,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 15,
+            'form_id' => 1,
+            'is_required' => 'sometimes',
+            'code' => 'cs_suggestion',
+            'question' => '8. If you could suggest something(s) about our customer service, what would it be?',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 27,
+            'form_question_id' => 15,
+            'answer' => null,
+        ]);
+
+// FORM ID 2
+        Form::create([
+            'id' => 2,
+            'title' => 'CUSTOMER SATISFACTION SURVEY (Meeting 2)',
+            'description' => 'Dear our beloved customers,||Thank you for joining NUSIA’s free online classes!||To improve our services, we would like to hear from you by filling out this survey. Any inputs and suggestions to improve the teaching and learning activities are strongly encouraged.||The time needed for filling this survey is 5-10 minutes.',
+        ]);
+        FormQuestion::create([
+            'id' => 16,
+            'form_id' => 2,
+            'is_required' => 'required',
+            'code' => 'email',
+            'question' => 'Email address',
+            'placeholder' => 'Your email address',
+            'answer_type' => 'email',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 28,
+            'form_question_id' => 16,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 17,
+            'form_id' => 2,
+            'is_required' => 'required',
+            'code' => 'full_name',
+            'question' => 'Full Name',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 29,
+            'form_question_id' => 17,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 18,
+            'form_id' => 2,
+            'is_required' => 'required',
+            'code' => 'instructor_improve_bi_proficiency',
+            'question' => '1. To what extent do you agree with the following statement: The instructors help me to improve my bahasa Indonesia proficiency.',
+            'placeholder' => null,
+            'answer_type' => 'radio',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 30,
+            'form_question_id' => 18,
+            'answer' => 'Strongly agree',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 31,
+            'form_question_id' => 18,
+            'answer' => 'Agree',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 32,
+            'form_question_id' => 18,
+            'answer' => 'Partly Agree',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 33,
+            'form_question_id' => 18,
+            'answer' => 'Disagree',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 34,
+            'form_question_id' => 18,
+            'answer' => 'Strongly Disagree',
+        ]);
+        FormQuestion::create([
+            'id' => 19,
+            'form_id' => 2,
+            'is_required' => 'required',
+            'code' => 'instructor_improve_bi_proficiency_reason',
+            'question' => '2. Reasons why you answered so:',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 35,
+            'form_question_id' => 19,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 20,
+            'form_id' => 2,
+            'is_required' => 'required',
+            'code' => 'instructor_rating',
+            'question' => '3. How would you rate the instructors’ overall performance?',
+            'placeholder' => null,
+            'answer_type' => 'radio',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 36,
+            'form_question_id' => 20,
+            'answer' => 'Poor',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 37,
+            'form_question_id' => 20,
+            'answer' => 'Good',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 38,
+            'form_question_id' => 20,
+            'answer' => 'Great',
+        ]);
+        FormQuestion::create([
+            'id' => 21,
+            'form_id' => 2,
+            'is_required' => 'required',
+            'code' => 'instructor_rating_reason',
+            'question' => '4. Reasons why you answered so',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 39,
+            'form_question_id' => 21,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 22,
+            'form_id' => 2,
+            'is_required' => 'required',
+            'code' => 'instructor_what_to_improve',
+            'question' => '5. Give comments what to improve for our instructors (time management, teaching delivery, etc)',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 40,
+            'form_question_id' => 22,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 23,
+            'form_id' => 2,
+            'is_required' => 'required',
+            'code' => 'materials_meet_the_needs',
+            'question' => '1. How well do our teaching materials meet your needs?',
+            'placeholder' => null,
+            'answer_type' => 'radio',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 41,
+            'form_question_id' => 23,
+            'answer' => 'Poor',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 42,
+            'form_question_id' => 23,
+            'answer' => 'Good',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 43,
+            'form_question_id' => 23,
+            'answer' => 'Great',
+        ]);
+        FormQuestion::create([
+            'id' => 24,
+            'form_id' => 2,
+            'is_required' => 'required',
+            'code' => 'materials_meet_the_needs_reason',
+            'question' => '2. Reasons why you answered so',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 44,
+            'form_question_id' => 24,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 25,
+            'form_id' => 2,
+            'is_required' => 'required',
+            'code' => 'materials_need_of_change',
+            'question' => '3. If you could change or add something(s) about our teaching materials, what would it be?',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 45,
+            'form_question_id' => 25,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 26,
+            'form_id' => 2,
+            'is_required' => 'required',
+            'code' => 'materials_rating',
+            'question' => '4. Overall, How would you rate our teaching materials?',
+            'placeholder' => null,
+            'answer_type' => 'radio',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 46,
+            'form_question_id' => 26,
+            'answer' => 'Poor',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 47,
+            'form_question_id' => 26,
+            'answer' => 'Good',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 48,
+            'form_question_id' => 26,
+            'answer' => 'Great',
+        ]);
+        FormQuestion::create([
+            'id' => 27,
+            'form_id' => 2,
+            'is_required' => 'required',
+            'code' => 'materials_rating_reason',
+            'question' => '5. Reasons why you answered so',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 49,
+            'form_question_id' => 27,
+            'answer' => null,
+        ]);
+
+// FORM ID 3
+        Form::create([
+            'id' => 3,
+            'title' => 'CUSTOMER SATISFACTION SURVEY (Meeting 3)',
+            'description' => 'Dear our beloved customers,||Thank you for joining NUSIA’s free online classes!||To improve our services, we would like to hear from you by filling out this survey. Any inputs and suggestions to improve the teaching and learning activities and also the website are strongly encouraged. The time needed for filling this survey is 10 minutes.',
+        ]);
+        FormQuestion::create([
+            'id' => 28,
+            'form_id' => 3,
+            'is_required' => 'required',
+            'code' => 'email',
+            'question' => 'Email address',
+            'placeholder' => 'Your email address',
+            'answer_type' => 'email',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 50,
+            'form_question_id' => 28,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 29,
+            'form_id' => 3,
+            'is_required' => 'required',
+            'code' => 'full_name',
+            'question' => 'Full name',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 51,
+            'form_question_id' => 29,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 30,
+            'form_id' => 3,
+            'is_required' => 'required',
+            'code' => 'website_rating',
+            'question' => '1. How would you rate our website?',
+            'placeholder' => null,
+            'answer_type' => 'radio',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 52,
+            'form_question_id' => 30,
+            'answer' => 'Poor',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 53,
+            'form_question_id' => 30,
+            'answer' => 'Good',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 54,
+            'form_question_id' => 30,
+            'answer' => 'Great',
         ]);
     }
 }
