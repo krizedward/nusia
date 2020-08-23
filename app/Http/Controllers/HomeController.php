@@ -476,7 +476,7 @@ class HomeController extends Controller
         }
 
         if($this->is_instructor()){
-            $instructor = Instructor::where('user_id',$id)->get();
+            $instructor = Instructor::where('user_id',Auth::user()->id)->get();
             $countries = [
                 'Afghanistan', 'Albania', 'Algeria', 'Antigua and Barbuda', 'Argentina',
                 'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Azores',
