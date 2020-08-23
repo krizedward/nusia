@@ -577,5 +577,142 @@ class FormsTableSeeder extends Seeder
             'form_question_id' => 30,
             'answer' => 'Great',
         ]);
+        FormQuestion::create([
+            'id' => 31,
+            'form_id' => 3,
+            'is_required' => 'required',
+            'code' => 'website_rating_reason',
+            'question' => '2. Reasons why you answered so',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 55,
+            'form_question_id' => 31,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 32,
+            'form_id' => 3,
+            'is_required' => 'required',
+            'code' => 'website_need_of_change',
+            'question' => '3. If you could change or add something(s) about our website, what would it be?',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 56,
+            'form_question_id' => 32,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 33,
+            'form_id' => 3,
+            'is_required' => 'required',
+            'code' => 'schedule_rating',
+            'question' => '1. What do you think about the time schedule?',
+            'placeholder' => null,
+            'answer_type' => 'radio',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 57,
+            'form_question_id' => 33,
+            'answer' => 'Satisfied',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 58,
+            'form_question_id' => 33,
+            'answer' => 'Not Satisfied',
+        ]);
+        FormQuestion::create([
+            'id' => 34,
+            'form_id' => 3,
+            'is_required' => 'required',
+            'code' => 'schedule_suggestion',
+            'question' => '2. What would you suggest to us regarding the time schedule?',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 59,
+            'form_question_id' => 34,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 35,
+            'form_id' => 3,
+            'is_required' => 'required',
+            'code' => 'nusia_rating',
+            'question' => '1. How likely are you to learn Indonesian language again from us?',
+            'placeholder' => null,
+            'answer_type' => 'radio',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 60,
+            'form_question_id' => 35,
+            'answer' => 'Not likely at all',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 61,
+            'form_question_id' => 35,
+            'answer' => 'Likely',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 62,
+            'form_question_id' => 35,
+            'answer' => 'Very likely',
+        ]);
+        FormQuestion::create([
+            'id' => 36,
+            'form_id' => 3,
+            'is_required' => 'required',
+            'code' => 'nusia_rating_reason',
+            'question' => '2. Reasons why you answered so',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 63,
+            'form_question_id' => 36,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 37,
+            'form_id' => 3,
+            'is_required' => 'required',
+            'code' => 'nusia_spending_plan',
+            'question' => '3. How much money would you spend for our service per session?',
+            'placeholder' => null,
+            'answer_type' => 'radio',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 64,
+            'form_question_id' => 37,
+            'answer' => 'Less than $15',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 65,
+            'form_question_id' => 37,
+            'answer' => '$16-$20',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 66,
+            'form_question_id' => 37,
+            'answer' => 'More than $20',
+        ]);
+        FormQuestion::create([
+            'id' => 38,
+            'form_id' => 3,
+            'is_required' => 'required',
+            'code' => 'nusia_spending_plan_exact_value',
+            'question' => 'To be exact, how many $ would you spend per session?',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 67,
+            'form_question_id' => 38,
+            'answer' => null,
+        ]);
     }
 }
