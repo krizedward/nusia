@@ -3,7 +3,7 @@
 namespace App\Models;
 use App\Models\Form;
 use App\Models\FormQuestionChoice;
-use App\Models\FormQuestionResponse;
+use App\Models\FormResponse;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -43,8 +43,8 @@ class FormQuestion extends Model
     /**
      * Define a relationship.
      */
-    public function form_question_responses()
+    public function form_responses()
     {
-    	return $this->hasMany(FormQuestionResponse::class);
+    	return $this->hasMany(FormResponse::class);
     }
 }

@@ -1,30 +1,22 @@
 <?php
 
 namespace App\Models;
-use App\Models\SessionRegistration;
 use App\Models\FormResponse;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SessionRegistrationForm extends Model
+class FormResponseDetail extends Model
 {
     use SoftDeletes;
 
-    protected $table = "session_registration_forms";
+    protected $table = "form_response_details";
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'session_registration_id',
         'form_response_id',
+        'answer',
     ];
-
-    /**
-     * Define a relationship.
-     */
-    public function session_registration()
-    {
-    	return $this->belongsTo(SessionRegistration::class);
-    }
 
     /**
      * Define a relationship.

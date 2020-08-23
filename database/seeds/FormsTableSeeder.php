@@ -144,5 +144,62 @@ class FormsTableSeeder extends Seeder
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
+        FormQuestionChoice::create([
+            'id' => 13,
+            'form_question_id' => 7,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 8,
+            'form_id' => 1,
+            'is_required' => 'required',
+            'code' => 'materials_meet_the_needs',
+            'question' => '4. How well do our teaching materials meet your needs?',
+            'placeholder' => null,
+            'answer_type' => 'radio',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 14,
+            'form_question_id' => 8,
+            'answer' => 'Poor',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 15,
+            'form_question_id' => 8,
+            'answer' => 'Good',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 16,
+            'form_question_id' => 8,
+            'answer' => 'Great',
+        ]);
+        FormQuestion::create([
+            'id' => 9,
+            'form_id' => 1,
+            'is_required' => 'required',
+            'code' => 'materials_meet_the_needs_reason',
+            'question' => 'Reasons why you answered so',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 17,
+            'form_question_id' => 9,
+            'answer' => null,
+        ]);
+        FormQuestion::create([
+            'id' => 10,
+            'form_id' => 1,
+            'is_required' => 'required',
+            'code' => 'materials_need_of_change',
+            'question' => '5. If you could change or add something(s) about our teaching materials, what would it be?',
+            'placeholder' => 'Your answer',
+            'answer_type' => 'text',
+        ]);
+        FormQuestionChoice::create([
+            'id' => 18,
+            'form_question_id' => 10,
+            'answer' => null,
+        ]);
     }
 }
