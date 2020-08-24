@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Nusantara Indonesia</title>
     <!--css_custom-->
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <!-- Bootstrap files (jQuery first, then Popper.js, then Bootstrap JS) -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" type="text/javascript"></script>
@@ -81,7 +81,7 @@
                     <li>Flipped learning method</li>
                     <li>Experienced & professional instructors</li>
                 </ul>
-                <a href="{{ route('login') }}" class="btn btn-primary btn-lg"> JOIN NOW!</a>
+                <a href="{{ route('login') }}" class="btn btn-primary btn-lg"> Start My Class</a>
             </div>
             <!--end_col-md-6-->
             <div class="col-md-6">
@@ -99,12 +99,15 @@
                 <!-- Grid column -->
                 <div class="col-md-3 mt-md-0 mt-3" style="color: #ffffff">
                     <!-- Content -->
-                    <h5 class="text-uppercase">Footer Content</h5>
+                    <h5 class="text-uppercase"><a href="#" style="text-decoration:none; color:#ffffff;">Terms of Service</a></h5>
                 </div>
                 <!-- Grid column -->
                 <div class="col-md-6 mb-md-0 mb-3"  style="color: #ffffff">
                     <!-- Links -->
-                    <h5 class="text-uppercase">Terms of Service </h5>
+                    <h5 class="text-uppercase">Contact Us </h5>
+                    <p>
+                      Have a question? Please feel free to send us an email on <a href="mailto:nusia.helpdesk@gmail.com">nusia.helpdesk@gmail.com</a>
+                    </p>
                     <!--
                     <ul class="list-unstyled">
                         <li>
