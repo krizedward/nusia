@@ -369,7 +369,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 2,
             'is_required' => 'required',
             'code' => 'instructor_improve_bi_proficiency_reason',
-            'question' => '2. Reasons why you answered so:',
+            'question' => 'Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -383,7 +383,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 2,
             'is_required' => 'required',
             'code' => 'instructor_rating',
-            'question' => '3. How would you rate the instructors’ overall performance?',
+            'question' => '2. How would you rate the instructors’ overall performance?',
             'placeholder' => null,
             'answer_type' => 'radio',
         ]);
@@ -407,7 +407,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 2,
             'is_required' => 'required',
             'code' => 'instructor_rating_reason',
-            'question' => '4. Reasons why you answered so:',
+            'question' => 'Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -421,7 +421,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 2,
             'is_required' => 'required',
             'code' => 'instructor_what_to_improve',
-            'question' => '5. Give comments what to improve for our instructors (time management, teaching delivery, etc)',
+            'question' => '3. Give comments what to improve for our instructors (time management, teaching delivery, etc)',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -435,7 +435,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 2,
             'is_required' => 'required',
             'code' => 'materials_meet_the_needs',
-            'question' => '1. How well do our teaching materials meet your needs?',
+            'question' => '4. How well do our teaching materials meet your needs?',
             'placeholder' => null,
             'answer_type' => 'radio',
         ]);
@@ -459,7 +459,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 2,
             'is_required' => 'required',
             'code' => 'materials_meet_the_needs_reason',
-            'question' => '2. Reasons why you answered so:',
+            'question' => 'Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -473,7 +473,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 2,
             'is_required' => 'required',
             'code' => 'materials_need_of_change',
-            'question' => '3. If you could change or add something(s) about our teaching materials, what would it be?',
+            'question' => '5. If you could change or add something(s) about our teaching materials, what would it be?',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -487,7 +487,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 2,
             'is_required' => 'required',
             'code' => 'materials_rating',
-            'question' => '4. Overall, How would you rate our teaching materials?',
+            'question' => '6. Overall, How would you rate our teaching materials?',
             'placeholder' => null,
             'answer_type' => 'radio',
         ]);
@@ -511,7 +511,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 2,
             'is_required' => 'required',
             'code' => 'materials_rating_reason',
-            'question' => '5. Reasons why you answered so:',
+            'question' => 'Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -585,7 +585,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 3,
             'is_required' => 'required',
             'code' => 'website_rating_reason',
-            'question' => '2. Reasons why you answered so:',
+            'question' => 'Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -599,7 +599,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 3,
             'is_required' => 'required',
             'code' => 'website_need_of_change',
-            'question' => '3. If you could change or add something(s) about our website, what would it be?',
+            'question' => '2. If you could change or add something(s) about our website, what would it be?',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -613,7 +613,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 3,
             'is_required' => 'required',
             'code' => 'schedule_rating',
-            'question' => '1. What do you think about the time schedule?',
+            'question' => '3. What do you think about the time schedule?',
             'placeholder' => null,
             'answer_type' => 'radio',
         ]);
@@ -632,7 +632,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 3,
             'is_required' => 'required',
             'code' => 'schedule_suggestion',
-            'question' => '2. What would you suggest to us regarding the time schedule?',
+            'question' => '4. What would you suggest to us regarding the time schedule?',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -646,7 +646,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 3,
             'is_required' => 'required',
             'code' => 'nusia_rating',
-            'question' => '1. How likely are you to learn Indonesian language again from us?',
+            'question' => '5. How likely are you to learn Indonesian language again from us?',
             'placeholder' => null,
             'answer_type' => 'radio',
         ]);
@@ -670,7 +670,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 3,
             'is_required' => 'required',
             'code' => 'nusia_rating_reason',
-            'question' => '2. Reasons why you answered so:',
+            'question' => 'Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -684,7 +684,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 3,
             'is_required' => 'required',
             'code' => 'nusia_spending_plan',
-            'question' => '3. How much money would you spend for our service per session?',
+            'question' => '6. How much money would you spend for our service per session?',
             'placeholder' => null,
             'answer_type' => 'radio',
         ]);

@@ -131,6 +131,10 @@ class FormResponseController extends Controller
     {
         if($this->is_student()) {
             $session_registration = SessionRegistration::where('id', $session_registration_id)->first();
+            if($session_registration->course_registration->student_id != Auth::user()->student->id) {
+                return redirect()->back();
+            }
+
             $form = $session_registration->session->form;
 
             return view('form_responses.student_create',compact(
