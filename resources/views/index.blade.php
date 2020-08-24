@@ -57,7 +57,11 @@
                     </li>
                 </ul>-->
                 <ul class="navbar-nav ml-auto">
+                  @if(Auth::check())
+                    <li class="nav-item"><a class="nav-link" style="color: #000;" href="{{ route('login') }}"> DASHBOARD </a></li>
+                  @else
                     <li class="nav-item"><a class="nav-link" style="color: #000;" href="{{ route('login') }}"> LOGIN </a></li>
+                  @endif
                 </ul>
             </div> <!-- navbar-collapse.// -->
         </div><!-- container //  -->
@@ -67,16 +71,17 @@
         <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <h1 class="title">SPEAK LIKE NATIVE !</h1>
+                <h1 class="title">SPEAK LIKE A NATIVE!</h1>
                 <br>
-                <p><b style="font-size: 20px;">FREE BAHASA INDONESIA ONLINE COURSES!</b></p>
+                <p><b style="font-size: 20px;">FREE BAHASA INDONESIA ONLINE CLASSES!</b></p>
                 <ul>
-                    <li>Flexible Time</li>
-                    <li>Experienced and profesional language partners</li>
-                    <li>Private or in Groups</li>
-                    <li>Learning materials that meet students’ needs</li>
+                    <li>Flexible time (9 a.m. - 9 p.m. GMT+7)</li>
+                    <li>Communicative approach</li>
+                    <li>Engaging learning activities</li>
+                    <li>Flipped learning method</li>
+                    <li>Experienced and professional language instructors</li>
                 </ul>
-                <a href="{{ route('login') }}" class="btn btn-primary btn-lg"> TRY FOR FREE CLASS</a>
+                <a href="{{ route('login') }}" class="btn btn-primary btn-lg"> JOIN NOW!</a>
             </div>
             <!--end_col-md-6-->
             <div class="col-md-6">
