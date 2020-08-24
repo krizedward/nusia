@@ -162,12 +162,12 @@ Route::group(['middleware'=>'auth'], function() {
 
     // BAGIAN FORMULIR
         // tampilan admin
-        Route::get('/forms', 'FormsController@index')->name('forms.index');
-        Route::get('/forms/student/{session_registration_form_id}', 'FormsResponseController@show')->name('form_responses.show');
+        Route::get('/forms', 'FormController@index')->name('forms.index');
+        Route::get('/forms/student/{session_registration_form_id}', 'FormResponseController@show')->name('form_responses.show');
 
         // tampilan student
-        Route::get('/forms/student/create/{session_registration_id}', 'FormsResponseController@create')->name('form_responses.create');
-        Route::post('/forms/student/create/{session_registration_id}', 'FormsResponseController@store')->name('form_responses.store');
+        Route::get('/forms/student/create/{session_registration_id}', 'FormResponseController@create')->name('form_responses.create');
+        Route::post('/forms/student/create/{session_registration_id}', 'FormResponseController@store')->name('form_responses.store');
 
     /*end link*/
 
