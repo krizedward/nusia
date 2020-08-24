@@ -130,7 +130,7 @@ class FormResponseController extends Controller
     public function create($session_registration_id)
     {
         if($this->is_student()) {
-            $session_registration = SessionRegistration::where('id', $session_registration_id)->first()->get();
+            $session_registration = SessionRegistration::where('id', $session_registration_id)->first();
             $forms = $session_registration->session->form;
 
             return view('form_responses.student_create',compact(
@@ -147,7 +147,7 @@ class FormResponseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $session_registration_id)
     {
         $interest = array(
             $request->interest_1,
@@ -350,13 +350,13 @@ class FormResponseController extends Controller
     public function show($session_registration_id)
     {
         if($this->is_admin()) {
-            $session_registration = SessionRegistration::where('id', $session_registration_id)->first()->get();
+            $session_registration = SessionRegistration::where('id', $session_registration_id)->first();
 
             return view('form_responses.admin_show',compact(
                 'session_registration',
             ));
         } else if($this->is_instructor()) {
-            $session_registration = SessionRegistration::where('id', $session_registration_id)->first()->get();
+            $session_registration = SessionRegistration::where('id', $session_registration_id)->first();
             if($session_registration->session_registration_forms->form_response->form_question->form->is_accessible_by == 1) {
                 // Tidak memiliki izin akses.
                 return redirect()->route('home');

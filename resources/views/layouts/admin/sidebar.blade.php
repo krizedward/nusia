@@ -122,7 +122,7 @@
                 </li>
                 --}}
             @endif
-            {{-- End Student --}}
+            {{-- End Student Navigation --}}
             @if(Auth::user()->roles == 'Instructor')
                 <!-- Head_Navigasi -->
                     <li class="header">INSTRUCTOR NAVIGATION</li>
@@ -232,7 +232,7 @@
                         </a>
                     </li>--}}
             @endif
-            {{-- End Instructor --}}
+            {{-- End Instructor Navigation --}}
             @if(Auth::user()->roles == 'Admin')
                 <!-- Head_Navigasi -->
                 <li class="header">ADMIN NAVIGATION</li>
@@ -443,7 +443,32 @@
                 </li>
             End_Navigasi_Menu -->
             @endif
-            {{-- End Admin --}}
+            {{-- End Admin Navigation --}}
+
+          @if(Auth::user()->roles != 'Student')
+            {{-- Add Form Navigation --}}
+            <li class="header">FORM</li>
+
+            @if(Auth::user()->roles == 'Admin')
+            <li class="{{ set_active(['forms.index', 'forms.create', 'forms.show', 'forms.edit']) }}">
+                <a href="{{ route('forms.index')}}">
+                    <i class="fa fa-edit"></i> <span>Form</span>
+                </a>
+            </li>
+            <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
+                <a href="{{ route('form_responses.index')}}">
+                    <i class="fa fa-file-text-o"></i> <span>Form Response</span>
+                </a>
+            </li>
+            @elseif(Auth::user()->roles == 'Instructor')
+            <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
+                <a href="{{ route('form_responses.index')}}">
+                    <i class="fa fa-file-text-o"></i> <span>Form Response</span>
+                </a>
+            </li>
+            @endif
+          @endif
+
         </ul>
     </section>
     <!-- /.sidebar -->

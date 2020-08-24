@@ -82,7 +82,11 @@
                                 @elseif($dt->status == 'Present')
                                   <td><label class="label label-success">Present</label></td>
                                 @elseif($dt->status == 'Not Present')
-                                  <td><label class="label label-danger">Not Present</label></td>
+                                  @if($dt->session_registration_forms == null)
+                                    <td><label class="label label-info">Completing Form</label></td>
+                                  @else
+                                    <td><label class="label label-danger">Not Present</label></td>
+                                  @endif
                                 @endif
                                 @if($dt->session->link_zoom)
                                   <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
