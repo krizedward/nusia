@@ -11,7 +11,9 @@
 |
 */
 
-Route::redirect('/', 'login');
+//Route::redirect('/', 'login');
+
+Route::get('/', 'HomeController@landing_page')->name('index');
 
 Route::group(['middleware'=>'auth'], function() {
 
@@ -157,6 +159,16 @@ Route::group(['middleware'=>'auth'], function() {
     Route::post('student/registration-form', 'HomeController@store')->name('questionnaire.store');
     Route::get('profile/', 'HomeController@profile')->name('profile');
     Route::get('contact/', 'HomeController@contact')->name('contact');
+
+    // BAGIAN FORMULIR
+        // tampilan admin
+        Route::get('/forms', 'FormsController@index')->name('forms.index');
+        Route::get('/forms/student/{session_registration_form_id}', 'FormsResponseController@show')->name('form_responses.show');
+
+        // tampilan student
+        Route::get('/forms/student/create/{session_registration_id}', 'FormsResponseController@create')->name('form_responses.create');
+        Route::post('/forms/student/create/{session_registration_id}', 'FormsResponseController@store')->name('form_responses.store');
+
     /*end link*/
 
 	//menampilkan detail dari schedule

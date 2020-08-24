@@ -640,4 +640,9 @@ class HomeController extends Controller
     {
         return view('layouts.contact');
     }
+
+    public function landing_page()
+    {
+        return view('index');
+    }
 }
