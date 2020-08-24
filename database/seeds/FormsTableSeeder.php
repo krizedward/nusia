@@ -64,7 +64,7 @@ class FormsTableSeeder extends Seeder
         FormQuestionChoice::create([
             'id' => 3,
             'form_question_id' => 3,
-            'answer' => 'Strongly agree',
+            'answer' => 'Strongly Agree',
         ]);
         FormQuestionChoice::create([
             'id' => 4,
@@ -129,7 +129,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 1,
             'is_required' => 'required',
             'code' => 'instructor_rating_reason',
-            'question' => 'Reasons why you answered so',
+            'question' => 'Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -181,7 +181,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 1,
             'is_required' => 'required',
             'code' => 'materials_meet_the_needs_reason',
-            'question' => 'Reasons why you answered so',
+            'question' => 'Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -233,7 +233,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 1,
             'is_required' => 'required',
             'code' => 'materials_rating_reason',
-            'question' => 'Reasons why you answered so',
+            'question' => 'Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -271,7 +271,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 1,
             'is_required' => 'sometimes',
             'code' => 'cs_rating_reason',
-            'question' => 'Reasons why you answered so',
+            'question' => 'Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -342,7 +342,7 @@ class FormsTableSeeder extends Seeder
         FormQuestionChoice::create([
             'id' => 30,
             'form_question_id' => 18,
-            'answer' => 'Strongly agree',
+            'answer' => 'Strongly Agree',
         ]);
         FormQuestionChoice::create([
             'id' => 31,
@@ -407,7 +407,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 2,
             'is_required' => 'required',
             'code' => 'instructor_rating_reason',
-            'question' => '4. Reasons why you answered so',
+            'question' => '4. Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -459,7 +459,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 2,
             'is_required' => 'required',
             'code' => 'materials_meet_the_needs_reason',
-            'question' => '2. Reasons why you answered so',
+            'question' => '2. Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -511,7 +511,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 2,
             'is_required' => 'required',
             'code' => 'materials_rating_reason',
-            'question' => '5. Reasons why you answered so',
+            'question' => '5. Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -585,7 +585,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 3,
             'is_required' => 'required',
             'code' => 'website_rating_reason',
-            'question' => '2. Reasons why you answered so',
+            'question' => '2. Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
@@ -670,7 +670,7 @@ class FormsTableSeeder extends Seeder
             'form_id' => 3,
             'is_required' => 'required',
             'code' => 'nusia_rating_reason',
-            'question' => '2. Reasons why you answered so',
+            'question' => '2. Reasons why you answered so:',
             'placeholder' => 'Your answer',
             'answer_type' => 'text',
         ]);
