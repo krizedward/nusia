@@ -2,6 +2,7 @@
 
 namespace App\Models;
 use App\Models\FormQuestion;
+use App\Models\Session;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,6 +17,7 @@ class Form extends Model
     protected $fillable = [
         'title',
         'description',
+        'is_accessible_by',
     ];
 
     /**
@@ -24,5 +26,13 @@ class Form extends Model
     public function form_questions()
     {
     	return $this->hasMany(FormQuestion::class);
+    }
+
+    /**
+     * Define a relationship.
+     */
+    public function session()
+    {
+    	return $this->hasOne(Session::class);
     }
 }

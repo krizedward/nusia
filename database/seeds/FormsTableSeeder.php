@@ -22,6 +22,7 @@ class FormsTableSeeder extends Seeder
             'id' => 1,
             'title' => 'CUSTOMER SATISFACTION SURVEY (Meeting 1)',
             'description' => 'Dear our beloved customers,||Thank you for joining NUSIA’s free online classes!||To improve our services, we would like to hear from you by filling out this survey. Any inputs and suggestions to improve the teaching and learning activities are strongly encouraged.||The time needed for filling this survey is 5-10 minutes.',
+            'is_accessible_by' => 2,
         ]);
         FormQuestion::create([
             'id' => 1,
@@ -299,6 +300,7 @@ class FormsTableSeeder extends Seeder
             'id' => 2,
             'title' => 'CUSTOMER SATISFACTION SURVEY (Meeting 2)',
             'description' => 'Dear our beloved customers,||Thank you for joining NUSIA’s free online classes!||To improve our services, we would like to hear from you by filling out this survey. Any inputs and suggestions to improve the teaching and learning activities are strongly encouraged.||The time needed for filling this survey is 5-10 minutes.',
+            'is_accessible_by' => 2,
         ]);
         FormQuestion::create([
             'id' => 16,
@@ -524,6 +526,7 @@ class FormsTableSeeder extends Seeder
             'id' => 3,
             'title' => 'CUSTOMER SATISFACTION SURVEY (Meeting 3)',
             'description' => 'Dear our beloved customers,||Thank you for joining NUSIA’s free online classes!||To improve our services, we would like to hear from you by filling out this survey. Any inputs and suggestions to improve the teaching and learning activities and also the website are strongly encouraged. The time needed for filling this survey is 10 minutes.',
+            'is_accessible_by' => 1,
         ]);
         FormQuestion::create([
             'id' => 28,

@@ -8,6 +8,7 @@ use App\Models\Schedule;
 use App\Models\MaterialSession;
 use App\Models\Rating;
 use App\Models\SessionRegistration;
+use App\Models\Form;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -22,6 +23,7 @@ class Session extends Model
     protected $fillable = [
         'course_id',
         'schedule_id',
+        'form_id',
         'title',
         'description',
         'requirement',
@@ -54,6 +56,14 @@ class Session extends Model
     public function schedule()
     {
     	return $this->belongsTo(Schedule::class);
+    }
+
+    /**
+     * Define a relationship.
+     */
+    public function form()
+    {
+    	return $this->belongsTo(Form::class);
     }
 
     /**

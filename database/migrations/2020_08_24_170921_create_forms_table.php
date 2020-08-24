@@ -17,6 +17,7 @@ class CreateFormsTable extends Migration
             $table->bigIncrements('id');
             $table->string('title')->nullable();
             $table->text('description')->nullable();
+            $table->integer('is_accessible_by')->unsigned();
             $table->timestamps();
             $table->softDeletes()->nullable();
         });

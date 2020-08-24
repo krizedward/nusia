@@ -162,12 +162,23 @@ Route::group(['middleware'=>'auth'], function() {
 
     // BAGIAN FORMULIR
         // tampilan admin
-        Route::get('/forms', 'FormController@index')->name('forms.index');
-        Route::get('/forms/student/{session_registration_form_id}', 'FormResponseController@show')->name('form_responses.show');
+        Route::get('/forms', 'FormController@index')->name('forms.index');               // Melihat daftar "formnya" (formnya, bukan responnya).
+        Route::get('/forms/create', 'FormController@create')->name('forms.create');      // TIDAK DIGUNAKAN: Membuat "formnya" yang baru (formnya, bukan responnya).
+        Route::post('/forms/create', 'FormController@store')->name('forms.store');       // TIDAK DIGUNAKAN: Membuat "formnya" yang baru (formnya, bukan responnya).
+        Route::get('/forms/show/{id}', 'FormController@show')->name('forms.show');       // TIDAK DIGUNAKAN: Melihat struktur "formnya" secara detail (formnya, bukan responnya).
+        Route::get('/forms/edit/{id}', 'FormController@edit')->name('forms.edit');       // TIDAK DIGUNAKAN: Mengedit struktur "formnya" (formnya, bukan responnya).
+        Route::put('/forms/update/{id}', 'FormController@update')->name('forms.update'); // TIDAK DIGUNAKAN: Mengedit struktur "formnya" (formnya, bukan responnya).
+        Route::delete('/forms/{id}', 'FormController@destroy')->name('forms.destroy');   // TIDAK DIGUNAKAN: Menghapus struktur "formnya" (formnya DAN SEMUA RESPONNYA).
+
+        // tampilan admin dan/atau instructor (melihat atribut Forms::is_accessible_by)
+        Route::get('/forms/responses', 'FormResponseController@index')->name('form_responses.index'); // Menampilkan semua form respon.
+        Route::get('/forms/responses/form/{form_id}', 'FormResponseController@index_form')->name('form_responses.index_form'); // Menampilkan semua form respon untuk form id tertentu (bisa jadi tergabung dari banyak sesi berbeda).
+        Route::get('/forms/responses/session/{session_id}', 'FormResponseController@index_session')->name('form_responses.index_session'); // Menampilkan semua form respon untuk sesi tertentu (tentu saja memiliki form id yang sama).
+        Route::get('/forms/responses/{session_registration_id}', 'FormResponseController@show')->name('form_responses.show'); // 1 session_registration_id hanya memiliki 1 jenis form tertentu, sesuai dengan sesinya masing-masing
 
         // tampilan student
-        Route::get('/forms/student/create/{session_registration_id}', 'FormResponseController@create')->name('form_responses.create');
-        Route::post('/forms/student/create/{session_registration_id}', 'FormResponseController@store')->name('form_responses.store');
+        Route::get('/forms/student/create/{session_registration_id}', 'FormResponseController@create')->name('form_responses.create'); // Membuat form response yang baru.
+        Route::post('/forms/student/create/{session_registration_id}', 'FormResponseController@store')->name('form_responses.store');  // Membuat form response yang baru.
 
     /*end link*/
 

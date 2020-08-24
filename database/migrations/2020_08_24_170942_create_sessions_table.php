@@ -18,6 +18,7 @@ class CreateSessionsTable extends Migration
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('course_id');
             $table->unsignedBigInteger('schedule_id');
+            $table->unsignedBigInteger('form_id');
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->text('requirement')->nullable();
@@ -31,6 +32,10 @@ class CreateSessionsTable extends Migration
                 ->onDelete('cascade');
             $table->foreign('schedule_id')
                 ->references('id')->on('schedules')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('form_id')
+                ->references('id')->on('forms')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

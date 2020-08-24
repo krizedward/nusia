@@ -19,6 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->call(CourseLevelsTableSeeder::class);
         $this->call(CourseLevelDetailsTableSeeder::class);
         $this->call(CoursePackagesTableSeeder::class);
+
+        // add FORMS
+        $this->call(FormsTableSeeder::class);
+
         //create by edward
         $this->call(CoursesTableSeeder::class);
         $this->call(SchedulesTableSeeder::class);
@@ -30,9 +34,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MaterialSessionsTableSeeder::class);
         $this->call(RatingsTableSeeder::class);
         $this->call(SessionRegistrationsTableSeeder::class);
-
-        // add FORMS
-        $this->call(FormsTableSeeder::class);
 
 
         /*
