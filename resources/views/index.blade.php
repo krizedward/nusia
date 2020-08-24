@@ -76,7 +76,7 @@
                     <li>Private or in Groups</li>
                     <li>Learning materials that meet students’ needs</li>
                 </ul>
-                <a href="#" class="btn btn-primary btn-lg"> TRY FOR FREE CLASS</a>
+                <a href="{{ route('login') }}" class="btn btn-primary btn-lg"> TRY FOR FREE CLASS</a>
             </div>
             <!--end_col-md-6-->
             <div class="col-md-6">
