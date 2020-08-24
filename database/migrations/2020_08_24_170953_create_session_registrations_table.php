@@ -19,7 +19,7 @@ class CreateSessionRegistrationsTable extends Migration
             $table->unsignedBigInteger('session_id');
             $table->unsignedBigInteger('course_registration_id');
             $table->timestamp('registration_time')->nullable();
-            $table->enum('status', ['Not Present', 'Present']);
+            $table->enum('status', ['Not Present', 'Not Assigned', 'Should Submit Form', 'Present']);
             $table->timestamps();
             $table->softDeletes()->nullable();
 

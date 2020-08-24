@@ -77,21 +77,31 @@
                                 @else
                                   <td><i>N/A</i></td>
                                 @endif
-                                @if(now() < $schedule_time)
-                                  <td><label class="label label-warning">Upcoming</label></td>
-                                @elseif($dt->status == 'Present')
-                                  <td><label class="label label-success">Present</label></td>
-                                @elseif($dt->status == 'Not Present')
-                                  @if($dt->session_registration_forms == null)
-                                    <td><label class="label label-info">Completing Form</label></td>
+                                @if($dt->status == 'Not Assigned')
+                                  @if(now() < $schedule_time)
+                                    <td><label class="badge bg-gray">Upcoming</label></td>
                                   @else
-                                    <td><label class="label label-danger">Not Present</label></td>
+                                    <td><label class="badge bg-yellow">Ongoing</label></td>
                                   @endif
+                                @elseif($dt->status == 'Not Present')
+                                    <td><label class="badge bg-red">Not Present</label></td>
+                                @elseif($dt->status == 'Should Submit Form')
+                                  <td><label class="badge bg-purple">Should Submit Form</label></td>
+                                @elseif($dt->status == 'Present')
+                                  <td><label class="badge bg-green">Present</label></td>
                                 @endif
-                                @if($dt->session->link_zoom)
-                                  <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
+                                @if(now() <= $schedule_time->add(80, 'minutes'))
+                                  @if($dt->session->link_zoom)
+                                    <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
+                                  @else
+                                    <td><i>N/A</i></td>
+                                  @endif
                                 @else
-                                  <td><i>N/A</i></td>
+                                  @if($dt->status == 'Should Submit Form')
+                                    <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('form_responses.create', [$dt->id]) }}">Form Link</a></td>
+                                  @else
+                                    <td><i>N/A</i></td>
+                                  @endif
                                 @endif
                             </tr>
                             @endforeach

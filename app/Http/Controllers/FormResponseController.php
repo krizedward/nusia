@@ -131,10 +131,10 @@ class FormResponseController extends Controller
     {
         if($this->is_student()) {
             $session_registration = SessionRegistration::where('id', $session_registration_id)->first();
-            $forms = $session_registration->session->form;
-
+            $form = $session_registration->session->form;
+dd(SessionRegistration::first()->session);
             return view('form_responses.student_create',compact(
-                'forms'
+                'form'
             ));
         } else {
             return redirect()->route('home');

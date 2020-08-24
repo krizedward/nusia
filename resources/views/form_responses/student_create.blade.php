@@ -7,7 +7,7 @@
 @section('content')
                 <div class="box box-primary" id="guidelines">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Indonesian Language Proficiency Guidelines</h3>
+                        <h3 class="box-title">{{ $form->title }}</h3>
                     </div>
                     <div class="box-body">
                         <div class="row">

@@ -105,7 +105,7 @@ class CourseRegistrationController extends Controller
                 SessionRegistration::create([
                     'session_id' => $s->id,
                     'course_registration_id' => $course_registration_id,
-                    'status' => 'Not Present',
+                    'status' => 'Not Assigned',
                 ]);
             }
         } else {
