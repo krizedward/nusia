@@ -79,7 +79,7 @@
                     <li>Communicative approach</li>
                     <li>Engaging learning activities</li>
                     <li>Flipped learning method</li>
-                    <li>Experienced and professional language instructors</li>
+                    <li>Experienced & professional instructors</li>
                 </ul>
                 <a href="{{ route('login') }}" class="btn btn-primary btn-lg"> JOIN NOW!</a>
             </div>
