@@ -115,6 +115,7 @@ class HomeController extends Controller
             $session = Session
                 ::join('courses', 'sessions.course_id', 'courses.id')
                 ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
                 ->where('schedules.schedule_time', '>=', now())
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')
