@@ -34,9 +34,7 @@
                             <dd>If cannot attend a session, you cannot reschedule it.</dd>
                             <hr>
                             <dt style="font-size:18px;"><i class="fa fa-pencil margin-r-5"></i> Feedback</dt>
-                            <dd>After participating in EACH session, please give us your feedback by clicking this
-                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-info" href="https://docs.google.com/forms/d/e/1FAIpQLSeQcLORmDvpAuN-l0OmV5h5xRq0TkRpBbgCI-haYyl3cqCWrQ/viewform?usp=sf_link">Link</a>
-                            </dd>
+                            <dd>After participating in EACH session,<br>you are required to give us your feedback.</dd>
                         </dl>
                     </div>
                 </form>
