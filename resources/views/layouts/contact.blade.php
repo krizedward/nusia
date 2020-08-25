@@ -10,9 +10,9 @@
         <div class="alert alert-success alert-dismissable">
             <h4>
                 <i class="icon fa fa-comments"></i>
-                Email : nusia.id@gmail.com
+                Contact Us!
             </h4>
-            Jika mengalami kendala atau ada pertanyaan silahkan hubungi ke email kami
+            Have a question? Please feel free to send us an email on <a href="mailto:nusia.helpdesk@gmail.com">nusia.helpdesk@gmail.com</a>.
         </div>
     </div>
 </div>
