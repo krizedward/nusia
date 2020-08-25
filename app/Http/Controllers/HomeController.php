@@ -75,17 +75,25 @@ class HomeController extends Controller
                 ::join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->join('instructors', 'schedules.instructor_id_2', 'instructors.id')
                 ->join('users', 'instructors.user_id', 'users.id')
-                ->where('schedules.instructor_id', Auth::user()->instructor->id)
-                ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id)
+                ->where(function($q) {
+                    $q
+                        ->where('schedules.instructor_id', Auth::user()->instructor->id)
+                        ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id);
+                })
+                ->where('schedules.schedule_time', '>=', now())
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at', 'schedules.instructor_id_2', 'users.image_profile')
                 ->get();
             $sessions_order_by_schedule_time = Session
                 ::join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->join('instructors', 'schedules.instructor_id_2', 'instructors.id')
                 ->join('users', 'instructors.user_id', 'users.id')
-                ->where('schedules.instructor_id', Auth::user()->instructor->id)
-                ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id)
-                ->orderBy('schedule_time')
+                ->where(function($q) {
+                    $q
+                        ->where('schedules.instructor_id', Auth::user()->instructor->id)
+                        ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id);
+                })
+                ->where('schedules.schedule_time', '>=', now())
+                ->orderBy('schedules.schedule_time')
                 ->take(5)
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at', 'schedules.instructor_id_2', 'users.image_profile')
                 ->get();
@@ -108,6 +116,7 @@ class HomeController extends Controller
                 ::join('courses', 'sessions.course_id', 'courses.id')
                 ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where('schedules.schedule_time', '>=', now())
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')
                 ->get();
             $session_order_by_schedule_time = Session
@@ -115,7 +124,8 @@ class HomeController extends Controller
                 ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
                 ->join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
-                ->orderBy('schedule_time')
+                ->where('schedules.schedule_time', '>=', now())
+                ->orderBy('schedules.schedule_time')
                 ->take(5)
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')
                 ->get();
