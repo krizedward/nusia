@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title','Instructor | Session')
+@section('title','Instructor | Schedule')
 
 @include('layouts.css_and_js.table')
 
@@ -86,10 +86,10 @@
 
 {{--Schedule di Sidebar--}}
 @section('content-header')
-    <h1><b>Schedule Group</b></h1>
+    <h1><b>Schedule</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li class="active">Schedule Group</li>
+        <li class="active">Schedule</li>
     </ol>
 @stop
 
@@ -104,7 +104,25 @@
                     <div class="box-body">
                         <dl>
                             <dt style="font-size:18px;"><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
-                            <dd>You can join 3 sessions of free trial courses with NUSIA.</dd>
+                            <dd>
+                              You are appointed to teach<br>in
+                              <?php
+                                arr = [];
+                                foreach($data as $dt) {
+                                  foreach($dt->session as $s) {
+                                    array_push($arr, $s->course->id);
+                                    array_unique($arr);
+                                    if(count($arr) == 2) break;
+                                  }
+                                  if(count($arr) == 2) break;
+                                }
+                              ?>
+                              @if(count($arr) == 1)
+                                this NUSIA class.
+                              @else
+                                these NUSIA classes.
+                              @endif
+                            </dd>
                         </dl>
                         <hr>
                         <dl>
