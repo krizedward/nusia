@@ -176,6 +176,11 @@ Route::group(['middleware'=>'auth'], function() {
         Route::get('/forms/responses/session/{session_id}', 'FormResponseController@index_session')->name('form_responses.index_session'); // Menampilkan semua form respon untuk sesi tertentu (tentu saja memiliki form id yang sama).
         Route::get('/forms/responses/{session_registration_id}', 'FormResponseController@show')->name('form_responses.show'); // 1 session_registration_id hanya memiliki 1 jenis form tertentu, sesuai dengan sesinya masing-masing
 
+        // TEMP REDIRECT FOR DEVELOPMENT PURPOSES
+        Route::redirect('/forms/responses', '/home');
+        Route::redirect('/forms/responses/form', '/home');
+        Route::redirect('/forms/responses/session', '/home');
+
         // tampilan student
         Route::get('/forms/student/create/{session_registration_id}', 'FormResponseController@create')->name('form_responses.create'); // Membuat form response yang baru.
         Route::post('/forms/student/create/{session_registration_id}', 'FormResponseController@store')->name('form_responses.store');  // Membuat form response yang baru.
