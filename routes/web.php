@@ -180,10 +180,11 @@ Route::group(['middleware'=>'auth'], function() {
         Route::get('/forms/student/create/{session_registration_id}', 'FormResponseController@create')->name('form_responses.create'); // Membuat form response yang baru.
         Route::post('/forms/student/create/{session_registration_id}', 'FormResponseController@store')->name('form_responses.store');  // Membuat form response yang baru.
 
+    // BAGIAN ABSENSI
         // tampilan instructor (juga admin) untuk form absensi. untuk melihat tampilan ini, instructor (khusus instructor) harus mengakses melalui tampilan session_registrations.index
         // (hanya dapat diakses oleh kedua instructor yang mengajar pada kelas ybs. hanya 1 instructor saja yang perlu mengisi form absensi)
-        Route::get('/forms/student/attendance/{session_id}', 'AttendanceController@edit')->name('form_responses.edit');
-        Route::put('/forms/student/attendance/{session_id}', 'AttendanceController@update')->name('form_responses.store');
+        Route::get('/forms/student/attendance/{session_id}', 'AttendanceController@edit')->name('attendances.edit');
+        Route::put('/forms/student/attendance/{session_id}', 'AttendanceController@update')->name('attendances.update');
 
     /*end link*/
 

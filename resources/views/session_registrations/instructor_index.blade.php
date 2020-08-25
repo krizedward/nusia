@@ -65,7 +65,8 @@
                             <th>Level</th>
                             <th>Session</th>
                             <th>Meeting Time</th>
-                            <th style="width: 40px">Link</th>
+                            <th style="width: 90px">Meeting Link</th>
+                            <th style="width: 40px">Attendance</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -87,10 +88,11 @@
                               <td><i>N/A</i></td>
                             @endif
                             @if($dt->link_zoom)
-                                <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Link</a></td>
+                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Link</a></td>
                             @else
-                                <td><i>N/A</i></td>
+                                <td class="text-center"><i>N/A</i></td>
                             @endif
+                            <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('attendances.edit', $dt->id) }}">Link</a></td>
                         </tr>
                         @endforeach
                         </tbody>
