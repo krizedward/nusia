@@ -82,6 +82,13 @@ class MaterialPublicsTableSeeder extends Seeder
             'description' => null,
             'path' => '10_WORKSHEET (2nd meeting).pdf',
         ]);
+        MaterialPublic::create([
+            'code' => 'MP-0000011',
+            'course_package_id' => 3,
+            'name' => 'WORKSHEET (3rd meeting)',
+            'description' => null,
+            'path' => '11_WORKSHEET (3rd meeting).pdf',
+        ]);
 
         /*
         factory(App\Models\MaterialPublic::class, 243)
