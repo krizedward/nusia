@@ -35,8 +35,8 @@
                                                 <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
                                                 <dd>You must download the materials before each session starts.</dd>
                                             </dl>
-                                            <hr>
-                                            <!--dl>
+                                            <!--hr>
+                                            <dl>
                                                 <dt><i class="fa fa-file-text-o margin-r-5"></i> Note</dt>
                                                 <dd>You can access the materials<br>on <b style="color:#ff0000;">August 21, 2020</b>.</dd>
                                             </dl-->
