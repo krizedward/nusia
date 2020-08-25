@@ -43,7 +43,7 @@ class CourseLevelsTableSeeder extends Seeder
         CourseLevel::create ([
             'code'        => 'CL-002',
             'name'        => 'Intermediate',
-            'description' => 'You are identified as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language. In free online classes, you will learn about introduction, diseases and its symptoms, as well as Indonesian traditional culinary.',
+            'description' => 'You are categorized as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language. In free online classes, you are going to learn about introduction, diseases and its symptoms, as well as Indonesian traditional culinary.',
             'created_at'  => now(),
             'updated_at'  => null
         ]);
