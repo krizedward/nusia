@@ -91,9 +91,13 @@
                     <!-- /.table-responsive -->
                 </div>
                 <!-- /.box-body -->
-                <!--div class="box-footer text-center">
-                  <a href="{{ route('session_registrations.index') }}" class="uppercase">View All Sessions</a>
-                </div-->
+                {{--
+                @if($sessions->count() > 0)
+                  <div class="box-footer text-center">
+                    <a href="{{ route('session_registrations.index') }}" class="uppercase">View All Sessions</a>
+                  </div>
+                @endif
+                --}}
                 <!-- /.box-footer -->
             </div>
             <!-- /.box -->
@@ -185,15 +189,17 @@
                               @endforeach
                               @if($i == 0)
                                 <div style="color:#555555">
-                                  No courses available. You may join one first!
+                                  No courses available.
                                 </div>
                               @endif
                             </ul>
                         </div>
                         <!-- /.box-body -->
-                        <div class="box-footer text-center">
-                          <a href="{{ route('session_registrations.index') }}" class="uppercase">View All Sessions</a>
-                        </div>
+                        @if($sessions->count() > 0)
+                          <div class="box-footer text-center">
+                            <a href="{{ route('session_registrations.index') }}" class="uppercase">View All Sessions</a>
+                          </div>
+                        @endif
                         <!-- /.box-footer -->
                     </div>
                     <!-- /.box -->
