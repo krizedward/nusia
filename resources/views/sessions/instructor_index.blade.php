@@ -107,13 +107,9 @@
                             <dd>
                               You are appointed to teach<br>in
                               <?php
-                                arr = [];
+                                $arr = [];
                                 foreach($data as $dt) {
-                                  foreach($dt->session as $s) {
-                                    array_push($arr, $s->course->id);
-                                    array_unique($arr);
-                                    if(count($arr) == 2) break;
-                                  }
+                                  if(!in_array($dt->id, $arr)) array_push($arr, $dt->id);
                                   if(count($arr) == 2) break;
                                 }
                               ?>
@@ -124,11 +120,11 @@
                               @endif
                             </dd>
                         </dl>
-                        <hr>
+                        <!--hr>
                         <dl>
                             <dt style="font-size:18px;"><i class="fa fa-file-text-o margin-r-5"></i> Note</dt>
                             <dd>Before starting each session, you must download the main materials.</dd>
-                        </dl>
+                        </dl-->
                     </div>
                 </form>
             </div>
@@ -136,26 +132,26 @@
         <div class="col-md-9">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Courses Class</h3>
+                    <h3 class="box-title">Schedule</h3>
                 </div>
                 <form>
                     <div class="box-body">
                         <table id="example1" class="table no-margin">
                             <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Course Name</th>
+                                <th>Class</th>
                                 <th>Level</th>
-                                <th>Slot</th>
+                                <th>Number of Students Registered</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($data as $dt)
                             <tr>
-                                <td>{{ $dt->session->code }}</td>
-                                <td>{{ $dt->session->course->course_package->course_level->name }}</td>
-                                <td>{{ $dt->session->course->course_package->course_type->name }}</td>
-                                <td>{{ $dt->session->course->course_package->course_type->count_student_max }} Student</td>
+                                <td>{{ $dt->title }}</td>
+                                <td>{{ $dt->course_package->course_level->name }}</td>
+                                <td>{{ $dt->course_registrations->count() }}/{{ $dt->course_package->course_type->count_student_max }}</td>
+                                <td><a class="btn btn-flat btn-xs btn-success" href="{{ route('course_registrations.index_by_course_id', $dt->id) }}">View Students</a></td>
                             </tr>
                             @endforeach
                             </tbody>

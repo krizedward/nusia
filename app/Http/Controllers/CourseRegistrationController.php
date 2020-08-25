@@ -49,6 +49,12 @@ class CourseRegistrationController extends Controller
         return view('registrations.courses.index', compact('data'));
     }
 
+    public function index_by_course_id($course_id)
+    {
+        $data = Course::findOrFail($course_id);
+        return view('course_registrations.instructor_index_by_course_id', compact('data'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

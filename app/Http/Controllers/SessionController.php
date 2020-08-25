@@ -51,13 +51,17 @@ class SessionController extends Controller
         }
 
         if ($this->is_instructor()){
-            $data = Schedule
-                ::where(function($q) {
+            $data = Course
+                ::join('sessions', 'courses.id', 'sessions.course_id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where(function($q) {
                     $q
-                        ->where('instructor_id', Auth::user()->instructor->id)
-                        ->orWhere('instructor_id_2', Auth::user()->instructor->id);
+                        ->where('schedules.instructor_id', Auth::user()->instructor->id)
+                        ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id);
                 })
-                ->where('status', 'Busy')
+                ->where('schedules.status', 'Busy')
+                ->distinct()
+                ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at')
                 ->get();
             return view('sessions.instructor_index', compact('data'));
         }

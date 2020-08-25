@@ -191,6 +191,9 @@ Route::group(['middleware'=>'auth'], function() {
         Route::get('/forms/student/attendance/{session_id}', 'AttendanceController@edit')->name('attendances.edit');
         Route::put('/forms/student/attendance/{session_id}', 'AttendanceController@update')->name('attendances.update');
 
+        // tampilan instructor (juga admin) untuk melihat pendaftaran mahasiswa pada satu kelas.
+        Route::get('/class-registration/{course_id}', 'CourseRegistrationController@index_by_course_id')->name('course_registrations.index_by_course_id');
+
     /*end link*/
 
 	//menampilkan detail dari schedule
