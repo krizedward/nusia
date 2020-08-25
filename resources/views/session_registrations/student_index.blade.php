@@ -80,6 +80,8 @@
                                 @if($dt->status == 'Not Assigned')
                                   @if(now() < $schedule_time)
                                     <td><label class="badge bg-gray">Upcoming</label></td>
+                                  @elseif(now() > $schedule_time->add(80, 'minutes'))
+                                    <td><label class="badge bg-red">Not Present</label></td>
                                   @else
                                     <td><label class="badge bg-yellow">Ongoing</label></td>
                                   @endif
