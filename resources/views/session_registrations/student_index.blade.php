@@ -15,6 +15,15 @@
 @stop
 
 @section('content')
+  @if(session('form_complete'))
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-success alert-dismissible">
+          <h4><i class="icon fa fa-check"></i> {{ session('form_complete') }}</h4>
+        </div>
+      </div>
+    </div>
+  @endif
     <div class="row">
         <div class="col-md-4">
             <div class="box box-warning">

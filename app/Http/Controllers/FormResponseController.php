@@ -239,6 +239,7 @@ class FormResponseController extends Controller
             $session_registration->update([
                 'status' => 'Present',
             ]);
+            session(['form_complete' => 'Thank you for your participation in completing the feedback form.']);
         } else {
             // Tidak memiliki izin akses.
         }
