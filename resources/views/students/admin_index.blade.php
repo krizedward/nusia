@@ -16,21 +16,16 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-warning">
-                <div class="box-header">
-                    <a href="{{ route('students.create') }}" class="btn btn-flat btn-sm btn-primary">+ Add Student</a>
-                </div>
+                <div class="box-header"></div>
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                         <tr>
                             <th>Name</th>
                             <th>Profile Image</th>
-                            <th>Age</th>
                             <th>Job Status</th>
-                            <th>Interest</th>
                             <th>Target Language Experience</th>
                             <th>Indonesian Language Proficiency</th>
-                            <th>Created At</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -38,32 +33,14 @@
                         @foreach($data as $dt)
                             <tr>
                                 <td>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</td>
+
                                 @if($dt->user->image_profile)
                                     <td><img src="{{ asset('uploads/user.jpg') }}" style="width: 50px"></td>
                                 @else
                                     <td><i>Not Available</i></td>
                                 @endif
-                                @if($dt->age)
-                                    <td>{{ $dt->age }}</td>
-                                @else
-                                    <td><i>Not Available</i></td>
-                                @endif
+                                {{--end if--}}
                                 <td>{{ $dt->status_job }}</td>
-                                @if($dt->interest)
-                                    <?php
-                                    $interest = explode(', ', $dt->interest);
-                                    ?>
-                                    <td>
-                                        @for($i = 0; $i < count($interest); $i = $i + 1)
-                                            {{ $i + 1 }}. {{ $interest[$i] }}
-                                            @if($i + 1 != count($interest))
-                                                <br>
-                                            @endif
-                                        @endfor
-                                    </td>
-                                @else
-                                    <td><i>Not Available</i></td>
-                                @endif
                                 @if($dt->target_language_experience != 'Others')
                                     <td>{{ $dt->target_language_experience }}</td>
                                 @else
@@ -76,12 +53,8 @@
                                         @endif
                                     </td>
                                 @endif
+                                {{--end if--}}
                                 <td>{{ $dt->indonesian_language_proficiency }}</td>
-                                @if($dt->created_at)
-                                    <td>{{ $dt->created_at }} GMT+0</td>
-                                @else
-                                    <td><i>Not Available</i></td>
-                                @endif
                                 <td>
                                     <a class="btn btn-flat btn-xs btn-success" href="{{ route('students.show', $dt->id) }}">Detail</a>
                                     <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>

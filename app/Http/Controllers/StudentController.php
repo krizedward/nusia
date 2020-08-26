@@ -233,6 +233,12 @@ class StudentController extends Controller
             // Data yang dicari tidak ditemukan.
             // Return?
         }
+        if ($this->is_admin()){
+
+            $student = Student::all();
+            return view('students.admin_show',compact('student'));
+        }
+
         return view('users.students.show', compact('data'));
     }
 
