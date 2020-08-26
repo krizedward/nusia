@@ -39,7 +39,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 {{--Form Kiri--}}
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     @if ($errors->get('email'))
                                         <div class="form-group has-error">
                                     @else
@@ -48,19 +48,6 @@
                                         <label for="email">Email</label>
                                             <input name="email" type="email" class="@error('email') is-invalid @enderror form-control" disabled value="{{ Auth::user()->email }}">
                                             @error('email')
-                                            <p style="color:red">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-                                </div>
-                                <div class="col-md-6">
-                                    @if ($errors->get('password'))
-                                        <div class="form-group has-error">
-                                    @else
-                                        <div class="form-group">
-                                    @endif
-                                        <label for="password">Password</label>
-                                            <input name="password" type="password" class="@error('password') is-invalid @enderror form-control" disabled value="{{ Auth::user()->password }}">
-                                            @error('password')
                                             <p style="color:red">{{ $message }}</p>
                                             @enderror
                                         </div>

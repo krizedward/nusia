@@ -36,7 +36,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: #ffffff;">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{ url('/') }}">
                 <img src="{{ asset('img/logo.png') }}" style="width: 50%">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav">
@@ -81,7 +81,11 @@
                     <li>Flipped learning method</li>
                     <li>Experienced & professional instructors</li>
                 </ul>
-                <a href="{{ route('login') }}" class="btn btn-primary btn-lg"> Start My Class</a>
+                @if(Auth::check())
+                  <a href="{{ route('home') }}" class="btn btn-primary btn-lg"> Go To Dashboard</a>
+                @else
+                  <a href="{{ route('login') }}" class="btn btn-primary btn-lg"> Start My Class</a>
+                @endif
             </div>
             <!--end_col-md-6-->
             <div class="col-md-6">

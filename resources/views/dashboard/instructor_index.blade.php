@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Our time: <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm A') }}</span></h4>
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Western Indonesian time: <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm A') }}</span></h4>
             </div>
         </div>
         <div class="col-md-6">
@@ -44,7 +44,7 @@
             <!-- TABLE: Sessions Instructor -->
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Sessions</h3>
+                    <h3 class="box-title"><b>Sessions</b></h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -138,7 +138,7 @@
                 <div class="col-md-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Upcoming Sessions</h3>
+                            <h3 class="box-title"><b>Upcoming Sessions</b></h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -203,6 +203,104 @@
                         <!-- /.box-footer -->
                     </div>
                     <!-- /.box -->
+            <!-- Materials -->
+            <div class="box box-success">
+              <div class="box-header with-border">
+                <h3 class="box-title"><b>Materials</b></h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                <div class="box-group" id="accordion">
+                  <?php
+                    $arr = [];
+                  ?>
+                  @foreach($sessions as $s)
+                    <?php
+                      if(!in_array($s->course->id, $arr)) {
+                        array_push($arr, $s->course->id);
+                      } else continue;
+                    ?>
+                    <div class="panel box box-default">
+                      <div class="box-header with-border">
+                        <p class="box-title" style="display:inline;">
+                          <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ $s->course->code }}{{ $s->course->id }}" aria-expanded="false" class="collapsed" style="color:#555555;">
+                            @if($s->course->title)
+                              <p>{{ $s->course->title }}</p>
+                            @else
+                              <p>{{ $s->course->course_package->title }}</p>
+                            @endif
+                          </a>
+                        </p>
+                      </div>
+                      <?php $i = 0; ?>
+                      <div id="collapse{{ $s->course->code }}{{ $s->course->id }}" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                        <div class="box-body">
+                          <ul class="products-list product-list-in-box">
+                            @foreach($s->course->course_package->material_publics as $dt)
+                              @if($dt->path)
+                                <?php $i++ ?>
+                                <li class="item">
+                                  <div class="product-img">
+                                    <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="Product Image">
+                                  </div>
+                                  <div class="product-info">
+                                    @if($s->course->title)
+                                      <div class="product-title">{{ $s->course->title }} - {{ $dt->name }}</div>
+                                    @else
+                                      <div class="product-title">{{ $s->course->course_package->title }} - {{ $dt->name }}</div>
+                                    @endif
+                                    <span class="product-description">
+                                      <a target="_blank" rel="noopener noreferrer" href="{{ route('materials.download', ['Public', $dt->id]) }}">Download</a>
+                                    </span>
+                                  </div>
+                                </li>
+                                <!-- /.item -->
+                              @endif
+                            @endforeach
+                            @foreach($s->course->sessions as $ss)
+                              @foreach($ss->material_sessions as $dt)
+                                @if($dt->path)
+                                  <?php $i++ ?>
+                                  <li class="item">
+                                    <div class="product-img">
+                                      <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="Product Image">
+                                    </div>
+                                    <div class="product-info">
+                                      @if($ss->title)
+                                        <div class="product-title">{{ $ss->title }} - {{ $dt->name }}</div>
+                                      @elseif($ss->course->title)
+                                        <div class="product-title">{{ $ss->course->title }} - {{ $dt->name }}</div>
+                                      @else
+                                        <div class="product-title">{{ $ss->course->course_package->title }} - {{ $dt->name }}</div>
+                                      @endif
+                                      <span class="product-description">
+                                        <a target="_blank" rel="noopener noreferrer" href="{{ route('materials.download', ['Session', $dt->id]) }}">Download</a>
+                                      </span>
+                                    </div>
+                                  </li>
+                                  <!-- /.item -->
+                                @endif
+                              @endforeach
+                            @endforeach
+                            @if($i == 0)
+                              <div style="color:#555555">
+                                No materials for this course.
+                              </div>
+                            @endif
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  @endforeach
+                </div>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer text-center">
+                <a href="{{ route('materials.index') }}" class="uppercase">View All Materials</a>
+              </div>
+              <!-- /.box-footer -->
+            </div>
+            <!-- /.box -->
                 </div>
                 <!-- /.col -->
 

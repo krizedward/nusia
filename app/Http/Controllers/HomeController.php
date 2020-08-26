@@ -10,6 +10,7 @@ use App\Models\Instructor;
 use App\Models\Student;
 use App\Models\Session;
 use App\Models\Schedule;
+use App\Models\MaterialPublic;
 use App\Models\MaterialSession;
 use App\Models\CourseRegistration;
 use Str;
@@ -97,8 +98,15 @@ class HomeController extends Controller
                 ->take(5)
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at', 'schedules.instructor_id_2', 'users.image_profile')
                 ->get();
+
+            $sessions = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where('schedules.instructor_id', Auth::user()->instructor->id)
+                ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id)
+                ->get();
+
             $is_local_access = config('database.connections.mysql.username') == 'root';
-            return view('dashboard.instructor_index', compact('sessions', 'sessions_order_by_schedule_time', 'timeNusia', 'timeStudent', 'is_local_access'));
+            return view('dashboard.instructor_index', compact('sessions', 'sessions_order_by_schedule_time', 'timeNusia', 'timeStudent', 'sessions', 'is_local_access'));
         }
 
         if($this->is_student()) {

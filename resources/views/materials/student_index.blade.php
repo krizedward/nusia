@@ -17,9 +17,9 @@
         <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#free_trial" data-toggle="tab">Free Classes</a></li>
-                    <!--li><a href="#private" data-toggle="tab">Private</a></li>
-                    <li><a href="#group" data-toggle="tab">Group</a></li-->
+                    <li class="active"><a href="#free_trial" data-toggle="tab"><b>Free Classes</b></a></li>
+                    <!--li><a href="#private" data-toggle="tab"><b>Private</b></a></li>
+                    <li><a href="#group" data-toggle="tab"><b>Group</b></a></li-->
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="free_trial">
@@ -33,7 +33,7 @@
                                         <div class="box-body">
                                             <dl>
                                                 <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
-                                                <dd>You must download the materials before each session starts.</dd>
+                                                <dd style="color:#ff0000;">You must download the materials before each session starts.</dd>
                                             </dl>
                                             <!--hr>
                                             <dl>
@@ -47,7 +47,7 @@
                             <div class="col-md-9">
                                 <div class="box">
                                     <div class="box-header">
-                                        <h3 class="box-title">Main Materials</h3>
+                                        <h3 class="box-title"><b>Main Materials</b></h3>
                                         <div class="box-tools pull-right">
                                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                             </button>
@@ -59,7 +59,6 @@
                                             <tr>
                                                 <th>Level</th>
                                                 <th>File Name</th>
-                                                <th>Learning Outcome</th>
                                                 <th>Data Type</th>
                                                 <th style="width: 40px">Link</th>
                                             </tr>
@@ -67,11 +66,6 @@
                                               <tr>
                                                 <td>{{ $mp->course_package->course_level->name }}</td>
                                                 <td>{{ $mp->name }}</td>
-                                                @if($mp->description)
-                                                  <td>{{ $mp->description }}</td>
-                                                @else
-                                                  <td><i>Not Available</i></td>
-                                                @endif
                                                 @if($mp->path)
                                                   <td>{{ strtoupper( substr($mp->path, strrpos($mp->path, '.', 0) + 1) ) }}</td>
                                                   <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('materials.download', ['Public', $mp->id]) }}">Download</a></td>
@@ -89,7 +83,7 @@
                                 </div>
                                 <div class="box">
                                     <div class="box-header">
-                                        <h3 class="box-title">Supplementary Materials</h3>
+                                        <h3 class="box-title"><b>Supplementary Materials</b></h3>
                                         <div class="box-tools pull-right">
                                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                             </button>
@@ -103,7 +97,6 @@
                                                 <th>Level</th>
                                                 <th>Session</th>
                                                 <th>File Name</th>
-                                                <th>Learning Outcome</th>
                                                 <th>Data Type</th>
                                                 <th style="width: 40px">Link</th>
                                             </tr>
@@ -113,11 +106,6 @@
                                                 <td>{{ $ms->session->course->course_package->course_level->name }}</td>
                                                 <td>{{ $ms->session->title }}</td>
                                                 <td>{{ $ms->name }}</td>
-                                                @if($ms->description)
-                                                  <td>{{ $ms->description }}</td>
-                                                @else
-                                                  <td><i>Not Available</i></td>
-                                                @endif
                                                 @if($ms->path)
                                                   <td>{{ strtoupper( substr($ms->path, strrpos($ms->path, '.', 0) + 1) ) }}</td>
                                                   <td><a {{--target="_blank" rel="noopener noreferrer"--}} class="btn btn-flat btn-xs btn-success" href="{{ route('materials.download', ['Session', $ms->id]) }}">Download</a></td>
@@ -162,7 +150,7 @@
                             <div class="col-md-9">
                                 <div class="box">
                                     <div class="box-header">
-                                        <h3 class="box-title">Main Materials</h3>
+                                        <h3 class="box-title"><b>Main Materials</b></h3>
                                         <div class="box-tools pull-right">
                                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                             </button>
@@ -173,7 +161,6 @@
                                             <tr>
                                                 <th style="width: 10px">#</th>
                                                 <th>File Name</th>
-                                                <th>Learning Outcome</th>
                                                 <th>Data Type</th>
                                                 <th style="width: 40px">Link</th>
                                             </tr>
@@ -197,11 +184,6 @@
                                                 <tr>
                                                   <td>{{ $i++ }}</td>
                                                   <td>{{ $mp->name }}</td>
-                                                  @if($mp->description)
-                                                    <td>{{ $mp->description }}</td>
-                                                  @else
-                                                    <td><i>Not Available</i></td>
-                                                  @endif
                                                   @if($mp->path)
                                                     <td>{{ strtoupper( substr($mp->path, strrpos($mp->path, '.', 0) + 1) ) }}</td>
                                                     <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('materials.download', ['Public', $mp->id]) }}">Download</a></td>
@@ -231,7 +213,7 @@
                                 </div>
                                 <div class="box">
                                     <div class="box-header">
-                                        <h3 class="box-title">Supplementary Materials</h3>
+                                        <h3 class="box-title"><b>Supplementary Materials</b></h3>
                                         <div class="box-tools pull-right">
                                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                             </button>
@@ -339,7 +321,7 @@
                             <div class="col-md-9">
                                 <div class="box">
                                     <div class="box-header">
-                                        <h3 class="box-title">Main Materials</h3>
+                                        <h3 class="box-title"><b>Main Materials</b></h3>
                                         <div class="box-tools pull-right">
                                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                             </button>
@@ -408,7 +390,7 @@
                                 </div>
                                 <div class="box">
                                     <div class="box-header">
-                                        <h3 class="box-title">Supplementary Materials</h3>
+                                        <h3 class="box-title"><b>Supplementary Materials</b></h3>
                                         <div class="box-tools pull-right">
                                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                             </button>
