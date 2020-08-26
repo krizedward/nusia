@@ -52,7 +52,7 @@
         <div class="col-md-8">
             <div class="box box-warning">
                 <div class="box-header">
-                    <h3 class="box-title">Class Sessions</h3>
+                    <h3 class="box-title"><b>Class Sessions</b></h3>
                 </div>
                 <form>
                     <div class="box-body">
