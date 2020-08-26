@@ -74,7 +74,7 @@
             <div class="col-md-6">
                 <h1 class="title">Terms of Service</h1>
                 <br>
-                <p><b style="font-size: 20px;">Terms of Service</b></p>
+                <!--p><b style="font-size: 20px;">Terms of Service</b></p-->
                 <ol style="text-align:justify;">
                     <li>Learners must attend all sessions in NUSIA's free classes.<br>If learners cannot attend some of them,<br>they cannot reschedule the sessions.</p>
                     <li>Learners must read the learning materials on the dashboard before joining each session.</p>
