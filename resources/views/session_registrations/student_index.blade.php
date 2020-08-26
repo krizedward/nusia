@@ -79,7 +79,7 @@
                                   @if(now() < $schedule_time)
                                     <td><label class="badge bg-gray">Upcoming</label></td>
                                   @elseif(now() > $schedule_time->add(80, 'minutes'))
-                                    <td><label class="badge bg-red">Not Present</label></td>
+                                    <td><label class="badge bg-blue">On Instructor Check</label></td>
                                   @else
                                     <td><label class="badge bg-yellow">Ongoing</label></td>
                                   @endif
@@ -94,7 +94,7 @@
                                   @if($dt->session->link_zoom)
                                     <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
                                   @else
-                                    <td><i>N/A</i></td>
+                                    <td><a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a></td>
                                   @endif
                                 @else
                                   @if($dt->status == 'Should Submit Form')

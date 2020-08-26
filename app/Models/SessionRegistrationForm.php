@@ -5,6 +5,7 @@ use App\Models\SessionRegistration;
 use App\Models\FormResponse;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SessionRegistrationForm extends Model
 {
