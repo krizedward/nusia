@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use Illuminate\Http\Request;
 use App\User;
 
@@ -298,7 +299,12 @@ class InstructorController extends Controller
             // Data yang dicari tidak ditemukan.
             // Return?
         }
-        return view('users.instructors.show', compact('data'));
+        if ($this->is_admin()){
+
+            $instructor = Instructor::all();
+            return view('instructors.admin_show',compact('instructor','id'));
+        }
+        return view('users.instructors.show', compact('instructor','id'));
     }
 
     /**

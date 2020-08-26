@@ -23,22 +23,34 @@
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
+                            <th>Name</th>
+                            <th>Profile Name</th>
                             <th>Email</th>
                             <th>Phone</th>
+                            <th>Action</th>
                         </tr>
                         {{-- head table content --}}
                         </thead>
                         <tbody>
                         @foreach($data as $dt)
                             <tr>
-                                <td>{{ $dt->code }}</td>
-                                <td>{{ $dt->user->first_name }}</td>
-                                <td>{{ $dt->user->last_name }}</td>
+                                <td>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</td>
+                                @if($dt->user->image_profile)
+                                    <td><img src="{{ asset('uploads/user.jpg') }}" style="width: 50px"></td>
+                                @else
+                                    <td><i>Not Available</i></td>
+                                @endif
+                                {{--end if--}}
                                 <td>{{ $dt->user->email }}</td>
-                                <td>{{ $dt->user->phone }}</td>
+                                @if($dt->user->phone)
+                                    <td>{{ $dt->user->phone }}</td>
+                                @else
+                                    <td><i>Not Available</i></td>
+                                @endif
+                                {{--end if--}}
+                                <td>
+                                    <a class="btn btn-flat btn-xs btn-success" href="{{ route('instructors.show', $dt->id) }}">Detail</a>
+                                </td>
                             </tr>
                         @endforeach
                         {{-- body content --}}

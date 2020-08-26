@@ -57,7 +57,7 @@
                                 <td>{{ $dt->indonesian_language_proficiency }}</td>
                                 <td>
                                     <a class="btn btn-flat btn-xs btn-success" href="{{ route('students.show', $dt->id) }}">Detail</a>
-                                    <a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>
+                                    {{--<a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>--}}
                                 </td>
                             </tr>
                         @endforeach
