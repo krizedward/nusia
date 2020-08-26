@@ -19,7 +19,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="alert alert-success alert-dismissible">
-          <h4><i class="icon fa fa-check"></i> {{ session('form_complete') }}</h4>
+          <h4><i class="icon fa fa-check"></i> {{ session('form_complete') }}</h4> {{ session(['form_complete' => null]) }}
         </div>
       </div>
     </div>
@@ -85,12 +85,15 @@
                                   <td><i>N/A</i></td>
                                 @endif
                                 @if($dt->status == 'Not Assigned')
+                                  <?php
+                                    $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  ?>
                                   @if(now() < $schedule_time)
                                     <td><label class="badge bg-gray">Upcoming</label></td>
-                                  @elseif(now() > $schedule_time->add(80, 'minutes'))
-                                    <td><label class="badge bg-blue">On Instructor Check</label></td>
-                                  @else
+                                  @elseif(now() < $schedule_time->add(80, 'minutes'))
                                     <td><label class="badge bg-yellow">Ongoing</label></td>
+                                  @else
+                                    <td><label class="badge bg-blue">On Instructor Check</label></td>
                                   @endif
                                 @elseif($dt->status == 'Not Present')
                                     <td><label class="badge bg-red">Not Present</label></td>
@@ -99,6 +102,9 @@
                                 @elseif($dt->status == 'Present')
                                   <td><label class="badge bg-green">Present</label></td>
                                 @endif
+                                <?php
+                                  $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                ?>
                                 @if(now() <= $schedule_time->add(80, 'minutes'))
                                   @if($dt->session->link_zoom)
                                     <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
