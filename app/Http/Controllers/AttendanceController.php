@@ -99,6 +99,12 @@ class AttendanceController extends Controller
             $session_registrations = SessionRegistration::where('session_id', $session_id)->get();
             $session = Session::findOrFail($session_id);
 
+            $schedule_time = Carbon::parse($session->schedule->schedule_time);
+            if(now() <= $schedule_time->add(80, 'minutes')) {
+                // tidak diperbolehkan mengakses link.
+                return redirect()->back();
+            }
+
             return view('attendances.instructor_edit', compact('session_registrations', 'session'));
         } else {
             return redirect()->back();

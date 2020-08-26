@@ -90,9 +90,13 @@
                             @if($dt->link_zoom)
                                 <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Link</a></td>
                             @else
-                                <td class="text-center"><i>N/A</i></td>
+                                <td class="text-center"><a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a></td>
                             @endif
-                            <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('attendances.edit', $dt->id) }}">Link</a></td>
+                            @if(now() > $schedule_time->add(80, 'minutes'))
+                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('attendances.edit', $dt->id) }}">Link</a></td>
+                            @else
+                              <td class="text-center"><a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a></td>
+                            @endif
                         </tr>
                         @endforeach
                         </tbody>
