@@ -56,8 +56,8 @@
                             <tbody>
                             @foreach($data->course_registrations as $dt)
                             <tr>
-                                <td>{{ $dt->student->user->first_name }} {{ $dt->student->user->last_name }}</td>
-                                <td><i>N/A</i></td>
+                              <td>{{ $dt->student->user->first_name }} {{ $dt->student->user->last_name }}</td>
+                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('profiles.show', $dt->student->id) }}">See Profile</a></td>
                             </tr>
                             @endforeach
                             </tbody>

@@ -157,8 +157,13 @@ Route::group(['middleware'=>'auth'], function() {
     //questionnaire aku taruh di HomeController
     Route::get('student/registration-form', 'HomeController@questionnaire')->name('layouts.questionnaire');
     Route::post('student/registration-form', 'HomeController@store')->name('questionnaire.store');
+
+    // lain-lain
     Route::get('profile/', 'HomeController@profile')->name('profile');
     Route::get('contact/', 'HomeController@contact')->name('contact');
+
+    // menampilkan profile Student (dilakukan oleh Instructor)
+    Route::get('profile/student/{student_id}', 'ProfileController@show')->name('profiles.show');
 
     // BAGIAN FORMULIR
         // tampilan admin

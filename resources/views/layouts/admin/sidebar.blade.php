@@ -134,7 +134,7 @@
                     </li>
                     --}}
                     <!--li class="treeview"-->
-                    <li class="{{ set_active(['sessions.index', 'course_registrations.index_by_course_id']) }}">
+                    <li class="{{ set_active(['sessions.index', 'course_registrations.index_by_course_id', 'profiles.show']) }}">
                         <a href="{{ route('sessions.index') }}">
                             <i class="fa fa-calendar"></i> <span>Schedule</span>
                             <!--span class="pull-right-container">
