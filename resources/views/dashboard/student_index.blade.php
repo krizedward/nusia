@@ -218,6 +218,7 @@
           <!-- /.box-header -->
           <div class="box-body">
             <ul class="products-list product-list-in-box">
+              <?php $i = 0; ?>
               @foreach($session_order_by_schedule_time as $dt)
                 @if($dt->schedule->schedule_time > now())
                 <li class="item">
@@ -272,8 +273,14 @@
                   </div>
                 </li>
                 <!-- /.item -->
+                <?php $i++; ?>
                 @endif
               @endforeach
+              @if($i == 0)
+                <div style="color:#555555">
+                  No courses available.
+                </div>
+              @endif
             </ul>
           </div>
           <!-- /.box-body -->

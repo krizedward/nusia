@@ -10,6 +10,7 @@
     <h1><b>Attendance for [{{ $session->course->course_package->course_level->name }}] {{ $session->course->title }} - {{ $session->title }}</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
+        <li><a href="{{ route('session_registrations.index') }}">Attendance</a></li>
         <li class="active">Sessions</li>
     </ol>
 @stop

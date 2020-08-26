@@ -93,7 +93,7 @@
                                   @elseif(now() < $schedule_time->add(80, 'minutes'))
                                     <td><label class="badge bg-yellow">Ongoing</label></td>
                                   @else
-                                    <td><label class="badge bg-blue">On Instructor Check</label></td>
+                                    <td><label class="badge bg-blue">Attendance Check</label></td>
                                   @endif
                                 @elseif($dt->status == 'Not Present')
                                     <td><label class="badge bg-red">Not Present</label></td>
