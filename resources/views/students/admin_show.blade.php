@@ -43,6 +43,10 @@
                             {{ $data->user->first_name }} {{ $data->user->last_name }}
                         </strong><hr>
 
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship :
+                            {{ $data->user->citizenship }}
+                        </strong><hr>
+
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Age :
                             {{ $data->age }}
                         </strong><hr>
@@ -64,15 +68,27 @@
                         </strong><hr>
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Job Status :
-                            {{ $data->status_job }}
+                            {{ $data->status_job }} at {{ $data->status_description }}
                         </strong><hr>
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Target Language Experience :
+                          @if($data->target_language_experience != 'Others')
                             {{ $data->target_language_experience }}
+                          @else
+                            {{ $data->target_language_experience_value }}
+                          @endif
+                        </strong><hr>
+
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Description of Course Taken :
+                            {{ $data->description_of_course_taken }}
                         </strong><hr>
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesian Language Proficiency :
                             {{ $data->indonesian_language_proficiency }}
+                        </strong><hr>
+
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Learning Objective :
+                            {{ $data->learning_objective }}
                         </strong><hr>
                     </div>
 
