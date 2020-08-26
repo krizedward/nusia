@@ -91,15 +91,17 @@ class AttendanceController extends Controller
     public function edit($session_id)
     {
         if($this->is_admin()) {
+            $session_registrations = SessionRegistration::where('session_id', $session_id)->get();
             $session = Session::findOrFail($session_id);
 
-            return view('attendances.admin_edit', compact('session'));            
+            return view('attendances.admin_edit', compact('session_registrations', 'session'));
         } else if($this->is_instructor()) {
+            $session_registrations = SessionRegistration::where('session_id', $session_id)->get();
             $session = Session::findOrFail($session_id);
 
-            return view('attendances.instructor_edit', compact('session'));
+            return view('attendances.instructor_edit', compact('session_registrations', 'session'));
         } else {
-            return redirect()->route('session_registrations.index');
+            return redirect()->back();
         }
     }
 
@@ -112,7 +114,30 @@ class AttendanceController extends Controller
      */
     public function update(Request $request, $session_id)
     {
-        //
+        if($this->is_admin() || $this->is_instructor()) {
+            foreach(Session::findOrFail($session_id)->session_registrations as $sr) {
+                $flag = 0;
+                foreach($request->all() as $key => $val) {
+                    if($key == 'flag'.$sr->course_registration->student->id && $val == 'true') {
+                        $sr->update([
+                            'status' => 'Should Submit Form',
+                        ]);
+                        $flag = 1;
+                        break;
+                    }
+                }
+                if($flag == 0) {
+                    $sr->update([
+                        'status' => 'Not Present',
+                    ]);
+                }
+            }
+        } else {
+            // Tidak memiliki hak akses.
+            return redirect()->back();
+        }
+
+        return redirect()->route('attendances.edit', $session_id);
     }
 
     /**
