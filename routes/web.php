@@ -15,6 +15,10 @@
 
 Route::get('/', 'HomeController@landing_page')->name('index');
 
+Route::get('/terms-of-service', function() {
+    return view('terms');
+})->name('terms');
+
 Route::group(['middleware'=>'auth'], function() {
 
 	/*Route::get('/home', function() {

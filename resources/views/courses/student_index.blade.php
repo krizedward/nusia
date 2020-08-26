@@ -111,17 +111,18 @@
                     <!-- Profile Image -->
                     <div class="box box-primary">
                         <div class="box-body box-profile">
-                            <h3 class="profile-username text-center">Terms and Conditions</h3>
+                            <h3 class="profile-username text-center">Terms of Service</h3>
 
                             <!--p class="text-muted text-center">More description here...</p-->
 
                             <ul class="list-group list-group-unbordered">
                                 <li class="list-group-item">
-                                    <!--b>Text</b-->
-                                    <p>1. Learners must attend all sessions. If learners cannot attend some of them, they cannot reschedule the sessions.</p>
-                                    <p>2. Learners must read the learning materials on the dashboard before joining each session.</p>
-                                    <p>3. Learners must give feedback on the link provided in the dashboard after finishing each session.</p>
-                                    <p>4. All session are recorded. Learners allow NUSIA to employ the video recordings for research and marketing purposes (If you disagree, please contact us via email and click the “agree” button below)</p>
+                                    <ol>
+                                    <li>&nbsp;&nbsp;&nbsp;Learners must attend all sessions in NUSIA's free classes.<br>&nbsp;&nbsp;&nbsp;If learners cannot attend some of them, they cannot reschedule the sessions.</li>
+                                    <li>&nbsp;&nbsp;&nbsp;Learners must read the learning materials on the dashboard before joining each session.</li>
+                                    <li>&nbsp;&nbsp;&nbsp;Learners must give feedback on the link provided in the dashboard<br>&nbsp;&nbsp;&nbsp;after finishing each session.</li>
+                                    <li>&nbsp;&nbsp;&nbsp;All sessions in the free classes are recorded.<br>&nbsp;&nbsp;&nbsp;Learners allow NUSIA to employ the video recordings for research and marketing purposes<br>&nbsp;&nbsp;&nbsp;(If you disagree with this term, please contact us via email on <a href="mailto:nusia.helpdesk@gmail.com">nusia.helpdesk@gmail.com</a>.)</li>
+                                    </ol>
                                 </li>
                             </ul>
 
@@ -129,7 +130,7 @@
                               @csrf
                               <input type="hidden" value="{{ $dt->id }}" name="course_id">
                               <input type="hidden" value="{{ Auth::user()->student->id }}" name="student_id">
-                              <input type="checkbox" value="false" onclick="checkboxClick(this);" id="flag" name="flag" class="minimal">&nbsp;&nbsp;I have read and agree to the Terms and Conditions
+                              <input type="checkbox" value="false" onclick="checkboxClick(this);" id="flag" name="flag" class="minimal">&nbsp;&nbsp;I have read and agree to the Terms of Service
                               <br>
                               <br>
                               <button type="submit" class="btn btn-s btn-primary" style="width:100%;">Agree and Continue</button>
