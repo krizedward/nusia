@@ -5,10 +5,10 @@
 @include('layouts.css_and_js.form_general')
 
 @section('content-header')
-    <h1>Student</h1>
+    <h1><b>Student</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="{{ route('students.index',1) }}">Student</a></li>
+        <li><a href="{{ route('students.index') }}">Student</a></li>
         <li class="active">Detail</li>
     </ol>
 @stop
@@ -21,7 +21,11 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body">
+                  @if($data->user->image_profile != 'user.jpg')
+                    <img class="img-responsive pad" src="{{ asset('uploads/student/profile/'.$data->user->image_profile) }}" alt="Photo">
+                  @else
                     <img class="img-responsive pad" src="{{ asset('uploads/user.jpg') }}" alt="Photo">
+                  @endif
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -35,19 +39,18 @@
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
-                        @foreach($student as $dt)
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Name :
-                            {{ $dt->id }}
+                            {{ $data->user->first_name }} {{ $data->user->last_name }}
                         </strong><hr>
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Age :
-                            {{ $dt->age }}
+                            {{ $data->age }}
                         </strong><hr>
 
-                        <strong><i class="fa fa-circle-o margin-r-5"></i> Interest :
-                            @if($dt->interest)
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Interest :<br>
+                            @if($data->interest)
                                 <?php
-                                $interest = explode(', ', $dt->interest);
+                                $interest = explode(', ', $data->interest);
                                 ?>
                                 @for($i = 0; $i < count($interest); $i = $i + 1)
                                   {{ $i + 1 }}. {{ $interest[$i] }}
@@ -61,17 +64,16 @@
                         </strong><hr>
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Job Status :
-                            {{ $dt->status_job }}
+                            {{ $data->status_job }}
                         </strong><hr>
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Target Language Experience :
-                            {{ $dt->target_language_experience }}
+                            {{ $data->target_language_experience }}
                         </strong><hr>
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesian Language Proficiency :
-                            {{ $dt->target_language_experience }}
+                            {{ $data->indonesian_language_proficiency }}
                         </strong><hr>
-                        @endforeach
                     </div>
 
                 </div>

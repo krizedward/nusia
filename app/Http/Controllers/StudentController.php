@@ -230,13 +230,12 @@ class StudentController extends Controller
     {
         $data = Student::findOrFail($id);
         if($data == null) {
-            // Data yang dicari tidak ditemukan.
-            // Return?
+            return redirect()->back();
         }
         if ($this->is_admin()){
 
             $student = Student::all();
-            return view('students.admin_show',compact('student'));
+            return view('students.admin_show',compact('data'));
         }
 
         return view('users.students.show', compact('data'));

@@ -5,7 +5,7 @@
 @include('layouts.css_and_js.form_general')
 
 @section('content-header')
-    <h1>Student</h1>
+    <h1><b>Student</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
         <li class="active">student</li>
@@ -34,10 +34,10 @@
                             <tr>
                                 <td>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</td>
 
-                                @if($dt->user->image_profile)
-                                    <td><img src="{{ asset('uploads/user.jpg') }}" style="width: 50px"></td>
+                                @if($dt->user->image_profile != 'user.jpg')
+                                    <td><img src="{{ asset('uploads/student/profile/'.$dt->user->image_profile) }}" style="width: 50px"></td>
                                 @else
-                                    <td><i>Not Available</i></td>
+                                    <td><img src="{{ asset('uploads/user.jpg') }}" style="width: 50px"></td>
                                 @endif
                                 {{--end if--}}
                                 <td>{{ $dt->status_job }}</td>
