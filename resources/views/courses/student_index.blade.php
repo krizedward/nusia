@@ -39,6 +39,17 @@
           </div>
         </div>
         @foreach($data as $dt)
+          <?php $flag = 1; ?>
+          @foreach($dt->sessions as $s)
+            <?php
+              $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+              if(now() >= $schedule_time) {
+                  $flag = 0;
+                  break;
+              }
+            ?>
+          @endforeach
+          <?php if($flag == 0) continue; ?>
             <div class="col-md-4">
               <div class="box box-primary">
                 <div class="box-header with-border">
