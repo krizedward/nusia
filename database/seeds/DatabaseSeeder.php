@@ -35,6 +35,9 @@ class DatabaseSeeder extends Seeder
         $this->call(RatingsTableSeeder::class);
         $this->call(SessionRegistrationsTableSeeder::class);
 
+        // DEMO TABLE SEEDER (FOR DEMO PURPOSE(S) ONLY)
+        //$this->call(DemoTableSeeder::class);
+
 
         /*
         $this->call(UsersTableSeeder::class);

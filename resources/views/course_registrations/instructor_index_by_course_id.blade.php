@@ -20,7 +20,7 @@
         <div class="col-md-3">
             <div class="box">
                 <div class="box-header">
-                    <h4 class="box-title">Information</h4>
+                    <h4 class="box-title"><b>Information</b></h4>
                 </div>
                 <form>
                     <div class="box-body">
@@ -42,7 +42,7 @@
         <div class="col-md-9">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">List of Students</h3>
+                    <h3 class="box-title"><b>List of Students</b></h3>
                 </div>
                 <form>
                     <div class="box-body">

@@ -20,7 +20,7 @@
         <div class="col-md-3">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Add Zoom Meeting Link</h3>
+                    <h3 class="box-title"><b>Add Zoom Meeting Link</b></h3>
                 </div>
                 <div class="box-body">
                     <form action="{{ route('sessions.update',1) }}" method="post">
@@ -92,6 +92,9 @@
                             @else
                                 <td class="text-center"><a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a></td>
                             @endif
+                            <?php
+                              $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                            ?>
                             @if(now() > $schedule_time->add(80, 'minutes'))
                               <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('attendances.edit', $dt->id) }}">Link</a></td>
                             @else

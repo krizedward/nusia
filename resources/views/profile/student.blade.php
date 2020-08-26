@@ -5,7 +5,7 @@
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Profile</h1>
+    <h1><b>Profile</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
         <li class="active">Profile</li>
@@ -19,7 +19,11 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
+                  @if(Auth::user()->image_profile != 'user.jpg')
                     <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/student/profile/'.Auth::user()->image_profile) }}" alt="User profile picture">
+                  @else
+                    <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/'.Auth::user()->image_profile) }}" alt="User profile picture">
+                  @endif
 
                     <h3 class="profile-username text-center">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h3>
 

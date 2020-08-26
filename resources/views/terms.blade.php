@@ -43,7 +43,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="main_nav">
-                <!--<ul class="navbar-nav">
+                <!--ul class="navbar-nav">
                     <li class="nav-item active"> <a class="nav-link" href="#">Home </a> </li>
                     <li class="nav-item"><a class="nav-link" href="#"> About </a></li>
                     <li class="nav-item"><a class="nav-link" href="#"> Services </a></li>
@@ -57,6 +57,7 @@
                     </li>
                 </ul>-->
                 <ul class="navbar-nav ml-auto">
+                  <li class="nav-item"><a class="nav-link" style="color: #000;" href="{{ route('index') }}"> HOME </a></li>
                   @if(Auth::check())
                     <li class="nav-item"><a class="nav-link" style="color: #000;" href="{{ route('login') }}"> DASHBOARD </a></li>
                   @else
@@ -71,20 +72,19 @@
         <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <h1 class="title">SPEAK LIKE A NATIVE!</h1>
+                <h1 class="title">Terms of Service</h1>
                 <br>
-                <p><b style="font-size: 20px;">FREE BAHASA INDONESIA ONLINE CLASSES!</b></p>
-                <ul>
-                    <li>Flexible time (9 a.m. - 9 p.m. GMT+7)</li>
-                    <li>Communicative approach</li>
-                    <li>Engaging learning activities</li>
-                    <li>Flipped learning method</li>
-                    <li>Experienced & professional instructors</li>
-                </ul>
+                <!--p><b style="font-size: 20px;">Terms of Service</b></p-->
+                <ol style="text-align:justify;">
+                    <li>Learners must attend all sessions in NUSIA's free classes.<br>If learners cannot attend some of them,<br>they cannot reschedule the sessions.</p>
+                    <li>Learners must read the learning materials on the dashboard before joining each session.</p>
+                    <li>Learners must give feedback on the link<br>provided in the dashboard after finishing each session.</p>
+                    <li>All sessions in the free classes are recorded.<br>Learners allow NUSIA to employ the video recordings<br>for research and marketing purposes<br>(If you disagree with this term, please contact us<br>via email on <a href="mailto:nusia.helpdesk@gmail.com">nusia.helpdesk@gmail.com</a>.)</p>
+                </ol>
                 @if(Auth::check())
-                  <a href="{{ route('home') }}" class="btn btn-primary btn-lg"> Go To Dashboard</a>
+                  <a href="{{ route('home') }}" class="btn btn-primary btn-md col-md-12"> Go To Dashboard</a>
                 @else
-                  <a href="{{ route('login') }}" class="btn btn-primary btn-lg"> Start My Class</a>
+                  <a href="{{ route('login') }}" class="btn btn-primary btn-md col-md-12"> Start My Class</a>
                 @endif
             </div>
             <!--end_col-md-6-->
@@ -103,7 +103,7 @@
                 <!-- Grid column -->
                 <div class="col-md-3 mt-md-0 mt-3" style="color: #ffffff">
                     <!-- Content -->
-                    <h5 class="text-uppercase"><a href="{{ route('terms') }}" style="text-decoration:none; color:#ffffff;">Terms of Service</a></h5>
+                    <h5 class="text-uppercase"><a href="#" style="text-decoration:none; color:#ffffff;">Terms of Service</a></h5>
                 </div>
                 <!-- Grid column -->
                 <div class="col-md-6 mb-md-0 mb-3"  style="color: #ffffff">
