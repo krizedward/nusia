@@ -44,13 +44,11 @@
                                 {{--end if--}}
                                 <td>{{ $dt->status_job }}</td>
                                 @if($dt->target_language_experience == 'Never (no experience)')
-                                    {{-- memperbaiki urutan sorting pada tabel. --}}
-                                    <td><span class="hidden">.</span>{{ $dt->target_language_experience }}</td>
+                                    <td>{{ $dt->target_language_experience }}</td>
                                 @elseif($dt->target_language_experience != 'Others')
-                                    <td><span class="hidden">_</span>{{ $dt->target_language_experience }}</td>
+                                    <td>{{ $dt->target_language_experience }}</td>
                                 @else
                                     <td>
-                                        <span class="hidden">_</span>
                                         {{ $dt->target_language_experience_value }}
                                         @if($dt->target_language_experience_value == 1)
                                             year
