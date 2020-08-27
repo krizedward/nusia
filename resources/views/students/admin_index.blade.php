@@ -47,7 +47,7 @@
                                     {{-- memperbaiki urutan sorting pada tabel. --}}
                                     <td><span class="hidden">.</span>{{ $dt->target_language_experience }}</td>
                                 @elseif($dt->target_language_experience != 'Others')
-                                    <td>{{ $dt->target_language_experience }}</td>
+                                    <td><span class="hidden">_</span>{{ $dt->target_language_experience }}</td>
                                 @else
                                     <td>
                                         {{ $dt->target_language_experience_value }}
@@ -60,8 +60,8 @@
                                 @endif
                                 {{--end if--}}
                                 <td>{{ $dt->indonesian_language_proficiency }}</td>
-                                <td>
-                                    <a class="btn btn-flat btn-xs btn-success text-center" href="{{ route('students.show', $dt->id) }}">Detail</a>
+                                <td class="text-center">
+                                    <a class="btn btn-flat btn-xs btn-success" href="{{ route('students.show', $dt->id) }}">Detail</a>
                                     <!--a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a-->
                                 </td>
                             </tr>
