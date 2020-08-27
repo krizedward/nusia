@@ -47,7 +47,7 @@
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship:</strong>
                         <p>
-                            @if($data->citizenship != 'Not Available')
+                            @if($data->user->citizenship != 'Not Available')
                               {{ $data->user->citizenship }}
                             @else
                               <i>Not Available</i>
