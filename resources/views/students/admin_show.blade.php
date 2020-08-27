@@ -47,13 +47,21 @@
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship:</strong>
                         <p>
-                            {{ $data->user->citizenship }}
+                            @if($data->citizenship != 'Not Available')
+                              {{ $data->user->citizenship }}
+                            @else
+                              <i>Not Available</i>
+                            @endif
                         </p>
                         <hr>
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Age:</strong>
                         <p>
-                            {{ $data->age }}
+                            @if($data->age != 0)
+                              {{ $data->age }}
+                            @else
+                              <i>Not Available</i>
+                            @endif
                         </p>
                         <hr>
 
@@ -78,37 +86,62 @@
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Job Status:</strong>
                         <p>
-                            {{ $data->status_job }} at {{ $data->status_description }}
+                            @if($data->status_description)
+                              {{ $data->status_job }} at {{ $data->status_description }}
+                            @else
+                              <i>Not Available</i>
+                            @endif
+                        </p>
+                        <hr>
+
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesian Language Proficiency:</strong>
+                        <p>
+                            @if($data->age != 0)
+                              {{ $data->indonesian_language_proficiency }}
+                            @else
+                              <i>Not Available</i>
+                            @endif
                         </p>
                         <hr>
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Target Language Experience:</strong>
                         <p>
-                          @if($data->target_language_experience != 'Others')
-                            {{ $data->target_language_experience }}
+                          @if($data->age != 0)
+                            @if($data->target_language_experience != 'Others')
+                              {{ $data->target_language_experience }}
+                            @else
+                              {{ $data->target_language_experience_value }}
+                              @if($data->target_language_experience_value == 1)
+                                year
+                              @else
+                                years
+                              @endif
+                            @endif
                           @else
-                            {{ $data->target_language_experience_value }}
+                            <i>Not Available</i>
                           @endif
                         </p>
                         <hr>
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Description of Course Taken:</strong>
                         <p>
-                            {{ $data->description_of_course_taken }}
-                        </p>
-                        <hr>
-
-                        <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesian Language Proficiency:</strong>
-                        <p>
-                            {{ $data->indonesian_language_proficiency }}
+                            @if($data->description_of_course_taken)
+                              {{ $data->description_of_course_taken }}
+                            @else
+                              <i>Not Available</i>
+                            @endif
                         </p>
                         <hr>
 
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Learning Objective:</strong>
                         <p>
-                            {{ $data->learning_objective }}
+                            @if($data->learning_objective)
+                              {{ $data->learning_objective }}
+                            @else
+                              <i>Not Available</i>
+                            @endif
                         </p>
-                        <hr>
+                        <!--hr-->
                     </div>
 
                 </div>
