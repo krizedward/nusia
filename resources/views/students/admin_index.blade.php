@@ -50,6 +50,7 @@
                                     <td><span class="hidden">_</span>{{ $dt->target_language_experience }}</td>
                                 @else
                                     <td>
+                                        <span class="hidden">_</span>
                                         {{ $dt->target_language_experience_value }}
                                         @if($dt->target_language_experience_value == 1)
                                             year
