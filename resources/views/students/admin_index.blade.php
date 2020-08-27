@@ -60,7 +60,7 @@
                                 @endif
                                 {{--end if--}}
                                 <td>{{ $dt->indonesian_language_proficiency }}</td>
-                                @if($dt->course_registrations->count() == 0)
+                                @if($dt->course_registrations->count() != 0)
                                   <td><label class="badge bg-green">Registered</label></td>
                                 @elseif($dt->age == 0)
                                   <td><label class="badge bg-red">Not registered</label></td>
