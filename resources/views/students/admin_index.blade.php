@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title','Admin | Student')
+@section('title','Admin | Student Table')
 
 {{-- @include('layouts.css_and_js.form_general') --}}
 
@@ -10,7 +10,7 @@
     <h1><b>Student</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li class="active">student</li>
+        <li class="active">Student</li>
     </ol>
 @stop
 

@@ -1,11 +1,11 @@
 @extends('layouts.admin.default')
 
-@section('title','Admin | Student | Show')
+@section('title','Admin | Student Profile')
 
 @include('layouts.css_and_js.form_general')
 
 @section('content-header')
-    <h1><b>Student</b></h1>
+    <h1><b>Student Profile</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
         <li><a href="{{ route('students.index') }}">Student</a></li>
@@ -39,19 +39,27 @@
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
-                        <strong><i class="fa fa-circle-o margin-r-5"></i> Name :
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Name:</strong>
+                        <p>
                             {{ $data->user->first_name }} {{ $data->user->last_name }}
-                        </strong><hr>
+                        </p>
+                        <hr>
 
-                        <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship :
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship:</strong>
+                        <p>
                             {{ $data->user->citizenship }}
-                        </strong><hr>
+                        </p>
+                        <hr>
 
-                        <strong><i class="fa fa-circle-o margin-r-5"></i> Age :
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Age:</strong>
+                        <p>
                             {{ $data->age }}
-                        </strong><hr>
+                        </p>
+                        <hr>
 
-                        <strong><i class="fa fa-circle-o margin-r-5"></i> Interest :<br>
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Interest:</strong>
+                        <br>
+                        <p>
                             @if($data->interest)
                                 <?php
                                 $interest = explode(', ', $data->interest);
@@ -63,33 +71,44 @@
                                     @endif
                                 @endfor
                             @else
-                                <td><i>Not Available</i></td>
+                                <i>Not Available</i>
                             @endif
-                        </strong><hr>
+                        </p>
+                        <hr>
 
-                        <strong><i class="fa fa-circle-o margin-r-5"></i> Job Status :
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Job Status:</strong>
+                        <p>
                             {{ $data->status_job }} at {{ $data->status_description }}
-                        </strong><hr>
+                        </p>
+                        <hr>
 
-                        <strong><i class="fa fa-circle-o margin-r-5"></i> Target Language Experience :
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Target Language Experience:</strong>
+                        <p>
                           @if($data->target_language_experience != 'Others')
                             {{ $data->target_language_experience }}
                           @else
                             {{ $data->target_language_experience_value }}
                           @endif
-                        </strong><hr>
+                        </p>
+                        <hr>
 
-                        <strong><i class="fa fa-circle-o margin-r-5"></i> Description of Course Taken :
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Description of Course Taken:</strong>
+                        <p>
                             {{ $data->description_of_course_taken }}
-                        </strong><hr>
+                        </p>
+                        <hr>
 
-                        <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesian Language Proficiency :
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesian Language Proficiency:</strong>
+                        <p>
                             {{ $data->indonesian_language_proficiency }}
-                        </strong><hr>
+                        </p>
+                        <hr>
 
-                        <strong><i class="fa fa-circle-o margin-r-5"></i> Learning Objective :
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Learning Objective:</strong>
+                        <p>
                             {{ $data->learning_objective }}
-                        </strong><hr>
+                        </p>
+                        <hr>
                     </div>
 
                 </div>
