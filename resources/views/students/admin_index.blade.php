@@ -60,12 +60,12 @@
                                 @endif
                                 {{--end if--}}
                                 <td>{{ $dt->indonesian_language_proficiency }}</td>
-                                @if($dt->course_registrations)
-                                  <td><label class="badge badge-success">Registered</label></td>
+                                @if($dt->course_registrations->count() == 0)
+                                  <td><label class="badge bg-green">Registered</label></td>
                                 @elseif($dt->age == 0)
-                                  <td><label class="badge badge-danger">Not registered</label></td>
+                                  <td><label class="badge bg-red">Not registered</label></td>
                                 @else
-                                  <td><label class="badge badge-warning">Choosing a class</label></td>
+                                  <td><label class="badge bg-yellow">Choosing a class</label></td>
                                 @endif
                                 <td class="text-center">
                                     <a class="btn btn-flat btn-xs btn-success" href="{{ route('students.show', $dt->id) }}">Detail</a>
