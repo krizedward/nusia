@@ -26,8 +26,9 @@
                             <th>Name</th>
                             <th>Profile Image</th>
                             <th>Job Status</th>
-                            <th>Target Language Experience</th>
-                            <th>Indonesian Language Proficiency</th>
+                            <th>Language Experience</th>
+                            <th>Language Proficiency</th>
+                            <th>Registration Status</th>
                             <th>View Profile</th>
                         </tr>
                         </thead>
@@ -59,6 +60,13 @@
                                 @endif
                                 {{--end if--}}
                                 <td>{{ $dt->indonesian_language_proficiency }}</td>
+                                @if($dt->course_registrations)
+                                  <td><label class="badge badge-success">Registered</label></td>
+                                @elseif($dt->age == 0)
+                                  <td><label class="badge badge-danger">Not registered</label></td>
+                                @else
+                                  <td><label class="badge badge-warning">Choosing a class</label></td>
+                                @endif
                                 <td class="text-center">
                                     <a class="btn btn-flat btn-xs btn-success" href="{{ route('students.show', $dt->id) }}">Detail</a>
                                     <!--a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a-->
