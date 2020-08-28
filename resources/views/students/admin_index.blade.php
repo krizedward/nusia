@@ -1,14 +1,16 @@
 @extends('layouts.admin.default')
 
-@section('title','Admin | Student')
+@section('title','Admin | Student Table')
 
-@include('layouts.css_and_js.form_general')
+{{-- @include('layouts.css_and_js.form_general') --}}
+
+@include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Student</h1>
+    <h1><b>Student</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li class="active">student</li>
+        <li class="active">Student</li>
     </ol>
 @stop
 
@@ -24,9 +26,10 @@
                             <th>Name</th>
                             <th>Profile Image</th>
                             <th>Job Status</th>
-                            <th>Target Language Experience</th>
-                            <th>Indonesian Language Proficiency</th>
-                            <th>Action</th>
+                            <th>Language Experience</th>
+                            <th>Language Proficiency</th>
+                            <th>Registration Status</th>
+                            <th>View Profile</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -34,14 +37,16 @@
                             <tr>
                                 <td>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</td>
 
-                                @if($dt->user->image_profile)
-                                    <td><img src="{{ asset('uploads/user.jpg') }}" style="width: 50px"></td>
+                                @if($dt->user->image_profile != 'user.jpg')
+                                    <td><img src="{{ asset('uploads/student/profile/'.$dt->user->image_profile) }}" style="width: 50px"></td>
                                 @else
-                                    <td><i>Not Available</i></td>
+                                    <td><img src="{{ asset('uploads/user.jpg') }}" style="width: 50px"></td>
                                 @endif
                                 {{--end if--}}
                                 <td>{{ $dt->status_job }}</td>
-                                @if($dt->target_language_experience != 'Others')
+                                @if($dt->target_language_experience == 'Never (no experience)')
+                                    <td>{{ $dt->target_language_experience }}</td>
+                                @elseif($dt->target_language_experience != 'Others')
                                     <td>{{ $dt->target_language_experience }}</td>
                                 @else
                                     <td>
@@ -55,9 +60,15 @@
                                 @endif
                                 {{--end if--}}
                                 <td>{{ $dt->indonesian_language_proficiency }}</td>
-                                <td>
+                                @if($dt->course_registrations->count() != 0)
+                                  <td><label class="badge bg-green">Registered</label></td>
+                                @elseif($dt->age == 0)
+                                  <td><label class="badge bg-red">Not registered</label></td>
+                                @else
+                                  <td><label class="badge bg-yellow">Choosing a class</label></td>
+                                @endif
+                                <td class="text-center">
                                     <a class="btn btn-flat btn-xs btn-success" href="{{ route('students.show', $dt->id) }}">Detail</a>
-                                    {{--<a class="btn btn-flat btn-xs btn-danger" href="#">Delete</a>--}}
                                 </td>
                             </tr>
                         @endforeach
