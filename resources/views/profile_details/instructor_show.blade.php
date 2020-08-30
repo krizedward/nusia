@@ -78,11 +78,28 @@
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Email</strong>
                             <p>{{ $student->user->email }}</p>
                             <hr>
-                            <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship</strong>
-                            <p>{{ $student->user->citizenship }}</p>
-                            <hr>
-                            <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
 
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship</strong>
+                            <p>
+                                @if($student->user->citizenship != 'Not Available')
+                                  {{ $student->user->citizenship }}
+                                @else
+                                  <i>Not Available</i>
+                                @endif
+                            </p>
+                            <hr>
+
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Age</strong>
+                            <p>
+                                @if($student->age != 0)
+                                  {{ $student->age }}
+                                @else
+                                  <i>Not Available</i>
+                                @endif
+                            </p>
+                            <hr>
+
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
                                 @if($student->interest)
                                     <?php
                                     $interest = explode(', ', $student->interest);
@@ -98,17 +115,66 @@
                                 @else
                                     <p><i>Not Available</i></p>
                                 @endif
+                            <hr>
 
-                            <!--p>{{ $student->interest }}</p-->
-                            <hr>
-                            <strong><i class="fa fa-circle-o margin-r-5"></i> Age</strong>
-                            <p>{{ $student->age }}</p>
-                            <hr>
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Job Status</strong>
-                            <p>{{ $student->status_job }} - {{ $student->status_description }}</p>
+                            <p>
+                                @if($student->status_description)
+                                  {{ $student->status_job }} at {{ $student->status_description }}
+                                @else
+                                  <i>Not Available</i>
+                                @endif
+                            </p>
                             <hr>
+
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesia Language Proficiency</strong>
-                            <p>{{ $student->indonesian_language_proficiency }}</p>
+                            <p>
+                                @if($student->age != 0)
+                                  {{ $student->indonesian_language_proficiency }}
+                                @else
+                                  <i>Not Available</i>
+                                @endif
+                            </p>
+                            <hr>
+
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Target Language Experience</strong>
+                            <p>
+                              @if($student->age != 0)
+                                @if($student->target_language_experience != 'Others')
+                                  {{ $student->target_language_experience }}
+                                @else
+                                  {{ $student->target_language_experience_value }}
+                                  @if($student->target_language_experience_value == 1)
+                                    year
+                                  @else
+                                    years
+                                  @endif
+                                @endif
+                              @else
+                                <i>Not Available</i>
+                              @endif
+                            </p>
+                            <hr>
+
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Description of Course Taken</strong>
+                            <p>
+                                @if($student->description_of_course_taken)
+                                  {{ $student->description_of_course_taken }}
+                                @else
+                                  <i>Not Available</i>
+                                @endif
+                            </p>
+                            <hr>
+
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Learning Objective</strong>
+                            <p>
+                                @if($student->learning_objective)
+                                  {{ $student->learning_objective }}
+                                @else
+                                  <i>Not Available</i>
+                                @endif
+                            </p>
+                            <!--hr-->
                     </div>
                     <!-- /.tab-pane -->
                 </div>
