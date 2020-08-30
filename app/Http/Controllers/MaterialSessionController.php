@@ -43,7 +43,8 @@ class MaterialSessionController extends Controller
     public function index()
     {
         if ($this->is_admin()){
-            return view('material_sessions.admin_index');
+            $material_session = MaterialSession::all();
+            return view('material_sessions.admin_index', compact('material_session'));
         }
         //$data = MaterialSession::all();
         //return view('materials.sessions.index', compact('data'));

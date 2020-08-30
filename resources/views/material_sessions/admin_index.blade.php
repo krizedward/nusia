@@ -22,18 +22,28 @@
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
-                        {{-- head table content
                         <tr>
-                            <th></th>
+                            <th>ID</th>
+                            <th>Session</th>
+                            <th>File Name</th>
+                            <th>Data Type</th>
+                            <th>Action</th>
                         </tr>
-                        --}}
+                        {{-- head table content --}}
                         </thead>
                         <tbody>
-                        {{-- body content
+                        @foreach($material_session as $dt)
                             <tr>
-                                <td></td>
+                                <td>{{ $dt->code }}</td>
+                                <td>{{ $dt->session->title }}</td>
+                                <td>{{ $dt->name }}</td>
+                                <td>PDF</td>
+                                <td>
+                                    <a class="btn btn-flat btn-xs btn-success" href="#">Details</a>
+                                </td>
                             </tr>
-                        --}}
+                        @endforeach
+                        {{-- body content --}}
                         </tbody>
                     </table>
                 </div>
