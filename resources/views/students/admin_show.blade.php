@@ -39,6 +39,12 @@
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Email:</strong>
+                        <p>
+                            {{ $data->user->email }}
+                        </p>
+                        <hr>
+
                         <strong><i class="fa fa-circle-o margin-r-5"></i> Name:</strong>
                         <p>
                             {{ $data->user->first_name }} {{ $data->user->last_name }}
