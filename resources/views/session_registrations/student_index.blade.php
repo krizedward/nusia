@@ -36,7 +36,7 @@
                             <dt style="font-size:18px;"><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
                             <dd>
                               Click "link" button to join your session!<br>
-                              <span style="color:#ff0000;">* Contact your instructors if you have a problem joining the sessions.</span>
+                              <span style="color:#ff0000;">* Contact us if you have a problem joining the sessions.</span>
                             </dd>
                             <hr>
                             <dt style="font-size:18px;"><i class="fa fa-book margin-r-5"></i> Note</dt>
