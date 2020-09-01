@@ -1,4 +1,4 @@
-@extends('layouts.auth.login')
+@extends('layouts.auth.default')
 
 @section('content-old')
 <div class="container">
