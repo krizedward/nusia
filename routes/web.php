@@ -162,12 +162,17 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('student/registration-form', 'HomeController@questionnaire')->name('layouts.questionnaire');
     Route::post('student/registration-form', 'HomeController@store')->name('questionnaire.store');
 
-    // lain-lain
-    Route::get('profile/', 'HomeController@profile')->name('profile');
-    Route::get('contact/', 'HomeController@contact')->name('contact');
+    // menampilkan profil akun
+    Route::get('profile/', 'ProfileController@index')->name('profile');
+
+    // sebagai catatan, Admin dapat mengedit profil Instructor dan Student, apabila diperlukan.
+    Route::put('profile/', 'ProfileController@update')->name('profile.update');
 
     // menampilkan profile Student (dilakukan oleh Instructor)
     Route::get('profile/student/{student_id}', 'ProfileController@show')->name('profiles.show');
+
+    // menampilkan contact
+    Route::get('contact/', 'HomeController@contact')->name('contact');
 
     // BAGIAN FORMULIR
         // tampilan admin
