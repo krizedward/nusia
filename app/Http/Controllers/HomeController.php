@@ -120,14 +120,23 @@ class HomeController extends Controller
             $timeNusia = Carbon::now()->setTimezone('Asia/Jakarta');
             $timeStudent = Carbon::now()->setTimezone(Auth::user()->timezone);
             //untuk mengubah zona waktu isi didalam dengan lokasi
-            $session = Session
+            $session_registration = SessionRegistration
+                ::join('sessions', 'session_registrations.session_id', 'sessions.id')
+                ->join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                //->where('schedules.schedule_time', '>=', now())
+                ->select('session_registrations.id', 'session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
+                ->get();
+            /*$session = Session
                 ::join('courses', 'sessions.course_id', 'courses.id')
                 ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
                 ->join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
                 ->where('schedules.schedule_time', '>=', now())
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')
-                ->get();
+                ->get();*/
             $session_order_by_schedule_time = Session
                 ::join('courses', 'sessions.course_id', 'courses.id')
                 ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
@@ -143,7 +152,7 @@ class HomeController extends Controller
             $instructors = Instructor::where('id',Auth::user()->id);
             $is_local_access = config('database.connections.mysql.username') == 'root';
             return view('dashboard.student_index', compact(
-                'session', 'session_order_by_schedule_time',
+                'session_registration', /*session,*/ 'session_order_by_schedule_time',
                 'material', 'course_registrations', 'instructors','timeNusia','timeStudent', 'is_local_access'
             ));
         }
@@ -264,12 +273,12 @@ class HomeController extends Controller
             'timezone' => ['bail', 'required'],
             'image_profile' => ['bail', 'sometimes', 'max:8000'],
 
-            'age' => ['bail', 'required', 'integer'],
+            'age' => ['bail', 'required', 'numeric'],
             'status_job' => ['bail', 'required'],
             'status_description' => ['bail', 'required'],
             'interest_1' => ['bail', 'required'],
             'target_language_experience' => ['bail', 'required'],
-            'target_language_experience_value' => ['bail', 'required_if:target_language_experience,Others'],
+            'target_language_experience_value' => ['bail', 'required_if:target_language_experience,Others', 'numeric'],
             'description_of_course_taken' => ['bail', 'required_unless:target_language_experience,Never (no experience)'],
             'indonesian_language_proficiency' => ['bail', 'required'],
             'learning_objective' => ['bail', 'required'],
@@ -490,169 +499,7 @@ class HomeController extends Controller
 
     public function profile()
     {
-        if($this->is_admin()){
-            return view('profile.admin');
-        }
-
-        if($this->is_instructor()){
-            $instructor = Instructor::where('user_id',Auth::user()->id)->get();
-            $countries = [
-                'Afghanistan', 'Albania', 'Algeria', 'Antigua and Barbuda', 'Argentina',
-                'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Azores',
-                'Bahamas', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium',
-                'Belize', 'Bermuda', 'Bolivia', 'Bosnia & Herzegovina', 'Brazil',
-                'Bulgaria', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde',
-                'Chile', 'China', 'Columbia', 'Costa Rica', 'Croatia',
-                'Cuba', 'Cyprus', 'Czech Republic', 'Czechoslovakia', 'Denmark',
-                'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador',
-                'Eritrea', 'Ethiopia', 'Fiji', 'Finland', 'France',
-                'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada',
-                'Guam', 'Guatemala', 'Guyana', 'Haiti', 'Honduras',
-                'Hong Kong', 'Hungary', 'India', 'Indonesia', 'Iran',
-                'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica',
-                'Japan', 'Jordan', 'Kenya', 'Kosovo', 'Kuwait',
-                'Laos', 'Latvia', 'Lebanon', 'Liberia', 'Lithuania',
-                'Macedonia', 'Malaysia', 'Mexico', 'Moldova', 'Morocco',
-                'Myanmar (Burma)', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua',
-                'Nigeria', 'North Korea', 'Northern Ireland', 'Norway', 'Pakistan',
-                'Panama', 'Paraguay', 'Peru', 'Philippines', 'Poland',
-                'Portugal', 'Puerto Rico', 'Romania', 'Russia', 'Samoa',
-                'Saudi Arabia', 'Scotland', 'Senegal', 'Serbia', 'Sierra Leone',
-                'Singapore', 'Slovakia', 'Somalia', 'South Africa', 'South Korea',
-                'Spain', 'Sri Lanka', 'St. Kitts--Nevis', 'St. Lucia', 'St. Vincent and the Grenadines',
-                'Sudan', 'Sweden', 'Switzerland', 'Syria', 'Taiwan',
-                'Tanzania', 'Thailand', 'Tonga', 'Trinidad and Tobago', 'Turkey',
-                'U. S. Virgin Islands', 'Uganda', 'Ukraine', 'United Kingdom', 'United States',
-                'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam', 'Wales',
-                'Yemen', 'Yugoslavia', 'Zimbabwe'
-            ];
-            $interests = [
-                'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Art', 'Aviation',
-                'Baking', 'Baseball', 'Basketball', 'Blogging', 'Boating', 'Bowling',
-                'Broadcasting', 'Business', 'Camping', 'Chess', 'Child caring',
-                'Clothing', 'Collecting', 'Community service', 'Cooking', 'Cosmetics', 'Crafting', 'Creative Writing', 'Culinary', 'Culture',
-                'Cycling', 'Dancing', 'Design', 'Discussion', 'Driving/racing',
-                'Electronics', 'Entrepreneurship', 'Event organizing', 'Fashion', 'Finance',
-                'Fishing', 'Foods & beverages', 'Football', 'Formulate Teaching Methods', 'Gardening', 'Gender Studies', 'Golf',
-                'Hairstyling', 'Handicrafting', 'Health', 'Higher education', 'Hiking',
-                'History', 'Home decoration', 'Horseback riding', 'Housecleaning', 'Hunting',
-                'Ice hockey', 'Jogging', 'Knowledge', 'Korean Pop Culture', 'Lacrosse', 'Laundry/ironing', 'Law',
-                'Leadership', 'Leatherworking', 'Listening', 'Listening Music', 'Literature', 'Management', 'Marketing',
-                'Mechanics', 'Motivating', 'Movie', 'Music', 'Nursing',
-                'Outdoor recreation', 'Photography', 'Physical exercise', 'Politics', 'Pop Culture', 'Pottery',
-                'Programming', 'Reading', 'Real estate', 'Research', 'Retail',
-                'Running (marathon)', 'Running (sprint)', 'Science Fiction', 'Scouting', 'Sewing/needle work', 'Sharing', 'Sharing Culture', 'Shopping',
-                'Singing', 'Skiing', 'Snorkeling', 'Snowboarding', 'Soccer', 'Social',
-                'Speaking (1-on-1)', 'Speaking (public)', 'Sports', 'Surfing', 'Swimming',
-                'Teaching', 'Technology', 'Tennis', 'Thriathlons', 'Tourism', 'Travelling',
-                'Videographing', 'Volleyball', 'Volunteering', 'Walking', 'Wrestling', 'Writing',
-                'Woodworking',
-            ];
-
-            return view('profile.instructor',compact('instructor','countries', 'interests'));
-        }
-
-        if($this->is_student()){
-            if(Auth::user()->citizenship == 'Not Available') {
-                return redirect()->route('layouts.questionnaire');
-            } else if(Auth::user()->student->course_registrations->count() == 0) {
-                return redirect()->route('courses.index'); // KHUSUS UNTUK FREE CLASSES, mungkin ada bug di CLASS PRIVATE DAN/ATAU GROUP.
-            }
-
-            //$c = (new Countries())->all();
-            //$countries = $c->pluck('name.common')->toArray();
-            //sort($countries);
-
-            /*$timezones = [];
-            foreach($countries as $country) {
-                $c_abbrs = $c
-                    ->where('name.common', $country)
-                    ->first()
-                    ->hydrateTimezones()
-                    ->timezones
-                    ->map(function($timezone) {
-                        return $timezone->abbreviations;
-                    })
-                    ->values()
-                    ->unique()
-                    ->toArray();
-                foreach($c_abbrs as $c_abbr) {
-                    foreach($c_abbr as $ca) {
-                        if($ca[0] == '+' || $ca[0] == '-') {
-                            if(strlen($ca) == 5) $ca = substr($ca, 0, 3) . '.' . substr($ca, 3);
-                            else if(strlen($ca) == 3) $ca = $ca . '.00';
-
-                            if(!in_array($ca, $timezones)) {
-                                array_push($timezones, $ca);
-                            }
-                        }
-                    }
-                }
-            }
-            sort($timezones);*/
-
-            $student = Student::where('user_id',Auth::user()->id)->get();
-            /*$countries = [
-                'Afghanistan', 'Albania', 'Algeria', 'Antigua and Barbuda', 'Argentina',
-                'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Azores',
-                'Bahamas', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium',
-                'Belize', 'Bermuda', 'Bolivia', 'Bosnia & Herzegovina', 'Brazil',
-                'Bulgaria', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde',
-                'Chile', 'China', 'Columbia', 'Costa Rica', 'Croatia',
-                'Cuba', 'Cyprus', 'Czech Republic', 'Czechoslovakia', 'Denmark',
-                'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador',
-                'Eritrea', 'Ethiopia', 'Fiji', 'Finland', 'France',
-                'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada',
-                'Guam', 'Guatemala', 'Guyana', 'Haiti', 'Honduras',
-                'Hong Kong', 'Hungary', 'India', 'Indonesia', 'Iran',
-                'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica',
-                'Japan', 'Jordan', 'Kenya', 'Kosovo', 'Kuwait',
-                'Laos', 'Latvia', 'Lebanon', 'Liberia', 'Lithuania',
-                'Macedonia', 'Malaysia', 'Mexico', 'Moldova', 'Morocco',
-                'Myanmar (Burma)', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua',
-                'Nigeria', 'North Korea', 'Northern Ireland', 'Norway', 'Pakistan',
-                'Panama', 'Paraguay', 'Peru', 'Philippines', 'Poland',
-                'Portugal', 'Puerto Rico', 'Romania', 'Russia', 'Samoa',
-                'Saudi Arabia', 'Scotland', 'Senegal', 'Serbia', 'Sierra Leone',
-                'Singapore', 'Slovakia', 'Somalia', 'South Africa', 'South Korea',
-                'Spain', 'Sri Lanka', 'St. Kitts--Nevis', 'St. Lucia', 'St. Vincent and the Grenadines',
-                'Sudan', 'Sweden', 'Switzerland', 'Syria', 'Taiwan',
-                'Tanzania', 'Thailand', 'Tonga', 'Trinidad and Tobago', 'Turkey',
-                'U. S. Virgin Islands', 'Uganda', 'Ukraine', 'United Kingdom', 'United States',
-                'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam', 'Wales',
-                'Yemen', 'Yugoslavia', 'Zimbabwe'
-            ];*/
-            $interests = [
-                'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Art', 'Aviation',
-                'Baking', 'Baseball', 'Basketball', 'Blogging', 'Boating', 'Bowling',
-                'Broadcasting', 'Business', 'Camping', 'Chess', 'Child caring',
-                'Clothing', 'Collecting', 'Community service', 'Cooking', 'Cosmetics', 'Crafting', 'Creative Writing', 'Culinary', 'Culture',
-                'Cycling', 'Dancing', 'Design', 'Discussion', 'Driving/racing',
-                'Electronics', 'Entrepreneurship', 'Event organizing', 'Fashion', 'Finance',
-                'Fishing', 'Foods & beverages', 'Football', 'Formulate Teaching Methods', 'Gardening', 'Gender Studies', 'Golf',
-                'Hairstyling', 'Handicrafting', 'Health', 'Higher education', 'Hiking',
-                'History', 'Home decoration', 'Horseback riding', 'Housecleaning', 'Hunting',
-                'Ice hockey', 'Jogging', 'Knowledge', 'Korean Pop Culture', 'Lacrosse', 'Laundry/ironing', 'Law',
-                'Leadership', 'Leatherworking', 'Listening', 'Listening Music', 'Literature', 'Management', 'Marketing',
-                'Mechanics', 'Motivating', 'Movie', 'Music', 'Nursing',
-                'Outdoor recreation', 'Photography', 'Physical exercise', 'Politics', 'Pop Culture', 'Pottery',
-                'Programming', 'Reading', 'Real estate', 'Research', 'Retail',
-                'Running (marathon)', 'Running (sprint)', 'Science Fiction', 'Scouting', 'Sewing/needle work', 'Sharing', 'Sharing Culture', 'Shopping',
-                'Singing', 'Skiing', 'Snorkeling', 'Snowboarding', 'Soccer', 'Social',
-                'Speaking (1-on-1)', 'Speaking (public)', 'Sports', 'Surfing', 'Swimming',
-                'Teaching', 'Technology', 'Tennis', 'Thriathlons', 'Tourism', 'Travelling',
-                'Videographing', 'Volleyball', 'Volunteering', 'Walking', 'Wrestling', 'Writing',
-                'Woodworking',
-            ];
-
-            $timezones = [
-                '-11', '-10', '-09:30', '-09', '-08', '-07',
-                '-06', '-05', '-04', '-03', '-02', '-01',
-                '+00', '+01', '+02', '+03', '+04', '+04:30', '+05', '+05:30', '+05:45', '+06',
-                '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
-            ];
-            return view('profile.student',compact('student',/*'countries',*/ 'interests','student','timezones'));
-        }
+        // Berpindah ke ProfileController.
     }
 
     public function contact()

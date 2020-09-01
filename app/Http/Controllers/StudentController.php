@@ -387,7 +387,7 @@ class StudentController extends Controller
 
         if ($this->is_student()){
 
-            if(Auth::user()->image_profile != 'user.jpg') {
+            if($file && Auth::user()->image_profile != 'user.jpg') {
                 $destinationPath = 'uploads/student/profile/';
                 File::delete($destinationPath . Auth::user()->image_profile);
             }

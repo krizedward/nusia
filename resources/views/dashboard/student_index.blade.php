@@ -97,6 +97,10 @@
                 <h4><i class="icon fa fa-clock-o"></i> Please check whether your local time zone shown in the dashboard is correct.</h4>
                 If not, you can change your local time zone in the profile.
             </div>
+            <div class="alert alert-danger alert-dismissible">
+                <h4><i class="icon fa fa-exclamation-triangle"></i> Announcement.</h4>
+                The time schedule for your sessions is already adjusted with your local time.
+            </div>
         </div>
     </div>
     <!-- /.row -->
@@ -124,20 +128,20 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach($session as $dt)
+                  @foreach($session_registration as $dt)
                     <tr>
-                      @if($dt->course->title)
-                        <td>{{ $dt->course->title }}</td>
+                      @if($dt->session->course->title)
+                        <td>{{ $dt->session->course->title }}</td>
                       @else
-                        <td>{{ $dt->course->course_package->title }}</td>
+                        <td>{{ $dt->session->course->course_package->title }}</td>
                       @endif
-                      <td>{{ $dt->course->course_package->course_level->name }}</td>
-                      <td>{{ $dt->title }}</td>
+                      <td>{{ $dt->session->course->course_package->course_level->name }}</td>
+                      <td>{{ $dt->session->title }}</td>
                       {{--session pakai attribut title untuk penamaan persession di halaman dashboard--}}
-                      <!--td>{{ date('l, M d Y', strtotime($dt->schedule->schedule_time)) }}</td-->
-                      @if($dt->schedule->schedule_time)
+                      <!--td>{{ date('l, M d Y', strtotime($dt->session->schedule->schedule_time)) }}</td-->
+                      @if($dt->session->schedule->schedule_time)
                         <?php
-                          $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                          $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                           $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                         ?>
                         {{--aku tambah 2 jam biar sama jadwalnya di web dengan di punya kita--}}
@@ -152,10 +156,18 @@
                       @else
                         <td><i>Not Available</i></td>
                       @endif
-                      @if($dt->link_zoom)
-                        <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Join</a></td>
+                      @if(now() <= $schedule_time->add(80, 'minutes'))
+                        @if($dt->session->link_zoom)
+                          <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
+                        @else
+                          <td><a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a></td>
+                        @endif
                       @else
-                        <td><i>N/A</i></td>
+                        @if($dt->status == 'Should Submit Form')
+                          <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('form_responses.create', [$dt->id]) }}">Form Link</a></td>
+                        @else
+                          <td><i>N/A</i></td>
+                        @endif
                       @endif
                     </tr>
                   @endforeach

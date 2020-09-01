@@ -76,12 +76,11 @@
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
                         {{--None--}}
-                        @foreach($student as $dt)
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Email</strong>
-                            <p>{{ $dt->user->email }}</p>
+                            <p>{{ Auth::user()->email }}</p>
                             <hr>
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship</strong>
-                            <p>{{ $dt->user->citizenship }}</p>
+                            <p>{{ Auth::user()->citizenship }}</p>
                             <hr>
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
 
@@ -100,23 +99,20 @@
                                 @else
                                     <p><i>Not Available</i></p>
                                 @endif
-
-                            <!--p>{{ $dt->interest }}</p-->
                             <hr>
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Age</strong>
-                            <p>{{ $dt->age }}</p>
+                            <p>{{ Auth::user()->student->age }}</p>
                             <hr>
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Job Status</strong>
-                            <p>{{ $dt->status_job }} - {{ $dt->status_description }}</p>
+                            <p>{{ Auth::user()->student->status_job }} - {{ Auth::user()->student->status_description }}</p>
                             <hr>
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesia Language Proficiency</strong>
-                            <p>{{ $dt->indonesian_language_proficiency }}</p>
+                            <p>{{ Auth::user()->student->indonesian_language_proficiency }}</p>
                             <hr>
-                        @endforeach
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="form">
-                        <form class="form-horizontal" role="form" method="post" action="{{ route('students.update',$dt->id) }}" enctype="multipart/form-data">
+                        <form class="form-horizontal" role="form" method="post" action="{{ route('students.update',Auth::user()->student->id) }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             {{--none
