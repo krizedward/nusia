@@ -60,10 +60,68 @@ class FormResponseController extends Controller
             ));
         } else if($this->is_instructor()) {
             $forms = Form::where('is_accessible_by', 2)->get();
+
+            // ANSWER TYPE: RADIO BOX
+            $form_widget_1 = FormResponse
+                ::join('session_registration_forms', 'form_responses.id', 'session_registration_forms.form_response_id')
+                ->join('session_registrations', 'session_registration_forms.session_registration_id', 'session_registrations.id')
+                ->join('sessions', 'session_registrations.session_id', 'sessions.id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where(function($q) {
+                    $q
+                        ->where('schedules.instructor_id', Auth::user()->instructor->id)
+                        ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id);
+                })
+                ->where(function($q) {
+                    $q
+                        ->where('form_responses.form_question_id', 3)
+                        ->orWhere('form_responses.form_question_id', 18);
+                })
+                ->select('form_responses.id', 'form_responses.form_question_id', 'form_responses.created_at', 'form_responses.updated_at')
+                ->get();
+
+            // ANSWER TYPE: RADIO BOX
+            $form_widget_2 = FormResponse
+                ::join('session_registration_forms', 'form_responses.id', 'session_registration_forms.form_response_id')
+                ->join('session_registrations', 'session_registration_forms.session_registration_id', 'session_registrations.id')
+                ->join('sessions', 'session_registrations.session_id', 'sessions.id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where(function($q) {
+                    $q
+                        ->where('schedules.instructor_id', Auth::user()->instructor->id)
+                        ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id);
+                })
+                ->where(function($q) {
+                    $q
+                        ->where('form_responses.form_question_id', 5)
+                        ->orWhere('form_responses.form_question_id', 20);
+                })
+                ->select('form_responses.id', 'form_responses.form_question_id', 'form_responses.created_at', 'form_responses.updated_at')
+                ->get();
+
+            // ANSWER TYPE: TEXT
+            $form_widget_3 = FormResponse
+                ::join('session_registration_forms', 'form_responses.id', 'session_registration_forms.form_response_id')
+                ->join('session_registrations', 'session_registration_forms.session_registration_id', 'session_registrations.id')
+                ->join('sessions', 'session_registrations.session_id', 'sessions.id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where(function($q) {
+                    $q
+                        ->where('schedules.instructor_id', Auth::user()->instructor->id)
+                        ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id);
+                })
+                ->where(function($q) {
+                    $q
+                        ->where('form_responses.form_question_id', 7)
+                        ->orWhere('form_responses.form_question_id', 22);
+                })
+                ->select('form_responses.id', 'form_responses.form_question_id', 'form_responses.created_at', 'form_responses.updated_at')
+                ->get();
+
             $rating = FormResponse::all()->count();
 
             return view('form_responses.instructor_index',compact(
-                'forms','rating'
+                'forms', 'form_widget_1', 'form_widget_2', 'form_widget_3', 'rating'
             ));
         } else {
             return redirect()->route('home');
