@@ -56,13 +56,14 @@ class FormResponseController extends Controller
             $forms = Form::all();
 
             return view('form_responses.admin_index',compact(
-                'forms',
+                'forms'
             ));
         } else if($this->is_instructor()) {
             $forms = Form::where('is_accessible_by', 2)->get();
+            $rating = FormResponse::all()->count();
 
             return view('form_responses.instructor_index',compact(
-                'forms',
+                'forms','rating'
             ));
         } else {
             return redirect()->route('home');
@@ -75,13 +76,13 @@ class FormResponseController extends Controller
             $forms = Form::where('id', $form_id)->get();
 
             return view('form_responses.admin_index',compact(
-                'forms',
+                'forms'
             ));
         } else if($this->is_instructor()) {
             $forms = Form::where('id', $form_id)->where('is_accessible_by', 2)->get();
 
             return view('form_responses.instructor_index',compact(
-                'forms',
+                'forms'
             ));
         } else {
             return redirect()->route('home');
@@ -101,7 +102,7 @@ class FormResponseController extends Controller
                 ->get();
 
             return view('form_responses.admin_index',compact(
-                'forms',
+                'forms'
             ));
         } else if($this->is_instructor()) {
             $forms = Form
@@ -115,7 +116,7 @@ class FormResponseController extends Controller
                 ->get();
 
             return view('form_responses.instructor_index',compact(
-                'forms',
+                'forms'
             ));
         } else {
             return redirect()->route('home');
@@ -258,17 +259,19 @@ class FormResponseController extends Controller
             $session_registration = SessionRegistration::where('id', $session_registration_id)->first();
 
             return view('form_responses.admin_show',compact(
-                'session_registration',
+                'session_registration'
             ));
         } else if($this->is_instructor()) {
             $session_registration = SessionRegistration::where('id', $session_registration_id)->first();
+            /*
             if($session_registration->session_registration_forms->form_response->form_question->form->is_accessible_by == 1) {
                 // Tidak memiliki izin akses.
                 return redirect()->route('home');
             }
+            */
 
             return view('form_responses.instructor_show',compact(
-                'session_registration',
+                'session_registration'
             ));
         } else {
             return redirect()->route('home');
