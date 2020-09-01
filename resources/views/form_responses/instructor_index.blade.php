@@ -27,32 +27,38 @@
                   }
                 }
               }
-              foreach($form_widget_1->first()->form_question->form_question_choices as $fqc) {
-                array_push($arr, $fqc->answer); // menambahkan index pada array untuk menghindari undefined index pada waktu menampilkan hasil count array element.
+              if($form_widget_1->first()) {
+                foreach($form_widget_1->first()->form_question->form_question_choices as $fqc) {
+                  array_push($arr, $fqc->answer); // menambahkan index pada array untuk menghindari undefined index pada waktu menampilkan hasil count array element.
+                }
               }
             ?>
             <ul class="nav nav-stacked">
-              @foreach($form_widget_1->first()->form_question->form_question_choices as $fqc)
-                {{-- Reserved keyword(s) --}}
-                @if($fqc->answer == 'Poor')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @elseif($fqc->answer == 'Good')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @elseif($fqc->answer == 'Great')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @endif
-                @if($fqc->answer == 'Strongly Disagree')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @elseif($fqc->answer == 'Disagree')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-orange">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @elseif($fqc->answer == 'Partly Agree')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @elseif($fqc->answer == 'Agree')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @elseif($fqc->answer == 'Strongly Agree')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-blue">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @endif
-              @endforeach
+              @if($form_widget_1->first())
+                @foreach($form_widget_1->first()->form_question->form_question_choices as $fqc)
+                  {{-- Reserved keyword(s) --}}
+                  @if($fqc->answer == 'Poor')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Good')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Great')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Strongly Disagree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Disagree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-orange">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Partly Agree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Agree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Strongly Agree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-blue">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                @endforeach
+              @else
+                <li><a href="#?">No results.</a></li>
+              @endif
             </ul>
           </div>
         </div>
@@ -81,32 +87,38 @@
                   }
                 }
               }
-              foreach($form_widget_2->first()->form_question->form_question_choices as $fqc) {
-                array_push($arr, $fqc->answer); // menambahkan index pada array untuk menghindari undefined index pada waktu menampilkan hasil count array element.
+              if($form_widget_2->first()) {
+                foreach($form_widget_2->first()->form_question->form_question_choices as $fqc) {
+                  array_push($arr, $fqc->answer); // menambahkan index pada array untuk menghindari undefined index pada waktu menampilkan hasil count array element.
+                }
               }
             ?>
             <ul class="nav nav-stacked">
-              @foreach($form_widget_2->first()->form_question->form_question_choices as $fqc)
-                {{-- Reserved keyword(s) --}}
-                @if($fqc->answer == 'Poor')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @elseif($fqc->answer == 'Good')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @elseif($fqc->answer == 'Great')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @endif
-                @if($fqc->answer == 'Strongly Disagree')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @elseif($fqc->answer == 'Disagree')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-orange">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @elseif($fqc->answer == 'Partly Agree')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @elseif($fqc->answer == 'Agree')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @elseif($fqc->answer == 'Strongly Agree')
-                  <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-blue">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                @endif
-              @endforeach
+              @if($form_widget_2->first())
+                @foreach($form_widget_2->first()->form_question->form_question_choices as $fqc)
+                  {{-- Reserved keyword(s) --}}
+                  @if($fqc->answer == 'Poor')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Good')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Great')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Strongly Disagree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Disagree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-orange">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Partly Agree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Agree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Strongly Agree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-blue">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                @endforeach
+              @else
+                <li><a href="#?">No results.</a></li>
+              @endif
             </ul>
           </div>
         </div>
@@ -132,6 +144,9 @@
                 <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
                 <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li> --}}
               @endforeach
+              @if($form_widget_3->first() == null)
+                <li><a href="#?">No results.</a></li>
+              @endif
             </ul>
           </div>
         </div>
@@ -145,7 +160,7 @@
     <div class="col-md-12">
       <div class="box">
         <div class="box-header">
-          <h3 class="box-title">Data Form Response</h3>
+          <h3 class="box-title">List of Available Form(s)</h3>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -153,8 +168,8 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Title</th>
-                <th>Descriptions</th>
+                <th style="width:250px;">Form Title</th>
+                <th>Form Description</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -163,9 +178,17 @@
                 <tr>
                   <td>{{ $i + 1 }}</td>
                   <td>{{ $dt->title }}</td>
-                  <td>{{ $dt->description }}</td>
                   <td>
-                    <a class="btn btn-xs btn-success" href="{{ route('form_responses.show',1) }}" target="_blank">View Details</a>
+                    <?php
+                      $description = explode('||', $dt->description);
+                    ?>
+                    @foreach($description as $d)
+                      {{ $d }}<br>
+                    @endforeach
+                  </td>
+                  <td>
+                    {{-- <a class="btn btn-xs btn-success" href="{{ route('form_responses.show',1) }}" target="_blank">View Details</a> --}}
+                    <a class="btn btn-xs btn-default disabled" href="#?">In Development</a>
                   </td>
                 </tr>
               @endforeach
