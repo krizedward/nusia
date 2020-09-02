@@ -162,7 +162,7 @@
           <div class="box-footer no-padding">
             <ul class="nav nav-stacked">
               @foreach($form_widget_3 as $fw)
-                <li><a href="#?">{{ $fw->form_response_details->first()->answer }}</a></li>
+                <li><a href="#?">{{ $fw->form_response_details->first()->answer }} ({{ $fw->session_registration_form->session_registration->course_registration->student->user->first_name }} {{ $fw->session_registration_form->session_registration->course_registration->student->user->last_name }})</a></li>
                 {{-- <li><a href="#">Nama <span class="pull-right badge bg-blue">31</span></a></li>
                 <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
                 <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
