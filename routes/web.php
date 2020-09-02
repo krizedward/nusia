@@ -12,6 +12,12 @@
 */
 
 //Route::redirect('/', 'login');
+//akses untuk menguji tampilan draft
+/*
+Route::get('/test', function () {
+    return view('');
+});
+*/
 
 Route::get('/', 'HomeController@landing_page')->name('index');
 
