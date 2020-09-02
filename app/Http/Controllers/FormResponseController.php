@@ -156,7 +156,7 @@ class FormResponseController extends Controller
                 'forms'
             ));
         } else if($this->is_instructor()) {
-            $forms = Form::where('id', $form_id)->where('is_accessible_by', 2)->get();
+            $form = Form::findOrFail($form_id);
 
             $form_responses = FormResponse
                 ::join('session_registration_forms', 'form_responses.id', 'session_registration_forms.form_response_id')
@@ -169,6 +169,18 @@ class FormResponseController extends Controller
                         ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id);
                 })
                 ->select('form_responses.id', 'form_responses.form_question_id', 'form_responses.created_at', 'form_responses.updated_at')
+                ->get();
+
+            $session_registrations = SessionRegistration
+                ::join('sessions', 'session_registrations.session_id', 'sessions.id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where(function($q) {
+                    $q
+                        ->where('schedules.instructor_id', Auth::user()->instructor->id)
+                        ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id);
+                })
+                ->where('session_registrations.status', 'Present')
+                ->select('session_registrations.id', 'session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
                 ->get();
 
             // ANSWER TYPE: RADIO BOX
@@ -238,7 +250,7 @@ class FormResponseController extends Controller
                 ->get();
 
             return view('form_responses.instructor_index_form',compact(
-                'forms', 'form_responses', 'form_widget_1', 'form_widget_2', 'form_widget_3'
+                'form', 'form_responses', 'session_registrations', 'form_widget_1', 'form_widget_2', 'form_widget_3'
             ));
         } else {
             return redirect()->route('home');

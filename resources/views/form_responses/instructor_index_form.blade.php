@@ -5,7 +5,7 @@
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1><b>Form Response, Filtered by Form Title</b></h1>
+    <h1><b>Form Response for {{ $form->title }}</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
         <li><a href="{{ route('form_responses.index') }}">Form Response</a></li>
@@ -187,49 +187,55 @@
           <li class="active"><a href="#summary" data-toggle="tab"><b>Summary</b></a></li>
           <li><a href="#individual" data-toggle="tab"><b>Individual</b></a></li>
         </ul>
-      </div>
-    </div>
-    <div class="col-md-12">
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title"><b>List of Available Form(s)</b></h3>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body">
-          <table id="example1" class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th style="width:250px;">Form Title</th>
-                <th>Form Description</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach($forms as $i => $dt)
-                <tr>
-                  <td>{{ $i + 1 }}</td>
-                  <td>{{ $dt->title }}</td>
-                  <td>
-                    <?php
-                      $description = explode('||', $dt->description);
-                    ?>
-                    @foreach($description as $d)
-                      {{ $d }}<br>
+        <div class="tab-content">
+          <div class="tab-pane active" id="summary">
+            <div class="row">
+              <div class="col-md-12">
+                Coming soon.
+              </div>
+            </div>
+          </div>
+          <!-- /.tab-pane -->
+          <div class="tab-pane" id="individual">
+            <div class="row">
+              <div class="col-md-12">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Profile Picture</th>
+                      <th>Student Name</th>
+                      <th>Level</th>
+                      <th>[Class] Session</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach($session_registrations as $i => $sr)
+                      <tr>
+                        <td>{{ $i + 1 }}</td>
+                        <td><img src="{{ asset('/uploads/student/profile/') . $sr->course_registration->student->user->image_profile }}"></td>
+                        <td>{{ $sr->course_registration->student->user->first_name }} {{ $sr->course_registration->student->user->last_name }}</td>
+                        <td>{{ $sr->session->course->course_package->course_level->name }}</td>
+                        <td>[{{ $sr->session->course->title }}] {{ $sr->session->title }}</td>
+                        <td>
+                          <a class="btn btn-xs btn-success" href="{{ route('form_responses.show', $sr->id) }}" target="_blank">View Details</a>
+                          {{-- <a class="btn btn-xs btn-default disabled" href="#?">In Development</a> --}}
+                        </td>
+                      </tr>
                     @endforeach
-                  </td>
-                  <td>
-                    <a class="btn btn-xs btn-success" href="{{ route('form_responses.index_form', $dt->id) }}" target="_blank">View Details</a>
-                    {{-- <a class="btn btn-xs btn-default disabled" href="#?">In Development</a> --}}
-                  </td>
-                </tr>
-              @endforeach
-            </tbody>
-          </table>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.tab-pane -->
         </div>
-        <!-- /.box-body -->
+        <!-- /.tab-content -->
       </div>
-      <!-- /.box -->
+      <!-- /.nav-tabs -->
     </div>
     <!-- /.col -->
   </div>
