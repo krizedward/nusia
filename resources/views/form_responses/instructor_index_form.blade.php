@@ -19,6 +19,11 @@
       <div class="col-md-4">
         <!-- Widget -->
         <div class="box box-widget widget-user">
+          <div class="box-header bg-yellow" style="margin:0px; padding:0px;">
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" style="color:#ffffff;" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+          </div>
           <!-- Add the bg color to the header using any of the bg-* classes -->
           <div class="widget-user-header bg-yellow">
             <h3 class="widget-user-username">Rating 1</h3>
@@ -79,6 +84,11 @@
       <div class="col-md-4">
         <!-- Widget -->
         <div class="box box-widget widget-user">
+          <div class="box-header bg-maroon" style="margin:0px; padding:0px;">
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" style="color:#ffffff;" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+          </div>
           <!-- Add the bg color to the header using any of the bg-* classes -->
           <div class="widget-user-header bg-maroon">
             <h3 class="widget-user-username">Rating 2</h3>
@@ -139,6 +149,11 @@
       <div class="col-md-4">
         <!-- Widget -->
         <div class="box box-widget widget-user">
+          <div class="box-header bg-purple" style="margin:0px; padding:0px;">
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" style="color:#ffffff;" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+          </div>
           <!-- Add the bg color to the header using any of the bg-* classes -->
           <div class="widget-user-header bg-purple">
             <h3 class="widget-user-username">Rating 3</h3>
@@ -165,11 +180,19 @@
     @endif
   </div>
   <!-- /.row -->
-  <div class="row hidden">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#summary" data-toggle="tab"><b>Summary</b></a></li>
+          <li><a href="#individual" data-toggle="tab"><b>Individual</b></a></li>
+        </ul>
+      </div>
+    </div>
     <div class="col-md-12">
       <div class="box">
         <div class="box-header">
-          <h3 class="box-title">List of Available Form(s)</h3>
+          <h3 class="box-title"><b>List of Available Form(s)</b></h3>
         </div>
         <!-- /.box-header -->
         <div class="box-body">

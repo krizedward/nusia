@@ -14,59 +14,86 @@
 
 @section('content')
   <div class="row">
-    <div class="col-md-4">
-      <div class="small-box bg-aqua">
+    <div class="col-md-6">
+      <div class="small-box bg-aqua-active">
         <div class="inner">
           <h3>{{ $widget_1 }}</h3>
           <p>
             @if($widget_1 == 1)
-              Feedback
+              Total Feedback Received
             @else
-              Feedbacks
+              Total Feedbacks Received
             @endif
           </p>
         </div>
         <div class="icon">
           <i class="fa fa-files-o"></i>
         </div>
-        <a href="#" class="small-box-footer">
+        <a href="#?" class="small-box-footer">
           More info <i class="fa fa-arrow-circle-right"></i>
         </a>
       </div>
     </div>
     <!-- /.col -->
-    <div class="col-md-4">
-      <div class="small-box bg-green">
-        <div class="inner">
-          <h3>{{ $widget_2 * 100 / $widget_1 }}%</h3>
-          <p>
-            Positive Performance of Instructors
-          </p>
+    <div class="col-md-6">
+      @if($widget_2 * 100 / $widget_1 >= 50)
+        <div class="small-box bg-green">
+          <div class="inner">
+            <h3>{{ $widget_2 * 100 / $widget_1 }}%</h3>
+            <p>
+              @if($widget_2 == 1)
+                Instructors' Performance
+              @else
+                Instructors' Performance
+              @endif
+            </p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-battery-full"></i>
+          </div>
+          <a href="#?" class="small-box-footer">
+            More info <i class="fa fa-arrow-circle-right"></i>
+          </a>
         </div>
-        <div class="icon">
-          <i class="fa fa-check-square-o"></i>
+      @elseif($widget_2 * 100 / $widget_1 >= 25)
+        <div class="small-box bg-yellow">
+          <div class="inner">
+            <h3>{{ $widget_2 * 100 / $widget_1 }}%</h3>
+            <p>
+              @if($widget_2 == 1)
+                Instructors' Performance
+              @else
+                Instructors' Performance
+              @endif
+            </p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-battery-half"></i>
+          </div>
+          <a href="#?" class="small-box-footer">
+            More info <i class="fa fa-arrow-circle-right"></i>
+          </a>
         </div>
-        <a href="#" class="small-box-footer">
-          More info <i class="fa fa-arrow-circle-right"></i>
-        </a>
-      </div>
-    </div>
-    <!-- /.col -->
-    <div class="col-md-4">
-      <div class="small-box bg-red">
-        <div class="inner">
-          <h3>{{ $widget_3 * 100 / $widget_1 }}%</h3>
-          <p>
-            Negative Performance of Instructors
-          </p>
+      @else
+        <div class="small-box bg-red">
+          <div class="inner">
+            <h3>{{ $widget_2 * 100 / $widget_1 }}%</h3>
+            <p>
+              @if($widget_2 == 1)
+                Instructors' Performance
+              @else
+                Instructors' Performance
+              @endif
+            </p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-battery-quarter"></i>
+          </div>
+          <a href="#?" class="small-box-footer">
+            More info <i class="fa fa-arrow-circle-right"></i>
+          </a>
         </div>
-        <div class="icon">
-          <i class="fa fa-times-circle-o"></i>
-        </div>
-        <a href="#" class="small-box-footer">
-          More info <i class="fa fa-arrow-circle-right"></i>
-        </a>
-      </div>
+      @endif
     </div>
     <!-- /.col -->
     {{-- <div class="col-md-4">
@@ -91,7 +118,7 @@
     <div class="col-md-12">
       <div class="box">
         <div class="box-header">
-          <h3 class="box-title">List of Available Form(s)</h3>
+          <h3 class="box-title"><b>List of Available Form(s)</b></h3>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
