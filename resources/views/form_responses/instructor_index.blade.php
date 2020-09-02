@@ -4,156 +4,87 @@
 
 @include('layouts.css_and_js.table')
 
+@section('content-header')
+    <h1><b>Form Response</b></h1>
+    <ol class="breadcrumb">
+        <li><a href="{{ route('home') }}">Home</a></li>
+        <li class="active">Form Response</li>
+    </ol>
+@stop
+
 @section('content')
   <div class="row">
-    @if($form_widget_1)
-      <div class="col-md-4">
-        <!-- Widget -->
-        <div class="box box-widget widget-user">
-          <!-- Add the bg color to the header using any of the bg-* classes -->
-          <div class="widget-user-header bg-yellow-active">
-            <h3 class="widget-user-username">Rating 1</h3>
-            <h5 class="widget-user-desc">The instructors help me to improve my bahasa Indonesia proficiency.</h5>
-          </div>
-          <div class="box-footer no-padding">
-            <?php
-              $arr = [];
-              foreach($form_widget_1 as $fw) {
-                foreach($fw->form_question->form_question_choices as $fqc) {
-                  // Suitable for text-like and radiobox answer. This is not suitable for checkbox choice(s).
-                  if($fw->form_response_details->first()->answer == $fqc->answer) {
-                    array_push($arr, $fqc->answer);
-                    break;
-                  }
-                }
-              }
-              if($form_widget_1->first()) {
-                foreach($form_widget_1->first()->form_question->form_question_choices as $fqc) {
-                  array_push($arr, $fqc->answer); // menambahkan index pada array untuk menghindari undefined index pada waktu menampilkan hasil count array element.
-                }
-              }
-            ?>
-            <ul class="nav nav-stacked">
-              @if($form_widget_1->first())
-                @foreach($form_widget_1->first()->form_question->form_question_choices as $fqc)
-                  {{-- Reserved keyword(s) --}}
-                  @if($fqc->answer == 'Poor')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @elseif($fqc->answer == 'Good')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @elseif($fqc->answer == 'Great')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @endif
-                  @if($fqc->answer == 'Strongly Disagree')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @elseif($fqc->answer == 'Disagree')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-orange">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @elseif($fqc->answer == 'Partly Agree')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @elseif($fqc->answer == 'Agree')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @elseif($fqc->answer == 'Strongly Agree')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-blue">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @endif
-                @endforeach
-              @else
-                <li><a href="#?">No results.</a></li>
-              @endif
-            </ul>
-          </div>
+    <div class="col-md-4">
+      <div class="small-box bg-aqua">
+        <div class="inner">
+          <h3>{{ $widget_1 }}</h3>
+          <p>
+            @if($widget_1 == 1)
+              Feedback
+            @else
+              Feedbacks
+            @endif
+          </p>
         </div>
-        <!-- /.widget-user -->
-      </div>
-      <!-- /.col -->
-    @endif
-    @if($form_widget_2)
-      <div class="col-md-4">
-        <!-- Widget -->
-        <div class="box box-widget widget-user">
-          <!-- Add the bg color to the header using any of the bg-* classes -->
-          <div class="widget-user-header bg-green-active">
-            <h3 class="widget-user-username">Rating 2</h3>
-            <h5 class="widget-user-desc">How would you rate the instructors’ overall performance?</h5>
-          </div>
-          <div class="box-footer no-padding">
-            <?php
-              $arr = [];
-              foreach($form_widget_2 as $fw) {
-                foreach($fw->form_question->form_question_choices as $fqc) {
-                  // Suitable for text-like and radiobox answer. This is not suitable for checkbox choice(s).
-                  if($fw->form_response_details->first()->answer == $fqc->answer) {
-                    array_push($arr, $fqc->answer);
-                    break;
-                  }
-                }
-              }
-              if($form_widget_2->first()) {
-                foreach($form_widget_2->first()->form_question->form_question_choices as $fqc) {
-                  array_push($arr, $fqc->answer); // menambahkan index pada array untuk menghindari undefined index pada waktu menampilkan hasil count array element.
-                }
-              }
-            ?>
-            <ul class="nav nav-stacked">
-              @if($form_widget_2->first())
-                @foreach($form_widget_2->first()->form_question->form_question_choices as $fqc)
-                  {{-- Reserved keyword(s) --}}
-                  @if($fqc->answer == 'Poor')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @elseif($fqc->answer == 'Good')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @elseif($fqc->answer == 'Great')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @endif
-                  @if($fqc->answer == 'Strongly Disagree')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @elseif($fqc->answer == 'Disagree')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-orange">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @elseif($fqc->answer == 'Partly Agree')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @elseif($fqc->answer == 'Agree')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @elseif($fqc->answer == 'Strongly Agree')
-                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-blue">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
-                  @endif
-                @endforeach
-              @else
-                <li><a href="#?">No results.</a></li>
-              @endif
-            </ul>
-          </div>
+        <div class="icon">
+          <i class="fa fa-files-o"></i>
         </div>
-        <!-- /.widget-user -->
+        <a href="#" class="small-box-footer">
+          More info <i class="fa fa-arrow-circle-right"></i>
+        </a>
       </div>
-      <!-- /.col -->
-    @endif
-    @if($form_widget_3)
-      <div class="col-md-4">
-        <!-- Widget -->
-        <div class="box box-widget widget-user">
-          <!-- Add the bg color to the header using any of the bg-* classes -->
-          <div class="widget-user-header bg-aqua-active">
-            <h3 class="widget-user-username">Rating 3</h3>
-            <h5 class="widget-user-desc">Give comments what to improve for our instructors (time management, teaching delivery, etc)</h5>
-          </div>
-          <div class="box-footer no-padding">
-            <ul class="nav nav-stacked">
-              @foreach($form_widget_3 as $fw)
-                <li><a href="#?">{{ $fw->form_response_details->first()->answer }}</a></li>
-                {{-- <li><a href="#">Nama <span class="pull-right badge bg-blue">31</span></a></li>
-                <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
-                <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
-                <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li> --}}
-              @endforeach
-              @if($form_widget_3->first() == null)
-                <li><a href="#?">No results.</a></li>
-              @endif
-            </ul>
-          </div>
+    </div>
+    <!-- /.col -->
+    <div class="col-md-4">
+      <div class="small-box bg-green">
+        <div class="inner">
+          <h3>{{ $widget_2 * 100 / $widget_1 }}%</h3>
+          <p>
+            Positive Performance of Instructors
+          </p>
         </div>
-        <!-- /.widget-user -->
+        <div class="icon">
+          <i class="fa fa-check-square-o"></i>
+        </div>
+        <a href="#" class="small-box-footer">
+          More info <i class="fa fa-arrow-circle-right"></i>
+        </a>
       </div>
-      <!-- /.col -->
-    @endif
+    </div>
+    <!-- /.col -->
+    <div class="col-md-4">
+      <div class="small-box bg-red">
+        <div class="inner">
+          <h3>{{ $widget_3 * 100 / $widget_1 }}%</h3>
+          <p>
+            Negative Performance of Instructors
+          </p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-times-circle-o"></i>
+        </div>
+        <a href="#" class="small-box-footer">
+          More info <i class="fa fa-arrow-circle-right"></i>
+        </a>
+      </div>
+    </div>
+    <!-- /.col -->
+    {{-- <div class="col-md-4">
+      <div class="info-box">
+        <span class="info-box-icon bg-red"><i class="fa fa-files-o"></i></span>
+        <div class="info-box-content">
+          @if($widget_1 == 1)
+            <span class="info-box-text">There is</span>
+            <span class="info-box-number">{{ $widget_1 }} Feedback Received</span>
+          @else
+            <span class="info-box-text">There are</span>
+            <span class="info-box-number">{{ $widget_1 }} Feedbacks Received</span>
+          @endif
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+    </div>
+    <!-- /.col --> --}}
   </div>
   <!-- /.row -->
   <div class="row">
@@ -187,8 +118,8 @@
                     @endforeach
                   </td>
                   <td>
-                    {{-- <a class="btn btn-xs btn-success" href="{{ route('form_responses.show',1) }}" target="_blank">View Details</a> --}}
-                    <a class="btn btn-xs btn-default disabled" href="#?">In Development</a>
+                    <a class="btn btn-xs btn-success" href="{{ route('form_responses.index_form', $dt->id) }}">View Details</a>
+                    {{-- <a class="btn btn-xs btn-default disabled" href="#?">In Development</a> --}}
                   </td>
                 </tr>
               @endforeach
