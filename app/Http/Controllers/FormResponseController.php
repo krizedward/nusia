@@ -174,6 +174,12 @@ class FormResponseController extends Controller
             $session_registrations = SessionRegistration
                 ::join('sessions', 'session_registrations.session_id', 'sessions.id')
                 ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('session_registration_forms', 'session_registrations.id', 'session_registration_forms.session_registration_id')
+                ->join('form_responses', 'session_registration_forms.form_response_id', 'form_responses.id')
+                ->join('form_questions', 'form_responses.form_question_id', 'form_questions.id')
+                ->join('forms', 'form_questions.form_id', 'forms.id')
+                ->where('forms.id', $form_id)
+                ->distinct()
                 ->where(function($q) {
                     $q
                         ->where('schedules.instructor_id', Auth::user()->instructor->id)
