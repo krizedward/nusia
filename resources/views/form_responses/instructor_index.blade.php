@@ -13,6 +13,7 @@
 @stop
 
 @section('content')
+  @if($widget_1 != 0)
   <div class="row">
     <div class="col-md-6">
       <div class="small-box bg-aqua-active">
@@ -74,7 +75,7 @@
             More info <i class="fa fa-arrow-circle-right"></i>
           </a>
         </div>
-      @else
+      @elseif($widget_2 * 100 / $widget_1 >= 0)
         <div class="small-box bg-red">
           <div class="inner">
             <h3>{{ $widget_2 * 100 / $widget_1 }}%</h3>
@@ -114,6 +115,32 @@
     <!-- /.col --> --}}
   </div>
   <!-- /.row -->
+  @else
+  <div class="row">
+    <div class="col-md-12">
+      <div class="small-box bg-aqua-active">
+        <div class="inner">
+          <h3>{{ $widget_1 }}</h3>
+          <p>
+            @if($widget_1 == 1)
+              Total Feedback Received
+            @else
+              Total Feedbacks Received
+            @endif
+          </p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-files-o"></i>
+        </div>
+        <a href="#?" class="small-box-footer">
+          More info <i class="fa fa-arrow-circle-right"></i>
+        </a>
+      </div>
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+  @endif
   <div class="row">
     <div class="col-md-12">
       <div class="box">
