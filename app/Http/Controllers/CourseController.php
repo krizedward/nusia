@@ -258,4 +258,17 @@ class CourseController extends Controller
         $data = Course::all();
         return view('courses.index', compact('data'));
     }
+
+    /**
+     * Private Courses
+     *
+     * Roles: Student
+    */
+    public function private()
+    {
+        if ($this->is_student()) {
+            $course = Course::all();
+            return view('courses.student_private_index', compact('course'));
+        }
+    }
 }

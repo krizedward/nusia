@@ -50,6 +50,9 @@ Route::group(['middleware'=>'auth'], function() {
         Route::delete('/material/destroy/{id}', 'MaterialController@destroy')->name('materials.destroy');
         Route::get('/material/download/{id}', 'MaterialController@download')->name('materials.download');
 
+        //Private Course Class
+        Route::get('/course/private','CourseController@private')->name('courses.private');
+
         // Apabila berencana membuat routing
         // selain Route::resource(s) (pada keyword yang sama),
         // lakukan deklarasi SEBELUM menulis baris kode Route::resource(s).

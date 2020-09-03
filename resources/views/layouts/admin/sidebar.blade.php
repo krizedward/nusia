@@ -109,6 +109,9 @@
                     <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> Material</span></a>
                 </li>
 
+                <li class="#">
+                    <a href="{{ route('courses.private') }}"><i class="fa fa-book"> </i><span> Private Courses</span></a>
+                </li>
                 <!-- Other_Navigasi -->
                 {{--
                 <li class="header">OTHER</li>
