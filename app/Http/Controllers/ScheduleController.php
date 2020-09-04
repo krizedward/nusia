@@ -350,11 +350,13 @@ class ScheduleController extends Controller
     /**
      * Custom Link By Edward
      */
-    public function private()
+    public function private($codeInstructor)
     {
         if ($this->is_student()) {
+            $instructor = Instructor::where('code',$codeInstructor)->get();
+            //$data = Schedule::where('instructor_id',$instructor->first()->id)->get();
             $data = Schedule::all();
-            return view('courses.student_private_schedule', compact('data'));
+            return view('courses.student_private_schedule', compact('data','instructor'));
         } else if ($this->is_instructor()) {
             $data = Schedule::all();
             return view('schedules.instructor.private', compact('data'));

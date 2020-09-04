@@ -51,9 +51,10 @@ Route::group(['middleware'=>'auth'], function() {
         Route::get('/material/download/{id}', 'MaterialController@download')->name('materials.download');
 
         //Private Course Class
-        Route::get('/course/private','CourseController@private')->name('courses.private');
-        Route::get('/course/instructor/private','InstructorController@private')->name('instructors.private');
-        Route::get('/course/instructor/schedule/private','ScheduleController@private')->name('schedules.private');
+        Route::get('/course/private','CourseController@private')->name('courses.private');//menampilkan macam course yang dipilih
+        Route::get('/course/instructor/private','InstructorController@private')->name('instructors.private');//menampilkan instructor
+        //Route::get('/course/instructor/{id}/private','InstructorController@privates')->name('instructors.privates');
+        Route::get('/course/instructor/schedules/private/{id}','ScheduleController@private')->name('schedules.private');//menampilkan jadwal instructor
 
         // Apabila berencana membuat routing
         // selain Route::resource(s) (pada keyword yang sama),
@@ -145,7 +146,6 @@ Route::group(['middleware'=>'auth'], function() {
     /*link custom*/
     //halaman instructor
     Route::get('/schedules/{course_type?}', 'ScheduleController@index')->name('schedules.index');
-    Route::get('/schedules/private','ScheduleController@private')->name('schedules.private');
     Route::get('/schedules/group','ScheduleController@group')->name('schedules.group');
 
     Route::get('/session/private', 'SessionController@private')->name('session.private');

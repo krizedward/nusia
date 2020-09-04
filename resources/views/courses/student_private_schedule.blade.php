@@ -74,6 +74,16 @@
                 },
                 //Random default events
                 events    : [
+                    //mengambil data dari model
+                    @foreach($data as $dt)
+                    @if($dt->instructor_id == $instructor->first()->id)
+                    {
+                        title 	: '{{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}',
+                        start 	: '{{ $dt->schedule_time }}',
+                        url 	: '{{ route('home') }}'
+                    },
+                    @endif
+                    @endforeach
                 ],
                 editable  : false,
                 droppable : false, // this allows things to be dropped onto the calendar !!!
@@ -87,26 +97,15 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-4">
-
-            <div class="callout callout-danger">
-                <h4>Class -  )</h4>
-                <form action="#">
-                    <button type="submit" class="btn btn-danger btn-block btn-flat">Select</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="callout callout-info">
-                <h4>Instructor - </h4>
-                <form action="#">
+                <h4>Instructor - {{ $instructor->first()->user->first_name }} {{ $instructor->first()->user->last_name }}</h4>
+                <form action="{{ route('instructors.private') }}">
                     <button type="submit" class="btn btn-info btn-block btn-flat">Select</button>
                 </form>
             </div>
         </div>
-
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="callout callout-warning">
                 <h4>Time</h4>
                 <form action="#">
@@ -114,7 +113,6 @@
                 </form>
             </div>
         </div>
-
     </div>
 
     <div class="row">
@@ -129,15 +127,14 @@
                             <th style="width: 10px">#</th>
                             <th>Date</th>
                         </tr>
-                        {{--
                         @foreach($data as $dt)
-                            @if($dt->instructor_id == $instructor->id)
-                                <tr>
-                                    <td>1</td>
-                                    <td>{{ date('d M yy', strtotime($dt->date_meet))}}</td>
-                                </tr>
+                            @if($dt->instructor_id == $instructor->first()->id)
+                            <tr>
+                                <td>#</td>
+                                <td>{{ date('d M yy', strtotime($dt->schedule_time))}}</td>
+                            </tr>
                             @endif
-                        @endforeach --}}
+                        @endforeach
                     </table>
                 </div>
             </div>

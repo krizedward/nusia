@@ -99,7 +99,7 @@
                                 @if(Auth::user()->citizenship == 'Not Available')
                                     <div class="text-center"><b>To continue, please complete the account confirmation.</b></div>
                                 @else
-                                    <a href="{{ route('schedules.private') }}" class="btn btn-primary btn-block"><b>Choose</b></a>
+                                    <a href="{{ route('schedules.private',[$dt->code]) }}" class="btn btn-primary btn-block"><b>Choose</b></a>
                                 @endif
                             </div>
                             <!-- /.box-body -->
