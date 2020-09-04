@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
+use App\Models\CourseRegistration;
 use Illuminate\Http\Request;
 
 use App\Models\CoursePayment;
@@ -72,27 +74,30 @@ class CoursePaymentController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $data = Validator::make($data, [
-            'course_registration_id' => [
-                'bail', 'required',
-                Rule::unique('course_payments', 'course_registration_id')
-            ],
-            'method' => ['bail', 'required', 'max:20'],
-            'payment_time' => ['bail', 'required', 'date'],
-            'amount' => ['bail', 'sometimes', 'integer', 'max:1000000000'],
-            'status' => ['bail', 'required'],
-            'path' => ['bail', 'sometimes', 'max:1000']
-        ]);
+        if($request->flag == false) return redirect()->route('courses.index');
 
-        if($data->fails()) {
-            return redirect()->back()
-                ->withErrors($data)
-                ->withInput();
-        }
 
-        if($this->is_admin() || $this->is_student()) {
+
+        if($this->is_admin()) {
             /*
+            $data = $request->all();
+            $data = Validator::make($data, [
+                'course_registration_id' => [
+                    'bail', 'required',
+                    Rule::unique('course_payments', 'course_registration_id')
+                ],
+                'method' => ['bail', 'required', 'max:20'],
+                'payment_time' => ['bail', 'required', 'date'],
+                'amount' => ['bail', 'sometimes', 'integer', 'max:1000000000'],
+                'status' => ['bail', 'required'],
+                'path' => ['bail', 'sometimes', 'max:1000']
+            ]);
+
+            if($data->fails()) {
+                return redirect()->back()
+                    ->withErrors($data)
+                    ->withInput();
+            }
             CoursePayment::create([
                 'course_registration_id' => $request->course_registration_id,
                 'method' => $request->method,
@@ -102,13 +107,43 @@ class CoursePaymentController extends Controller
                 'path' => $request->path
             ]);
             */
-        } else {
-            // Tidak memiliki hak akses.
-        }
+        } else if ($this->is_student()) {
+            $data = $request->all();
+            $data = Validator::make($data, [
+                'course_id' => [
+                    'bail', 'required',
+                    Rule::unique('course_registrations', 'course_id')
+                        ->where('student_id', $request->student_id)
+                ],
+                'student_id' => [
+                    'bail', 'required',
+                    Rule::unique('course_registrations', 'student_id')
+                        ->where('course_id', $request->course_id)
+                ]
+            ]);
 
-        if($this->is_admin() || $this->is_student()) {
+            if($data->fails()) {
+                return redirect()->back()
+                    ->withErrors($data)
+                    ->withInput();
+            }
+
+            CourseRegistration::create([
+                'course_id' => $request->course_id,
+                'student_id' => $request->student_id
+            ]);
+
+            $course = Course::findOrFail($request->course_id);
+            $course_registration_id = CourseRegistration::all()->last()->id;
+
+            CoursePayment::create([
+                'course_registration_id' => $course_registration_id,
+                'method' => 'None',
+                'amount' => $course->course_package->price,
+                'status' => 'Not Confirmed',
+            ]);
             $data = CoursePayment::all();
-            return view('courses.payments.index', compact('data'));
+            return view('course_payments.student_index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }

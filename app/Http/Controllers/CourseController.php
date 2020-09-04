@@ -267,8 +267,44 @@ class CourseController extends Controller
     public function private()
     {
         if ($this->is_student()) {
-            $course = Course::all();
-            return view('courses.student_private_index', compact('course'));
+            //$course = Course::all();
+            //return view('courses.student_private_index', compact('course'));
+
+            $i = 0;
+            foreach(Auth::user()->student->course_registrations as $cr) {
+                if(strlen( strstr($cr->course->course_package->course_type->name, 'Private') ) != 0) {
+                    $i++;
+                    break;
+                }
+            }
+
+            if(Auth::user()->citizenship == 'Not Available') {
+                return redirect()->route('layouts.questionnaire');
+            } else if($i == 0) {
+                // jika Student tidak sedang mengikuti Free Trial class,
+                // maka Student diperbolehkan untuk mendaftar pada satu atau beberapa kelas lain
+                // sesuai dengan language proficiency masing-masing Student.
+
+                // seleksi berikut, khusus free trial saja
+                // (PERLU DITAMBAHKAN JIKA ADA KELAS "Private" DAN "Group").
+                $data = Course
+                    ::join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                    ->join('course_levels', 'course_packages.course_level_id', 'course_levels.id')
+                    ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                    //->where('course_levels.name', 'LIKE', '%'.Auth::user()->student->indonesian_language_proficiency.'%')
+                    ->where('course_types.name', 'LIKE', '%Private%')
+                    ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at')
+                    ->get();
+                $is_local_access = config('database.connections.mysql.username') == 'root';
+                return view('courses.student_private_index', compact('data', 'is_local_access'));
+            } else {
+                // jika Student sedang mengikuti Free Trial class,
+                // maka Student tidak diperbolehkan untuk mendaftar dalam class lain.
+                // Free Trial class dibatasi sejumlah 3 sesi.
+                // Setiap Student hanya diperbolehkan mengikuti Free Trial class, sebanyak satu kali.
+                return redirect()->route('home');
+            }
+
         }
     }
 }
