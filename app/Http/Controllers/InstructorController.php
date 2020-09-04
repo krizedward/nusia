@@ -349,4 +349,15 @@ class InstructorController extends Controller
     {
         //
     }
+
+    /**
+     * Course Private Untuk Memilih Instructor
+     *
+     * Role: Student
+    */
+    public function private()
+    {
+        $instructors = Instructor::all();
+        return view('courses.student_private_instructor', compact('instructors'));
+    }
 }

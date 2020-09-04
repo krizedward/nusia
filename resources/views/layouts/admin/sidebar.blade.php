@@ -112,6 +112,10 @@
                 <li class="#">
                     <a href="{{ route('courses.private') }}"><i class="fa fa-book"> </i><span> Private Courses</span></a>
                 </li>
+
+                <li class="#">
+                    <a href="{{ route('course_payments.index',1) }}"><i class="fa fa-book"> </i><span> Payments</span></a>
+                </li>
                 <!-- Other_Navigasi -->
                 {{--
                 <li class="header">OTHER</li>

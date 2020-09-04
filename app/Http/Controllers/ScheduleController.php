@@ -354,7 +354,7 @@ class ScheduleController extends Controller
     {
         if ($this->is_student()) {
             $data = Schedule::all();
-            return view('schedules.students.private', compact('data'));
+            return view('courses.student_private_schedule', compact('data'));
         } else if ($this->is_instructor()) {
             $data = Schedule::all();
             return view('schedules.instructor.private', compact('data'));

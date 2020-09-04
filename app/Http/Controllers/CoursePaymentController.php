@@ -42,11 +42,14 @@ class CoursePaymentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($parameter)
     {
-        if($this->is_admin() || $this->is_student()) {
+        if($this->is_admin()) {
             $data = CoursePayment::all();
             return view('courses.payments.index', compact('data'));
+        } else if ($this->is_student()) {
+            $data = CoursePayment::all();
+            return view('course_payments.student_index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }

@@ -52,6 +52,8 @@ Route::group(['middleware'=>'auth'], function() {
 
         //Private Course Class
         Route::get('/course/private','CourseController@private')->name('courses.private');
+        Route::get('/course/instructor/private','InstructorController@private')->name('instructors.private');
+        Route::get('/course/instructor/schedule/private','ScheduleController@private')->name('schedules.private');
 
         // Apabila berencana membuat routing
         // selain Route::resource(s) (pada keyword yang sama),

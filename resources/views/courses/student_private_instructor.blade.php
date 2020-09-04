@@ -16,17 +16,8 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-4">
 
-            <div class="callout callout-danger">
-                <h4>Class - {{ $class->name }} ( {{ $class->level }} )</h4>
-                <form action="{{ url('/classroom') }}">
-                    <button type="submit" class="btn btn-danger btn-block btn-flat">Select</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="callout callout-info">
                 <h4>Instructor</h4>
                 <form action="#">
@@ -35,9 +26,9 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="callout callout-default">
-                <h4>Time</a></h4>
+                <h4>Time</h4>
                 <form action="#">
                     <button type="submit" class="btn btn-block btn-default disabled">Select</button>
                 </form>
@@ -47,14 +38,17 @@
     </div>
 
     <div class="row">
-
-        @foreach($data as $dt)
+        @foreach($instructors as $dt)
             <div class="col-md-4">
                 <!-- Box Comment -->
                 <div class="box box-widget">
                     <div class="box-body">
                         <a href="#" data-toggle="modal" data-target="#{{$dt->id}}">
-                            <img class="img-responsive pad" src="{{ url('upload/nusia-ins/'.$dt->image) }}" alt="Photo">
+                            @if($dt->user->image_profile)
+                                <img class="img-responsive pad" src="{{ url('uploads/instructor/'.$dt->user->image_profile) }}" alt="User profile picture">
+                            @else
+                                <img class="img-responsive pad" src="{{ asset('adminlte/dist/img/avatar5.png') }}" alt="User profile picture">
+                            @endif
                         </a>
                     </div>
                     <!-- /.box-body -->
@@ -69,28 +63,46 @@
                         <!-- Profile Image -->
                         <div class="box box-primary">
                             <div class="box-body box-profile">
-                                <img class="profile-user-img img-responsive img-circle" src="{{ url('upload/nusia-ins/'.$dt->image) }}" alt="User profile picture">
+                                @if($dt->user->image_profile)
+                                    <img class="profile-user-img img-responsive img-circle" src="{{ url('uploads/instructor/'.$dt->user->image_profile) }}" alt="User profile picture">
+                                @else
+                                    <img class="profile-user-img img-responsive img-circle" src="{{ asset('adminlte/dist/img/avatar5.png') }}" alt="User profile picture">
+                                @endif
 
-                                <h3 class="profile-username text-center">{{$dt->user->name}}</h3>
+                                <h3 class="profile-username text-center">{{$dt->user->first_name}} {{$dt->user->last_name}}</h3>
 
-                                <p class="text-muted text-center">I am Your Instructor</p>
+                                <p class="text-muted text-center">This box describes the professional experience(s) and interest(s) of {{$dt->user->first_name}} {{$dt->user->last_name}}</p>
 
                                 <ul class="list-group list-group-unbordered">
                                     <li class="list-group-item">
                                         <b>Professional Experiences</b>
-                                        <p>
-                                            {{ nl2br(e($dt->pro_experiences,false)) }}
-                                        </p>
+                                        @foreach(explode('|| ', $dt->working_experience) as $we)
+                                            <p>
+                                                {{$we}}
+                                            </p>
+                                        @endforeach
                                     </li>
                                     <li class="list-group-item">
                                         <b>Interest</b>
-                                        <p>{{ $dt->interest }}</p>
+                                        @foreach(explode(', ', $dt->interest) as $in)
+                                            <p>
+                                                {{$in}}
+                                            </p>
+                                        @endforeach
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Email</b>
+                                        <p>{{$dt->user->email}}</p>
                                     </li>
                                 </ul>
 
-                                <a href="{{ route('instructors.choose',[$class->id,$dt->id]) }}" class="btn btn-primary btn-block"><b>Choose</b></a>
+                                @if(Auth::user()->citizenship == 'Not Available')
+                                    <div class="text-center"><b>To continue, please complete the account confirmation.</b></div>
+                                @else
+                                    <a href="{{ route('schedules.private') }}" class="btn btn-primary btn-block"><b>Choose</b></a>
+                                @endif
                             </div>
-                        <!-- /.box-body {{ url('/schedule/'.Auth::user()->id).'/'.$dt->id }} -->
+                            <!-- /.box-body -->
                         </div>
                         <!-- /.box -->
                     </div>
