@@ -12,6 +12,7 @@ use App\Models\Session;
 use App\Models\Schedule;
 use App\Models\MaterialPublic;
 use App\Models\MaterialSession;
+use App\Models\Course;
 use App\Models\CourseRegistration;
 use Str;
 use Illuminate\Support\Facades\Validator;
@@ -58,14 +59,25 @@ class HomeController extends Controller
             //$temp_nation = $c->where('name.common', Auth::user()->timezone)->first()->hydrate('timezones')->timezones->first()->zone_name;
             $timeNusia = Carbon::now()->setTimezone('Asia/Jakarta');
             $timeStudent = Carbon::now()->setTimezone(Auth::user()->timezone);
-            $student = Student::paginate(5);
-            $instructor = Instructor::paginate(5);
-            $session = Session::paginate(5);
-            $session_reg = SessionRegistration::paginate(5);
+            //$student = Student::paginate(5);
+            $student = Student::all();
+            //$instructor = Instructor::paginate(5);
+            $instructor = Instructor::all();
+            //$session = Session::paginate(5);
+            $session = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where('schedules.schedule_time', '>=', now())
+                ->orderBy('schedules.schedule_time')
+                /*->take(7)*/
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')
+                ->get();
+
+            //$session_reg = SessionRegistration::paginate(5);
+            $course = Course::all();
             //return value
             return view('dashboard.admin_index',compact(
                 'student','instructor','timeNusia','timeStudent',
-                'session', 'session_reg'
+                'session', /*'session_reg',*/ 'course'
             ));
         }
 

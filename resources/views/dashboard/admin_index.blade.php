@@ -2,14 +2,16 @@
 
 @section('title','Dashboard')
 
-@include('layouts.css_and_js.dashboard')
+{{-- @include('layouts.css_and_js.dashboard') --}}
+
+@include('layouts.css_and_js.table')
 
 @section('content')
     <!-- Main row -->
     <div class="row">
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Our time: <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm A') }}</span></h4>
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Western Indonesian time: <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm A') }}</span></h4>
             </div>
         </div>
         <div class="col-md-6">
@@ -24,8 +26,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-success alert-dismissible">
-                <h4><i class="icon fa fa-book"></i> Notification!</h4>
-                Student Yang Mendaftar Akan Mendapatkan Kesempatan Untuk Free 3 Session Sesuai Dengan Quisioner.
+                <h4><i class="icon fa fa-book"></i> Update</h4>
+                Private and group classes are in development!
             </div>
         </div>
         <!-- /.col -->
@@ -34,34 +36,41 @@
 
     <!-- Main row -->
     <div class="row">
-        <!-- col-6 -->
-        <div class="col-md-6">
-            <!-- TABLE: Sessions Instructor -->
+        <!-- col-8 -->
+        <div class="col-md-8">
+            <!-- TABLE: Student -->
             <div class="box box-info">
                 <div class="box-header with-border">
                     <h3 class="box-title">Student</h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
-                        <table class="table no-margin">
+                        <table id="example1" class="table no-margin">
                             <thead>
                             <tr>
-                                <th>Student ID</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Language Experience</th>
-                                <th>Language Proficiency</th>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Registration Status</th>
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach($student as $dt)
+                                @foreach($student as $i => $dt)
                                 <tr>
-                                    <td>{{ $dt->code }}</td>
-                                    <td>{{ $dt->user->first_name }}</td>
-                                    <td>{{ $dt->user->last_name }}</td>
-                                    <td>{{ $dt->target_language_experience }}</td>
-                                    <td>{{ $dt->indonesian_language_proficiency }}</td>
+                                    <td>{{ $i + 1 }}</td>
+                                    <td>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</td>
+                                    <td>{{ $dt->user->email }}</td>
+                                    @if($dt->course_registrations->count() != 0)
+                                      <td><label class="badge bg-green">Registered</label></td>
+                                    @elseif($dt->age == 0)
+                                      <td><label class="badge bg-red">Not registered</label></td>
+                                    @else
+                                      <td><label class="badge bg-yellow">Choosing a class</label></td>
+                                    @endif
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -70,129 +79,80 @@
                     <!-- /.table-responsive -->
                 </div>
                 <!-- /.box-body -->
-                <div class="box-footer clearfix">
-                    <a href="#" class="btn btn-sm btn-info btn-flat pull-left">View All Data</a>
+                <div class="box-footer text-center">
+                  <a href="{{ route('students.index') }}" class="uppercase">View All Students</a>
                 </div>
                 <!-- /.box-footer -->
             </div>
             <!-- /.box -->
-        </div>
-        <!-- /.col -->
 
-        <!-- col-6 -->
-        <div class="col-md-6">
-            <!-- TABLE: Sessions Instructor -->
-            <div class="box box-info">
+            <!-- TABLE: Instructor -->
+            <div class="box box-danger">
                 <div class="box-header with-border">
                     <h3 class="box-title">Instructor</h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
                         <table class="table no-margin">
-                            <thead>
+                          <thead>
                             <tr>
-                                <th>Instructor ID</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
+                                <th>#</th>
+                                <th>Name</th>
                                 <th>Email</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($instructor as $dt)
+                            @foreach($instructor as $i => $dt)
                                 <tr>
-                                    <td>{{ $dt->code }}</td>
-                                    <td>{{ $dt->user->first_name }}</td>
-                                    <td>{{ $dt->user->last_name }}</td>
+                                    <td>{{ $i + 1 }}</td>
+                                    <td>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</td>
                                     <td>{{ $dt->user->email }}</td>
                                 </tr>
                             @endforeach
-                            </tbody>
+                          </tbody>
                         </table>
                     </div>
                     <!-- /.table-responsive -->
                 </div>
                 <!-- /.box-body -->
-                <div class="box-footer clearfix">
-                    <a href="#" class="btn btn-sm btn-info btn-flat pull-left">View All Data</a>
+                <div class="box-footer text-center">
+                  <a href="{{ route('instructors.index') }}" class="uppercase">View All Instructors</a>
                 </div>
                 <!-- /.box-footer -->
             </div>
             <!-- /.box -->
-        </div>
-        <!-- /.col -->
-    </div>
-    <!-- /.row -->
 
-    <!-- Main row -->
-    <div class="row">
-        <!-- col-6 -->
-        <div class="col-md-6">
-            <div class="box box-info">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Session</h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="table-responsive">
-                        <table class="table no-margin">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Meeting Time</th>
-                                <th>Course</th>
-                                <th>Session Name</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($session as $dt)
-                                <tr>
-                                    <td>{{ $dt->code }}</td>
-                                    <td>{{ $dt->schedule->schedule_time }}</td>
-                                    <td>{{ $dt->course->course_package->course_level->name }}-{{ $dt->course->course_package->course_level_detail->name }}</td>
-                                    <td>{{ $dt->title }}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.table-responsive -->
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer clearfix">
-                    <a href="#" class="btn btn-sm btn-info btn-flat pull-left">View All Data</a>
-                </div>
-                <!-- /.box-footer -->
-            </div>
-            <!-- /.box -->
-        </div>
-        <!-- /.col -->
-
-        <!-- col-6 -->
-        <div class="col-md-6">
-            <div class="box box-info">
+            <!-- TABLE: Schedule -->
+            <div class="box box-warning">
                 <div class="box-header with-border">
                     <h3 class="box-title">Schedule</h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
-                        <table class="table no-margin">
+                        <table id="example2" class="table no-margin">
                             <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Student</th>
-                                <th>Course</th>
+                                <th>#</th>
+                                <th>Title</th>
+                                <th>Proficiency</th>
+                                <th>Slot</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($session_reg as $dt)
+                            @foreach($course as $i => $dt)
                                 <tr>
-                                    <td>#</td>
-                                    <td>{{ $dt->course_registration->student->user->first_name }}</td>
-                                    <td>{{ $dt->course_registration->course->course_package->course_level->name }} {{ $dt->course_registration->course->course_package->course_level_detail->name }}</td>
-                                    <td>{{ __('3 Student') }}</td>
-                                    <td>{{ $dt->session->title }}</td>
+                                    <td>{{ $i + 1 }}</td>
+                                    <td>{{ $dt->title }}</td>
+                                    <td>{{ $dt->course_package->course_level->name }}</td>
+                                    <td>{{ $dt->course_registrations->count() }}/{{ $dt->course_package->course_type->count_student_max }}</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -201,8 +161,95 @@
                     <!-- /.table-responsive -->
                 </div>
                 <!-- /.box-body -->
-                <div class="box-footer clearfix">
-                    <a href="#" class="btn btn-sm btn-info btn-flat pull-left">View All Data</a>
+                <div class="box-footer text-center">
+                  <a href="{{ route('schedules.index') }}" class="uppercase">View All Schedules</a>
+                </div>
+                <!-- /.box-footer -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- col-4 -->
+        <div class="col-md-4">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Upcoming Session</h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <ul class="products-list product-list-in-box">
+                    <?php $i = 0; ?>
+                    @foreach($session as $dt)
+                      @if($dt->schedule->schedule_time > now())
+                      <li class="item">
+                        <div class="product-img">
+                          @if($dt->schedule->instructor->user->image_profile)
+                            <img src="{{ url('uploads/instructor/'.$dt->schedule->instructor->user->image_profile) }}" alt="User profile picture">
+                          @else
+                            <img src="{{ asset('adminlte/dist/img/avatar5.png') }}" alt="User profile picture">
+                          @endif
+                        </div>
+                        <div class="product-info">
+                          {{--session pakai attribut title untuk penamaan persession di halaman dashboard--}}
+                          <div class="product-title">
+                            @if($dt->title)
+                              @if($dt->course->title)
+                                {{ $dt->course->course_package->course_level->name }} - {{ $dt->course->title }} - {{ $dt->title }}
+                              @else
+                                {{ $dt->course->course_package->course_level->name }} - {{ $dt->course->course_package->title }} - {{ $dt->title }}
+                              @endif
+                            @else
+                              @if($dt->course->title)
+                                {{ $dt->course->course_package->course_level->name }} - {{ $dt->course->title }}
+                              @else
+                                {{ $dt->course->course_package->course_level->name }} - {{ $dt->course->course_package->title }}
+                              @endif
+                            @endif
+                            @if($dt->schedule->schedule_time)
+                              <?php
+                                $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                              ?>
+                              @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                <span class="label label-success pull-right">Today</span>
+                              @else
+                                <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM DD \'YY') }}</span>
+                              @endif
+                            @else 
+                              <span class="label label-danger pull-right">N/A</span>
+                            @endif
+                          </div>
+                          <span class="product-description">
+                            <!--Note : don't forget to join class.-->
+                            @if($dt->schedule->schedule_time < now())
+                              Class has been started!
+                              @if($dt->link_zoom)
+                                Join <a href="{{ $dt->link_zoom }}" target="_blank">here</a>.
+                              @endif
+                            @else
+                              {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                            @endif
+                          </span>
+                        </div>
+                      </li>
+                      <!-- /.item -->
+                      <?php $i++; ?>
+                      @endif
+                    @endforeach
+                    @if($i == 0)
+                      <div style="color:#555555">
+                        No courses available.
+                      </div>
+                    @endif
+                  </ul>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                  <a href="{{ route('sessions.index') }}" class="uppercase">View All Sessions</a>
                 </div>
                 <!-- /.box-footer -->
             </div>
