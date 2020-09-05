@@ -69,6 +69,11 @@
                   @elseif($fqc->answer == 'Strongly Agree')
                     <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-blue">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
                   @endif
+                  @if($fqc->answer == 'Satisfied')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Not Satisfied')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
                 @endforeach
               @else
                 <li><a href="#?">No results.</a></li>
@@ -133,6 +138,11 @@
                     <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
                   @elseif($fqc->answer == 'Strongly Agree')
                     <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-blue">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Satisfied')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Not Satisfied')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
                   @endif
                 @endforeach
               @else

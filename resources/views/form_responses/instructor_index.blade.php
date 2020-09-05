@@ -37,10 +37,10 @@
     </div>
     <!-- /.col -->
     <div class="col-md-6">
-      @if($widget_2 * 100 / $widget_1 >= 50)
+      @if($widget_2 * 100 / $widget_2_total >= 50)
         <div class="small-box bg-green">
           <div class="inner">
-            <h3>{{ $widget_2 * 100 / $widget_1 }}%</h3>
+            <h3>{{ $widget_2 * 100 / $widget_2_total }}%</h3>
             <p>
               @if($widget_2 == 1)
                 Instructors' Performance
@@ -56,10 +56,10 @@
             More info <i class="fa fa-arrow-circle-right"></i>
           </a>
         </div>
-      @elseif($widget_2 * 100 / $widget_1 >= 25)
+      @elseif($widget_2 * 100 / $widget_2_total >= 25)
         <div class="small-box bg-yellow">
           <div class="inner">
-            <h3>{{ $widget_2 * 100 / $widget_1 }}%</h3>
+            <h3>{{ $widget_2 * 100 / $widget_2_total }}%</h3>
             <p>
               @if($widget_2 == 1)
                 Instructors' Performance
@@ -75,10 +75,10 @@
             More info <i class="fa fa-arrow-circle-right"></i>
           </a>
         </div>
-      @elseif($widget_2 * 100 / $widget_1 >= 0)
+      @elseif($widget_2 * 100 / $widget_2_total >= 0)
         <div class="small-box bg-red">
           <div class="inner">
-            <h3>{{ $widget_2 * 100 / $widget_1 }}%</h3>
+            <h3>{{ $widget_2 * 100 / $widget_2_total }}%</h3>
             <p>
               @if($widget_2 == 1)
                 Instructors' Performance

@@ -27,7 +27,11 @@
           <!-- Add the bg color to the header using any of the bg-* classes -->
           <div class="widget-user-header bg-yellow">
             <h3 class="widget-user-username">Rating 1</h3>
-            <h5 class="widget-user-desc">The instructors help me to improve my bahasa Indonesia proficiency.</h5>
+            @if($form->id == 1 || $form->id == 2)
+              <h5 class="widget-user-desc">The instructors help me to improve my bahasa Indonesia proficiency.</h5>
+            @else
+              <h5 class="widget-user-desc">What do you think about the time schedule?</h5>
+            @endif
           </div>
           <div class="box-footer no-padding">
             <?php
@@ -69,6 +73,25 @@
                   @elseif($fqc->answer == 'Strongly Agree')
                     <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-blue">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
                   @endif
+                  @if($fqc->answer == 'Satisfied')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Not Satisfied')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Not likely at all')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Likely')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Very likely')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Less than $15')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == '$16-$20')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'More than $20')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
                 @endforeach
               @else
                 <li><a href="#?">No results.</a></li>
@@ -92,7 +115,11 @@
           <!-- Add the bg color to the header using any of the bg-* classes -->
           <div class="widget-user-header bg-maroon">
             <h3 class="widget-user-username">Rating 2</h3>
-            <h5 class="widget-user-desc">How would you rate the instructors’ overall performance?</h5>
+            @if($form->id == 1 || $form->id == 2)
+              <h5 class="widget-user-desc">How would you rate the instructors’ overall performance?</h5>
+            @else
+              <h5 class="widget-user-desc">How likely are you to learn Indonesian language again from us?</h5>
+            @endif
           </div>
           <div class="box-footer no-padding">
             <?php
@@ -134,6 +161,25 @@
                   @elseif($fqc->answer == 'Strongly Agree')
                     <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-blue">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
                   @endif
+                  @if($fqc->answer == 'Satisfied')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Not Satisfied')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Not likely at all')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Likely')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Very likely')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Less than $15')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == '$16-$20')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'More than $20')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
                 @endforeach
               @else
                 <li><a href="#?">No results.</a></li>
@@ -157,18 +203,73 @@
           <!-- Add the bg color to the header using any of the bg-* classes -->
           <div class="widget-user-header bg-purple">
             <h3 class="widget-user-username">Rating 3</h3>
-            <h5 class="widget-user-desc">Give comments what to improve for our instructors (time management, teaching delivery, etc)</h5>
+            @if($form->id == 1 || $form->id == 2)
+              <h5 class="widget-user-desc">Give comments what to improve for our instructors (time management, teaching delivery, etc)</h5>
+            @else
+              <h5 class="widget-user-desc">How much money would you spend for our service per session?</h5>
+            @endif
           </div>
           <div class="box-footer no-padding">
+            <?php
+              $arr = [];
+              foreach($form_widget_3 as $fw) {
+                foreach($fw->form_question->form_question_choices as $fqc) {
+                  // Suitable for text-like and radiobox answer. This is not suitable for checkbox choice(s).
+                  if($fw->form_response_details->first()->answer == $fqc->answer) {
+                    array_push($arr, $fqc->answer);
+                    break;
+                  }
+                }
+              }
+              if($form_widget_3->first()) {
+                foreach($form_widget_3->first()->form_question->form_question_choices as $fqc) {
+                  array_push($arr, $fqc->answer); // menambahkan index pada array untuk menghindari undefined index pada waktu menampilkan hasil count array element.
+                }
+              }
+            ?>
             <ul class="nav nav-stacked">
-              @foreach($form_widget_3 as $fw)
-                <li><a href="#?">{{ $fw->form_response_details->first()->answer }} ({{ $fw->session_registration_form->session_registration->course_registration->student->user->first_name }} {{ $fw->session_registration_form->session_registration->course_registration->student->user->last_name }})</a></li>
-                {{-- <li><a href="#">Nama <span class="pull-right badge bg-blue">31</span></a></li>
-                <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
-                <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
-                <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li> --}}
-              @endforeach
-              @if($form_widget_3->first() == null)
+              @if($form_widget_3->first())
+                @foreach($form_widget_3->first()->form_question->form_question_choices as $fqc)
+                  {{-- Reserved keyword(s) --}}
+                  @if($fqc->answer == 'Poor')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Good')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Great')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Strongly Disagree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Disagree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-orange">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Partly Agree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Agree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Strongly Agree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-blue">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Satisfied')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Not Satisfied')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Not likely at all')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Likely')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Very likely')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Less than $15')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == '$16-$20')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'More than $20')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                @endforeach
+              @else
                 <li><a href="#?">No results.</a></li>
               @endif
             </ul>
