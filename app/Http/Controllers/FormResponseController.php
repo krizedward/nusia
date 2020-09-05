@@ -55,8 +55,58 @@ class FormResponseController extends Controller
         if($this->is_admin()) {
             $forms = Form::all();
 
+            // WIDGET 1: Number of Feedback(s) Received
+            $session_registration_forms = SessionRegistrationForm
+                ::select('session_registration_forms.session_registration_id as id')
+                ->get();
+
+            $arr = [];
+            $widget_1 = 0;
+            foreach($session_registration_forms as $srf) if(!in_array($srf->id, $arr)) {
+                array_push($arr, $srf->id);
+                $widget_1++;
+            }
+
+            // WIDGET 2
+            $form_widget_2 = FormResponse
+                ::where(function($q) {
+                    $q
+                        ->where('form_responses.form_question_id', 5)
+                        ->orWhere('form_responses.form_question_id', 20);
+                })
+                ->get();
+            $widget_2 = 0;
+            foreach($form_widget_2 as $fw) {
+                if(
+                    $fw->form_response_details->first()->answer == 'Great'
+                    || $fw->form_response_details->first()->answer == 'Good'
+                    || $fw->form_response_details->first()->answer == 'Strongly Agree'
+                    || $fw->form_response_details->first()->answer == 'Agree'
+                ) $widget_2++;
+            }
+
+            // WIDGET 3
+            $form_widget_3 = FormResponse
+                ::where(function($q) {
+                    $q
+                        ->where('form_responses.form_question_id', 5)
+                        ->orWhere('form_responses.form_question_id', 20);
+                })
+                ->get();
+            $widget_3 = 0;
+            foreach($form_widget_3 as $fw) {
+                if(
+                    $fw->form_response_details->first()->answer == 'Poor'
+                    || $fw->form_response_details->first()->answer == 'Partly Agree'
+                    || $fw->form_response_details->first()->answer == 'Disagree'
+                    || $fw->form_response_details->first()->answer == 'Strongly Disagree'
+                ) $widget_3++;
+            }
+
+            $rating = FormResponse::all()->count();
+
             return view('form_responses.admin_index',compact(
-                'forms'
+                'forms', 'widget_1', 'widget_2', 'widget_3', 'rating'
             ));
         } else if($this->is_instructor()) {
             $forms = Form::where('is_accessible_by', 2)->get();
@@ -150,10 +200,62 @@ class FormResponseController extends Controller
     public function index_form($form_id)
     {
         if($this->is_admin()) {
-            $forms = Form::where('id', $form_id)->get();
+            $form = Form::findOrFail($form_id);
 
-            return view('form_responses.admin_index',compact(
-                'forms'
+            $form_responses = FormResponse::all();
+
+            $session_registrations = SessionRegistration
+                ::join('session_registration_forms', 'session_registrations.id', 'session_registration_forms.session_registration_id')
+                ->join('form_responses', 'session_registration_forms.form_response_id', 'form_responses.id')
+                ->join('form_questions', 'form_responses.form_question_id', 'form_questions.id')
+                ->join('forms', 'form_questions.form_id', 'forms.id')
+                ->where('forms.id', $form_id)
+                ->distinct()
+                ->where('session_registrations.status', 'Present')
+                ->select('session_registrations.id', 'session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
+                ->get();
+
+            // ANSWER TYPE: RADIO BOX
+            $form_widget_1 = FormResponse
+                ::join('form_questions', 'form_responses.form_question_id', 'form_questions.id')
+                ->join('forms', 'form_questions.form_id', 'forms.id')
+                ->where('forms.id', $form_id)
+                ->where(function($q) {
+                    $q
+                        ->where('form_responses.form_question_id', 3)
+                        ->orWhere('form_responses.form_question_id', 18);
+                })
+                ->select('form_responses.id', 'form_responses.form_question_id', 'form_responses.created_at', 'form_responses.updated_at')
+                ->get();
+
+            // ANSWER TYPE: RADIO BOX
+            $form_widget_2 = FormResponse
+                ::join('form_questions', 'form_responses.form_question_id', 'form_questions.id')
+                ->join('forms', 'form_questions.form_id', 'forms.id')
+                ->where('forms.id', $form_id)
+                ->where(function($q) {
+                    $q
+                        ->where('form_responses.form_question_id', 5)
+                        ->orWhere('form_responses.form_question_id', 20);
+                })
+                ->select('form_responses.id', 'form_responses.form_question_id', 'form_responses.created_at', 'form_responses.updated_at')
+                ->get();
+
+            // ANSWER TYPE: TEXT
+            $form_widget_3 = FormResponse
+                ::join('form_questions', 'form_responses.form_question_id', 'form_questions.id')
+                ->join('forms', 'form_questions.form_id', 'forms.id')
+                ->where('forms.id', $form_id)
+                ->where(function($q) {
+                    $q
+                        ->where('form_responses.form_question_id', 7)
+                        ->orWhere('form_responses.form_question_id', 22);
+                })
+                ->select('form_responses.id', 'form_responses.form_question_id', 'form_responses.created_at', 'form_responses.updated_at')
+                ->get();
+
+            return view('form_responses.admin_index_form',compact(
+                'form', 'form_responses', 'session_registrations', 'form_widget_1', 'form_widget_2', 'form_widget_3'
             ));
         } else if($this->is_instructor()) {
             $form = Form::findOrFail($form_id);
