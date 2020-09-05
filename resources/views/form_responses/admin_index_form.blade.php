@@ -228,7 +228,7 @@
               }
             ?>
             <ul class="nav nav-stacked">
-              @if($form_widget_3->first())
+              @if($form_widget_3->first() && $form_widget_3->first()->form_question->answer_type == 'radio')
                 @foreach($form_widget_3->first()->form_question->form_question_choices as $fqc)
                   {{-- Reserved keyword(s) --}}
                   @if($fqc->answer == 'Poor')
@@ -268,6 +268,10 @@
                   @elseif($fqc->answer == 'More than $20')
                     <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
                   @endif
+                @endforeach
+              @elseif($form_widget_3->first())
+                @foreach($form_widget_3 as $fw)
+                  <li><a href="#?">{{ $fw->form_response_details->first()->answer }} ({{ $fw->session_registration_form->session_registration->course_registration->student->user->first_name }} {{ $fw->session_registration_form->session_registration->course_registration->student->user->last_name }})</a></li>
                 @endforeach
               @else
                 <li><a href="#?">No results.</a></li>

@@ -170,15 +170,70 @@
             <h5 class="widget-user-desc">Give comments what to improve for our instructors (time management, teaching delivery, etc)</h5>
           </div>
           <div class="box-footer no-padding">
+            <?php
+              $arr = [];
+              foreach($form_widget_3 as $fw) {
+                foreach($fw->form_question->form_question_choices as $fqc) {
+                  // Suitable for text-like and radiobox answer. This is not suitable for checkbox choice(s).
+                  if($fw->form_response_details->first()->answer == $fqc->answer) {
+                    array_push($arr, $fqc->answer);
+                    break;
+                  }
+                }
+              }
+              if($form_widget_3->first()) {
+                foreach($form_widget_3->first()->form_question->form_question_choices as $fqc) {
+                  array_push($arr, $fqc->answer); // menambahkan index pada array untuk menghindari undefined index pada waktu menampilkan hasil count array element.
+                }
+              }
+            ?>
             <ul class="nav nav-stacked">
-              @foreach($form_widget_3 as $fw)
-                <li><a href="#?">{{ $fw->form_response_details->first()->answer }} ({{ $fw->session_registration_form->session_registration->course_registration->student->user->first_name }} {{ $fw->session_registration_form->session_registration->course_registration->student->user->last_name }})</a></li>
-                {{-- <li><a href="#">Nama <span class="pull-right badge bg-blue">31</span></a></li>
-                <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
-                <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
-                <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li> --}}
-              @endforeach
-              @if($form_widget_3->first() == null)
+              @if($form_widget_3->first() && $form_widget_3->first()->form_question->answer_type == 'radio')
+                @foreach($form_widget_3->first()->form_question->form_question_choices as $fqc)
+                  {{-- Reserved keyword(s) --}}
+                  @if($fqc->answer == 'Poor')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Good')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Great')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Strongly Disagree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Disagree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-orange">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Partly Agree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Agree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Strongly Agree')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-blue">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Satisfied')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Not Satisfied')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Not likely at all')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Likely')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'Very likely')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                  @if($fqc->answer == 'Less than $15')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-red">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == '$16-$20')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-yellow">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @elseif($fqc->answer == 'More than $20')
+                    <li><a href="#?">{{ $fqc->answer }} <span class="pull-right badge bg-green">{{ array_count_values($arr)[$fqc->answer] - 1 }}</span></a></li>
+                  @endif
+                @endforeach
+              @elseif($form_widget_3->first())
+                @foreach($form_widget_3 as $fw)
+                  <li><a href="#?">{{ $fw->form_response_details->first()->answer }} ({{ $fw->session_registration_form->session_registration->course_registration->student->user->first_name }} {{ $fw->session_registration_form->session_registration->course_registration->student->user->last_name }})</a></li>
+                @endforeach
+              @else
                 <li><a href="#?">No results.</a></li>
               @endif
             </ul>
