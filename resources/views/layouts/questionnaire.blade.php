@@ -342,7 +342,11 @@
                                     <div class="form-group hidden" id="target_language_experience_value">
                                 @endif
                                     <label for="target_language_experience_value">I have learned Indonesian for .... years</label>
+                                      @if(old('target_language_experience_value'))
                                         <input name="target_language_experience_value" type="text" class="@error('target_language_experience_value') is-invalid @enderror form-control" placeholder="Enter Value" value="{{ old('target_language_experience_value') }}">
+                                      @else
+                                        <input name="target_language_experience_value" type="text" class="@error('target_language_experience_value') is-invalid @enderror form-control" placeholder="Enter Value" value="0">
+                                      @endif
                                         @error('target_language_experience_value')
                                         <p style="color:red">{{ $message }}</p>
                                         @enderror
