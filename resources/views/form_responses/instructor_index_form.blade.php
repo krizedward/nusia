@@ -281,9 +281,9 @@
                         <td>{{ $i + 1 }}</td>
                         <td>
                           @if($sr->course_registration->student->user->image_profile != 'user.jpg')
-                            <img src="{{ asset('/uploads/student/profile/') . $sr->course_registration->student->user->image_profile }}">
+                            <img src="{{ asset('uploads/student/profile/') . $sr->course_registration->student->user->image_profile }}">
                           @else
-                            <img src="{{ asset('/uploads/') . $sr->course_registration->student->user->image_profile }}">
+                            <img src="{{ asset('uploads/') . $sr->course_registration->student->user->image_profile }}">
                           @endif
                         </td>
                         <td>{{ $sr->course_registration->student->user->first_name }} {{ $sr->course_registration->student->user->last_name }}</td>
