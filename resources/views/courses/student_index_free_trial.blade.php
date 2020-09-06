@@ -5,10 +5,10 @@
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Choose Your Course!</h1>
+    <h1>Choose Your Class!</h1>
     <!--ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li class="active">Choose Your Course!</li>
+        <li class="active">Choose Your Class!</li>
     </ol-->
 @stop
 
@@ -18,9 +18,9 @@
           <div class="alert alert-success alert-dismissable">
             <h4>
               <i class="icon fa fa-comments"></i>
-              Choose a course at your convenience!
+              Choose the schedule at your convenience!
             </h4>
-            Join one of NUSIA's classes consisting of <b>10 to 15 sessions per class</b>! Per session lasts <b>80 minutes</b>.
+            Join one of NUSIA's free classes consisting of <b>3 sessions per class</b>! Per session lasts <b>80 minutes</b>.
           </div>
         </div>
         <div class="col-md-12" style="margin:0;">

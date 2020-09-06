@@ -56,6 +56,9 @@ Route::group(['middleware'=>'auth'], function() {
         //Route::get('/course/instructor/{id}/private','InstructorController@privates')->name('instructors.privates');
         Route::get('/course/instructor/schedules/private/{id}','ScheduleController@private')->name('schedules.private');//menampilkan jadwal instructor
 
+        // Dari memilih MaterialType (General Indonesian Language, Basic Conversation, etc), lanjut ke memilih CourseType (Private/Public) via CoursePackage
+        Route::get('/course_packages/{material_type_id}', 'CoursePackageController@index_material_type')->name('course_packages.index_material_type');
+
         // Apabila berencana membuat routing
         // selain Route::resource(s) (pada keyword yang sama),
         // lakukan deklarasi SEBELUM menulis baris kode Route::resource(s).

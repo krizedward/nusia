@@ -42,8 +42,15 @@ class MaterialTypeController extends Controller
      */
     public function index()
     {
-        if ($this->is_admin()){
+        if($this->is_admin()){
             return view('material_types.admin_index');
+        } else if($this->is_instructor()){
+            return redirect()->route('home');
+        } else if($this->is_student()) {
+            $material_types = MaterialType::all();
+            return view('material_types.student_index', compact('material_types'));
+        } else {
+            return redirect()->route('home');
         }
         //$data = MaterialType::all();
         //return view('materials.types.index', compact('data'));

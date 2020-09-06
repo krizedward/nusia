@@ -125,7 +125,8 @@ class HomeController extends Controller
             if(Auth::user()->citizenship == 'Not Available') {
                 return redirect()->route('layouts.questionnaire');
             } else if(Auth::user()->student->course_registrations->count() == 0) {
-                return redirect()->route('courses.index'); // KHUSUS UNTUK FREE CLASSES, mungkin ada bug di CLASS PRIVATE DAN/ATAU GROUP.
+                //return redirect()->route('courses.index'); // KHUSUS UNTUK FREE CLASSES, mungkin ada bug di CLASS PRIVATE DAN/ATAU GROUP.
+                return redirect()->route('material_types.index');
             }
 
             //$temp_nation = $c->where('name.common', Auth::user()->timezone)->first()->hydrate('timezones')->timezones->first()->zone_name;
@@ -377,7 +378,7 @@ class HomeController extends Controller
             }
         }
 
-        return redirect()->route('courses.index');
+        return redirect()->route('material_types.index');
     }
 
     /**
@@ -437,7 +438,8 @@ class HomeController extends Controller
                 // Jika Student belum terdaftar dalam class manapun,
                 // tetapi sudah melakukan pengisian kuisioner.
                 // Contoh kasus: Student mengumpulkan kuisioner, kemudian logout, kemudian login lagi.
-                return redirect()->route('courses.index');
+                //return redirect()->route('courses.index');
+                return redirect()->route('material_types.index');
             }
             return redirect()->route('home');
         }
