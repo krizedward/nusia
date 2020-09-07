@@ -290,6 +290,9 @@
                         </li>
                     </ul>
                 </li>
+                <li class="#">
+                    <a href="#"><i class="fa fa-book"> </i><span> Courses</span></a>
+                </li>
                 {{--
                 <li class="#">
                     <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> Materials</span></a>
