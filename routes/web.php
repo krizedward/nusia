@@ -14,9 +14,11 @@
 //Route::redirect('/', 'login');
 //akses untuk menguji tampilan draft
 
+/*
 Route::get('/test', function () {
     return view('courses.student_private_schedule');
 });
+*/
 
 
 Route::get('/', 'HomeController@landing_page')->name('index');
