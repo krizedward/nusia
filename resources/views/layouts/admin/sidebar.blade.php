@@ -302,7 +302,7 @@
                     <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Schedule</span></a>
                 </li>
                 <li class="#">
-                    <a href="{{ route('sessions.index') }}"><i class="fa fa-book"> </i><span> Session</span></a>
+                    <a href="{{ route('sessions.admin_instrucstor') }}"><i class="fa fa-book"> </i><span> Session</span></a>
                 </li>
                 {{--
                 <!-- Head_Navigasi -->

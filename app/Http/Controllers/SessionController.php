@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Schedule;
 use App\Models\SessionRegistration;
 use Illuminate\Http\Request;
+use App\Models\Instructor;
 
 use App\Models\Session;
 use Str;
@@ -359,6 +360,25 @@ class SessionController extends Controller
         } else if ($this->is_instructor()) {
             $data = Session::all();
             return view('sessions.instructor.group', compact('data'));
+        }
+    }
+
+    public function instructor()
+    {
+        $data = Instructor::all();
+        return view('sessions.admin_instructor',compact('data'));
+    }
+
+    public function detail($code)
+    {
+        if ($this->is_admin()){
+            $instructor = Instructor::where('code',$code)->get();
+            $id = $instructor->first()->id;
+            $data = Session::where('schedule_id',$id)->get();
+            //$schedule = Schedule::where('instructor_id',$id)->get();
+            //$id  = $schedule->first()->id;
+            //$data = Session::where('schedule_id',$id)->get();
+            return view('sessions.admin_index', compact('data'));
         }
     }
 }

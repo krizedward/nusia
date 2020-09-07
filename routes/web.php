@@ -65,6 +65,9 @@ Route::group(['middleware'=>'auth'], function() {
         Route::get('/schedules/instructor/choose','ScheduleController@instructor')->name('schedules.admin_instrucstor');
         Route::get('/schedules/instructor/{code}/detail','ScheduleController@detail')->name('schedules.admin_index');
 
+        Route::get('/sessions/instructor/choose','SessionController@instructor')->name('sessions.admin_instrucstor');
+        Route::get('/sessions/instructor/{code}/detail','SessionController@detail')->name('sessions.admin_index');
+
         // Apabila berencana membuat routing
         // selain Route::resource(s) (pada keyword yang sama),
         // lakukan deklarasi SEBELUM menulis baris kode Route::resource(s).
