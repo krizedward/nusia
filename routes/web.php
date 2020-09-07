@@ -61,6 +61,10 @@ Route::group(['middleware'=>'auth'], function() {
         // Dari memilih MaterialType (General Indonesian Language, Basic Conversation, etc), lanjut ke memilih CourseType (Private/Public) via CoursePackage
         Route::get('/course_packages/{material_type_id}', 'CoursePackageController@index_material_type')->name('course_packages.index_material_type');
 
+        //Admin
+        Route::get('/schedules/instructor/choose','ScheduleController@instructor')->name('schedules.admin_instrucstor');
+        Route::get('/schedules/instructor/{code}/detail','ScheduleController@detail')->name('schedules.admin_index');
+
         // Apabila berencana membuat routing
         // selain Route::resource(s) (pada keyword yang sama),
         // lakukan deklarasi SEBELUM menulis baris kode Route::resource(s).

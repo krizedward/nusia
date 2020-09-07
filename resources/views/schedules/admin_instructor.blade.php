@@ -18,9 +18,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Instructor Name</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Status</th>
+                            <th>Detail</th>
                         </tr>
                         {{-- head table content --}}
                         </thead>
@@ -28,10 +26,10 @@
                         @foreach($data as $dt)
                             <tr>
                                 <td>{{ $dt->code }}</td>
-                                <td>{{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}</td>
-                                <td>{{ $dt->schedule_time }}</td>
-                                <td>{{ $dt->schedule_time }}</td>
-                                <td>{{ $dt->status }}</td>
+                                <td>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</td>
+                                <td>
+                                    <a href="{{ route('schedules.admin_index',$dt->code) }}">Detail</a>
+                                </td>
                             </tr>
                         @endforeach
                         {{-- body content --}}

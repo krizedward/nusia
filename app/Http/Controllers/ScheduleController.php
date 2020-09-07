@@ -45,10 +45,6 @@ class ScheduleController extends Controller
      */
     public function index($course_type = 'Free Trial')
     {
-        if ($this->is_admin()){
-            $data = Schedule::all();
-            return view('schedules.admin_index', compact('data'));
-        }
 
         if ($this->is_instructor()) {
           return view('schedules.instructor_index');
@@ -371,6 +367,24 @@ class ScheduleController extends Controller
         } else if ($this->is_instructor()) {
             $data = Schedule::all();
             return view('schedules.instructor.group', compact('data'));
+        }
+    }
+
+    public function instructor()
+    {
+        if ($this->is_admin()) {
+            $data = Instructor::all();
+            return view('schedules.admin_instructor',compact('data'));
+        }
+    }
+
+    public function detail($code)
+    {
+        if ($this->is_admin()){
+            $instructor = Instructor::where('code',$code)->get();
+            $id  = $instructor->first()->id;
+            $data = Schedule::where('instructor_id',$id)->get();
+            return view('schedules.admin_index', compact('data'));
         }
     }
 }

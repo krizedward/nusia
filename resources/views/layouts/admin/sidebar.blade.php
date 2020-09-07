@@ -269,7 +269,7 @@
                             <a href="{{ route('instructors.index') }}"><i class="fa fa-circle-o"></i> Personal Data</a>
                         </li>
                         <li class="#">
-                            <a href="{{ route('schedules.index', ['Free Trial']) }}"><i class="fa fa-circle-o"></i> Schedule</a>
+                            <a href="{{ route('schedules.admin_instrucstor') }}"><i class="fa fa-circle-o"></i> Schedule</a>
                         </li>
                     </ul>
                 </li>
