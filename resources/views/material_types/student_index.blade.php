@@ -35,7 +35,7 @@
             @endforeach
           </div>
         </div>
-        @foreach($material_types as $mt)
+        @foreach($material_types as $i => $mt)
             <div class="col-md-6">
               <div class="box box-primary">
                 <div class="box-header with-border">
@@ -44,12 +44,16 @@
                 <div class="box-body">
                   <div class="row">
                     {{-- More pictures? Mungkin menambah beberapa gambar di sini, seperti di satu saran feedback Student? --}}
+                    <div class="col-md-12">
+                      <?php $path = 'uploads/other/img-material-type-'. ($i + 1) . '.jpg'; ?>
+                      <img class="img-flat" src="{{ asset($path) }}" style="width:100%; height:200px;">
+                    </div>
                     <!--div class="col-md-12">
                       <b>Description</b>
                       <p>{{ $mt->description }}</p>
                     </div-->
                     <div class="col-md-12">
-                      <a href="#" data-toggle="modal" data-target="#{{$mt->id}}" class="btn btn-s btn-primary" style="width:100%;">
+                      <a href="#" data-toggle="modal" data-target="#{{$mt->id}}" class="btn btn-s btn-flat btn-primary" style="width:100%;">
                         View More
                       </a>
                     </div>
@@ -66,17 +70,24 @@
                 <div class="modal-content">
                     <!-- Profile Image -->
                     <div class="box box-primary">
+                        <div class="box-header">
+                          <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#{{$mt->id}}"><i class="fa fa-times"></i></button>
+                          </div>
+                        </div>
                         <div class="box-body box-profile">
                             <h3 class="profile-username text-center">{{ $mt->name }}</h3>
 
                             <p class="text-muted text-center">Program description follows.</p>
+
+                            <img class="img-flat" src="{{ asset($path) }}" style="width:100%; height:200px;">
 
                             <ul class="list-group list-group-unbordered">
                                 <li class="list-group-item">
                                     {{ $mt->description }}
                                 </li>
                             </ul>
-                            <a href="{{ route('course_packages.index_material_type', $mt->id) }}" class="btn btn-s btn-primary" style="width:100%;">Choose This Program</a>
+                            <a href="{{ route('course_packages.index_material_type', $mt->id) }}" class="btn btn-s btn-flat btn-primary" style="width:100%;">Choose This Program</a>
                         </div>
                         <!-- /.box-body -->
                     </div>
