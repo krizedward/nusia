@@ -58,8 +58,12 @@ Route::group(['middleware'=>'auth'], function() {
         //Route::get('/course/instructor/{id}/private','InstructorController@privates')->name('instructors.privates');
         Route::get('/course/instructor/schedules/private/{id}','ScheduleController@private')->name('schedules.private');//menampilkan jadwal instructor
 
-        // Dari memilih MaterialType (General Indonesian Language, Basic Conversation, etc), lanjut ke memilih CourseType (Private/Public) via CoursePackage
-        Route::get('/course_packages/{material_type_id}', 'CoursePackageController@index_material_type')->name('course_packages.index_material_type');
+        // REGISTRASI PRIVATE & GROUP CLASSES
+          // Dari form registrasi Student, lanjut ke memilih MaterialType (General Indonesian Language, Basic Conversation, etc)
+          Route::get('/student/materials', 'MaterialTypeController@index')->name('material_types.index');
+
+          // Dari memilih MaterialType, lanjut ke memilih CourseType (Private/Public) via CoursePackage
+          Route::get('/student/courses/{material_type_id}', 'CoursePackageController@index_material_type')->name('course_packages.index_material_type');
 
         //Admin
         Route::get('/schedules/instructor/choose','ScheduleController@instructor')->name('schedules.admin_instrucstor');
