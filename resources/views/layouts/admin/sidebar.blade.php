@@ -291,7 +291,7 @@
                     </ul>
                 </li>
                 <li class="#">
-                    <a href="#"><i class="fa fa-book"> </i><span> Courses</span></a>
+                    <a href="{{ route('courses.index') }}"><i class="fa fa-book"> </i><span> Courses</span></a>
                 </li>
                 {{--
                 <li class="#">

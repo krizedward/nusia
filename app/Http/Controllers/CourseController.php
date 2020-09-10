@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Course;
+use App\Models\CoursePackage;
+use App\Models\CourseLevelDetail;
+use App\Models\CourseLevel;
+use App\Models\CourseType;
+use App\Models\MaterialPublic;
+use App\Models\MaterialType;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -43,7 +49,14 @@ class CourseController extends Controller
     public function index()
     {
         if ($this->is_admin()){
-            return view('courses.admin_index');
+            $course = Course::all();
+            $course_package = CoursePackage::all();
+            $course_level   = CourseLevel::all();
+            $course_level_detail = CourseLevelDetail::all();
+            $course_type = CourseType::all();
+            $material_public = MaterialPublic::all();
+            $material_type = MaterialType::all();
+            return view('courses.admin_index', compact('course','course_package','course_level','course_level_detail', 'course_type', 'material_public', 'material_type'));
         } else if ($this->is_student()) {
             $i = 0;
             foreach(Auth::user()->student->course_registrations as $cr) {
