@@ -43,7 +43,8 @@ class CoursePackageController extends Controller
     public function index()
     {
         if ($this->is_admin()){
-            return view('course_packages.admin_index');
+            $course_package = CoursePackage::all();   
+            return view('course_packages.admin_index', compact('course_package'));
         }
         //$data = CoursePackage::all();
         //return view('courses.packages.index', compact('data'));
@@ -150,11 +151,16 @@ class CoursePackageController extends Controller
      */
     public function show($id)
     {
-        $data = CoursePackage::findOrFail($id);
-        if($data == null) {
-            // Data yang dicari tidak ditemukan.
-            // Return?
+        if ($this->is_admin()) {
+            $data = CoursePackage::findOrFail($id);
+            if($data == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+        
+            return view('course_packages.admin_show',compact('data'));
         }
+
         return view('courses.packages.show', compact('data'));
     }
 
