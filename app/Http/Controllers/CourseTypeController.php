@@ -42,6 +42,10 @@ class CourseTypeController extends Controller
      */
     public function index()
     {
+        if ($this->is_admin()) {
+            $data = CourseType::all();
+            return view('course_types.admin_index', compact('data'));    
+        }
         return view('course_types.admin_index');
         //$data = CourseType::all();
         //return view('courses.types.index', compact('data'));
@@ -124,10 +128,15 @@ class CourseTypeController extends Controller
      */
     public function show($id)
     {
-        $data = CourseType::findOrFail($id);
-        if($data == null) {
-            // Data yang dicari tidak ditemukan.
-            // Return?
+        if ($this->is_admin()) {
+            
+            $data = CourseType::findOrFail($id);
+            if($data == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+
+            return view('course_types.admin_show', compact('data'));
         }
         return view('courses.types.show', compact('data'));
     }

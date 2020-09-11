@@ -164,12 +164,16 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        $data = Course::findOrFail($id);
-        if($data == null) {
-            // Data yang dicari tidak ditemukan.
-            // Return?
+        if ($this->is_admin()) {
+            # code...
+            $data = Course::findOrFail($id);
+            if($data == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+            return view('courses.admin_show', compact('data'));
         }
-        return view('courses.show', compact('data'));
+        return view('courses.admin_show', compact('data'));
     }
 
     /**

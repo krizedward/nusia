@@ -28,7 +28,7 @@
                             <td>{{ $dt->code }}</td>
                             <td>{{ $dt->title }}</td>
                             <td>
-                                <a href="#">Detail</a>
+                                <a href="{{ route('courses.show',[$dt->id]) }}">Detail</a>
                             </td>
                         </tr>
                         @endforeach
