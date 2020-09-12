@@ -43,7 +43,8 @@ class CourseLevelController extends Controller
     public function index()
     {
         if ($this->is_admin()){
-            return view('course_levels.admin_index');
+            $data = CourseLevel::all();
+            return view('course_levels.admin_index', compact('data'));
         }
         //$data = CourseLevel::all();
         //return view('courses.levels.index', compact('data'));
@@ -122,10 +123,15 @@ class CourseLevelController extends Controller
      */
     public function show($id)
     {
-        $data = CourseLevel::findOrFail($id);
-        if($data == null) {
-            // Data yang dicari tidak ditemukan.
-            // Return?
+        if ($this->is_admin()) {
+            
+            $data = CourseLevel::findOrFail($id);
+            
+            if($data == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+            return view('course_levels.admin_show', compact('data'));
         }
         return view('courses.levels.show', compact('data'));
     }

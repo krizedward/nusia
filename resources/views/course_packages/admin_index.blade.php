@@ -2,7 +2,7 @@
 
 @section('title','Admin | Course Packages')
 
-@include('layouts.css_and_js.form_general')
+@include('layouts.css_and_js.table')
 
 @section('content-header')
     <h1>Course Packages</h1>
@@ -22,18 +22,24 @@
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
-                        {{-- head table content
                         <tr>
-                            <th></th>
+                            <th>Code</th>
+                            <th>Title</th>
+                            <th>Action</th>
                         </tr>
-                        --}}
+                        {{-- head table content--}}
                         </thead>
                         <tbody>
-                        {{-- body content
-                            <tr>
-                                <td></td>
-                            </tr>
-                        --}}
+                        @foreach($course_package as $dt)
+                        <tr>
+                            <td>{{ $dt->code }}</td>
+                            <td>{{ $dt->title }}</td>
+                            <td>
+                            	<a href="{{ route('course_packages.show',[$dt->id]) }}">Detail</a>
+                            </td>
+                        </tr>
+                        @endforeach
+                        {{-- body content--}}
                         </tbody>
                     </table>
                 </div>
