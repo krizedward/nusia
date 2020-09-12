@@ -11,7 +11,7 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <h3 class="profile-username text-center">{{ $data->title }}</h3>
+                    <h3 class="profile-username text-center"><b>{{ $data->title }}</b></h3>
                     <p class="text-muted text-center">Code : {{ $data->code }}</p>
                 </div>
                 <div class="box-body">
@@ -30,13 +30,13 @@
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
-                        <strong><i class="fa fa-circle-o margin-r-5"></i>Course Name</strong>
+                        <strong><i class="fa fa-circle-o margin-r-5"></i>Class Title</strong>
                         <p>{{ $data->title }}</p>
                         <hr>
                         <strong><i class="fa fa-circle-o margin-r-5"></i>Description</strong>
                         <p>{{ $data->description }}</p>
                         <hr>
-                        <strong><i class="fa fa-circle-o margin-r-5"></i>Student Min</strong>
+                        <strong><i class="fa fa-circle-o margin-r-5"></i>Student (minimum)</strong>
                         <p>
                           {{ $data->course_package->course_type->count_student_min }}
                           @if($data->course_package->course_type->count_student_min == 1)
@@ -46,7 +46,7 @@
                           @endif
                         </p>
                         <hr>
-                        <strong><i class="fa fa-circle-o margin-r-5"></i>Student Max</strong>
+                        <strong><i class="fa fa-circle-o margin-r-5"></i>Student (maximum)</strong>
                         <p>
                           {{ $data->course_package->course_type->count_student_max }}
                           @if($data->course_package->course_type->count_student_max == 1)

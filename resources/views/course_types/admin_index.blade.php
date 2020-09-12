@@ -1,14 +1,14 @@
 @extends('layouts.admin.default')
 
-@section('title','Admin | Course Type')
+@section('title','Admin | Class Type')
 
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Course Type</h1>
+    <h1><b>Class Type</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li class="active">Course Type</li>
+        <li class="active">Class Type</li>
     </ol>
 @stop
 
@@ -17,25 +17,27 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header">
-                    <a href="#" class="btn btn-flat btn-sm btn-primary">+ Add</a>
+                    <a href="#" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;
+                      Add New Course Type
+                    </a>
                 </div>
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>Code</th>
+                            <th style="width:50px;">#</th>
                             <th>Name</th>
-                            <th>Action</th>
+                            <th style="width:50px;">Action</th>
                         </tr>
                         {{-- head table content --}}
                         </thead>
                         <tbody>
-                        @foreach( $data as $dt)
+                        @foreach( $data as $i => $dt)
                         <tr>
-                            <td>{{ $dt->code }}</td>
+                            <td>{{ $i + 1 }}</td>
                             <td>{{ $dt->name }}</td>
-                            <td>
-                                <a href="{{ route('course_types.show',[$dt->id]) }}">Detail</a>
+                            <td class="text-center">
+                                <a href="{{ route('course_types.show',[$dt->id]) }}" class="btn btn-xs btn-flat btn-success">Detail</a>
                             </td>
                         </tr>
                         @endforeach

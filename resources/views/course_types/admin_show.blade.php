@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title','Admin | Course Level Details | Detail')
+@section('title','Admin | Class Type Detail')
 
 @include('layouts.css_and_js.table')
 
@@ -11,11 +11,11 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <h3 class="profile-username text-center">Courses Types</h3>
+                    <h3 class="profile-username text-center"><b>{{ $data->name }}</b></h3>
                     <p class="text-muted text-center">Code : {{ $data->code }}</p>
                 </div>
                 <div class="box-body">
-                    <a href="#" class="btn btn-danger btn-block"><b>Delete</b></a>
+                    <a href="#" class="btn btn-danger btn-block"><b>Delete This Class Type</b></a>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -25,22 +25,22 @@
         <div class="col-md-9">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#activity" data-toggle="tab">Detail</a></li>
+                    <li class="active"><a href="#activity" data-toggle="tab">Overview</a></li>
                     <li><a href="#form" data-toggle="tab">Form</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
-                        <strong><i class="fa fa-circle-o margin-r-5"></i>Course Name</strong>
+                        <strong><i class="fa fa-circle-o margin-r-5"></i>Class Type</strong>
                         <p>{{ $data->name }}</p>
                         <hr>
                         <strong><i class="fa fa-circle-o margin-r-5"></i>Description</strong>
                         <p>{{ $data->description }}</p>
                         <hr>
-                        <strong><i class="fa fa-circle-o margin-r-5"></i>Student Min</strong>
-                        <p>{{ $data->count_student_min }} Student</p>
+                        <strong><i class="fa fa-circle-o margin-r-5"></i>Student (minimum)</strong>
+                        <p>{{ $data->count_student_min }} @if($data->count_student_min == 1) Student @else Students @endif</p>
                         <hr>
-                        <strong><i class="fa fa-circle-o margin-r-5"></i>Student Max</strong>
-                        <p>{{ $data->count_student_max }} Student</p>
+                        <strong><i class="fa fa-circle-o margin-r-5"></i>Student (maximum)</strong>
+                        <p>{{ $data->count_student_max }} @if($data->count_student_max == 1) Student @else Students @endif</p>
                         <hr>
                     </div>
                     <!-- /.tab-pane -->
