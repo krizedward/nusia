@@ -22,16 +22,16 @@
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>Code</th>
+                            <th class="text-right" style="width:20px;">#</th>
                             <th>Title</th>
                             <th style="width:50px;">Action</th>
                         </tr>
                         {{--head table content--}}
                         </thead>
                         <tbody>
-                        @foreach($course as $dt)
+                        @foreach($course as $i => $dt)
                         <tr>
-                            <td>{{ $dt->code }}</td>
+                            <td class="text-right">{{ $i + 1 }}</td>
                             <td>{{ $dt->title }}</td>
                             <td class="text-center">
                                 <a href="{{ route('courses.show',[$dt->id]) }}" class="btn btn-xs btn-flat btn-success">Detail</a>
@@ -49,7 +49,7 @@
         <div class="col-md-6">
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title"><b>Course Package</b></h3>
+              <h3 class="box-title"><b>Class Package</b></h3>
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
               </div>
@@ -59,15 +59,15 @@
               <table class="table table-bordered">
                 <thead>
                 <tr>
-                  <th>Code</th>
+                  <th class="text-right" style="width:20px;">#</th>
                   <th>Title</th>
-                  <th>Count</th>
+                  <th>Number of Sessions</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($course_package as $dt)
+                @foreach($course_package as $i => $dt)
                 <tr>
-                  <td>{{ $dt->code }}</td>
+                  <td class="text-right">{{ $i + 1 }}</td>
                   <td>{{ $dt->title }}</td>
                   <td>{{ $dt->count_session }}</td>
                 </tr>
@@ -86,7 +86,7 @@
 
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title"><b>Course Type</b></h3>
+              <h3 class="box-title"><b>Class Type</b></h3>
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
               </div>
@@ -96,14 +96,14 @@
               <table class="table table-bordered">
                 <thead>
                 <tr>
-                  <th>Code</th>
+                  <th class="text-right" style="width:20px;">#</th>
                   <th>Name</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($course_type as $dt)
+                @foreach($course_type as $i => $dt)
                 <tr>
-                  <td>{{ $dt->code }}</td>
+                  <td class="text-right">{{ $i + 1 }}</td>
                   <td>{{ $dt->name }}</td>
                 </tr>
                 @endforeach
@@ -125,7 +125,7 @@
         <div class="col-md-6">
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title"><b>Course Level</b></h3>
+              <h3 class="box-title"><b>Class Level</b></h3>
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
               </div>
@@ -135,14 +135,14 @@
               <table class="table table-bordered">
                 <thead>
                 <tr>
-                  <th>Code</th>
+                  <th class="text-right" style="width:20px;">#</th>
                   <th>Name</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($course_level as $dt)
+                @foreach($course_level as $i => $dt)
                 <tr>
-                  <td>{{ $dt->code }}</td>
+                  <td class="text-right">{{ $i + 1 }}</td>
                   <td>{{ $dt->name }}</td>
                 </tr>
                 @endforeach
@@ -160,7 +160,7 @@
 
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title"><b>Course Level Detail</b></h3>
+              <h3 class="box-title"><b>Class Level (Detailed)</b></h3>
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
               </div>
@@ -170,14 +170,14 @@
               <table class="table table-bordered">
                 <thead>
                 <tr>
-                  <th>Code</th>
+                  <th class="text-right" style="width:20px;">#</th>
                   <th>Name</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($course_level_detail as $dt)
+                @foreach($course_level_detail as $i => $dt)
                 <tr>
-                  <td>{{ $dt->code }}</td>
+                  <td class="text-right">{{ $i + 1 }}</td>
                   <td>{{ $dt->name }}</td>
                 </tr>
                 @endforeach

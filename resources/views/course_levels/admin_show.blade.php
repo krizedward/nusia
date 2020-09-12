@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title','Admin | Course Level Details | Detail')
+@section('title','Admin | Course Level Detail')
 
 @include('layouts.css_and_js.table')
 
@@ -11,11 +11,11 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <h3 class="profile-username text-center">Courses Level</h3>
+                    <h3 class="profile-username text-center"><b>{{ $data->name }}</b></h3>
                     <p class="text-muted text-center">Code : {{ $data->code }}</p>
                 </div>
                 <div class="box-body">
-                    <a href="#" class="btn btn-danger btn-block"><b>Delete</b></a>
+                    <a href="#" class="btn btn-danger btn-block"><b>Delete This Class Level</b></a>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -25,12 +25,12 @@
         <div class="col-md-9">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#activity" data-toggle="tab">Detail</a></li>
+                    <li class="active"><a href="#activity" data-toggle="tab">Overview</a></li>
                     <li><a href="#form" data-toggle="tab">Form</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
-                        <strong><i class="fa fa-circle-o margin-r-5"></i>Course Name</strong>
+                        <strong><i class="fa fa-circle-o margin-r-5"></i>Class Level</strong>
                         <p>{{ $data->name }}</p>
                         <hr>
                         <strong><i class="fa fa-circle-o margin-r-5"></i>Description</strong>

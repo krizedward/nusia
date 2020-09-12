@@ -18,14 +18,14 @@
             <div class="box box-warning">
                 <div class="box-header">
                     <a href="#" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;
-                      Add New Course Type
+                      Add New Class Type
                     </a>
                 </div>
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th style="width:50px;">#</th>
+                            <th class="text-right" style="width:20px;">#</th>
                             <th>Name</th>
                             <th style="width:50px;">Action</th>
                         </tr>
@@ -34,7 +34,7 @@
                         <tbody>
                         @foreach( $data as $i => $dt)
                         <tr>
-                            <td>{{ $i + 1 }}</td>
+                            <td class="text-right">{{ $i + 1 }}</td>
                             <td>{{ $dt->name }}</td>
                             <td class="text-center">
                                 <a href="{{ route('course_types.show',[$dt->id]) }}" class="btn btn-xs btn-flat btn-success">Detail</a>
