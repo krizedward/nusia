@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\CoursePackage;
+use App\Models\CourseLevel;
+use App\Models\CourseLevelDetail;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -47,6 +49,21 @@ class CoursePackageController extends Controller
         }
         //$data = CoursePackage::all();
         //return view('courses.packages.index', compact('data'));
+    }
+
+    public function index_material_type($material_type_id)
+    {
+        if($this->is_student()){
+            $course_level_id = CourseLevel::where('name', Auth::user()->student->indonesian_language_proficiency)->first()->id;
+            $course_level_detail_id = CourseLevelDetail::where('name', Auth::user()->student->indonesian_language_proficiency_detail)->first()->id;
+
+            $course_packages = CoursePackage
+                ::where('material_type_id', $material_type_id)
+                ->get();
+            return view('course_packages.student_index_material_type', compact('course_packages'));
+        } else {
+            return redirect()->route('home');
+        }
     }
 
     /**

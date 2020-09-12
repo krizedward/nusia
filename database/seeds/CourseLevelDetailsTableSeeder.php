@@ -40,6 +40,27 @@ class CourseLevelDetailsTableSeeder extends Seeder
             'created_at'  => now(),
             'updated_at'  => null
         ]);
+        CourseLevelDetail::create ([
+            'code'        => 'CLD-002',
+            'name'        => 'Low',
+            'description' => 'This describes a difficulty lower than mid difficulty.',
+            'created_at'  => now(),
+            'updated_at'  => null
+        ]);
+        CourseLevelDetail::create ([
+            'code'        => 'CLD-003',
+            'name'        => 'Mid',
+            'description' => 'This describes a difficulty higher than low difficulty.',
+            'created_at'  => now(),
+            'updated_at'  => null
+        ]);
+        CourseLevelDetail::create ([
+            'code'        => 'CLD-004',
+            'name'        => 'High',
+            'description' => 'This describes a difficulty higher than mid difficulty.',
+            'created_at'  => now(),
+            'updated_at'  => null
+        ]);
 
         /*CourseLevelDetail::create ([
             'code'        => 'CLD-001',

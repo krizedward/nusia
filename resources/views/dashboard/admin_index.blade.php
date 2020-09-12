@@ -56,6 +56,8 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Registration Status</th>
+                                <th>Proficiency</th>
+                                <th>Attendance Count</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -70,6 +72,18 @@
                                       <td><label class="badge bg-red">Not registered</label></td>
                                     @else
                                       <td><label class="badge bg-yellow">Choosing a class</label></td>
+                                    @endif
+                                    <td>{{ $dt->indonesian_language_proficiency }}</td>
+                                    @if($dt->course_registrations->count() != 0)
+                                      <?php
+                                        $i = 0;
+                                        foreach($dt->course_registrations->first()->session_registrations as $sr) {
+                                          if($sr->status == 'Present' || $sr->status == 'Should Submit Form') $i++;
+                                        }
+                                      ?>
+                                      <td>{{ $i }}/{{ $dt->course_registrations->first()->course->course_package->count_session }}</td>
+                                    @else
+                                      <td><i>N/A</i></td>
                                     @endif
                                 </tr>
                                 @endforeach
