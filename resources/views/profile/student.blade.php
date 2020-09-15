@@ -40,8 +40,11 @@
                     <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
                     <p>{{ Auth::user()->email }}</p>
                     <hr>
-                    <strong><i class="fa fa-map-marker margin-r-5"></i> Citizenship</strong>
+                    <strong><i class="fa fa-map-marker margin-r-5"></i> Nationality</strong>
                     <p class="text-muted">{{ Auth::user()->citizenship }}</p>
+                    <hr>
+                    <strong><i class="fa fa-map-marker margin-r-5"></i> Where do you live now</strong>
+                    <p class="text-muted">{{ Auth::user()->domicile }}</p>
                     <hr>
                     <strong><i class="fa fa-pencil margin-r-5"></i> Interest</strong>
 
@@ -79,8 +82,11 @@
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Email</strong>
                             <p>{{ Auth::user()->email }}</p>
                             <hr>
-                            <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship</strong>
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Nationality</strong>
                             <p>{{ Auth::user()->citizenship }}</p>
+                            <hr>
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Where do you live now</strong>
+                            <p>{{ Auth::user()->domicile }}</p>
                             <hr>
                             <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
 

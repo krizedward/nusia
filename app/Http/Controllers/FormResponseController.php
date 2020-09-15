@@ -742,6 +742,7 @@ class FormResponseController extends Controller
             'password' => ['bail', 'required', 'min:8'],
             'phone' => ['bail', 'sometimes'],
             'citizenship' => ['bail', 'required'],
+            'domicile' => ['bail', 'required'],
             'image_profile' => ['bail', 'sometimes', 'max:8000'],
 
             'age' => ['bail', 'required', 'integer'],
@@ -772,6 +773,7 @@ class FormResponseController extends Controller
                 'password' => Hash::make($request->password),
                 'phone' => $request->phone,
                 'citizenship' => $request->citizenship,
+                'domicile' => $request->domicile,
                 'image_profile' => ($file)? $file_name : 'user.jpg',
             ]);
 

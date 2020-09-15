@@ -404,6 +404,7 @@ class ProfileController extends Controller
                 'old_password' => ['bail', 'sometimes'],
                 'password' => ['bail', 'sometimes'],
                 'citizenship' => ['bail', 'sometimes'],
+                'domicile' => ['bail', 'sometimes'],
                 'image_profile' => ['bail', 'sometimes', 'max:8000'],
 
                 'working_experience_1' => ['bail', 'required_unless:working_experience_begin_year_1,'],
@@ -455,6 +456,7 @@ class ProfileController extends Controller
                 'password' => Hash::make($request->password),
                 'phone' => $request->phone,
                 'citizenship' => $request->citizenship,
+                'domicile' => $request->domicile,
             ]);
 
             Auth::user()->instructor->update([

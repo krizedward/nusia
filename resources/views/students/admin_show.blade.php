@@ -51,10 +51,20 @@
                         </p>
                         <hr>
 
-                        <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship:</strong>
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Nationality</strong>
                         <p>
                             @if($data->user->citizenship != 'Not Available')
                               {{ $data->user->citizenship }}
+                            @else
+                              <i>Not Available</i>
+                            @endif
+                        </p>
+                        <hr>
+
+                        <strong><i class="fa fa-circle-o margin-r-5"></i> Where do you live now</strong>
+                        <p>
+                            @if($data->user->domicile)
+                              {{ $data->user->domicile }}
                             @else
                               <i>Not Available</i>
                             @endif

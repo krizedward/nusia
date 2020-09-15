@@ -35,8 +35,12 @@
           <p>{{ Auth::user()->email }}</p>
           <hr>
 
-          <strong><i class="fa fa-map-marker margin-r-5"></i> Citizenship</strong>
+          <strong><i class="fa fa-map-marker margin-r-5"></i> Nationality</strong>
           <p class="text-muted">{{ Auth::user()->citizenship }}</p>
+          <hr>
+
+          <strong><i class="fa fa-map-marker margin-r-5"></i> Where do you live now</strong>
+          <p class="text-muted">{{ Auth::user()->domicile }}</p>
           <hr>
 
           <strong><i class="fa fa-pencil margin-r-5"></i> Interest</strong>
@@ -70,8 +74,12 @@
             <p>{{ Auth::user()->email }}</p>
             <hr>
 
-            <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship</strong>
+            <strong><i class="fa fa-circle-o margin-r-5"></i> Nationality</strong>
             <p>{{ Auth::user()->citizenship }}</p>
+            <hr>
+
+            <strong><i class="fa fa-circle-o margin-r-5"></i> Where do you live now</strong>
+            <p>{{ Auth::user()->domicile }}</p>
             <hr>
 
             <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
@@ -174,13 +182,30 @@
                       @else
                         <div class="form-group">
                       @endif
-                          <label for="citizenship">Citizenship</label>
+                          <label for="citizenship">Nationality</label>
                           @if(Auth::user()->citizenship)
-                            <input name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control" placeholder="Enter Citizenship" value="{{ Auth::user()->citizenship }}">
+                            <input name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control" placeholder="Enter Nationality" value="{{ Auth::user()->citizenship }}">
                           @else
-                            <input name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control" placeholder="Enter Citizenship" value="{{ old('citizenship') }}">
+                            <input name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control" placeholder="Enter Nationality" value="{{ old('citizenship') }}">
                           @endif
                           @error('citizenship')
+                            <p style="color:red">{{ $message }}</p>
+                          @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                      @if($errors->get('domicile'))
+                        <div class="form-group has-error">
+                      @else
+                        <div class="form-group">
+                      @endif
+                          <label for="domicile">Where do you live now?</label>
+                          @if(Auth::user()->domicile)
+                            <input name="domicile" type="text" class="@error('domicile') is-invalid @enderror form-control" placeholder="Enter Domicile" value="{{ Auth::user()->domicile }}">
+                          @else
+                            <input name="domicile" type="text" class="@error('domicile') is-invalid @enderror form-control" placeholder="Enter Domicile" value="{{ old('domicile') }}">
+                          @endif
+                          @error('domicile')
                             <p style="color:red">{{ $message }}</p>
                           @enderror
                         </div>

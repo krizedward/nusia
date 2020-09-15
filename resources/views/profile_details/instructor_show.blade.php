@@ -40,8 +40,11 @@
                     <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
                     <p>{{ $student->user->email }}</p>
                     <hr>
-                    <strong><i class="fa fa-map-marker margin-r-5"></i> Citizenship</strong>
+                    <strong><i class="fa fa-map-marker margin-r-5"></i> Nationality</strong>
                     <p class="text-muted">{{ $student->user->citizenship }}</p>
+                    <hr>
+                    <strong><i class="fa fa-map-marker margin-r-5"></i> Where do you live now</strong>
+                    <p class="text-muted">{{ $student->user->domicile }}</p>
                     <hr>
                     <strong><i class="fa fa-pencil margin-r-5"></i> Interest</strong>
 
@@ -79,10 +82,20 @@
                             <p>{{ $student->user->email }}</p>
                             <hr>
 
-                            <strong><i class="fa fa-circle-o margin-r-5"></i> Citizenship</strong>
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Nationality</strong>
                             <p>
                                 @if($student->user->citizenship != 'Not Available')
                                   {{ $student->user->citizenship }}
+                                @else
+                                  <i>Not Available</i>
+                                @endif
+                            </p>
+                            <hr>
+
+                            <strong><i class="fa fa-circle-o margin-r-5"></i> Where do you live now</strong>
+                            <p>
+                                @if($student->user->domicile)
+                                  {{ $student->user->domicile }}
                                 @else
                                   <i>Not Available</i>
                                 @endif

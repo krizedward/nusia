@@ -283,6 +283,7 @@ class HomeController extends Controller
         $file = $request->file('image_profile');
         $data = Validator::make($data, [
             'citizenship' => ['bail', 'required'],
+            'domicile' => ['bail', 'required'],
             'timezone' => ['bail', 'required'],
             'image_profile' => ['bail', 'sometimes', 'max:8000'],
 
@@ -326,6 +327,7 @@ class HomeController extends Controller
                 'password' => Hash::make($request->password),
                 'roles' => 'Student',
                 'citizenship' => $request->citizenship,
+                'domicile' => $request->domicile,
                 'timezone' => $request->timezone,
                 'image_profile' => ($file)? $file_name : 'user.jpg',
             ]);
@@ -348,6 +350,7 @@ class HomeController extends Controller
 
             User::find(Auth::user()->id)->update([
                 'citizenship' => $request->citizenship,
+                'domicile' => $request->domicile,
                 'timezone' => $request->timezone,
                 'image_profile'   => $file_name,
             ]);
@@ -372,6 +375,7 @@ class HomeController extends Controller
 
                 User::find(Auth::user()->id)->update([
                     'citizenship' => $request->citizenship,
+                    'domicile' => $request->domicile,
                     'timezone' => $request->timezone,
                     'image_profile'   => 'user.jpg',
                 ]);

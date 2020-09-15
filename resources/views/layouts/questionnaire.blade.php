@@ -5,31 +5,7 @@
 @include('layouts.css_and_js.form_advanced')
 
 @section('content')
-                <div class="box box-primary" id="guidelines">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Indonesian Language Proficiency Guidelines</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <b>Novice</b>
-                                <p>You are categorized as a novice learner when you have no or limited prior Indonesian language knowledge. In free online classes, you are going to learn about greetings, how to introduce yourself and someone else, as well as how to ask someone’s information.</p>
-                            </div>
-                            <div class="col-md-12">
-                                <b>Intermediate</b>
-                                <p>You are identified as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language. In free online classes, you will learn about introduction, diseases and its symptoms, as well as Indonesian traditional culinary.</p>
-                            </div>
-                            <div class="col-md-12">
-                                <b>Advanced</b>
-                                <p>You are categorized as an advanced learner when you are able to handle a complicated situation or transaction in the Indonesian language. You are going to learn about introduction and a general knowledge of Indonesia, Indonesian culinary, and the current world’s phenomenon in free online classes.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.box-body -->
-                </div>
-                <!-- /.box -->
-
-                <div class="box box-default">
+                <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title"><b>New Student Registration Form</b></h3>
                     </div>
@@ -78,6 +54,19 @@
                                             @enderror
                                         </div>
                                 </div>
+                                <div class="col-md-12">
+                                    @if ($errors->get('age'))
+                                        <div class="form-group has-error">
+                                    @else
+                                        <div class="form-group">
+                                    @endif
+                                        <label for="age">Age</label>
+                                            <input name="age" type="text" class="@error('age') is-invalid @enderror form-control" placeholder="Enter Age" value="{{ old('age') }}">
+                                            @error('age')
+                                            <p style="color:red">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                </div>
                                 <div class="col-md-6">
                                     @if ($errors->get('status_job'))
                                         <div class="form-group has-error">
@@ -112,27 +101,14 @@
                             {{--Form Kanan--}}
                             <div class="col-md-6">
                                 <div class="col-md-12">
-                                    @if ($errors->get('age'))
-                                        <div class="form-group has-error">
-                                    @else
-                                        <div class="form-group">
-                                    @endif
-                                        <label for="age">Age</label>
-                                            <input name="age" type="text" class="@error('age') is-invalid @enderror form-control" placeholder="Enter Age" value="{{ old('age') }}">
-                                            @error('age')
-                                            <p style="color:red">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-                                </div>
-                                <div class="col-md-12">
                                     @if ($errors->get('citizenship'))
                                         <div class="form-group has-error">
                                     @else
                                         <div class="form-group">
                                     @endif
-                                        <label for="citizenship">Citizenship</label>
+                                        <label for="citizenship">Nationality</label>
                                             {{--<select name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control">
-                                                <option selected="selected" value="">-- Enter Citizenship --</option>
+                                                <option selected="selected" value="">-- Enter Nationality --</option>
                                                 @foreach($countries as $country)
                                                     @if(old('citizenship') == $country)
                                                       <option selected="selected" value="{{ $country }}">{{ $country }}</option>
@@ -141,8 +117,21 @@
                                                     @endif
                                                 @endforeach
                                             </select>--}}
-                                            <input name="citizenship" type="text" class="@error('age') is-invalid @enderror form-control" placeholder="Enter Citizenship" value="{{ old('citizenship') }}">
+                                            <input name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control" placeholder="Enter Nationality" value="{{ old('citizenship') }}">
                                             @error('citizenship')
+                                            <p style="color:red">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                </div>
+                                <div class="col-md-12">
+                                    @if ($errors->get('domicile'))
+                                        <div class="form-group has-error">
+                                    @else
+                                        <div class="form-group">
+                                    @endif
+                                        <label for="domicile">Where do you live now?</label>
+                                            <input name="domicile" type="text" class="@error('domicile') is-invalid @enderror form-control" placeholder="Enter Domicile" value="{{ old('domicile') }}">
+                                            @error('domicile')
                                             <p style="color:red">{{ $message }}</p>
                                             @enderror
                                         </div>
@@ -177,29 +166,35 @@
                                     @else
                                         <div class="form-group">
                                     @endif
-                                        <label for="indonesian_language_proficiency">Indonesian Language Proficiency (Self-assessment)</label>
-                                        <p style="color:#ff0000; padding-top:0px; margin-top:0px;"><a href="#guidelines" style="color:#ff0000;">*Check the proficiency guidelines above</a></p>
-                                            <select name="indonesian_language_proficiency" type="text" class="@error('indonesian_language_proficiency') is-invalid @enderror form-control">
-                                                <option selected="selected" value="">-- Enter Indonesian Language Proficiency --</option>
-                                                @if(old('indonesian_language_proficiency') == 'Novice')
-                                                  <option selected="selected" value="Novice">Novice</option>
-                                                @else
-                                                  <option value="Novice">Novice</option>
-                                                @endif
-                                                @if(old('indonesian_language_proficiency') == 'Intermediate')
-                                                  <option selected="selected" value="Intermediate">Intermediate</option>
-                                                @else
-                                                  <option value="Intermediate">Intermediate</option>
-                                                @endif
-                                                @if(old('indonesian_language_proficiency') == 'Advanced')
-                                                  <option selected="selected" value="Advanced">Advanced</option>
-                                                @else
-                                                  <option value="Advanced">Advanced</option>
-                                                @endif
-                                            </select>
-                                            @error('indonesian_language_proficiency')
+                                          <label for="indonesian_language_proficiency">Indonesian Language Proficiency (Self-assessment)</label>
+                                          <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Check the radio box below</p>
+                                          <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*The descriptions in each level are based on ACTFL proficiency descriptions</p>
+                                          <p class="hidden" id="descriptionNovice" style="color:#000000; padding-top:0px; margin-top:0px;"><b>Novice Proficiency</b><br>You are categorized as a novice learner when you have no or limited prior Indonesian language knowledge.</p>
+                                          <p class="hidden" id="descriptionIntermediate" style="color:#000000; padding-top:0px; margin-top:0px;"><b>Intermediate Proficiency</b><br>You are categorized as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language.</p>
+                                          <p class="hidden" id="descriptionAdvanced" style="color:#000000; padding-top:0px; margin-top:0px;"><b>Advanced Proficiency</b><br>You are categorized as an advanced learner when you are able to handle a complicated situation or transaction in the Indonesian language.</p>
+                                          @if(old('indonesian_language_proficiency') == 'Novice')
+                                            <input checked id="radioAnswer1" name="indonesian_language_proficiency" type="radio" value="Novice" onchange="if(document.getElementById('radioAnswer1').checked) { document.getElementById('descriptionNovice').className = ''; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
+                                          @else
+                                            <input id="radioAnswer1" name="indonesian_language_proficiency" type="radio" value="Novice" onchange="if(document.getElementById('radioAnswer1').checked) { document.getElementById('descriptionNovice').className = ''; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
+                                          @endif
+                                          <label for="radioAnswer1" class="custom-control-label">Novice</label>
+                                          <br>
+                                          @if(old('indonesian_language_proficiency') == 'Intermediate')
+                                            <input checked id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
+                                          @else
+                                            <input id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
+                                          @endif
+                                          <label for="radioAnswer2" class="custom-control-label">Intermediate</label>
+                                          <br>
+                                          @if(old('indonesian_language_proficiency') == 'Advanced')
+                                            <input checked id="radioAnswer3" name="indonesian_language_proficiency" type="radio" value="Advanced" onchange="if(document.getElementById('radioAnswer3').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = ''; }">
+                                          @else
+                                            <input id="radioAnswer3" name="indonesian_language_proficiency" type="radio" value="Advanced" onchange="if(document.getElementById('radioAnswer3').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = ''; }">
+                                          @endif
+                                          <label for="radioAnswer3" class="custom-control-label">Advanced</label>
+                                          @error('indonesian_language_proficiency')
                                             <p style="color:red">{{ $message }}</p>
-                                            @enderror
+                                          @enderror
                                         </div>
                                 </div>
                             </div>

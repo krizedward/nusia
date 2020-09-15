@@ -159,6 +159,7 @@ class StudentController extends Controller
             'email' => ['bail', 'required', 'unique:users'],
             'password' => ['bail', 'required', 'min:8'],
             'citizenship' => ['bail', 'required'],
+            'domicile' => ['bail', 'required'],
             'image_profile' => ['bail', 'sometimes', 'max:8000'],
 
             'age' => ['bail', 'required', 'integer'],
@@ -194,6 +195,7 @@ class StudentController extends Controller
                 'password' => Hash::make($request->password),
                 'roles' => 'Student',
                 'citizenship' => $request->citizenship,
+                'domicile' => $request->domicile,
                 'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
             ]);
             $temp = User::all()->last();
@@ -439,6 +441,7 @@ class StudentController extends Controller
             'password' => ['bail', 'required', 'min:8'],
             'phone' => ['bail', 'sometimes'],
             'citizenship' => ['bail', 'required'],
+            'domicile' => ['bail', 'domicile'],
             'image_profile' => ['bail', 'sometimes', 'max:8000'],
 
             'age' => ['bail', 'required', 'integer'],
@@ -469,6 +472,7 @@ class StudentController extends Controller
                 'password' => Hash::make($request->password),
                 'phone' => $request->phone,
                 'citizenship' => $request->citizenship,
+                'domicile' => $request->domicile,
                 'image_profile' => ($file)? $file_name : 'user.jpg',
             ]);
 

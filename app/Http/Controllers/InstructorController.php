@@ -233,6 +233,7 @@ class InstructorController extends Controller
             'email' => ['bail', 'required', 'unique:users'],
             'password' => ['bail', 'required', 'min:8'],
             'citizenship' => ['bail', 'required'],
+            'domicile' => ['bail', 'required'],
             'image_profile' => ['bail', 'sometimes', 'max:5000'],
 
             'working_experience_1' => ['bail', 'required_unless:working_experience_begin_year_1,'],
@@ -268,6 +269,7 @@ class InstructorController extends Controller
                 'password' => Hash::make($request->password),
                 'roles' => 'Instructor',
                 'citizenship' => $request->citizenship,
+                'domicile' => $request->domicile,
                 'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
             ]);
             $temp = User::all()->last();
