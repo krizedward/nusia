@@ -53,8 +53,8 @@
             </li>
             @elseif(Auth::user()->citizenship != 'Not Available')
               @if(Auth::user()->student->course_registrations->count() == 0)
-                <li class="{{ set_active(['courses.index']) }}">
-                  <a href="{{ route('courses.index')}}">
+                <li class="{{ set_active(['material_types.index']) }}">
+                  <a href="{{ route('material_types.index')}}">
                     <i class="fa fa-book"></i> <span>Registration</span>
                   </a>
                 </li>
