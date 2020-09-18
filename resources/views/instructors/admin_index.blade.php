@@ -2,7 +2,7 @@
 
 @section('title','Admin | Instructor')
 
-@include('layouts.css_and_js.form_general')
+@include('layouts.css_and_js.table')
 
 @section('content-header')
     <h1>Instructor</h1>

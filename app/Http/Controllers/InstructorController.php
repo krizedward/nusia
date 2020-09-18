@@ -253,15 +253,38 @@ class InstructorController extends Controller
             'working_experience_15' => ['bail', 'required_unless:working_experience_begin_year_15,'],
             'interest_1' => ['bail', 'sometimes'],
         ]);
-
+        /*
         if($data->fails()) {
             return redirect()->back()
                 ->withErrors($data)
                 ->withInput();
+        }*/
+
+        if ($this->is_admin()) {
+            User::create([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'password' => Hash::make('12345678'),
+                'roles' => 'Instructor',
+                'citizenship' => $request->citizenship,
+                'timezone' => 'Asia/Jakarta',
+                'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
+            ]);
+
+            $temp = User::all()->last();
+            
+            Instructor::create([
+                'user_id' => $temp->id,
+                'working_experience' => $working_experience,
+                'interest' => $interest,
+            ]);
+
+            \Session::flash('admin_store_instructor','Create Success !!!');
         }
 
 
-        if($this->is_admin() || $this->is_instructor()) {
+        if($this->is_instructor()) {
             User::create([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -269,7 +292,7 @@ class InstructorController extends Controller
                 'password' => Hash::make($request->password),
                 'roles' => 'Instructor',
                 'citizenship' => $request->citizenship,
-                'domicile' => $request->domicile,
+                'domicile' => 'Indonesia',
                 'image_profile' => ($request->hasFile('image_profile'))? $request->file('image_profile')->storeAs('students', $data) : null,
             ]);
             $temp = User::all()->last();

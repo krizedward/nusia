@@ -5,10 +5,10 @@
 @include('layouts.css_and_js.form_general')
 
 @section('content-header')
-    <h1>Student</h1>
+    <h1>Instructor</h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="{{ route('students.index',1) }}">Student</a></li>
+        <li><a href="{{ route('instructors.index') }}">Instructor</a></li>
         <li class="active">Detail</li>
     </ol>
 @stop
