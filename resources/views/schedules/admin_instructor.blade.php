@@ -12,6 +12,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-warning">
+                <div class="box-header">
+                    <a href="{{ route('schedules.create') }}" class="btn btn-flat btn-sm btn-primary">+ Add</a>
+                </div>
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>

@@ -29,8 +29,8 @@
                             <tr>
                                 <td>{{ $dt->code }}</td>
                                 <td>{{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}</td>
-                                <td>{{ $dt->schedule_time }}</td>
-                                <td>{{ $dt->schedule_time }}</td>
+                                <td>{{ date("d F Y", strtotime($dt->schedule_time)) }}</td>
+                                <td>{{ date("h:i A", strtotime($dt->schedule_time)) }}</td>
                                 <td>{{ $dt->status }}</td>
                             </tr>
                         @endforeach

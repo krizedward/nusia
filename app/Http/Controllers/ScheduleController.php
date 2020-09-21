@@ -207,7 +207,8 @@ class ScheduleController extends Controller
     {
         if ($this->is_admin()){
             Schedule::create([
-                'instructor_id' => $request->instructor,
+                'instructor_id' => $request->instructor_1,
+                'instructor_id_2' => $request->instructor_2,
                 'schedule_time' => $request->date,
                 'status' => 'Available',
             ]);
@@ -240,8 +241,8 @@ class ScheduleController extends Controller
             // Tidak memiliki hak akses.
         }
         */
-        \Session::flash('sukses','Success Save Data');
-        return redirect()->route('schedules.index');
+        \Session::flash('admin_store_instructor_schedule','Success Save Data');
+        return redirect()->route('schedules.admin_instrucstor');
     }
 
     /**
@@ -383,7 +384,7 @@ class ScheduleController extends Controller
         if ($this->is_admin()){
             $instructor = Instructor::where('code',$code)->get();
             $id  = $instructor->first()->id;
-            $data = Schedule::where('instructor_id',$id)->get();
+            $data = Schedule::where('instructor_id',$id)->orWhere('instructor_id_2',$id)->get();
             return view('schedules.admin_index', compact('data'));
         }
     }

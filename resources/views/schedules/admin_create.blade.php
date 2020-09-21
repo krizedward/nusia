@@ -31,8 +31,17 @@
                                 <input name="text" type="text" class="form-control">
                             </div>--}}
                             <div class="form-group">
-                                <label>Instructor</label>
-                                <select name="instructor" class="form-control select2">
+                                <label>Instructor 1</label>
+                                <select name="instructor_1" class="form-control select2">
+                                    <option selected="" disabled="">Choose Instructor</option>
+                                    @foreach($instructor as $dt)
+                                        <option value="{{$dt->id}}">{{$dt->user->first_name}} {{$dt->user->last_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Instructor 2</label>
+                                <select name="instructor_2" class="form-control select2">
                                     <option selected="" disabled="">Choose Instructor</option>
                                     @foreach($instructor as $dt)
                                         <option value="{{$dt->id}}">{{$dt->user->first_name}} {{$dt->user->last_name}}</option>
@@ -44,6 +53,10 @@
                             <div class="form-group">
                                 <label for="#text">Schedule Time</label>
                                 <input name="date" type="date" class="form-control">
+                            </div>
+                            <div>
+                                <label>Time</label>
+                                <input name="text" type="text" class="form-control">
                             </div>
                         </div>
                     </div>
