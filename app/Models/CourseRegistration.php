@@ -64,7 +64,7 @@ class CourseRegistration extends Model
      */
     public function course_payment()
     {
-    	return $this->hasOne(CoursePayment::class);
+    	return $this->hasMany(CoursePayment::class); // diubah dari hasOne menjadi hasMany untuk fitur cicilan.
     }
 
     /**
