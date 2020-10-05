@@ -17,16 +17,21 @@ class CreateCoursePaymentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('course_registration_id');
-            $table->string('method', 20);
-            $table->timestamp('payment_time');
+            $table->unsignedBigInteger('payment_type_id');
+            $table->timestamp('payment_time')->nullable();
             $table->bigInteger('amount')->unsigned()->nullable();
-            $table->enum('status', ['Not Confirmed', 'Confirmed']);
+            $table->enum('status', ['Not Confirmed', 'Refunded', 'Wallet', 'Confirmed']);
+            $table->timestamp('refunded_at')->nullable();
             $table->text('path')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 
             $table->foreign('course_registration_id')
                 ->references('id')->on('course_registrations')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('payment_type_id')
+                ->references('id')->on('payment_types')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

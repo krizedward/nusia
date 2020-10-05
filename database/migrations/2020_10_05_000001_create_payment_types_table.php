@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCourseLevelsTable extends Migration
+class CreatePaymentTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateCourseLevelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_levels', function (Blueprint $table) {
+        Schema::create('payment_types', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
-            $table->string('name', 100);
-            $table->text('description')->nullable();
-            $table->integer('assignment_score_min')->nullable();
-            $table->integer('mid_exam_score_min')->nullable();
-            $table->integer('final_exam_score_min')->nullable();
+            $table->string('method')->nullable();
+            $table->text('brief_description')->nullable();
+            $table->text('detailed_description')->nullable();
+            $table->string('account_number')->nullable();
+            $table->text('account_name')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
         });
@@ -33,6 +33,6 @@ class CreateCourseLevelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_levels');
+        Schema::dropIfExists('payment_types');
     }
 }

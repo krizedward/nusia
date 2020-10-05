@@ -16,14 +16,14 @@ class CreateRatingsTable extends Migration
         Schema::create('ratings', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
-            $table->unsignedBigInteger('session_id');
+            $table->unsignedBigInteger('session_registration_id');
             $table->integer('rating')->unsigned();
             $table->text('comment')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 
-            $table->foreign('session_id')
-                ->references('id')->on('sessions')
+            $table->foreign('session_registration_id')
+                ->references('id')->on('session_registrations')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

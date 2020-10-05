@@ -6,6 +6,7 @@ use Alfa6661\AutoNumber\AutoNumberTrait;
 use App\Models\Session;
 use App\Models\CourseRegistration;
 use App\Models\SessionRegistrationForm;
+use App\Models\Rating;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -57,5 +58,13 @@ class SessionRegistration extends Model
     public function session_registration_forms()
     {
     	return $this->hasMany(SessionRegistrationForm::class);
+    }
+
+    /**
+     * Define a relationship.
+     */
+    public function ratings()
+    {
+    	return $this->hasOne(Rating::class);
     }
 }

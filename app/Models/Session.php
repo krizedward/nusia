@@ -6,7 +6,6 @@ use Alfa6661\AutoNumber\AutoNumberTrait;
 use App\Models\Course;
 use App\Models\Schedule;
 use App\Models\MaterialSession;
-use App\Models\Rating;
 use App\Models\SessionRegistration;
 use App\Models\Form;
 use Illuminate\Database\Eloquent\Model;
@@ -72,14 +71,6 @@ class Session extends Model
     public function material_sessions()
     {
     	return $this->hasMany(MaterialSession::class);
-    }
-
-    /**
-     * Define a relationship.
-     */
-    public function ratings()
-    {
-    	return $this->hasMany(Rating::class);
     }
 
     /**

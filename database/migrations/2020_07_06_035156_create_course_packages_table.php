@@ -19,7 +19,7 @@ class CreateCoursePackagesTable extends Migration
             $table->unsignedBigInteger('material_type_id');
             $table->unsignedBigInteger('course_type_id');
             $table->unsignedBigInteger('course_level_id');
-            $table->unsignedBigInteger('course_level_detail_id');
+            //$table->unsignedBigInteger('course_level_detail_id');
             $table->string('title');
             $table->text('description')->nullable();
             $table->text('requirement')->nullable();
@@ -40,10 +40,10 @@ class CreateCoursePackagesTable extends Migration
                 ->references('id')->on('course_levels')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreign('course_level_detail_id')
+            /*$table->foreign('course_level_detail_id')
                 ->references('id')->on('course_level_details')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade');*/
         });
     }
 

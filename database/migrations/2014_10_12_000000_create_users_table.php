@@ -20,10 +20,11 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->string('password');
-            $table->enum('roles', ['Student', 'Instructor', 'Admin']);
+            $table->enum('roles', ['Student', 'Instructor', 'Lead Instructor', 'Customer Service', 'Financial Team', 'Admin']);
             $table->string('citizenship');
             $table->string('domicile')->nullable();
             $table->string('timezone')->nullable();
+            $table->string('website_language')->nullable();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone', 15)->nullable();
