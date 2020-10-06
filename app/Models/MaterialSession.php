@@ -48,6 +48,6 @@ class MaterialSession extends Model
      */
     public function getRouteKey()
     {
-        return $this->slug;
+        return $this->code;
     }
 }

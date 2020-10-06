@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Student;
 use App\Models\CourseCertificate;
 use App\Models\CoursePayment;
+use App\Models\PlacementTest;
 use App\Models\SessionRegistration;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -65,6 +66,14 @@ class CourseRegistration extends Model
     public function course_payment()
     {
     	return $this->hasMany(CoursePayment::class); // diubah dari hasOne menjadi hasMany untuk fitur cicilan.
+    }
+
+    /**
+     * Define a relationship.
+     */
+    public function placement_test()
+    {
+    	return $this->hasOne(PlacementTest::class);
     }
 
     /**

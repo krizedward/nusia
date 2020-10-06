@@ -17,7 +17,10 @@ class CourseLevel extends Model
 
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'assignment_score_min',
+        'mid_exam_score_min',
+        'final_exam_score_min'
     ];
 
     public function getAutoNumberOptions()
@@ -46,6 +49,6 @@ class CourseLevel extends Model
      */
     public function getRouteKey()
     {
-        return $this->slug;
+        return $this->code;
     }
 }

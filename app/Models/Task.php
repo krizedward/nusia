@@ -3,34 +3,36 @@
 namespace App\Models;
 
 use Alfa6661\AutoNumber\AutoNumberTrait;
-use App\Models\PaymentType;
-use App\Models\CourseRegistration;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CoursePayment extends Model
+use App\Models\Session;
+use App\Models\TaskSubmission;
+
+class Task extends Model
 {
     use SoftDeletes;
     use AutoNumberTrait;
 
-    protected $table = "course_payments";
+    protected $table = "tasks";
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'course_registration_id',
-        'payment_type_id',
-        'payment_time',
-        'amount',
-        'status',
-        'refunded_at',
-        'path'
+        'session_id',
+        'type',
+        'title',
+        'description',
+        'due_date',
+        'path_1',
+        'path_2',
+        'path_3'
     ];
 
     public function getAutoNumberOptions()
     {
         return [
             'code' => [
-                'format' => 'CRY?', // Format kode yang akan digunakan.
+                'format' => 'TAS?', // Format kode yang akan digunakan.
                 'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
                 //refrensi : https://www.lab-informatika.com/membuat-kode-otomatis-di-laravel
             ]
@@ -38,18 +40,18 @@ class CoursePayment extends Model
     }
 
     /**
-     * Define a relationship.
+     * Get user information.
      */
-    public function payment_type()
+    public function session()
     {
-    	return $this->belongsTo(PaymentType::class);
+        return $this->belongsTo(Session::class);
     }
 
     /**
      * Define a relationship.
      */
-    public function course_registration()
+    public function task_submissions()
     {
-    	return $this->belongsTo(CourseRegistration::class);
+    	return $this->hasMany(TaskSubmission::class);
     }
 }
