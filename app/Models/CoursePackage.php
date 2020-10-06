@@ -6,7 +6,6 @@ use Alfa6661\AutoNumber\AutoNumberTrait;
 use App\Models\MaterialType;
 use App\Models\CourseType;
 use App\Models\CourseLevel;
-use App\Models\CourseLevelDetail;
 use App\Models\Course;
 use App\Models\MaterialPublic;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +23,6 @@ class CoursePackage extends Model
         'material_type_id',
         'course_type_id',
         'course_level_id',
-        'course_level_detail_id',
         'title',
         'description',
         'requirement',
@@ -70,14 +68,6 @@ class CoursePackage extends Model
     /**
      * Define a relationship.
      */
-    public function course_level_detail()
-    {
-    	return $this->belongsTo(CourseLevelDetail::class);
-    }
-
-    /**
-     * Define a relationship.
-     */
     public function courses()
     {
     	return $this->hasMany(Course::class);
@@ -98,6 +88,6 @@ class CoursePackage extends Model
      */
     public function getRouteKey()
     {
-        return $this->slug;
+        return $this->code;
     }
 }

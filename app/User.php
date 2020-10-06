@@ -22,13 +22,13 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'slug',
         'email',
         'password',
         'roles',
         'citizenship',
         'domicile',
         'timezone',
+        'website_language',
         'first_name',
         'last_name',
         'phone',
@@ -70,12 +70,36 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Define a relationship.
+     */
+    public function other_user()
+    {
+    	return $this->hasOne('App\Models\OtherUser', 'user_id');
+    }
+
+    /**
+     * Define a relationship.
+     */
+    public function user_notifications()
+    {
+    	return $this->hasMany('App\Models\UserNotification', 'user_id');
+    }
+
+    /**
+     * Define a relationship.
+     */
+    public function messages()
+    {
+    	return $this->hasMany('App\Models\Messages', 'user_id');
+    }
+
+    /**
      * Get the value of the model's route key.
      *
      * @return mixed
      */
     public function getRouteKey()
     {
-        return $this->slug;
+        return $this->code;
     }
 }

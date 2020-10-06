@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Alfa6661\AutoNumber\AutoNumberTrait;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use App\Models\Session;
 use App\Models\CourseRegistration;
 use App\Models\SessionRegistrationForm;
 use App\Models\Rating;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\TaskSubmission;
 
 class SessionRegistration extends Model
 {
@@ -65,6 +67,14 @@ class SessionRegistration extends Model
      */
     public function ratings()
     {
-    	return $this->hasOne(Rating::class);
+    	return $this->hasMany(Rating::class);
+    }
+
+    /**
+     * Define a relationship.
+     */
+    public function task_submissions()
+    {
+    	return $this->hasMany(TaskSubmission::class);
     }
 }

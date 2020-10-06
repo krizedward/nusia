@@ -6,6 +6,8 @@ use Alfa6661\AutoNumber\AutoNumberTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Models\CoursePayment;
+
 class PaymentType extends Model
 {
     use SoftDeletes;
@@ -31,5 +33,13 @@ class PaymentType extends Model
                 //refrensi : https://www.lab-informatika.com/membuat-kode-otomatis-di-laravel
             ]
         ];
+    }
+
+    /**
+     * Define a relationship.
+     */
+    public function course_payments()
+    {
+    	return $this->hasMany(CoursePayment::class);
     }
 }

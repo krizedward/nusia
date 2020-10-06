@@ -46,6 +46,6 @@ class CourseCertificate extends Model
      */
     public function getRouteKey()
     {
-        return $this->slug;
+        return $this->code;
     }
 }

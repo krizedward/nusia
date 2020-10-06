@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use Alfa6661\AutoNumber\AutoNumberTrait;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use App\Models\Course;
 use App\Models\Schedule;
 use App\Models\MaterialSession;
 use App\Models\SessionRegistration;
 use App\Models\Form;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Task;
 
 class Session extends Model
 {
@@ -26,7 +28,10 @@ class Session extends Model
         'title',
         'description',
         'requirement',
-        'link_zoom'
+        'link_zoom',
+        'reschedule_late_confirmation',
+        'reschedule_technical_issue_instructor',
+        'reschedule_technical_issue_student',
     ];
 
     public function getAutoNumberOptions()
@@ -82,12 +87,20 @@ class Session extends Model
     }
 
     /**
+     * Define a relationship.
+     */
+    public function tasks()
+    {
+    	return $this->hasMany(Task::class);
+    }
+
+    /**
      * Get the value of the model's route key.
      *
      * @return mixed
      */
     public function getRouteKey()
     {
-        return $this->slug;
+        return $this->code;
     }
 }
