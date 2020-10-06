@@ -76,17 +76,33 @@ Route::group(['middleware'=>'auth'], function() {
         // selain Route::resource(s) (pada keyword yang sama),
         // lakukan deklarasi SEBELUM menulis baris kode Route::resource(s).
         Route::resources([
-            'material_types'        => 'MaterialTypeController',
-            'course_types'          => 'CourseTypeController',
-            'course_levels'         => 'CourseLevelController',
-            'course_level_details'  => 'CourseLevelDetailController',
-            'course_packages'       => 'CoursePackageController',
-            'courses'               => 'CourseController',
-            'sessions'              => 'SessionController',
-            'course_certificates'   => 'CourseCertificateController',
-            'material_publics'      => 'MaterialPublicController',
-            'material_sessions'     => 'MaterialSessionController',
-            'users'                 => 'UserController'
+            'payment_types'                 => 'PlacementTypeController',
+            'placement_tests'               => 'PlacementTestController',
+            'tasks'                         => 'TaskController',
+            'task_submissions'              => 'TaskSubmissionController',
+            'form_questions'                => 'FormQuestionController',
+            'form_question_choices'         => 'FormQuestionChoiceController',
+            'form_response_details'         => 'FormResponseDetailController',
+            'other_users'                   => 'OtherUserControllerController',
+            'messages'                      => 'MessageController',
+            'notification_datas'            => 'NotificationDataController',
+            'notification_durations'        => 'NotificationDurationController',
+            'content_labels'                => 'ContentLabelController'
+            'notification_labels'           => 'NotificationLabelController',
+            'notifications'                 => 'NotificationController',
+            'notification_transactions'     => 'NotificationTransactionController',
+            'user_notifications'            => 'UserNotificationController',
+            'material_types'                => 'MaterialTypeController',
+            'course_types'                  => 'CourseTypeController',
+            'course_levels'                 => 'CourseLevelController',
+            'course_level_details'          => 'CourseLevelDetailController',
+            'course_packages'               => 'CoursePackageController',
+            'courses'                       => 'CourseController',
+            'sessions'                      => 'SessionController',
+            'course_certificates'           => 'CourseCertificateController',
+            'material_publics'              => 'MaterialPublicController',
+            'material_sessions'             => 'MaterialSessionController',
+            'users'                         => 'UserController'
         ]);
 
         // menggunakan nested resources: /courses/{course}/registrations/{user}
