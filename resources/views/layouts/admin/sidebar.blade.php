@@ -5,8 +5,12 @@
             <div class="pull-left image">
                 @if(Auth::user()->roles == 'Student' && Auth::user()->image_profile != 'user.jpg')
                     <img src="{{ asset('uploads/student/profile/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
-                @elseif(Auth::user()->roles == 'Instructor' && Auth::user()->image_profile != 'user.jpg')
+                @elseif((Auth::user()->roles == 'Instructor' || Auth::user()->roles == 'Lead Instructor') && Auth::user()->image_profile != 'user.jpg')
                     <img src="{{ asset('uploads/instructor/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
+                @elseif(Auth::user()->roles == 'Customer Service' && Auth::user()->image_profile != 'user.jpg')
+                    <img src="{{ asset('uploads/team-cs/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
+                @elseif(Auth::user()->roles == 'Financial Team' && Auth::user()->image_profile != 'user.jpg')
+                    <img src="{{ asset('uploads/team-financial/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
                 @else
                     <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="img-circle" alt="User Image">
                 @endif
@@ -15,8 +19,14 @@
                 @if(Auth::user()->roles == 'Student')
                     <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
                 @endif
-                @if(Auth::user()->roles == 'Instructor')
+                @if(Auth::user()->roles == 'Instructor' || Auth::user()->roles == 'Lead Instructor')
                     <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
+                @endif
+                @if(Auth::user()->roles == 'Customer Service')
+                    <p>CS Team: {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
+                @endif
+                @if(Auth::user()->roles == 'Financial Team')
+                    <p>Financial Team: {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
                 @endif
                 @if(Auth::user()->roles == 'Admin')
                     <p>Admin</p>
@@ -43,9 +53,9 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
 
-            <li class="header">MAIN NAVIGATION</li>
+            <li class="header">GENERAL</li>
 
-            @if(Auth::user()->roles == 'Admin' || Auth::user()->roles == 'Instructor')
+            @if(Auth::user()->roles != 'Student')
             <li class="{{ set_active('home') }}">
                 <a href="{{ route('home')}}">
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
@@ -75,7 +85,7 @@
 
             @if(Auth::user()->roles == 'Student' && Auth::user()->citizenship != 'Not Available' && Auth::user()->student->course_registrations->count() > 0)
             <!-- Head_Navigasi -->
-            <li class="header">STUDENT NAVIGATION</li>
+            <li class="header">CLASSES</li>
                 {{--
                 <li class="treeview">
                     <a href="#">
@@ -102,19 +112,39 @@
                 </li>--}}
 
                 <li class="{{ set_active(['session_registrations.index', 'form_responses.create']) }}">
-                    <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Sessions</span></a>
+                    <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Schedule</span></a>
                 </li>
 
                 <li class="{{ set_active('materials.index') }}">
                     <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> Material</span></a>
                 </li>
 
-                <li class="#">
+                {{-- <li class="#">
                     <a href="{{ route('courses.private') }}"><i class="fa fa-book"> </i><span> Private Courses</span></a>
+                </li> --}}
+
+                <li class="header">TASKS</li>
+
+                <li class="#">
+                    <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Assignment</span></a>
                 </li>
 
                 <li class="#">
-                    <a href="{{ route('course_payments.index',1) }}"><i class="fa fa-book"> </i><span> Payments</span></a>
+                    <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Exam</span></a>
+                </li>
+
+                <li class="header">OTHERS</li>
+
+                <li class="#">
+                    <a href="{{ route('course_certificates.index') }}"><i class="fa fa-book"> </i><span> Certificate</span></a>
+                </li>
+
+                <li class="{{ set_active('material_types.index') }}">
+                    <a href="{{ route('material_types.index') }}"><i class="fa fa-book"> </i><span> Choose a Course</span></a>
+                </li>
+
+                <li class="{{ set_active('course_payments.index') }}">
+                    <a href="{{ route('course_payments.index',1) }}"><i class="fa fa-book"> </i><span> Payment</span></a>
                 </li>
                 <!-- Other_Navigasi -->
                 {{--
