@@ -404,15 +404,15 @@
 
                 <li class="header">RATINGS</li>
 
-                <li class="#">
-                    <a href="{{ route('home') }}">
-                        <i class="fa fa-book"> </i><span> Form</span>
+                <li class="{{ set_active(['forms.index', 'forms.create', 'forms.show', 'forms.edit']) }}">
+                    <a href="{{ route('forms.index')}}">
+                        <i class="fa fa-edit"></i> <span>Form</span>
                     </a>
                 </li>
 
-                <li class="#">
-                    <a href="{{ route('home') }}">
-                        <i class="fa fa-book"> </i><span> Website Rating</span>
+                <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
+                    <a href="{{ route('form_responses.index')}}">
+                        <i class="fa fa-file-text-o"></i><span> Website Rating</span>
                     </a>
                 </li>
 
@@ -627,24 +627,6 @@
             End_Navigasi_Menu -->
             @endif
             {{-- End Admin Navigation --}}
-
-          @if(Auth::user()->roles == 'Admin')
-            {{-- Add Form Navigation --}}
-            <li class="header">FORM</li>
-
-            @if(Auth::user()->roles == 'Admin')
-            <li class="{{ set_active(['forms.index', 'forms.create', 'forms.show', 'forms.edit']) }}">
-                <a href="{{ route('forms.index')}}">
-                    <i class="fa fa-edit"></i> <span>Form</span>
-                </a>
-            </li>
-            <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
-                <a href="{{ route('form_responses.index')}}">
-                    <i class="fa fa-file-text-o"></i> <span>Form Response</span>
-                </a>
-            </li>
-            @endif
-          @endif
 
         </ul>
     </section>
