@@ -388,8 +388,35 @@
 
             @if(Auth::user()->roles == 'Admin')
                 <!-- Head_Navigasi -->
-                <li class="header">ADMIN NAVIGATION</li>
-                <li class="treeview">
+                <li class="header">DATA</li>
+
+                <li class="#">
+                    <a href="{{ route('home') }}">
+                        <i class="fa fa-book"> </i><span> Course</span>
+                    </a>
+                </li>
+
+                <li class="#">
+                    <a href="{{ route('home') }}">
+                        <i class="fa fa-book"> </i><span> User</span>
+                    </a>
+                </li>
+
+                <li class="header">RATINGS</li>
+
+                <li class="#">
+                    <a href="{{ route('home') }}">
+                        <i class="fa fa-book"> </i><span> Form</span>
+                    </a>
+                </li>
+
+                <li class="#">
+                    <a href="{{ route('home') }}">
+                        <i class="fa fa-book"> </i><span> Website Rating</span>
+                    </a>
+                </li>
+
+                {{--<li class="treeview">
                     <a href="#">
                         <i class="fa fa-users"></i> <span>Student</span>
                         <span class="pull-right-container">
@@ -401,9 +428,9 @@
                             <a href="{{ route('students.index') }}"><i class="fa fa-circle-o"></i> Personal Data</a>
                         </li>
                     </ul>
-                </li>
+                </li>--}}
                 {{-- End Tree --}}
-                <li class="treeview">
+                {{--<li class="treeview">
                     <a href="#">
                         <i class="fa fa-users"></i> <span>Instructor</span>
                         <span class="pull-right-container">
@@ -415,12 +442,12 @@
                             <a href="{{ route('instructors.index') }}"><i class="fa fa-circle-o"></i> Personal Data</a>
                         </li>
                         <li class="#">
-                            <a href="{{ route('schedules.admin_instrucstor') }}"><i class="fa fa-circle-o"></i> Schedule</a>
+                            <a href="{{ route('schedules.admin_instructor') }}"><i class="fa fa-circle-o"></i> Schedule</a>
                         </li>
                     </ul>
-                </li>
+                </li>--}}
                 {{-- End Tree --}}
-                <li class="treeview">
+                {{--<li class="treeview">
                     <a href="#">
                         <i class="fa fa-book"></i> <span>Materials</span>
                         <span class="pull-right-container">
@@ -438,21 +465,21 @@
                 </li>
                 <li class="#">
                     <a href="{{ route('courses.index') }}"><i class="fa fa-book"> </i><span> Courses</span></a>
-                </li>
+                </li>--}}
                 {{--
                 <li class="#">
                     <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> Materials</span></a>
                 </li> --}}
 
                 <!-- Head_Schedule -->
-                <li class="header">COURSES SCHEDULE</li>
+                {{--<li class="header">COURSES SCHEDULE</li>
 
                 <li class="#">
                     <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Schedule</span></a>
                 </li>
                 <li class="#">
                     <a href="{{ route('sessions.admin_instrucstor') }}"><i class="fa fa-book"> </i><span> Session</span></a>
-                </li>
+                </li>--}}
                 {{--
                 <!-- Head_Navigasi -->
 
