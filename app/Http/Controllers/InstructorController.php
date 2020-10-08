@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class InstructorController extends Controller
 {
@@ -261,6 +262,9 @@ class InstructorController extends Controller
         }*/
 
         if ($this->is_admin()) {
+            //alert
+            Alert::success('Success Title', 'Success Message');
+            //user create
             User::create([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -280,7 +284,7 @@ class InstructorController extends Controller
                 'interest' => $interest,
             ]);
 
-            \Session::flash('admin_store_instructor','Create Success !!!');
+            //\Session::flash('admin_store_instructor','Create Success !!!');
         }
 
 

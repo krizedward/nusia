@@ -44,6 +44,7 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+@include('sweetalert::alert')
 
 @include('layouts.admin._script')
 </body>
