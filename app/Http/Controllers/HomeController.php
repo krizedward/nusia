@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use PragmaRX\Countries\Package\Countries;
 use Illuminate\Support\Facades\File;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class HomeController extends Controller
 {
@@ -56,6 +57,8 @@ class HomeController extends Controller
     public function index()
     {
         if($this->is_admin()) {
+            //alert
+            Alert::success('Success', 'Login Berhasil !!!');
             //$temp_nation = $c->where('name.common', Auth::user()->timezone)->first()->hydrate('timezones')->timezones->first()->zone_name;
             $timeNusia = Carbon::now()->setTimezone('Asia/Jakarta');
             $timeStudent = Carbon::now()->setTimezone(Auth::user()->timezone);
