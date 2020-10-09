@@ -32,6 +32,15 @@ class SessionController extends Controller
     public function is_admin() {
         return ($this->user_roles() == "Admin")? 1 : 0;
     }
+    public function is_financial_team() {
+        return ($this->user_roles() == "Financial Team")? 1 : 0;
+    }
+    public function is_customer_service() {
+        return ($this->user_roles() == "Customer Service")? 1 : 0;
+    }
+    public function is_lead_instructor() {
+        return ($this->user_roles() == "Lead Instructor")? 1 : 0;
+    }
     public function is_instructor() {
         return ($this->user_roles() == "Instructor")? 1 : 0;
     }
