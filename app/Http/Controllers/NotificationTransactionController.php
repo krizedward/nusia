@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ContentLabel extends Controller
+class NotificationTransactionController extends Controller
 {
     /**
      * Memeriksa role User saat ini.

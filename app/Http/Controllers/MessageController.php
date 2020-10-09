@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class PlacementTest extends Controller
+class MessageController extends Controller
 {
     /**
      * Memeriksa role User saat ini.

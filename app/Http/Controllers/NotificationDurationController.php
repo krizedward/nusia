@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class NotificationData extends Controller
+class NotificationDurationController extends Controller
 {
     /**
      * Memeriksa role User saat ini.

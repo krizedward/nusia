@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class Task extends Controller
+class PaymentTypeController extends Controller
 {
     /**
      * Memeriksa role User saat ini.

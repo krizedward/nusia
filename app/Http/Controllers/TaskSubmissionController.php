@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class TaskSubmission extends Controller
+class TaskSubmissionController extends Controller
 {
     /**
      * Memeriksa role User saat ini.

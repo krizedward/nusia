@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class UserNotification extends Controller
+class UserNotificationController extends Controller
 {
     /**
      * Memeriksa role User saat ini.

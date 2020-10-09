@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class NotificationTransaction extends Controller
+class FormResponseDetailController extends Controller
 {
     /**
      * Memeriksa role User saat ini.

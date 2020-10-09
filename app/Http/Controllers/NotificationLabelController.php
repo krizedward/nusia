@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class PaymentType extends Controller
+class NotificationLabelController extends Controller
 {
     /**
      * Memeriksa role User saat ini.
