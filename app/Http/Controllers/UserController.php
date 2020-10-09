@@ -52,9 +52,9 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        $lead_instructors = User::where('roles', 'Lead Instructor')->get();
-        $instructors = User::where('roles', 'Instructor')->get();
-        $students = User::where('roles', 'Student')->get();
+        $lead_instructors = User::where('roles', 'Lead Instructor')->orderBy('first_name')->orderBy('last_name')->get();
+        $instructors = User::where('roles', 'Instructor')->orderBy('first_name')->orderBy('last_name')->get();
+        $students = User::where('roles', 'Student')->orderBy('first_name')->orderBy('last_name')->get();
         $other_users = User
             ::where('roles', '<>', 'Lead Instructor')
             ->where('roles', '<>', 'Instructor')

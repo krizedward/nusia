@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-  <div class="row">
+<div class="row">
     <div class="col-md-12">
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
@@ -50,6 +50,14 @@
                 <div class="box">
                   <div class="box-header">
                     <h3 class="box-title"><b>All Users</b></h3>
+                    {{--
+                    <div>
+                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                        Add New User
+                      </a>
+                    </div>
+                    --}}
                     <div class="box-tools pull-right">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
@@ -115,13 +123,21 @@
                     @if($lead_instructors->toArray())
                       <table class="table table-bordered">
                         <tr>
-                          <th class="text-right" style="width:40px;">#</th>
+                          <th style="width:40px;" class="text-right">#</th>
+                          <th style="width:150px;">Profile Picture</th>
                           <th>Name</th>
                           <th style="width:40px;">Profile</th>
                         </tr>
                         @foreach($lead_instructors as $i => $dt)
                           <tr>
                             <td class="text-right">{{ $i + 1 }}</td>
+                            <td>
+                              @if($dt->image_profile != 'user.jpg')
+                                <img style="width:75px;" alt="User Image" src="{{ asset('uploads/instructor/' . $dt->image_profile) }}">
+                              @else
+                                <img style="width:75px;" alt="User Image" src="{{ asset('uploads/' . $dt->image_profile) }}">
+                              @endif
+                            </td>
                             <td>{{ $dt->first_name }} {{ $dt->last_name }}</td>
                             <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
                           </tr>
@@ -170,13 +186,21 @@
                     @if($instructors->toArray())
                       <table class="table table-bordered">
                         <tr>
-                          <th class="text-right" style="width:40px;">#</th>
+                          <th style="width:40px;" class="text-right">#</th>
+                          <th style="width:150px;">Profile Picture</th>
                           <th>Name</th>
                           <th style="width:40px;">Profile</th>
                         </tr>
                         @foreach($instructors as $i => $dt)
                           <tr>
                             <td class="text-right">{{ $i + 1 }}</td>
+                            <td>
+                              @if($dt->image_profile != 'user.jpg')
+                                <img style="width:75px;" alt="User Image" src="{{ asset('uploads/instructor/' . $dt->image_profile) }}">
+                              @else
+                                <img style="width:75px;" alt="User Image" src="{{ asset('uploads/' . $dt->image_profile) }}">
+                              @endif
+                            </td>
                             <td>{{ $dt->first_name }} {{ $dt->last_name }}</td>
                             <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
                           </tr>
@@ -225,13 +249,21 @@
                     @if($students->toArray())
                       <table class="table table-bordered">
                         <tr>
-                          <th class="text-right" style="width:40px;">#</th>
+                          <th style="width:40px;" class="text-right">#</th>
+                          <th style="width:150px;">Profile Picture</th>
                           <th>Name</th>
                           <th style="width:40px;">Profile</th>
                         </tr>
                         @foreach($students as $i => $dt)
                           <tr>
                             <td class="text-right">{{ $i + 1 }}</td>
+                            <td>
+                              @if($dt->image_profile != 'user.jpg')
+                                <img style="width:75px;" alt="User Image" src="{{ asset('uploads/student/profile/' . $dt->image_profile) }}">
+                              @else
+                                <img style="width:75px;" alt="User Image" src="{{ asset('uploads/' . $dt->image_profile) }}">
+                              @endif
+                            </td>
                             <td>{{ $dt->first_name }} {{ $dt->last_name }}</td>
                             <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
                           </tr>
@@ -280,13 +312,23 @@
                     @if($other_users->toArray())
                       <table class="table table-bordered">
                         <tr>
-                          <th class="text-right" style="width:40px;">#</th>
+                          <th style="width:40px;" class="text-right">#</th>
+                          <th style="width:150px;">Profile Picture</th>
+                          <th>Role</th>
                           <th>Name</th>
                           <th style="width:40px;">Profile</th>
                         </tr>
                         @foreach($other_users as $i => $dt)
                           <tr>
                             <td class="text-right">{{ $i + 1 }}</td>
+                            <td>
+                              @if($dt->image_profile != 'user.jpg')
+                                <img style="width:75px;" alt="User Image" src="{{ asset('uploads/instructor/' . $dt->image_profile) }}">
+                              @else
+                                <img style="width:75px;" alt="User Image" src="{{ asset('uploads/' . $dt->image_profile) }}">
+                              @endif
+                            </td>
+                            <td>{{ $dt->roles }}</td>
                             <td>{{ $dt->first_name }} {{ $dt->last_name }}</td>
                             <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
                           </tr>
