@@ -85,7 +85,7 @@
 
             @if(Auth::user()->roles == 'Student' && Auth::user()->citizenship != 'Not Available' && Auth::user()->student->course_registrations->count() > 0)
             <!-- Head_Navigasi -->
-            <li class="header">CLASSES</li>
+            <li class="header">COURSES</li>
                 {{--
                 <li class="treeview">
                     <a href="#">
@@ -129,15 +129,34 @@
                     <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Assignment</span></a>
                 </li>
 
-                <li class="#">
-                    <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Exam</span></a>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-book"></i> <span>Exam</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="#">
+                            <a href="{{ route('home') }}"><i class="fa fa-circle-o"></i> Mid-Exam</a>
+                        </li>
+                        <li class="#">
+                            <a href="{{ route('home') }}"><i class="fa fa-circle-o"></i> Final-Exam</a>
+                        </li>
+                    </ul>
                 </li>
 
-                <li class="header">OTHERS</li>
+                <li class="header">RESULTS</li>
+
+                <li class="#">
+                    <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Grade</span></a>
+                </li>
 
                 <li class="#">
                     <a href="{{ route('course_certificates.index') }}"><i class="fa fa-book"> </i><span> Certificate</span></a>
                 </li>
+
+                <li class="header">OTHERS</li>
 
                 <li class="{{ set_active('material_types.index') }}">
                     <a href="{{ route('material_types.index') }}"><i class="fa fa-book"> </i><span> Choose a Course</span></a>
@@ -160,9 +179,9 @@
                 --}}
             @endif
             {{-- End Student Navigation --}}
-            @if(Auth::user()->roles == 'Instructor')
+            @if(Auth::user()->roles == 'Instructor' || Auth::user()->roles == 'Lead Instructor')
                 <!-- Head_Navigasi -->
-                    <li class="header">INSTRUCTOR NAVIGATION</li>
+                    <li class="header">COURSES</li>
                     {{--
                     <li class="{{ set_active('course.instructor') }}">
                         <a href="{{ route('course.instructor') }}">
@@ -189,7 +208,7 @@
                     </li>
 
                     <!--li class="treeview"-->
-                    <li class="{{ set_active(['session_registrations.index', 'attendances.edit']) }}">
+                    {{--<li class="{{ set_active(['session_registrations.index', 'attendances.edit']) }}">
                         <a href="{{ route('session_registrations.index') }}">
                             <i class="fa fa-calendar-check-o"></i> <span>Session</span>
                             <!--span class="pull-right-container">
@@ -206,16 +225,55 @@
                             <!--li class="#">
                                 <a href="{{ route('sessions.index') }}"><i class="fa fa-circle-o"></i> Group</a>
                             </li-->
-                            {{--
-                            <li class="#"><a href="{{ route('sessions.index') }}"><i class="fa fa-circle-o"></i> Free Trial</a></li>
+                            <!--li class="#"><a href="{{ route('sessions.index') }}"><i class="fa fa-circle-o"></i> Free Trial</a></li>
                             <li class="#"><a href="#"><i class="fa fa-circle-o"></i> Private</a></li>
-                            <li class="#"><a href="#"><i class="fa fa-circle-o"></i> Group</a></li>--}}
+                            <li class="#"><a href="#"><i class="fa fa-circle-o"></i> Group</a></li-->
                         <!--/ul-->
-                    </li>
+                    </li>--}}
 
                     <li class="{{ set_active('materials.index') }}">
                         <a href="{{ route('materials.index') }}">
                             <i class="fa fa-book"> </i><span> Material</span>
+                        </a>
+                    </li>
+
+                    <li class="#">
+                        <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Assignment</span></a>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-book"></i> <span>Exam</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="#">
+                                <a href="{{ route('home') }}"><i class="fa fa-circle-o"></i> Mid-Exam</a>
+                            </li>
+                            <li class="#">
+                                <a href="{{ route('home') }}"><i class="fa fa-circle-o"></i> Final-Exam</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {{-- Additional Navigation Menu for Lead Instructor --}}
+                    @if(Auth::user()->roles == 'Lead Instructor')
+                        <li class="header">STUDENTS</li>
+
+                        <li class="#">
+                            <a href="{{ route('home')}}">
+                                <i class="fa fa-file-text-o"></i> <span>Placement Test</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    <li class="header">RATINGS</li>
+
+                    <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
+                        <a href="{{ route('form_responses.index')}}">
+                            <i class="fa fa-file-text-o"></i> <span>Form Response</span>
                         </a>
                     </li>
 
@@ -270,10 +328,95 @@
                     </li>--}}
             @endif
             {{-- End Instructor Navigation --}}
+
+
+
+
+            @if(Auth::user()->roles == 'Customer Service')
+                <!-- Head_Navigasi -->
+                    <li class="header">DATA</li>
+
+                    <li class="#">
+                        <a href="{{ route('home') }}">
+                            <i class="fa fa-book"> </i><span> Course Schedule</span>
+                        </a>
+                    </li>
+
+                    <li class="#">
+                        <a href="{{ route('home') }}">
+                            <i class="fa fa-book"> </i><span> Student</span>
+                        </a>
+                    </li>
+
+                    <li class="header">RATINGS</li>
+
+                    <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
+                        <a href="{{ route('form_responses.index')}}">
+                            <i class="fa fa-file-text-o"></i> <span>Form Response</span>
+                        </a>
+                    </li>
+            @endif
+            {{-- End Customer Service Navigation --}}
+
+
+
+
+
+            @if(Auth::user()->roles == 'Financial Team')
+                <!-- Head_Navigasi -->
+                    <li class="header">FINANCE</li>
+
+                    <li class="#">
+                        <a href="{{ route('home') }}">
+                            <i class="fa fa-book"> </i><span> Course Payment</span>
+                        </a>
+                    </li>
+
+                    <li class="header">RATINGS</li>
+
+                    <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
+                        <a href="{{ route('form_responses.index')}}">
+                            <i class="fa fa-file-text-o"></i> <span>Form Response</span>
+                        </a>
+                    </li>
+            @endif
+            {{-- End Customer Service Navigation --}}
+
+
+
+
+
             @if(Auth::user()->roles == 'Admin')
                 <!-- Head_Navigasi -->
-                <li class="header">ADMIN NAVIGATION</li>
-                <li class="treeview">
+                <li class="header">DATA</li>
+
+                <li class="#">
+                    <a href="{{ route('home') }}">
+                        <i class="fa fa-book"> </i><span> Course</span>
+                    </a>
+                </li>
+
+                <li class="#">
+                    <a href="{{ route('home') }}">
+                        <i class="fa fa-book"> </i><span> User</span>
+                    </a>
+                </li>
+
+                <li class="header">RATINGS</li>
+
+                <li class="{{ set_active(['forms.index', 'forms.create', 'forms.show', 'forms.edit']) }}">
+                    <a href="{{ route('forms.index')}}">
+                        <i class="fa fa-edit"></i> <span>Form</span>
+                    </a>
+                </li>
+
+                <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
+                    <a href="{{ route('form_responses.index')}}">
+                        <i class="fa fa-file-text-o"></i><span> Website Rating</span>
+                    </a>
+                </li>
+
+                {{--<li class="treeview">
                     <a href="#">
                         <i class="fa fa-users"></i> <span>Student</span>
                         <span class="pull-right-container">
@@ -285,9 +428,9 @@
                             <a href="{{ route('students.index') }}"><i class="fa fa-circle-o"></i> Personal Data</a>
                         </li>
                     </ul>
-                </li>
+                </li>--}}
                 {{-- End Tree --}}
-                <li class="treeview">
+                {{--<li class="treeview">
                     <a href="#">
                         <i class="fa fa-users"></i> <span>Instructor</span>
                         <span class="pull-right-container">
@@ -299,12 +442,12 @@
                             <a href="{{ route('instructors.index') }}"><i class="fa fa-circle-o"></i> Personal Data</a>
                         </li>
                         <li class="#">
-                            <a href="{{ route('schedules.admin_instrucstor') }}"><i class="fa fa-circle-o"></i> Schedule</a>
+                            <a href="{{ route('schedules.admin_instructor') }}"><i class="fa fa-circle-o"></i> Schedule</a>
                         </li>
                     </ul>
-                </li>
+                </li>--}}
                 {{-- End Tree --}}
-                <li class="treeview">
+                {{--<li class="treeview">
                     <a href="#">
                         <i class="fa fa-book"></i> <span>Materials</span>
                         <span class="pull-right-container">
@@ -322,21 +465,21 @@
                 </li>
                 <li class="#">
                     <a href="{{ route('courses.index') }}"><i class="fa fa-book"> </i><span> Courses</span></a>
-                </li>
+                </li>--}}
                 {{--
                 <li class="#">
                     <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> Materials</span></a>
                 </li> --}}
 
                 <!-- Head_Schedule -->
-                <li class="header">COURSES SCHEDULE</li>
+                {{--<li class="header">COURSES SCHEDULE</li>
 
                 <li class="#">
                     <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Schedule</span></a>
                 </li>
                 <li class="#">
                     <a href="{{ route('sessions.admin_instrucstor') }}"><i class="fa fa-book"> </i><span> Session</span></a>
-                </li>
+                </li>--}}
                 {{--
                 <!-- Head_Navigasi -->
 
@@ -484,30 +627,6 @@
             End_Navigasi_Menu -->
             @endif
             {{-- End Admin Navigation --}}
-
-          @if(Auth::user()->roles != 'Student')
-            {{-- Add Form Navigation --}}
-            <li class="header">FORM</li>
-
-            @if(Auth::user()->roles == 'Admin')
-            <li class="{{ set_active(['forms.index', 'forms.create', 'forms.show', 'forms.edit']) }}">
-                <a href="{{ route('forms.index')}}">
-                    <i class="fa fa-edit"></i> <span>Form</span>
-                </a>
-            </li>
-            <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
-                <a href="{{ route('form_responses.index')}}">
-                    <i class="fa fa-file-text-o"></i> <span>Form Response</span>
-                </a>
-            </li>
-            @elseif(Auth::user()->roles == 'Instructor')
-            <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
-                <a href="{{ route('form_responses.index')}}">
-                    <i class="fa fa-file-text-o"></i> <span>Form Response</span>
-                </a>
-            </li>
-            @endif
-          @endif
 
         </ul>
     </section>
