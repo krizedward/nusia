@@ -29,6 +29,12 @@ Route::get('/terms-of-service', function() {
 
 Route::group(['middleware'=>'auth'], function() {
 
+        // NEW ROUTING FOR ADMIN: 9 Oktober 2020
+        Route::get('/courses', 'CourseController@index')->name('courses.index');
+        Route::get('/users', 'UserController@index')->name('users.index');
+        Route::get('/forms', 'FormController@index')->name('forms.index');
+        Route::get('/website-rating', 'FormResponseController@index_admin')->name('form_responses.index_admin');
+
 	/*Route::get('/home', function() {
             return view('home');
 	})->name('home');*/

@@ -391,13 +391,13 @@
                 <li class="header">DATA</li>
 
                 <li class="#">
-                    <a href="{{ route('home') }}">
+                    <a href="{{ route('courses.index') }}">
                         <i class="fa fa-book"> </i><span> Course</span>
                     </a>
                 </li>
 
                 <li class="#">
-                    <a href="{{ route('home') }}">
+                    <a href="{{ route('users.index') }}">
                         <i class="fa fa-book"> </i><span> User</span>
                     </a>
                 </li>
@@ -410,8 +410,8 @@
                     </a>
                 </li>
 
-                <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
-                    <a href="{{ route('form_responses.index')}}">
+                <li class="{{ set_active(['form_responses.index_admin', 'form_responses.index_form_admin', 'form_responses.index_session_admin', 'form_responses.show_admin']) }}">
+                    <a href="{{ route('form_responses.index_admin')}}">
                         <i class="fa fa-file-text-o"></i><span> Website Rating</span>
                     </a>
                 </li>
