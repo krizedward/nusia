@@ -390,13 +390,13 @@
                 <!-- Head_Navigasi -->
                 <li class="header">DATA</li>
 
-                <li class="#">
+                <li class="{{ set_active(['courses.index']) }}">
                     <a href="{{ route('courses.index') }}">
                         <i class="fa fa-book"> </i><span> Course</span>
                     </a>
                 </li>
 
-                <li class="#">
+                <li class="{{ set_active(['users.index']) }}">
                     <a href="{{ route('users.index') }}">
                         <i class="fa fa-book"> </i><span> User</span>
                     </a>
