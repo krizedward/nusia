@@ -51,7 +51,18 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('users.index');
+        $users = User::all();
+        $lead_instructors = User::where('roles', 'Lead Instructor')->get();
+        $instructors = User::where('roles', 'Instructor')->get();
+        $students = User::where('roles', 'Student')->get();
+        $other_users = User
+            ::where('roles', '<>', 'Lead Instructor')
+            ->where('roles', '<>', 'Instructor')
+            ->where('roles', '<>', 'Student')
+            ->get();
+        return view('users.index', compact(
+            'users', 'lead_instructors', 'instructors', 'students', 'other_users',
+        ));
     }
 
     /**
