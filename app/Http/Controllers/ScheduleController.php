@@ -12,6 +12,7 @@ use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ScheduleController extends Controller
 {
@@ -206,6 +207,9 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         if ($this->is_admin()){
+            //alert
+            Alert::success('Success', 'Memasukan Data');
+            //schedule create
             Schedule::create([
                 'instructor_id' => $request->instructor_1,
                 'instructor_id_2' => $request->instructor_2,
@@ -241,7 +245,7 @@ class ScheduleController extends Controller
             // Tidak memiliki hak akses.
         }
         */
-        \Session::flash('admin_store_instructor_schedule','Success Save Data');
+        //\Session::flash('admin_store_instructor_schedule','Success Save Data');
         return redirect()->route('schedules.admin_instrucstor');
     }
 

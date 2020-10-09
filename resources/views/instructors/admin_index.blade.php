@@ -5,7 +5,7 @@
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Instructor</h1>
+    <h1><b>Instructor</b></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('home') }}">Home</a></li>
         <li class="active">Instructor</li>
