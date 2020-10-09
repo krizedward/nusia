@@ -323,7 +323,13 @@
                             <td class="text-right">{{ $i + 1 }}</td>
                             <td>
                               @if($dt->image_profile != 'user.jpg')
-                                <img style="width:75px;" alt="User Image" src="{{ asset('uploads/instructor/' . $dt->image_profile) }}">
+                                @if($dt->roles == 'Customer Service')
+                                  <img style="width:75px;" alt="User Image" src="{{ asset('uploads/team-cs/' . $dt->image_profile) }}">
+                                @elseif($dt->roles == 'Financial Team')
+                                  <img style="width:75px;" alt="User Image" src="{{ asset('uploads/team-financial/' . $dt->image_profile) }}">
+                                @else {{-- for admin --}}
+                                  <img style="width:75px;" alt="User Image" src="{{ asset('uploads/' . $dt->image_profile) }}">
+                                @endif
                               @else
                                 <img style="width:75px;" alt="User Image" src="{{ asset('uploads/' . $dt->image_profile) }}">
                               @endif

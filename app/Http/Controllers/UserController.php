@@ -51,18 +51,20 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        $lead_instructors = User::where('roles', 'Lead Instructor')->orderBy('first_name')->orderBy('last_name')->get();
-        $instructors = User::where('roles', 'Instructor')->orderBy('first_name')->orderBy('last_name')->get();
-        $students = User::where('roles', 'Student')->orderBy('first_name')->orderBy('last_name')->get();
-        $other_users = User
-            ::where('roles', '<>', 'Lead Instructor')
-            ->where('roles', '<>', 'Instructor')
-            ->where('roles', '<>', 'Student')
-            ->get();
-        return view('users.index', compact(
-            'users', 'lead_instructors', 'instructors', 'students', 'other_users',
-        ));
+        if($this->is_admin()) {
+            $users = User::orderBy('first_name')->orderBy('last_name')->get();
+            $lead_instructors = User::where('roles', 'Lead Instructor')->orderBy('first_name')->orderBy('last_name')->get();
+            $instructors = User::where('roles', 'Instructor')->orderBy('first_name')->orderBy('last_name')->get();
+            $students = User::where('roles', 'Student')->orderBy('first_name')->orderBy('last_name')->get();
+            $other_users = User
+                ::where('roles', '<>', 'Lead Instructor')
+                ->where('roles', '<>', 'Instructor')
+                ->where('roles', '<>', 'Student')
+                ->get();
+            return view('users.admin_index', compact(
+                'users', 'lead_instructors', 'instructors', 'students', 'other_users',
+            ));
+        }
     }
 
     /**
