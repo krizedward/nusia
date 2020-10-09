@@ -5,7 +5,7 @@
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Schedule</h1>
+    <h1><b>Schedule</b></h1>
 @stop
 
 @section('content')

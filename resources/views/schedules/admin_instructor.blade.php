@@ -1,11 +1,11 @@
 @extends('layouts.admin.default')
 
-@section('title','Admin | Schedule')
+@section('title','Admin | Choose Instructor')
 
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Schedule</h1>
+    <h1><b>Choose Instructor For More Schedule</b></h1>
 @stop
 
 @section('content')
@@ -31,7 +31,7 @@
                                 <td>{{ $dt->code }}</td>
                                 <td>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</td>
                                 <td>
-                                    <a href="{{ route('schedules.admin_index',$dt->code) }}">Detail</a>
+                                    <a class="btn btn-flat btn-xs btn-success" href="{{ route('schedules.admin_index',$dt->code) }}">Detail</a>
                                 </td>
                             </tr>
                         @endforeach

@@ -2,7 +2,7 @@
 
 @section('title','Admin | Schedule Instructor')
 
-@include('layouts.css_and_js.form_general')
+@include('layouts.css_and_js.form_advanced')
 
 @section('content-header')
     <h1>Schedule Instructor</h1>
@@ -52,11 +52,18 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="#text">Schedule Time</label>
-                                <input name="date" type="date" class="form-control">
+                                <input type="text" class="form-control pull-right" id="datepicker" name="date_meet">
                             </div>
-                            <div>
+                            <div class="form-group">
                                 <label>Time</label>
-                                <input name="text" type="text" class="form-control">
+                                <div class="input-group">
+                                    <input type="text" class="form-control timepicker" name="time_meet">
+
+                                    <div class="input-group-addon">
+                                      <i class="fa fa-clock-o"></i>
+                                    </div>
+                                </div>
+                                <!-- /.input group -->
                             </div>
                         </div>
                     </div>
