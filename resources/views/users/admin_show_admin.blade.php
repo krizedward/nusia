@@ -124,146 +124,6 @@
           </div>
           <!-- /.tab-pane -->
           <div class="tab-pane" id="form">
-
-            <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
-              @csrf
-              @method('PUT')
-              <div class="box-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      @if ($errors->get('email'))
-                        <div class="form-group has-error">
-                      @else
-                        <div class="form-group">
-                      @endif
-                          <label for="email">Email</label>
-                          <input name="email" value="{{ $user->email }}" type="email" class="@error('email') is-invalid @enderror form-control" placeholder="Enter Email">
-                          @error('email')
-                            <p style="color:red">{{ $message }}</p>
-                          @enderror
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                      @if($errors->get('old_password'))
-                        <div class="form-group has-error">
-                      @else
-                        <div class="form-group">
-                      @endif
-                          <label for="old_password">Old Password</label>
-                          <input name="old_password" type="password" class="@error('old_password') is-invalid @enderror form-control" placeholder="Enter Old Password">
-                            @error('old_password')
-                              <p style="color:red">{{ $message }}</p>
-                            @enderror
-                            @if(session('error_old_password'))
-                              <p style="color:red">{{ session('error_old_password') }}</p>
-                              <?php session(['error_old_password' => null]); ?>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                      @if($errors->get('password'))
-                        <div class="form-group has-error">
-                      @else
-                        <div class="form-group">
-                      @endif
-                          <label for="password">New Password</label>
-                          <input name="password" type="password" class="@error('password') is-invalid @enderror form-control" placeholder="Enter New Password">
-                            @error('password')
-                              <p style="color:red">{{ $message }}</p>
-                            @enderror
-                            @if(session('error_password'))
-                              <p style="color:red">{{ session('error_password') }}</p>
-                              <?php session(['error_password' => null]); ?>
-                            @endif
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      @if($errors->get('citizenship'))
-                        <div class="form-group has-error">
-                      @else
-                        <div class="form-group">
-                      @endif
-                          <label for="citizenship">Nationality</label>
-                          @if(Auth::user()->citizenship)
-                            <input name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control" placeholder="Enter Nationality" value="{{ $user->citizenship }}">
-                          @else
-                            <input name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control" placeholder="Enter Nationality" value="{{ old('citizenship') }}">
-                          @endif
-                          @error('citizenship')
-                            <p style="color:red">{{ $message }}</p>
-                          @enderror
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                      @if($errors->get('domicile'))
-                        <div class="form-group has-error">
-                      @else
-                        <div class="form-group">
-                      @endif
-                          <label for="domicile">Where do you live now?</label>
-                          @if($user->domicile)
-                            <input name="domicile" type="text" class="@error('domicile') is-invalid @enderror form-control" placeholder="Enter Domicile" value="{{ $user->domicile }}">
-                          @else
-                            <input name="domicile" type="text" class="@error('domicile') is-invalid @enderror form-control" placeholder="Enter Domicile" value="{{ old('domicile') }}">
-                          @endif
-                          @error('domicile')
-                            <p style="color:red">{{ $message }}</p>
-                          @enderror
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                      @if($errors->get('first_name'))
-                        <div class="form-group has-error">
-                      @else
-                        <div class="form-group">
-                      @endif
-                          <label for="first_name">First Name</label>
-                          <input name="first_name" value="{{ $user->first_name }}" type="text" class="@error('first_name') is-invalid @enderror form-control" placeholder="Enter First Name">
-                          @error('first_name')
-                            <p style="color:red">{{ $message }}</p>
-                          @enderror
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                      @if($errors->get('last_name'))
-                        <div class="form-group has-error">
-                      @else
-                        <div class="form-group">
-                      @endif
-                          <label for="last_name">Last Name</label>
-                          <input name="last_name" value="{{ $user->last_name }}" type="text" class="@error('last_name') is-invalid @enderror form-control" placeholder="Enter Last Name">
-                          @error('last_name')
-                            <p style="color:red">{{ $message }}</p>
-                          @enderror
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="col-md-12">
-                      @if($errors->get('image_profile'))
-                        <div class="form-group has-error">
-                      @else
-                        <div class="form-group">
-                      @endif
-                          <label for="image_profile">Upload Profile Picture</label>
-                          <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
-                          <input name="image_profile" type="file" accept="image/*" class="@error('image_profile') is-invalid @enderror form-control">
-                          @error('image_profile')
-                            <p style="color:red">{{ $message }}</p>
-                          @enderror
-                        </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
-            </form>
-
             <div class="row">
               <div class="col-md-3">
                 <div class="box">
@@ -294,28 +154,145 @@
                     </div>
                   </div>
                   <div class="box-body">
-                    @if($user)
-                      <table class="table table-bordered">
-                        <tr>
-                          <th style="width:150px;">Profile Picture</th>
-                          <th>Name</th>
-                          <th style="width:40px;">Profile</th>
-                        </tr>
-                        <tr>
-                          <td>
-                            @if($user->image_profile != 'user.jpg')
-                              <img style="width:75px;" alt="User Image" src="{{ asset('uploads/instructor/' . $user->image_profile) }}">
-                            @else
-                              <img style="width:75px;" alt="User Image" src="{{ asset('uploads/' . $user->image_profile) }}">
-                            @endif
-                          </td>
-                          <td>{{ $user->first_name }} {{ $user->last_name }}</td>
-                          <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('users.show', [Str::slug($user->password.$user->first_name.'-'.$user->last_name)]) }}">Link</a></td>
-                        </tr>
-                      </table>
-                    @else
-                      <div class="text-center">No data available.</div>
-                    @endif
+                    <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                      @csrf
+                      @method('PUT')
+                      <div class="box-body">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="col-md-12">
+                              <div class="form-group @error('email') has-error @enderror">
+                                <label for="email">Email</label>
+                                <input name="email" value="{{ $user->email }}" type="email" class="@error('email') is-invalid @enderror form-control" placeholder="Enter Email">
+                                @error('email')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group @error('first_name') has-error @enderror">
+                                <label for="first_name">First Name</label>
+                                <input name="first_name" value="{{ $user->first_name }}" type="text" class="@error('first_name') is-invalid @enderror form-control" placeholder="Enter First Name">
+                                @error('first_name')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group @error('last_name') has-error @enderror">
+                                <label for="last_name">Last Name</label>
+                                <input name="last_name" value="{{ $user->last_name }}" type="text" class="@error('last_name') is-invalid @enderror form-control" placeholder="Enter Last Name">
+                                @error('last_name')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group @error('old_password') has-error @enderror">
+                                <label for="old_password">Old Password</label>
+                                <input name="old_password" type="password" class="@error('old_password') is-invalid @enderror form-control" placeholder="Enter Old Password">
+                                @error('old_password')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                                @if(session('error_old_password'))
+                                  <p style="color:red">{{ session('error_old_password') }}</p>
+                                  <?php session(['error_old_password' => null]); ?>
+                                @endif
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group @error('password') has-error @enderror">
+                                <label for="password">New Password</label>
+                                <input name="password" type="password" class="@error('password') is-invalid @enderror form-control" placeholder="Enter New Password">
+                                @error('password')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                                @if(session('error_password'))
+                                  <p style="color:red">{{ session('error_password') }}</p>
+                                  <?php session(['error_password' => null]); ?>
+                                @endif
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group @error('password_confirm') has-error @enderror">
+                                <label for="password_confirm">Confirm New Password</label>
+                                <input name="password_confirm" type="password" class="@error('password_confirm') is-invalid @enderror form-control" placeholder="Enter New Password">
+                                @error('password_confirm')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                                @if(session('error_password_confirm'))
+                                  <p style="color:red">{{ session('error_password_confirm') }}</p>
+                                  <?php session(['error_password_confirm' => null]); ?>
+                                @endif
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="col-md-12">
+                              <div class="form-group @error('citizenship') has-error @enderror">
+                                <label for="citizenship">Nationality</label>
+                                @if($user->citizenship)
+                                  <input name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control" placeholder="Enter Nationality" value="{{ $user->citizenship }}">
+                                @else
+                                  <input name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control" placeholder="Enter Nationality" value="{{ old('citizenship') }}">
+                                @endif
+                                @error('citizenship')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group @error('domicile') has-error @enderror">
+                                <label for="domicile">Where do you live now?</label>
+                                @if($user->domicile)
+                                  <input name="domicile" type="text" class="@error('domicile') is-invalid @enderror form-control" placeholder="Enter Domicile" value="{{ $user->domicile }}">
+                                @else
+                                  <input name="domicile" type="text" class="@error('domicile') is-invalid @enderror form-control" placeholder="Enter Domicile" value="{{ old('domicile') }}">
+                                @endif
+                                @error('domicile')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group @error('timezone') has-error @enderror">
+                                <label for="timezone">What is your local time zone?</label>
+                                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*This information is needed to adjust Indonesian time<br>to your local time for scheduling your sessions</p>
+                                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Reference: <b><a target="_blank" rel="noopener noreferrer" href="https://www.timeanddate.com/">timeanddate.com</a></b></p>
+                                <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control">
+                                  <option selected="selected" value="">-- Enter Current Time Zone --</option>
+                                  @foreach($timezones as $timezone)
+                                    @if(old('timezone') == $timezone)
+                                      <option selected="selected" value="{{ $timezone }}">UTC/GMT{{ $timezone }}</option>
+                                    @else
+                                      <option value="{{ $timezone }}">UTC/GMT{{ $timezone }}</option>
+                                    @endif
+                                  @endforeach
+                                </select>
+                                @error('timezone')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="col-md-12">
+                              <div class="form-group @error('image_profile') has-error @enderror">
+                                <label for="image_profile">Upload Profile Picture</label>
+                                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
+                                <input name="image_profile" type="file" accept="image/*" class="@error('image_profile') is-invalid @enderror form-control">
+                                @error('image_profile')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="box-footer">
+                        <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>
