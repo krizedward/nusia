@@ -96,7 +96,29 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        if($this->is_admin()) {
+            $user = User::findOrFail($id);
+
+            $view_name = '';
+            if($user->roles == 'Admin') {
+                $view_name = 'users.admin_show_admin';
+            } else if($user->roles == 'Customer Service') {
+                $view_name = 'users.admin_show_customer_service';
+            } else if($user->roles == 'Financial Team') {
+                $view_name = 'users.admin_show_financial_team';
+            } else if($user->roles == 'Lead Instructor') {
+                $view_name = 'users.admin_show_lead_instructor';
+            } else if($user->roles == 'Instructor') {
+                $view_name = 'users.admin_show_instructor';
+            } else if($user->roles == 'Student') {
+                $view_name = 'users.admin_show_student';
+            } else {
+                return redirect()->route('home');
+            }
+            return view($view_name, compact(
+                'user',
+            ));
+        }
     }
 
     /**
