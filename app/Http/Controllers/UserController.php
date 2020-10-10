@@ -96,8 +96,21 @@ class UserController extends Controller
      */
     public function show($id)
     {
+        // untuk akses fungsi ini (selain admin), mohon memperhatikan keamanan akses,
+        // sehingga tidak ada user yang mengakses profil akun yang
+        // tidak diizinkan untuk diakses oleh user tsb.
         if($this->is_admin()) {
-            $user = User::findOrFail($id);
+            $users = User::all();
+            $user = null;
+            $flag = 0;
+            foreach($users as $dt) {
+                if(Str::slug($dt->password.$dt->first_name.'-'.$dt->last_name) == $id) {
+                    $user = $dt;
+                    $flag = 1;
+                    break;
+                }
+            }
+            if($flag == 0) return redirect()->route('users.index');
 
             $view_name = '';
             if($user->roles == 'Admin') {
