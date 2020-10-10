@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title', 'Admin | Show | Admin')
+@section('title', 'Admin | Show | Student')
 
 @include('layouts.css_and_js.table')
 
@@ -20,6 +20,7 @@
         <ul class="nav nav-tabs">
           <li class="active"><a href="#overview" data-toggle="tab"><b>Overview</b></a></li>
           <li><a href="#edit_profile" data-toggle="tab"><b>Edit Profile</b></a></li>
+          <li><a href="#courses" data-toggle="tab"><b>Courses</b></a></li>
         </ul>
         <div class="tab-content">
           <div class="active tab-pane" id="overview">
@@ -123,7 +124,7 @@
                     <div class="box-header">
                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                         <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New User
+                        Add New "Something"
                       </a>
                     </div>
                     --}}
@@ -317,6 +318,80 @@
                         <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
                       </div>
                     </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.tab-pane -->
+          <div class="tab-pane" id="courses">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="box">
+                  <!--div class="box-header">
+                    <h3 class="box-title">Section Title</h3>
+                  </div-->
+                  <form>
+                    <div class="box-body">
+                      <dl>
+                        <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
+                        <dd>This is the section description.</dd>
+                      </dl>
+                      <!--hr>
+                      <dl>
+                        <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
+                        <dd>This is the section description.</dd>
+                      </dl-->
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="col-md-9">
+                <div class="box box-primary">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>Calendar</b></h3>
+                    {{--
+                    <div>
+                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                        Add New User
+                      </a>
+                    </div>
+                    --}}
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    <p>Tampilkan kalender pada bagian ini.</p>
+                    <hr>
+                    <h3 class="box-title"><b>List of Registered Courses</b></h3>
+                    {{--
+                    <div class="box-header">
+                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                        Add New Course Registration
+                      </a>
+                    </div>
+                    --}}
+                    <div class="box-body">
+                      <table class="table table-bordered">
+                        <tr>
+                          <th style="width:40px;" class="text-right">#</th>
+                          <th>Proficiency Level</th>
+                          <th>Course</th>
+                          <th style="width:40px;">Detail</th>
+                        </tr>
+                        @foreach($user->student->course_registrations as $i => $dt)
+                          <tr>
+                            <td class="text-right">{{ $i + 1 }}</td>
+                            <td>{{ $dt->course->course_package->course_level->name }}</td>
+                            <td>{{ $dt->course->title }}</td>
+                            <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-green" href="{{ route('home') }}">Link</a></td>
+                          </tr>
+                        @endforeach
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>

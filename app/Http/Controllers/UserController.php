@@ -99,47 +99,29 @@ class UserController extends Controller
         // untuk akses fungsi ini (selain admin), mohon memperhatikan keamanan akses,
         // sehingga tidak ada user yang mengakses profil akun yang
         // tidak diizinkan untuk diakses oleh user tsb.
-        if($this->is_admin()) {
-            $users = User::all();
-            $user = null;
-            $flag = 0;
-            foreach($users as $dt) {
-                if(Str::slug($dt->password.$dt->first_name.'-'.$dt->last_name) == $id) {
-                    $user = $dt;
-                    $flag = 1;
-                    break;
-                }
+
+        $users = User::all();
+        $user = null;
+        $flag = 0;
+        foreach($users as $dt) {
+            if(Str::slug($dt->password.$dt->first_name.'-'.$dt->last_name) == $id) {
+                $user = $dt;
+                $flag = 1;
+                break;
             }
-            if($flag == 0) return redirect()->route('users.index');
-
-            $view_name = '';
-            if($user->roles == 'Admin') {
-                $view_name = 'users.admin_show_admin';
-            } else if($user->roles == 'Customer Service') {
-                $view_name = 'users.admin_show_customer_service';
-            } else if($user->roles == 'Financial Team') {
-                $view_name = 'users.admin_show_financial_team';
-            } else if($user->roles == 'Lead Instructor') {
-                $view_name = 'users.admin_show_lead_instructor';
-            } else if($user->roles == 'Instructor') {
-                $view_name = 'users.admin_show_instructor';
-            } else if($user->roles == 'Student') {
-                $view_name = 'users.admin_show_student';
-            } else {
-                return redirect()->route('home');
-            }
-
-            $timezones = [
-                '-11', '-10', '-09:30', '-09', '-08', '-07',
-                '-06', '-05', '-04', '-03', '-02', '-01',
-                '+00', '+01', '+02', '+03', '+04', '+04:30', '+05', '+05:30', '+05:45', '+06',
-                '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
-            ];
-
-            return view($view_name, compact(
-                'user', 'timezones',
-            ));
         }
+        if($flag == 0) return redirect()->route('users.index');
+
+        $timezones = [
+            '-11', '-10', '-09:30', '-09', '-08', '-07',
+            '-06', '-05', '-04', '-03', '-02', '-01',
+            '+00', '+01', '+02', '+03', '+04', '+04:30', '+05', '+05:30', '+05:45', '+06',
+            '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
+        ];
+
+        return view('users.'.Str::slug(Auth::user()->roles, '_').'_show_'.Str::slug($user->roles, '_'), compact(
+            'user', 'timezones',
+        ));
     }
 
     /**
