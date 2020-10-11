@@ -76,7 +76,7 @@
                 <!-- /.box -->
               </div>
               <div class="col-md-3">
-                <div class="small-box bg-green">
+                <div class="small-box bg-yellow">
                   <div class="inner">
                     <h3>
                       @if($user->student->course_registrations->toArray())
@@ -94,7 +94,7 @@
                     </p>
                   </div>
                   <div class="icon">
-                    <i class="fa fa-files-o"></i>
+                    <i class="fa fa-book"></i>
                   </div>
                   <a href="#?" class="small-box-footer">
                     More info <i class="fa fa-arrow-circle-right"></i>
@@ -103,7 +103,7 @@
               </div>
               <!-- /.col FOR WIDGET 1 -->
               <div class="col-md-3">
-                <div class="small-box bg-blue">
+                <div class="small-box bg-green">
                   <div class="inner">
                     <h3>
                       <?php
@@ -123,7 +123,7 @@
                       {{ count($arr_present) }} / {{ count($arr) }}
                     </h3>
                     <p>
-                      @if($user->student->course_registrations->count() != 1)
+                      @if(count($arr) != 1)
                         Attendances
                       @else
                         Attendance
@@ -131,7 +131,7 @@
                     </p>
                   </div>
                   <div class="icon">
-                    <i class="fa fa-files-o"></i>
+                    <i class="fa fa-check-circle-o"></i>
                   </div>
                   <a href="#?" class="small-box-footer">
                     More info <i class="fa fa-arrow-circle-right"></i>
@@ -140,7 +140,7 @@
               </div>
               <!-- /.col FOR WIDGET 2 -->
               <div class="col-md-3">
-                <div class="small-box bg-purple">
+                <div class="small-box bg-blue">
                   <div class="inner">
                     <h3>
                       <?php
