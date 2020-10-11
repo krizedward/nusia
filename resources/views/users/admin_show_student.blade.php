@@ -75,6 +75,101 @@
                 </div>
                 <!-- /.box -->
               </div>
+              <div class="col-md-3">
+                <div class="small-box bg-green">
+                  <div class="inner">
+                    <h3>
+                      @if($user->student->course_registrations->toArray())
+                        {{ $user->student->course_registrations->count() }}
+                      @else
+                        0
+                      @endif
+                    </h3>
+                    <p>
+                      @if($user->student->course_registrations->count() != 1)
+                        Registered Courses
+                      @else
+                        Registered Course
+                      @endif
+                    </p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-files-o"></i>
+                  </div>
+                  <a href="#?" class="small-box-footer">
+                    More info <i class="fa fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+              </div>
+              <!-- /.col FOR WIDGET 1 -->
+              <div class="col-md-3">
+                <div class="small-box bg-blue">
+                  <div class="inner">
+                    <h3>
+                      <?php
+                        $arr_present = [];
+                        $arr = [];
+                        foreach($user->student->course_registrations as $cr)
+                          foreach($cr->session_registrations as $sr) {
+                            // Menghitung jumlah sesi yang dihadiri.
+                            if($sr->status == 'Present')
+                              if(!in_array($sr->id, $arr_present))
+                                array_push($arr_present, $sr->id);
+                            // Menghitung jumlah sesi secara keseluruhan.
+                            if(!in_array($sr->id, $arr))
+                              array_push($arr, $sr->id);
+                          }
+                      ?>
+                      {{ count($arr_present) }} / {{ count($arr) }}
+                    </h3>
+                    <p>
+                      @if($user->student->course_registrations->count() != 1)
+                        Attendances
+                      @else
+                        Attendance
+                      @endif
+                    </p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-files-o"></i>
+                  </div>
+                  <a href="#?" class="small-box-footer">
+                    More info <i class="fa fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+              </div>
+              <!-- /.col FOR WIDGET 2 -->
+              <div class="col-md-3">
+                <div class="small-box bg-purple">
+                  <div class="inner">
+                    <h3>
+                      <?php
+                        $arr = [];
+                        foreach($user->student->course_registrations as $cr)
+                          foreach($cr->session_registrations as $sr)
+                            foreach($sr->session_registration_forms as $srf)
+                              if(!in_array($srf->form_response->form_question->form->id, $arr))
+                                array_push($arr, $srf->form_response->form_question->form->id);
+                      ?>
+                      {{ count($arr) }}
+                    </h3>
+                    <p>
+                      @if(count($arr) != 1)
+                        Forms Filled
+                      @else
+                        Form Filled
+                      @endif
+                    </p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-files-o"></i>
+                  </div>
+                  <a href="#?" class="small-box-footer">
+                    More info <i class="fa fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+              </div>
+              <!-- /.col FOR WIDGET 3 -->
               <div class="col-md-9">
                 <div class="box box-primary">
                   <div class="box-header">
@@ -375,22 +470,26 @@
                     </div>
                     --}}
                     <div class="box-body">
-                      <table class="table table-bordered">
-                        <tr>
-                          <th style="width:40px;" class="text-right">#</th>
-                          <th>Proficiency Level</th>
-                          <th>Course</th>
-                          <th style="width:40px;">Detail</th>
-                        </tr>
-                        @foreach($user->student->course_registrations as $i => $dt)
+                      @if($user->student->course_registrations->toArray())
+                        <table class="table table-bordered">
                           <tr>
-                            <td class="text-right">{{ $i + 1 }}</td>
-                            <td>{{ $dt->course->course_package->course_level->name }}</td>
-                            <td>{{ $dt->course->title }}</td>
-                            <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-green" href="{{ route('home') }}">Link</a></td>
+                            <th style="width:40px;" class="text-right">#</th>
+                            <th>Proficiency Level</th>
+                            <th>Course</th>
+                            <th style="width:40px;">Detail</th>
                           </tr>
-                        @endforeach
-                      </table>
+                          @foreach($user->student->course_registrations as $i => $dt)
+                            <tr>
+                              <td class="text-right">{{ $i + 1 }}</td>
+                              <td>{{ $dt->course->course_package->course_level->name }}</td>
+                              <td>{{ $dt->course->title }}</td>
+                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-green" href="{{ route('home') }}">Link</a></td>
+                            </tr>
+                          @endforeach
+                        </table>
+                      @else
+                        <div class="text-center">No data available.</div>
+                      @endif
                     </div>
                   </div>
                 </div>
