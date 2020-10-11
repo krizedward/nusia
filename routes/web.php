@@ -29,11 +29,57 @@ Route::get('/terms-of-service', function() {
 
 Route::group(['middleware'=>'auth'], function() {
 
-        // NEW ROUTING FOR ADMIN: 9 Oktober 2020
+        // NEW ROUTING FOR ADMIN: 9 Oktober 2020 dan selanjutnya.
+        /* VIEW (SIDEBAR) */
         Route::get('/courses', 'CourseController@index')->name('courses.index');
+        Route::post('/courses', 'MaterialTypeController@store')->name('material_types.index'); // dilakukan pada view courses.index
+        Route::post('/courses', 'CourseTypeController@store')->name('course_types.index'); // dilakukan pada view courses.index
+        Route::post('/courses', 'CourseLevelController@store')->name('course_levels.index'); // dilakukan pada view courses.index
+        Route::post('/courses', 'CoursePackageController@store')->name('course_packages.index'); // dilakukan pada view courses.index
+        Route::post('/courses', 'CourseController@store')->name('courses.index'); // dilakukan pada view courses.index
+        Route::put('/data/{id}', 'MaterialTypeController@update')->name('material_types.update'); // dilakukan pada view courses.index
+        Route::put('/data/{id}', 'CourseTypeController@update')->name('course_types.update'); // dilakukan pada view courses.index
+        Route::put('/data/{id}', 'CourseLevelController@update')->name('course_levels.update'); // dilakukan pada view courses.index
+        Route::put('/data/{id}', 'CoursePackageController@update')->name('course_packages.update'); // dilakukan pada view courses.index
+        Route::delete('/data/{id}', 'MaterialTypeController@destroy')->name('material_types.destroy'); // dilakukan pada view courses.index
+        Route::delete('/data/{id}', 'CourseTypeController@destroy')->name('course_types.destroy'); // dilakukan pada view courses.index
+        Route::delete('/data/{id}', 'CourseLevelController@destroy')->name('course_levels.destroy'); // dilakukan pada view courses.index
+        Route::delete('/data/{id}', 'CoursePackageController@destroy')->name('course_packages.destroy'); // dilakukan pada view courses.index
+        /* VIEW */
+        Route::get('/courses/{id}', 'CourseController@show')->name('courses.show');
+        Route::put('/courses/{id}', 'CourseController@update')->name('courses.update'); // dilakukan pada view courses.show
+        Route::delete('/courses/{id}', 'CourseController@destroy')->name('courses.destroy'); // dilakukan pada view courses.show
+        Route::post('/schedules', 'ScheduleController@store')->name('schedules.index'); // dilakukan pada view courses.show
+        Route::post('/sessions', 'SessionController@store')->name('sessions.index'); // dilakukan pada view courses.show
+
+        /* VIEW (SIDEBAR) */
         Route::get('/users', 'UserController@index')->name('users.index');
+        Route::post('/users', 'UserController@store')->name('users.store'); // dilakukan pada view users.index
+        /* VIEW */
         Route::get('/users/{id}', 'UserController@show')->name('users.show');
+        Route::put('/users/{id}', 'UserController@update')->name('users.update'); // dilakukan pada view users.show
+        Route::delete('/users/{id}', 'UserController@destroy')->name('users.destroy'); // dilakukan pada view users.show
+        Route::post('/users', 'CourseRegistrationController@store')->name('course_registrations.store'); // dilakukan pada view users.show
+        /* VIEW */
+        Route::get('/users/{user_id}/courses/{course_id}', 'CourseRegistrationController@show')->name('course_registrations.show');
+        Route::put('/users/{user_id}/courses/{course_id}', 'CourseRegistrationController@update')->name('course_registrations.update'); // dilakukan pada view course_registrations.show
+        Route::delete('/users/{user_id}/courses/{course_id}', 'CourseRegistrationController@destroy')->name('course_registrations.destroy'); // dilakukan pada view course_registrations.show
+        Route::put('/courses/{id}', 'CourseController@update')->name('courses.update'); // dilakukan pada view course_registrations.show
+        Route::put('/sessions/{id}', 'SessionController@update')->name('sessions.update'); // dilakukan pada view course_registrations.show
+        Route::put('/schedules/{id}', 'ScheduleController@update')->name('schedules.update'); // dilakukan pada view course_registrations.show
+        /* VIEW */
+        Route::get('/users/{user_id}/courses/{course_id}/sessions/{session_id}', 'SessionRegistrationController@show')->name('session_registrations.show');
+        Route::put('/users/{user_id}/courses/{course_id}/sessions/{session_id}', 'SessionRegistrationController@update')->name('session_registrations.update'); // dilakukan pada view session_registrations.show
+        Route::destroy('/users/{user_id}/courses/{course_id}/sessions/{session_id}', 'SessionRegistrationController@destroy')->name('session_registrations.destroy'); // dilakukan pada view session_registrations.show
+        Route::post('/submission', 'TaskSubmissionController@store')->name('task_submissions.store'); // dilakukan pada view session_registrations.show
+        Route::put('/submission/{id}', 'TaskSubmissionController@update')->name('task_submissions.update'); // dilakukan pada view session_registrations.show
+        Route::destroy('/submission/{id}', 'TaskSubmissionController@destroy')->name('task_submissions.destroy'); // dilakukan pada view session_registrations.show
+        Route::put('/task/{id}', 'TaskController@update')->name('tasks.update'); // dilakukan pada view session_registrations.show
+
+        /* VIEW */
         Route::get('/forms', 'FormController@index')->name('forms.index');
+
+        /* VIEW */
         Route::get('/website-rating', 'FormResponseController@index_admin')->name('form_responses.index_admin');
 
 	/*Route::get('/home', function() {
