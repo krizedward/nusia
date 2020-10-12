@@ -112,6 +112,29 @@ class UserController extends Controller
         }
         if($flag == 0) return redirect()->route('users.index');
 
+        $interests = [
+            'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Art', 'Aviation',
+            'Baking', 'Baseball', 'Basketball', 'Blogging', 'Boating', 'Bowling',
+            'Broadcasting', 'Business', 'Camping', 'Chess', 'Child caring',
+            'Clothing', 'Collecting', 'Community service', 'Cooking', 'Cosmetics', 'Crafting', 'Creative Writing', 'Culinary', 'Culture',
+            'Cycling', 'Dancing', 'Design', 'Discussion', 'Driving/racing',
+            'Electronics', 'Entrepreneurship', 'Event organizing', 'Fashion', 'Finance',
+            'Fishing', 'Foods & beverages', 'Football', 'Formulate Teaching Methods', 'Gardening', 'Gender Studies', 'Golf',
+            'Hairstyling', 'Handicrafting', 'Health', 'Higher education', 'Hiking',
+            'History', 'Home decoration', 'Horseback riding', 'Housecleaning', 'Hunting',
+            'Ice hockey', 'Jogging', 'Knowledge', 'Korean Pop Culture', 'Lacrosse', 'Laundry/ironing', 'Law',
+            'Leadership', 'Leatherworking', 'Listening', 'Listening Music', 'Literature', 'Management', 'Marketing',
+            'Mechanics', 'Motivating', 'Movie', 'Music', 'Nursing',
+            'Outdoor recreation', 'Photography', 'Physical exercise', 'Politics', 'Pop Culture', 'Pottery',
+            'Programming', 'Reading', 'Real estate', 'Research', 'Retail',
+            'Running (marathon)', 'Running (sprint)', 'Science Fiction', 'Scouting', 'Sewing/needle work', 'Sharing', 'Sharing Culture', 'Shopping',
+            'Singing', 'Skiing', 'Snorkeling', 'Snowboarding', 'Soccer', 'Social',
+            'Speaking (1-on-1)', 'Speaking (public)', 'Sports', 'Surfing', 'Swimming',
+            'Teaching', 'Technology', 'Tennis', 'Thriathlons', 'Tourism', 'Travelling',
+            'Videographing', 'Volleyball', 'Volunteering', 'Walking', 'Wrestling', 'Writing',
+            'Woodworking',
+        ];
+
         $timezones = [
             '-11', '-10', '-09:30', '-09', '-08', '-07',
             '-06', '-05', '-04', '-03', '-02', '-01',
@@ -120,7 +143,7 @@ class UserController extends Controller
         ];
 
         return view('users.'.Str::slug(Auth::user()->roles, '_').'_show_'.Str::slug($user->roles, '_'), compact(
-            'user', 'timezones',
+            'user', 'interests', 'timezones',
         ));
     }
 
