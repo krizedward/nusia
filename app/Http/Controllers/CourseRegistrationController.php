@@ -13,6 +13,9 @@ use App\Models\CourseRegistration;
 use App\Models\Course;
 use App\Models\SessionRegistration;
 use App\Models\Session;
+use App\Models\MaterialType;
+use App\Models\CourseType;
+use App\Models\CourseLevel;
 
 class CourseRegistrationController extends Controller
 {
@@ -172,8 +175,12 @@ class CourseRegistrationController extends Controller
             }
         }
 
+        $material_types = MaterialType::all();
+        $course_types = CourseType::all();
+        $course_levels = CourseLevel::all();
+
         return view('course_registrations.'.Str::slug(Auth::user()->roles, '_').'_show_'.Str::slug($course_registration->student->user->roles, '_'), compact(
-            'course_registration',
+            'course_registration', 'material_types', 'course_types', 'course_levels',
         ));
     }
 
