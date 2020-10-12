@@ -61,8 +61,15 @@ class UserController extends Controller
                 ->where('roles', '<>', 'Instructor')
                 ->where('roles', '<>', 'Student')
                 ->get();
-            return view('users.admin_index', compact(
-                'users', 'lead_instructors', 'instructors', 'students', 'other_users',
+            /*Ada Beberapa Versi Tampilan Sebagai Opsi Lain*/
+            /*Tinggal Menyesuaikan Di Folder User*/
+            
+            //return view('users.admin_index', compact(
+            //    'users', 'lead_instructors', 'instructors', 'students', 'other_users'
+            //));
+
+            return view('users.admin_index_v1', compact(
+                'users', 'lead_instructors', 'instructors', 'students', 'other_users'
             ));
         }
     }
@@ -143,7 +150,7 @@ class UserController extends Controller
         ];
 
         return view('users.'.Str::slug(Auth::user()->roles, '_').'_show_'.Str::slug($user->roles, '_'), compact(
-            'user', 'interests', 'timezones',
+            'user', 'interests', 'timezones'
         ));
     }
 
