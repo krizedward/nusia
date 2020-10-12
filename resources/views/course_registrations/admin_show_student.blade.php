@@ -20,10 +20,10 @@
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
           <li class="active"><a href="#overview" data-toggle="tab"><b>Overview</b></a></li>
-          <li><a href="#course_information" data-toggle="tab"><b>Course Information</b></a></li>
+          <li><a href="#course_information" data-toggle="tab"><b>Registration Information</b></a></li>
           <li><a href="#sessions" data-toggle="tab"><b>Sessions</b></a></li>
           <li><a href="#instructor_information" data-toggle="tab"><b>Instructor Information</b></a></li>
-          <li><a href="#registered_students" data-toggle="tab"><b>Registered Students</b></a></li>
+          <li><a href="#registered_students" data-toggle="tab"><b>All Registered Students</b></a></li>
         </ul>
         <div class="tab-content">
           <div class="active tab-pane" id="overview">
@@ -43,12 +43,28 @@
                   <!-- /.box-body -->
                   <!-- About Me Box -->
                   <div class="box-header with-border">
-                    <h3 class="box-title">User Information</h3>
+                    <h3 class="box-title">Registered at <b>{{ $course_registration->course->title }}</b></h3>
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
-                    <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
-                    <p>Data</p>
+                    <strong><i class="fa fa-clock-o margin-r-5"></i> Registration Time</strong>
+                    <p>
+                      <?php
+                        $schedule_time = \Carbon\Carbon::parse($course_registration->created_at)->setTimezone(Auth::user()->timezone);
+                      ?>
+                      <table>
+                        <tr>
+                          <td><b>Day</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>{{ $schedule_time->isoFormat('dddd') }}</td>
+                        </tr>
+                        <tr>
+                          <td><b>Date</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>{{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}</td>
+                        </tr>
+                      </table>
+                    </p>
                     <hr>
                     <strong><i class="fa fa-map-marker margin-r-5"></i> Nationality</strong>
                     <p>Data</p>
