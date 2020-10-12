@@ -80,7 +80,7 @@ Route::group(['middleware'=>'auth'], function() {
         Route::get('/forms', 'FormController@index')->name('forms.index');
 
         /* VIEW */
-        Route::get('/website-rating', 'FormResponseController@index_admin')->name('form_responses.index_admin');
+        Route::get('/website-rating', 'FormResponseController@index')->name('form_responses.index_admin');
 
 	/*Route::get('/home', function() {
             return view('home');

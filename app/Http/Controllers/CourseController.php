@@ -61,11 +61,11 @@ class CourseController extends Controller
             $course = Course::all();
             $course_package = CoursePackage::all();
             $course_level   = CourseLevel::all();
-            $course_level_detail = CourseLevelDetail::all();
+            //$course_level_detail = CourseLevelDetail::all();
             $course_type = CourseType::all();
             $material_public = MaterialPublic::all();
             $material_type = MaterialType::all();
-            return view('courses.admin_index', compact('course','course_package','course_level','course_level_detail', 'course_type', 'material_public', 'material_type'));
+            return view('courses.admin_index', compact('course','course_package','course_level', 'course_type', 'material_public', 'material_type'));
         } else if ($this->is_student()) {
             $i = 0;
             foreach(Auth::user()->student->course_registrations as $cr) {

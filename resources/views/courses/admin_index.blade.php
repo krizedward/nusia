@@ -158,41 +158,6 @@
           </div>
           <!-- /.box -->
 
-          <div class="box">
-            <div class="box-header with-border">
-              <h3 class="box-title"><b>Class Level (Detailed)</b></h3>
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <table class="table table-bordered">
-                <thead>
-                <tr>
-                  <th class="text-right" style="width:20px;">#</th>
-                  <th>Name</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($course_level_detail as $i => $dt)
-                <tr>
-                  <td class="text-right">{{ $i + 1 }}</td>
-                  <td>{{ $dt->name }}</td>
-                </tr>
-                @endforeach
-                </tbody>              
-              </table>
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer clearfix">
-              <ul class="pagination pagination-sm no-margin pull-right">
-                <li><a href="{{ route('course_level_details.index') }}">View Details</a></li>
-              </ul>
-            </div>
-          </div>
-          <!-- /.box -->
-
         </div>
         <!-- /.col -->
     </div>
