@@ -745,7 +745,7 @@
                               <td class="text-right">{{ $i + 1 }}</td>
                               <td>{{ $dt->course->course_package->course_level->name }}</td>
                               <td>{{ $dt->course->title }}</td>
-                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-green" href="{{ route('home') }}">Link</a></td>
+                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-green" href="{{ route('course_registrations.show', [Str::slug($user->password.$user->first_name.'-'.$user->last_name), Str::slug($dt->created_at.'-'.$dt->course->title)]) }}">Link</a></td>
                             </tr>
                           @endforeach
                         </table>

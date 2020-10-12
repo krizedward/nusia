@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\CourseRegistration;
-use App\Models\Course;
-use App\Models\SessionRegistration;
-use App\Models\Session;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+
+use App\Models\CourseRegistration;
+use App\Models\Course;
+use App\Models\SessionRegistration;
+use App\Models\Session;
 
 class CourseRegistrationController extends Controller
 {
@@ -133,6 +134,47 @@ class CourseRegistrationController extends Controller
 
         $data = CourseRegistration::all();
         return view('registrations.courses.index', compact('data'));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $user_id
+     * @param  int  $course_id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($user_id, $course_id)
+    {
+        $course_registrations = CourseRegistration::all();
+        $course_registration = null;
+        $flag = 0;
+        foreach($course_registrations as $dt) {
+            if(
+                Str::slug(
+                $dt->student->user->password.
+                $dt->student->user->first_name.
+                '-'.$dt->student->user->last_name) == $user_id
+                &&
+                Str::slug($dt->created_at.'-'.$dt->course->title) == $course_id
+            ) {
+                $course_registration = $dt;
+                $flag = 1;
+                break;
+            }
+        }
+        if($flag == 0) {
+            if(session('redirect_again') != 1) {
+                session(['redirect_again' => 1]);
+                return redirect()->back();
+            } else {
+                session(['redirect_again' => null]);
+                return redirect()->route('users.index');
+            }
+        }
+
+        return view('course_registrations.'.Str::slug(Auth::user()->roles, '_').'_show_'.Str::slug($course_registration->student->user->roles, '_'), compact(
+            'course_registration',
+        ));
     }
 
     /**
