@@ -377,7 +377,7 @@
                           </div>
                           <div class="col-md-6">
                             <div class="col-md-12">
-                              <div class="form-group @error('description') has-error @enderror" id="description">
+                              <div class="form-group @error('description') has-error @enderror">
                                 <label for="description">Course Description</label>
                                 @if($course_registration->course->description)
                                   <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Description">{{ $course_registration->course->description }}</textarea>
@@ -390,7 +390,7 @@
                               </div>
                             </div>
                             <div class="col-md-12">
-                              <div class="form-group @error('requirement') has-error @enderror" id="requirement">
+                              <div class="form-group @error('requirement') has-error @enderror">
                                 <label for="requirement">Course Requirement</label>
                                 @if($course_registration->course->requirement)
                                   <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Requirement">{{ $course_registration->course->requirement }}</textarea>
@@ -552,9 +552,9 @@
                                         <option selected="selected" value="">-- Enter Installment Number --</option>
                                         @foreach($course_payments as $i => $cp)
                                           @if(old('id') == Str::slug($cp->created_at.$cp->refunded_at.$cp->amount.$cp->payment_time))
-                                            <option selected="selected" value="{{ Str::slug($cp->created_at.$cp->refunded_at.$cp->amount.$cp->payment_time) }}">#{{ $i }}</option>
+                                            <option selected="selected" value="{{ Str::slug($cp->created_at.$cp->refunded_at.$cp->amount.$cp->payment_time) }}">#{{ $i + 1 }}</option>
                                           @else
-                                            <option value="{{ Str::slug($cp->created_at.$cp->refunded_at.$cp->amount.$cp->payment_time) }}">#{{ $i }}</option>
+                                            <option value="{{ Str::slug($cp->created_at.$cp->refunded_at.$cp->amount.$cp->payment_time) }}">#{{ $i + 1 }}</option>
                                           @endif
                                         @endforeach
                                       </select>
@@ -702,7 +702,7 @@
                           </div>
                           <div class="col-md-6">
                             <div class="col-md-12">
-                              <div class="form-group @error('description') has-error @enderror" id="description">
+                              <div class="form-group @error('description') has-error @enderror">
                                 <label for="description">Course Description</label>
                                 @if($course_registration->course->description)
                                   <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Description">{{ $course_registration->course->description }}</textarea>
@@ -715,7 +715,7 @@
                               </div>
                             </div>
                             <div class="col-md-12">
-                              <div class="form-group @error('requirement') has-error @enderror" id="requirement">
+                              <div class="form-group @error('requirement') has-error @enderror">
                                 <label for="requirement">Course Requirement</label>
                                 @if($course_registration->course->requirement)
                                   <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Requirement">{{ $course_registration->course->requirement }}</textarea>
@@ -829,15 +829,69 @@
                             </tr>
                           @endforeach
                         </table>
+                        <div class="box-header">
+                          <h4>Edit Attendance Information</h4>
+                        </div>
+                        <div class="box-body">
+                          <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="box-body">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="col-md-12">
+                                    <div class="form-group @error('id') has-error @enderror">
+                                      <label for="id">Session Title</label>
+                                      <select name="id" type="text" class="@error('id') is-invalid @enderror form-control">
+                                        <option selected="selected" value="">-- Enter Session Title --</option>
+                                        @foreach($course_registration->session_registrations as $i => $sr)
+                                          @if(old('id') == Str::slug($sr->updated_at.$sr->status.$sr->created_at))
+                                            <option selected="selected" value="{{ Str::slug($sr->updated_at.$sr->status.$sr->created_at) }}">#{{ $i + 1 }} - {{ $sr->session->title }}</option>
+                                          @else
+                                            <option value="{{ Str::slug($sr->updated_at.$sr->status.$sr->created_at) }}">#{{ $i + 1 }} - {{ $sr->session->title }}</option>
+                                          @endif
+                                        @endforeach
+                                      </select>
+                                      @error('id')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="col-md-12">
+                                    <div class="form-group @error('status') has-error @enderror">
+                                      <label for="status">Attendance Status</label>
+                                      <select name="status" type="text" class="@error('status') is-invalid @enderror form-control">
+                                        <option selected="selected" value="">-- Enter Attendance Status --</option>
+                                        <option value="Not Assigned">Not Assigned</option>
+                                        <option value="Not Present">Not Present</option>
+                                        <option value="Should Submit Form">Should Submit Form</option>
+                                        <option value="Present">Present</option>
+                                      </select>
+                                      @error('status')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="box-footer">
+                              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                            </div>
+                          </form>
+                        </div>
                       @else
                         <div class="text-center">No data available.</div>
                       @endif
                     </div>
                   </div>
                 </div>
-                <div class="box box-warning">
+                @foreach($course_registration->course->sessions as $i => $s)
+                <div class="box box-warning collapsed-box">
                   <div class="box-header">
-                    <h3 class="box-title"><b>Edit Session Registration Information</b></h3>
+                    <h3 class="box-title"><b>Edit #{{ $i + 1 }} - {{ $s->title }} Information</b></h3>
                     {{--
                     <div>
                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
@@ -847,7 +901,7 @@
                     </div>
                     --}}
                     <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     </div>
                   </div>
                   <div class="box-body">
@@ -859,83 +913,9 @@
                           <div class="col-md-6">
                             <div class="col-md-12">
                               <div class="form-group @error('title') has-error @enderror">
-                                <label for="title">Course Title</label>
-                                <input name="title" value="{{ $course_registration->course->title }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter Course Title">
+                                <label for="title">Session Title</label>
+                                <input name="title" value="{{ $s->title }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter Session Title">
                                 @error('title')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group @error('material_type_id') has-error @enderror">
-                                <label for="material_type_id">Material Type</label>
-                                <select name="material_type" type="text" class="@error('material_type') is-invalid @enderror form-control">
-                                  <option selected="selected" value="">-- Enter Material Type --</option>
-                                  @foreach($material_types as $mt)
-                                    @if(old('material_type_id') == $mt->name)
-                                      <option selected="selected" value="{{ $mt->name }}">{{ $mt->name }}</option>
-                                    @elseif($course_registration->course->course_package->material_type->name == $mt->name)
-                                      <option selected="selected" value="{{ $mt->name }}">{{ $mt->name }}</option>
-                                    @else
-                                      <option value="{{ $mt->name }}">{{ $mt->name }}</option>
-                                    @endif
-                                  @endforeach
-                                </select>
-                                @error('material_type_id')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
-                              </div>
-                              <div class="form-group @error('course_type_id') has-error @enderror">
-                                <label for="course_type_id">Course Type</label>
-                                <select name="course_type" type="text" class="@error('course_type') is-invalid @enderror form-control">
-                                  <option selected="selected" value="">-- Enter Course Type --</option>
-                                  @foreach($course_types as $ct)
-                                    @if(old('course_type_id') == $ct->name)
-                                      <option selected="selected" value="{{ $ct->name }}">
-                                        @if($ct->count_student_min != $ct->count_student_max)
-                                          {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
-                                        @else
-                                          {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
-                                        @endif
-                                      </option>
-                                    @elseif($course_registration->course->course_package->course_type->name == $ct->name)
-                                      <option selected="selected" value="{{ $ct->name }}">
-                                        @if($ct->count_student_min != $ct->count_student_max)
-                                          {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
-                                        @else
-                                          {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
-                                        @endif
-                                      </option>
-                                    @else
-                                      <option value="{{ $ct->name }}">
-                                        @if($ct->count_student_min != $ct->count_student_max)
-                                          {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
-                                        @else
-                                          {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
-                                        @endif
-                                      </option>
-                                    @endif
-                                  @endforeach
-                                </select>
-                                @error('course_type_id')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
-                              </div>
-                              <div class="form-group @error('course_level_id') has-error @enderror">
-                                <label for="course_level_id">Course Proficiency Level</label>
-                                <select name="course_level" type="text" class="@error('course_level') is-invalid @enderror form-control">
-                                  <option selected="selected" value="">-- Enter Course Proficiency Level --</option>
-                                  @foreach($course_levels as $cl)
-                                    @if(old('course_level_id') == $cl->name)
-                                      <option selected="selected" value="{{ $cl->name }}">{{ $cl->name }}</option>
-                                    @elseif($course_registration->course->course_package->course_level->name == $cl->name)
-                                      <option selected="selected" value="{{ $cl->name }}">{{ $cl->name }}</option>
-                                    @else
-                                      <option value="{{ $cl->name }}">{{ $cl->name }}</option>
-                                    @endif
-                                  @endforeach
-                                </select>
-                                @error('course_level_id')
                                   <p style="color:red">{{ $message }}</p>
                                 @enderror
                               </div>
@@ -943,12 +923,12 @@
                           </div>
                           <div class="col-md-6">
                             <div class="col-md-12">
-                              <div class="form-group @error('description') has-error @enderror" id="description">
-                                <label for="description">Course Description</label>
-                                @if($course_registration->course->description)
-                                  <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Description">{{ $course_registration->course->description }}</textarea>
+                              <div class="form-group @error('description') has-error @enderror">
+                                <label for="description">Session Description</label>
+                                @if($s->description)
+                                  <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Description">{{ $s->description }}</textarea>
                                 @else
-                                  <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Description">{{ old('description') }}</textarea>
+                                  <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Description">{{ old('description') }}</textarea>
                                 @endif
                                 @error('description')
                                   <p style="color:red">{{ $message }}</p>
@@ -956,12 +936,12 @@
                               </div>
                             </div>
                             <div class="col-md-12">
-                              <div class="form-group @error('requirement') has-error @enderror" id="requirement">
-                                <label for="requirement">Course Requirement</label>
-                                @if($course_registration->course->requirement)
-                                  <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Requirement">{{ $course_registration->course->requirement }}</textarea>
+                              <div class="form-group @error('requirement') has-error @enderror">
+                                <label for="requirement">Session Requirement</label>
+                                @if($s->requirement)
+                                  <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Requirement">{{ $s->requirement }}</textarea>
                                 @else
-                                  <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Requirement">{{ old('requirement') }}</textarea>
+                                  <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Requirement">{{ old('requirement') }}</textarea>
                                 @endif
                                 @error('requirement')
                                   <p style="color:red">{{ $message }}</p>
@@ -977,6 +957,7 @@
                     </form>
                   </div>
                 </div>
+                @endforeach
               </div>
             </div>
           </div>
@@ -1060,7 +1041,7 @@
               </div>
               <div class="col-md-6">
                 <!-- Profile Image -->
-                <div class="box box-default">
+                <div class="box box-primary">
                   <div class="box-body box-profile">
                     @if($course_registration->course->sessions->first()->schedule->instructor->user->image_profile != 'user.jpg')
                       <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/instructor/'.$course_registration->course->sessions->first()->schedule->instructor->user->image_profile) }}" alt="User profile picture">
