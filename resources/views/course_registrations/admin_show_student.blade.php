@@ -2,7 +2,9 @@
 
 @section('title', 'Admin | Show | Student')
 
-@include('layouts.css_and_js.table')
+{{-- @include('layouts.css_and_js.table') --}}
+
+@include('layouts.css_and_js.form_advanced')
 
 @section('content-header')
   <h1><b>User Course Registration</b></h1>
@@ -916,6 +918,24 @@
                                 <label for="title">Session Title</label>
                                 <input name="title" value="{{ $s->title }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter Session Title">
                                 @error('title')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group @error('link_zoom') has-error @enderror">
+                                <label for="link_zoom">Meeting Link (https only)</label>
+                                <input name="link_zoom" value="{{ $s->link_zoom }}" type="text" class="@error('link_zoom') is-invalid @enderror form-control" placeholder="Enter Meeting Link">
+                                @error('link_zoom')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group @error('schedule_time') has-error @enderror">
+                                <label for="schedule_time">Scheduled Time</label>
+                                <input name="schedule_time" value="{{ $s->schedule->schedule_time }}" type="text" class="@error('schedule_time') is-invalid @enderror form-control" placeholder="YYYY-MM-DD hh:mm:ss">
+                                @error('schedule_time')
                                   <p style="color:red">{{ $message }}</p>
                                 @enderror
                               </div>
