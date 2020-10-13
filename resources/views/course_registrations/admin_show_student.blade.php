@@ -489,14 +489,14 @@
                     </p>
                     <hr>
                     <h3 class="box-title"><b>List of Payment Installment(s)</b></h3>
-                    {{--
-                    <div class="box-header">
-                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New Payment Installment
-                      </a>
-                    </div>
-                    --}}
+                    @if($course_registration->course->course_package->price != 0)
+                      <div class="box-header">
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add New Payment Installment
+                        </a>
+                      </div>
+                    @endif
                     <div class="box-body">
                       @if($course_registration->course_payments)
                         <table class="table table-bordered">
@@ -517,6 +517,7 @@
                               <td>{{ $cp->status }}</td>
                               <td class="text-center">
                                 @if($cp->path)
+                                  {{-- Link untuk mengunduh bukti pembayaran. --}}
                                   <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a>
                                 @else
                                   <span class="text-muted">Not Available</span>
@@ -525,6 +526,59 @@
                             </tr>
                           @endforeach
                         </table>
+                        <div class="box-header">
+                          <h4>Confirm Installment Information</h4>
+                        </div>
+                        <div class="box-body">
+                          <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="box-body">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="col-md-12">
+                                    <div class="form-group @error('id') has-error @enderror">
+                                      <label for="id">Installment Number</label>
+                                      <select name="id" type="text" class="@error('id') is-invalid @enderror form-control">
+                                        <option selected="selected" value="">-- Enter Installment Number --</option>
+                                        @foreach($course_payments as $i => $cp)
+                                          @if(old('id') == Str::slug($cp->created_at.$cp->refunded_at.$cp->amount.$cp->payment_time))
+                                            <option selected="selected" value="{{ $cp->created_at.$cp->refunded_at.$cp->amount.$cp->payment_time }}">#{{ $i }}</option>
+                                          @else
+                                            <option value="{{ $cp->created_at.$cp->refunded_at.$cp->amount.$cp->payment_time }}">#{{ $i }}</option>
+                                          @endif
+                                        @endforeach
+                                      </select>
+                                      @error('id')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="col-md-12">
+                                    <div class="form-group @error('status') has-error @enderror">
+                                      <label for="status">Installment Status</label>
+                                      <select name="status" type="text" class="@error('status') is-invalid @enderror form-control">
+                                        <option selected="selected" value="">-- Enter Installment Status --</option>
+                                        <option value="Not Confirmed">Not Confirmed</option>
+                                        <option value="Refunded">Refunded</option>
+                                        <option value="Wallet">Wallet</option>
+                                        <option value="Confirmed">Confirmed</option>
+                                      </select>
+                                      @error('status')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="box-footer">
+                              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                            </div>
+                          </form>
+                        </div>
                       @else
                         <div class="text-center">No data available.</div>
                       @endif
