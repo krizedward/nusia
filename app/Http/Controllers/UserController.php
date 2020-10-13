@@ -63,12 +63,18 @@ class UserController extends Controller
                 ->get();
             /*Ada Beberapa Versi Tampilan Sebagai Opsi Lain*/
             /*Tinggal Menyesuaikan Di Folder User*/
+
+            /*Reply: ok sip*/
             
             //return view('users.admin_index', compact(
             //    'users', 'lead_instructors', 'instructors', 'students', 'other_users'
             //));
 
-            return view('users.admin_index_v1', compact(
+            //return view('users.admin_index_v1', compact(
+            //    'users', 'lead_instructors', 'instructors', 'students', 'other_users'
+            //));
+
+            return view('users.admin_index_v2', compact(
                 'users', 'lead_instructors', 'instructors', 'students', 'other_users'
             ));
         }
