@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\User;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+
+use App\User;
+use App\Models\PlacementTest;
 
 class UserController extends Controller
 {
@@ -155,8 +157,15 @@ class UserController extends Controller
             '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
         ];
 
+        $placement_tests = PlacementTest
+            ::join('course_registrations', 'placement_tests.course_registration_id', 'course_registrations.id')
+            ->where('course_registrations.student_id', $user->student->id)
+            ->select('placement_tests.id', 'placement_tests.code', 'placement_tests.course_registration_id', 'placement_tests.path', 'placement_tests.status', 'placement_tests.submitted_at', 'placement_tests.result_updated_at', 'placement_tests.created_at', 'placement_tests.updated_at', 'placement_tests.deleted_at')
+            ->orderBy('placement_tests.submitted_at')
+            ->get();
+
         return view('users.'.Str::slug(Auth::user()->roles, '_').'_show_'.Str::slug($user->roles, '_'), compact(
-            'user', 'interests', 'timezones'
+            'user', 'interests', 'timezones', 'placement_tests',
         ));
     }
 

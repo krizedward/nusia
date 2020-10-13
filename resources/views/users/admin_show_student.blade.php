@@ -21,6 +21,7 @@
           <li class="active"><a href="#overview" data-toggle="tab"><b>Overview</b></a></li>
           <li><a href="#edit_profile" data-toggle="tab"><b>Edit Profile</b></a></li>
           <li><a href="#courses" data-toggle="tab"><b>Courses</b></a></li>
+          <li><a href="#placement_tests" data-toggle="tab"><b>Placement Tests</b></a></li>
         </ul>
         <div class="tab-content">
           <div class="active tab-pane" id="overview">
@@ -753,6 +754,145 @@
                         <div class="text-center">No data available.</div>
                       @endif
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.tab-pane -->
+          <div class="tab-pane" id="placement_tests">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="box">
+                  <!--div class="box-header">
+                    <h3 class="box-title">Section Title</h3>
+                  </div-->
+                  <form>
+                    <div class="box-body">
+                      <dl>
+                        <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
+                        <dd>This is the section description.</dd>
+                      </dl>
+                      <!--hr>
+                      <dl>
+                        <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
+                        <dd>This is the section description.</dd>
+                      </dl-->
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="col-md-9">
+                <div class="box box-primary">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>List of Placement Test(s)</b></h3>
+                    {{--
+                    <div>
+                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                        Add New "Something"
+                      </a>
+                    </div>
+                    --}}
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    @if($placement_tests->count() != 0)
+                      <table class="table table-bordered">
+                        <tr>
+                          <th style="width:40px;" class="text-right">#</th>
+                          <th>Submission Time</th>
+                          <th>Material</th>
+                          <th>Course</th>
+                          <th>Level</th>
+                          <th>Result</th>
+                          <th>Submission</th>
+                        </tr>
+                        @foreach($placement_tests as $i => $dt)
+                          <?php
+                            $submitted_at = \Carbon\Carbon::parse($dt->submitted_at)->setTimezone(Auth::user()->timezone);
+                            //$result_updated_at = \Carbon\Carbon::parse($dt->result_updated_at)->setTimezone(Auth::user()->timezone);
+                          ?>
+                          <tr>
+                            <td class="text-right">{{ $i + 1 }}</td>
+                            <td>{{ $submitted_at->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}</td>
+                            <td>{{ $dt->course_registration->course->course_package->material_type->name }}</td>
+                            <td>{{ $dt->course_registration->course->course_package->course_type->name }}</td>
+                            <td>{{ $dt->course_registration->course->course_package->course_level->name }}</td>
+                            <td>{{ $dt->status }}</td>
+                            <td class="text-center">
+                              @if($dt->path)
+                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-green" href="{{ $dt->path }}">Link</a>
+                              @else
+                                <i class="text-muted">Not Available</i>
+                              @endif
+                            </td>
+                          </tr>
+                        @endforeach
+                      </table>
+                      <hr>
+                      <h3 class="box-title"><b>Confirm Placement Test Information</b></h3>
+                      {{--
+                      <div class="box-header">
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add New "Something"
+                        </a>
+                      </div>
+                      --}}
+                      <div class="box-body">
+                        <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                          @csrf
+                          @method('PUT')
+                          <div class="box-body">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="col-md-12">
+                                  <div class="form-group @error('id') has-error @enderror">
+                                    <label for="id">Placement Test Number</label>
+                                    <select name="id" type="text" class="@error('id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Placement Test Number --</option>
+                                      @foreach($placement_tests as $i => $pt)
+                                        @if(old('id') == Str::slug($pt->created_at.$pt->path.$pt->submitted_at.$pt->status.$pt->result_updated_at))
+                                          <option selected="selected" value="{{ Str::slug($pt->created_at.$pt->path.$pt->submitted_at.$pt->status.$pt->result_updated_at) }}">#{{ $i }}</option>
+                                        @else
+                                          <option value="{{ Str::slug($pt->created_at.$pt->path.$pt->submitted_at.$pt->status.$pt->result_updated_at) }}">#{{ $i }}</option>
+                                        @endif
+                                      @endforeach
+                                    </select>
+                                    @error('id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="col-md-12">
+                                  <div class="form-group @error('status') has-error @enderror">
+                                    <label for="status">Placement Test Result</label>
+                                    <select name="status" type="text" class="@error('status') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Placement Test Result --</option>
+                                      <option value="Not Passed">Not Passed</option>
+                                      <option value="Passed">Passed</option>
+                                    </select>
+                                    @error('status')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="box-footer">
+                            <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                          </div>
+                        </form>
+                      </div>
+                    @else
+                      <div class="text-center">No data available.</div>
+                    @endif
                   </div>
                 </div>
               </div>
