@@ -65,7 +65,10 @@ class CourseController extends Controller
             $course_type = CourseType::all();
             $material_public = MaterialPublic::all();
             $material_type = MaterialType::all();
-            return view('courses.admin_index', compact('course','course_package','course_level', 'course_type', 'material_public', 'material_type'));
+            //return view('courses.admin_index', compact('course','course_package','course_level', 'course_type', 'material_public', 'material_type'));
+
+            return view('courses.admin_index_v1', compact('course','course_package','course_level', 'course_type', 'material_public', 'material_type'));
+            
         } else if ($this->is_student()) {
             $i = 0;
             foreach(Auth::user()->student->course_registrations as $cr) {
