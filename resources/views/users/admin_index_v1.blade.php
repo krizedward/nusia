@@ -14,7 +14,7 @@
 			<!-- Student -->
           	<div class="small-box bg-blue">
 	        	<div class="inner">
-	        		<h3>0</h3>
+	        		<h3>{{ $students->count() }}</h3>
 	              	<p>Student</p>
 	            </div>
 	            <div class="icon">
@@ -24,7 +24,7 @@
 	        <!-- Instructor -->
 	        <div class="small-box bg-green">
 	        	<div class="inner">
-	        		<h3>0</h3>
+	        		<h3>{{ $instructors->count() }}</h3>
 	              	<p>Instructor</p>
 	            </div>
 	            <div class="icon">
@@ -34,7 +34,7 @@
 	        <!-- Lead Instructors -->
 	        <div class="small-box bg-blue">
 	        	<div class="inner">
-	        		<h3>0</h3>
+	        		<h3>{{ $lead_instructors->count() }}</h3>
 	              	<p>Lead Instructors</p>
 	            </div>
 	            <div class="icon">
@@ -44,7 +44,7 @@
 	        <!-- Other Users -->
 	        <div class="small-box bg-green">
 	        	<div class="inner">
-	        		<h3>0</h3>
+	        		<h3>{{ $other_users->count() }}</h3>
 	              	<p>Other Users</p>
 	            </div>
 	            <div class="icon">
