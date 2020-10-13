@@ -261,8 +261,8 @@
                           <th style="width:40px;">Profile</th>
                         </tr>
                         <tr>
-                          <td>{{ $course_registration->student->user->roles }}</td>
-                          <td>{{ $course_registration->student->user->first_name }} {{ $course_registration->student->user->last_name }}</td>
+                          <td>Record 1</td>
+                          <td>Record 2</td>
                           <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
                         </tr>
                       </table>
@@ -441,12 +441,236 @@
                 <div class="box box-primary">
                   <div class="box-header">
                     <h3 class="box-title"><b>Registration Status</b></h3>
+                    {{--
+                    <div>
+                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                        Add New User
+                      </a>
+                    </div>
+                    --}}
                     <div class="box-tools pull-right">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                   </div>
                   <div class="box-body">
-                    Form Data (?)
+                    <strong><i class="fa fa-circle-o margin-r-5"></i> Registration Time</strong>
+                    <p>
+                      <?php
+                        $schedule_time = \Carbon\Carbon::parse($course_registration->created_at)->setTimezone(Auth::user()->timezone);
+                      ?>
+                      {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                    </p>
+                    <hr>
+                    <strong><i class="fa fa-circle-o margin-r-5"></i> Registration Price</strong>
+                    <p>${{ $course_registration->course->course_package->price }}</p>
+                    <hr>
+                    <strong><i class="fa fa-circle-o margin-r-5"></i> Payment Status</strong>
+                    <p>
+                      @if($course_registration->course->course_package->price != 0)
+                        {{-- Kode untuk memeriksa status pembayaran untuk course berbayar. --}}
+                        @if($course_registration->course_payments)
+                          {{-- Bagian berikut perlu ditambahkan kembali untuk menyesuaikan total pembayaran yang sudah dilakukan saat ini dengan total biaya course. --}}
+                          <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Paid</span>
+                          <span class="label label-warning"><i class="fa fa-question"></i>&nbsp;&nbsp;Not Confirmed</span>
+                          <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
+                        @else
+                          <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
+                        @endif
+                      @else
+                        <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Free of Charge</span>
+                      @endif
+                    </p>
+                    <hr>
+                    <strong><i class="fa fa-circle-o margin-r-5"></i> Payment Time (fully paid)</strong>
+                    <p>
+                      {{-- Kode pada bagian ini perlu ditambahkan kembali. --}}
+                      <i class="text-muted">Not Available</i>
+                    </p>
+                    <hr>
+                    <h3 class="box-title"><b>List of Payment Installment(s)</b></h3>
+                    {{--
+                    <div class="box-header">
+                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                        Add New Payment Installment
+                      </a>
+                    </div>
+                    --}}
+                    <div class="box-body">
+                      @if($course_registration->course_payments)
+                        <table class="table table-bordered">
+                          <tr>
+                            <th>#</th>
+                            <th>Time</th>
+                            <th>Method</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th style="width:100px;">Evidence</th>
+                          </tr>
+                          @foreach($course_payments as $i => $cp)
+                            <tr>
+                              <td>{{ $i + 1 }}</td>
+                              <td>{{ $cp->payment_time }}</td>
+                              <td>{{ $cp->payment_type->method }}</td>
+                              <td>{{ $cp->amount }}</td>
+                              <td>{{ $cp->status }}</td>
+                              <td class="text-center">
+                                @if($cp->path)
+                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a>
+                                @else
+                                  <span class="text-muted">Not Available</span>
+                                @endif
+                              </td>
+                            </tr>
+                          @endforeach
+                        </table>
+                      @else
+                        <div class="text-center">No data available.</div>
+                      @endif
+                    </div>
+                  </div>
+                </div>
+                <div class="box box-warning">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>Edit Registration Information</b></h3>
+                    {{--
+                    <div>
+                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                        Add New User
+                      </a>
+                    </div>
+                    --}}
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                      @csrf
+                      @method('PUT')
+                      <div class="box-body">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="col-md-12">
+                              <div class="form-group @error('title') has-error @enderror">
+                                <label for="title">Course Title</label>
+                                <input name="title" value="{{ $course_registration->course->title }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter Course Title">
+                                @error('title')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group @error('material_type_id') has-error @enderror">
+                                <label for="material_type_id">Material Type</label>
+                                <select name="material_type" type="text" class="@error('material_type') is-invalid @enderror form-control">
+                                  <option selected="selected" value="">-- Enter Material Type --</option>
+                                  @foreach($material_types as $mt)
+                                    @if(old('material_type_id') == $mt->name)
+                                      <option selected="selected" value="{{ $mt->name }}">{{ $mt->name }}</option>
+                                    @elseif($course_registration->course->course_package->material_type->name == $mt->name)
+                                      <option selected="selected" value="{{ $mt->name }}">{{ $mt->name }}</option>
+                                    @else
+                                      <option value="{{ $mt->name }}">{{ $mt->name }}</option>
+                                    @endif
+                                  @endforeach
+                                </select>
+                                @error('material_type_id')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                              <div class="form-group @error('course_type_id') has-error @enderror">
+                                <label for="course_type_id">Course Type</label>
+                                <select name="course_type" type="text" class="@error('course_type') is-invalid @enderror form-control">
+                                  <option selected="selected" value="">-- Enter Course Type --</option>
+                                  @foreach($course_types as $ct)
+                                    @if(old('course_type_id') == $ct->name)
+                                      <option selected="selected" value="{{ $ct->name }}">
+                                        @if($ct->count_student_min != $ct->count_student_max)
+                                          {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
+                                        @else
+                                          {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
+                                        @endif
+                                      </option>
+                                    @elseif($course_registration->course->course_package->course_type->name == $ct->name)
+                                      <option selected="selected" value="{{ $ct->name }}">
+                                        @if($ct->count_student_min != $ct->count_student_max)
+                                          {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
+                                        @else
+                                          {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
+                                        @endif
+                                      </option>
+                                    @else
+                                      <option value="{{ $ct->name }}">
+                                        @if($ct->count_student_min != $ct->count_student_max)
+                                          {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
+                                        @else
+                                          {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
+                                        @endif
+                                      </option>
+                                    @endif
+                                  @endforeach
+                                </select>
+                                @error('course_type_id')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                              <div class="form-group @error('course_level_id') has-error @enderror">
+                                <label for="course_level_id">Course Proficiency Level</label>
+                                <select name="course_level" type="text" class="@error('course_level') is-invalid @enderror form-control">
+                                  <option selected="selected" value="">-- Enter Course Proficiency Level --</option>
+                                  @foreach($course_levels as $cl)
+                                    @if(old('course_level_id') == $cl->name)
+                                      <option selected="selected" value="{{ $cl->name }}">{{ $cl->name }}</option>
+                                    @elseif($course_registration->course->course_package->course_level->name == $cl->name)
+                                      <option selected="selected" value="{{ $cl->name }}">{{ $cl->name }}</option>
+                                    @else
+                                      <option value="{{ $cl->name }}">{{ $cl->name }}</option>
+                                    @endif
+                                  @endforeach
+                                </select>
+                                @error('course_level_id')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="col-md-12">
+                              <div class="form-group @error('description') has-error @enderror" id="description">
+                                <label for="description">Course Description</label>
+                                @if($course_registration->course->description)
+                                  <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Description">{{ $course_registration->course->description }}</textarea>
+                                @else
+                                  <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Description">{{ old('description') }}</textarea>
+                                @endif
+                                @error('description')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group @error('requirement') has-error @enderror" id="requirement">
+                                <label for="requirement">Course Requirement</label>
+                                @if($course_registration->course->requirement)
+                                  <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Requirement">{{ $course_registration->course->requirement }}</textarea>
+                                @else
+                                  <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Requirement">{{ old('requirement') }}</textarea>
+                                @endif
+                                @error('requirement')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="box-footer">
+                        <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>

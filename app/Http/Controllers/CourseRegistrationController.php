@@ -16,6 +16,7 @@ use App\Models\Session;
 use App\Models\MaterialType;
 use App\Models\CourseType;
 use App\Models\CourseLevel;
+use App\Models\CoursePayment;
 
 class CourseRegistrationController extends Controller
 {
@@ -179,8 +180,13 @@ class CourseRegistrationController extends Controller
         $course_types = CourseType::all();
         $course_levels = CourseLevel::all();
 
+        $course_payments = CoursePayment
+            ::where('course_registration_id', $course_registration->id)
+            ->orderBy('payment_time')
+            ->get();
+
         return view('course_registrations.'.Str::slug(Auth::user()->roles, '_').'_show_'.Str::slug($course_registration->student->user->roles, '_'), compact(
-            'course_registration', 'material_types', 'course_types', 'course_levels',
+            'course_registration', 'material_types', 'course_types', 'course_levels', 'course_payments',
         ));
     }
 
