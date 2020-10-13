@@ -552,9 +552,9 @@
                                         <option selected="selected" value="">-- Enter Installment Number --</option>
                                         @foreach($course_payments as $i => $cp)
                                           @if(old('id') == Str::slug($cp->created_at.$cp->refunded_at.$cp->amount.$cp->payment_time))
-                                            <option selected="selected" value="{{ $cp->created_at.$cp->refunded_at.$cp->amount.$cp->payment_time }}">#{{ $i }}</option>
+                                            <option selected="selected" value="{{ Str::slug($cp->created_at.$cp->refunded_at.$cp->amount.$cp->payment_time) }}">#{{ $i }}</option>
                                           @else
-                                            <option value="{{ $cp->created_at.$cp->refunded_at.$cp->amount.$cp->payment_time }}">#{{ $i }}</option>
+                                            <option value="{{ Str::slug($cp->created_at.$cp->refunded_at.$cp->amount.$cp->payment_time) }}">#{{ $i }}</option>
                                           @endif
                                         @endforeach
                                       </select>
