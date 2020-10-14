@@ -1015,14 +1015,12 @@
                 <div class="box box-primary">
                   <div class="box-header">
                     <h3 class="box-title"><b>Main Materials</b></h3>
-                    {{--
                     <div>
                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                         <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New Material
+                        Add New Main Material
                       </a>
                     </div>
-                    --}}
                     <div class="box-tools pull-right">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
@@ -1072,7 +1070,7 @@
                                     <label for="id">Material Name</label>
                                     <select name="id" type="text" class="@error('id') is-invalid @enderror form-control">
                                       <option selected="selected" value="">-- Enter Material Name --</option>
-                                      @foreach($course_registration->course->course_package->material_publics as $i => $mp)
+                                      @foreach($course_registration->course->course_package->material_publics as $mp)
                                         @if(old('id') == Str::slug($mp->updated_at.$mp->name.$mp->created_at))
                                           <option selected="selected" value="{{ Str::slug($mp->updated_at.$mp->name.$mp->created_at) }}">{{ $mp->name }}</option>
                                         @else
@@ -1098,19 +1096,10 @@
                               <div class="col-md-6">
                                 <div class="col-md-12">
                                   <div class="form-group @error('path') has-error @enderror">
-                                    <label for="name">Material Link</label>
-                                    <input name="path" value="{{ old('path') }}" type="text" class="@error('path') is-invalid @enderror form-control" placeholder="Enter Material Link">
+                                    <label for="name">Upload Material</label>
+                                    <span style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</span>
+                                    <input name="path" type="file" accept="image/*" class="@error('path') is-invalid @enderror form-control">
                                     @error('path')
-                                      <p style="color:red">{{ $message }}</p>
-                                    @enderror
-                                  </div>
-                                </div>
-                                <div class="col-md-12">
-                                  <div class="form-group @error('image_profile') has-error @enderror">
-                                    <label for="image_profile">or, Upload New Material Here</label>
-                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
-                                    <input name="image_profile" type="file" accept="image/*" class="@error('image_profile') is-invalid @enderror form-control">
-                                    @error('image_profile')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
                                   </div>
@@ -1129,92 +1118,111 @@
                   </div>
                 </div>
                 @foreach($course_registration->course->sessions as $i => $s)
-                <div class="box box-warning collapsed-box">
-                  <div class="box-header">
-                    <h3 class="box-title"><b>Edit #{{ $i + 1 }} - {{ $s->title }} Information</b></h3>
-                    {{--
-                    <div>
-                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New "Something"
-                      </a>
+                  <div class="box box-warning">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>Supplementary Materials for #{{ $i + 1 }} - {{ $s->title }}</b></h3>
+                      <div>
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add New Supplementary Material for This Session
+                        </a>
+                      </div>
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      </div>
                     </div>
-                    --}}
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-                    </div>
-                  </div>
-                  <div class="box-body">
-                    <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
-                      @csrf
-                      @method('PUT')
-                      <div class="box-body">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="col-md-12">
-                              <div class="form-group @error('title') has-error @enderror">
-                                <label for="title">Session Title</label>
-                                <input name="title" value="{{ $s->title }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter Session Title">
-                                @error('title')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group @error('link_zoom') has-error @enderror">
-                                <label for="link_zoom">Meeting Link (https only)</label>
-                                <input name="link_zoom" value="{{ $s->link_zoom }}" type="text" class="@error('link_zoom') is-invalid @enderror form-control" placeholder="Enter Meeting Link">
-                                @error('link_zoom')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group @error('schedule_time') has-error @enderror">
-                                <label for="schedule_time">Scheduled Time</label>
-                                <input name="schedule_time" value="{{ $s->schedule->schedule_time }}" type="text" class="@error('schedule_time') is-invalid @enderror form-control" placeholder="YYYY-MM-DD hh:mm:ss">
-                                @error('schedule_time')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="col-md-12">
-                              <div class="form-group @error('description') has-error @enderror">
-                                <label for="description">Session Description</label>
-                                @if($s->description)
-                                  <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Description">{{ $s->description }}</textarea>
+                    <div class="box-body">
+                      @if($s->material_sessions->toArray())
+                        <table class="table table-bordered">
+                          <tr>
+                            <th style="width:40px;" class="text-right">#</th>
+                            <th>File Name</th>
+                            <th>File Type</th>
+                            <th style="width:90px;">Download</th>
+                          </tr>
+                          @foreach($s->material_sessions as $j => $dt)
+                            <tr>
+                              <td class="text-right">{{ $j + 1 }}</td>
+                              <td>{{ $dt->name }}</td>
+                              <td>
+                                @if($dt->path)
+                                  {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
                                 @else
-                                  <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Description">{{ old('description') }}</textarea>
+                                  <i class="text-muted">Not Available</i>
                                 @endif
-                                @error('description')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group @error('requirement') has-error @enderror">
-                                <label for="requirement">Session Requirement</label>
-                                @if($s->requirement)
-                                  <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Requirement">{{ $s->requirement }}</textarea>
+                              </td>
+                              <td class="text-center">
+                                @if($dt->path)
+                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Link</a>
                                 @else
-                                  <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Requirement">{{ old('requirement') }}</textarea>
+                                  <i class="text-muted">Not Available</i>
                                 @endif
-                                @error('requirement')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
-                              </div>
-                            </div>
-                          </div>
+                              </td>
+                            </tr>
+                          @endforeach
+                        </table>
+                        <div class="box-header">
+                          <h4>Edit Supplementary Material Information</h4>
                         </div>
-                      </div>
-                      <div class="box-footer">
-                        <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
-                      </div>
-                    </form>
+                        <div class="box-body">
+                          <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="box-body">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="col-md-12">
+                                    <div class="form-group @error('id') has-error @enderror">
+                                      <label for="id">Material Name</label>
+                                      <select name="id" type="text" class="@error('id') is-invalid @enderror form-control">
+                                        <option selected="selected" value="">-- Enter Material Name --</option>
+                                        @foreach($s->material_sessions as $ms)
+                                          @if(old('id') == Str::slug($ms->updated_at.$ms->name.$ms->created_at))
+                                            <option selected="selected" value="{{ Str::slug($ms->updated_at.$ms->name.$ms->created_at) }}">{{ $ms->name }}</option>
+                                          @else
+                                            <option value="{{ Str::slug($ms->updated_at.$ms->name.$ms->created_at) }}">{{ $ms->name }}</option>
+                                          @endif
+                                        @endforeach
+                                      </select>
+                                      @error('id')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                  </div>
+                                  <div class="col-md-12">
+                                    <div class="form-group @error('name') has-error @enderror">
+                                      <label for="name">Change Material Name (optional)</label>
+                                      <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Material Name (optional)">
+                                      @error('name')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="col-md-12">
+                                    <div class="form-group @error('path') has-error @enderror">
+                                      <label for="name">Upload Material</label>
+                                      <span style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</span>
+                                      <input name="path" type="file" accept="image/*" class="@error('path') is-invalid @enderror form-control">
+                                      @error('path')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="box-footer">
+                              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                            </div>
+                          </form>
+                        </div>
+                      @else
+                        <div class="text-center">No data available.</div>
+                      @endif
+                    </div>
                   </div>
-                </div>
                 @endforeach
               </div>
             </div>
