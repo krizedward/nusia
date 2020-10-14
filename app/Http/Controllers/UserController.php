@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\User;
 use App\Models\PlacementTest;
+use App\Models\Course;
 
 class UserController extends Controller
 {
@@ -157,15 +158,40 @@ class UserController extends Controller
             '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
         ];
 
-        $placement_tests = PlacementTest
-            ::join('course_registrations', 'placement_tests.course_registration_id', 'course_registrations.id')
-            ->where('course_registrations.student_id', $user->student->id)
-            ->select('placement_tests.id', 'placement_tests.code', 'placement_tests.course_registration_id', 'placement_tests.path', 'placement_tests.status', 'placement_tests.submitted_at', 'placement_tests.result_updated_at', 'placement_tests.created_at', 'placement_tests.updated_at', 'placement_tests.deleted_at')
-            ->orderBy('placement_tests.submitted_at')
-            ->get();
+        // Special condition for viewing a role (or some roles).
+        $placement_tests = null;
+        $courses = null;
+        if($user->roles == 'Student') {
+            $placement_tests = PlacementTest
+                ::join('course_registrations', 'placement_tests.course_registration_id', 'course_registrations.id')
+                ->where('course_registrations.student_id', $user->student->id)
+                ->select('placement_tests.id', 'placement_tests.code', 'placement_tests.course_registration_id', 'placement_tests.path', 'placement_tests.status', 'placement_tests.submitted_at', 'placement_tests.result_updated_at', 'placement_tests.created_at', 'placement_tests.updated_at', 'placement_tests.deleted_at')
+                ->orderBy('placement_tests.submitted_at')
+                ->get();
+        } else if($user->roles == 'Lead Instructor') {
+            $courses = Course
+                ::join('sessions', 'courses.id', 'sessions.course_id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructors', 'schedules.instructor_id', 'instructors.id')
+                ->distinct()
+                ->where('instructors.user_id', $user->id)
+                ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at', 'courses.deleted_at')
+                ->orderBy('courses.title')
+                ->get();
+        } else if($user->roles == 'Instructor') {
+            $courses = Course
+                ::join('sessions', 'courses.id', 'sessions.course_id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructors', 'schedules.instructor_id', 'instructors.id')
+                ->distinct()
+                ->where('instructors.user_id', $user->id)
+                ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at', 'courses.deleted_at')
+                ->orderBy('courses.title')
+                ->get();
+        }
 
         return view('users.'.Str::slug(Auth::user()->roles, '_').'_show_'.Str::slug($user->roles, '_'), compact(
-            'user', 'interests', 'timezones', 'placement_tests',
+            'user', 'interests', 'timezones', 'placement_tests', 'courses',
         ));
     }
 
