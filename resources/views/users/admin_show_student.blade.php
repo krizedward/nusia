@@ -97,9 +97,9 @@
                   <div class="icon">
                     <i class="fa fa-book"></i>
                   </div>
-                  <a href="#?" class="small-box-footer">
+                  <!--a href="#?" class="small-box-footer">
                     More info <i class="fa fa-arrow-circle-right"></i>
-                  </a>
+                  </a-->
                 </div>
               </div>
               <!-- /.col FOR WIDGET 1 -->
@@ -134,9 +134,9 @@
                   <div class="icon">
                     <i class="fa fa-check-circle-o"></i>
                   </div>
-                  <a href="#?" class="small-box-footer">
+                  <!--a href="#?" class="small-box-footer">
                     More info <i class="fa fa-arrow-circle-right"></i>
-                  </a>
+                  </a-->
                 </div>
               </div>
               <!-- /.col FOR WIDGET 2 -->
@@ -163,11 +163,11 @@
                     </p>
                   </div>
                   <div class="icon">
-                    <i class="fa fa-files-o"></i>
+                    <i class="fa fa-pencil"></i>
                   </div>
-                  <a href="#?" class="small-box-footer">
+                  <!--a href="#?" class="small-box-footer">
                     More info <i class="fa fa-arrow-circle-right"></i>
-                  </a>
+                  </a-->
                 </div>
               </div>
               <!-- /.col FOR WIDGET 3 -->
