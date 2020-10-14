@@ -23,9 +23,12 @@
         <ul class="nav nav-tabs">
           <li class="active"><a href="#overview" data-toggle="tab"><b>Overview</b></a></li>
           <li><a href="#registration" data-toggle="tab"><b>Registration</b></a></li>
-          <li><a href="#sessions" data-toggle="tab"><b>Sessions</b></a></li>
           <li><a href="#instructor" data-toggle="tab"><b>Instructor</b></a></li>
           <li><a href="#all_registered_students" data-toggle="tab"><b>All Registered Students</b></a></li>
+          <li><a href="#sessions" data-toggle="tab"><b>Sessions</b></a></li>
+          <li><a href="#materials" data-toggle="tab"><b>Materials</b></a></li>
+          <li><a href="#tasks" data-toggle="tab"><b>Tasks</b></a></li>
+          <li><a href="#grades" data-toggle="tab"><b>Grades</b></a></li>
           <li><a href="#course_certificate" data-toggle="tab"><b>Course Certificate</b></a></li>
         </ul>
         <div class="tab-content">
@@ -793,14 +796,13 @@
                     </div>
                     --}}
                     <div class="box-body">
-                      @if($course_registration->session_registrations->toArray())
+                      @if($course_registration->session_registrations)
                         <table class="table table-bordered">
                           <tr>
                             <th style="width:40px;" class="text-right">#</th>
                             <th style="width:150px;">Attendance Status</th>
                             <th>Title</th>
                             <th style="width:100px;">Meeting Link</th>
-                            <th style="width:40px;">Materials</th>
                           </tr>
                           @foreach($course_registration->session_registrations as $i => $dt)
                             <tr>
@@ -826,55 +828,15 @@
                                 @endif
                               </td>
                               <td>{{ $dt->session->title }}</td>
-                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ $dt->session->link_zoom }}">Link</a></td>
-                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-green" data-toggle="modal" data-target="#{{ Str::slug($dt->session->updated_at.$dt->session->title.$dt->session->created_at) }}" href="#{{ Str::slug($dt->session->updated_at.$dt->session->title.$dt->session->created_at) }}">Link</a></td>
-
-        <div class="modal fade" id="{{ Str::slug($dt->session->updated_at.$dt->session->title.$dt->session->created_at) }}">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <!-- Profile Image -->
-                    <div class="box box-primary">
-                        <div class="box-body box-profile">
-                            <h3 class="profile-username text-center">List of Material(s)</h3>
-                            {{--
-                            <p class="text-muted text-center">#{{ $i + 1 }} - {{ $dt->session->title }}</p>
-                            --}}
-                            <hr>
-                            <ul class="list-group list-group-unbordered">
-                                <li class="list-group-item">
-                                    <ol>
-                                    <li>&nbsp;&nbsp;&nbsp;Learners must attend all sessions in NUSIA's free classes.<br>&nbsp;&nbsp;&nbsp;If learners cannot attend some of them, they cannot reschedule the sessions.</li>
-                                    <li>&nbsp;&nbsp;&nbsp;Learners must read the learning materials on the dashboard before joining each session.</li>
-                                    <li>&nbsp;&nbsp;&nbsp;Learners must give feedback on the link provided in the dashboard<br>&nbsp;&nbsp;&nbsp;after finishing each session.</li>
-                                    <li>&nbsp;&nbsp;&nbsp;All sessions in the free classes are recorded.<br>&nbsp;&nbsp;&nbsp;Learners allow NUSIA to employ the video recordings for research and marketing purposes<br>&nbsp;&nbsp;&nbsp;(If you disagree with this term, please contact us via email on <a href="mailto:nusia.helpdesk@gmail.com">nusia.helpdesk@gmail.com</a>.)</li>
-                                    </ol>
-                                </li>
-                            </ul>
-                            <hr>
-                            <form action="{{ route('course_registrations.store') }}" method="POST">
-                              @csrf
-                              <input type="checkbox" value="false" onclick="checkboxClick(this);" id="flag" name="flag" class="minimal">&nbsp;&nbsp;I have read and agree to the Terms of Service
-                              <br>
-                              <br>
-                              <button type="submit" class="btn btn-s btn-primary" style="width:100%;">Agree and Continue</button>
-                            </form>
-                        </div>
-                        <!-- /.box-body -->
-                    </div>
-                    <!-- /.box -->
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
+                              <td class="text-center">
+                                @if($dt->session->link_zoom)
+                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ $dt->session->link_zoom }}">Link</a>
+                                @else
+                                  <i class="text-muted">Not Available</i>
+                                @endif
+                              </td>
                             </tr>
                           @endforeach
-    <script>
-      function checkboxClick(cb) {
-          document.getElementById("flag").value = cb.checked;
-      }
-    </script>
                         </table>
                         <div class="box-header">
                           <h4>Edit Attendance Information</h4>
@@ -933,6 +895,237 @@
                         <div class="text-center">No data available.</div>
                       @endif
                     </div>
+                  </div>
+                </div>
+                @foreach($course_registration->course->sessions as $i => $s)
+                <div class="box box-warning collapsed-box">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>Edit #{{ $i + 1 }} - {{ $s->title }} Information</b></h3>
+                    {{--
+                    <div>
+                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                        Add New "Something"
+                      </a>
+                    </div>
+                    --}}
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                      @csrf
+                      @method('PUT')
+                      <div class="box-body">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="col-md-12">
+                              <div class="form-group @error('title') has-error @enderror">
+                                <label for="title">Session Title</label>
+                                <input name="title" value="{{ $s->title }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter Session Title">
+                                @error('title')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group @error('link_zoom') has-error @enderror">
+                                <label for="link_zoom">Meeting Link (https only)</label>
+                                <input name="link_zoom" value="{{ $s->link_zoom }}" type="text" class="@error('link_zoom') is-invalid @enderror form-control" placeholder="Enter Meeting Link">
+                                @error('link_zoom')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group @error('schedule_time') has-error @enderror">
+                                <label for="schedule_time">Scheduled Time</label>
+                                <input name="schedule_time" value="{{ $s->schedule->schedule_time }}" type="text" class="@error('schedule_time') is-invalid @enderror form-control" placeholder="YYYY-MM-DD hh:mm:ss">
+                                @error('schedule_time')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="col-md-12">
+                              <div class="form-group @error('description') has-error @enderror">
+                                <label for="description">Session Description</label>
+                                @if($s->description)
+                                  <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Description">{{ $s->description }}</textarea>
+                                @else
+                                  <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Description">{{ old('description') }}</textarea>
+                                @endif
+                                @error('description')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group @error('requirement') has-error @enderror">
+                                <label for="requirement">Session Requirement</label>
+                                @if($s->requirement)
+                                  <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Requirement">{{ $s->requirement }}</textarea>
+                                @else
+                                  <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Requirement">{{ old('requirement') }}</textarea>
+                                @endif
+                                @error('requirement')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="box-footer">
+                        <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                @endforeach
+              </div>
+            </div>
+          </div>
+          <!-- /.tab-pane -->
+          <div class="tab-pane" id="materials">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="box">
+                  <!--div class="box-header">
+                    <h3 class="box-title">Section Title</h3>
+                  </div-->
+                  <form>
+                    <div class="box-body">
+                      <dl>
+                        <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
+                        <dd>This is the section description.</dd>
+                      </dl>
+                      <!--hr>
+                      <dl>
+                        <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
+                        <dd>This is the section description.</dd>
+                      </dl-->
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="col-md-9">
+                <div class="box box-primary">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>Main Materials</b></h3>
+                    {{--
+                    <div>
+                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                        Add New Material
+                      </a>
+                    </div>
+                    --}}
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    @if($course_registration->course->course_package->material_publics)
+                      <table class="table table-bordered">
+                        <tr>
+                          <th style="width:40px;" class="text-right">#</th>
+                          <th>File Name</th>
+                          <th>File Type</th>
+                          <th style="width:90px;">Download</th>
+                        </tr>
+                        @foreach($course_registration->course->course_package->material_publics as $i => $dt)
+                          <tr>
+                            <td class="text-right">{{ $i + 1 }}</td>
+                            <td>{{ $dt->name }}</td>
+                            <td>
+                              @if($dt->path)
+                                {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
+                              @else
+                                <i class="text-muted">Not Available</i>
+                              @endif
+                            </td>
+                            <td class="text-center">
+                              @if($dt->path)
+                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Link</a>
+                              @else
+                                <i class="text-muted">Not Available</i>
+                              @endif
+                            </td>
+                          </tr>
+                        @endforeach
+                      </table>
+                      <div class="box-header">
+                        <h4>Edit Main Material Information</h4>
+                      </div>
+                      <div class="box-body">
+                        <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                          @csrf
+                          @method('PUT')
+                          <div class="box-body">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="col-md-12">
+                                  <div class="form-group @error('id') has-error @enderror">
+                                    <label for="id">Material Name</label>
+                                    <select name="id" type="text" class="@error('id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Material Name --</option>
+                                      @foreach($course_registration->course->course_package->material_publics as $i => $mp)
+                                        @if(old('id') == Str::slug($mp->updated_at.$mp->name.$mp->created_at))
+                                          <option selected="selected" value="{{ Str::slug($mp->updated_at.$mp->name.$mp->created_at) }}">{{ $mp->name }}</option>
+                                        @else
+                                          <option value="{{ Str::slug($mp->updated_at.$mp->name.$mp->created_at) }}">{{ $mp->name }}</option>
+                                        @endif
+                                      @endforeach
+                                    </select>
+                                    @error('id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group @error('name') has-error @enderror">
+                                    <label for="name">Change Material Name (optional)</label>
+                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Material Name (optional)">
+                                    @error('name')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="col-md-12">
+                                  <div class="form-group @error('path') has-error @enderror">
+                                    <label for="name">Material Link</label>
+                                    <input name="path" value="{{ old('path') }}" type="text" class="@error('path') is-invalid @enderror form-control" placeholder="Enter Material Link">
+                                    @error('path')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group @error('image_profile') has-error @enderror">
+                                    <label for="image_profile">or, Upload New Material Here</label>
+                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
+                                    <input name="image_profile" type="file" accept="image/*" class="@error('image_profile') is-invalid @enderror form-control">
+                                    @error('image_profile')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="box-footer">
+                            <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                          </div>
+                        </form>
+                      </div>
+                    @else
+                      <div class="text-center">No data available.</div>
+                    @endif
                   </div>
                 </div>
                 @foreach($course_registration->course->sessions as $i => $s)
