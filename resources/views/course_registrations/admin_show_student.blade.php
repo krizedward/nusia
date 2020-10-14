@@ -766,57 +766,39 @@
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
-                    <strong><i class="fa fa-clock-o margin-r-5"></i> Registration Time</strong>
+                    <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
+                    <p>{{ $course_registration->student->user->email }}</p>
+                    <hr>
+                    <strong><i class="fa fa-map-marker margin-r-5"></i> Nationality</strong>
                     <p>
-                      <?php
-                        $schedule_time = \Carbon\Carbon::parse($course_registration->created_at)->setTimezone(Auth::user()->timezone);
-                      ?>
-                      <table>
-                        <tr>
-                          <td><b>Day</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>{{ $schedule_time->isoFormat('dddd') }}</td>
-                        </tr>
-                        <tr>
-                          <td><b>Date</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>{{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}</td>
-                        </tr>
-                      </table>
+                      {{ $course_registration->student->user->citizenship }}
+                      @if($course_registration->student->user->domicile)
+                        <br>
+                        Currently living in: <b>{{ $course_registration->student->user->domicile }}</b>
+                      @endif
                     </p>
                     <hr>
-                    <strong><i class="fa fa-credit-card margin-r-5"></i> Payment Status</strong>
-                    <p>
-                      <table>
-                        <tr>
-                          <td><b>Status</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($course_registration->course->course_package->price != 0)
-                              {{-- Kode untuk memeriksa status pembayaran untuk course berbayar. --}}
-                              @if($course_registration->course_payments)
-                                {{-- Bagian berikut perlu ditambahkan kembali untuk menyesuaikan total pembayaran yang sudah dilakukan saat ini dengan total biaya course. --}}
-                                <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Paid</span>
-                                <span class="label label-warning"><i class="fa fa-question"></i>&nbsp;&nbsp;Not Confirmed</span>
-                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
-                              @else
-                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
-                              @endif
-                            @else
-                              <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Free of Charge</span>
-                            @endif
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><b>Paid at</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            {{-- Kode pada bagian ini perlu ditambahkan kembali. --}}
-                            <i class="text-muted">Not Available</i>
-                          </td>
-                        </tr>
-                      </table>
-                    </p>
+                    <strong><i class="fa fa-clock-o margin-r-5"></i> Current local time zone</strong>
+                    @if($course_registration->student->user->timezone)
+                      <p>{{ $course_registration->student->user->timezone }}</p>
+                    @else
+                      <p class="text-muted"><i>Not Available</i></p>
+                    @endif
+                    <hr>
+                    <strong><i class="fa fa-street-view margin-r-5"></i> Interest</strong>
+                    @if($course_registration->student->interest)
+                      <?php
+                        $interest = explode(', ', $course_registration->student->interest);
+                        sort($interest);
+                      ?>
+                      <p>
+                        @for($i = 0; $i < count($interest); $i = $i + 1)
+                          <span class="label label-success">{{ $interest[$i] }}</span>
+                        @endfor
+                      </p>
+                    @else
+                      <p class="text-muted"><i>Not Available</i></p>
+                    @endif
                   </div>
                   <!-- /.box-body -->
                 </div>
@@ -841,57 +823,39 @@
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
-                    <strong><i class="fa fa-clock-o margin-r-5"></i> Registration Time</strong>
+                    <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
+                    <p>{{ $course_registration->course->sessions->first()->schedule->instructor->user->email }}</p>
+                    <hr>
+                    <strong><i class="fa fa-map-marker margin-r-5"></i> Nationality</strong>
                     <p>
-                      <?php
-                        $schedule_time = \Carbon\Carbon::parse($course_registration->created_at)->setTimezone(Auth::user()->timezone);
-                      ?>
-                      <table>
-                        <tr>
-                          <td><b>Day</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>{{ $schedule_time->isoFormat('dddd') }}</td>
-                        </tr>
-                        <tr>
-                          <td><b>Date</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>{{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}</td>
-                        </tr>
-                      </table>
+                      {{ $course_registration->course->sessions->first()->schedule->instructor->user->citizenship }}
+                      @if($course_registration->course->sessions->first()->schedule->instructor->user->domicile)
+                        <br>
+                        Currently living in: <b>{{ $course_registration->course->sessions->first()->schedule->instructor->user->domicile }}</b>
+                      @endif
                     </p>
                     <hr>
-                    <strong><i class="fa fa-credit-card margin-r-5"></i> Payment Status</strong>
-                    <p>
-                      <table>
-                        <tr>
-                          <td><b>Status</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($course_registration->course->course_package->price != 0)
-                              {{-- Kode untuk memeriksa status pembayaran untuk course berbayar. --}}
-                              @if($course_registration->course_payments)
-                                {{-- Bagian berikut perlu ditambahkan kembali untuk menyesuaikan total pembayaran yang sudah dilakukan saat ini dengan total biaya course. --}}
-                                <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Paid</span>
-                                <span class="label label-warning"><i class="fa fa-question"></i>&nbsp;&nbsp;Not Confirmed</span>
-                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
-                              @else
-                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
-                              @endif
-                            @else
-                              <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Free of Charge</span>
-                            @endif
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><b>Paid at</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            {{-- Kode pada bagian ini perlu ditambahkan kembali. --}}
-                            <i class="text-muted">Not Available</i>
-                          </td>
-                        </tr>
-                      </table>
-                    </p>
+                    <strong><i class="fa fa-clock-o margin-r-5"></i> Current local time zone</strong>
+                    @if($course_registration->course->sessions->first()->schedule->instructor->user->timezone)
+                      <p>{{ $course_registration->course->sessions->first()->schedule->instructor->user->timezone }}</p>
+                    @else
+                      <p class="text-muted"><i>Not Available</i></p>
+                    @endif
+                    <hr>
+                    <strong><i class="fa fa-street-view margin-r-5"></i> Interest</strong>
+                    @if($course_registration->course->sessions->first()->schedule->instructor->interest)
+                      <?php
+                        $interest = explode(', ', $course_registration->course->sessions->first()->schedule->instructor->interest);
+                        sort($interest);
+                      ?>
+                      <p>
+                        @for($i = 0; $i < count($interest); $i = $i + 1)
+                          <span class="label label-success">{{ $interest[$i] }}</span>
+                        @endfor
+                      </p>
+                    @else
+                      <p class="text-muted"><i>Not Available</i></p>
+                    @endif
                   </div>
                   <!-- /.box-body -->
                 </div>
