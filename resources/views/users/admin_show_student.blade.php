@@ -723,7 +723,7 @@
                   <div class="box-body">
                     <p>Tampilkan kalender pada bagian ini.</p>
                     <hr>
-                    <h3 class="box-title"><b>List of Registered Courses</b></h3>
+                    <h3 class="box-title"><b>List of Registered Course(s)</b></h3>
                     {{--
                     <div class="box-header">
                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
