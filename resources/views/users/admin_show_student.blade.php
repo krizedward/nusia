@@ -276,19 +276,19 @@
                     @endif
                     <hr>
                     <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
-                      @if($user->student->interest)
-                        <?php
-                          $interest = explode(', ', $user->student->interest);
-                          sort($interest);
-                        ?>
-                        <p>
-                          @for($i = 0; $i < count($interest); $i = $i + 1)
-                            <span class="label label-success">{{ $interest[$i] }}</span>
-                          @endfor
-                        </p>
-                      @else
-                        <p class="text-muted"><i>Not Available</i></p>
-                      @endif
+                    @if($user->student->interest)
+                      <?php
+                        $interest = explode(', ', $user->student->interest);
+                        sort($interest);
+                      ?>
+                      <p>
+                        @for($i = 0; $i < count($interest); $i = $i + 1)
+                          <span class="label label-success">{{ $interest[$i] }}</span>
+                        @endfor
+                      </p>
+                    @else
+                      <p class="text-muted"><i>Not Available</i></p>
+                    @endif
                     <hr>
                     <h3 class="box-title"><b>Table Data</b></h3>
                     {{--
