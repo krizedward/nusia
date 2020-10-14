@@ -800,7 +800,7 @@
                             <th style="width:150px;">Attendance Status</th>
                             <th>Title</th>
                             <th style="width:100px;">Meeting Link</th>
-                            <th style="width:40px;">Detail</th>
+                            <th style="width:40px;">Materials</th>
                           </tr>
                           @foreach($course_registration->session_registrations as $i => $dt)
                             <tr>
@@ -827,9 +827,54 @@
                               </td>
                               <td>{{ $dt->session->title }}</td>
                               <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ $dt->session->link_zoom }}">Link</a></td>
-                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-green" href="{{ route('home') }}">Link</a></td>
+                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-green" data-toggle="modal" data-target="#{{ Str::slug($dt->session->updated_at.$dt->session->title.$dt->session->created_at) }}" href="#{{ Str::slug($dt->session->updated_at.$dt->session->title.$dt->session->created_at) }}">Link</a></td>
+
+        <div class="modal fade" id="{{ Str::slug($dt->session->updated_at.$dt->session->title.$dt->session->created_at) }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Profile Image -->
+                    <div class="box box-primary">
+                        <div class="box-body box-profile">
+                            <h3 class="profile-username text-center">List of Material(s)</h3>
+                            {{--
+                            <p class="text-muted text-center">#{{ $i + 1 }} - {{ $dt->session->title }}</p>
+                            --}}
+                            <hr>
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item">
+                                    <ol>
+                                    <li>&nbsp;&nbsp;&nbsp;Learners must attend all sessions in NUSIA's free classes.<br>&nbsp;&nbsp;&nbsp;If learners cannot attend some of them, they cannot reschedule the sessions.</li>
+                                    <li>&nbsp;&nbsp;&nbsp;Learners must read the learning materials on the dashboard before joining each session.</li>
+                                    <li>&nbsp;&nbsp;&nbsp;Learners must give feedback on the link provided in the dashboard<br>&nbsp;&nbsp;&nbsp;after finishing each session.</li>
+                                    <li>&nbsp;&nbsp;&nbsp;All sessions in the free classes are recorded.<br>&nbsp;&nbsp;&nbsp;Learners allow NUSIA to employ the video recordings for research and marketing purposes<br>&nbsp;&nbsp;&nbsp;(If you disagree with this term, please contact us via email on <a href="mailto:nusia.helpdesk@gmail.com">nusia.helpdesk@gmail.com</a>.)</li>
+                                    </ol>
+                                </li>
+                            </ul>
+                            <hr>
+                            <form action="{{ route('course_registrations.store') }}" method="POST">
+                              @csrf
+                              <input type="checkbox" value="false" onclick="checkboxClick(this);" id="flag" name="flag" class="minimal">&nbsp;&nbsp;I have read and agree to the Terms of Service
+                              <br>
+                              <br>
+                              <button type="submit" class="btn btn-s btn-primary" style="width:100%;">Agree and Continue</button>
+                            </form>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
                             </tr>
                           @endforeach
+    <script>
+      function checkboxClick(cb) {
+          document.getElementById("flag").value = cb.checked;
+      }
+    </script>
                         </table>
                         <div class="box-header">
                           <h4>Edit Attendance Information</h4>
