@@ -745,6 +745,161 @@
             </div>
           </div>
           <!-- /.tab-pane -->
+          <div class="tab-pane" id="instructor">
+            <div class="row">
+              <div class="col-md-6">
+                <!-- Profile Image -->
+                <div class="box box-default">
+                  <div class="box-body box-profile">
+                    @if($course_registration->student->user->image_profile != 'user.jpg')
+                      <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/student/profile/'.$course_registration->student->user->image_profile) }}" alt="User profile picture">
+                    @else
+                      <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/'.$course_registration->student->user->image_profile) }}" alt="User profile picture">
+                    @endif
+                    <h3 class="profile-username text-center">{{ $course_registration->student->user->first_name }} {{ $course_registration->student->user->last_name }}</h3>
+                    <p class="text-muted text-center">Role: {{ $course_registration->student->user->roles }}</p>
+                  </div>
+                  <!-- /.box-body -->
+                  <!-- About Me Box -->
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Student Information</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <strong><i class="fa fa-clock-o margin-r-5"></i> Registration Time</strong>
+                    <p>
+                      <?php
+                        $schedule_time = \Carbon\Carbon::parse($course_registration->created_at)->setTimezone(Auth::user()->timezone);
+                      ?>
+                      <table>
+                        <tr>
+                          <td><b>Day</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>{{ $schedule_time->isoFormat('dddd') }}</td>
+                        </tr>
+                        <tr>
+                          <td><b>Date</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>{{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}</td>
+                        </tr>
+                      </table>
+                    </p>
+                    <hr>
+                    <strong><i class="fa fa-credit-card margin-r-5"></i> Payment Status</strong>
+                    <p>
+                      <table>
+                        <tr>
+                          <td><b>Status</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>
+                            @if($course_registration->course->course_package->price != 0)
+                              {{-- Kode untuk memeriksa status pembayaran untuk course berbayar. --}}
+                              @if($course_registration->course_payments)
+                                {{-- Bagian berikut perlu ditambahkan kembali untuk menyesuaikan total pembayaran yang sudah dilakukan saat ini dengan total biaya course. --}}
+                                <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Paid</span>
+                                <span class="label label-warning"><i class="fa fa-question"></i>&nbsp;&nbsp;Not Confirmed</span>
+                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
+                              @else
+                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
+                              @endif
+                            @else
+                              <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Free of Charge</span>
+                            @endif
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><b>Paid at</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>
+                            {{-- Kode pada bagian ini perlu ditambahkan kembali. --}}
+                            <i class="text-muted">Not Available</i>
+                          </td>
+                        </tr>
+                      </table>
+                    </p>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+              </div>
+              <div class="col-md-6">
+                <!-- Profile Image -->
+                <div class="box box-primary">
+                  <div class="box-body box-profile">
+                    @if($course_registration->course->sessions->first()->schedule->instructor->user->image_profile != 'user.jpg')
+                      <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/instructor/'.$course_registration->course->sessions->first()->schedule->instructor->user->image_profile) }}" alt="User profile picture">
+                    @else
+                      <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/'.$course_registration->course->sessions->first()->schedule->instructor->user->image_profile) }}" alt="User profile picture">
+                    @endif
+                    <h3 class="profile-username text-center">{{ $course_registration->course->sessions->first()->schedule->instructor->user->first_name }} {{ $course_registration->course->sessions->first()->schedule->instructor->user->last_name }}</h3>
+                    <p class="text-muted text-center">Role: {{ $course_registration->course->sessions->first()->schedule->instructor->user->roles }}</p>
+                  </div>
+                  <!-- /.box-body -->
+                  <!-- About Me Box -->
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Instructor Information</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <strong><i class="fa fa-clock-o margin-r-5"></i> Registration Time</strong>
+                    <p>
+                      <?php
+                        $schedule_time = \Carbon\Carbon::parse($course_registration->created_at)->setTimezone(Auth::user()->timezone);
+                      ?>
+                      <table>
+                        <tr>
+                          <td><b>Day</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>{{ $schedule_time->isoFormat('dddd') }}</td>
+                        </tr>
+                        <tr>
+                          <td><b>Date</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>{{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}</td>
+                        </tr>
+                      </table>
+                    </p>
+                    <hr>
+                    <strong><i class="fa fa-credit-card margin-r-5"></i> Payment Status</strong>
+                    <p>
+                      <table>
+                        <tr>
+                          <td><b>Status</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>
+                            @if($course_registration->course->course_package->price != 0)
+                              {{-- Kode untuk memeriksa status pembayaran untuk course berbayar. --}}
+                              @if($course_registration->course_payments)
+                                {{-- Bagian berikut perlu ditambahkan kembali untuk menyesuaikan total pembayaran yang sudah dilakukan saat ini dengan total biaya course. --}}
+                                <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Paid</span>
+                                <span class="label label-warning"><i class="fa fa-question"></i>&nbsp;&nbsp;Not Confirmed</span>
+                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
+                              @else
+                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
+                              @endif
+                            @else
+                              <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Free of Charge</span>
+                            @endif
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><b>Paid at</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>
+                            {{-- Kode pada bagian ini perlu ditambahkan kembali. --}}
+                            <i class="text-muted">Not Available</i>
+                          </td>
+                        </tr>
+                      </table>
+                    </p>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+              </div>
+            </div>
+          </div>
+          <!-- /.tab-pane -->
           <div class="tab-pane" id="sessions">
             <div class="row">
               <div class="col-md-3">
@@ -1224,161 +1379,6 @@
                     </div>
                   </div>
                 @endforeach
-              </div>
-            </div>
-          </div>
-          <!-- /.tab-pane -->
-          <div class="tab-pane" id="instructor">
-            <div class="row">
-              <div class="col-md-6">
-                <!-- Profile Image -->
-                <div class="box box-default">
-                  <div class="box-body box-profile">
-                    @if($course_registration->student->user->image_profile != 'user.jpg')
-                      <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/student/profile/'.$course_registration->student->user->image_profile) }}" alt="User profile picture">
-                    @else
-                      <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/'.$course_registration->student->user->image_profile) }}" alt="User profile picture">
-                    @endif
-                    <h3 class="profile-username text-center">{{ $course_registration->student->user->first_name }} {{ $course_registration->student->user->last_name }}</h3>
-                    <p class="text-muted text-center">Role: {{ $course_registration->student->user->roles }}</p>
-                  </div>
-                  <!-- /.box-body -->
-                  <!-- About Me Box -->
-                  <div class="box-header with-border">
-                    <h3 class="box-title">Student Information</h3>
-                  </div>
-                  <!-- /.box-header -->
-                  <div class="box-body">
-                    <strong><i class="fa fa-clock-o margin-r-5"></i> Registration Time</strong>
-                    <p>
-                      <?php
-                        $schedule_time = \Carbon\Carbon::parse($course_registration->created_at)->setTimezone(Auth::user()->timezone);
-                      ?>
-                      <table>
-                        <tr>
-                          <td><b>Day</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>{{ $schedule_time->isoFormat('dddd') }}</td>
-                        </tr>
-                        <tr>
-                          <td><b>Date</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>{{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}</td>
-                        </tr>
-                      </table>
-                    </p>
-                    <hr>
-                    <strong><i class="fa fa-credit-card margin-r-5"></i> Payment Status</strong>
-                    <p>
-                      <table>
-                        <tr>
-                          <td><b>Status</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($course_registration->course->course_package->price != 0)
-                              {{-- Kode untuk memeriksa status pembayaran untuk course berbayar. --}}
-                              @if($course_registration->course_payments)
-                                {{-- Bagian berikut perlu ditambahkan kembali untuk menyesuaikan total pembayaran yang sudah dilakukan saat ini dengan total biaya course. --}}
-                                <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Paid</span>
-                                <span class="label label-warning"><i class="fa fa-question"></i>&nbsp;&nbsp;Not Confirmed</span>
-                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
-                              @else
-                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
-                              @endif
-                            @else
-                              <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Free of Charge</span>
-                            @endif
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><b>Paid at</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            {{-- Kode pada bagian ini perlu ditambahkan kembali. --}}
-                            <i class="text-muted">Not Available</i>
-                          </td>
-                        </tr>
-                      </table>
-                    </p>
-                  </div>
-                  <!-- /.box-body -->
-                </div>
-                <!-- /.box -->
-              </div>
-              <div class="col-md-6">
-                <!-- Profile Image -->
-                <div class="box box-primary">
-                  <div class="box-body box-profile">
-                    @if($course_registration->course->sessions->first()->schedule->instructor->user->image_profile != 'user.jpg')
-                      <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/instructor/'.$course_registration->course->sessions->first()->schedule->instructor->user->image_profile) }}" alt="User profile picture">
-                    @else
-                      <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/'.$course_registration->course->sessions->first()->schedule->instructor->user->image_profile) }}" alt="User profile picture">
-                    @endif
-                    <h3 class="profile-username text-center">{{ $course_registration->course->sessions->first()->schedule->instructor->user->first_name }} {{ $course_registration->course->sessions->first()->schedule->instructor->user->last_name }}</h3>
-                    <p class="text-muted text-center">Role: {{ $course_registration->course->sessions->first()->schedule->instructor->user->roles }}</p>
-                  </div>
-                  <!-- /.box-body -->
-                  <!-- About Me Box -->
-                  <div class="box-header with-border">
-                    <h3 class="box-title">Instructor Information</h3>
-                  </div>
-                  <!-- /.box-header -->
-                  <div class="box-body">
-                    <strong><i class="fa fa-clock-o margin-r-5"></i> Registration Time</strong>
-                    <p>
-                      <?php
-                        $schedule_time = \Carbon\Carbon::parse($course_registration->created_at)->setTimezone(Auth::user()->timezone);
-                      ?>
-                      <table>
-                        <tr>
-                          <td><b>Day</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>{{ $schedule_time->isoFormat('dddd') }}</td>
-                        </tr>
-                        <tr>
-                          <td><b>Date</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>{{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}</td>
-                        </tr>
-                      </table>
-                    </p>
-                    <hr>
-                    <strong><i class="fa fa-credit-card margin-r-5"></i> Payment Status</strong>
-                    <p>
-                      <table>
-                        <tr>
-                          <td><b>Status</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($course_registration->course->course_package->price != 0)
-                              {{-- Kode untuk memeriksa status pembayaran untuk course berbayar. --}}
-                              @if($course_registration->course_payments)
-                                {{-- Bagian berikut perlu ditambahkan kembali untuk menyesuaikan total pembayaran yang sudah dilakukan saat ini dengan total biaya course. --}}
-                                <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Paid</span>
-                                <span class="label label-warning"><i class="fa fa-question"></i>&nbsp;&nbsp;Not Confirmed</span>
-                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
-                              @else
-                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
-                              @endif
-                            @else
-                              <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Free of Charge</span>
-                            @endif
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><b>Paid at</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            {{-- Kode pada bagian ini perlu ditambahkan kembali. --}}
-                            <i class="text-muted">Not Available</i>
-                          </td>
-                        </tr>
-                      </table>
-                    </p>
-                  </div>
-                  <!-- /.box-body -->
-                </div>
-                <!-- /.box -->
               </div>
             </div>
           </div>
