@@ -357,7 +357,7 @@
                                 @endif
                               </td>
                               <td>{{ $dt->first_name }} {{ $dt->last_name }}</td>
-                            <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('users.show', [Str::slug($dt->password.$dt->first_name.'-'.$dt->last_name)]) }}">Link</a></td>
+                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('users.show', [Str::slug($dt->password.$dt->first_name.'-'.$dt->last_name)]) }}">Link</a></td>
                             </tr>
                           @endif
                         @endforeach
@@ -405,7 +405,7 @@
                                 @endif
                               </td>
                               <td>{{ $dt->first_name }} {{ $dt->last_name }}</td>
-                            <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('users.show', [Str::slug($dt->password.$dt->first_name.'-'.$dt->last_name)]) }}">Link</a></td>
+                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('users.show', [Str::slug($dt->password.$dt->first_name.'-'.$dt->last_name)]) }}">Link</a></td>
                             </tr>
                           @endif
                         @endforeach
@@ -453,7 +453,7 @@
                                 @endif
                               </td>
                               <td>{{ $dt->first_name }} {{ $dt->last_name }}</td>
-                            <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('users.show', [Str::slug($dt->password.$dt->first_name.'-'.$dt->last_name)]) }}">Link</a></td>
+                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('users.show', [Str::slug($dt->password.$dt->first_name.'-'.$dt->last_name)]) }}">Link</a></td>
                             </tr>
                           @endif
                         @endforeach
@@ -542,6 +542,6 @@
         <!-- /.tab-content -->
       </div>
       <!-- /.nav-tabs-custom -->
-		</div>
-	</div>
+    </div>
+  </div>
 @stop
