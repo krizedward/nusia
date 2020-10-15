@@ -47,7 +47,13 @@
                 <div class="small-box bg-yellow">
                   <div class="inner">
                     <h3>{{ $lead_instructors->count() }}</h3>
-                    <p>Lead Instructors</p>
+                    <p>
+                      @if($lead_instructors->count() != 1)
+                        Lead Instructors
+                      @else
+                        Lead Instructor
+                      @endif
+                    </p>
                   </div>
                   <div class="icon">
                     <i class="ion ion-person-add"></i>
@@ -59,7 +65,13 @@
                 <div class="small-box bg-green">
                   <div class="inner">
                     <h3>{{ $instructors->count() }}</h3>
-                    <p>Instructor</p>
+                    <p>
+                      @if($instructors->count() != 1)
+                        Instructors
+                      @else
+                        Instructor
+                      @endif
+                    </p>
                   </div>
                   <div class="icon">
                     <i class="ion ion-person-add"></i>
@@ -71,7 +83,13 @@
                 <div class="small-box bg-blue">
                   <div class="inner">
                     <h3>{{ $students->count() }}</h3>
-                    <p>Student</p>
+                    <p>
+                      @if($students->count() != 1)
+                        Students
+                      @else
+                        Student
+                      @endif
+                    </p>
                   </div>
                   <div class="icon">
                     <i class="ion ion-person-add"></i>
