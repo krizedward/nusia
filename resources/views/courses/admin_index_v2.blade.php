@@ -51,7 +51,13 @@
                 <div class="small-box bg-yellow">
                   <div class="inner">
                     <h3>{{ $material_type->count() }}</h3>
-                    <p>Material Types</p>
+                    <p>
+                      @if($material_type->count() != 1)
+                        Material Types
+                      @else
+                        Material Type
+                      @endif
+                    </p>
                   </div>
                   <div class="icon">
                     <i class="fa fa-book"></i>
@@ -63,7 +69,13 @@
                 <div class="small-box bg-green">
                   <div class="inner">
                     <h3>{{ $course_type->count() }}</h3>
-                    <p>Course Types</p>
+                    <p>
+                      @if($course_type->count() != 1)
+                        Course Types
+                      @else
+                        Course Type
+                      @endif
+                    </p>
                   </div>
                   <div class="icon">
                     <i class="fa fa-book"></i>
@@ -75,7 +87,13 @@
                 <div class="small-box bg-blue">
                   <div class="inner">
                     <h3>{{ $course_level->count() }}</h3>
-                    <p>Course Levels</p>
+                    <p>
+                      @if($course_level->count() != 1)
+                        Proficiency Levels
+                      @else
+                        Proficiency Level
+                      @endif
+                    </p>
                   </div>
                   <div class="icon">
                     <i class="fa fa-book"></i>
