@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Course;
 use App\Models\CoursePackage;
-use App\Models\CourseLevelDetail;
+//use App\Models\CourseLevelDetail;
 use App\Models\CourseLevel;
 use App\Models\CourseType;
 use App\Models\MaterialPublic;
@@ -58,13 +58,13 @@ class CourseController extends Controller
     public function index()
     {
         if ($this->is_admin()){
-            $course = Course::all();
+            $course = Course::orderBy('course_package_id')->get();
             $course_package = CoursePackage::all();
-            $course_level   = CourseLevel::all();
+            $course_level   = CourseLevel::orderBy('name')->get();
             //$course_level_detail = CourseLevelDetail::all();
-            $course_type = CourseType::all();
+            $course_type = CourseType::orderBy('name')->get();
             $material_public = MaterialPublic::all();
-            $material_type = MaterialType::all();
+            $material_type = MaterialType::orderBy('name')->get();
             //return view('courses.admin_index', compact('course','course_package','course_level', 'course_type', 'material_public', 'material_type'));
 
             //return view('courses.admin_index_v1', compact('course','course_package','course_level', 'course_type', 'material_public', 'material_type'));
