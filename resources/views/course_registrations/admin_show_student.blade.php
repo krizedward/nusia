@@ -109,311 +109,313 @@
                 </div>
                 <!-- /.box -->
               </div>
-              <div class="col-md-3">
-                <div class="small-box bg-yellow">
-                  <div class="inner">
-                    <h3>
-                      @if($course_registration->course->course_registrations->toArray())
-                        {{ $course_registration->course->course_registrations->count() }} / {{ $course_registration->course->course_package->course_type->count_student_max }}
-                      @else
-                        0 / {{ $course_registration->course->course_package->course_type->count_student_max }}
-                      @endif
-                    </h3>
-                    <p>
-                      @if($course_registration->course->course_package->course_type->count_student_max != 1)
-                        Registered Students
-                      @else
-                        Registered Student
-                      @endif
-                    </p>
-                  </div>
-                  <div class="icon">
-                    <i class="fa fa-user"></i>
-                  </div>
-                  <!--a href="#?" class="small-box-footer">
-                    More info <i class="fa fa-arrow-circle-right"></i>
-                  </a-->
-                </div>
-              </div>
-              <!-- /.col FOR WIDGET 1 -->
-              <div class="col-md-3">
-                <div class="small-box bg-green">
-                  <div class="inner">
-                    <h3>
-                      <?php
-                        $present_attendances = 0;
-                        foreach($course_registration->session_registrations as $sr)
-                          if($sr->status == 'Present') $present_attendances++;
-                      ?>
-                      {{ $present_attendances }} / {{ $course_registration->session_registrations->count() }}
-                    </h3>
-                    <p>
-                      @if($course_registration->session_registrations->count() != 1)
-                        Attendances
-                      @else
-                        Attendance
-                      @endif
-                    </p>
-                  </div>
-                  <div class="icon">
-                    <i class="fa fa-check-circle-o"></i>
-                  </div>
-                  <!--a href="#?" class="small-box-footer">
-                    More info <i class="fa fa-arrow-circle-right"></i>
-                  </a-->
-                </div>
-              </div>
-              <!-- /.col FOR WIDGET 2 -->
-              <div class="col-md-3">
-                <div class="small-box bg-blue">
-                  <div class="inner">
-                    <h3>
-                      <?php
-                        $arr_student = [];
-                        $arr = [];
-                        foreach($course_registration->session_registrations as $sr)
-                          foreach($sr->session_registration_forms as $srf)
-                            if(!in_array($srf->form_response->form_question->form->id, $arr_student))
-                              array_push($arr_student, $srf->form_response->form_question->form->id);
-                        foreach($course_registration->course->sessions as $s)
-                          if(!in_array($s->form->id, $arr))
-                            array_push($arr, $s->form->id);
-                      ?>
-                      {{ count($arr_student) }} / {{ count($arr) }}
-                    </h3>
-                    <p>
-                      @if(count($arr) != 1)
-                        Forms Filled
-                      @else
-                        Form Filled
-                      @endif
-                    </p>
-                  </div>
-                  <div class="icon">
-                    <i class="fa fa-pencil"></i>
-                  </div>
-                  <!--a href="#?" class="small-box-footer">
-                    More info <i class="fa fa-arrow-circle-right"></i>
-                  </a-->
-                </div>
-              </div>
-              <!-- /.col FOR WIDGET 3 -->
-              <div class="col-md-9">
-                <div class="box box-primary">
-                  <div class="box-header">
-                    <h3 class="box-title"><b>Overview</b></h3>
-                    {{--
-                    <div>
-                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New User
-                      </a>
+              <div class="col-md-9 no-padding">
+                <div class="col-md-4">
+                  <div class="small-box bg-yellow">
+                    <div class="inner">
+                      <h3>
+                        @if($course_registration->course->course_registrations->toArray())
+                          {{ $course_registration->course->course_registrations->count() }} / {{ $course_registration->course->course_package->course_type->count_student_max }}
+                        @else
+                          0 / {{ $course_registration->course->course_package->course_type->count_student_max }}
+                        @endif
+                      </h3>
+                      <p>
+                        @if($course_registration->course->course_package->course_type->count_student_max != 1)
+                          Registered Students
+                        @else
+                          Registered Student
+                        @endif
+                      </p>
                     </div>
-                    --}}
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <div class="icon">
+                      <i class="fa fa-user"></i>
                     </div>
+                    <!--a href="#?" class="small-box-footer">
+                      More info <i class="fa fa-arrow-circle-right"></i>
+                    </a-->
                   </div>
-                  <div class="box-body">
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Material Type</strong>
-                    <p>
-                      <u>{{ $course_registration->course->course_package->material_type->name }}</u><br>
-                      {{ $course_registration->course->course_package->material_type->description }}
-                    </p>
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Course Type</strong>
-                    <p>
-                      <u>{{ $course_registration->course->course_package->course_type->name }}</u><br>
-                      {{ $course_registration->course->course_package->course_type->description }}
-                    </p>
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Course Proficiency Level</strong>
-                    <p>
-                      <u>{{ $course_registration->course->course_package->course_level->name }}</u><br>
-                      {{ $course_registration->course->course_package->course_level->description }}
-                    </p>
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Course Title</strong>
-                    <p>{{ $course_registration->course->title }}</p>
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Total Available Session(s)</strong>
-                    <p>
-                      {{ $course_registration->course->course_package->count_session }}
-                      @if($course_registration->course->course_package->count_session != 1)
-                        sessions
-                      @else
-                        session
-                      @endif
-                    </p>
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Registration Price</strong>
-                    <p>${{ $course_registration->course->course_package->price }}</p>
-                    <hr>
-                    <h3 class="box-title"><b>Table Data</b></h3>
-                    {{--
+                </div>
+                <!-- /.col FOR WIDGET 1 -->
+                <div class="col-md-4">
+                  <div class="small-box bg-green">
+                    <div class="inner">
+                      <h3>
+                        <?php
+                          $present_attendances = 0;
+                          foreach($course_registration->session_registrations as $sr)
+                            if($sr->status == 'Present') $present_attendances++;
+                        ?>
+                        {{ $present_attendances }} / {{ $course_registration->session_registrations->count() }}
+                      </h3>
+                      <p>
+                        @if($course_registration->session_registrations->count() != 1)
+                          Attendances
+                        @else
+                          Attendance
+                        @endif
+                      </p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa fa-check-circle-o"></i>
+                    </div>
+                    <!--a href="#?" class="small-box-footer">
+                      More info <i class="fa fa-arrow-circle-right"></i>
+                    </a-->
+                  </div>
+                </div>
+                <!-- /.col FOR WIDGET 2 -->
+                <div class="col-md-4">
+                  <div class="small-box bg-blue">
+                    <div class="inner">
+                      <h3>
+                        <?php
+                          $arr_student = [];
+                          $arr = [];
+                          foreach($course_registration->session_registrations as $sr)
+                            foreach($sr->session_registration_forms as $srf)
+                              if(!in_array($srf->form_response->form_question->form->id, $arr_student))
+                                array_push($arr_student, $srf->form_response->form_question->form->id);
+                          foreach($course_registration->course->sessions as $s)
+                            if(!in_array($s->form->id, $arr))
+                              array_push($arr, $s->form->id);
+                        ?>
+                        {{ count($arr_student) }} / {{ count($arr) }}
+                      </h3>
+                      <p>
+                        @if(count($arr) != 1)
+                          Forms Filled
+                        @else
+                          Form Filled
+                        @endif
+                      </p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa fa-pencil"></i>
+                    </div>
+                    <!--a href="#?" class="small-box-footer">
+                      More info <i class="fa fa-arrow-circle-right"></i>
+                    </a-->
+                  </div>
+                </div>
+                <!-- /.col FOR WIDGET 3 -->
+                <div class="col-md-12">
+                  <div class="box box-primary">
                     <div class="box-header">
-                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New "Something"
-                      </a>
+                      <h3 class="box-title"><b>Overview</b></h3>
+                      {{--
+                      <div>
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add New User
+                        </a>
+                      </div>
+                      --}}
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      </div>
                     </div>
-                    --}}
                     <div class="box-body">
-                      <table class="table table-bordered">
-                        <tr>
-                          <th>Role</th>
-                          <th>Name</th>
-                          <th style="width:40px;">Profile</th>
-                        </tr>
-                        <tr>
-                          <td>Record 1</td>
-                          <td>Record 2</td>
-                          <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
-                        </tr>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-                <div class="box box-warning">
-                  <div class="box-header">
-                    <h3 class="box-title"><b>Edit Course Information</b></h3>
-                    {{--
-                    <div>
-                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New User
-                      </a>
-                    </div>
-                    --}}
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    </div>
-                  </div>
-                  <div class="box-body">
-                    <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
-                      @csrf
-                      @method('PUT')
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Material Type</strong>
+                      <p>
+                        <u>{{ $course_registration->course->course_package->material_type->name }}</u><br>
+                        {{ $course_registration->course->course_package->material_type->description }}
+                      </p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Course Type</strong>
+                      <p>
+                        <u>{{ $course_registration->course->course_package->course_type->name }}</u><br>
+                        {{ $course_registration->course->course_package->course_type->description }}
+                      </p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Course Proficiency Level</strong>
+                      <p>
+                        <u>{{ $course_registration->course->course_package->course_level->name }}</u><br>
+                        {{ $course_registration->course->course_package->course_level->description }}
+                      </p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Course Title</strong>
+                      <p>{{ $course_registration->course->title }}</p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Total Available Session(s)</strong>
+                      <p>
+                        {{ $course_registration->course->course_package->count_session }}
+                        @if($course_registration->course->course_package->count_session != 1)
+                          sessions
+                        @else
+                          session
+                        @endif
+                      </p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Registration Price</strong>
+                      <p>${{ $course_registration->course->course_package->price }}</p>
+                      <hr>
+                      <h3 class="box-title"><b>Table Data</b></h3>
+                      {{--
+                      <div class="box-header">
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add New "Something"
+                        </a>
+                      </div>
+                      --}}
                       <div class="box-body">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="col-md-12">
-                              <div class="form-group @error('title') has-error @enderror">
-                                <label for="title">Course Title</label>
-                                <input name="title" value="{{ $course_registration->course->title }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter Course Title">
-                                @error('title')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
+                        <table class="table table-bordered">
+                          <tr>
+                            <th>Role</th>
+                            <th>Name</th>
+                            <th style="width:40px;">Profile</th>
+                          </tr>
+                          <tr>
+                            <td>Record 1</td>
+                            <td>Record 2</td>
+                            <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="box box-warning">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>Edit Course Information</b></h3>
+                      {{--
+                      <div>
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add New User
+                        </a>
+                      </div>
+                      --}}
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      </div>
+                    </div>
+                    <div class="box-body">
+                      <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="box-body">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="col-md-12">
+                                <div class="form-group @error('title') has-error @enderror">
+                                  <label for="title">Course Title</label>
+                                  <input name="title" value="{{ $course_registration->course->title }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter Course Title">
+                                  @error('title')
+                                    <p style="color:red">{{ $message }}</p>
+                                  @enderror
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group @error('material_type_id') has-error @enderror">
+                                  <label for="material_type_id">Material Type</label>
+                                  <select name="material_type" type="text" class="@error('material_type') is-invalid @enderror form-control">
+                                    <option selected="selected" value="">-- Enter Material Type --</option>
+                                    @foreach($material_types as $mt)
+                                      @if(old('material_type_id') == $mt->name)
+                                        <option selected="selected" value="{{ $mt->name }}">{{ $mt->name }}</option>
+                                      @elseif($course_registration->course->course_package->material_type->name == $mt->name)
+                                        <option selected="selected" value="{{ $mt->name }}">{{ $mt->name }}</option>
+                                      @else
+                                        <option value="{{ $mt->name }}">{{ $mt->name }}</option>
+                                      @endif
+                                    @endforeach
+                                  </select>
+                                  @error('material_type_id')
+                                    <p style="color:red">{{ $message }}</p>
+                                  @enderror
+                                </div>
+                                <div class="form-group @error('course_type_id') has-error @enderror">
+                                  <label for="course_type_id">Course Type</label>
+                                  <select name="course_type" type="text" class="@error('course_type') is-invalid @enderror form-control">
+                                    <option selected="selected" value="">-- Enter Course Type --</option>
+                                    @foreach($course_types as $ct)
+                                      @if(old('course_type_id') == $ct->name)
+                                        <option selected="selected" value="{{ $ct->name }}">
+                                          @if($ct->count_student_min != $ct->count_student_max)
+                                            {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
+                                          @else
+                                            {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
+                                          @endif
+                                        </option>
+                                      @elseif($course_registration->course->course_package->course_type->name == $ct->name)
+                                        <option selected="selected" value="{{ $ct->name }}">
+                                          @if($ct->count_student_min != $ct->count_student_max)
+                                            {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
+                                          @else
+                                            {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
+                                          @endif
+                                        </option>
+                                      @else
+                                        <option value="{{ $ct->name }}">
+                                          @if($ct->count_student_min != $ct->count_student_max)
+                                            {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
+                                          @else
+                                            {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
+                                          @endif
+                                        </option>
+                                      @endif
+                                    @endforeach
+                                  </select>
+                                  @error('course_type_id')
+                                    <p style="color:red">{{ $message }}</p>
+                                  @enderror
+                                </div>
+                                <div class="form-group @error('course_level_id') has-error @enderror">
+                                  <label for="course_level_id">Proficiency Level</label>
+                                  <select name="course_level" type="text" class="@error('course_level') is-invalid @enderror form-control">
+                                    <option selected="selected" value="">-- Enter Proficiency Level --</option>
+                                    @foreach($course_levels as $cl)
+                                      @if(old('course_level_id') == $cl->name)
+                                        <option selected="selected" value="{{ $cl->name }}">{{ $cl->name }}</option>
+                                      @elseif($course_registration->course->course_package->course_level->name == $cl->name)
+                                        <option selected="selected" value="{{ $cl->name }}">{{ $cl->name }}</option>
+                                      @else
+                                        <option value="{{ $cl->name }}">{{ $cl->name }}</option>
+                                      @endif
+                                    @endforeach
+                                  </select>
+                                  @error('course_level_id')
+                                    <p style="color:red">{{ $message }}</p>
+                                  @enderror
+                                </div>
                               </div>
                             </div>
-                            <div class="col-md-12">
-                              <div class="form-group @error('material_type_id') has-error @enderror">
-                                <label for="material_type_id">Material Type</label>
-                                <select name="material_type" type="text" class="@error('material_type') is-invalid @enderror form-control">
-                                  <option selected="selected" value="">-- Enter Material Type --</option>
-                                  @foreach($material_types as $mt)
-                                    @if(old('material_type_id') == $mt->name)
-                                      <option selected="selected" value="{{ $mt->name }}">{{ $mt->name }}</option>
-                                    @elseif($course_registration->course->course_package->material_type->name == $mt->name)
-                                      <option selected="selected" value="{{ $mt->name }}">{{ $mt->name }}</option>
-                                    @else
-                                      <option value="{{ $mt->name }}">{{ $mt->name }}</option>
-                                    @endif
-                                  @endforeach
-                                </select>
-                                @error('material_type_id')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
+                            <div class="col-md-6">
+                              <div class="col-md-12">
+                                <div class="form-group @error('description') has-error @enderror">
+                                  <label for="description">Course Description</label>
+                                  @if($course_registration->course->description)
+                                    <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Description">{{ $course_registration->course->description }}</textarea>
+                                  @else
+                                    <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Description">{{ old('description') }}</textarea>
+                                  @endif
+                                  @error('description')
+                                    <p style="color:red">{{ $message }}</p>
+                                  @enderror
+                                </div>
                               </div>
-                              <div class="form-group @error('course_type_id') has-error @enderror">
-                                <label for="course_type_id">Course Type</label>
-                                <select name="course_type" type="text" class="@error('course_type') is-invalid @enderror form-control">
-                                  <option selected="selected" value="">-- Enter Course Type --</option>
-                                  @foreach($course_types as $ct)
-                                    @if(old('course_type_id') == $ct->name)
-                                      <option selected="selected" value="{{ $ct->name }}">
-                                        @if($ct->count_student_min != $ct->count_student_max)
-                                          {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
-                                        @else
-                                          {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
-                                        @endif
-                                      </option>
-                                    @elseif($course_registration->course->course_package->course_type->name == $ct->name)
-                                      <option selected="selected" value="{{ $ct->name }}">
-                                        @if($ct->count_student_min != $ct->count_student_max)
-                                          {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
-                                        @else
-                                          {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
-                                        @endif
-                                      </option>
-                                    @else
-                                      <option value="{{ $ct->name }}">
-                                        @if($ct->count_student_min != $ct->count_student_max)
-                                          {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
-                                        @else
-                                          {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
-                                        @endif
-                                      </option>
-                                    @endif
-                                  @endforeach
-                                </select>
-                                @error('course_type_id')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
-                              </div>
-                              <div class="form-group @error('course_level_id') has-error @enderror">
-                                <label for="course_level_id">Proficiency Level</label>
-                                <select name="course_level" type="text" class="@error('course_level') is-invalid @enderror form-control">
-                                  <option selected="selected" value="">-- Enter Proficiency Level --</option>
-                                  @foreach($course_levels as $cl)
-                                    @if(old('course_level_id') == $cl->name)
-                                      <option selected="selected" value="{{ $cl->name }}">{{ $cl->name }}</option>
-                                    @elseif($course_registration->course->course_package->course_level->name == $cl->name)
-                                      <option selected="selected" value="{{ $cl->name }}">{{ $cl->name }}</option>
-                                    @else
-                                      <option value="{{ $cl->name }}">{{ $cl->name }}</option>
-                                    @endif
-                                  @endforeach
-                                </select>
-                                @error('course_level_id')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="col-md-12">
-                              <div class="form-group @error('description') has-error @enderror">
-                                <label for="description">Course Description</label>
-                                @if($course_registration->course->description)
-                                  <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Description">{{ $course_registration->course->description }}</textarea>
-                                @else
-                                  <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Description">{{ old('description') }}</textarea>
-                                @endif
-                                @error('description')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group @error('requirement') has-error @enderror">
-                                <label for="requirement">Course Requirement</label>
-                                @if($course_registration->course->requirement)
-                                  <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Requirement">{{ $course_registration->course->requirement }}</textarea>
-                                @else
-                                  <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Requirement">{{ old('requirement') }}</textarea>
-                                @endif
-                                @error('requirement')
-                                  <p style="color:red">{{ $message }}</p>
-                                @enderror
+                              <div class="col-md-12">
+                                <div class="form-group @error('requirement') has-error @enderror">
+                                  <label for="requirement">Course Requirement</label>
+                                  @if($course_registration->course->requirement)
+                                    <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Requirement">{{ $course_registration->course->requirement }}</textarea>
+                                  @else
+                                    <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Requirement">{{ old('requirement') }}</textarea>
+                                  @endif
+                                  @error('requirement')
+                                    <p style="color:red">{{ $message }}</p>
+                                  @enderror
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="box-footer">
-                        <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
-                      </div>
-                    </form>
+                        <div class="box-footer">
+                          <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                        </div>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>

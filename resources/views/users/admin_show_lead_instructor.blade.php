@@ -76,178 +76,180 @@
                 </div>
                 <!-- /.box -->
               </div>
-              <div class="col-md-3">
-                <div class="small-box bg-yellow">
-                  <div class="inner">
-                    <h3>
-                      {{ $courses->count() }}
-                    </h3>
-                    <p>
-                      @if($courses->count() != 1)
-                        Registered
-                        <br>Courses
-                      @else
-                        Registered
-                        <br>Course
-                      @endif
-                    </p>
-                  </div>
-                  <div class="icon">
-                    <i class="fa fa-book"></i>
-                  </div>
-                  <!--a href="#?" class="small-box-footer">
-                    More info <i class="fa fa-arrow-circle-right"></i>
-                  </a-->
-                </div>
-              </div>
-              <!-- /.col FOR WIDGET 1 -->
-              <div class="col-md-3">
-                <div class="small-box bg-green">
-                  <div class="inner">
-                    <h3>
-                      <?php
-                        $arr_student = [];
-                        foreach($user->instructor->schedules as $schedule)
-                          foreach($schedule->session->session_registrations as $session_registration)
-                            if($session_registration->status == 'Present')
-                              if(!in_array($session_registration->course_registration->student_id, $arr_student))
-                                array_push($arr_student, $session_registration->course_registration->student_id);
-                      ?>
-                      {{ count($arr_student) }}
-                    </h3>
-                    <p>
-                      @if(count($arr_student) != 1)
-                        Present
-                        <br>Students
-                      @else
-                        Present
-                        <br>Student
-                      @endif
-                    </p>
-                  </div>
-                  <div class="icon">
-                    <i class="fa fa-check-square-o"></i>
-                  </div>
-                  <!--a href="#?" class="small-box-footer">
-                    More info <i class="fa fa-arrow-circle-right"></i>
-                  </a-->
-                </div>
-              </div>
-              <!-- /.col FOR WIDGET 2 -->
-              <div class="col-md-3">
-                <div class="small-box bg-blue">
-                  <div class="inner">
-                    <h3>
-                      <?php
-                        $arr_schedule = [];
-                        foreach($user->instructor->schedules as $schedule)
-                          if(now() < $schedule->schedule_time)
-                            if($schedule->status == 'Busy')
-                              if(!in_array($schedule->id, $arr_schedule))
-                                array_push($arr_schedule, $schedule->id);
-                      ?>
-                      {{ count($arr_schedule) }}
-                    </h3>
-                    <p>
-                      @if(count($arr_schedule) != 1)
-                        Upcoming
-                        <br>Schedules
-                      @else
-                        Upcoming
-                        <br>Schedule
-                      @endif
-                    </p>
-                  </div>
-                  <div class="icon">
-                    <i class="fa fa-calendar"></i>
-                  </div>
-                  <!--a href="#?" class="small-box-footer">
-                    More info <i class="fa fa-arrow-circle-right"></i>
-                  </a-->
-                </div>
-              </div>
-              <!-- /.col FOR WIDGET 3 -->
-              <div class="col-md-9">
-                <div class="box box-primary">
-                  <div class="box-header">
-                    <h3 class="box-title"><b>Overview</b></h3>
-                    {{--
-                    <div>
-                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New User
-                      </a>
-                    </div>
-                    --}}
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    </div>
-                  </div>
-                  <div class="box-body">
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Email</strong>
-                    <p>{{ $user->email }}</p>
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Nationality</strong>
-                    <p>{{ $user->citizenship }}</p>
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Where do you live now</strong>
-                    @if($user->domicile)
-                      <p>{{ $user->domicile }}</p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Current local time zone</strong>
-                    @if($user->timezone)
-                      <p>{{ $user->timezone }}</p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Current website language</strong>
-                    @if($user->website_language)
-                      <p>{{ $user->website_language }}</p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
-                    @if($user->instructor->interest)
-                      <?php
-                        $interest = explode(', ', $user->instructor->interest);
-                        sort($interest);
-                      ?>
+              <div class="col-md-9 no-padding">
+                <div class="col-md-4">
+                  <div class="small-box bg-yellow">
+                    <div class="inner">
+                      <h3>
+                        {{ $courses->count() }}
+                      </h3>
                       <p>
-                        @for($i = 0; $i < count($interest); $i = $i + 1)
-                          <span class="label label-success">{{ $interest[$i] }}</span>
-                        @endfor
+                        @if($courses->count() != 1)
+                          Registered
+                          <br>Courses
+                        @else
+                          Registered
+                          <br>Course
+                        @endif
                       </p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <h3 class="box-title"><b>Table Data</b></h3>
-                    {{--
-                    <div class="box-header">
-                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New "Something"
-                      </a>
                     </div>
-                    --}}
+                    <div class="icon">
+                      <i class="fa fa-book"></i>
+                    </div>
+                    <!--a href="#?" class="small-box-footer">
+                      More info <i class="fa fa-arrow-circle-right"></i>
+                    </a-->
+                  </div>
+                </div>
+                <!-- /.col FOR WIDGET 1 -->
+                <div class="col-md-4">
+                  <div class="small-box bg-green">
+                    <div class="inner">
+                      <h3>
+                        <?php
+                          $arr_student = [];
+                          foreach($user->instructor->schedules as $schedule)
+                            foreach($schedule->session->session_registrations as $session_registration)
+                              if($session_registration->status == 'Present')
+                                if(!in_array($session_registration->course_registration->student_id, $arr_student))
+                                  array_push($arr_student, $session_registration->course_registration->student_id);
+                        ?>
+                        {{ count($arr_student) }}
+                      </h3>
+                      <p>
+                        @if(count($arr_student) != 1)
+                          Present
+                          <br>Students
+                        @else
+                          Present
+                          <br>Student
+                        @endif
+                      </p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa fa-check-square-o"></i>
+                    </div>
+                    <!--a href="#?" class="small-box-footer">
+                      More info <i class="fa fa-arrow-circle-right"></i>
+                    </a-->
+                  </div>
+                </div>
+                <!-- /.col FOR WIDGET 2 -->
+                <div class="col-md-4">
+                  <div class="small-box bg-blue">
+                    <div class="inner">
+                      <h3>
+                        <?php
+                          $arr_schedule = [];
+                          foreach($user->instructor->schedules as $schedule)
+                            if(now() < $schedule->schedule_time)
+                              if($schedule->status == 'Busy')
+                                if(!in_array($schedule->id, $arr_schedule))
+                                  array_push($arr_schedule, $schedule->id);
+                        ?>
+                        {{ count($arr_schedule) }}
+                      </h3>
+                      <p>
+                        @if(count($arr_schedule) != 1)
+                          Upcoming
+                          <br>Schedules
+                        @else
+                          Upcoming
+                          <br>Schedule
+                        @endif
+                      </p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                    <!--a href="#?" class="small-box-footer">
+                      More info <i class="fa fa-arrow-circle-right"></i>
+                    </a-->
+                  </div>
+                </div>
+                <!-- /.col FOR WIDGET 3 -->
+                <div class="col-md-12">
+                  <div class="box box-primary">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>Overview</b></h3>
+                      {{--
+                      <div>
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add New User
+                        </a>
+                      </div>
+                      --}}
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      </div>
+                    </div>
                     <div class="box-body">
-                      <table class="table table-bordered">
-                        <tr>
-                          <th>Role</th>
-                          <th>Name</th>
-                          <th style="width:40px;">Profile</th>
-                        </tr>
-                        <tr>
-                          <td>{{ $user->roles }}</td>
-                          <td>{{ $user->first_name }} {{ $user->last_name }}</td>
-                          <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('users.show', [Str::slug($user->password.$user->first_name.'-'.$user->last_name)]) }}">Link</a></td>
-                        </tr>
-                      </table>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Email</strong>
+                      <p>{{ $user->email }}</p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Nationality</strong>
+                      <p>{{ $user->citizenship }}</p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Where do you live now</strong>
+                      @if($user->domicile)
+                        <p>{{ $user->domicile }}</p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Current local time zone</strong>
+                      @if($user->timezone)
+                        <p>{{ $user->timezone }}</p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Current website language</strong>
+                      @if($user->website_language)
+                        <p>{{ $user->website_language }}</p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
+                      @if($user->instructor->interest)
+                        <?php
+                          $interest = explode(', ', $user->instructor->interest);
+                          sort($interest);
+                        ?>
+                        <p>
+                          @for($i = 0; $i < count($interest); $i = $i + 1)
+                            <span class="label label-success">{{ $interest[$i] }}</span>
+                          @endfor
+                        </p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <h3 class="box-title"><b>Table Data</b></h3>
+                      {{--
+                      <div class="box-header">
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add New "Something"
+                        </a>
+                      </div>
+                      --}}
+                      <div class="box-body">
+                        <table class="table table-bordered">
+                          <tr>
+                            <th>Role</th>
+                            <th>Name</th>
+                            <th style="width:40px;">Profile</th>
+                          </tr>
+                          <tr>
+                            <td>{{ $user->roles }}</td>
+                            <td>{{ $user->first_name }} {{ $user->last_name }}</td>
+                            <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('users.show', [Str::slug($user->password.$user->first_name.'-'.$user->last_name)]) }}">Link</a></td>
+                          </tr>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>

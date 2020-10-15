@@ -76,242 +76,244 @@
                 </div>
                 <!-- /.box -->
               </div>
-              <div class="col-md-3">
-                <div class="small-box bg-yellow">
-                  <div class="inner">
-                    <h3>
-                      @if($user->student->course_registrations->toArray())
-                        {{ $user->student->course_registrations->count() }}
-                      @else
-                        0
-                      @endif
-                    </h3>
-                    <p>
-                      @if($user->student->course_registrations->count() != 1)
-                        Registered Courses
-                      @else
-                        Registered Course
-                      @endif
-                    </p>
-                  </div>
-                  <div class="icon">
-                    <i class="fa fa-book"></i>
-                  </div>
-                  <!--a href="#?" class="small-box-footer">
-                    More info <i class="fa fa-arrow-circle-right"></i>
-                  </a-->
-                </div>
-              </div>
-              <!-- /.col FOR WIDGET 1 -->
-              <div class="col-md-3">
-                <div class="small-box bg-green">
-                  <div class="inner">
-                    <h3>
-                      <?php
-                        $arr_present = [];
-                        $arr = [];
-                        foreach($user->student->course_registrations as $cr)
-                          foreach($cr->session_registrations as $sr) {
-                            // Menghitung jumlah sesi yang dihadiri.
-                            if($sr->status == 'Present')
-                              if(!in_array($sr->id, $arr_present))
-                                array_push($arr_present, $sr->id);
-                            // Menghitung jumlah sesi secara keseluruhan.
-                            if(!in_array($sr->id, $arr))
-                              array_push($arr, $sr->id);
-                          }
-                      ?>
-                      {{ count($arr_present) }} / {{ count($arr) }}
-                    </h3>
-                    <p>
-                      @if(count($arr) != 1)
-                        Attendances
-                      @else
-                        Attendance
-                      @endif
-                    </p>
-                  </div>
-                  <div class="icon">
-                    <i class="fa fa-check-circle-o"></i>
-                  </div>
-                  <!--a href="#?" class="small-box-footer">
-                    More info <i class="fa fa-arrow-circle-right"></i>
-                  </a-->
-                </div>
-              </div>
-              <!-- /.col FOR WIDGET 2 -->
-              <div class="col-md-3">
-                <div class="small-box bg-blue">
-                  <div class="inner">
-                    <h3>
-                      <?php
-                        $arr = [];
-                        foreach($user->student->course_registrations as $cr)
-                          foreach($cr->session_registrations as $sr)
-                            foreach($sr->session_registration_forms as $srf)
-                              if(!in_array($srf->form_response->form_question->form->id, $arr))
-                                array_push($arr, $srf->form_response->form_question->form->id);
-                      ?>
-                      {{ count($arr) }}
-                    </h3>
-                    <p>
-                      @if(count($arr) != 1)
-                        Forms Filled
-                      @else
-                        Form Filled
-                      @endif
-                    </p>
-                  </div>
-                  <div class="icon">
-                    <i class="fa fa-pencil"></i>
-                  </div>
-                  <!--a href="#?" class="small-box-footer">
-                    More info <i class="fa fa-arrow-circle-right"></i>
-                  </a-->
-                </div>
-              </div>
-              <!-- /.col FOR WIDGET 3 -->
-              <div class="col-md-9">
-                <div class="box box-primary">
-                  <div class="box-header">
-                    <h3 class="box-title"><b>Overview</b></h3>
-                    {{--
-                    <div>
-                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New User
-                      </a>
-                    </div>
-                    --}}
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    </div>
-                  </div>
-                  <div class="box-body">
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Email</strong>
-                    <p>{{ $user->email }}</p>
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Nationality</strong>
-                    <p>{{ $user->citizenship }}</p>
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Where do you live now</strong>
-                    @if($user->domicile)
-                      <p>{{ $user->domicile }}</p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Current local time zone</strong>
-                    @if($user->timezone)
-                      <p>{{ $user->timezone }}</p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Current website language</strong>
-                    @if($user->website_language)
-                      <p>{{ $user->website_language }}</p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Age</strong>
-                    @if($user->student->age != 0)
-                      <p>
-                        {{ $user->student->age }}
-                        @if($user->student->age != 1)
-                          years old
+              <div class="col-md-9 no-padding">
+                <div class="col-md-4">
+                  <div class="small-box bg-yellow">
+                    <div class="inner">
+                      <h3>
+                        @if($user->student->course_registrations->toArray())
+                          {{ $user->student->course_registrations->count() }}
                         @else
-                          year old
+                          0
+                        @endif
+                      </h3>
+                      <p>
+                        @if($user->student->course_registrations->count() != 1)
+                          Registered Courses
+                        @else
+                          Registered Course
                         @endif
                       </p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Job Status</strong>
-                    @if($user->student->status_description)
-                      <p>{{ $user->student->status_job }} at {{ $user->student->status_description }}</p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesia Language Proficiency</strong>
-                    @if($user->student->age != 0)
-                      <p>{{ $user->student->indonesian_language_proficiency }}</p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Target Language Experience</strong>
-                    @if($user->student->age != 0)
-                      @if($user->student->target_language_experience != 'Others')
-                        <p>{{ $user->student->target_language_experience }}</p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa fa-book"></i>
+                    </div>
+                    <!--a href="#?" class="small-box-footer">
+                      More info <i class="fa fa-arrow-circle-right"></i>
+                    </a-->
+                  </div>
+                </div>
+                <!-- /.col FOR WIDGET 1 -->
+                <div class="col-md-4">
+                  <div class="small-box bg-green">
+                    <div class="inner">
+                      <h3>
+                        <?php
+                          $arr_present = [];
+                          $arr = [];
+                          foreach($user->student->course_registrations as $cr)
+                            foreach($cr->session_registrations as $sr) {
+                              // Menghitung jumlah sesi yang dihadiri.
+                              if($sr->status == 'Present')
+                                if(!in_array($sr->id, $arr_present))
+                                  array_push($arr_present, $sr->id);
+                              // Menghitung jumlah sesi secara keseluruhan.
+                              if(!in_array($sr->id, $arr))
+                                array_push($arr, $sr->id);
+                            }
+                        ?>
+                        {{ count($arr_present) }} / {{ count($arr) }}
+                      </h3>
+                      <p>
+                        @if(count($arr) != 1)
+                          Attendances
+                        @else
+                          Attendance
+                        @endif
+                      </p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa fa-check-circle-o"></i>
+                    </div>
+                    <!--a href="#?" class="small-box-footer">
+                      More info <i class="fa fa-arrow-circle-right"></i>
+                    </a-->
+                  </div>
+                </div>
+                <!-- /.col FOR WIDGET 2 -->
+                <div class="col-md-4">
+                  <div class="small-box bg-blue">
+                    <div class="inner">
+                      <h3>
+                        <?php
+                          $arr = [];
+                          foreach($user->student->course_registrations as $cr)
+                            foreach($cr->session_registrations as $sr)
+                              foreach($sr->session_registration_forms as $srf)
+                                if(!in_array($srf->form_response->form_question->form->id, $arr))
+                                  array_push($arr, $srf->form_response->form_question->form->id);
+                        ?>
+                        {{ count($arr) }}
+                      </h3>
+                      <p>
+                        @if(count($arr) != 1)
+                          Forms Filled
+                        @else
+                          Form Filled
+                        @endif
+                      </p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa fa-pencil"></i>
+                    </div>
+                    <!--a href="#?" class="small-box-footer">
+                      More info <i class="fa fa-arrow-circle-right"></i>
+                    </a-->
+                  </div>
+                </div>
+                <!-- /.col FOR WIDGET 3 -->
+                <div class="col-md-12">
+                  <div class="box box-primary">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>Overview</b></h3>
+                      {{--
+                      <div>
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add New User
+                        </a>
+                      </div>
+                      --}}
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      </div>
+                    </div>
+                    <div class="box-body">
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Email</strong>
+                      <p>{{ $user->email }}</p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Nationality</strong>
+                      <p>{{ $user->citizenship }}</p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Where do you live now</strong>
+                      @if($user->domicile)
+                        <p>{{ $user->domicile }}</p>
                       @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Current local time zone</strong>
+                      @if($user->timezone)
+                        <p>{{ $user->timezone }}</p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Current website language</strong>
+                      @if($user->website_language)
+                        <p>{{ $user->website_language }}</p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Age</strong>
+                      @if($user->student->age != 0)
                         <p>
-                          {{ $user->student->target_language_experience_value }}
-                          @if($user->student->target_language_experience_value != 1)
-                            years
+                          {{ $user->student->age }}
+                          @if($user->student->age != 1)
+                            years old
                           @else
-                            year
+                            year old
                           @endif
                         </p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
                       @endif
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Description of Course Taken</strong>
-                    @if($user->student->description_of_course_taken)
-                      <p>{{ $user->student->description_of_course_taken }}</p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Learning Objective</strong>
-                    @if($user->student->learning_objective)
-                      <p>{{ $user->student->learning_objective }}</p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
-                    @if($user->student->interest)
-                      <?php
-                        $interest = explode(', ', $user->student->interest);
-                        sort($interest);
-                      ?>
-                      <p>
-                        @for($i = 0; $i < count($interest); $i = $i + 1)
-                          <span class="label label-success">{{ $interest[$i] }}</span>
-                        @endfor
-                      </p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <h3 class="box-title"><b>Table Data</b></h3>
-                    {{--
-                    <div class="box-header">
-                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New "Something"
-                      </a>
-                    </div>
-                    --}}
-                    <div class="box-body">
-                      <table class="table table-bordered">
-                        <tr>
-                          <th>Role</th>
-                          <th>Name</th>
-                          <th style="width:40px;">Profile</th>
-                        </tr>
-                        <tr>
-                          <td>{{ $user->roles }}</td>
-                          <td>{{ $user->first_name }} {{ $user->last_name }}</td>
-                          <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('users.show', [Str::slug($user->password.$user->first_name.'-'.$user->last_name)]) }}">Link</a></td>
-                        </tr>
-                      </table>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Job Status</strong>
+                      @if($user->student->status_description)
+                        <p>{{ $user->student->status_job }} at {{ $user->student->status_description }}</p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesia Language Proficiency</strong>
+                      @if($user->student->age != 0)
+                        <p>{{ $user->student->indonesian_language_proficiency }}</p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Target Language Experience</strong>
+                      @if($user->student->age != 0)
+                        @if($user->student->target_language_experience != 'Others')
+                          <p>{{ $user->student->target_language_experience }}</p>
+                        @else
+                          <p>
+                            {{ $user->student->target_language_experience_value }}
+                            @if($user->student->target_language_experience_value != 1)
+                              years
+                            @else
+                              year
+                            @endif
+                          </p>
+                        @endif
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Description of Course Taken</strong>
+                      @if($user->student->description_of_course_taken)
+                        <p>{{ $user->student->description_of_course_taken }}</p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Learning Objective</strong>
+                      @if($user->student->learning_objective)
+                        <p>{{ $user->student->learning_objective }}</p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
+                      @if($user->student->interest)
+                        <?php
+                          $interest = explode(', ', $user->student->interest);
+                          sort($interest);
+                        ?>
+                        <p>
+                          @for($i = 0; $i < count($interest); $i = $i + 1)
+                            <span class="label label-success">{{ $interest[$i] }}</span>
+                          @endfor
+                        </p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <h3 class="box-title"><b>Table Data</b></h3>
+                      {{--
+                      <div class="box-header">
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add New "Something"
+                        </a>
+                      </div>
+                      --}}
+                      <div class="box-body">
+                        <table class="table table-bordered">
+                          <tr>
+                            <th>Role</th>
+                            <th>Name</th>
+                            <th style="width:40px;">Profile</th>
+                          </tr>
+                          <tr>
+                            <td>{{ $user->roles }}</td>
+                            <td>{{ $user->first_name }} {{ $user->last_name }}</td>
+                            <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('users.show', [Str::slug($user->password.$user->first_name.'-'.$user->last_name)]) }}">Link</a></td>
+                          </tr>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -42,100 +42,99 @@
                   </form>
                 </div>
               </div>
-              <div class="col-md-3">
-                <!-- Lead Instructors -->
-                <div class="small-box bg-yellow">
-                  <div class="inner">
-                    <h3>{{ $lead_instructors->count() }}</h3>
-                    <p>
-                      @if($lead_instructors->count() != 1)
-                        Lead Instructors
-                      @else
-                        Lead Instructor
-                      @endif
-                    </p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-person-add"></i>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <!-- Instructor -->
-                <div class="small-box bg-green">
-                  <div class="inner">
-                    <h3>{{ $instructors->count() }}</h3>
-                    <p>
-                      @if($instructors->count() != 1)
-                        Instructors
-                      @else
-                        Instructor
-                      @endif
-                    </p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-person-add"></i>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <!-- Student -->
-                <div class="small-box bg-blue">
-                  <div class="inner">
-                    <h3>{{ $students->count() }}</h3>
-                    <p>
-                      @if($students->count() != 1)
-                        Students
-                      @else
-                        Student
-                      @endif
-                    </p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-person-add"></i>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                &nbsp;
-              </div>
-              <div class="col-md-9">
-                <div class="box box-primary">
-                  <div class="box-header">
-                    <h3 class="box-title"><b>All Users</b></h3>
-                    {{--
-                    <div>
-                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New User
-                      </a>
+              <div class="col-md-9 no-padding">
+                <div class="col-md-4">
+                  <!-- Lead Instructors -->
+                  <div class="small-box bg-yellow">
+                    <div class="inner">
+                      <h3>{{ $lead_instructors->count() }}</h3>
+                      <p>
+                        @if($lead_instructors->count() != 1)
+                          Lead Instructors
+                        @else
+                          Lead Instructor
+                        @endif
+                      </p>
                     </div>
-                    --}}
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <div class="icon">
+                      <i class="ion ion-person-add"></i>
                     </div>
                   </div>
-                  <div class="box-body">
-                    @if($users->toArray())
-                      <table class="table table-bordered">
-                        <tr>
-                          <th class="text-right" style="width:40px;">#</th>
-                          <th>Role</th>
-                          <th>Name</th>
-                          <th style="width:40px;">Profile</th>
-                        </tr>
-                        @foreach($users as $i => $dt)
+                </div>
+                <div class="col-md-4">
+                  <!-- Instructor -->
+                  <div class="small-box bg-green">
+                    <div class="inner">
+                      <h3>{{ $instructors->count() }}</h3>
+                      <p>
+                        @if($instructors->count() != 1)
+                          Instructors
+                        @else
+                          Instructor
+                        @endif
+                      </p>
+                    </div>
+                    <div class="icon">
+                      <i class="ion ion-person-add"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <!-- Student -->
+                  <div class="small-box bg-blue">
+                    <div class="inner">
+                      <h3>{{ $students->count() }}</h3>
+                      <p>
+                        @if($students->count() != 1)
+                          Students
+                        @else
+                          Student
+                        @endif
+                      </p>
+                    </div>
+                    <div class="icon">
+                      <i class="ion ion-person-add"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="box box-primary">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>All Users</b></h3>
+                      {{--
+                      <div>
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add New User
+                        </a>
+                      </div>
+                      --}}
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      </div>
+                    </div>
+                    <div class="box-body">
+                      @if($users->toArray())
+                        <table class="table table-bordered">
                           <tr>
-                            <td class="text-right">{{ $i + 1 }}</td>
-                            <td>{{ $dt->roles }}</td>
-                            <td>{{ $dt->first_name }} {{ $dt->last_name }}</td>
-                            <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('users.show', [Str::slug($dt->password.$dt->first_name.'-'.$dt->last_name)]) }}">Link</a></td>
+                            <th class="text-right" style="width:40px;">#</th>
+                            <th>Role</th>
+                            <th>Name</th>
+                            <th style="width:40px;">Profile</th>
                           </tr>
-                        @endforeach
-                      </table>
-                    @else
-                      <div class="text-center">No data available.</div>
-                    @endif
+                          @foreach($users as $i => $dt)
+                            <tr>
+                              <td class="text-right">{{ $i + 1 }}</td>
+                              <td>{{ $dt->roles }}</td>
+                              <td>{{ $dt->first_name }} {{ $dt->last_name }}</td>
+                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('users.show', [Str::slug($dt->password.$dt->first_name.'-'.$dt->last_name)]) }}">Link</a></td>
+                            </tr>
+                          @endforeach
+                        </table>
+                      @else
+                        <div class="text-center">No data available.</div>
+                      @endif
+                    </div>
                   </div>
                 </div>
               </div>
