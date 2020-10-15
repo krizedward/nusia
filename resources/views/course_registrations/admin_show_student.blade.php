@@ -361,9 +361,9 @@
                                 @enderror
                               </div>
                               <div class="form-group @error('course_level_id') has-error @enderror">
-                                <label for="course_level_id">Course Proficiency Level</label>
+                                <label for="course_level_id">Proficiency Level</label>
                                 <select name="course_level" type="text" class="@error('course_level') is-invalid @enderror form-control">
-                                  <option selected="selected" value="">-- Enter Course Proficiency Level --</option>
+                                  <option selected="selected" value="">-- Enter Proficiency Level --</option>
                                   @foreach($course_levels as $cl)
                                     @if(old('course_level_id') == $cl->name)
                                       <option selected="selected" value="{{ $cl->name }}">{{ $cl->name }}</option>
@@ -686,9 +686,9 @@
                                 @enderror
                               </div>
                               <div class="form-group @error('course_level_id') has-error @enderror">
-                                <label for="course_level_id">Course Proficiency Level</label>
+                                <label for="course_level_id">Proficiency Level</label>
                                 <select name="course_level" type="text" class="@error('course_level') is-invalid @enderror form-control">
-                                  <option selected="selected" value="">-- Enter Course Proficiency Level --</option>
+                                  <option selected="selected" value="">-- Enter Proficiency Level --</option>
                                   @foreach($course_levels as $cl)
                                     @if(old('course_level_id') == $cl->name)
                                       <option selected="selected" value="{{ $cl->name }}">{{ $cl->name }}</option>
@@ -1204,8 +1204,8 @@
                                 </div>
                                 <div class="col-md-12">
                                   <div class="form-group @error('name') has-error @enderror">
-                                    <label for="name">Change Material Name (optional)</label>
-                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Material Name (optional)">
+                                    <label for="name">Change Name (optional)</label>
+                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Name (optional)">
                                     @error('name')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -1310,8 +1310,8 @@
                                   </div>
                                   <div class="col-md-12">
                                     <div class="form-group @error('name') has-error @enderror">
-                                      <label for="name">Change Material Name (optional)</label>
-                                      <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Material Name (optional)">
+                                      <label for="name">Change Name (optional)</label>
+                                      <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Name (optional)">
                                       @error('name')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror

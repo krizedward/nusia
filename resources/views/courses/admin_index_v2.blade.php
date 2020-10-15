@@ -169,8 +169,8 @@
                               <div class="col-md-6">
                                 <div class="col-md-12">
                                   <div class="form-group @error('name') has-error @enderror">
-                                    <label for="name">Change Material Type Name (optional)</label>
-                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Material Type Name (optional)">
+                                    <label for="name">Change Name (optional)</label>
+                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Name (optional)">
                                     @error('name')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -178,8 +178,8 @@
                                 </div>
                                 <div class="col-md-12">
                                   <div class="form-group @error('description') has-error @enderror">
-                                    <label for="description">Change Material Type Description (optional)</label>
-                                    <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Material Type Description (optional)">
+                                    <label for="description">Change Description (optional)</label>
+                                    <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Description (optional)">
                                     @error('description')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -271,8 +271,8 @@
                               <div class="col-md-6">
                                 <div class="col-md-12">
                                   <div class="form-group @error('name') has-error @enderror">
-                                    <label for="name">Change Course Type Name (optional)</label>
-                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Course Type Name (optional)">
+                                    <label for="name">Change Name (optional)</label>
+                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Name (optional)">
                                     @error('name')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -280,8 +280,8 @@
                                 </div>
                                 <div class="col-md-12">
                                   <div class="form-group @error('description') has-error @enderror">
-                                    <label for="description">Change Course Type Description (optional)</label>
-                                    <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Course Type Description (optional)">
+                                    <label for="description">Change Description (optional)</label>
+                                    <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Description (optional)">
                                     @error('description')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -389,8 +389,8 @@
                               <div class="col-md-6">
                                 <div class="col-md-12">
                                   <div class="form-group @error('name') has-error @enderror">
-                                    <label for="name">Change Proficiency Level Name (optional)</label>
-                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Proficiency Level Name (optional)">
+                                    <label for="name">Change Name (optional)</label>
+                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Name (optional)">
                                     @error('name')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -398,8 +398,8 @@
                                 </div>
                                 <div class="col-md-12">
                                   <div class="form-group @error('description') has-error @enderror">
-                                    <label for="description">Change Proficiency Level Description (optional)</label>
-                                    <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Proficiency Level Description (optional)">
+                                    <label for="description">Change Description (optional)</label>
+                                    <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Description (optional)">
                                     @error('description')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -604,8 +604,8 @@
                               <div class="col-md-6">
                                 <div class="col-md-12">
                                   <div class="form-group @error('title') has-error @enderror">
-                                    <label for="title">Change Course Package Title (optional)</label>
-                                    <input name="title" value="{{ old('title') }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter New Course Package Title (optional)">
+                                    <label for="title">Change Title (optional)</label>
+                                    <input name="title" value="{{ old('title') }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter New Title (optional)">
                                     @error('title')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -613,8 +613,8 @@
                                 </div>
                                 <div class="col-md-12">
                                   <div class="form-group @error('description') has-error @enderror">
-                                    <label for="description">Change Course Package Description (optional)</label>
-                                    <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Course Package Description (optional)">
+                                    <label for="description">Change Description (optional)</label>
+                                    <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Description (optional)">
                                     @error('description')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -622,8 +622,8 @@
                                 </div>
                                 <div class="col-md-12">
                                   <div class="form-group @error('requirement') has-error @enderror">
-                                    <label for="requirement">Change Course Package Requirement (optional)</label>
-                                    <input name="requirement" value="{{ old('requirement') }}" type="text" class="@error('requirement') is-invalid @enderror form-control" placeholder="Enter New Course Package Requirement (optional)">
+                                    <label for="requirement">Change Requirement (optional)</label>
+                                    <input name="requirement" value="{{ old('requirement') }}" type="text" class="@error('requirement') is-invalid @enderror form-control" placeholder="Enter New Requirement (optional)">
                                     @error('requirement')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -631,8 +631,8 @@
                                 </div>
                                 <div class="col-md-12">
                                   <div class="form-group @error('count_session') has-error @enderror">
-                                    <label for="count_session">Change Course Package Number of Session(s) (optional)</label>
-                                    <input name="count_session" value="{{ old('count_session') }}" type="text" class="@error('count_session') is-invalid @enderror form-control" placeholder="Enter New Course Package Number of Session(s) (optional)">
+                                    <label for="count_session">Change Number of Session(s) (optional)</label>
+                                    <input name="count_session" value="{{ old('count_session') }}" type="text" class="@error('count_session') is-invalid @enderror form-control" placeholder="Enter New Number of Session(s) (optional)">
                                     @error('count_session')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -640,8 +640,8 @@
                                 </div>
                                 <div class="col-md-12">
                                   <div class="form-group @error('price') has-error @enderror">
-                                    <label for="price">Change Course Package Price in USD$ (optional)</label>
-                                    <input name="price" value="{{ old('price') }}" type="text" class="@error('price') is-invalid @enderror form-control" placeholder="Enter New Course Package Price in USD$ (optional)">
+                                    <label for="price">Change Price in USD$ (optional)</label>
+                                    <input name="price" value="{{ old('price') }}" type="text" class="@error('price') is-invalid @enderror form-control" placeholder="Enter New Price in USD$ (optional)">
                                     @error('price')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
