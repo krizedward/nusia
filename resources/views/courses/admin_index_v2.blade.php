@@ -220,6 +220,7 @@
                           <th class="text-right" style="width:40px;">#</th>
                           <th>Name</th>
                           <th>Description</th>
+                          <th>Student Quota</th>
                           <!--th style="width:40px;">Detail</th-->
                         </tr>
                         @foreach($course_type as $i => $dt)
@@ -227,6 +228,13 @@
                             <td class="text-right">{{ $i + 1 }}</td>
                             <td>{{ $dt->name }}</td>
                             <td>{{ $dt->description }}</td>
+                            <td class="text-right">
+                              @if($dt->count_student_min != $dt->count_student_max)
+                                {{ $dt->count_student_min }}-{{ $dt->count_student_max }}
+                              @else
+                                {{ $dt->count_student_min }}
+                              @endif
+                            </td>
                             <!--td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td-->
                           </tr>
                         @endforeach
@@ -279,6 +287,24 @@
                                     @enderror
                                   </div>
                                 </div>
+                                <div class="col-md-12">
+                                  <div class="form-group @error('count_student_min') has-error @enderror">
+                                    <label for="count_student_min">Change Student Minimum Quota (optional)</label>
+                                    <input name="count_student_min" value="{{ old('count_student_min') }}" type="text" class="@error('count_student_min') is-invalid @enderror form-control" placeholder="Enter New Student Minimum Quota (optional)">
+                                    @error('count_student_min')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group @error('count_student_max') has-error @enderror">
+                                    <label for="count_student_max">Change Student Maximum Quota (optional)</label>
+                                    <input name="count_student_max" value="{{ old('count_student_max') }}" type="text" class="@error('count_student_max') is-invalid @enderror form-control" placeholder="Enter New Student Maximum Quota (optional)">
+                                    @error('count_student_max')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -314,6 +340,9 @@
                           <th class="text-right" style="width:40px;">#</th>
                           <th>Name</th>
                           <th>Description</th>
+                          <th style="width:90px;">Assignment Passing Score</th>
+                          <th style="width:90px;">Mid-Exam Passing Score</th>
+                          <th style="width:90px;">Final-Exam Passing Score</th>
                           <!--th style="width:40px;">Detail</th-->
                         </tr>
                         @foreach($course_level as $i => $dt)
@@ -321,6 +350,9 @@
                             <td class="text-right">{{ $i + 1 }}</td>
                             <td>{{ $dt->name }}</td>
                             <td>{{ $dt->description }}</td>
+                            <td>{{ $dt->assignment_score_min }}</td>
+                            <td>{{ $dt->mid_exam_score_min }}</td>
+                            <td>{{ $dt->final_exam_score_min }}</td>
                             <!--td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td-->
                           </tr>
                         @endforeach
@@ -369,6 +401,248 @@
                                     <label for="description">Change Proficiency Level Description (optional)</label>
                                     <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Proficiency Level Description (optional)">
                                     @error('description')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group @error('assignment_score_min') has-error @enderror">
+                                    <label for="assignment_score_min">Change Assignment Passing Score (optional)</label>
+                                    <input name="assignment_score_min" value="{{ old('assignment_score_min') }}" type="text" class="@error('assignment_score_min') is-invalid @enderror form-control" placeholder="Enter New Assignment Passing Score (optional)">
+                                    @error('assignment_score_min')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group @error('mid_exam_score_min') has-error @enderror">
+                                    <label for="mid_exam_score_min">Change Mid-Exam Passing Score (optional)</label>
+                                    <input name="mid_exam_score_min" value="{{ old('mid_exam_score_min') }}" type="text" class="@error('mid_exam_score_min') is-invalid @enderror form-control" placeholder="Enter New Mid-Exam Passing Score (optional)">
+                                    @error('mid_exam_score_min')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group @error('final_exam_score_min') has-error @enderror">
+                                    <label for="final_exam_score_min">Change Final-Exam Passing Score (optional)</label>
+                                    <input name="final_exam_score_min" value="{{ old('final_exam_score_min') }}" type="text" class="@error('final_exam_score_min') is-invalid @enderror form-control" placeholder="Enter New Final-Exam Passing Score (optional)">
+                                    @error('final_exam_score_min')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="box-footer">
+                            <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                          </div>
+                        </form>
+                      </div>
+                    @else
+                      <div class="text-center">No data available.</div>
+                    @endif
+                  </div>
+                </div>
+                <div class="box box-warning">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>List of Course Package(s)</b></h3>
+                    {{--
+                    <div>
+                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                        Add New "Something"
+                      </a>
+                    </div>
+                    --}}
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    @if($course_package->toArray())
+                      <table class="table table-bordered">
+                        <tr>
+                          <th class="text-right" style="width:40px;">#</th>
+                          <th>Title</th>
+                          <th>Material Type</th>
+                          <th>Course Type</th>
+                          <th>Proficiency Level</th>
+                          <!--th style="width:40px;">Detail</th-->
+                        </tr>
+                        @foreach($course_package as $i => $dt)
+                          <tr>
+                            <td class="text-right">{{ $i + 1 }}</td>
+                            <td>{{ $dt->title }}</td>
+                            <td>{{ $dt->material_type->name }}</td>
+                            <td>{{ $dt->course_type->name }}</td>
+                            <td>{{ $dt->course_level->name }}</td>
+                            <!--td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td-->
+                          </tr>
+                        @endforeach
+                      </table>
+                      <div class="col-md-12">
+                        &nbsp;
+                      </div>
+                      <table class="table table-bordered">
+                        <tr>
+                          <th class="text-right" style="width:40px;">#</th>
+                          <th>Title</th>
+                          <th>Description</th>
+                          <th>Requirement</th>
+                          <!--th style="width:40px;">Detail</th-->
+                        </tr>
+                        @foreach($course_package as $i => $dt)
+                          <tr>
+                            <td class="text-right">{{ $i + 1 }}</td>
+                            <td>{{ $dt->title }}</td>
+                            <td>{{ $dt->description }}</td>
+                            <td>{{ $dt->requirement }}</td>
+                            <!--td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td-->
+                          </tr>
+                        @endforeach
+                      </table>
+                      <div class="col-md-12">
+                        &nbsp;
+                      </div>
+                      <table class="table table-bordered">
+                        <tr>
+                          <th class="text-right" style="width:40px;">#</th>
+                          <th>Title</th>
+                          <th>Number of Session(s)</th>
+                          <th>Course Price (USD$)</th>
+                          <!--th style="width:40px;">Detail</th-->
+                        </tr>
+                        @foreach($course_package as $i => $dt)
+                          <tr>
+                            <td class="text-right">{{ $i + 1 }}</td>
+                            <td>{{ $dt->title }}</td>
+                            <td class="text-right">{{ $dt->count_session }}</td>
+                            <td class="text-right">{{ $dt->price }}</td>
+                            <!--td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td-->
+                          </tr>
+                        @endforeach
+                      </table>
+                      <div class="box-header">
+                        <h4>Edit Course Package Information</h4>
+                      </div>
+                      <div class="box-body">
+                        <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                          @csrf
+                          @method('PUT')
+                          <div class="box-body">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="col-md-12">
+                                  <div class="form-group @error('id') has-error @enderror">
+                                    <label for="id">Course Package Number</label>
+                                    <select name="id" type="text" class="@error('id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Course Package Number --</option>
+                                      @foreach($course_package as $i => $cp)
+                                        @if(old('id') == Str::slug($cp->updated_at.$cp->title.$cp->created_at))
+                                          <option selected="selected" value="{{ Str::slug($cp->updated_at.$cp->title.$cp->created_at) }}">#{{ $i + 1 }} - {{ $cp->title }}</option>
+                                        @else
+                                          <option value="{{ Str::slug($cp->updated_at.$cp->title.$cp->created_at) }}">#{{ $i + 1 }} - {{ $cp->title }}</option>
+                                        @endif
+                                      @endforeach
+                                    </select>
+                                    @error('id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('material_type_id') has-error @enderror">
+                                    <label for="material_type_id">Change Material Type (optional)</label>
+                                    <select name="material_type_id" type="text" class="@error('material_type_id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter New Material Type (optional) --</option>
+                                      @foreach($material_type as $i => $mt)
+                                        @if(old('material_type_id') == Str::slug($mt->updated_at.$mt->name.$mt->created_at))
+                                          <option selected="selected" value="{{ Str::slug($mt->updated_at.$mt->name.$mt->created_at) }}">#{{ $i + 1 }} - {{ $mt->name }}</option>
+                                        @else
+                                          <option value="{{ Str::slug($mt->updated_at.$mt->name.$mt->created_at) }}">#{{ $i + 1 }} - {{ $mt->name }}</option>
+                                        @endif
+                                      @endforeach
+                                    </select>
+                                    @error('material_type_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('course_type_id') has-error @enderror">
+                                    <label for="course_type_id">Change Course Type (optional)</label>
+                                    <select name="course_type_id" type="text" class="@error('course_type_id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter New Course Type (optional) --</option>
+                                      @foreach($course_type as $i => $ct)
+                                        @if(old('course_type_id') == Str::slug($ct->updated_at.$ct->name.$ct->created_at))
+                                          <option selected="selected" value="{{ Str::slug($ct->updated_at.$ct->name.$ct->created_at) }}">#{{ $i + 1 }} - {{ $ct->name }}</option>
+                                        @else
+                                          <option value="{{ Str::slug($ct->updated_at.$ct->name.$ct->created_at) }}">#{{ $i + 1 }} - {{ $ct->name }}</option>
+                                        @endif
+                                      @endforeach
+                                    </select>
+                                    @error('course_type_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('course_level_id') has-error @enderror">
+                                    <label for="course_level_id">Change Proficiency Level (optional)</label>
+                                    <select name="course_level_id" type="text" class="@error('course_level_id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter New Proficiency Level (optional) --</option>
+                                      @foreach($course_level as $i => $cl)
+                                        @if(old('course_level_id') == Str::slug($cl->created_at.$cl->name.$cl->updated_at))
+                                          <option selected="selected" value="{{ Str::slug($cl->created_at.$cl->name.$cl->updated_at) }}">#{{ $i + 1 }} - {{ $cl->name }}</option>
+                                        @else
+                                          <option value="{{ Str::slug($cl->created_at.$cl->name.$cl->updated_at) }}">#{{ $i + 1 }} - {{ $cl->name }}</option>
+                                        @endif
+                                      @endforeach
+                                    </select>
+                                    @error('course_level_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="col-md-12">
+                                  <div class="form-group @error('title') has-error @enderror">
+                                    <label for="title">Change Course Package Title (optional)</label>
+                                    <input name="title" value="{{ old('title') }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter New Course Package Title (optional)">
+                                    @error('title')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group @error('description') has-error @enderror">
+                                    <label for="description">Change Course Package Description (optional)</label>
+                                    <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Course Package Description (optional)">
+                                    @error('description')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group @error('requirement') has-error @enderror">
+                                    <label for="requirement">Change Course Package Requirement (optional)</label>
+                                    <input name="requirement" value="{{ old('requirement') }}" type="text" class="@error('requirement') is-invalid @enderror form-control" placeholder="Enter New Course Package Requirement (optional)">
+                                    @error('requirement')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group @error('count_session') has-error @enderror">
+                                    <label for="count_session">Change Course Package Number of Session(s) (optional)</label>
+                                    <input name="count_session" value="{{ old('count_session') }}" type="text" class="@error('count_session') is-invalid @enderror form-control" placeholder="Enter New Course Package Number of Session(s) (optional)">
+                                    @error('count_session')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group @error('price') has-error @enderror">
+                                    <label for="price">Change Course Package Price in USD$ (optional)</label>
+                                    <input name="price" value="{{ old('price') }}" type="text" class="@error('price') is-invalid @enderror form-control" placeholder="Enter New Course Package Price in USD$ (optional)">
+                                    @error('price')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
                                   </div>
