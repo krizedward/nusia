@@ -33,6 +33,7 @@
                         <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
                         <dd>This is the section description.</dd>
                       </dl>
+                      <a href="{{ route('users.create') }}" class="btn bg-maroon btn-flat margin">Create User Form</a>
                       <!--hr>
                       <dl>
                         <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>

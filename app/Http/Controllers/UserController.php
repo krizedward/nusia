@@ -90,7 +90,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.index');
+        //return view('users.index');
+        //return "Hello World";
+        if ($this->is_admin()) {
+            return view('users.admin_create');
+        }
     }
 
     /**
@@ -191,7 +195,7 @@ class UserController extends Controller
         }
 
         return view('users.'.Str::slug(Auth::user()->roles, '_').'_show_'.Str::slug($user->roles, '_'), compact(
-            'user', 'interests', 'timezones', 'placement_tests', 'courses',
+            'user', 'interests', 'timezones', 'placement_tests', 'courses'
         ));
     }
 
