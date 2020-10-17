@@ -37,13 +37,234 @@
                         <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
                         <dd>This is the section description.</dd>
                       </dl>
-                      <!--hr>
-                      <dl>
-                        <dt><i class="fa fa-file-text-o margin-r-5"></i> Description</dt>
-                        <dd>This is the section description.</dd>
-                      </dl-->
+                      <!--hr-->
                     </div>
                   </form>
+                </div>
+                <div class="box box-primary collapsed-box">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>Add Material Type</b></h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    <dl>
+                      <dt><i class="fa fa-pencil-square-o margin-r-5"></i> Form</dt>
+                      <dd>
+                        <div class="box-body">
+                          <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="box-body">
+                              <div class="row">
+                                <div class="col-md-12 no-padding">
+                                  <div class="form-group @error('name') has-error @enderror">
+                                    <label for="name">Name</label>
+                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter Name">
+                                    @error('name')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('description') has-error @enderror">
+                                    <label for="description">Description</label>
+                                    <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Description">{{ old('description') }}</textarea>
+                                    @error('description')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="box-footer">
+                              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                            </div>
+                          </form>
+                        </div>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="box box-primary collapsed-box">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>Add Course Type</b></h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    <dl>
+                      <dt><i class="fa fa-pencil-square-o margin-r-5"></i> Form</dt>
+                      <dd>
+                        <div class="box-body">
+                          <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="box-body">
+                              <div class="row">
+                                <div class="col-md-12 no-padding">
+                                  <div class="form-group @error('name') has-error @enderror">
+                                    <label for="name">Name</label>
+                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter Name">
+                                    @error('name')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('description') has-error @enderror">
+                                    <label for="description">Description</label>
+                                    <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Description">{{ old('description') }}</textarea>
+                                    @error('description')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('count_student_min') has-error @enderror">
+                                    <label for="count_student_min">Student Minimum Quota</label>
+                                    <input name="count_student_min" value="{{ old('count_student_min') }}" type="text" class="@error('count_student_min') is-invalid @enderror form-control" placeholder="Enter Student Minimum Quota">
+                                    @error('count_student_min')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('count_student_max') has-error @enderror">
+                                    <label for="count_student_max">Student Maximum Quota</label>
+                                    <input name="count_student_max" value="{{ old('count_student_max') }}" type="text" class="@error('count_student_max') is-invalid @enderror form-control" placeholder="Enter Student Maximum Quota">
+                                    @error('count_student_max')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="box-footer">
+                              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                            </div>
+                          </form>
+                        </div>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="box box-primary collapsed-box">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>Add Proficiency Level</b></h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    <dl>
+                      <dt><i class="fa fa-pencil-square-o margin-r-5"></i> Form</dt>
+                      <dd>
+                        <div class="box-body">
+                          <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="box-body">
+                              <div class="row">
+                                <div class="col-md-12 no-padding">
+                                  <div class="form-group @error('name') has-error @enderror">
+                                    <label for="name">Name</label>
+                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter Name">
+                                    @error('name')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('description') has-error @enderror">
+                                    <label for="description">Description</label>
+                                    <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Description">{{ old('description') }}</textarea>
+                                    @error('description')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('assignment_score_min') has-error @enderror">
+                                    <label for="assignment_score_min">Assignment Passing Score</label>
+                                    <input name="assignment_score_min" value="{{ old('assignment_score_min') }}" type="text" class="@error('assignment_score_min') is-invalid @enderror form-control" placeholder="Enter Assignment Passing Score">
+                                    @error('assignment_score_min')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('mid_exam_score_min') has-error @enderror">
+                                    <label for="mid_exam_score_min">Mid-Exam Passing Score</label>
+                                    <input name="mid_exam_score_min" value="{{ old('mid_exam_score_min') }}" type="text" class="@error('mid_exam_score_min') is-invalid @enderror form-control" placeholder="Enter Mid-Exam Passing Score">
+                                    @error('mid_exam_score_min')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('final_exam_score_min') has-error @enderror">
+                                    <label for="final_exam_score_min">Final-Exam Passing Score</label>
+                                    <input name="final_exam_score_min" value="{{ old('final_exam_score_min') }}" type="text" class="@error('final_exam_score_min') is-invalid @enderror form-control" placeholder="Enter Final-Exam Passing Score">
+                                    @error('final_exam_score_min')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="box-footer">
+                              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                            </div>
+                          </form>
+                        </div>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="box box-primary collapsed-box">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>Add Course Package</b></h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    <dl>
+                      <dt><i class="fa fa-pencil-square-o margin-r-5"></i> Form</dt>
+                      <dd>
+                        <div class="box-body">
+                          <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="box-body">
+                              <div class="row">
+                                <div class="col-md-12 no-padding">
+                                  <div class="form-group @error('name') has-error @enderror">
+                                    <label for="name">Name</label>
+                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter Name">
+                                    @error('name')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('description') has-error @enderror">
+                                    <label for="description">Description</label>
+                                    <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Description">{{ old('description') }}</textarea>
+                                    @error('description')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('count_session') has-error @enderror">
+                                    <label for="count_session">Number of Session(s)</label>
+                                    <input name="count_session" value="{{ old('count_session') }}" type="text" class="@error('count_session') is-invalid @enderror form-control" placeholder="Enter Number of Session(s)">
+                                    @error('count_session')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('price') has-error @enderror">
+                                    <label for="price">Price in USD$</label>
+                                    <input name="price" value="{{ old('price') }}" type="text" class="@error('price') is-invalid @enderror form-control" placeholder="Enter Price in USD$">
+                                    @error('price')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="box-footer">
+                              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                            </div>
+                          </form>
+                        </div>
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
               </div>
               <div class="col-md-9 no-padding">
@@ -109,7 +330,7 @@
                       <div>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                           <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add New "Something"
+                          Add "Something"
                         </a>
                       </div>
                       --}}
@@ -168,7 +389,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('name') has-error @enderror">
                                       <label for="name">Change Name (optional)</label>
-                                      <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Name (optional)">
+                                      <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter Name (optional)">
                                       @error('name')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -177,7 +398,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('description') has-error @enderror">
                                       <label for="description">Change Description (optional)</label>
-                                      <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Description (optional)">
+                                      <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Description (optional)">{{ old('description') }}</textarea>
                                       @error('description')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -203,7 +424,7 @@
                       <div>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                           <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add New "Something"
+                          Add "Something"
                         </a>
                       </div>
                       --}}
@@ -270,7 +491,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('name') has-error @enderror">
                                       <label for="name">Change Name (optional)</label>
-                                      <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Name (optional)">
+                                      <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter Name (optional)">
                                       @error('name')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -279,7 +500,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('description') has-error @enderror">
                                       <label for="description">Change Description (optional)</label>
-                                      <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Description (optional)">
+                                      <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Description (optional)">{{ old('description') }}</textarea>
                                       @error('description')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -288,7 +509,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('count_student_min') has-error @enderror">
                                       <label for="count_student_min">Change Student Minimum Quota (optional)</label>
-                                      <input name="count_student_min" value="{{ old('count_student_min') }}" type="text" class="@error('count_student_min') is-invalid @enderror form-control" placeholder="Enter New Student Minimum Quota (optional)">
+                                      <input name="count_student_min" value="{{ old('count_student_min') }}" type="text" class="@error('count_student_min') is-invalid @enderror form-control" placeholder="Enter Student Minimum Quota (optional)">
                                       @error('count_student_min')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -297,7 +518,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('count_student_max') has-error @enderror">
                                       <label for="count_student_max">Change Student Maximum Quota (optional)</label>
-                                      <input name="count_student_max" value="{{ old('count_student_max') }}" type="text" class="@error('count_student_max') is-invalid @enderror form-control" placeholder="Enter New Student Maximum Quota (optional)">
+                                      <input name="count_student_max" value="{{ old('count_student_max') }}" type="text" class="@error('count_student_max') is-invalid @enderror form-control" placeholder="Enter Student Maximum Quota (optional)">
                                       @error('count_student_max')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -323,7 +544,7 @@
                       <div>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                           <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add New "Something"
+                          Add "Something"
                         </a>
                       </div>
                       --}}
@@ -388,7 +609,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('name') has-error @enderror">
                                       <label for="name">Change Name (optional)</label>
-                                      <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Name (optional)">
+                                      <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter Name (optional)">
                                       @error('name')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -397,7 +618,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('description') has-error @enderror">
                                       <label for="description">Change Description (optional)</label>
-                                      <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Description (optional)">
+                                      <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Description (optional)">{{ old('description') }}</textarea>
                                       @error('description')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -406,7 +627,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('assignment_score_min') has-error @enderror">
                                       <label for="assignment_score_min">Change Assignment Passing Score (optional)</label>
-                                      <input name="assignment_score_min" value="{{ old('assignment_score_min') }}" type="text" class="@error('assignment_score_min') is-invalid @enderror form-control" placeholder="Enter New Assignment Passing Score (optional)">
+                                      <input name="assignment_score_min" value="{{ old('assignment_score_min') }}" type="text" class="@error('assignment_score_min') is-invalid @enderror form-control" placeholder="Enter Assignment Passing Score (optional)">
                                       @error('assignment_score_min')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -415,7 +636,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('mid_exam_score_min') has-error @enderror">
                                       <label for="mid_exam_score_min">Change Mid-Exam Passing Score (optional)</label>
-                                      <input name="mid_exam_score_min" value="{{ old('mid_exam_score_min') }}" type="text" class="@error('mid_exam_score_min') is-invalid @enderror form-control" placeholder="Enter New Mid-Exam Passing Score (optional)">
+                                      <input name="mid_exam_score_min" value="{{ old('mid_exam_score_min') }}" type="text" class="@error('mid_exam_score_min') is-invalid @enderror form-control" placeholder="Enter Mid-Exam Passing Score (optional)">
                                       @error('mid_exam_score_min')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -424,7 +645,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('final_exam_score_min') has-error @enderror">
                                       <label for="final_exam_score_min">Change Final-Exam Passing Score (optional)</label>
-                                      <input name="final_exam_score_min" value="{{ old('final_exam_score_min') }}" type="text" class="@error('final_exam_score_min') is-invalid @enderror form-control" placeholder="Enter New Final-Exam Passing Score (optional)">
+                                      <input name="final_exam_score_min" value="{{ old('final_exam_score_min') }}" type="text" class="@error('final_exam_score_min') is-invalid @enderror form-control" placeholder="Enter Final-Exam Passing Score (optional)">
                                       @error('final_exam_score_min')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -450,7 +671,7 @@
                       <div>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                           <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add New "Something"
+                          Add "Something"
                         </a>
                       </div>
                       --}}
@@ -552,7 +773,7 @@
                                     <div class="form-group @error('material_type_id') has-error @enderror">
                                       <label for="material_type_id">Change Material Type (optional)</label>
                                       <select name="material_type_id" type="text" class="@error('material_type_id') is-invalid @enderror form-control">
-                                        <option selected="selected" value="">-- Enter New Material Type (optional) --</option>
+                                        <option selected="selected" value="">-- Enter Material Type (optional) --</option>
                                         @foreach($material_type as $i => $mt)
                                           @if(old('material_type_id') == Str::slug($mt->updated_at.$mt->name.$mt->created_at))
                                             <option selected="selected" value="{{ Str::slug($mt->updated_at.$mt->name.$mt->created_at) }}">#{{ $i + 1 }} - {{ $mt->name }}</option>
@@ -568,7 +789,7 @@
                                     <div class="form-group @error('course_type_id') has-error @enderror">
                                       <label for="course_type_id">Change Course Type (optional)</label>
                                       <select name="course_type_id" type="text" class="@error('course_type_id') is-invalid @enderror form-control">
-                                        <option selected="selected" value="">-- Enter New Course Type (optional) --</option>
+                                        <option selected="selected" value="">-- Enter Course Type (optional) --</option>
                                         @foreach($course_type as $i => $ct)
                                           @if(old('course_type_id') == Str::slug($ct->updated_at.$ct->name.$ct->created_at))
                                             <option selected="selected" value="{{ Str::slug($ct->updated_at.$ct->name.$ct->created_at) }}">#{{ $i + 1 }} - {{ $ct->name }}</option>
@@ -584,7 +805,7 @@
                                     <div class="form-group @error('course_level_id') has-error @enderror">
                                       <label for="course_level_id">Change Proficiency Level (optional)</label>
                                       <select name="course_level_id" type="text" class="@error('course_level_id') is-invalid @enderror form-control">
-                                        <option selected="selected" value="">-- Enter New Proficiency Level (optional) --</option>
+                                        <option selected="selected" value="">-- Enter Proficiency Level (optional) --</option>
                                         @foreach($course_level as $i => $cl)
                                           @if(old('course_level_id') == Str::slug($cl->created_at.$cl->name.$cl->updated_at))
                                             <option selected="selected" value="{{ Str::slug($cl->created_at.$cl->name.$cl->updated_at) }}">#{{ $i + 1 }} - {{ $cl->name }}</option>
@@ -603,7 +824,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('title') has-error @enderror">
                                       <label for="title">Change Title (optional)</label>
-                                      <input name="title" value="{{ old('title') }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter New Title (optional)">
+                                      <input name="title" value="{{ old('title') }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter Title (optional)">
                                       @error('title')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -612,7 +833,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('description') has-error @enderror">
                                       <label for="description">Change Description (optional)</label>
-                                      <input name="description" value="{{ old('description') }}" type="text" class="@error('description') is-invalid @enderror form-control" placeholder="Enter New Description (optional)">
+                                      <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Description (optional)">{{ old('description') }}</textarea>
                                       @error('description')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -621,7 +842,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('requirement') has-error @enderror">
                                       <label for="requirement">Change Requirement (optional)</label>
-                                      <input name="requirement" value="{{ old('requirement') }}" type="text" class="@error('requirement') is-invalid @enderror form-control" placeholder="Enter New Requirement (optional)">
+                                      <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Requirement (optional)">{{ old('requirement') }}</textarea>
                                       @error('requirement')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -630,7 +851,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('count_session') has-error @enderror">
                                       <label for="count_session">Change Number of Session(s) (optional)</label>
-                                      <input name="count_session" value="{{ old('count_session') }}" type="text" class="@error('count_session') is-invalid @enderror form-control" placeholder="Enter New Number of Session(s) (optional)">
+                                      <input name="count_session" value="{{ old('count_session') }}" type="text" class="@error('count_session') is-invalid @enderror form-control" placeholder="Enter Number of Session(s) (optional)">
                                       @error('count_session')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
@@ -639,7 +860,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('price') has-error @enderror">
                                       <label for="price">Change Price in USD$ (optional)</label>
-                                      <input name="price" value="{{ old('price') }}" type="text" class="@error('price') is-invalid @enderror form-control" placeholder="Enter New Price in USD$ (optional)">
+                                      <input name="price" value="{{ old('price') }}" type="text" class="@error('price') is-invalid @enderror form-control" placeholder="Enter Price in USD$ (optional)">
                                       @error('price')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
