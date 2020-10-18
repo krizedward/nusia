@@ -105,7 +105,22 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Menyimpan dari fungsi create
+        if ($this->is_admin()) {
+            //draft
+            User::create([
+                'email'         => "email@mail.com",
+                'password'      => "12345678",
+                'roles'         => "Student",
+                'citizenship'   => "Country",
+                'domicile'      => "City",
+                'timezone'      => "Asia/Jakarta",
+                'first_name'    => "name",
+                'last_name'     => "user",
+                'phone'         => "081234579230",
+                'image_profile' => "user.jpg",
+            ]);  
+        }
     }
 
     /**
