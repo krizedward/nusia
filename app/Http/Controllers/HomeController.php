@@ -14,6 +14,9 @@ use App\Models\MaterialPublic;
 use App\Models\MaterialSession;
 use App\Models\Course;
 use App\Models\CourseRegistration;
+use App\Models\MaterialType;
+use App\Models\CourseLevel;
+use App\Models\CoursePackage;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -394,7 +397,7 @@ class HomeController extends Controller
             }
         }
 
-        return redirect()->route('material_types.index');
+        return redirect()->route('student.choose_materials');
     }
 
     /**
@@ -525,6 +528,25 @@ class HomeController extends Controller
         ];
 
         return view('layouts.questionnaire', compact(/*'countries',*/ 'interests', 'timezones'));
+    }
+
+    public function choose_materials() {
+        $material_types = MaterialType::all();
+        return view('material_types.student_index', compact('material_types'));
+    }
+
+    public function choose_course_types($material_type_id)
+    {
+        if($this->is_student()){
+            //$course_level_id = CourseLevel::where('name', Auth::user()->student->indonesian_language_proficiency)->first()->id;
+
+            $course_packages = CoursePackage
+                ::where('material_type_id', $material_type_id)
+                ->get();
+            return view('course_packages.student_index_material_type', compact('course_packages'));
+        } else {
+            return redirect()->route('home');
+        }
     }
 
     public function profile()

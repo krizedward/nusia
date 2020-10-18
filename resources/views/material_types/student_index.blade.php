@@ -5,48 +5,35 @@
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Choose Your Course!</h1>
-    <!--ol class="breadcrumb">
-        <li><a href="{{ route('home') }}">Home</a></li>
-        <li class="active">Choose Your Course!</li>
-    </ol-->
+	<h1><b>Choose Your Course</b></h1>
 @stop
 
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
-          <div class="alert alert-success alert-dismissable">
-            <h4>
-              <i class="icon fa fa-comments"></i>
-              Choose a course that matches your need!
-            </h4>
-            Join one of NUSIA's courses consisting of <b>more than 3 sessions per class</b>! Per session lasts <b>80 minutes</b>.
-          </div>
-        </div>
-        @foreach($material_types as $i => $mt)
-            <div class="col-md-6">
-              <div class="box box-primary">
-                <div class="box-header with-border">
-                  <h3 class="box-title"><i class="fa fa-group"></i>&nbsp;&nbsp;{{ $mt->name }}</h3>
-                </div>
-                <div class="box-body">
-                  <div class="row">
-                    <div class="col-md-12" style="height:186px;">
-                      <b>Description</b>
-                      <p>{{ $mt->description }}</p>
-                    </div>
-                    <div class="col-md-12">
-                      <a href="{{ route('course_packages.index_material_type', $mt->id) }}" class="btn btn-s btn-flat btn-primary" style="width:100%;">
-                        Choose This Course
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <!-- /.box-body -->
-              </div>
-              <!-- /.box -->
-            </div>
-            <!-- /.col -->
-        @endforeach
-    </div>
+	<div class="row">
+            @foreach($material_types as $mt)
+		<div class="col-md-4">
+			<div class="box box-warning">
+				<div class="box-header with-border">
+					<h3 class="box-title"><b>{{ $mt->name }}</b></h3>
+		                </div>
+		                <div class="box-body">
+		                	<p>{{ $mt->description }}</p>
+		                	<!--ul>
+                				<li>Lorem ipsum dolor sit amet</li>
+				                <li>Consectetur adipiscing elit</li>
+				                <li>Integer molestie lorem at massa</li>
+		                		<li>Facilisis in pretium nisl aliquet</li>
+				                <li>Nulla volutpat aliquam velit</li>
+				                <li>Faucibus porta lacus fringilla vel</li>
+		                		<li>Aenean sit amet erat nunc</li>
+				                <li>Eget porttitor lorem</li>
+					</ul-->
+		                </div>
+		                <div class="box-footer">
+                			<a href="{{ route('student.choose_course_types', $mt->id) }}" class="btn btn-primary btn-block"><b>Choose This Course</b></a>	
+		                </div>
+			</div>
+		</div>
+            @endforeach
+	</div>
 @stop

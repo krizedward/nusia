@@ -83,6 +83,10 @@ Route::group(['middleware'=>'auth'], function() {
         /* VIEW */
         Route::get('/website-rating', 'FormResponseController@index')->name('form_responses.index_admin');
 
+        // NEW ROUTING FOR STUDENT: 18 Oktober 2020 dan selanjutnya.
+        Route::get('/student/choose-materials', 'HomeController@choose_materials')->name('student.choose_materials');
+        Route::get('/student/choose-course-types/{id}', 'HomeController@choose_course_types')->name('student.choose_course_types');
+
 	/*Route::get('/home', function() {
             return view('home');
 	})->name('home');*/
@@ -117,7 +121,7 @@ Route::group(['middleware'=>'auth'], function() {
           Route::get('/student/materials', 'MaterialTypeController@index')->name('material_types.index');
 
           // Dari memilih MaterialType, lanjut ke memilih CourseType (Private/Public) via CoursePackage
-          Route::get('/student/courses/{material_type_id}', 'CoursePackageController@index_material_type')->name('course_packages.index_material_type');
+          ////Route::get('/student/courses/{material_type_id}', 'CoursePackageController@index_material_type')->name('course_packages.index_material_type');
 
         //Admin
         Route::get('/schedules/instructor/choose','ScheduleController@instructor')->name('schedules.admin_instrucstor');

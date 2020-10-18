@@ -29,13 +29,13 @@
               <i class="icon fa fa-book"></i>
               What to learn in these programs?
             </h4>
-            @foreach($course_packages as $i => $mt)
+            @foreach($material_types as $i => $mt)
               <b>{{ $mt->name }}</b><br>
               {{ $mt->description }}<br>
             @endforeach
           </div>
         </div>
-        @foreach($course_packages as $i => $mt)
+        @foreach($material_types as $i => $mt)
             <div class="col-md-6">
               <div class="box box-primary">
                 <div class="box-header with-border">
@@ -87,7 +87,7 @@
                                     {{ $mt->description }}
                                 </li>
                             </ul>
-                            <a href="{{ route('home') }}" class="btn btn-s btn-flat btn-primary" style="width:100%;">Choose This Program</a>
+                            <a href="{{ route('course_packages.index_material_type', $mt->id) }}" class="btn btn-s btn-flat btn-primary" style="width:100%;">Choose This Program</a>
                         </div>
                         <!-- /.box-body -->
                     </div>

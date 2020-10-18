@@ -207,7 +207,7 @@
                       <div>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                           <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add New User
+                          Add User
                         </a>
                       </div>
                       --}}
@@ -255,7 +255,7 @@
                       <div class="box-header">
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                           <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add New "Something"
+                          Add "Something"
                         </a>
                       </div>
                       --}}
@@ -282,7 +282,7 @@
                       <div>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                           <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add New User
+                          Add User
                         </a>
                       </div>
                       --}}
@@ -452,7 +452,7 @@
                     <div>
                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                         <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New User
+                        Add User
                       </a>
                     </div>
                     --}}
@@ -509,7 +509,7 @@
                       <div class="box-header">
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                           <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add New Payment Installment
+                          Add Payment Installment
                         </a>
                       </div>
                     @endif
@@ -608,7 +608,7 @@
                     <div>
                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                         <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New User
+                        Add User
                       </a>
                     </div>
                     --}}
@@ -896,7 +896,7 @@
                     <div>
                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                         <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New Session
+                        Add Session
                       </a>
                     </div>
                     --}}
@@ -912,7 +912,7 @@
                     <div class="box-header">
                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                         <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New Session
+                        Add Session
                       </a>
                     </div>
                     --}}
@@ -1026,7 +1026,7 @@
                     <div>
                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                         <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New "Something"
+                        Add "Something"
                       </a>
                     </div>
                     --}}
@@ -1139,7 +1139,7 @@
                     <div>
                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                         <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add New Main Material
+                        Add Main Material
                       </a>
                     </div>
                     <div class="box-tools pull-right">
@@ -1207,7 +1207,7 @@
                                 <div class="col-md-12">
                                   <div class="form-group @error('name') has-error @enderror">
                                     <label for="name">Change Name (optional)</label>
-                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Name (optional)">
+                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter Name (optional)">
                                     @error('name')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -1245,7 +1245,7 @@
                       <div>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
                           <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add New Supplementary Material for This Session
+                          Add Supplementary Material for This Session
                         </a>
                       </div>
                       <div class="box-tools pull-right">
@@ -1313,7 +1313,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group @error('name') has-error @enderror">
                                       <label for="name">Change Name (optional)</label>
-                                      <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter New Name (optional)">
+                                      <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter Name (optional)">
                                       @error('name')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
