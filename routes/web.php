@@ -20,7 +20,7 @@ Route::get('/test', function () {
 });
 */
 
-
+//ini route
 Route::get('/', 'HomeController@landing_page')->name('index');
 
 Route::get('/terms-of-service', function() {
