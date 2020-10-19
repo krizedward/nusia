@@ -53,9 +53,8 @@
                       <dt><i class="fa fa-pencil-square-o margin-r-5"></i> Form</dt>
                       <dd>
                         <div class="box-body">
-                          <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                          <form role="form" method="post" action="{{ route('material_types.store') }}" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
                             <div class="box-body">
                               <div class="row">
                                 <div class="col-md-12 no-padding">
@@ -97,9 +96,8 @@
                       <dt><i class="fa fa-pencil-square-o margin-r-5"></i> Form</dt>
                       <dd>
                         <div class="box-body">
-                          <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                          <form role="form" method="post" action="{{ route('course_types.store') }}" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
                             <div class="box-body">
                               <div class="row">
                                 <div class="col-md-12 no-padding">
@@ -119,14 +117,14 @@
                                   </div>
                                   <div class="form-group @error('count_student_min') has-error @enderror">
                                     <label for="count_student_min">Student Minimum Quota</label>
-                                    <input name="count_student_min" value="{{ old('count_student_min') }}" type="text" class="@error('count_student_min') is-invalid @enderror form-control" placeholder="Enter Student Minimum Quota">
+                                    <input name="count_student_min" value="{{ old('count_student_min') }}" type="number" min="1" max="100" class="@error('count_student_min') is-invalid @enderror form-control" placeholder="Enter Student Minimum Quota">
                                     @error('count_student_min')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
                                   </div>
                                   <div class="form-group @error('count_student_max') has-error @enderror">
                                     <label for="count_student_max">Student Maximum Quota</label>
-                                    <input name="count_student_max" value="{{ old('count_student_max') }}" type="text" class="@error('count_student_max') is-invalid @enderror form-control" placeholder="Enter Student Maximum Quota">
+                                    <input name="count_student_max" value="{{ old('count_student_max') }}" type="number" min="1" max="100" class="@error('count_student_max') is-invalid @enderror form-control" placeholder="Enter Student Maximum Quota">
                                     @error('count_student_max')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -157,7 +155,6 @@
                         <div class="box-body">
                           <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
                             <div class="box-body">
                               <div class="row">
                                 <div class="col-md-12 no-padding">
@@ -222,7 +219,6 @@
                         <div class="box-body">
                           <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
                             <div class="box-body">
                               <div class="row">
                                 <div class="col-md-12 no-padding">

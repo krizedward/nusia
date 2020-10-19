@@ -9,6 +9,7 @@ use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class MaterialTypeController extends Controller
 {
@@ -89,11 +90,12 @@ class MaterialTypeController extends Controller
     {
         $data = $request->all();
         $data = Validator::make($data, [
+            /*
             'code' => [
                 'bail', 'required',
                 Rule::unique('material_types', 'code'),
                 'size:1'
-            ],
+            ],*/
             'name' => [
                 'bail', 'required',
                 Rule::unique('material_types', 'name'),
@@ -109,25 +111,29 @@ class MaterialTypeController extends Controller
         }
 
         // Membuat slug baru.
-        $data = "";
-        while(1) {
-            $data = Str::random(255);
-            if(MaterialType::where('slug', $data)->first() === null) break;
-        }
+        //$data = "";
+        //while(1) {
+        //    $data = Str::random(255);
+        //    if(MaterialType::where('slug', $data)->first() === null) break;
+        //}
 
         if($this->is_admin()) {
             MaterialType::create([
-                'slug' => $data,
-                'code' => $request->code,
+                //'slug' => $data,
+                //'code' => $request->code,
                 'name' => $request->name,
                 'description' => $request->description
             ]);
         } else {
-            // Tidak memiliki hak akses.
+            //  Tidak memiliki hak akses.
         }
 
         $data = MaterialType::all();
-        return view('materials.types.index', compact('data'));
+        //return view('materials.types.index', compact('data'));
+        
+        //return view('courses.index', compact('data'));
+        Alert::success('Success', 'Create Material Type Berhasil !!!');
+        return redirect()->route('courses.index');
     }
 
     /**

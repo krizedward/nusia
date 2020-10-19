@@ -9,6 +9,8 @@ use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class CourseTypeController extends Controller
 {
@@ -84,11 +86,11 @@ class CourseTypeController extends Controller
     {
         $data = $request->all();
         $data = Validator::make($data, [
-            'code' => [
-                'bail', 'required',
-                Rule::unique('course_types', 'code'),
-                'size:1'
-            ],
+            //'code' => [
+            //    'bail', 'required',
+            //    Rule::unique('course_types', 'code'),
+            //    'size:1'
+            //],
             'name' => [
                 'bail', 'required',
                 Rule::unique('course_types', 'name'),
@@ -106,16 +108,16 @@ class CourseTypeController extends Controller
         }
 
         // Membuat slug baru.
-        $data = "";
-        while(1) {
-            $data = Str::random(255);
-            if(CourseType::where('slug', $data)->first() === null) break;
-        }
+        //$data = "";
+        //while(1) {
+        //    $data = Str::random(255);
+        //    if(CourseType::where('slug', $data)->first() === null) break;
+        //}
 
         if($this->is_admin()) {
             CourseType::create([
-                'slug' => $data,
-                'code' => $request->code,
+                //'slug' => $data,
+                //'code' => $request->code,
                 'name' => $request->name,
                 'description' => $request->description,
                 'count_student_min' => $request->count_student_min,
@@ -126,7 +128,9 @@ class CourseTypeController extends Controller
         }
 
         $data = CourseType::all();
-        return view('courses.types.index', compact('data'));
+        //return view('courses.types.index', compact('data'));
+        Alert::success('Success', 'Create Course Type Berhasil !!!');
+        return redirect()->route('courses.index');
     }
 
     /**
