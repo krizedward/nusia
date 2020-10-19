@@ -11,6 +11,7 @@ use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CoursePackageController extends Controller
 {
@@ -98,7 +99,7 @@ class CoursePackageController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        /*$data = $request->all();
         $data = Validator::make($data, [
             'material_type_id' => [
                 'bail', 'required',
@@ -146,18 +147,18 @@ class CoursePackageController extends Controller
         while(1) {
             $data = Str::random(255);
             if(CoursePackage::where('slug', $data)->first() === null) break;
-        }
+        }*/
 
         if($this->is_admin()) {
             CoursePackage::create([
-                'slug' => $data,
-                'material_type_id' => $request->material_type_id,
-                'course_type_id' => $request->course_type_id,
-                'course_level_id' => $request->course_level_id,
-                'course_level_detail_id' => $request->course_level_detail_id,
-                'title' => $request->title,
+                //'slug' => $data,
+                'material_type_id' => 1,
+                'course_type_id' => 1,
+                'course_level_id' => 1,
+                'course_level_detail_id' => 1,
+                'title' => $request->name,
                 'description' => $request->description,
-                'requirement' => $request->requirement,
+                //'requirement' => $request->requirement,
                 'count_session' => $request->count_session,
                 'price' => $request->price
             ]);
@@ -166,7 +167,9 @@ class CoursePackageController extends Controller
         }
 
         $data = CoursePackage::all();
-        return view('courses.packages.index', compact('data'));
+        //return view('courses.packages.index', compact('data'));
+        Alert::success('Success', 'Create Course Packages Berhasil !!!');
+        return redirect()->route('courses.index');
     }
 
     /**

@@ -9,6 +9,7 @@ use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CourseLevelController extends Controller
 {
@@ -83,17 +84,20 @@ class CourseLevelController extends Controller
     {
         $data = $request->all();
         $data = Validator::make($data, [
-            'code' => [
-                'bail', 'required',
-                Rule::unique('course_levels', 'code'),
-                'size:1'
-            ],
+            //'code' => [
+            //    'bail', 'required',
+            //    Rule::unique('course_levels', 'code'),
+            //    'size:1'
+            //],
             'name' => [
                 'bail', 'required',
                 Rule::unique('course_levels', 'name'),
                 'max:100'
             ],
-            'description' => ['bail', 'sometimes', 'max:5000']
+            'description' => ['bail', 'sometimes', 'max:5000'],
+            'assignment_score_min' => ['bail','sometimes','min:0','max:100'],
+            'mid_score_min' => ['bail','sometimes','min:0','max:100'],
+            'final_score_min' => ['bail','sometimes','min:0','max:100'],
         ]);
 
         if($data->fails()) {
@@ -103,25 +107,30 @@ class CourseLevelController extends Controller
         }
 
         // Membuat slug baru.
-        $data = "";
-        while(1) {
-            $data = Str::random(255);
-            if(CourseLevel::where('slug', $data)->first() === null) break;
-        }
+        //$data = "";
+        //while(1) {
+        //    $data = Str::random(255);
+        //    if(CourseLevel::where('slug', $data)->first() === null) break;
+        //}
 
         if($this->is_admin()) {
             CourseLevel::create([
-                'slug' => $data,
-                'code' => $request->code,
+                //'slug' => $data,
+                //'code' => $request->code,
                 'name' => $request->name,
-                'description' => $request->description
+                'description' => $request->description,
+                'assignment_score_min' => $request->assignment_score_min,
+                'mid_exam_score_min' => $request->mid_exam_score_min,
+                'final_exam_score_min' => $request->final_exam_score_min,
             ]);
         } else {
             // Tidak memiliki hak akses.
         }
 
         $data = CourseLevel::all();
-        return view('courses.levels.index', compact('data'));
+        //return view('courses.levels.index', compact('data'));
+        Alert::success('Success', 'Create Course Level Berhasil !!!');
+        return redirect()->route('courses.index'); 
     }
 
     /**

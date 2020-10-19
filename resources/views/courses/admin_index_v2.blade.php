@@ -153,7 +153,7 @@
                       <dt><i class="fa fa-pencil-square-o margin-r-5"></i> Form</dt>
                       <dd>
                         <div class="box-body">
-                          <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                          <form role="form" method="post" action="{{ route('course_levels.store') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="box-body">
                               <div class="row">
@@ -217,7 +217,7 @@
                       <dt><i class="fa fa-pencil-square-o margin-r-5"></i> Form</dt>
                       <dd>
                         <div class="box-body">
-                          <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                          <form role="form" method="post" action="{{ route('course_packages.store') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="box-body">
                               <div class="row">
@@ -319,6 +319,144 @@
                   </div>
                 </div>
                 <div class="col-md-12">
+                  <div class="box box-solid">
+                    <div class="box-body">
+                      <div class="box-group" id="accordion">
+                        <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+                        <div class="panel box box-warning">
+                          <div class="box-header with-border">
+                            <h4 class="box-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                List of Material Type(s)
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseOne" class="panel-collapse collapse in">
+                            <div class="box-body">
+                              @if($material_type->toArray())
+                                <table class="table table-bordered">
+                                  <tr>
+                                    <th class="text-right" style="width:40px;">#</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <!--th style="width:40px;">Detail</th-->
+                                  </tr>
+                                  @foreach($material_type as $i => $dt)
+                                    <tr>
+                                      <td class="text-right">{{ $i + 1 }}</td>
+                                      <td>{{ $dt->name }}</td>
+                                      <td>{{ $dt->description }}</td>
+                                      <!--td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td-->
+                                    </tr>
+                                  @endforeach
+                                </table>
+                                <div class="box-header">
+                                  <h4>Edit Material Type Information</h4>
+                                </div>
+                                <div class="box-body">
+                                  <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="box-body">
+                                      <div class="row">
+                                        <div class="col-md-6">
+                                          <div class="col-md-12">
+                                            <div class="form-group @error('id') has-error @enderror">
+                                              <label for="id">Material Type Number</label>
+                                              <select name="id" type="text" class="@error('id') is-invalid @enderror form-control">
+                                                <option selected="selected" value="">-- Enter Material Type Number --</option>
+                                                @foreach($material_type as $i => $mt)
+                                                  @if(old('id') == Str::slug($mt->created_at.$mt->name.$mt->updated_at))
+                                                    <option selected="selected" value="{{ Str::slug($mt->created_at.$mt->name.$mt->updated_at) }}">#{{ $i + 1 }} - {{ $mt->name }}</option>
+                                                  @else
+                                                    <option value="{{ Str::slug($mt->created_at.$mt->name.$mt->updated_at) }}">#{{ $i + 1 }} - {{ $mt->name }}</option>
+                                                  @endif
+                                                @endforeach
+                                              </select>
+                                              @error('id')
+                                                <p style="color:red">{{ $message }}</p>
+                                              @enderror
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                          <div class="col-md-12">
+                                            <div class="form-group @error('name') has-error @enderror">
+                                              <label for="name">Change Name (optional)</label>
+                                              <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter Name (optional)">
+                                              @error('name')
+                                                <p style="color:red">{{ $message }}</p>
+                                              @enderror
+                                            </div>
+                                          </div>
+                                          <div class="col-md-12">
+                                            <div class="form-group @error('description') has-error @enderror">
+                                              <label for="description">Change Description (optional)</label>
+                                              <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Description (optional)">{{ old('description') }}</textarea>
+                                              @error('description')
+                                                <p style="color:red">{{ $message }}</p>
+                                              @enderror
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="box-footer">
+                                      <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              @else
+                                <div class="text-center">No data available.</div>
+                              @endif
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel box box-danger">
+                          <div class="box-header with-border">
+                            <h4 class="box-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                Collapsible Group Danger
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseTwo" class="panel-collapse collapse">
+                            <div class="box-body">
+                              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3
+                              wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum
+                              eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla
+                              assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred
+                              nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
+                              farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
+                              labore sustainable VHS.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel box box-success">
+                          <div class="box-header with-border">
+                            <h4 class="box-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                Collapsible Group Success
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseThree" class="panel-collapse collapse">
+                            <div class="box-body">
+                              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3
+                              wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum
+                              eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla
+                              assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred
+                              nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
+                              farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
+                              labore sustainable VHS.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+                  <!-- /.box -->
                   <div class="box box-warning">
                     <div class="box-header">
                       <h3 class="box-title"><b>List of Material Type(s)</b></h3>
