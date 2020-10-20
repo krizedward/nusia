@@ -83,7 +83,7 @@ Route::group(['middleware'=>'auth'], function() {
         Route::get('/website-ratings', 'FormResponseController@index')->name('form_responses.index_admin');
 
         // NEW ROUTING FOR STUDENT REGISTRATION: 18 Oktober 2020 dan selanjutnya.
-        // (for role Student)
+        // for role Student
         Route::get('/student/choose-materials', 'HomeController@choose_materials')->name('student.choose_materials'); // View ini digunakan untuk memilih jenis materi: General Indonesian Language, Language Partners, atau Cultural Classes.
         Route::get('/student/choose-course-types/{id}', 'HomeController@choose_course_types')->name('student.choose_course_types'); // ID digunakan adalah material_type_id. View ini digunakan untuk memilih jenis course: Private atau Group.
         Route::get('/student/complete-payment-information/course/{id}', 'HomeController@complete_payment_information')->name('student.complete_payment_information'); // ID digunakan adalah course_id yang menunjuk pada 1 course "sementara". Apabila Student belum dipindahkan ke course tertentu, maka akan ditambahkan ke course ini, sampai Lead Instructor mengonfirmasi hasil placement test. View ini digunakan untuk mengisi informasi pembayaran.
@@ -92,10 +92,10 @@ Route::group(['middleware'=>'auth'], function() {
         Route::post('/student/complete-placement-tests/{id}', 'HomeController@store_placement_tests')->name('student.store_placement_tests'); // Mengumpulkan informasi. Daftar model dibuat: PlacementTest. Informasi pada model CoursePayment dimodifikasi.
         Route::get('/student/complete-course-registrations/{id}', 'HomeController@complete_course_registrations')->name('student.complete_course_registrations'); // ID digunakan adalah placement_test_id. View ini digunakan untuk memilih jadwal course sesuai pilihan Student.
         Route::post('/student/complete-course-registrations/{id}', 'HomeController@store_course_registrations')->name('student.store_course_registrations'); // Mengumpulkan informasi. Dalam model CourseRegistration, course_id diganti ke id yang dipilih oleh Student. Tampilkan popup registrasi berhasil dilakukan, kemudian arahkan ke dashboard.
-        // (for role Financial Team and Admin)
+        // for role Financial Team and Admin
         Route::get('/course-payments', 'CoursePaymentController@index')->name('course_payments.index'); // View ini digunakan untuk melihat daftar informasi course payment untuk seluruh Student, dalam proficiency masing-masing.
-        Route::put('/course-payments/{id}', 'CoursePaymentController@update')->name('course_payments.update); // Daftar model dimodifikasi: CoursePayment.
-        // (for role Lead Instructor and Admin)
+        Route::put('/course-payments/{id}', 'CoursePaymentController@update')->name('course_payments.update'); // Daftar model dimodifikasi: CoursePayment.
+        // for role Lead Instructor and Admin
         Route::get('/placement-tests', 'PlacementTestController@index')->name('placement_tests.index'); // View ini digunakan untuk melihat daftar informasi placement test untuk seluruh Student, dalam proficiency masing-masing.
         Route::put('/placement-tests/{id}', 'PlacementTestController@update')->name('placement_tests.update'); // Daftar model dimodifikasi: PlacementTest.
 
