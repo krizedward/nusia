@@ -164,8 +164,8 @@
 
                 <li class="header">OTHERS</li>
 
-                <li class="{{ set_active('material_types.index') }}">
-                    <a href="{{ route('material_types.index') }}"><i class="fa fa-book"> </i><span> Choose a Course</span></a>
+                <li class="{{ set_active('student.choose_materials') }}">
+                    <a href="{{ route('student.choose_materials') }}"><i class="fa fa-book"> </i><span> Choose a Course</span></a>
                 </li>
 
                 <li class="{{ set_active('course_payments.index') }}">
