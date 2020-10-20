@@ -65,7 +65,7 @@
               @if(Auth::user()->student->course_registrations->count() == 0)
                 <li class="{{ set_active(['material_types.index']) }}">
                   <a href="{{ route('material_types.index')}}">
-                    <i class="fa fa-book"></i> <span>Registration</span>
+                    <i class="fa fa-book"></i> <span>Registrations</span>
                   </a>
                 </li>
               @else
@@ -78,7 +78,7 @@
             @else
             <li class="{{ set_active(['layouts.questionnaire']) }}">
                 <a href="{{ route('layouts.questionnaire')}}">
-                    <i class="fa fa-book"></i> <span>Registration</span>
+                    <i class="fa fa-book"></i> <span>Registrations</span>
                 </a>
             </li>
             @endif
@@ -112,11 +112,11 @@
                 </li>--}}
 
                 <li class="{{ set_active(['session_registrations.index', 'form_responses.create']) }}">
-                    <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Schedule</span></a>
+                    <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Schedules</span></a>
                 </li>
 
                 <li class="{{ set_active('materials.index') }}">
-                    <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> Material</span></a>
+                    <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> Materials</span></a>
                 </li>
 
                 {{-- <li class="#">
@@ -126,12 +126,17 @@
                 <li class="header">TASKS</li>
 
                 <li class="#">
-                    <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Assignment</span></a>
+                    <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Assignments</span></a>
                 </li>
 
+                <li class="#">
+                    <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Exams</span></a>
+                </li>
+
+                {{--
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-book"></i> <span>Exam</span>
+                        <i class="fa fa-book"></i> <span>Exams</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -145,15 +150,16 @@
                         </li>
                     </ul>
                 </li>
+                --}}
 
                 <li class="header">RESULTS</li>
 
                 <li class="#">
-                    <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Grade</span></a>
+                    <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Grades</span></a>
                 </li>
 
                 <li class="#">
-                    <a href="{{ route('course_certificates.index') }}"><i class="fa fa-book"> </i><span> Certificate</span></a>
+                    <a href="{{ route('course_certificates.index') }}"><i class="fa fa-book"> </i><span> Certificates</span></a>
                 </li>
 
                 <li class="header">OTHERS</li>
@@ -163,7 +169,7 @@
                 </li>
 
                 <li class="{{ set_active('course_payments.index') }}">
-                    <a href="{{ route('course_payments.index',1) }}"><i class="fa fa-book"> </i><span> Payment</span></a>
+                    <a href="{{ route('course_payments.index',1) }}"><i class="fa fa-book"> </i><span> Payments</span></a>
                 </li>
                 <!-- Other_Navigasi -->
                 {{--
@@ -185,14 +191,14 @@
                     {{--
                     <li class="{{ set_active('course.instructor') }}">
                         <a href="{{ route('course.instructor') }}">
-                            <i class="fa fa-book"> </i><span>Course</span>
+                            <i class="fa fa-book"> </i><span>Courses</span>
                         </a>
                     </li>
                     --}}
                     <!--li class="treeview"-->
                     <li class="{{ set_active(['sessions.index', 'course_registrations.index_by_course_id', 'profiles.show']) }}">
                         <a href="{{ route('sessions.index') }}">
-                            <i class="fa fa-calendar"></i> <span>Schedule</span>
+                            <i class="fa fa-calendar"></i> <span>Schedules</span>
                             <!--span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span-->
@@ -210,7 +216,7 @@
                     <!--li class="treeview"-->
                     {{--<li class="{{ set_active(['session_registrations.index', 'attendances.edit']) }}">
                         <a href="{{ route('session_registrations.index') }}">
-                            <i class="fa fa-calendar-check-o"></i> <span>Session</span>
+                            <i class="fa fa-calendar-check-o"></i> <span>Sessions</span>
                             <!--span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span-->
@@ -233,17 +239,22 @@
 
                     <li class="{{ set_active('materials.index') }}">
                         <a href="{{ route('materials.index') }}">
-                            <i class="fa fa-book"> </i><span> Material</span>
+                            <i class="fa fa-book"> </i><span> Materials</span>
                         </a>
                     </li>
 
                     <li class="#">
-                        <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Assignment</span></a>
+                        <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Assignments</span></a>
                     </li>
 
+                    <li class="#">
+                        <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Exams</span></a>
+                    </li>
+
+                    {{--
                     <li class="treeview">
                         <a href="#">
-                            <i class="fa fa-book"></i> <span>Exam</span>
+                            <i class="fa fa-book"></i> <span>Exams</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
@@ -257,6 +268,7 @@
                             </li>
                         </ul>
                     </li>
+                    --}}
 
                     {{-- Additional Navigation Menu for Lead Instructor --}}
                     @if(Auth::user()->roles == 'Lead Instructor')
@@ -264,7 +276,7 @@
 
                         <li class="#">
                             <a href="{{ route('home')}}">
-                                <i class="fa fa-file-text-o"></i> <span>Placement Test</span>
+                                <i class="fa fa-file-text-o"></i> <span>Placement Tests</span>
                             </a>
                         </li>
                     @endif
@@ -273,7 +285,7 @@
 
                     <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
                         <a href="{{ route('form_responses.index')}}">
-                            <i class="fa fa-file-text-o"></i> <span>Form Response</span>
+                            <i class="fa fa-file-text-o"></i> <span>Form Responses</span>
                         </a>
                     </li>
 
@@ -286,13 +298,13 @@
                     </li>
 
                     <li class="#">
-                        <a href="{{ route('instructors.index') }}"><i class="fa fa-users"> </i><span> Nusia Student</span></a>
+                        <a href="{{ route('instructors.index') }}"><i class="fa fa-users"> </i><span> Nusia Students</span></a>
                     </li>
                     --}}
                     {{--
                     <li class="{{ set_active(['material.student','material.public.student']) }} treeview">
                         <a href="#">
-                            <i class="fa fa-archive"></i> <span>Material</span>
+                            <i class="fa fa-archive"></i> <span>Materials</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
@@ -311,19 +323,19 @@
 
                     <li class="#">
                         <a href="#">
-                            <i class="fa fa-archive"> </i><span>Student</span>
+                            <i class="fa fa-archive"> </i><span>Students</span>
                         </a>
                     </li>
 
                     <li class="#">
                         <a href="#">
-                            <i class="fa fa-archive"> </i><span>Rating</span>
+                            <i class="fa fa-archive"> </i><span>Ratings</span>
                         </a>
                     </li>
 
                     <li class="#">
                         <a href="#">
-                            <i class="fa fa-archive"> </i><span>Report</span>
+                            <i class="fa fa-archive"> </i><span>Reports</span>
                         </a>
                     </li>--}}
             @endif
@@ -338,13 +350,13 @@
 
                     <li class="#">
                         <a href="{{ route('home') }}">
-                            <i class="fa fa-book"> </i><span> Course Schedule</span>
+                            <i class="fa fa-book"> </i><span> Course Schedules</span>
                         </a>
                     </li>
 
                     <li class="#">
                         <a href="{{ route('home') }}">
-                            <i class="fa fa-book"> </i><span> Student</span>
+                            <i class="fa fa-book"> </i><span> Students</span>
                         </a>
                     </li>
 
@@ -352,7 +364,7 @@
 
                     <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
                         <a href="{{ route('form_responses.index')}}">
-                            <i class="fa fa-file-text-o"></i> <span>Form Response</span>
+                            <i class="fa fa-file-text-o"></i> <span>Form Responses</span>
                         </a>
                     </li>
             @endif
@@ -368,7 +380,7 @@
 
                     <li class="#">
                         <a href="{{ route('home') }}">
-                            <i class="fa fa-book"> </i><span> Course Payment</span>
+                            <i class="fa fa-book"> </i><span> Course Payments</span>
                         </a>
                     </li>
 
@@ -376,7 +388,7 @@
 
                     <li class="{{ set_active(['form_responses.index', 'form_responses.index_form', 'form_responses.index_session', 'form_responses.show']) }}">
                         <a href="{{ route('form_responses.index')}}">
-                            <i class="fa fa-file-text-o"></i> <span>Form Response</span>
+                            <i class="fa fa-file-text-o"></i> <span>Form Responses</span>
                         </a>
                     </li>
             @endif
@@ -392,13 +404,13 @@
 
                 <li class="{{ set_active(['courses.index']) }}">
                     <a href="{{ route('courses.index') }}">
-                        <i class="fa fa-book"> </i><span> Course</span>
+                        <i class="fa fa-book"> </i><span> Courses</span>
                     </a>
                 </li>
 
                 <li class="{{ set_active(['users.index']) }}">
                     <a href="{{ route('users.index') }}">
-                        <i class="fa fa-book"> </i><span> User</span>
+                        <i class="fa fa-book"> </i><span> Users</span>
                     </a>
                 </li>
 
@@ -406,19 +418,19 @@
 
                 <li class="{{ set_active(['forms.index', 'forms.create', 'forms.show', 'forms.edit']) }}">
                     <a href="{{ route('forms.index')}}">
-                        <i class="fa fa-edit"></i> <span>Form</span>
+                        <i class="fa fa-edit"></i> <span>Forms</span>
                     </a>
                 </li>
 
                 <li class="{{ set_active(['form_responses.index_admin', 'form_responses.index_form_admin', 'form_responses.index_session_admin', 'form_responses.show_admin']) }}">
                     <a href="{{ route('form_responses.index_admin')}}">
-                        <i class="fa fa-file-text-o"></i><span> Website Rating</span>
+                        <i class="fa fa-file-text-o"></i><span> Website Ratings</span>
                     </a>
                 </li>
 
                 {{--<li class="treeview">
                     <a href="#">
-                        <i class="fa fa-users"></i> <span>Student</span>
+                        <i class="fa fa-users"></i> <span>Students</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -432,7 +444,7 @@
                 {{-- End Tree --}}
                 {{--<li class="treeview">
                     <a href="#">
-                        <i class="fa fa-users"></i> <span>Instructor</span>
+                        <i class="fa fa-users"></i> <span>Instructors</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -442,7 +454,7 @@
                             <a href="{{ route('instructors.index') }}"><i class="fa fa-circle-o"></i> Personal Data</a>
                         </li>
                         <li class="#">
-                            <a href="{{ route('schedules.admin_instructor') }}"><i class="fa fa-circle-o"></i> Schedule</a>
+                            <a href="{{ route('schedules.admin_instructor') }}"><i class="fa fa-circle-o"></i> Schedules</a>
                         </li>
                     </ul>
                 </li>--}}
@@ -475,10 +487,10 @@
                 {{--<li class="header">COURSES SCHEDULE</li>
 
                 <li class="#">
-                    <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Schedule</span></a>
+                    <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Schedules</span></a>
                 </li>
                 <li class="#">
-                    <a href="{{ route('sessions.admin_instrucstor') }}"><i class="fa fa-book"> </i><span> Session</span></a>
+                    <a href="{{ route('sessions.admin_instrucstor') }}"><i class="fa fa-book"> </i><span> Sessions</span></a>
                 </li>--}}
                 {{--
                 <!-- Head_Navigasi -->
@@ -542,24 +554,24 @@
 
                 <li class="{{ set_active(['students.index','students.create','students.edit','instructors.index','instructors.create','instructors.edit',]) }} treeview">
                     <a href="#">
-                        <i class="fa fa-user"></i> <span>User</span>
+                        <i class="fa fa-user"></i> <span>Users</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
                     <ul class="treeview-menu">
                         <li class="{{ set_active(['students.index','students.create','students.edit']) }}">
-                            <a href="{{ route('students.index') }}"><i class="fa fa-circle-o"></i> Student</a>
+                            <a href="{{ route('students.index') }}"><i class="fa fa-circle-o"></i> Students</a>
                         </li>
                         <li class="{{ set_active(['instructors.index','instructors.create','instructors.edit']) }}">
-                            <a href="{{ route('instructors.index') }}"><i class="fa fa-circle-o"></i> Instructor</a>
+                            <a href="{{ route('instructors.index') }}"><i class="fa fa-circle-o"></i> Instructors</a>
                         </li>
                     </ul>
                 </li>
 
                 <li class="{{ set_active(['course_payments.index','course_payments.create','course_payments.edit','course_packages.index','course_packages.create','course_packages.edit','course_types.index','course_types.create','course_types.edit','course_levels.index','course_levels.create','course_levels.edit','course_level_details.index','course_level_details.create','course_level_details.edit','course_certificates.index','course_certificates.create','course_level_details.edit']) }} treeview">
                     <a href="#">
-                        <i class="fa fa-book"></i> <span>Course</span>
+                        <i class="fa fa-book"></i> <span>Courses</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -567,29 +579,29 @@
                     <ul class="treeview-menu">
                         <li class="{{ set_active(['course_payments.index','course_payments.create','course_payments.edit']) }}">
                             <a href="{{ route('course_payments.index',['1']) }}">
-                                <i class="fa fa-circle-o"></i> Payment</a>
+                                <i class="fa fa-circle-o"></i> Payments</a>
                         </li>
                         <li class="{{ set_active(['course_packages.index','course_packages.create','course_packages.edit']) }}">
-                            <a href="{{ route('course_packages.index') }}"><i class="fa fa-circle-o"></i> Package</a>
+                            <a href="{{ route('course_packages.index') }}"><i class="fa fa-circle-o"></i> Packages</a>
                         </li>
                         <li class="{{ set_active(['course_types.index','course_types.create','course_types.edit']) }}">
-                            <a href="{{ route('course_types.index',['1']) }}"><i class="fa fa-circle-o"></i> Type</a>
+                            <a href="{{ route('course_types.index',['1']) }}"><i class="fa fa-circle-o"></i> Types</a>
                         </li>
                         <li class="{{ set_active(['course_levels.index','course_levels.create','course_levels.edit']) }}">
-                            <a href="{{ route('course_levels.index',['1']) }}"><i class="fa fa-circle-o"></i> Level</a>
+                            <a href="{{ route('course_levels.index',['1']) }}"><i class="fa fa-circle-o"></i> Levels</a>
                         </li>
                         <li class="{{ set_active(['course_level_details.index','course_level_details.create','course_level_details.edit']) }}">
-                            <a href="{{ route('course_level_details.index',['1']) }}"><i class="fa fa-circle-o"></i> Level Detail</a>
+                            <a href="{{ route('course_level_details.index',['1']) }}"><i class="fa fa-circle-o"></i> Level Details</a>
                         </li>
                         <li class="{{ set_active(['course_certificates.index','course_certificates.create','course_level_details.edit']) }}">
-                            <a href="{{ route('course_certificates.index',['1']) }}"><i class="fa fa-circle-o"></i> Certificate</a>
+                            <a href="{{ route('course_certificates.index',['1']) }}"><i class="fa fa-circle-o"></i> Certificates</a>
                         </li>
                     </ul>
                 </li>
 
                 <li class="{{ set_active(['material_publics.index','material_publics.create','material_publics.edit','material_sessions.index','material_sessions.create','material_sessions.edit','material_types.index','material_types.create','material_types.edit']) }} treeview">
                     <a href="#">
-                        <i class="fa fa-book"></i> <span>Material</span>
+                        <i class="fa fa-book"></i> <span>Materials</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -602,26 +614,26 @@
                             <a href="{{ route('material_sessions.index') }}"><i class="fa fa-circle-o"></i> Session</a>
                         </li>
                         <li class="{{ set_active(['material_types.index','material_types.create','material_types.edit']) }}">
-                            <a href="{{ route('material_types.index') }}"><i class="fa fa-circle-o"></i> Type</a>
+                            <a href="{{ route('material_types.index') }}"><i class="fa fa-circle-o"></i> Types</a>
                         </li>
                     </ul>
                 </li>
 
                 <li class="{{ set_active(['ratings.index','ratings.create','ratings.edit']) }}">
                     <a href="{{ route('ratings.index') }}">
-                        <i class="fa fa-star"> </i><span> Rating</span>
+                        <i class="fa fa-star"> </i><span> Ratings</span>
                     </a>
                 </li>
 
                 <li class="{{ set_active(['schedules.index','schedules.create','schedules.edit']) }}">
                     <a href="{{ route('schedules.index') }}">
-                        <i class="fa fa-calendar"></i> <span>Schedule</span>
+                        <i class="fa fa-calendar"></i> <span>Schedules</span>
                     </a>
                 </li>
 
                 <li class="{{ set_active(['sessions.index','sessions.create','sessions.edit']) }}">
                     <a href="{{ route('sessions.index') }}">
-                        <i class="fa fa-calendar-check-o"></i> <span>Session</span>
+                        <i class="fa fa-calendar-check-o"></i> <span>Sessions</span>
                     </a>
                 </li>
             End_Navigasi_Menu -->
@@ -641,35 +653,35 @@
 
           <li class="{{ set_active('schedule') }}">
             <a href="#">
-              <i class="fa fa-th-large"></i> <span>Schedule</span>
+              <i class="fa fa-th-large"></i> <span>Schedules</span>
             </a>
           </li>
 
           <li class="{{ (Request::path() == 'schedule/'.Auth::user()->id)  ? 'active' : '' }}">
             <a href="{{ url('/schedule/'.Auth::user()->id) }}">
-              <i class="fa fa-th-large"></i> <span>Schedule</span>
+              <i class="fa fa-th-large"></i> <span>Schedules</span>
             </a>
           </li>
 
           <li class="{{ (Request::path() == 'session/'.Auth::user()->id)  ? 'active' : '' }}">
             <a href="{{ url('/session/'.Auth::user()->id) }}">
-              <i class="fa fa-user"></i> <span>Session</span>
+              <i class="fa fa-user"></i> <span>Sessions</span>
             </a>
           </li>
 
           <li class="{{ set_active('material.index') }}">
             <a href="{{ url('/material') }}">
-              <i class="fa fa-book"></i> <span>Share Material</span>
+              <i class="fa fa-book"></i> <span>Shared Materials</span>
             </a>
           </li>
           <li>
             <a href="#">
-              <i class="fa fa-th-large"></i> <span>Session</span>
+              <i class="fa fa-th-large"></i> <span>Sessions</span>
             </a>
           </li>
 
           <li>
             <a href="#">
-              <i class="ion ion-pie-graph"></i> <span>Performance</span>
+              <i class="ion ion-pie-graph"></i> <span>Performances</span>
             </a>
           </li>  -->
