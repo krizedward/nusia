@@ -33,8 +33,7 @@
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2020 <a href="https://hehe.co.id">Hehe Corp</a>.</strong> All rights
-    reserved.
+    <strong>Made with <i class="fa fa-heart-o"></i> by <a href="https://hehe.co.id">Hehe Corp</a>.</strong>
   </footer>
 
   <!-- Control Sidebar -->
