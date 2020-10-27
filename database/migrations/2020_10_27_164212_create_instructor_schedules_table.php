@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserNotificationsTable extends Migration
+class CreateInstructorSchedulesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,21 @@ class CreateUserNotificationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_notifications', function (Blueprint $table) {
+        Schema::create('instructor_schedules', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('notification_id');
+            $table->unsignedBigInteger('instructor_id');
+            $table->unsignedBigInteger('schedule_id');
+            $table->enum('status', ['Available', 'Busy']);
             $table->timestamps();
             $table->softDeletes()->nullable();
 
-            $table->foreign('user_id')
-                ->references('id')->on('users')
+            $table->foreign('instructor_id')
+                ->references('id')->on('instructors')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreign('notification_id')
-                ->references('id')->on('notifications')
+            $table->foreign('schedule_id')
+                ->references('id')->on('schedules')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
@@ -39,6 +40,6 @@ class CreateUserNotificationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_notifications');
+        Schema::dropIfExists('instructor_schedules');
     }
 }

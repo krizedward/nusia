@@ -22,6 +22,7 @@ class CreateTaskSubmissionsTable extends Migration
             $table->text('description')->nullable();
             $table->enum('status', ['Not Accepted', 'Accepted']);
             $table->integer('score')->nullable();
+            $table->text('instructor_reply')->nullable();
             $table->text('path_1')->nullable();
             $table->timestamp('path_1_submitted_at')->nullable();
             $table->text('path_2')->nullable();

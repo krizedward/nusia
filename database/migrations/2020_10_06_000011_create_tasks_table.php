@@ -17,7 +17,7 @@ class CreateTasksTable extends Migration
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('session_id');
-            $table->enum('type', ['Assignment', 'Mid-Exam', 'Final-Exam']);
+            $table->enum('type', ['Assignment', 'Exam']);
             $table->string('title');
             $table->text('description')->nullable();
             $table->timestamp('due_date')->nullable();

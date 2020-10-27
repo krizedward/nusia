@@ -6,12 +6,12 @@ use Alfa6661\AutoNumber\AutoNumberTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class NotificationData extends Model
+class Metadata extends Model
 {
     use SoftDeletes;
     use AutoNumberTrait;
 
-    protected $table = "notification_data";
+    protected $table = "metadata";
     protected $primaryKey = 'id';
 
     protected $fillable = [
@@ -23,7 +23,7 @@ class NotificationData extends Model
     {
         return [
             'code' => [
-                'format' => 'NTD?', // Format kode yang akan digunakan.
+                'format' => 'MTD?', // Format kode yang akan digunakan.
                 'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
                 //refrensi : https://www.lab-informatika.com/membuat-kode-otomatis-di-laravel
             ]

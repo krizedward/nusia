@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCourseLevelsTable extends Migration
+class CreateMaterialTypeValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,18 @@ class CreateCourseLevelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_levels', function (Blueprint $table) {
+        Schema::create('material_type_values', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
-            $table->string('name', 100);
-            $table->integer('assignment_score_min')->nullable();
-            $table->integer('exam_score_min')->nullable();
+            $table->unsignedBigInteger('material_type_id');
+            $table->text('value')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
+
+            $table->foreign('material_type_id')
+                ->references('id')->on('material_types')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
@@ -31,6 +35,6 @@ class CreateCourseLevelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_levels');
+        Schema::dropIfExists('material_type_values');
     }
 }

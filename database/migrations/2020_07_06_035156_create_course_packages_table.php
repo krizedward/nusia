@@ -22,9 +22,9 @@ class CreateCoursePackagesTable extends Migration
             //$table->unsignedBigInteger('course_level_detail_id');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->text('requirement')->nullable();
             $table->integer('count_session')->unsigned()->nullable();
             $table->bigInteger('price')->unsigned()->nullable();
+            $table->text('refund_description')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

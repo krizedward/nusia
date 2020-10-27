@@ -18,6 +18,7 @@ class CreateMaterialTypesTable extends Migration
             $table->string('code',20)->nullable();
             $table->string('name', 100);
             $table->text('description')->nullable();
+            $table->integer('duration_in_minute')->default(80);
             $table->timestamps();
             $table->softDeletes()->nullable();
         });

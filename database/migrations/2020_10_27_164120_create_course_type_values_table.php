@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateNotificationDataTable extends Migration
+class CreateCourseTypeValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,18 @@ class CreateNotificationDataTable extends Migration
      */
     public function up()
     {
-        Schema::create('notification_data', function (Blueprint $table) {
+        Schema::create('course_type_values', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
-            $table->string('caption');
+            $table->unsignedBigInteger('course_type_id');
             $table->text('value')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
+
+            $table->foreign('course_type_id')
+                ->references('id')->on('course_types')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
@@ -30,6 +35,6 @@ class CreateNotificationDataTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notification_data');
+        Schema::dropIfExists('course_type_values');
     }
 }
