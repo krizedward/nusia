@@ -19,7 +19,7 @@ class UserNotification extends Model
 
     protected $fillable = [
         'user_id',
-        'notification_transaction_id'
+        'notification_id'
     ];
 
     public function getAutoNumberOptions()
@@ -44,8 +44,8 @@ class UserNotification extends Model
     /**
      * Define a relationship.
      */
-    public function notification_transaction()
+    public function notification()
     {
-    	return $this->belongsTo(NotificationTransaction::class);
+    	return $this->belongsTo(Notification::class);
     }
 }

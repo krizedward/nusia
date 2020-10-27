@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Alfa6661\AutoNumber\AutoNumberTrait;
 use App\User;
-use App\Models\Schedule;
+use App\Models\InstructorSchedule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -44,8 +44,8 @@ class Instructor extends Model
     /**
      * Define a relationship.
      */
-    public function schedules()
+    public function instructor_schedules()
     {
-    	return $this->hasMany(Schedule::class);
+    	return $this->hasMany(InstructorSchedule::class);
     }
 }

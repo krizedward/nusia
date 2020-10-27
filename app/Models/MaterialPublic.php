@@ -17,6 +17,7 @@ class MaterialPublic extends Model
 
     protected $fillable = [
         'course_package_id',
+        'session_number',
         'name',
         'description',
         'path'

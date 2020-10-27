@@ -17,10 +17,8 @@ class CourseLevel extends Model
 
     protected $fillable = [
         'name',
-        'description',
         'assignment_score_min',
-        'mid_exam_score_min',
-        'final_exam_score_min'
+        'exam_score_min'
     ];
 
     public function getAutoNumberOptions()

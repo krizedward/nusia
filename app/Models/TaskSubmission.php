@@ -24,6 +24,7 @@ class TaskSubmission extends Model
         'description',
         'status',
         'score',
+        'instructor_reply',
         'path_1',
         'path_1_submitted_at',
         'path_2',

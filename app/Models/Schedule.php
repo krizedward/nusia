@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Alfa6661\AutoNumber\AutoNumberTrait;
-use App\Models\Instructor;
+use App\Models\InstructorSchedule;
 use App\Models\Session;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,10 +17,7 @@ class Schedule extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'instructor_id',
-        'instructor_id_2',
         'schedule_time',
-        'status'
     ];
 
     public function getAutoNumberOptions()
@@ -37,9 +34,9 @@ class Schedule extends Model
     /**
      * Define a relationship.
      */
-    public function instructor()
+    public function instructor_schedules()
     {
-    	return $this->belongsTo(Instructor::class);
+    	return $this->hasMany(InstructorSchedule::class);
     }
 
     /**

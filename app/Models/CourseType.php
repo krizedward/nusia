@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Alfa6661\AutoNumber\AutoNumberTrait;
 use App\Models\CoursePackage;
+use App\Models\CourseTypeValue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -17,6 +18,8 @@ class CourseType extends Model
 
     protected $fillable = [
         'name',
+        'brief_description_1',
+        'brief_description_2',
         'description',
         'count_student_min',
         'count_student_max'
@@ -39,6 +42,14 @@ class CourseType extends Model
     public function course_packages()
     {
     	return $this->hasMany(CoursePackage::class);
+    }
+
+    /**
+     * Define a relationship.
+     */
+    public function course_type_values()
+    {
+    	return $this->hasMany(CourseTypeValue::class);
     }
 
     /**

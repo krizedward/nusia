@@ -6,7 +6,7 @@ use Alfa6661\AutoNumber\AutoNumberTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Models\NotificationTransaction;
+use App\Models\UserNotification;
 use App\Models\NotificationLabel;
 use App\Models\NotificationDuration;
 
@@ -39,9 +39,9 @@ class Notification extends Model
     /**
      * Define a relationship.
      */
-    public function notification_transactions()
+    public function user_notifications()
     {
-    	return $this->hasMany(NotificationTransaction::class);
+    	return $this->hasMany(UserNotification::class);
     }
 
     /**

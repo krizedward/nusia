@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Alfa6661\AutoNumber\AutoNumberTrait;
 use App\Models\CoursePackage;
+use App\Models\MaterialTypeValue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -17,7 +18,8 @@ class MaterialType extends Model
 
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'duration_in_minute'
     ];
 
     public function getAutoNumberOptions()
@@ -37,6 +39,14 @@ class MaterialType extends Model
     public function course_packages()
     {
     	return $this->hasMany(CoursePackage::class);
+    }
+
+    /**
+     * Define a relationship.
+     */
+    public function material_type_values()
+    {
+    	return $this->hasMany(MaterialTypeValue::class);
     }
 
     /**

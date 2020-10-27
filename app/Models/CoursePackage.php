@@ -8,6 +8,7 @@ use App\Models\CourseType;
 use App\Models\CourseLevel;
 use App\Models\Course;
 use App\Models\MaterialPublic;
+use App\Models\CoursePackageDiscount;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -25,9 +26,9 @@ class CoursePackage extends Model
         'course_level_id',
         'title',
         'description',
-        'requirement',
         'count_session',
-        'price'
+        'price',
+        'refund_description'
     ];
 
     public function getAutoNumberOptions()
@@ -79,6 +80,14 @@ class CoursePackage extends Model
     public function material_publics()
     {
     	return $this->hasMany(MaterialPublic::class);
+    }
+
+    /**
+     * Define a relationship.
+     */
+    public function course_package_discounts()
+    {
+    	return $this->hasMany(CoursePackageDiscount::class);
     }
 
     /**
