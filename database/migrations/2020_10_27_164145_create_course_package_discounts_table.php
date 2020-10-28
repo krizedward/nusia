@@ -18,7 +18,7 @@ class CreateCoursePackageDiscountsTable extends Migration
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('course_package_id');
             $table->bigInteger('price')->unsigned()->nullable();
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
             $table->timestamp('due_date')->nullable();
             $table->enum('status', ['Active', 'Nonactive']);
             $table->timestamps();

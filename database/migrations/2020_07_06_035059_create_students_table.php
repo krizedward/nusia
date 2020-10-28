@@ -19,13 +19,13 @@ class CreateStudentsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->integer('age')->unsigned();
             $table->enum('status_job', ['Professional', 'Student']);
-            $table->text('status_description')->nullable();
-            $table->text('interest')->nullable();
+            $table->longText('status_description')->nullable();
+            $table->longText('interest')->nullable();
             $table->enum('target_language_experience', ['Never (no experience)', '< 6 months', '<= 1 year', 'Others']);
             $table->integer('target_language_experience_value')->nullable();
-            $table->text('description_of_course_taken')->nullable();
+            $table->longText('description_of_course_taken')->nullable();
             $table->enum('indonesian_language_proficiency', ['Novice', 'Intermediate', 'Advanced']);
-            $table->text('learning_objective')->nullable();
+            $table->longText('learning_objective')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

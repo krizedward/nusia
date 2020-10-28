@@ -16,10 +16,10 @@ class CreateNotificationsTable extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
-            $table->text('subject');
-            $table->text('message')->nullable();
+            $table->longText('subject');
+            $table->longText('message')->nullable();
             $table->enum('icon_replacement_type', ['Not Changed', 'Clear', 'Icon', 'Image']);
-            $table->text('icon_replacement_path')->nullable();
+            $table->longText('icon_replacement_path')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
         });

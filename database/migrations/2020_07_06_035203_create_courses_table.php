@@ -18,8 +18,8 @@ class CreateCoursesTable extends Migration
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('course_package_id');
             $table->string('title')->nullable();
-            $table->text('description')->nullable();
-            $table->text('requirement')->nullable();
+            $table->longText('description')->nullable();
+            $table->longText('requirement')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

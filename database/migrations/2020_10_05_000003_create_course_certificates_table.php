@@ -17,7 +17,7 @@ class CreateCourseCertificatesTable extends Migration
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('course_registration_id');
-            $table->text('path')->nullable();
+            $table->longText('path')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

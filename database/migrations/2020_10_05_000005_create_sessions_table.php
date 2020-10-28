@@ -20,9 +20,9 @@ class CreateSessionsTable extends Migration
             $table->unsignedBigInteger('schedule_id');
             $table->unsignedBigInteger('form_id');
             $table->string('title')->nullable();
-            $table->text('description')->nullable();
-            $table->text('requirement')->nullable();
-            $table->text('link_zoom')->nullable();
+            $table->longText('description')->nullable();
+            $table->longText('requirement')->nullable();
+            $table->longText('link_zoom')->nullable();
             $table->integer('reschedule_late_confirmation')->nullable();
             $table->integer('reschedule_technical_issue_instructor')->nullable();
             $table->integer('reschedule_technical_issue_student')->nullable();

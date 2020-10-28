@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone', 15)->nullable();
-            $table->text('image_profile')->nullable();
+            $table->longText('image_profile')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
         });

@@ -22,7 +22,7 @@ class CreateCoursePaymentsTable extends Migration
             $table->bigInteger('amount')->unsigned()->nullable();
             $table->enum('status', ['Not Confirmed', 'Refunded', 'Wallet', 'Confirmed']);
             $table->timestamp('refunded_at')->nullable();
-            $table->text('path')->nullable();
+            $table->longText('path')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

@@ -18,7 +18,7 @@ class CreateFormQuestionsTable extends Migration
             $table->unsignedBigInteger('form_id');
             $table->string('is_required', 10)->nullable();
             $table->string('code', 50)->nullable();
-            $table->text('question')->nullable();
+            $table->longText('question')->nullable();
             $table->string('placeholder')->nullable();
             $table->string('answer_type')->nullable();
             $table->timestamps();

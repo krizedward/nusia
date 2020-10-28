@@ -17,7 +17,7 @@ class CreatePlacementTestsTable extends Migration
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('course_registration_id');
-            $table->text('path')->nullable();
+            $table->longText('path')->nullable();
             $table->enum('status', ['Not Passed', 'Passed']);
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('result_updated_at')->nullable();

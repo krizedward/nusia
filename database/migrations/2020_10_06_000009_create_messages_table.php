@@ -18,8 +18,8 @@ class CreateMessagesTable extends Migration
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('user_id_sender');
             $table->unsignedBigInteger('user_id_recipient');
-            $table->text('subject');
-            $table->text('message')->nullable();
+            $table->longText('subject');
+            $table->longText('message')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

@@ -17,7 +17,7 @@ class CreateCourseTypeValuesTable extends Migration
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('course_type_id');
-            $table->text('value')->nullable();
+            $table->longText('value')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

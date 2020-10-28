@@ -18,8 +18,8 @@ class CreateMaterialSessionsTable extends Migration
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('session_id');
             $table->string('name');
-            $table->text('description')->nullable();
-            $table->text('path')->nullable();
+            $table->longText('description')->nullable();
+            $table->longText('path')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

@@ -18,7 +18,7 @@ class CreateRatingsTable extends Migration
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('session_registration_id');
             $table->integer('rating')->unsigned();
-            $table->text('comment')->nullable();
+            $table->longText('comment')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

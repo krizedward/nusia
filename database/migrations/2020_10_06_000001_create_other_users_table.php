@@ -17,7 +17,7 @@ class CreateOtherUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->text('profile_description')->nullable();
+            $table->longText('profile_description')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

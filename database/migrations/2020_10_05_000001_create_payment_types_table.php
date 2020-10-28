@@ -17,10 +17,10 @@ class CreatePaymentTypesTable extends Migration
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
             $table->string('method')->nullable();
-            $table->text('brief_description')->nullable();
-            $table->text('detailed_description')->nullable();
+            $table->longText('brief_description')->nullable();
+            $table->longText('detailed_description')->nullable();
             $table->string('account_number')->nullable();
-            $table->text('account_name')->nullable();
+            $table->longText('account_name')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
         });

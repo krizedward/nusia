@@ -17,7 +17,7 @@ class CreateContentLabelsTable extends Migration
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
             $table->string('label');
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
             $table->string('icon')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();

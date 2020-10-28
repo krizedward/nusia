@@ -16,7 +16,7 @@ class CreateFormQuestionChoicesTable extends Migration
         Schema::create('form_question_choices', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('form_question_id');
-            $table->text('answer')->nullable();
+            $table->longText('answer')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

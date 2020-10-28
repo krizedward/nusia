@@ -19,8 +19,8 @@ class CreateMaterialPublicsTable extends Migration
             $table->unsignedBigInteger('course_package_id');
             $table->integer('session_number');
             $table->string('name');
-            $table->text('description')->nullable();
-            $table->text('path')->nullable();
+            $table->longText('description')->nullable();
+            $table->longText('path')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

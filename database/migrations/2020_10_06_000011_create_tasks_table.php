@@ -19,11 +19,11 @@ class CreateTasksTable extends Migration
             $table->unsignedBigInteger('session_id');
             $table->enum('type', ['Assignment', 'Exam']);
             $table->string('title');
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
             $table->timestamp('due_date')->nullable();
-            $table->text('path_1')->nullable();
-            $table->text('path_2')->nullable();
-            $table->text('path_3')->nullable();
+            $table->longText('path_1')->nullable();
+            $table->longText('path_2')->nullable();
+            $table->longText('path_3')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

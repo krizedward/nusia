@@ -16,7 +16,7 @@ class CreateFormResponseDetailsTable extends Migration
         Schema::create('form_response_details', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('form_response_id');
-            $table->text('answer')->nullable();
+            $table->longText('answer')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 

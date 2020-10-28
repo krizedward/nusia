@@ -17,8 +17,8 @@ class CreateInstructorsTable extends Migration
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->text('interest')->nullable();
-            $table->text('working_experience')->nullable();
+            $table->longText('interest')->nullable();
+            $table->longText('working_experience')->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
 
