@@ -17,6 +17,7 @@ use App\Models\CourseRegistration;
 use App\Models\MaterialType;
 use App\Models\CourseLevel;
 use App\Models\CoursePackage;
+use App\Models\Metadata;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -59,6 +60,14 @@ class HomeController extends Controller
     }
     public function is_student() {
         return ($this->user_roles() == "Student")? 1 : 0;
+    }
+
+    /**
+     * Memeriksa apakah saat ini website ada dalam mode "Trial" atau "Full Version".
+     * Return boolean (1 dan 0).
+     */
+    public function is_trial() {
+        return (Metadata::find(1)->value == 'Trial');
     }
 
     /**
@@ -141,7 +150,7 @@ class HomeController extends Controller
                 return redirect()->route('layouts.questionnaire');
             } else if(Auth::user()->student->course_registrations->count() == 0) {
                 //return redirect()->route('courses.index'); // KHUSUS UNTUK FREE CLASSES, mungkin ada bug di CLASS PRIVATE DAN/ATAU GROUP.
-                return redirect()->route('material_types.index');
+                return redirect()->route('student.choose_materials');
             }
 
             //$temp_nation = $c->where('name.common', Auth::user()->timezone)->first()->hydrate('timezones')->timezones->first()->zone_name;
@@ -531,8 +540,23 @@ class HomeController extends Controller
     }
 
     public function choose_materials() {
-        $material_types = MaterialType::all();
-        return view('material_types.student_index', compact('material_types'));
+        if($this->is_trial()) {
+            $material_types = MaterialType::all();
+            $course_packages = CoursePackage
+                ::where('title', 'LIKE', '%Free%')
+                ->orWhere('title', 'LIKE', '%Test%')
+                ->orWhere('title', 'LIKE', '%Trial%')
+                ->get();
+            return view('material_types.student_index', compact('material_types', 'course_packages'));
+        } else {
+            $material_types = MaterialType::all();
+            $course_packages = CoursePackage
+                ::where('title', 'NOT LIKE', '%Free%')
+                ->where('title', 'NOT LIKE', '%Test%')
+                ->where('title', 'NOT LIKE', '%Trial%')
+                ->get();
+            return view('material_types.student_index', compact('material_types', 'course_packages'));
+        }
     }
 
     public function choose_course_types($material_type_id)

@@ -130,7 +130,7 @@ Route::group(['middleware'=>'auth'], function() {
 
         // REGISTRASI PRIVATE & GROUP CLASSES
           // Dari form registrasi Student, lanjut ke memilih MaterialType (General Indonesian Language, Basic Conversation, etc)
-          Route::get('/student/materials', 'MaterialTypeController@index')->name('material_types.index');
+          //Route::get('/student/materials', 'MaterialTypeController@index')->name('material_types.index');
 
           // Dari memilih MaterialType, lanjut ke memilih CourseType (Private/Public) via CoursePackage
           ////Route::get('/student/courses/{material_type_id}', 'CoursePackageController@index_material_type')->name('course_packages.index_material_type');
