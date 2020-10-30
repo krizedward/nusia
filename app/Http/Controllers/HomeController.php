@@ -6,18 +6,20 @@ use App\Models\SessionRegistration;
 use Illuminate\Http\Request;
 
 use App\User;
-use App\Models\Instructor;
-use App\Models\Student;
-use App\Models\Session;
-use App\Models\Schedule;
-use App\Models\MaterialPublic;
-use App\Models\MaterialSession;
 use App\Models\Course;
-use App\Models\CourseRegistration;
-use App\Models\MaterialType;
 use App\Models\CourseLevel;
 use App\Models\CoursePackage;
+use App\Models\CoursePackageDiscount;
+use App\Models\CourseRegistration;
+use App\Models\CourseType;
+use App\Models\Instructor;
+use App\Models\MaterialPublic;
+use App\Models\MaterialSession;
+use App\Models\MaterialType;
 use App\Models\Metadata;
+use App\Models\Schedule;
+use App\Models\Session;
+use App\Models\Student;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -542,20 +544,41 @@ class HomeController extends Controller
     public function choose_materials() {
         if($this->is_trial()) {
             $material_types = MaterialType::all();
+            $course_types = CourseType
+                ::where('name', 'LIKE', '%Free%')
+                ->orWhere('name', 'LIKE', '%Test%')
+                ->orWhere('name', 'LIKE', '%Trial%')
+                ->get();
             $course_packages = CoursePackage
                 ::where('title', 'LIKE', '%Free%')
                 ->orWhere('title', 'LIKE', '%Test%')
                 ->orWhere('title', 'LIKE', '%Trial%')
                 ->get();
-            return view('material_types.student_index', compact('material_types', 'course_packages'));
+            $course_package_discounts = CoursePackageDiscount
+                ::where('due_date', '>', now())
+                ->get();
+            return view('material_types.student_index', compact(
+                'material_types', 'course_types', 'course_packages', 'course_package_discounts'
+            ));
         } else {
             $material_types = MaterialType::all();
+            $course_types = CourseType
+                ::where('name', 'NOT LIKE', '%Free%')
+                ->where('name', 'NOT LIKE', '%Test%')
+                ->where('name', 'NOT LIKE', '%Trial%')
+                ->get();
             $course_packages = CoursePackage
                 ::where('title', 'NOT LIKE', '%Free%')
                 ->where('title', 'NOT LIKE', '%Test%')
                 ->where('title', 'NOT LIKE', '%Trial%')
                 ->get();
-            return view('material_types.student_index', compact('material_types', 'course_packages'));
+            $course_package_discounts = CoursePackageDiscount
+                ::where('due_date', '>', now())
+                ->where('status', 'Active')
+                ->get();
+            return view('material_types.student_index', compact(
+                'material_types', 'course_types', 'course_packages', 'course_package_discounts'
+            ));
         }
     }
 
