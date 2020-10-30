@@ -469,7 +469,7 @@ class HomeController extends Controller
                 // tetapi sudah melakukan pengisian kuisioner.
                 // Contoh kasus: Student mengumpulkan kuisioner, kemudian logout, kemudian login lagi.
                 //return redirect()->route('courses.index');
-                return redirect()->route('material_types.index');
+                return redirect()->route('student.choose_materials');
             }
             return redirect()->route('home');
         }
