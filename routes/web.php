@@ -145,7 +145,7 @@ Route::group(['middleware'=>'auth'], function() {
         // Apabila berencana membuat routing
         // selain Route::resource(s) (pada keyword yang sama),
         // lakukan deklarasi SEBELUM menulis baris kode Route::resource(s).
-        /*Route::resources([
+        Route::resources([
             'payment_types'                 => 'PlacementTypeController',
             'placement_tests'               => 'PlacementTestController',
             'tasks'                         => 'TaskController',
@@ -173,7 +173,7 @@ Route::group(['middleware'=>'auth'], function() {
             'material_publics'              => 'MaterialPublicController',
             'material_sessions'             => 'MaterialSessionController',
             'users'                         => 'UserController'
-        ]);*/
+        ]);
 
         // menggunakan nested resources: /courses/{course}/registrations/{user}
         /*Route::resource('courses-registrations', 'CourseRegistrationController')
