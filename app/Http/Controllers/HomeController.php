@@ -556,6 +556,7 @@ class HomeController extends Controller
                 ->get();
             $course_package_discounts = CoursePackageDiscount
                 ::where('due_date', '>', now())
+                ->where('status', 'Active')
                 ->get();
             return view('material_types.student_index', compact(
                 'material_types', 'course_types', 'course_packages', 'course_package_discounts'
@@ -566,11 +567,13 @@ class HomeController extends Controller
                 ::where('name', 'NOT LIKE', '%Free%')
                 ->where('name', 'NOT LIKE', '%Test%')
                 ->where('name', 'NOT LIKE', '%Trial%')
+                ->where('name', 'NOT LIKE', '%Not Assigned%')
                 ->get();
             $course_packages = CoursePackage
                 ::where('title', 'NOT LIKE', '%Free%')
                 ->where('title', 'NOT LIKE', '%Test%')
                 ->where('title', 'NOT LIKE', '%Trial%')
+                ->where('title', 'NOT LIKE', '%Not Assigned%')
                 ->get();
             $course_package_discounts = CoursePackageDiscount
                 ::where('due_date', '>', now())

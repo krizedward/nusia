@@ -58,28 +58,26 @@
                       </div>
                     @endif
                     @if($mt->name == 'Indonesian Culture')
-                      <div class="box-body" style="height:225px;">
-                        @foreach($course_packages as $cp)
-                          @if($cp->course_type->id == $ct->id)
+                      @foreach($ct->course_packages as $i => $cp)
+                        <div class="box-body" style="@if($i % 2 == 0) height:400px; @else height:275px; @endif">
+                          @if($i % 2 == 0)
                             <hr>
-                            @foreach($course_package_discounts as $cpd)
-                              @if($cpd->course_package_id == $cp->id)
-                                <label class="label label-success">$ {{ $cp->price - $cpd->price }} savings</label>
-                                <div class="text-center">
-                                  <p><b><span style="font-size:20px;"><strike>${{ $cp->price }}</strike></span></b></p>
-                                  <p>Get a {{ $cpd->description }}</p>
-                                  <p><b>Now is only <span style="font-size:20px;">${{ $cpd->price }}/level</span></b></p>
-                                  <p style="color:#ff0000;">{{ $cp->refund_description }}</p>
-                                </div>
-                              @endif
-                            @endforeach
-                            @break
+                            <p class="text-center">{{ $cp->description }}</p>
                           @endif
-                        @endforeach
-                      </div>
-                      <div class="box-footer">
-                        <a href="{{ route('student.complete_payment_information', $cp->id) }}" class="btn btn-primary btn-block"><b>BOOK NOW!</b></a>
-                      </div>
+                          <hr>
+                          <p class="text-center" style="font-size:1.5em;"><b>{{ $cp->title }}</b></p>
+                          <label class="label label-success">$ {{ $cp->price - $cp->course_package_discounts->last()->price }} savings</label>
+                          <div class="text-center">
+                            <p><b><span style="font-size:20px;"><strike>${{ $cp->price }}</strike></span></b></p>
+                            <p>{{ $cp->course_package_discounts->last()->description }}</p>
+                            <p><b>Now is only <span style="font-size:20px;">${{ $cp->course_package_discounts->last()->price }}/level</span></b></p>
+                            <p style="color:#ff0000;">{{ $cp->refund_description }}</p>
+                          </div>
+                        </div>
+                        <div class="box-footer">
+                          <a href="{{ route('student.complete_payment_information', $cp->id) }}" class="btn btn-primary btn-block"><b>BOOK NOW!</b></a>
+                        </div>
+                      @endforeach
                     @else
                       <div class="box-body" style="height:225px;">
                         @foreach($course_packages as $cp)
@@ -92,7 +90,7 @@
                                 <label class="label label-success">$ {{ $cp->price - $cpd->price }} savings</label>
                                 <div class="text-center">
                                   <p><b><span style="font-size:20px;"><strike>${{ $cp->price }}</strike></span></b></p>
-                                  <p>Get a {{ $cpd->description }}</p>
+                                  <p>{{ $cpd->description }}</p>
                                   <p><b>Now is only <span style="font-size:20px;">${{ $cpd->price }}/level</span></b></p>
                                   <p style="color:#ff0000;">{{ $cp->refund_description }}</p>
                                 </div>
