@@ -582,7 +582,7 @@ class HomeController extends Controller
         }
     }
 
-    public function choose_course_types($material_type_id)
+    /*public function choose_course_types($material_type_id)
     {
         if($this->is_student()){
             //$course_level_id = CourseLevel::where('name', Auth::user()->student->indonesian_language_proficiency)->first()->id;
@@ -594,6 +594,10 @@ class HomeController extends Controller
         } else {
             return redirect()->route('home');
         }
+    }*/
+
+    public function complete_payment_information($course_id) {
+        //
     }
 
     public function profile()
