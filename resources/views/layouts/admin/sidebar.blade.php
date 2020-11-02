@@ -63,9 +63,27 @@
             </li>
             @elseif(Auth::user()->citizenship != 'Not Available')
               @if(Auth::user()->student->course_registrations->count() == 0)
-                <li class="{{ set_active(['student.choose_materials', 'student.complete_payment_information']) }}">
+                <li class="{{ set_active(['student.choose_materials']) }}">
                   <a href="{{ route('student.choose_materials')}}">
-                    <i class="fa fa-book"></i> <span>Registrations</span>
+                    <i class="fa fa-book"></i> <span>Choose a Course</span>
+                  </a>
+                </li>
+              @elseif(Auth::user()->student->course_registrations->first()->course_payments->count() == 0)
+                <li class="{{ set_active(['student.complete_payment_information']) }}">
+                  <a href="{{ route('student.complete_payment_information', [Auth::user()->student->course_registrations->first()->id])}}">
+                    <i class="fa fa-book"></i> <span>Complete Payment Information</span>
+                  </a>
+                </li>
+              @elseif(Auth::user()->student->course_registrations->first()->placement_test)
+                <li class="{{ set_active(['student.complete_placement_tests']) }}">
+                  <a href="{{ route('student.complete_placement_tests', [Auth::user()->student->course_registrations->first()->id])}}">
+                    <i class="fa fa-book"></i> <span>Complete Placement Test</span>
+                  </a>
+                </li>
+              @elseif(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed')
+                <li class="{{ set_active(['student.complete_course_registrations']) }}">
+                  <a href="{{ route('student.complete_course_registrations', [Auth::user()->student->course_registrations->first()->id])}}">
+                    <i class="fa fa-book"></i> <span>Complete Course Registration</span>
                   </a>
                 </li>
               @else
