@@ -93,7 +93,10 @@ class UserController extends Controller
         //return view('users.index');
         //return "Hello World";
         if ($this->is_admin()) {
-            return view('users.admin_create');
+            //$user = User::all();
+            //Pagination
+            $user = User::orderBy('id', 'asc')->simplePaginate(5);
+            return view('users.admin_create',compact('user'));
         }
     }
 
@@ -105,21 +108,37 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'email'         => ['required'],
+            'first_name'    => ['required'],
+            'last_name'     => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         // Menyimpan dari fungsi create
         if ($this->is_admin()) {
             //draft
             User::create([
-                'email'         => "email@mail.com",
+                'first_name'    => $request->first_name,
+                'last_name'     => $request->last_name,
+                'email'         => $request->email,
+                'roles'         => $request->roles,
                 'password'      => "12345678",
-                'roles'         => "Student",
                 'citizenship'   => "Country",
                 'domicile'      => "City",
                 'timezone'      => "Asia/Jakarta",
-                'first_name'    => "name",
-                'last_name'     => "user",
                 'phone'         => "081234579230",
                 'image_profile' => "user.jpg",
-            ]);  
+            ]);
+
+            return redirect()->back();  
         }
     }
 
