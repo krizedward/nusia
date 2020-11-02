@@ -63,7 +63,7 @@
             </li>
             @elseif(Auth::user()->citizenship != 'Not Available')
               @if(Auth::user()->student->course_registrations->count() == 0)
-                <li class="{{ set_active(['student.choose_materials']) }}">
+                <li class="{{ set_active(['student.choose_materials', 'student.complete_payment_information']) }}">
                   <a href="{{ route('student.choose_materials')}}">
                     <i class="fa fa-book"></i> <span>Registrations</span>
                   </a>
@@ -164,7 +164,7 @@
 
                 <li class="header">OTHERS</li>
 
-                <li class="{{ set_active('student.choose_materials') }}">
+                <li class="{{ set_active(['student.choose_materials', 'student.complete_payment_information']) }}">
                     <a href="{{ route('student.choose_materials') }}"><i class="fa fa-book"> </i><span> Choose a Course</span></a>
                 </li>
 
