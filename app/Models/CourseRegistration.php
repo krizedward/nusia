@@ -63,7 +63,7 @@ class CourseRegistration extends Model
     /**
      * Define a relationship.
      */
-    public function course_payment()
+    public function course_payments()
     {
     	return $this->hasMany(CoursePayment::class); // diubah dari hasOne menjadi hasMany untuk fitur cicilan.
     }
