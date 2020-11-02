@@ -555,8 +555,16 @@ class HomeController extends Controller
                 ->orWhere('title', 'LIKE', '%Trial%')
                 ->get();
             $course_package_discounts = CoursePackageDiscount
-                ::where('due_date', '>', now())
-                ->where('status', 'Active')
+                ::join('course_packages', 'course_package_discounts.course_package_id', 'course_packages.id')
+                ->where(function($q) {
+                    $q
+                        ->where('title', 'LIKE', '%Free%')
+                        ->orWhere('title', 'LIKE', '%Test%')
+                        ->orWhere('title', 'LIKE', '%Trial%');
+                })
+                ->where('course_package_discounts.due_date', '>', now())
+                ->where('course_package_discounts.status', 'Active')
+                ->select('course_package_discounts.id', 'course_package_discounts.code', 'course_package_discounts.course_package_id', 'course_package_discounts.price', 'course_package_discounts.description', 'course_package_discounts.due_date', 'course_package_discounts.status', 'course_package_discounts.created_at', 'course_package_discounts.updated_at', 'course_package_discounts.deleted_at')
                 ->get();
             return view('material_types.student_index', compact(
                 'material_types', 'course_types', 'course_packages', 'course_package_discounts'
@@ -576,8 +584,14 @@ class HomeController extends Controller
                 ->where('title', 'NOT LIKE', '%Not Assigned%')
                 ->get();
             $course_package_discounts = CoursePackageDiscount
-                ::where('due_date', '>', now())
-                ->where('status', 'Active')
+                ::join('course_packages', 'course_package_discounts.course_package_id', 'course_packages.id')
+                ->where('course_packages.title', 'NOT LIKE', '%Free%')
+                ->where('course_packages.title', 'NOT LIKE', '%Test%')
+                ->where('course_packages.title', 'NOT LIKE', '%Trial%')
+                ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+                ->where('course_package_discounts.due_date', '>', now())
+                ->where('course_package_discounts.status', 'Active')
+                ->select('course_package_discounts.id', 'course_package_discounts.code', 'course_package_discounts.course_package_id', 'course_package_discounts.price', 'course_package_discounts.description', 'course_package_discounts.due_date', 'course_package_discounts.status', 'course_package_discounts.created_at', 'course_package_discounts.updated_at', 'course_package_discounts.deleted_at')
                 ->get();
             return view('material_types.student_index', compact(
                 'material_types', 'course_types', 'course_packages', 'course_package_discounts'
@@ -585,21 +599,152 @@ class HomeController extends Controller
         }
     }
 
-    /*public function choose_course_types($material_type_id)
-    {
-        if($this->is_student()){
-            //$course_level_id = CourseLevel::where('name', Auth::user()->student->indonesian_language_proficiency)->first()->id;
-
-            $course_packages = CoursePackage
-                ::where('material_type_id', $material_type_id)
-                ->get();
-            return view('course_packages.student_index_material_type', compact('course_packages'));
-        } else {
-            return redirect()->route('home');
+    public function store_materials(Request $request) {
+        // Pengeditan array dilakukan secara MANUAL.
+        $arr_available = [7, 16, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39];
+        if(!in_array($request->choice, $arr_available)) {
+            return redirect()->route('student.choose_materials');
         }
-    }*/
 
-    public function complete_payment_information($course_id) {
+        if($this->is_trial()) {
+            $current_course_package = CoursePackage::find($request->choice);
+
+            if($current_course_package->material_type->name == 'Indonesian Culture') {
+                $new_course_package_id = CoursePackage
+                    ::where(function($q) {
+                        $q
+                            ->where('title', 'LIKE', '%Free%')
+                            ->orWhere('title', 'LIKE', '%Test%')
+                            ->orWhere('title', 'LIKE', '%Trial%');
+                    })
+                    ->where('title', 'LIKE', '%Not Assigned%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->title.'%')
+                    ->first()->id;
+            } else {
+                $new_course_package_id = CoursePackage
+                    ::where(function($q) {
+                        $q
+                            ->where('title', 'LIKE', '%Free%')
+                            ->orWhere('title', 'LIKE', '%Test%')
+                            ->orWhere('title', 'LIKE', '%Trial%');
+                    })
+                    ->where('title', 'LIKE', '%Not Assigned%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
+                    ->first()->id;
+            }
+        } else {
+            $current_course_package = CoursePackage::find($request->choice);
+
+            if($current_course_package->material_type->name == 'Indonesian Culture') {
+                $new_course_package_id = CoursePackage
+                    ::where('title', 'NOT LIKE', '%Free%')
+                    ->where('title', 'NOT LIKE', '%Test%')
+                    ->where('title', 'NOT LIKE', '%Trial%')
+                    ->where('title', 'LIKE', '%Not Assigned%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->title.'%')
+                    ->first()->id;
+            } else {
+                $new_course_package_id = CoursePackage
+                    ::where('title', 'NOT LIKE', '%Free%')
+                    ->where('title', 'NOT LIKE', '%Test%')
+                    ->where('title', 'NOT LIKE', '%Trial%')
+                    ->where('title', 'LIKE', '%Not Assigned%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
+                    ->first()->id;
+            }
+        }
+
+dd($new_course_package_id);
+
+        if(Auth::check() && Auth::user()->student->course_registrations->count() == 0) {
+            // Apabila Student belum pernah memilih jenis course sebelumnya, maka buat kelas Course.
+        } else {
+            // Apabila Student sudah pernah memilih jenis course sebelumnya, maka update kelas Course, ubah course_package_id dengan ID baru yang telah dipilih.
+        }
+    }
+
+    public function complete_payment_information($course_package_id) {
+        // Apabila Student belum pernah melakukan pendaftaran course sebelumnya, maka sistem 1x free trial berlaku.
+        if(Auth::user()->student->course_registrations->count() == 0) {
+            //
+        }
+
+        // Pengeditan array dilakukan secara MANUAL.
+        $arr_available = [7, 16, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39];
+        if(!in_array($course_package_id, $arr_available)) {
+            return redirect()->route('student.choose_materials');
+        }
+
+        if($this->is_trial()) {
+            $current_course_package = CoursePackage::find($course_package_id);
+
+            if($current_course_package->material_type->name == 'Indonesian Culture') {
+                $new_course_package_id = CoursePackage
+                    ::where(function($q) {
+                        $q
+                            ->where('title', 'LIKE', '%Free%')
+                            ->orWhere('title', 'LIKE', '%Test%')
+                            ->orWhere('title', 'LIKE', '%Trial%');
+                    })
+                    ->where('title', 'LIKE', '%Not Assigned%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->title.'%')
+                    ->first()->id;
+            } else {
+                $new_course_package_id = CoursePackage
+                    ::where(function($q) {
+                        $q
+                            ->where('title', 'LIKE', '%Free%')
+                            ->orWhere('title', 'LIKE', '%Test%')
+                            ->orWhere('title', 'LIKE', '%Trial%');
+                    })
+                    ->where('title', 'LIKE', '%Not Assigned%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
+                    ->first()->id;
+            }
+
+            return view('registrations.student_complete_payment_information', compact(
+                'new_course_package_id',
+            ));
+        } else {
+            $current_course_package = CoursePackage::find($course_package_id);
+
+            if($current_course_package->material_type->name == 'Indonesian Culture') {
+                $new_course_package_id = CoursePackage
+                    ::where('title', 'NOT LIKE', '%Free%')
+                    ->where('title', 'NOT LIKE', '%Test%')
+                    ->where('title', 'NOT LIKE', '%Trial%')
+                    ->where('title', 'LIKE', '%Not Assigned%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->title.'%')
+                    ->first()->id;
+            } else {
+                $new_course_package_id = CoursePackage
+                    ::where('title', 'NOT LIKE', '%Free%')
+                    ->where('title', 'NOT LIKE', '%Test%')
+                    ->where('title', 'NOT LIKE', '%Trial%')
+                    ->where('title', 'LIKE', '%Not Assigned%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
+                    ->first()->id;
+            }
+
+            return view('registrations.student_complete_payment_information', compact(
+                'new_course_package_id',
+            ));
+        }
+    }
+
+    public function store_payment_information(Request $request, $course_registration_id) {
         //
     }
 
