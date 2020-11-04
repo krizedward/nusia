@@ -213,7 +213,10 @@ class FormResponseController extends Controller
             return view('form_responses.instructor_index',compact(
                 'forms', 'widget_1', 'widget_2', 'widget_2_total', 'widget_3', 'rating'
             ));
-        } else {
+        } else if($this->is_lead_instructor()){
+            //04.11.2020
+            return view('form_responses.lead_instructor_index'); 
+        }else {
             return redirect()->route('home');
         }
     }
