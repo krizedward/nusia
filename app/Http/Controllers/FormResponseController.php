@@ -216,7 +216,13 @@ class FormResponseController extends Controller
         } else if($this->is_lead_instructor()){
             //04.11.2020
             return view('form_responses.lead_instructor_index'); 
-        }else {
+        } else if($this->is_customer_service()){
+            //04.11.2020
+            return view('form_responses.customer_service_index'); 
+        } else if($this->is_financial_team()) {
+            //04.11.2020
+            return view('form_responses.financial_team_index');
+        } else {
             return redirect()->route('home');
         }
     }

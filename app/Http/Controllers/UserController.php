@@ -8,10 +8,14 @@ use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 use App\User;
 use App\Models\PlacementTest;
 use App\Models\Course;
+
+
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -131,14 +135,14 @@ class UserController extends Controller
                 'email'         => $request->email,
                 'roles'         => $request->roles,
                 'password'      => Hash::make("12345678"),
-                'citizenship'   => "Country",
-                'domicile'      => "City",
+                'citizenship'   => "No Data",
+                'domicile'      => "No Data",
                 'timezone'      => "Asia/Jakarta",
-                'phone'         => "081234579230",
+                'phone'         => "000",
                 'image_profile' => "user.jpg",
             ]);
 
-            Alert::success('Success', 'Login Berhasil !!!');
+            Alert::success('Success', 'Input Berhasil !!!');
             return redirect()->back();  
         }
     }

@@ -59,6 +59,8 @@ class CoursePaymentController extends Controller
         } else if ($this->is_student()) {
             $data = CoursePayment::all();
             return view('course_payments.student_index', compact('data'));
+        } else if($this->is_financial_team()){
+            return view('course_payments.financial_team_index');
         } else {
             // Tidak memiliki hak akses.
         }
