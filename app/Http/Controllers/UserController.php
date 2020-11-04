@@ -130,7 +130,7 @@ class UserController extends Controller
                 'last_name'     => $request->last_name,
                 'email'         => $request->email,
                 'roles'         => $request->roles,
-                'password'      => "12345678",
+                'password'      => Hash::make("12345678"),
                 'citizenship'   => "Country",
                 'domicile'      => "City",
                 'timezone'      => "Asia/Jakarta",
@@ -138,6 +138,7 @@ class UserController extends Controller
                 'image_profile' => "user.jpg",
             ]);
 
+            Alert::success('Success', 'Login Berhasil !!!');
             return redirect()->back();  
         }
     }
@@ -221,7 +222,7 @@ class UserController extends Controller
                 ::join('sessions', 'courses.id', 'sessions.course_id')
                 ->join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->join('instructors', 'schedules.instructor_id', 'instructors.id')
-                ->distinct()
+                //->distinct()
                 ->where('instructors.user_id', $user->id)
                 ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at', 'courses.deleted_at')
                 ->orderBy('courses.title')

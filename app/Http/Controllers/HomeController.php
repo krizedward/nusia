@@ -79,6 +79,13 @@ class HomeController extends Controller
      */
     public function index()
     {
+        //03.11.2020
+        //Membuat Akses Untuk Lead Instructor
+        if ($this->is_lead_instructor()) {
+            
+            return view('dashboard.lead_instructor_index');
+        }
+
         if($this->is_admin()) {
             //alert
             Alert::success('Success', 'Login Berhasil !!!');
@@ -459,7 +466,7 @@ class HomeController extends Controller
     //Menampilkan form questionnaire
     public function questionnaire()
     {
-        if($this->is_admin() || $this->is_instructor()) {
+        if($this->is_admin() || $this->is_instructor() || $this->is_lead_instructor()) {
             return redirect()->route('home');
         }
 
@@ -712,7 +719,7 @@ dd($new_course_package_id);
             }
 
             return view('registrations.student_complete_payment_information', compact(
-                'new_course_package_id',
+                'new_course_package_id'
             ));
         } else {
             $current_course_package = CoursePackage::find($course_package_id);
@@ -739,7 +746,7 @@ dd($new_course_package_id);
             }
 
             return view('registrations.student_complete_payment_information', compact(
-                'new_course_package_id',
+                'new_course_package_id'
             ));
         }
     }
