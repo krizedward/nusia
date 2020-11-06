@@ -8,10 +8,14 @@ use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 use App\User;
 use App\Models\PlacementTest;
 use App\Models\Course;
+
+
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -130,14 +134,15 @@ class UserController extends Controller
                 'last_name'     => $request->last_name,
                 'email'         => $request->email,
                 'roles'         => $request->roles,
-                'password'      => "12345678",
-                'citizenship'   => "Country",
-                'domicile'      => "City",
+                'password'      => Hash::make("12345678"),
+                'citizenship'   => "No Data",
+                'domicile'      => "No Data",
                 'timezone'      => "Asia/Jakarta",
-                'phone'         => "081234579230",
+                'phone'         => "000",
                 'image_profile' => "user.jpg",
             ]);
 
+            Alert::success('Success', 'Input Berhasil !!!');
             return redirect()->back();  
         }
     }
@@ -221,7 +226,7 @@ class UserController extends Controller
                 ::join('sessions', 'courses.id', 'sessions.course_id')
                 ->join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->join('instructors', 'schedules.instructor_id', 'instructors.id')
-                ->distinct()
+                //->distinct()
                 ->where('instructors.user_id', $user->id)
                 ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at', 'courses.deleted_at')
                 ->orderBy('courses.title')

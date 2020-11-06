@@ -55,6 +55,10 @@ class ScheduleController extends Controller
      */
     public function index($course_type = 'Free Trial')
     {
+        //04.11.2020
+        if ($this->is_lead_instructor()) {
+            return "Hello World";
+        }
 
         if ($this->is_instructor()) {
           return view('schedules.instructor_index');

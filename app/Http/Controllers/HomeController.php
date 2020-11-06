@@ -79,6 +79,25 @@ class HomeController extends Controller
      */
     public function index()
     {
+        //04.11.2020
+        //Membuat Akses Untuk Financial Team
+        if ($this->is_financial_team()) {
+            return view('dashboard.financial_team_index');
+        }
+
+        //Membuat Akses Untuk Customer Service
+        if ($this->is_customer_service()) {
+            # code...
+            return view('dashboard.customer_service_index');
+        }
+
+        //03.11.2020
+        //Membuat Akses Untuk Lead Instructor
+        if ($this->is_lead_instructor()) {
+            
+            return view('dashboard.lead_instructor_index');
+        }
+
         if($this->is_admin()) {
             //alert
             Alert::success('Success', 'Login Berhasil !!!');
@@ -459,7 +478,10 @@ class HomeController extends Controller
     //Menampilkan form questionnaire
     public function questionnaire()
     {
-        if($this->is_admin() || $this->is_instructor()) {
+        //04.11.2020
+        if( $this->is_admin() || $this->is_instructor() || $this->is_financial_team() ||
+            $this->is_lead_instructor() || $this->is_customer_service()) {
+            //menampilkan halaman dashboard
             return redirect()->route('home');
         }
 
@@ -893,7 +915,7 @@ class HomeController extends Controller
             }
 
             return view('registrations.student_complete_payment_information', compact(
-                'new_course_package_id',
+                'new_course_package_id'
             ));
         } else {
             $current_course_package = CoursePackage::find($course_package_id);
@@ -920,7 +942,7 @@ class HomeController extends Controller
             }
 
             return view('registrations.student_complete_payment_information', compact(
-                'new_course_package_id',
+                'new_course_package_id'
             ));
         }
     }

@@ -57,6 +57,11 @@ class StudentController extends Controller
      */
     public function index()
     {
+        //04.11.2020
+        if ($this->is_customer_service()) {
+            return view('students.customer_service_index');
+        }
+
         if ($this->is_admin()) {
             $data = Student::all();
             return view('students.admin_index', compact('data'));
@@ -72,6 +77,7 @@ class StudentController extends Controller
      */
     public function create()
     {
+        //basic
         if($this->is_admin() || $this->is_student()) {
             $countries = [
                 'Afghanistan', 'Albania', 'Algeria', 'Angola', 'Anguilla',

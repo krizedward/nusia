@@ -255,8 +255,8 @@
                         <!--/ul-->
                     </li>--}}
 
-                    <li class="{{ set_active('materials.index') }}">
-                        <a href="{{ route('materials.index') }}">
+                    <li class="{{ set_active('material_types.index') }}">
+                        <a href="{{ route('material_types.index') }}">
                             <i class="fa fa-book"> </i><span> Materials</span>
                         </a>
                     </li>
@@ -293,7 +293,7 @@
                         <li class="header">STUDENTS</li>
 
                         <li class="#">
-                            <a href="{{ route('home')}}">
+                            <a href="#">
                                 <i class="fa fa-file-text-o"></i> <span>Placement Tests</span>
                             </a>
                         </li>
@@ -367,13 +367,13 @@
                     <li class="header">DATA</li>
 
                     <li class="#">
-                        <a href="{{ route('home') }}">
+                        <a href="{{ route('sessions.index') }}">
                             <i class="fa fa-book"> </i><span> Course Schedules</span>
                         </a>
                     </li>
 
                     <li class="#">
-                        <a href="{{ route('home') }}">
+                        <a href="{{ route('students.index') }}">
                             <i class="fa fa-book"> </i><span> Students</span>
                         </a>
                     </li>
@@ -397,7 +397,7 @@
                     <li class="header">FINANCE</li>
 
                     <li class="#">
-                        <a href="{{ route('home') }}">
+                        <a href="{{ route('course_payments.index',[1]) }}">
                             <i class="fa fa-book"> </i><span> Course Payments</span>
                         </a>
                     </li>

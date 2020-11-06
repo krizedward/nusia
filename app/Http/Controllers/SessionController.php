@@ -55,6 +55,16 @@ class SessionController extends Controller
      */
     public function index()
     {
+        //04.11.2020
+        if ($this->is_customer_service()) {
+            return view('sessions.customer_service_index');
+        }
+
+        if ($this->is_lead_instructor()) {
+            //membuat tampilan di lead_instructor
+            return view('sessions.lead_instructor_index');
+        }
+
         if ($this->is_admin()){
             $data = Session::all();
             return view('sessions.admin_index',compact('data'));
