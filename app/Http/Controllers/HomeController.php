@@ -566,9 +566,59 @@ class HomeController extends Controller
                 ->where('course_package_discounts.status', 'Active')
                 ->select('course_package_discounts.id', 'course_package_discounts.code', 'course_package_discounts.course_package_id', 'course_package_discounts.price', 'course_package_discounts.description', 'course_package_discounts.due_date', 'course_package_discounts.status', 'course_package_discounts.created_at', 'course_package_discounts.updated_at', 'course_package_discounts.deleted_at')
                 ->get();
-            return view('material_types.student_index', compact(
-                'material_types', 'course_types', 'course_packages', 'course_package_discounts'
-            ));
+
+            $registered_early_classes = CourseRegistration
+                ::join('courses', 'course_registrations.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where('course_packages.title', 'LIKE', '%Early Registration%')
+                ->where(function($q) {
+                    $q
+                        ->where('course_packages.title', 'LIKE', '%Free%')
+                        ->orWhere('course_packages.title', 'LIKE', '%Test%')
+                        ->orWhere('course_packages.title', 'LIKE', '%Trial%');
+                })
+                ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
+                ->get();
+
+            // Menyimpan daftar course_registrations yang memiliki jadwal sesi yang belum berjalan.
+            // Dengan kata lain, course ini sedang diikuti oleh Student ybs.
+            // Query ini menghilangkan daftar course_registrations yang sudah SEPENUHNYA selesai.
+            // Hal ini dilakukan untuk mengganti button pada material_type
+            // yang masih belum dapat didaftarkan oleh Student, karena ada course yang masih dihadiri.
+            $all_current_running_course_registrations = Schedule
+                ::join('sessions', 'schedules.id', 'sessions.schedule_id')
+                ->join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where(function($q) {
+                    $q
+                        ->where('course_packages.title', 'LIKE', '%Free%')
+                        ->orWhere('course_packages.title', 'LIKE', '%Test%')
+                        ->orWhere('course_packages.title', 'LIKE', '%Trial%');
+                })
+                ->where('schedules.schedule_time', '>', now())
+                ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
+                ->distinct()
+                ->get();
+
+            // Menyimpan daftar course_registrations yang bersifat "Not Registered".
+            // Hal ini dilakukan untuk mengetahui daftar course yang berstatus masih dalam proses pendaftaran.
+            $all_not_assigned_courses = CourseRegistration
+                ::join('courses', 'course_registrations.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where(function($q) {
+                    $q
+                        ->where('course_packages.title', 'LIKE', '%Free%')
+                        ->orWhere('course_packages.title', 'LIKE', '%Test%')
+                        ->orWhere('course_packages.title', 'LIKE', '%Trial%');
+                })
+                ->where('course_packages.title', 'NOT LIKE', '%Early Registration%')
+                ->where('course_packages.title', 'LIKE', '%Not Assigned%')
+                ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
+                ->get();
         } else {
             $material_types = MaterialType::all();
             $course_types = CourseType
@@ -582,6 +632,7 @@ class HomeController extends Controller
                 ->where('title', 'NOT LIKE', '%Test%')
                 ->where('title', 'NOT LIKE', '%Trial%')
                 ->where('title', 'NOT LIKE', '%Not Assigned%')
+                ->where('title', 'NOT LIKE', '%Early Registration%')
                 ->get();
             $course_package_discounts = CoursePackageDiscount
                 ::join('course_packages', 'course_package_discounts.course_package_id', 'course_packages.id')
@@ -589,83 +640,213 @@ class HomeController extends Controller
                 ->where('course_packages.title', 'NOT LIKE', '%Test%')
                 ->where('course_packages.title', 'NOT LIKE', '%Trial%')
                 ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+                ->where('course_packages.title', 'NOT LIKE', '%Early Registration%')
                 ->where('course_package_discounts.due_date', '>', now())
                 ->where('course_package_discounts.status', 'Active')
                 ->select('course_package_discounts.id', 'course_package_discounts.code', 'course_package_discounts.course_package_id', 'course_package_discounts.price', 'course_package_discounts.description', 'course_package_discounts.due_date', 'course_package_discounts.status', 'course_package_discounts.created_at', 'course_package_discounts.updated_at', 'course_package_discounts.deleted_at')
                 ->get();
-            return view('material_types.student_index', compact(
-                'material_types', 'course_types', 'course_packages', 'course_package_discounts'
-            ));
+
+            $registered_early_classes = CourseRegistration
+                ::join('courses', 'course_registrations.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where('course_packages.title', 'LIKE', '%Early Registration%')
+                ->where('course_packages.title', 'NOT LIKE', '%Free%')
+                ->where('course_packages.title', 'NOT LIKE', '%Test%')
+                ->where('course_packages.title', 'NOT LIKE', '%Trial%')
+                ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+                ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
+                ->get();
+
+            // Menyimpan daftar course_registrations yang memiliki jadwal sesi yang belum berjalan.
+            // Dengan kata lain, course ini sedang diikuti oleh Student ybs.
+            // Query ini menghilangkan daftar course_registrations yang sudah SEPENUHNYA selesai.
+            // Hal ini dilakukan untuk mengganti button pada material_type
+            // yang masih belum dapat didaftarkan oleh Student, karena ada course yang masih dihadiri.
+            $all_current_running_course_registrations = Schedule
+                ::join('sessions', 'schedules.id', 'sessions.schedule_id')
+                ->join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where('course_packages.title', 'NOT LIKE', '%Free%')
+                ->where('course_packages.title', 'NOT LIKE', '%Test%')
+                ->where('course_packages.title', 'NOT LIKE', '%Trial%')
+                ->where('schedules.schedule_time', '>', now())
+                ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
+                ->distinct()
+                ->get();
+
+            // Menyimpan daftar course_registrations yang bersifat "Not Registered".
+            // Hal ini dilakukan untuk mengetahui daftar course yang berstatus masih dalam proses pendaftaran.
+            $all_not_assigned_courses = CourseRegistration
+                ::join('courses', 'course_registrations.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where('course_packages.title', 'NOT LIKE', '%Free%')
+                ->where('course_packages.title', 'NOT LIKE', '%Test%')
+                ->where('course_packages.title', 'NOT LIKE', '%Trial%')
+                ->where('course_packages.title', 'NOT LIKE', '%Early Registration%')
+                ->where('course_packages.title', 'LIKE', '%Not Assigned%')
+                ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
+                ->get();
         }
+
+        return view('material_types.student_index', compact(
+            'material_types', 'course_types', 'course_packages', 'course_package_discounts',
+            'registered_early_classes', 'all_current_running_course_registrations', 'all_not_assigned_courses',
+        ));
     }
 
     public function store_materials(Request $request) {
+        // LANGKAH 1: Apakah User sudah melakukan login pada waktu mengirim request?
+        // Jika User belum login (atau sesi login telah berakhir), lakukan redirect ke GET method.
+        if(!Auth::check()) {
+            return redirect()->route('student.choose_materials');
+        }
+
+        // LANGKAH 2: Apakah User memilih ID yang sesuai dengan ID yang ditampilkan pada layar?
+        // Berikut daftar ID yang diperbolehkan untuk melanjutkan ke langkah berikutnya.
         // Pengeditan array dilakukan secara MANUAL.
         $arr_available = [7, 16, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39];
         if(!in_array($request->choice, $arr_available)) {
             return redirect()->route('student.choose_materials');
         }
 
-        if($this->is_trial()) {
-            $current_course_package = CoursePackage::find($request->choice);
-
-            if($current_course_package->material_type->name == 'Indonesian Culture') {
-                $new_course_package_id = CoursePackage
-                    ::where(function($q) {
-                        $q
-                            ->where('title', 'LIKE', '%Free%')
-                            ->orWhere('title', 'LIKE', '%Test%')
-                            ->orWhere('title', 'LIKE', '%Trial%');
-                    })
-                    ->where('title', 'LIKE', '%Not Assigned%')
-                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
-                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
-                    ->where('title', 'LIKE', '%'.$current_course_package->title.'%')
-                    ->first()->id;
-            } else {
-                $new_course_package_id = CoursePackage
-                    ::where(function($q) {
-                        $q
-                            ->where('title', 'LIKE', '%Free%')
-                            ->orWhere('title', 'LIKE', '%Test%')
-                            ->orWhere('title', 'LIKE', '%Trial%');
-                    })
-                    ->where('title', 'LIKE', '%Not Assigned%')
-                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
-                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
-                    ->first()->id;
-            }
-        } else {
-            $current_course_package = CoursePackage::find($request->choice);
-
-            if($current_course_package->material_type->name == 'Indonesian Culture') {
-                $new_course_package_id = CoursePackage
-                    ::where('title', 'NOT LIKE', '%Free%')
-                    ->where('title', 'NOT LIKE', '%Test%')
-                    ->where('title', 'NOT LIKE', '%Trial%')
-                    ->where('title', 'LIKE', '%Not Assigned%')
-                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
-                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
-                    ->where('title', 'LIKE', '%'.$current_course_package->title.'%')
-                    ->first()->id;
-            } else {
-                $new_course_package_id = CoursePackage
-                    ::where('title', 'NOT LIKE', '%Free%')
-                    ->where('title', 'NOT LIKE', '%Test%')
-                    ->where('title', 'NOT LIKE', '%Trial%')
-                    ->where('title', 'LIKE', '%Not Assigned%')
-                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
-                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
-                    ->first()->id;
+        // LANGKAH 3: Melakukan pemeriksaan, apakah User sudah mendaftar dalam early class.
+        //            Satu material type memberikan 1 bonus early class untuk masing-masing Student.
+        $early_classes_registration = CourseRegistration
+            ::join('courses', 'course_registrations.course_id', 'courses.id')
+            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+            ->where('course_registrations.student_id', Auth::user()->student->id)
+            ->where('course_packages.title', 'LIKE', '%Early Registration%')
+            ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
+            ->get();
+        $early_classes_not_accepted_registration = CourseRegistration
+            ::join('courses', 'course_registrations.course_id', 'courses.id')
+            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+            ->join('placement_tests', 'course_registrations.id', 'placement_tests.course_registration_id')
+            ->where('course_registrations.student_id', Auth::user()->student->id)
+            ->where('course_packages.title', 'LIKE', '%Early Registration%')
+            ->where('placement_tests.status', 'Not Passed')
+            ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
+            ->get();
+        // Untuk semua early classes (disebut "class" karena hanya ada 1 sesi per course).
+        foreach($early_classes_registration as $ecr) {
+            // Apabila sudah ada pendaftaran 
+            if($ecr->course->course_package->material_type_id == $request->choice_mt) {
+                
             }
         }
 
-dd($new_course_package_id);
+        // LANGKAH 4: Melakukan pemeriksaan, apakah sebelumnya
+        //            Student sudah pernah mendaftarkan course "lain" pada material type yang sama.
+        //            Apabila "ya", maka tidak diperbolehkan mendaftar pada material type tersebut.
+        $not_assigned_course_registrations = CourseRegistration
+            ::join('courses', 'course_registrations.course_id', 'courses.id')
+            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+            ->where('course_registrations.student_id', Auth::user()->student->id)
+            ->where('course_packages.title', 'LIKE', '%Not Assigned%')
+            ->where('course_packages.material_type_id', $request->choice_mt)
+            ->count();
+        if($not_assigned_course_registrations > 0) {
+            // Jika Student sudah melakukan pendaftaran satu (atau lebih) course "lain"
+            // pada material type yang sama, selain pendaftaran course yang ini.
 
-        if(Auth::check() && Auth::user()->student->course_registrations->count() == 0) {
-            // Apabila Student belum pernah memilih jenis course sebelumnya, maka buat kelas Course.
+            // KURANG: Tambahkan penjelasan dalam bentuk pesan error, bahwa
+            // sudah ada course terdaftar pada jenis materi tersebut, yang juga belum dialokasikan.
+
+            return redirect()->back();
+        }
+
+        // LANGKAH 3: Berikut course package yang dipilih untuk didaftarkan.
+        // Data $current_course_package digunakan untuk mencari course_package_id yang
+        // sesuai untuk placement test, dan diubah dalam data $new_course_package.
+        $current_course_package = CoursePackage::find($request->choice);
+
+        // LANGKAH 4: Melakukan pemeriksaan, apakah User mengakses website mode "Trial" atau "Full Version".
+        // LANGKAH 5: Menentukan new course package apa yang akan diambil.
+        if($this->is_trial()) {
+            if($current_course_package->material_type->name == 'Indonesian Culture') {
+                $new_course_package = CoursePackage
+                    ::where(function($q) {
+                        $q
+                            ->where('title', 'LIKE', '%Free%')
+                            ->orWhere('title', 'LIKE', '%Test%')
+                            ->orWhere('title', 'LIKE', '%Trial%');
+                    })
+                    ->where('title', 'LIKE', '%Not Assigned%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->title.'%')
+                    ->first();
+            } else {
+                $new_course_package = CoursePackage
+                    ::where(function($q) {
+                        $q
+                            ->where('title', 'LIKE', '%Free%')
+                            ->orWhere('title', 'LIKE', '%Test%')
+                            ->orWhere('title', 'LIKE', '%Trial%');
+                    })
+                    ->where('title', 'LIKE', '%Not Assigned%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
+                    ->first();
+            }
         } else {
-            // Apabila Student sudah pernah memilih jenis course sebelumnya, maka update kelas Course, ubah course_package_id dengan ID baru yang telah dipilih.
+            if($current_course_package->material_type->name == 'Indonesian Culture') {
+                // $has_registered_in_early_class && $has_been_accepted_in_early_class
+                if($request->hriec && $request->hbaiec) {
+                    
+                }
+
+                $new_course_package = CoursePackage
+                    ::where('title', 'NOT LIKE', '%Free%')
+                    ->where('title', 'NOT LIKE', '%Test%')
+                    ->where('title', 'NOT LIKE', '%Trial%')
+                    ->where('title', 'LIKE', '%Not Assigned%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->title.'%')
+                    ->first();
+            } else {
+                $new_course_package = CoursePackage
+                    ::where('title', 'NOT LIKE', '%Free%')
+                    ->where('title', 'NOT LIKE', '%Test%')
+                    ->where('title', 'NOT LIKE', '%Trial%')
+                    ->where('title', 'LIKE', '%Not Assigned%')
+                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
+                    ->first();
+            }
+        }
+
+        if(Auth::user()->student->course_registrations->count() == 0) {
+            // Apabila Student belum pernah memilih jenis course sebelumnya, maka buat kelas Course
+            // dan pendaftaran Student dalam course tersebut.
+            /*CourseRegistration::create([
+                'course_id' => Course::create([
+                    'course_package_id' => $new_course_package->id,
+                    'title' => 'Not Assigned Course - ' . $current_course_package->material_type->name . ' - ' . $current_course_package->course_type->name,
+                ])->id,
+                'student_id' => Auth::user()->student->id,
+            ]);*/
+        } else {
+            // Apabila Student sudah pernah memilih jenis course sebelumnya, maka update kelas Course,
+            // ubah course_package_id dengan ID baru yang telah dipilih.
+            // Catatan: HANYA PENDAFTARAN TERAKHIR YANG DAPAT DIUBAH (digunakan fungsi last()).
+            /*Course
+                ::join('course_registrations', 'courses.id', 'course_registrations.course_id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where('course_packages.title', 'LIKE', '%Not Assigned%')
+                ->select('courses.id', 'courses.course_package_id', 'courses.title')
+                ->get()
+                ->last()
+                ->update([
+                    'course_package_id' => $new_course_package->id,
+                    'title' => 'Not Assigned Course - ' . $current_course_package->material_type->name . ' - ' . $current_course_package->course_type->name,
+                ]);*/
         }
     }
 

@@ -12,6 +12,7 @@
   <form role="form" method="post" action="{{ route('student.store_materials') }}" enctype="multipart/form-data">
   @csrf
     <input type="hidden" id="choice" name="choice" value="">
+    <input type="hidden" id="choice_mt" name="choice_mt" value="">
     <div class="row">
       @foreach($material_types as $mt)
         <div class="col-md-12">
@@ -19,6 +20,17 @@
             <div class="box-header with-border text-center">
               <h3 class="box-title"><b>{{ $mt->name }}</b></h3>
               <p class="no-margin"><b>{{ $mt->duration_in_minute }} minutes/session</b></p>
+              <?php
+                $flag_registered_early_classes = 1;
+                foreach($registered_early_classes as $registered_early_class)
+                  if($registered_early_class->course->course_package->material_type_id == $mt->id) {
+                    $flag_registered_early_classes = 0;
+                    break;
+                  }
+              ?>
+              @if($flag_registered_early_classes)
+                <p class="no-margin" style="color:#ff0000;"><b>This material has a free class for one-time only!</b></p>
+              @endif
             </div>
             <div class="box-body">
               <p>{{ $mt->description }}</p>
@@ -81,9 +93,24 @@
                             </div>
                           </div>
                           <div class="box-footer">
-                            <button class="btn btn-primary btn-block" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
-                              <b>BOOK NOW!</b>
-                            </button>
+                            <?php
+                              $is_allowed_to_register = 1;
+                              foreach($all_current_running_course_registrations as $acrcr) {
+                                if($acrcr->course->course_package->material_type == $mt->id) {
+                                  $is_allowed_to_register = 0;
+                                  break;
+                                }
+                              }
+                            ?>
+                            @if($is_allowed_to_register)
+                              <button class="btn btn-primary btn-block" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                <b>BOOK NOW!</b>
+                              </button>
+                            @else
+                              <button class="btn btn-default btn-block disabled" type="reset" onclick="alert('You can only register in one course per material, at a time.');">
+                                <b>Unavailable, you are currently registered in this material.</b>
+                              </button>
+                            @endif
                           </div>
                         @endforeach
                       @else
@@ -100,9 +127,24 @@
                           </div>
                         </div>
                         <div class="box-footer">
-                          <button class="btn btn-primary btn-block" onclick="document.getElementById('choice').value = '{{ $ct->course_packages->first()->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
-                            <b>BOOK NOW!</b>
-                          </button>
+                          <?php
+                            $is_allowed_to_register = 1;
+                            foreach($all_current_running_course_registrations as $acrcr) {
+                              if($acrcr->course->course_package->material_type == $mt->id) {
+                                $is_allowed_to_register = 0;
+                                break;
+                              }
+                            }
+                          ?>
+                          @if($is_allowed_to_register)
+                            <button class="btn btn-primary btn-block" onclick="document.getElementById('choice').value = '{{ $ct->course_packages->first()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                              <b>BOOK NOW!</b>
+                            </button>
+                          @else
+                            <button class="btn btn-default btn-block disabled" type="reset" onclick="alert('You can only register in one course per material, at a time.');">
+                              <b>Currently registered in this material.</b>
+                            </button>
+                          @endif
                         </div>
                       @endif
                     </div>
@@ -112,7 +154,7 @@
             </div>
             {{--
             <div class="box-footer">
-              <button class="btn btn-primary btn-block" onclick="document.getElementById('choice').value = '{{ $ct->course_packages->first()->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+              <button class="btn btn-primary btn-block" onclick="document.getElementById('choice').value = '{{ $ct->course_packages->first()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                 <b>BOOK NOW!</b>
               </button>
             </div>
