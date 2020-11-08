@@ -326,8 +326,8 @@
                         <div class="panel box box-warning">
                           <div class="box-header with-border">
                             <h4 class="box-title">
-                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                List of Material Type(s)
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" style="color:#000000;">
+                                <b>List of Material Type(s)</b>
                               </a>
                             </h4>
                           </div>
@@ -415,8 +415,8 @@
                         <div class="panel box box-danger">
                           <div class="box-header with-border">
                             <h4 class="box-title">
-                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                                List of Course Type(s)
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" style="color:#000000;">
+                                <b>List of Course Type(s)</b>
                               </a>
                             </h4>
                           </div>
@@ -531,8 +531,8 @@
                         <div class="panel box box-success">
                           <div class="box-header with-border">
                             <h4 class="box-title">
-                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                                List of Proficiency Level(s)
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" style="color:#000000;">
+                                <b>List of Proficiency Level(s)</b>
                               </a>
                             </h4>
                           </div>
@@ -653,8 +653,8 @@
                         <div class="panel box box-info">
                           <div class="box-header with-border">
                             <h4 class="box-title">
-                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
-                                List of Course Package(s))
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" style="color:#000000;">
+                                <b>List of Course Package(s)</b>
                               </a>
                             </h4>
                           </div>
@@ -891,6 +891,117 @@
                     </div>
                   </form>
                 </div>
+                <div class="box box-primary">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>Add Course</b></h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    <dl>
+                      <dt><i class="fa fa-pencil-square-o margin-r-5"></i> Form</dt>
+                      <dd>
+                        <div class="box-body">
+                          <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="box-body">
+                              <div class="row">
+                                <div class="col-md-12 no-padding">
+                                  <div class="form-group @error('title') has-error @enderror">
+                                    <label for="title">Course Title</label>
+                                    <input name="title" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter Course Title">
+                                    @error('title')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('material_type_id') has-error @enderror">
+                                    <label for="material_type_id">Material Type</label>
+                                    <select name="material_type" type="text" class="@error('material_type') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Material Type --</option>
+                                      @foreach($material_type as $mt)
+                                        @if(old('material_type_id') == $mt->name)
+                                          <option selected="selected" value="{{ $mt->name }}">{{ $mt->name }}</option>
+                                        @else
+                                          <option value="{{ $mt->name }}">{{ $mt->name }}</option>
+                                        @endif
+                                      @endforeach
+                                    </select>
+                                    @error('material_type_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('course_type_id') has-error @enderror">
+                                    <label for="course_type_id">Course Type</label>
+                                    <select name="course_type" type="text" class="@error('course_type') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Course Type --</option>
+                                      @foreach($course_type as $ct)
+                                        @if(old('course_type_id') == $ct->name)
+                                          <option selected="selected" value="{{ $ct->name }}">
+                                            @if($ct->count_student_min != $ct->count_student_max)
+                                              {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
+                                            @else
+                                              {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
+                                            @endif
+                                          </option>
+                                        @else
+                                          <option value="{{ $ct->name }}">
+                                            @if($ct->count_student_min != $ct->count_student_max)
+                                              {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
+                                            @else
+                                              {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
+                                            @endif
+                                          </option>
+                                        @endif
+                                      @endforeach
+                                    </select>
+                                    @error('course_type_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('course_level_id') has-error @enderror">
+                                    <label for="course_level_id">Proficiency Level</label>
+                                    <select name="course_level" type="text" class="@error('course_level') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Proficiency Level --</option>
+                                      @foreach($course_level as $cl)
+                                        @if(old('course_level_id') == $cl->name)
+                                          <option selected="selected" value="{{ $cl->name }}">{{ $cl->name }}</option>
+                                        @else
+                                          <option value="{{ $cl->name }}">{{ $cl->name }}</option>
+                                        @endif
+                                      @endforeach
+                                    </select>
+                                    @error('course_level_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('description') has-error @enderror">
+                                    <label for="description">Course Description</label>
+                                    <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Description">{{ old('description') }}</textarea>
+                                    @error('description')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('requirement') has-error @enderror">
+                                    <label for="requirement">Course Requirement</label>
+                                    <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Requirement">{{ old('requirement') }}</textarea>
+                                    @error('requirement')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="box-footer">
+                              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                            </div>
+                          </form>
+                        </div>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
               </div>
               <div class="col-md-9">
                 <div class="box box-primary">
@@ -954,36 +1065,52 @@
                 </div>
               </div>
               <div class="col-md-9">
-                <div class="box box-primary">
-                  <div class="box-header">
-                    <h3 class="box-title"><b>All Material Type</b></h3>
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                @foreach($material_type as $mt)
+                  <div class="box box-primary">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>All "{{ $mt->name }}" Courses</b></h3>
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      </div>
+                    </div>
+                    <div class="box-body">
+                      <strong>Description</strong>
+                      <p>{{ $mt->description }}</p>
+                      <hr>
+                      <?php
+                        $flag = 0;
+                        foreach($course as $c) if($c->course_package->material_type->id == $mt->id) {
+                          $flag = 1;
+                          break;
+                        }
+                      ?>
+                      @if($flag)
+                        <table class="table table-bordered">
+                          <tr>
+                            <th style="width:40px;" class="text-right">#</th>
+                            <th>Course Type</th>
+                            <th>Proficiency Level</th>
+                            <th>Title</th>
+                            <th style="width:40px;">Detail</th>
+                          </tr>
+                          @foreach($course as $i => $dt)
+                            @if($c->course_package->material_type->id == $mt->id)
+                              <tr>
+                                <td class="text-right">{{ $i + 1 }}</td>
+                                <td>{{ $dt->course_package->course_type->name }}</td>
+                                <td>{{ $dt->course_package->course_level->name }}</td>
+                                <td>{{ $dt->title }}</td>
+                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
+                              </tr>
+                            @endif
+                          @endforeach
+                        </table>
+                      @else
+                        <div class="text-center">No data available.</div>
+                      @endif
                     </div>
                   </div>
-                  <div class="box-body">
-                    @if($course->toArray())
-                      <table class="table table-bordered">
-                        <tr>
-                          <th class="text-right" style="width:40px;">#</th>
-                          <th>Name</th>
-                          <th>Description</th>
-                          <!--th style="width:40px;">Detail</th-->
-                        </tr>
-                        @foreach($material_type as $i => $dt)
-                        <tr>
-                          <td class="text-right">{{ $i + 1 }}</td>
-                          <td>{{ $dt->name }}</td>
-                          <td>{{ $dt->description }}</td>
-                          <!--td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td-->
-                        </tr>
-                        @endforeach
-                      </table>
-                    @else
-                      <div class="text-center">No data available.</div>
-                    @endif
-                  </div>
-                </div>
+                @endforeach
               </div>
             </div>
           </div>
@@ -1011,134 +1138,52 @@
                 </div>
               </div>
               <div class="col-md-9">
-                <div class="box box-primary">
-                  <div class="box-header">
-                    <h3 class="box-title"><b>All Course Type</b></h3>
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                @foreach($material_type as $mt)
+                  <div class="box box-primary">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>All "{{ $mt->name }}" Courses</b></h3>
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      </div>
                     </div>
-                  </div>
-                  <div class="box-body">
-                    @if($course->toArray())
-                      <table class="table table-bordered">
-                        <tr>
-                          <th class="text-right" style="width:40px;">#</th>
-                          <th>Name</th>
-                          <th>Description</th>
-                          <th>Student Quota</th>
-                          <!--th style="width:40px;">Detail</th-->
-                        </tr>
-                          @foreach($course_type as $i => $dt)
-                        <tr>
-                          <td class="text-right">{{ $i + 1 }}</td>
-                          <td>{{ $dt->name }}</td>
-                          <td>{{ $dt->description }}</td>
-                          <td class="text-right">
-                            @if($dt->count_student_min != $dt->count_student_max)
-                              {{ $dt->count_student_min }}-{{ $dt->count_student_max }}
-                            @else
-                              {{ $dt->count_student_min }}
+                    <div class="box-body">
+                      <strong>Description</strong>
+                      <p>{{ $mt->description }}</p>
+                      <hr>
+                      <?php
+                        $flag = 0;
+                        foreach($course as $c) if($c->course_package->material_type->id == $mt->id) {
+                          $flag = 1;
+                          break;
+                        }
+                      ?>
+                      @if($flag)
+                        <table class="table table-bordered">
+                          <tr>
+                            <th style="width:40px;" class="text-right">#</th>
+                            <th>Course Type</th>
+                            <th>Proficiency Level</th>
+                            <th>Title</th>
+                            <th style="width:40px;">Detail</th>
+                          </tr>
+                          @foreach($course as $i => $dt)
+                            @if($c->course_package->material_type->id == $mt->id)
+                              <tr>
+                                <td class="text-right">{{ $i + 1 }}</td>
+                                <td>{{ $dt->course_package->course_type->name }}</td>
+                                <td>{{ $dt->course_package->course_level->name }}</td>
+                                <td>{{ $dt->title }}</td>
+                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
+                              </tr>
                             @endif
-                          </td>
-                          <!--td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td-->
-                        </tr>
-                        @endforeach
-                      </table>
-                    @else
-                      <div class="text-center">No data available.</div>
-                    @endif
-                  </div>
-                </div>
-                <div class="box box-success collapsed-box">
-                  <div class="box-header">
-                    <h3 class="box-title"><b>All Registered Students</b></h3>
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                          @endforeach
+                        </table>
+                      @else
+                        <div class="text-center">No data available.</div>
+                      @endif
                     </div>
                   </div>
-                  <div class="box-body">
-                    @if($course)
-                      <table class="table table-bordered">
-                        <tr>
-                          <th style="width:40px;" class="text-right">#</th>
-                          <th>Name</th>
-                          <th style="width:40px;">Profile</th>
-                        </tr>
-                        @foreach($course as $dt)
-                          @if($course->count() != 0)
-                            <tr>
-                              <td class="text-right">Data</td>
-                              <td>Data</td>
-                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
-                            </tr>
-                          @endif
-                        @endforeach
-                      </table>
-                    @else
-                      <div class="text-center">No data available.</div>
-                    @endif
-                  </div>
-                </div>
-                <div class="box box-warning collapsed-box">
-                  <div class="box-header">
-                    <h3 class="box-title"><b>All Students Registering for a Course</b></h3>
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-                    </div>
-                  </div>
-                  <div class="box-body">
-                    @if($course)
-                      <table class="table table-bordered">
-                        <tr>
-                          <th style="width:40px;" class="text-right">#</th>
-                          <th>Name</th>
-                          <th style="width:40px;">Profile</th>
-                        </tr>
-                        @foreach($course as $dt)
-                          @if($course->count() != 0)
-                            <tr>
-                              <td class="text-right">Data</td>
-                              <td>Data</td>
-                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
-                            </tr>
-                          @endif
-                        @endforeach
-                      </table>
-                    @else
-                      <div class="text-center">No data available.</div>
-                    @endif
-                  </div>
-                </div>
-                <div class="box box-danger collapsed-box">
-                  <div class="box-header">
-                    <h3 class="box-title"><b>All Non-Registered Students</b></h3>
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-                    </div>
-                  </div>
-                  <div class="box-body">
-                    @if($course)
-                      <table class="table table-bordered">
-                        <tr>
-                          <th style="width:40px;" class="text-right">#</th>
-                          <th>Name</th>
-                          <th style="width:40px;">Profile</th>
-                        </tr>
-                        @foreach($course as $dt)
-                          @if($course->count() != 0)
-                            <tr>
-                              <td class="text-right">Data</td>
-                              <td>Data</td>
-                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
-                            </tr>
-                          @endif
-                        @endforeach
-                      </table>
-                    @else
-                      <div class="text-center">No data available.</div>
-                    @endif
-                  </div>
-                </div>
+                @endforeach
               </div>
             </div>
           </div>
