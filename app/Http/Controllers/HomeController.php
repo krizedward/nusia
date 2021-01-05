@@ -716,7 +716,7 @@ class HomeController extends Controller
 
         return view('material_types.student_index', compact(
             'material_types', 'course_types', 'course_packages', 'course_package_discounts',
-            'registered_early_classes', 'all_current_running_course_registrations', 'all_not_assigned_courses',
+            'registered_early_classes', 'all_current_running_course_registrations', 'all_not_assigned_courses'
         ));
     }
 
