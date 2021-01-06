@@ -26,6 +26,14 @@
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
+    <!-- Sweetalert2 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.js"></script>
+
+    <!-- Intro.js -->
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/intro.js/minified/introjs.min.css">
+    <script type="text/javascript" src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
+ 
     <!-- Bootstrap time Picker -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.css')}}">
     <!-- daterange picker -->

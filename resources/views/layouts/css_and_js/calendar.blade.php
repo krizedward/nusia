@@ -17,6 +17,15 @@
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="{{ url('adminlte/dist/css/skins/_all-skins.min.css')}}">
 
+    <!-- Sweetalert2 -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.js"></script>
+
+    <!-- Intro.js -->
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/intro.js/minified/introjs.min.css">
+    <script type="text/javascript" src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
+ 
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
