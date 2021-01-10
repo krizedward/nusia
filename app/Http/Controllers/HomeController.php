@@ -739,8 +739,8 @@ class HomeController extends Controller
 
         return view('registrations.student_choose_materials', compact(
             'material_types', 'course_types', 'course_packages', 'course_package_discounts',
-            'registered_early_classes', 'all_current_running_course_registrations', 'all_not_assigned_courses',
             'current_course_registration',
+            'registered_early_classes', 'all_current_running_course_registrations', 'all_not_assigned_courses'
         ));
     }
 
