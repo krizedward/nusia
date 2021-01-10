@@ -563,7 +563,7 @@ class HomeController extends Controller
         return view('layouts.questionnaire', compact(/*'countries',*/ 'interests', 'timezones'));
     }
 
-    public function choose_materials() {
+    public function choose_materials($id = 0) {
         if($this->is_trial()) {
             $material_types = MaterialType::all();
             $course_types = CourseType
@@ -714,9 +714,33 @@ class HomeController extends Controller
                 ->get();
         }
 
-        return view('material_types.student_index', compact(
+        if($id > 0) {
+            // LANJUTKAN DARI KODE INI
+            $current_course_registration = CourseRegistration::findOrFail($id)->first();
+        } else if($id == -1) {
+            // Jika Student memilih untuk mendaftar course baru,
+            // selain daftar course yang sudah/sedang didaftarkan sebelumnya.
+            // GANTI KODE DI BAGIAN INI DENGAN KODE YANG SESUAI.
+            $current_course_registration = CourseRegistration::findOrFail(10)->first();
+        } else {
+            // Ditanyakan ke Mbak Nina, apakah pendaftaran 2 course pada 2 tipe berbeda,
+            // dapat dilakukan pada satu waktu yang sama?
+            // Pertimbangan:
+            // Penjadwalan dapat berbenturan apabila semua jadwal dipilih pada satu waktu yang sama.
+
+            // Jika bisa.
+
+            // Jika tidak bisa.
+
+
+            // Tambahan kode.
+            $current_course_registration = null;
+        }
+
+        return view('registrations.student_choose_materials', compact(
             'material_types', 'course_types', 'course_packages', 'course_package_discounts',
             'registered_early_classes', 'all_current_running_course_registrations', 'all_not_assigned_courses',
+            'current_course_registration',
         ));
     }
 

@@ -9,6 +9,7 @@
 @stop
 
 @section('content')
+@if($current_course_registration)
   <form role="form" method="post" action="{{ route('student.store_materials') }}" enctype="multipart/form-data">
   @csrf
     <input type="hidden" id="choice" name="choice" value="">
@@ -164,4 +165,44 @@
       @endforeach
     </div>
   </form>
+@else
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header">
+          <h3 class="box-title"><b>Current Course Registrations</b></h3>
+          <div>
+            <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('student.choose_materials', [-1]) }}">
+            <i class="fa fa-plus"></i>&nbsp;&nbsp;
+              Register in New Course
+            </a>
+          </div>
+          {{--
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+          --}}
+        </div>
+        <div class="box-body">
+          <table class="table table-bordered">
+            <tr>
+              <th class="text-right" style="width:40px;">#</th>
+              <th>Registered in</th>
+              <th>Registration Time</th>
+              <th style="width:40px;">Edit</th>
+            </tr>
+            @foreach($all_not_assigned_courses as $i => $dt)
+              <tr>
+                <td class="text-right">{{ $i + 1 }}</td>
+                <td>{{ $dt->course->course_package->title }}</td>
+                <td>{{ $dt->created_at }}</td>
+                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('student.choose_materials', [$dt->id]) }}">Link</a></td>
+              </tr>
+            @endforeach
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+@endif
 @stop
