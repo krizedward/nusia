@@ -37,7 +37,6 @@ de German
 dv Divehi; Dhivehi; Maldivian
 dz Dzongkha
 ee Ewe
-eg Egyptian
 el Greek, Modern (1453-)
 en English
 eo Esperanto
