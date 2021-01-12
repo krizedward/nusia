@@ -70,12 +70,12 @@
     <div class="row">
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Western Indonesian time: <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm A') }}</span></h4>
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> {{ __('custom_dashboard.panel_time.wib_text') }} <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm A') }}</span></h4>
             </div>
         </div>
         <div class="col-md-6">
             <div class="alert alert-dismissible">
-                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Your time: <span id="time_student">{{ $timeStudent->isoFormat('h:mm A') }}</span></h4>
+                <h4 class="text-center"><i class="icon fa fa-clock-o"></i> {{ __('custom_dashboard.panel_time.other_tz_text') }} <span id="time_student">{{ $timeStudent->isoFormat('h:mm A') }}</span></h4>
             </div>
         </div>
     </div>
@@ -85,13 +85,13 @@
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-success alert-dismissible">
-                <h4><i class="icon fa fa-comments"></i> You have successfully registered!</h4>
-                Thank you for registering for this free online class! :)<br>
-                Here are a few things to remember:<br>
-                1. Before joining your class session, <b>please read all the materials</b>.<br>
-                2. When it is time for the session to start, click the Zoom link to join the class.<br>
-                3. You should join the class <b>five minutes before it starts</b>.<br>
-                4. Be sure to join the session from laptop or desktop computer.
+                <h4><i class="icon fa fa-comments"></i> {{ __('custom_dashboard.registered_successfully') }}</h4>
+                {{ __('custom_dashboard.free_classes.sentence_1') }}<br>
+                {{ __('custom_dashboard.free_classes.rules_intro') }}<br>
+                {{ __('custom_dashboard.free_classes.rules_1_part_1') }}<b>{{ __('custom_dashboard.free_classes.rules_1_part_2') }}</b>{{ __('custom_dashboard.free_classes.rules_1_part_3') }}<br>
+                {{ __('custom_dashboard.free_classes.rules_2') }}<br>
+                {{ __('custom_dashboard.free_classes.rules_3_part_1') }}<b>{{ __('custom_dashboard.free_classes.rules_3_part_2') }}</b>{{ __('custom_dashboard.free_classes.rules_3_part_3') }}<br>
+                {{ __('custom_dashboard.free_classes.rules_4') }}
             </div>
             <div class="alert alert-warning alert-dismissible">
                 <h4><i class="icon fa fa-clock-o"></i> Please check whether your local time zone shown in the dashboard is correct.</h4>
