@@ -61,9 +61,9 @@ Route::group(['middleware'=>'auth'], function() {
         //Route::delete('/users/{id}', 'UserController@destroy')->name('users.destroy'); // dilakukan pada view users.show
         Route::post('/users', 'CourseRegistrationController@store')->name('course_registrations.store'); // dilakukan pada view users.show
         /* VIEW */
-        Route::get('/users/{user_id}/courses/{course_id}', 'CourseRegistrationController@show')->name('course_registrations.show');
-        Route::put('/users/{user_id}/courses/{course_id}', 'CourseRegistrationController@update')->name('course_registrations.update'); // dilakukan pada view course_registrations.show
-        //Route::delete('/users/{user_id}/courses/{course_id}', 'CourseRegistrationController@destroy')->name('course_registrations.destroy'); // dilakukan pada view course_registrations.show
+        Route::get('/users/{user_id}/courses/{course_id}', 'CourseRegistrationController@show_by_admin')->name('course_registrations.show_by_admin');
+        Route::put('/users/{user_id}/courses/{course_id}', 'CourseRegistrationController@update_by_admin')->name('course_registrations.update_by_admin'); // dilakukan pada view course_registrations.show
+        //Route::delete('/users/{user_id}/courses/{course_id}', 'CourseRegistrationController@destroy_by_admin')->name('course_registrations.destroy_by_admin'); // dilakukan pada view course_registrations.show
         Route::put('/courses/{id}', 'CourseController@update')->name('courses.update'); // dilakukan pada view course_registrations.show
         Route::put('/sessions/{id}', 'SessionController@update')->name('sessions.update'); // dilakukan pada view course_registrations.show
         Route::put('/schedules/{id}', 'ScheduleController@update')->name('schedules.update'); // dilakukan pada view course_registrations.show
@@ -100,6 +100,11 @@ Route::group(['middleware'=>'auth'], function() {
         // for role Lead Instructor and Admin
         Route::get('/placement-tests', 'PlacementTestController@index')->name('placement_tests.index'); // View ini digunakan untuk melihat daftar informasi placement test untuk seluruh Student, dalam proficiency masing-masing.
         Route::put('/placement-tests/{id}', 'PlacementTestController@update')->name('placement_tests.update'); // Daftar model dimodifikasi: PlacementTest.
+
+        // NEW ROUTING FOR REGISTERED STUDENT: 13 Januari 2021 dan selanjutnya.
+        Route::get('/view/course/{course_registration_id}', 'CourseRegistrationController@show_by_student')->name('course_registrations.show_by_student');
+        Route::put('/view/course/{course_registration_id}', 'CourseRegistrationController@update_by_student')->name('course_registrations.update_by_student'); // dilakukan pada view course_registrations.show
+        //Route::delete('/view/course/{course_registration_id}', 'CourseRegistrationController@destroy_by_student')->name('course_registrations.destroy_by_student'); // dilakukan pada view course_registrations.show
 
 	/*Route::get('/home', function() {
             return view('home');

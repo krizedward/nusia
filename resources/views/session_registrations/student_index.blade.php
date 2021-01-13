@@ -130,7 +130,7 @@
                                 <td class="text-right">{{ $i + 1 }}</td>
                                 <td>{{ $dt->course->title }}</td>
                                 <td>{{ $dt->course->course_package->material_type->name }}/{{ $dt->course->course_package->course_type->name }}</td>
-                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
+                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
                               </tr>
                             @endforeach
                           </table>
@@ -173,7 +173,7 @@
                                   <td class="text-right">{{ $i + 1 }}</td>
                                   <td>{{ $dt->course->title }}</td>
                                   <td>{{ $dt->course->course_package->course_type->name }}</td>
-                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
+                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
                                 </tr>
                               @endif
                             @endforeach
@@ -218,7 +218,7 @@
                                   <td class="text-right">{{ $i + 1 }}</td>
                                   <td>{{ $dt->course->title }}</td>
                                   <td>{{ $dt->course->course_package->course_type->name }}</td>
-                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
+                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
                                 </tr>
                               @endif
                             @endforeach
@@ -262,7 +262,7 @@
                                   <td class="text-right">{{ $i + 1 }}</td>
                                   <td>{{ $dt->course->title }}</td>
                                   <td>{{ $dt->course->course_package->course_type->name }}</td>
-                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
+                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
                                 </tr>
                               @endif
                             @endforeach

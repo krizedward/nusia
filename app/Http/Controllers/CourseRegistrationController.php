@@ -190,6 +190,67 @@ class CourseRegistrationController extends Controller
         ));
     }
 
+    public function show_by_admin($user_id, $course_id)
+    {
+        $course_registrations = CourseRegistration::all();
+        $course_registration = null;
+        $flag = 0;
+        foreach($course_registrations as $dt) {
+            if(
+                Str::slug(
+                $dt->student->user->password.
+                $dt->student->user->first_name.
+                '-'.$dt->student->user->last_name) == $user_id
+                &&
+                Str::slug($dt->created_at.'-'.$dt->course->title) == $course_id
+            ) {
+                $course_registration = $dt;
+                $flag = 1;
+                break;
+            }
+        }
+        if($flag == 0) {
+            if(session('redirect_again') != 1) {
+                session(['redirect_again' => 1]);
+                return redirect()->back();
+            } else {
+                session(['redirect_again' => null]);
+                return redirect()->route('users.index');
+            }
+        }
+
+        $material_types = MaterialType::all();
+        $course_types = CourseType::all();
+        $course_levels = CourseLevel::all();
+
+        $course_payments = CoursePayment
+            ::where('course_registration_id', $course_registration->id)
+            ->orderBy('payment_time')
+            ->get();
+
+        return view('course_registrations.'.Str::slug(Auth::user()->roles, '_').'_show_'.Str::slug($course_registration->student->user->roles, '_'), compact(
+            'course_registration', 'material_types', 'course_types', 'course_levels', 'course_payments',
+        ));
+    }
+
+    public function show_by_student($course_registration_id)
+    {
+        $course_registration = CourseRegistration::findOrFail($course_registration_id);
+
+        $material_types = MaterialType::all();
+        $course_types = CourseType::all();
+        $course_levels = CourseLevel::all();
+
+        $course_payments = CoursePayment
+            ::where('course_registration_id', $course_registration->id)
+            ->orderBy('payment_time')
+            ->get();
+
+        return view('course_registrations.'.Str::slug(Auth::user()->roles, '_').'_show', compact(
+            'course_registration', 'material_types', 'course_types', 'course_levels', 'course_payments',
+        ));
+    }
+
     /**
      * Remove the specified resource from storage.
      *
