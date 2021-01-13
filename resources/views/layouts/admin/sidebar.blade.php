@@ -100,7 +100,7 @@
     @if(Auth::user()->roles == 'Student' && Auth::user()->citizenship != 'Not Available' && Auth::user()->student->course_registrations->count() > 0)
       <!-- Head_Navigasi -->
       <li class="header">COURSES</li>
-      <li class="{{ set_active(['session_registrations.index', 'form_responses.create']) }}">
+      <li class="{{ set_active(['session_registrations.index', 'course_registrations.show_by_student', 'form_responses.create']) }}">
         <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Schedules</span></a>
       </li>
       <li class="{{ set_active('materials.index') }}">

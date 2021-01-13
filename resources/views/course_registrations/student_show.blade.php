@@ -55,18 +55,33 @@
                     <strong><i class="fa fa-clock-o margin-r-5"></i> Registration Time</strong>
                     <p>
                       <?php
-                        $schedule_time = \Carbon\Carbon::parse($course_registration->created_at)->setTimezone(Auth::user()->timezone);
+                        if($course_registration->created_at != null)
+                          $schedule_time = \Carbon\Carbon::parse($course_registration->created_at)->setTimezone(Auth::user()->timezone);
+                        else
+                          $schedule_time = null;
                       ?>
                       <table>
                         <tr>
                           <td><b>Day</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>{{ $schedule_time->isoFormat('dddd') }}</td>
+                          <td>
+                            @if($schedule_time)
+                              {{ $schedule_time->isoFormat('dddd') }}
+                            @else
+                              <i class="text-muted">Not Available</i>
+                            @endif
+                          </td>
                         </tr>
                         <tr>
                           <td><b>Date</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>{{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}</td>
+                          <td>
+                            @if($schedule_time)
+                              {{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}
+                            @else
+                              <i class="text-muted">Not Available</i>
+                            @endif
+                          </td>
                         </tr>
                       </table>
                     </p>
@@ -78,15 +93,22 @@
                           <td><b>Status</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
+                            <?php
+                              $sum = 0;
+                              foreach($course_registration->course_payments as $dt) {
+                                if($dt->status == 'Confirmed') {
+                                  $sum += $dt->amount;
+                                }
+                              }
+                            ?>
                             @if($course_registration->course->course_package->price != 0)
                               {{-- Kode untuk memeriksa status pembayaran untuk course berbayar. --}}
-                              @if($course_registration->course_payments)
-                                {{-- Bagian berikut perlu ditambahkan kembali untuk menyesuaikan total pembayaran yang sudah dilakukan saat ini dengan total biaya course. --}}
+                              @if($sum > $course_registration->course->course_package->price)
+                                <span style="color:red;">Possible bug, please report to us.</span>
+                              @elseif($sum == $course_registration->course->course_package->price)
                                 <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Paid</span>
-                                <span class="label label-warning"><i class="fa fa-question"></i>&nbsp;&nbsp;Not Confirmed</span>
-                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
                               @else
-                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Paid</span>
+                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Fully Paid</span>
                               @endif
                             @else
                               <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Free of Charge</span>
@@ -97,8 +119,20 @@
                           <td><b>Paid at</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
-                            {{-- Kode pada bagian ini perlu ditambahkan kembali. --}}
-                            <i class="text-muted">Not Available</i>
+                            @if($course_registration->course->course_package->price != 0)
+                              @if($sum > $course_registration->course->course_package->price)
+                                <span style="color:red;">Possible bug, please report to us.</span>
+                              @elseif($sum == $course_registration->course->course_package->price)
+                                <?php
+                                  $payment_time = \Carbon\Carbon::parse($course_registration->course_payments->last()->payment_time)->setTimezone(Auth::user()->timezone);
+                                ?>
+                                {{ $payment_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                              @else
+                                Not Fully Paid
+                              @endif
+                            @else
+                              <i class="text-muted">Not Available</i>
+                            @endif
                           </td>
                         </tr>
                       </table>
