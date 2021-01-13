@@ -76,21 +76,17 @@
                       @if(Auth::user()->student->course_registrations->toArray() != 0)
                         <table id="example1" class="table table-bordered">
                           <tr>
-                            <th {{--style="width:40px;" class="text-right"--}}>#</th>
-                            <th>Material</th>
-                            <th>Course</th>
-                            <th>Proficiency</th>
-                            <th>Title</th>
-                            <th {{--style="width:40px;"--}}>Detail</th-->
+                            <th style="width:2%;" class="text-right">#</th>
+                            <th>Course/Session</th>
+                            <th>Time</th>
+                            <th style="width:5%;">Link</th>
                           </tr>
                           @foreach(Auth::user()->student->course_registrations as $i => $dt)
                             <tr>
                               <td class="text-right">{{ $i + 1 }}</td>
-                              <td>{{ $dt->course->course_package->material_type->name }}</td>
-                              <td>{{ $dt->course->course_package->course_type->name }}</td>
-                              <td>{{ $dt->course->course_package->course_level->name }}</td>
                               <td>{{ $dt->course->title }}</td>
-                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
+                              <td>#</td>
+                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Link</a></td>
                             </tr>
                           @endforeach
                         </table>
@@ -122,22 +118,18 @@
                     <div id="collapseOne" class="panel-collapse collapse in">
                       <div class="box-body">
                         @if(Auth::user()->student->course_registrations->toArray() != 0)
-                          <table id="example1" class="table table-bordered">
+                          <table class="table table-bordered">
                             <tr>
-                              <th {{--style="width:40px;" class="text-right"--}}>#</th>
-                              <th>Course Type</th>
-                              <th>Title</th>
-                              <th>Proficiency</th>
-                              <th>Title</th>
-                              <th {{--style="width:40px;"--}}>Detail</th-->
+                              <th style="width:2%;" class="text-right">#</th>
+                              <th>Course</th>
+                              <th>Type</th>
+                              <th style="width:5%;">Detail</th-->
                             </tr>
                             @foreach(Auth::user()->student->course_registrations as $i => $dt)
                               <tr>
                                 <td class="text-right">{{ $i + 1 }}</td>
-                                <td>{{ $dt->course->course_package->material_type->name }}</td>
-                                <td>{{ $dt->course->course_package->course_type->name }}</td>
-                                <td>{{ $dt->course->course_package->course_level->name }}</td>
                                 <td>{{ $dt->course->title }}</td>
+                                <td>{{ $dt->course->course_package->material_type->name }}/{{ $dt->course->course_package->course_type->name }}</td>
                                 <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
                               </tr>
                             @endforeach
@@ -158,29 +150,32 @@
                     </div>
                     <div id="collapseTwo" class="panel-collapse collapse">
                       <div class="box-body">
-                        @if(Auth::user()->toArray() == 0)
+                        <?php
+                          $type = 'General Indonesian Language';
+                          $count = 0;
+                          foreach(Auth::user()->student->course_registrations as $dt) {
+                            if($dt->course->course_package->material_type->name == $type) {
+                              $count++;
+                            }
+                          }
+                        ?>
+                        @if(Auth::user()->student->course_registrations->toArray() != 0 && $count > 0)
                           <table class="table table-bordered">
                             <tr>
-                              <th class="text-right" style="width:40px;">#</th>
-                              <th>Name</th>
-                              <th>Description</th>
-                              <th>Student Quota</th>
-                              <!--th style="width:40px;">Detail</th-->
+                              <th style="width:2%;" class="text-right">#</th>
+                              <th>Course</th>
+                              <th>Type</th>
+                              <th style="width:5%;">Detail</th-->
                             </tr>
-                            @foreach(Auth::user() as $i => $dt)
-                              <tr>
-                                <td class="text-right">{{ $i + 1 }}</td>
-                                <td>{{ $dt->name }}</td>
-                                <td>{{ $dt->description }}</td>
-                                <td class="text-right">
-                                  @if($dt->count_student_min != $dt->count_student_max)
-                                    {{ $dt->count_student_min }}-{{ $dt->count_student_max }}
-                                  @else
-                                    {{ $dt->count_student_min }}
-                                  @endif
-                                </td>
-                                <!--td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td-->
-                              </tr>
+                            @foreach(Auth::user()->student->course_registrations as $i => $dt)
+                              @if($dt->course->course_package->material_type->name == $type)
+                                <tr>
+                                  <td class="text-right">{{ $i + 1 }}</td>
+                                  <td>{{ $dt->course->title }}</td>
+                                  <td>{{ $dt->course->course_package->course_type->name }}</td>
+                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
+                                </tr>
+                              @endif
                             @endforeach
                           </table>
                         @else
@@ -200,27 +195,32 @@
                     </div>
                     <div id="collapseThree" class="panel-collapse collapse">
                       <div class="box-body">
-                        @if(Auth::user()->toArray() == 0)
+                        <?php
+                          $type = 'Language Partners';
+                          $count = 0;
+                          foreach(Auth::user()->student->course_registrations as $dt) {
+                            if($dt->course->course_package->material_type->name == $type) {
+                              $count++;
+                            }
+                          }
+                        ?>
+                        @if(Auth::user()->student->course_registrations->toArray() != 0 && $count > 0)
                           <table class="table table-bordered">
                             <tr>
-                              <th class="text-right" style="width:40px;">#</th>
-                              <th>Name</th>
-                              <th>Description</th>
-                              <th style="width:90px;">Assignment Passing Score</th>
-                              <th style="width:90px;">Mid-Exam Passing Score</th>
-                              <th style="width:90px;">Final-Exam Passing Score</th>
-                              <!--th style="width:40px;">Detail</th-->
+                              <th style="width:2%;" class="text-right">#</th>
+                              <th>Course</th>
+                              <th>Type</th>
+                              <th style="width:5%;">Detail</th-->
                             </tr>
-                            @foreach(Auth::user() as $i => $dt)
-                              <tr>
-                                <td class="text-right">{{ $i + 1 }}</td>
-                                <td>{{ $dt->name }}</td>
-                                <td>{{ $dt->description }}</td>
-                                <td>{{ $dt->assignment_score_min }}</td>
-                                <td>{{ $dt->mid_exam_score_min }}</td>
-                                <td>{{ $dt->final_exam_score_min }}</td>
-                                <!--td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td-->
-                              </tr>
+                            @foreach(Auth::user()->student->course_registrations as $i => $dt)
+                              @if($dt->course->course_package->material_type->name == $type)
+                                <tr>
+                                  <td class="text-right">{{ $i + 1 }}</td>
+                                  <td>{{ $dt->course->title }}</td>
+                                  <td>{{ $dt->course->course_package->course_type->name }}</td>
+                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
+                                </tr>
+                              @endif
                             @endforeach
                           </table>
                         @else
@@ -239,25 +239,32 @@
                     </div>
                     <div id="collapseFour" class="panel-collapse collapse">
                       <div class="box-body">
-                        @if(Auth::user()->toArray() == 0)
+                        <?php
+                          $type = 'Cultural Classes';
+                          $count = 0;
+                          foreach(Auth::user()->student->course_registrations as $dt) {
+                            if($dt->course->course_package->material_type->name == $type) {
+                              $count++;
+                            }
+                          }
+                        ?>
+                        @if(Auth::user()->student->course_registrations->toArray() != 0 && $count > 0)
                           <table class="table table-bordered">
                             <tr>
-                              <th class="text-right" style="width:40px;">#</th>
-                              <th>Title</th>
-                              <th>Material Type</th>
-                              <th>Course Type</th>
-                              <th>Proficiency Level</th>
-                              <!--th style="width:40px;">Detail</th-->
+                              <th style="width:2%;" class="text-right">#</th>
+                              <th>Course</th>
+                              <th>Type</th>
+                              <th style="width:5%;">Detail</th-->
                             </tr>
-                            @foreach($course_package as $i => $dt)
-                              <tr>
-                                <td class="text-right">{{ $i + 1 }}</td>
-                                <td>{{ $dt->title }}</td>
-                                <td>0</td>
-                                <td>{{ $dt->course_type->name }}</td>
-                                <td>{{ $dt->course_level->name }}</td>
-                                <!--td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td-->
-                              </tr>
+                            @foreach(Auth::user()->student->course_registrations as $i => $dt)
+                              @if($dt->course->course_package->material_type->name == $type)
+                                <tr>
+                                  <td class="text-right">{{ $i + 1 }}</td>
+                                  <td>{{ $dt->course->title }}</td>
+                                  <td>{{ $dt->course->course_package->course_type->name }}</td>
+                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
+                                </tr>
+                              @endif
                             @endforeach
                           </table>
                         @else
