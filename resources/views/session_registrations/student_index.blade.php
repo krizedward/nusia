@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title', 'Student | Sessions')
+@section('title', 'Student | Schedules')
 
 {{-- @include('layouts.css_and_js.form_general') --}}
 
