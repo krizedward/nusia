@@ -1,18 +1,17 @@
 @extends('layouts.admin.default')
 
-@section('title', 'Admin | Show | Student')
+@section('title', 'Student | View Course')
 
 {{-- @include('layouts.css_and_js.table') --}}
 
 @include('layouts.css_and_js.form_advanced')
 
 @section('content-header')
-  <h1><b>User Course Registration</b></h1>
+  <h1><b>Course Information</b></h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('home') }}">Home</a></li>
-    <li><a href="{{ route('users.index') }}">User</a></li>
-    <li><a href="{{ route('users.show', [Str::slug($course_registration->student->user->password.$course_registration->student->user->first_name.'-'.$course_registration->student->user->last_name)]) }}">Detail</a></li>
-    <li class="active">Course Registration</li>
+    <li><a href="{{ route('session_registrations.index') }}">Schedules</a></li>
+    <li class="active">Course Information</li>
   </ol>
 @stop
 
@@ -810,13 +809,15 @@
                 <!-- Profile Image -->
                 <div class="box box-primary">
                   <div class="box-body box-profile">
-                    @if($course_registration->course->sessions->first()->schedule->instructor->user->image_profile != 'user.jpg')
-                      <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/instructor/'.$course_registration->course->sessions->first()->schedule->instructor->user->image_profile) }}" alt="User profile picture">
-                    @else
-                      <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/'.$course_registration->course->sessions->first()->schedule->instructor->user->image_profile) }}" alt="User profile picture">
+                    @if($course_registration->course->sessions->first()->schedule->instructor)
+                      @if($course_registration->course->sessions->first()->schedule->instructor->user->image_profile != 'user.jpg')
+                        <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/instructor/'.$course_registration->course->sessions->first()->schedule->instructor->user->image_profile) }}" alt="User profile picture">
+                      @else
+                        <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/'.$course_registration->course->sessions->first()->schedule->instructor->user->image_profile) }}" alt="User profile picture">
+                      @endif
+                      <h3 class="profile-username text-center">{{ $course_registration->course->sessions->first()->schedule->instructor->user->first_name }} {{ $course_registration->course->sessions->first()->schedule->instructor->user->last_name }}</h3>
+                      <p class="text-muted text-center">Role: {{ $course_registration->course->sessions->first()->schedule->instructor->user->roles }}</p>
                     @endif
-                    <h3 class="profile-username text-center">{{ $course_registration->course->sessions->first()->schedule->instructor->user->first_name }} {{ $course_registration->course->sessions->first()->schedule->instructor->user->last_name }}</h3>
-                    <p class="text-muted text-center">Role: {{ $course_registration->course->sessions->first()->schedule->instructor->user->roles }}</p>
                   </div>
                   <!-- /.box-body -->
                   <!-- About Me Box -->
@@ -825,38 +826,40 @@
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
-                    <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
-                    <p>{{ $course_registration->course->sessions->first()->schedule->instructor->user->email }}</p>
-                    <hr>
-                    <strong><i class="fa fa-map-marker margin-r-5"></i> Nationality</strong>
-                    <p>
-                      {{ $course_registration->course->sessions->first()->schedule->instructor->user->citizenship }}
-                      @if($course_registration->course->sessions->first()->schedule->instructor->user->domicile)
-                        <br>
-                        Currently living in: <b>{{ $course_registration->course->sessions->first()->schedule->instructor->user->domicile }}</b>
-                      @endif
-                    </p>
-                    <hr>
-                    <strong><i class="fa fa-clock-o margin-r-5"></i> Current local time zone</strong>
-                    @if($course_registration->course->sessions->first()->schedule->instructor->user->timezone)
-                      <p>{{ $course_registration->course->sessions->first()->schedule->instructor->user->timezone }}</p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
-                    @endif
-                    <hr>
-                    <strong><i class="fa fa-street-view margin-r-5"></i> Interest</strong>
-                    @if($course_registration->course->sessions->first()->schedule->instructor->interest)
-                      <?php
-                        $interest = explode(', ', $course_registration->course->sessions->first()->schedule->instructor->interest);
-                        sort($interest);
-                      ?>
+                    @if($course_registration->course->sessions->first()->schedule->instructor)
+                      <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
+                      <p>{{ $course_registration->course->sessions->first()->schedule->instructor->user->email }}</p>
+                      <hr>
+                      <strong><i class="fa fa-map-marker margin-r-5"></i> Nationality</strong>
                       <p>
-                        @for($i = 0; $i < count($interest); $i = $i + 1)
-                          <span class="label label-success">{{ $interest[$i] }}</span>
-                        @endfor
+                        {{ $course_registration->course->sessions->first()->schedule->instructor->user->citizenship }}
+                        @if($course_registration->course->sessions->first()->schedule->instructor->user->domicile)
+                          <br>
+                          Currently living in: <b>{{ $course_registration->course->sessions->first()->schedule->instructor->user->domicile }}</b>
+                        @endif
                       </p>
-                    @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <hr>
+                      <strong><i class="fa fa-clock-o margin-r-5"></i> Current local time zone</strong>
+                      @if($course_registration->course->sessions->first()->schedule->instructor->user->timezone)
+                       <p>{{ $course_registration->course->sessions->first()->schedule->instructor->user->timezone }}</p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
+                      <hr>
+                      <strong><i class="fa fa-street-view margin-r-5"></i> Interest</strong>
+                      @if($course_registration->course->sessions->first()->schedule->instructor->interest)
+                        <?php
+                          $interest = explode(', ', $course_registration->course->sessions->first()->schedule->instructor->interest);
+                          sort($interest);
+                        ?>
+                        <p>
+                          @for($i = 0; $i < count($interest); $i = $i + 1)
+                            <span class="label label-success">{{ $interest[$i] }}</span>
+                          @endfor
+                        </p>
+                      @else
+                        <p class="text-muted"><i>Not Available</i></p>
+                      @endif
                     @endif
                   </div>
                   <!-- /.box-body -->
