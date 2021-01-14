@@ -277,7 +277,16 @@
                   </div>
                   <div class="box box-warning">
                     <div class="box-header">
-                      <h3 class="box-title"><b>Participants</b></h3>
+                      <h3 class="box-title">
+                        <?php
+                          $data = $course_registration->course->sessions->first()->schedule->instructor_schedules;
+                        ?>
+                        @if($data->count() == 1)
+                          <b>Instructor</b>
+                        @else
+                          <b>Instructors</b>
+                        @endif
+                      </h3>
                       {{--
                       <div>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
@@ -293,15 +302,27 @@
                     <div class="box-body">
                       <table class="table table-bordered">
                         <tr>
-                          <th style="width:35%;">Role</th>
                           <th>Name</th>
+                          <th style="width:15%;">Interest</th>
                           <th style="width:12%;">Picture</th>
                         </tr>
-                        @foreach($course_registration->course->sessions->first()->schedule->instructor_schedules as $i => $dt)
+                        @foreach($data as $dt)
                           <tr>
-                            <td>Instructor {{ $i + 1 }}</td>
+                            <td>{{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}</td>
                             <td>
-                              {{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}
+                              <?php
+                                if($dt->instructor->interest) {
+                                  $interest = explode(', ', $dt->instructor->interest);
+                                  sort($interest);
+                                } else $interest = null;
+                              ?>
+                              @if($interest)
+                                @for($i = 0; $i < count($interest); $i = $i + 1)
+                                  <span class="label label-success">{{ $interest[$i] }}</span>
+                                @endfor
+                              @else
+                                <span class="text-muted"><i>Not Available</i></span>
+                              @endif
                             </td>
                             <td>
                               @if($dt->instructor->user->image_profile != 'user.jpg')
@@ -312,10 +333,58 @@
                             </td>
                           </tr>
                         @endforeach
-                        @foreach($course_registration->course->course_registrations as $dt)
+                      </table>
+                    </div>
+                  </div>
+                  <div class="box box-info">
+                    <div class="box-header">
+                      <h3 class="box-title">
+                        <?php
+                          $data = $course_registration->course->course_registrations;
+                        ?>
+                        @if($data->count() == 1)
+                          <b>Student</b>
+                        @else
+                          <b>Students</b>
+                        @endif
+                      </h3>
+                      {{--
+                      <div>
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add User
+                        </a>
+                      </div>
+                      --}}
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      </div>
+                    </div>
+                    <div class="box-body">
+                      <table class="table table-bordered">
+                        <tr>
+                          <th>Name</th>
+                          <th style="width:15%;">Interest</th>
+                          <th style="width:12%;">Picture</th>
+                        </tr>
+                        @foreach($data as $dt)
                           <tr>
-                            <td>Student</td>
                             <td>{{ $dt->student->user->first_name }} {{ $dt->student->user->last_name }}</td>
+                            <td>
+                              <?php
+                                if($dt->student->interest) {
+                                  $interest = explode(', ', $dt->student->interest);
+                                  sort($interest);
+                                } else $interest = null;
+                              ?>
+                              @if($interest)
+                                @for($i = 0; $i < count($interest); $i = $i + 1)
+                                  <span class="label label-success">{{ $interest[$i] }}</span>
+                                @endfor
+                              @else
+                                <span class="text-muted"><i>Not Available</i></span>
+                              @endif
+                            </td>
                             <td>
                               @if($dt->student->user->image_profile != 'user.jpg')
                                 <img src="{{ asset('uploads/student/profile/'.$dt->student->user->image_profile) }}" style="width:100%">
