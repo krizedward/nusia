@@ -428,7 +428,13 @@
                   <form>
                     <div class="box-body">
                       <dl>
-                        <dt><i class="fa fa-file-text-o margin-r-5"></i> Note</dt>
+                        <dt>
+                          @if($course_registration->course->course_registrations->count() == 1)
+                            <i class="fa fa-user-circle-o margin-r-5"></i> Note
+                          @else
+                            <i class="fa fa-users margin-r-5"></i> Note
+                          @endif
+                        </dt>
                         <dd>
                           Click "link" button to join your session!<br />
                           <span style="color:#ff0000;">* Contact your instructor if you encounter a problem.</span>
@@ -584,9 +590,9 @@
                   <form>
                     <div class="box-body">
                       <dl>
-                        <dt><i class="fa fa-file-text-o margin-r-5"></i> Note</dt>
+                        <dt><i class="fa fa-files-o margin-r-5"></i> Note</dt>
                         <dd>
-                          Click "download" button to download the materials!<br />
+                          Click "link" button to download the materials!<br />
                           <span style="color:#ff0000;">* Contact your instructor if you encounter a problem.</span>
                         </dd>
                       </dl>
@@ -612,7 +618,7 @@
                           <th style="width:2%;" class="text-right">#</th>
                           <th>File Name</th>
                           <th>File Type</th>
-                          <th style="width:5%;">Download</th>
+                          <th style="width:5%;">Link</th>
                         </tr>
                         @foreach($course_registration->course->course_package->material_publics as $i => $dt)
                           <tr>
@@ -712,7 +718,7 @@
                             <th style="width:2%;" class="text-right">#</th>
                             <th>File Name</th>
                             <th>File Type</th>
-                            <th style="width:5%;">Download</th>
+                            <th style="width:5%;">Link</th>
                           </tr>
                           @foreach($s->material_sessions as $j => $dt)
                             <tr>
@@ -831,7 +837,7 @@
                         <dt><i class="fa fa-download margin-r-5"></i> File Download</dt>
                         <dd>
                           Each course (not session) consists of at least one assignment, and exactly one (final) exam.<br />
-                          Click "download" button to get the working instruction!
+                          Click "link" button to download each file given!
                         </dd>
                       </dl>
                       <hr>
@@ -886,7 +892,7 @@
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Task</th>
                           <th>Due Time</th>
-                          <th style="width:5%;">Download</th>
+                          <th style="width:5%;">Link</th>
                         </tr>
                         <?php $i = 0; ?>
                         @foreach($course_registration->course->sessions as $s)
@@ -907,7 +913,7 @@
                                 </td>
                                 <td class="text-center">
                                   @if($dt->path_1)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->path_1 }}">Download</a>
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->path_1 }}">Link</a>
                                   @else
                                     <i class="text-muted">Not Available</i>
                                   @endif
@@ -929,6 +935,33 @@
                           <div class="box-body">
                             <div class="row">
                               <div class="col-md-6">
+                                <div class="col-md-12">
+                                  <div class="form-group @error('assignment_id') has-error @enderror">
+                                    <label for="assignment_id">
+                                      Assignment ID
+                                      <span style="color:#ff0000;">*</span>
+                                    </label>
+                                    <select name="assignment_id" type="text" class="@error('assignment_id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Assignment ID --</option>
+                                      <?php $i = 0; ?>
+                                      @foreach($course_registration->course->sessions as $s)
+                                        @foreach($s->tasks as $dt)
+                                          @if($dt->type == 'Assignment')
+                                            @if(old('assignment_id') == $dt->id))
+                                              <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
+                                            @else
+                                              <option value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
+                                            @endif
+                                            <?php $i++; ?>
+                                          @endif
+                                        @endforeach
+                                      @endforeach
+                                    </select>
+                                    @error('assignment_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
                                 <div class="col-md-12">
                                   <div class="form-group @error('title') has-error @enderror">
                                     <label for="title">
@@ -997,7 +1030,7 @@
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Task</th>
                           <th>Due Date</th>
-                          <th style="width:5%;">Download</th>
+                          <th style="width:5%;">Link</th>
                         </tr>
                         <?php $i = 0; ?>
                         @foreach($course_registration->course->sessions as $s)
@@ -1018,7 +1051,7 @@
                                 </td>
                                 <td class="text-center">
                                   @if($dt->path_1)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->path_1 }}">Download</a>
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->path_1 }}">Link</a>
                                   @else
                                     <i class="text-muted">Not Available</i>
                                   @endif
@@ -1040,6 +1073,33 @@
                           <div class="box-body">
                             <div class="row">
                               <div class="col-md-6">
+                                <div class="col-md-12">
+                                  <div class="form-group @error('exam_id') has-error @enderror">
+                                    <label for="exam_id">
+                                      Exam ID
+                                      <span style="color:#ff0000;">*</span>
+                                    </label>
+                                    <select name="exam_id" type="text" class="@error('exam_id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Exam ID --</option>
+                                      <?php $i = 0; ?>
+                                      @foreach($course_registration->course->sessions as $s)
+                                        @foreach($s->tasks as $dt)
+                                          @if($dt->type == 'Exam')
+                                            @if(old('exam_id') == $dt->id))
+                                              <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
+                                            @else
+                                              <option value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
+                                            @endif
+                                            <?php $i++; ?>
+                                          @endif
+                                        @endforeach
+                                      @endforeach
+                                    </select>
+                                    @error('exam_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
                                 <div class="col-md-12">
                                   <div class="form-group @error('title') has-error @enderror">
                                     <label for="title">
@@ -1182,7 +1242,7 @@
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Task</th>
                           <th>Due Date</th>
-                          <th style="width:5%;">Download</th>
+                          <th style="width:5%;">Link</th>
                         </tr>
                         <?php $i = 0; ?>
                         @foreach($course_registration->course->sessions as $s)
@@ -1196,7 +1256,7 @@
                                 </td>
                                 <td class="text-center">
                                   @if($dt->path_1)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Download</a>
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Link</a>
                                   @else
                                     <i class="text-muted">Not Available</i>
                                   @endif
@@ -1226,7 +1286,7 @@
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Task</th>
                           <th>Due Date</th>
-                          <th style="width:5%;">Download</th>
+                          <th style="width:5%;">Link</th>
                         </tr>
                         <?php $i = 0; ?>
                         @foreach($course_registration->course->sessions as $s)
@@ -1240,7 +1300,7 @@
                                 </td>
                                 <td class="text-center">
                                   @if($dt->path_1)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Download</a>
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Link</a>
                                   @else
                                     <i class="text-muted">Not Available</i>
                                   @endif
