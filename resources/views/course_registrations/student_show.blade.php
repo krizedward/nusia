@@ -900,7 +900,11 @@
                             @if($dt->type == 'Assignment')
                               <tr>
                                 <td class="text-right">{{ $i + 1 }}</td>
-                                <td>{{ $dt->title }}</td>
+                                <td>
+                                  <a href="#" data-toggle="modal" data-target="#Assignment{{$dt->id}}" {{-- class="btn btn-s btn-primary" --}}>
+                                    {{ $dt->title }}
+                                  </a>
+                                </td>
                                 <td>
                                   <?php
                                     $time_due = \Carbon\Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone);
@@ -919,6 +923,33 @@
                                   @endif
                                 </td>
                               </tr>
+                              <div class="modal fade" id="Assignment{{$dt->id}}">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="box box-primary">
+                                      <div class="box-body box-profile">
+                                        <h3 class="profile-username text-center">Terms of Service</h3>
+                                        <!--p class="text-muted text-center">More description here...</p-->
+                                        <ul class="list-group list-group-unbordered">
+                                          <li class="list-group-item">
+                                            <ol>
+                                              <li>&nbsp;&nbsp;&nbsp;Learners must attend all sessions in NUSIA's free classes.<br>&nbsp;&nbsp;&nbsp;If learners cannot attend some of them, they cannot reschedule the sessions.</li>
+                                              <li>&nbsp;&nbsp;&nbsp;Learners must read the learning materials on the dashboard before joining each session.</li>
+                                              <li>&nbsp;&nbsp;&nbsp;Learners must give feedback on the link provided in the dashboard<br>&nbsp;&nbsp;&nbsp;after finishing each session.</li>
+                                              <li>&nbsp;&nbsp;&nbsp;All sessions in the free classes are recorded.<br>&nbsp;&nbsp;&nbsp;Learners allow NUSIA to employ the video recordings for research and marketing purposes<br>&nbsp;&nbsp;&nbsp;(If you disagree with this term, please contact us via email on <a href="mailto:nusia.helpdesk@gmail.com">nusia.helpdesk@gmail.com</a>.)</li>
+                                            </ol>
+                                          </li>
+                                        </ul>
+                                        <button onclick="document.getElementById('Assignment{{$dt->id}}').className = 'modal fade'; document.getElementById('Assignment{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
+                                      </div>
+                                      <!-- /.box-body -->
+                                    </div>
+                                    <!-- /.box -->
+                                  </div>
+                                  <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                              </div>
                               <?php $i++; ?>
                             @endif
                           @endforeach
