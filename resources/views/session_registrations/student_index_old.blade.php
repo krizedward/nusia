@@ -79,7 +79,7 @@
                       ?>
                       <td>
                         <span class="hidden">{{ $schedule_time->isoFormat('YYMMDDAhhmm') }}</span>
-                        {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                        {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
                       </td>
                     @else
                       <td><i>N/A</i></td>
@@ -90,7 +90,7 @@
                       ?>
                       @if(now() < $schedule_time)
                         <td><label class="badge bg-gray">Upcoming</label></td>
-                      @elseif(now() < $schedule_time->add(80, 'minutes'))
+                      @elseif(now() < $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes'))
                         <td><label class="badge bg-yellow">Ongoing</label></td>
                       @else
                         <td><label class="badge bg-blue">Attendance Check</label></td>
@@ -105,7 +105,7 @@
                     <?php
                       $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                     ?>
-                    @if(now() <= $schedule_time->add(80, 'minutes'))
+                    @if(now() <= $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes'))
                       @if($dt->session->link_zoom)
                         <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
                       @else

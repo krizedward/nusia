@@ -82,7 +82,7 @@
                               ?>
                               <td>
                                 <span class="hidden">{{ $schedule_time->isoFormat('YYMMDDAhhmm') }}</span>
-                                {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
                               </td>
                             @else
                               <td><i>N/A</i></td>
@@ -95,7 +95,7 @@
                             <?php
                               $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                             ?>
-                            @if(now() > $schedule_time->add(80, 'minutes'))
+                            @if(now() > $schedule_time->add($dt->course->course_package->material_type->duration_in_minute, 'minutes'))
                               <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('attendances.edit', $dt->id) }}">Link</a></td>
                             @else
                               <td class="text-center"><a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a></td>

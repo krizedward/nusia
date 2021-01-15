@@ -245,7 +245,7 @@
                                 Join <a href="{{ $dt->link_zoom }}" target="_blank">here</a>.
                               @endif
                             @else
-                              {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                              {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
                             @endif
                           </span>
                         </div>

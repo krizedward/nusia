@@ -72,7 +72,7 @@
                       ?>
                       <div class="col-md-12">
                         <b>Session {{ $j + 1 }}</b>
-                        <p>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}</p>
+                        <p>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}</p>
                       </div>
                       <?php $i--; ?>
                     @endforeach

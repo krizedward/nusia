@@ -148,15 +148,15 @@
                         <td>
                           <span class="hidden">{{ $schedule_time->isoFormat('YYMMDDAhhmm') }}</span>
                           @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                            Today, {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                            Today, {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
                           @else
-                            {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                            {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
                           @endif
                         </td>
                       @else
                         <td><i>Not Available</i></td>
                       @endif
-                      @if(now() <= $schedule_time->add(80, 'minutes'))
+                      @if(now() <= $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes'))
                         @if($dt->session->link_zoom)
                           <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
                         @else
@@ -279,7 +279,7 @@
                           Join <a href="{{ $dt->link_zoom }}" target="_blank">here</a>.
                         @endif
                       @else
-                        {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                        {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
                       @endif
                     </span>
                   </div>

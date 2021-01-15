@@ -935,7 +935,7 @@
                                   ?>
                                   @if(now() < $schedule_time)
                                     <label class="label bg-gray">Upcoming</label>
-                                  @elseif(now() < $schedule_time->add(80, 'minutes'))
+                                  @elseif(now() < $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes'))
                                     <label class="label bg-yellow">Ongoing</label>
                                   @else
                                     <label class="label bg-blue">Attendance Check</label>

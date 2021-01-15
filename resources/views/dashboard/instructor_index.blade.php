@@ -73,9 +73,9 @@
                                     <td>
                                       <span class="hidden">{{ $schedule_time->isoFormat('YYMMDDAhhmm') }}</span>
                                       @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                        Today, {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                        Today, {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
                                       @else
-                                        {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                        {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
                                       @endif
                                     </td>
                                     @if($s->link_zoom)
@@ -178,7 +178,7 @@
                                           Join <a href="{{ $s->link_zoom }}" target="_blank">here</a>.
                                         @endif
                                       @else
-                                        {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add(80, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                        {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
                                       @endif
                                     </span>
                                   </div>
