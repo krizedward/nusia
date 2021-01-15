@@ -481,7 +481,17 @@
                           <tr>
                             <td class="text-right">{{ $i + 1 }}</td>
                             <td>{{ $dt->session->title }}</td>
-                            <td>#</td>
+                            <td>
+                              <?php
+                                $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                              ?>
+                              @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                Today, {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                              @else
+                                {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                              @endif
+                            </td>
                             <td class="text-center">
                               @if($dt->session->link_zoom)
                                 <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ $dt->session->link_zoom }}">Link</a>
@@ -836,7 +846,7 @@
                       <dl>
                         <dt><i class="fa fa-file-text-o margin-r-5"></i> More Information</dt>
                         <dd>
-                          Please note the due date for each task.<br />
+                          Please note the due time for each task.<br />
                           <span style="color:#ff0000;">* Contact your instructor if you encounter a problem.</span>
                         </dd>
                       </dl>
@@ -875,7 +885,7 @@
                         <tr>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Task</th>
-                          <th>Due Date</th>
+                          <th>Due Time</th>
                           <th style="width:5%;">Download</th>
                         </tr>
                         <?php $i = 0; ?>
@@ -886,11 +896,18 @@
                                 <td class="text-right">{{ $i + 1 }}</td>
                                 <td>{{ $dt->title }}</td>
                                 <td>
-                                  {{ $dt->due_date }}
+                                  <?php
+                                    $time_due = \Carbon\Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone);
+                                  ?>
+                                  @if($time_due->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                    Today, {{ $time_due->isoFormat('hh:mm A') }}
+                                  @else
+                                    {{ $time_due->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                  @endif
                                 </td>
                                 <td class="text-center">
                                   @if($dt->path_1)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Download</a>
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->path_1 }}">Download</a>
                                   @else
                                     <i class="text-muted">Not Available</i>
                                   @endif
@@ -990,11 +1007,18 @@
                                 <td class="text-right">{{ $i + 1 }}</td>
                                 <td>{{ $dt->title }}</td>
                                 <td>
-                                  {{ $dt->due_date }}
+                                  <?php
+                                    $time_due = \Carbon\Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone);
+                                  ?>
+                                  @if($time_due->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                    Today, {{ $time_due->isoFormat('hh:mm A') }}
+                                  @else
+                                    {{ $time_due->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                  @endif
                                 </td>
                                 <td class="text-center">
                                   @if($dt->path_1)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Download</a>
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->path_1 }}">Download</a>
                                   @else
                                     <i class="text-muted">Not Available</i>
                                   @endif
@@ -1065,7 +1089,7 @@
                     @else
                       <div class="text-center">
                         There is no exam here... :(<br />
-                        Kindly check after all sessions are done.
+                        Kindly check periodically.
                       </div>
                     @endif
                   </div>
@@ -1077,15 +1101,18 @@
           <div class="tab-pane" id="grades">
             <div class="row">
               <div class="col-md-3">
-                <!-- Profile Image -->
-                <div class="box box-default">
+                <div class="box">
                   <div class="box-header with-border">
                     <h3 class="box-title">Registered at <b>{{ $course_registration->course->title }}</b></h3>
                     <p class="no-margin">
                       Includes
                       <b>
-                        {{ $course_registration->course->course_package->count_session }}
-                        @if($course_registration->course->course_package->count_session != 1)
+                        {{--
+                          dapat juga menggunakan variabel
+                          $course_registration->course->course_package->count_session
+                        --}}
+                        {{ $course_registration->course->sessions->count() }}
+                        @if($course_registration->course->sessions->count() != 1)
                           sessions
                         @else
                           session
@@ -1094,345 +1121,139 @@
                     </p>
                   </div>
                   <!-- /.box-header -->
-                  <div class="box-body">
-                    <strong><i class="fa fa-clock-o margin-r-5"></i> Registration Time</strong>
-                    <p>
-                      <?php
-                        if($course_registration->created_at != null)
-                          $schedule_time = \Carbon\Carbon::parse($course_registration->created_at)->setTimezone(Auth::user()->timezone);
-                        else
-                          $schedule_time = null;
-                      ?>
-                      <table>
-                        <tr>
-                          <td><b>Day</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($schedule_time)
-                              {{ $schedule_time->isoFormat('dddd') }}
-                            @else
-                              <i class="text-muted">Not Available</i>
-                            @endif
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><b>Date</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($schedule_time)
-                              {{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}
-                            @else
-                              <i class="text-muted">Not Available</i>
-                            @endif
-                          </td>
-                        </tr>
-                      </table>
-                    </p>
-                    <hr>
-                    <strong><i class="fa fa-credit-card margin-r-5"></i> Payment Status</strong>
-                    <p>
-                      <table>
-                        <tr>
-                          <td><b>Status</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            <?php
-                              $sum = 0;
-                              foreach($course_registration->course_payments as $dt) {
-                                if($dt->status == 'Confirmed') {
-                                  $sum += $dt->amount;
-                                }
-                              }
-                            ?>
-                            @if($course_registration->course->course_package->price != 0)
-                              {{-- Kode untuk memeriksa status pembayaran untuk course berbayar. --}}
-                              @if($sum > $course_registration->course->course_package->price)
-                                <span style="color:red;">Possible bug, please report to us.</span>
-                              @elseif($sum == $course_registration->course->course_package->price)
-                                <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Paid</span>
-                              @else
-                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Fully Paid</span>
-                              @endif
-                            @else
-                              <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Free of Charge</span>
-                            @endif
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><b>Paid at</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($course_registration->course->course_package->price != 0)
-                              @if($sum > $course_registration->course->course_package->price)
-                                <span style="color:red;">Possible bug, please report to us.</span>
-                              @elseif($sum == $course_registration->course->course_package->price)
-                                <?php
-                                  $payment_time = \Carbon\Carbon::parse($course_registration->course_payments->last()->payment_time)->setTimezone(Auth::user()->timezone);
-                                ?>
-                                {{ $payment_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
-                              @else
-                                Not Fully Paid
-                              @endif
-                            @else
-                              <i class="text-muted">Not Available</i>
-                            @endif
-                          </td>
-                        </tr>
-                      </table>
-                    </p>
-                  </div>
-                  <!-- /.box-body -->
+                  <form>
+                    <div class="box-body">
+                      <dl>
+                        <dt><i class="fa fa-download margin-r-5"></i> File Download</dt>
+                        <dd>
+                          Each course (not session) consists of at least one assignment, and exactly one (final) exam.<br />
+                          Click "download" button to get the working instruction!
+                        </dd>
+                      </dl>
+                      <hr>
+                      <dl>
+                        <dt><i class="fa fa-upload margin-r-5"></i> Task Submission</dt>
+                        <dd>
+                          After completing a task, fill out the submission form and click "submit" button!<br />
+                          If you have uploaded a file, please check whether the file has been submitted successfully.
+                        </dd>
+                      </dl>
+                      <hr>
+                      <dl>
+                        <dt><i class="fa fa-file-text-o margin-r-5"></i> More Information</dt>
+                        <dd>
+                          Please note the due date for each task.<br />
+                          <span style="color:#ff0000;">* Contact your instructor if you encounter a problem.</span>
+                        </dd>
+                      </dl>
+                      {{--
+                      <hr>
+                      --}}
+                    </div>
+                  </form>
                 </div>
-                <!-- /.box -->
               </div>
-              <div class="col-md-9 no-padding">
-                <div class="col-md-12">
-                  <div class="box box-primary">
-                    <div class="box-header">
-                      <h3 class="box-title"><b>Overview</b></h3>
-                      {{--
-                      <div>
-                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add User
-                        </a>
-                      </div>
-                      --}}
-                      <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                      </div>
-                    </div>
-                    <div class="box-body">
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Material Type</strong>
-                      <p>
-                        <u>{{ $course_registration->course->course_package->material_type->name }}</u><br>
-                        {{ $course_registration->course->course_package->material_type->description }}
-                      </p>
-                      <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Course Type</strong>
-                      <p>
-                        <u>{{ $course_registration->course->course_package->course_type->name }}</u><br>
-                        {{ $course_registration->course->course_package->course_type->description }}
-                      </p>
-                      <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Course Proficiency Level</strong>
-                      <p>
-                        <u>{{ $course_registration->course->course_package->course_level->name }}</u><br>
-                        {{ $course_registration->course->course_package->course_level->description }}
-                      </p>
-                      <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Course Title</strong>
-                      <p>{{ $course_registration->course->title }}</p>
-                      <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Total Available Session(s)</strong>
-                      <p>
-                        {{ $course_registration->course->course_package->count_session }}
-                        @if($course_registration->course->course_package->count_session != 1)
-                          sessions
-                        @else
-                          session
-                        @endif
-                      </p>
-                      <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Registration Price</strong>
-                      <p>${{ $course_registration->course->course_package->price }}</p>
-                      <hr>
-                      <h3 class="box-title"><b>Table Data</b></h3>
-                      {{--
-                      <div class="box-header">
-                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add "Something"
-                        </a>
-                      </div>
-                      --}}
-                      <div class="box-body">
-                        <table class="table table-bordered">
-                          <tr>
-                            <th>Role</th>
-                            <th>Name</th>
-                            <th style="width:40px;">Profile</th>
-                          </tr>
-                          <tr>
-                            <td>Record 1</td>
-                            <td>Record 2</td>
-                            <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
-                          </tr>
-                        </table>
-                      </div>
+              <div class="col-md-9">
+                <?php
+                  $has_an_assignment = 0;
+                  $has_an_exam = 0;
+                  foreach($course_registration->course->sessions as $s) {
+                    foreach($s->tasks as $dt) {
+                      if($dt->type == 'Assignment')
+                        $has_an_assignment = 1;
+                      else if($dt->type == 'Exam')
+                        $has_an_exam = 1;
+                      if($has_an_assignment == 1 && $has_an_exam == 1)
+                        break;
+                    }
+                  }
+                ?>
+                <div class="box box-primary">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>Grades for Assignments</b></h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                   </div>
-                  <div class="box box-warning">
-                    <div class="box-header">
-                      <h3 class="box-title"><b>Edit Course Information</b></h3>
-                      {{--
-                      <div>
-                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add User
-                        </a>
-                      </div>
-                      --}}
-                      <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                      </div>
-                    </div>
-                    <div class="box-body">
+                  <div class="box-body">
+                    @if($has_an_assignment == 1)
                       <table class="table table-bordered">
                         <tr>
-                          <th>Role</th>
-                          <th>Name</th>
-                          <th style="width:40px;">Profile</th>
+                          <th style="width:2%;" class="text-right">#</th>
+                          <th>Task</th>
+                          <th>Due Date</th>
+                          <th style="width:5%;">Download</th>
                         </tr>
-                        <tr>
-                          <td>Record 1</td>
-                          <td>Record 2</td>
-                          <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a></td>
-                        </tr>
+                        <?php $i = 0; ?>
+                        @foreach($course_registration->course->sessions as $s)
+                          @foreach($s->tasks as $dt)
+                            @if($dt->type == 'Assignment')
+                              <tr>
+                                <td class="text-right">{{ $i + 1 }}</td>
+                                <td>{{ $dt->title }}</td>
+                                <td>
+                                  {{ $dt->due_date }}
+                                </td>
+                                <td class="text-center">
+                                  @if($dt->path_1)
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Download</a>
+                                  @else
+                                    <i class="text-muted">Not Available</i>
+                                  @endif
+                                </td>
+                              </tr>
+                              <?php $i++; ?>
+                            @endif
+                          @endforeach
+                        @endforeach
                       </table>
+                    @else
+                      <div class="text-center">No data available.</div>
+                    @endif
+                  </div>
+                </div>
+                <div class="box box-primary">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>Grades for Exam</b></h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                   </div>
-                  <div class="box box-warning">
-                    <div class="box-header">
-                      <h3 class="box-title"><b>Edit Course Information</b></h3>
-                      {{--
-                      <div>
-                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add User
-                        </a>
-                      </div>
-                      --}}
-                      <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                      </div>
-                    </div>
-                    <div class="box-body">
-                      <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <div class="box-body">
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="col-md-12">
-                                <div class="form-group @error('title') has-error @enderror">
-                                  <label for="title">Course Title</label>
-                                  <input name="title" value="{{ $course_registration->course->title }}" type="text" class="@error('title') is-invalid @enderror form-control" placeholder="Enter Course Title">
-                                  @error('title')
-                                    <p style="color:red">{{ $message }}</p>
-                                  @enderror
-                                </div>
-                              </div>
-                              <div class="col-md-12">
-                                <div class="form-group @error('material_type_id') has-error @enderror">
-                                  <label for="material_type_id">Material Type</label>
-                                  <select name="material_type" type="text" class="@error('material_type') is-invalid @enderror form-control">
-                                    <option selected="selected" value="">-- Enter Material Type --</option>
-                                    @foreach($material_types as $mt)
-                                      @if(old('material_type_id') == $mt->name)
-                                        <option selected="selected" value="{{ $mt->name }}">{{ $mt->name }}</option>
-                                      @elseif($course_registration->course->course_package->material_type->name == $mt->name)
-                                        <option selected="selected" value="{{ $mt->name }}">{{ $mt->name }}</option>
-                                      @else
-                                        <option value="{{ $mt->name }}">{{ $mt->name }}</option>
-                                      @endif
-                                    @endforeach
-                                  </select>
-                                  @error('material_type_id')
-                                    <p style="color:red">{{ $message }}</p>
-                                  @enderror
-                                </div>
-                                <div class="form-group @error('course_type_id') has-error @enderror">
-                                  <label for="course_type_id">Course Type</label>
-                                  <select name="course_type" type="text" class="@error('course_type') is-invalid @enderror form-control">
-                                    <option selected="selected" value="">-- Enter Course Type --</option>
-                                    @foreach($course_types as $ct)
-                                      @if(old('course_type_id') == $ct->name)
-                                        <option selected="selected" value="{{ $ct->name }}">
-                                          @if($ct->count_student_min != $ct->count_student_max)
-                                            {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
-                                          @else
-                                            {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
-                                          @endif
-                                        </option>
-                                      @elseif($course_registration->course->course_package->course_type->name == $ct->name)
-                                        <option selected="selected" value="{{ $ct->name }}">
-                                          @if($ct->count_student_min != $ct->count_student_max)
-                                            {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
-                                          @else
-                                            {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
-                                          @endif
-                                        </option>
-                                      @else
-                                        <option value="{{ $ct->name }}">
-                                          @if($ct->count_student_min != $ct->count_student_max)
-                                            {{ $ct->name }}: {{ $ct->count_student_min }} to {{ $ct->count_student_max }} @if($ct->count_student_max != 1) Students @else Student @endif
-                                          @else
-                                            {{ $ct->name }}: {{ $ct->count_student_min }} @if($ct->count_student_max != 1) Students @else Student @endif only
-                                          @endif
-                                        </option>
-                                      @endif
-                                    @endforeach
-                                  </select>
-                                  @error('course_type_id')
-                                    <p style="color:red">{{ $message }}</p>
-                                  @enderror
-                                </div>
-                                <div class="form-group @error('course_level_id') has-error @enderror">
-                                  <label for="course_level_id">Proficiency Level</label>
-                                  <select name="course_level" type="text" class="@error('course_level') is-invalid @enderror form-control">
-                                    <option selected="selected" value="">-- Enter Proficiency Level --</option>
-                                    @foreach($course_levels as $cl)
-                                      @if(old('course_level_id') == $cl->name)
-                                        <option selected="selected" value="{{ $cl->name }}">{{ $cl->name }}</option>
-                                      @elseif($course_registration->course->course_package->course_level->name == $cl->name)
-                                        <option selected="selected" value="{{ $cl->name }}">{{ $cl->name }}</option>
-                                      @else
-                                        <option value="{{ $cl->name }}">{{ $cl->name }}</option>
-                                      @endif
-                                    @endforeach
-                                  </select>
-                                  @error('course_level_id')
-                                    <p style="color:red">{{ $message }}</p>
-                                  @enderror
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="col-md-12">
-                                <div class="form-group @error('description') has-error @enderror">
-                                  <label for="description">Course Description</label>
-                                  @if($course_registration->course->description)
-                                    <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Description">{{ $course_registration->course->description }}</textarea>
+                  <div class="box-body">
+                    @if($has_an_exam == 1)
+                      <table class="table table-bordered">
+                        <tr>
+                          <th style="width:2%;" class="text-right">#</th>
+                          <th>Task</th>
+                          <th>Due Date</th>
+                          <th style="width:5%;">Download</th>
+                        </tr>
+                        <?php $i = 0; ?>
+                        @foreach($course_registration->course->sessions as $s)
+                          @foreach($s->tasks as $dt)
+                            @if($dt->type == 'Exam')
+                              <tr>
+                                <td class="text-right">{{ $i + 1 }}</td>
+                                <td>{{ $dt->title }}</td>
+                                <td>
+                                  {{ $dt->due_date }}
+                                </td>
+                                <td class="text-center">
+                                  @if($dt->path_1)
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Download</a>
                                   @else
-                                    <textarea name="description" class="@error('description') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Description">{{ old('description') }}</textarea>
+                                    <i class="text-muted">Not Available</i>
                                   @endif
-                                  @error('description')
-                                    <p style="color:red">{{ $message }}</p>
-                                  @enderror
-                                </div>
-                              </div>
-                              <div class="col-md-12">
-                                <div class="form-group @error('requirement') has-error @enderror">
-                                  <label for="requirement">Course Requirement</label>
-                                  @if($course_registration->course->requirement)
-                                    <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Requirement">{{ $course_registration->course->requirement }}</textarea>
-                                  @else
-                                    <textarea name="requirement" class="@error('requirement') is-invalid @enderror form-control" rows="5" placeholder="Enter Course Requirement">{{ old('requirement') }}</textarea>
-                                  @endif
-                                  @error('requirement')
-                                    <p style="color:red">{{ $message }}</p>
-                                  @enderror
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="box-footer">
-                          <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
-                        </div>
-                      </form>
-                    </div>
+                                </td>
+                              </tr>
+                              <?php $i++; ?>
+                            @endif
+                          @endforeach
+                        @endforeach
+                      </table>
+                    @else
+                      <div class="text-center">No data available.</div>
+                    @endif
                   </div>
                 </div>
               </div>
