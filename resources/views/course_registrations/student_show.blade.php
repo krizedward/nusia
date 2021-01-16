@@ -870,13 +870,16 @@
                   $exam_flag = 0;
                   foreach($course_registration->course->sessions as $s) {
                     foreach($s->tasks as $dt) {
+                      $task_submission_flag++;
                       if($dt->type == 'Assignment')
-                        $assignment_flag = 1;
+                        $assignment_flag++;
                       else if($dt->type == 'Exam')
-                        $exam_flag = 1;
-                      if($assignment_flag == 1 && $exam_flag == 1)
+                        $exam_flag++;
+                      if($task_submission_flag > 1 && $assignment_flag > 1 && $exam_flag > 1)
                         break;
                     }
+                    if($task_submission_flag > 1 && $assignment_flag > 1 && $exam_flag > 1)
+                      break;
                   }
                 ?>
                 <div class="box box-primary">
@@ -1271,22 +1274,6 @@
                 </div>
               </div>
               <div class="col-md-9">
-                <?php
-                  $task_submission_flag = 0;
-                  $assignment_flag = 0;
-                  $exam_flag = 0;
-                  foreach($course_registration->session_registrations as $sr) {
-                    foreach($sr->task_submissions as $dt) {
-                      $task_submission_flag++;
-                      if($dt->task->type == 'Assignment')
-                        $assignment_flag++;
-                      else if($dt->task->type == 'Exam')
-                        $exam_flag++;
-                      if($task_submission_flag > 1)
-                        break;
-                    }
-                  }
-                ?>
                 <div class="box box-primary">
                   <div class="box-header">
                     <h3 class="box-title">
@@ -1342,19 +1329,55 @@
                                   <div class="modal-content">
                                     <div class="box box-primary">
                                       <div class="box-body box-profile">
-                                        <h3 class="profile-username text-center">Task: <b>{{ $dt->title }}</b></h3>
-                                        <p class="text-muted text-center">
-                                          Due time:
-                                          @if($time_due->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                            Today, {{ $time_due->isoFormat('hh:mm A') }}
-                                          @else
-                                            {{ $time_due->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
-                                          @endif
-                                        </p>
+                                        <h3 class="profile-username text-center">Submission for: <b>{{ $dt->title }}</b></h3>
+                                        <p class="text-muted text-center">Type: <b>Assignment</b></p>
                                         <ul class="list-group list-group-unbordered">
-                                          <li class="list-group-item">
-                                            {{ $dt->description }}
-                                          </li>
+                                          <?php $j = 0; $flag = 0; ?>
+                                          @foreach($course_registration->session_registrations as $sr)
+                                            @foreach($sr->task_submissions as $ts)
+                                              @if($ts->task_id == $dt->id)
+                                                <?php $flag = 1; ?>
+                                                <li class="list-group-item">
+                                                  <b>Submission #{{ $j + 1 }}</b>,
+                                                    download your submission:
+                                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $ts->path_1 }}">Download</a>
+                                                    <br />
+                                                  Submitted on
+                                                    <?php
+                                                      $submission_time = \Carbon\Carbon::parse($ts->path_1_submitted_at)->setTimezone(Auth::user()->timezone);
+                                                    ?>
+                                                    {{ $submission_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                                    <br />
+                                                  <b>Title:</b> {{ $ts->title }}<br />
+                                                  <b>Description:</b><br />
+                                                    {{ $ts->description }}<br />
+                                                    <br />
+                                                  <b>Submission status:</b>
+                                                    @if($ts->status == 'Accepted')
+                                                      <b style="color:#007700;">{{ $ts->status }}</b><br />
+                                                    @else
+                                                      <b style="color:#ff0000;">{{ $ts->status }}</b><br />
+                                                    @endif
+                                                  <b>Score:</b>
+                                                    @if($ts->status == 'Accepted')
+                                                      {{ $ts->score }}<br />
+                                                    @else
+                                                      <i class="text-muted">Not Available</i><br />
+                                                    @endif
+                                                  <b>Instructor reply:</b><br />
+                                                    @if($ts->status == 'Accepted')
+                                                      {{ $ts->instructor_reply }}<br />
+                                                    @else
+                                                      <i class="text-muted">Not Available</i><br />
+                                                    @endif
+                                                </li>
+                                                <?php $j++; ?>
+                                              @endif
+                                            @endforeach
+                                          @endforeach
+                                          @if($flag == 0)
+                                            <div class="text-center">No data available.</div>
+                                          @endif
                                         </ul>
                                         <button onclick="document.getElementById('AssignmentGrading{{$dt->id}}').className = 'modal fade'; document.getElementById('AssignmentGrading{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
                                       </div>
@@ -1431,19 +1454,55 @@
                                   <div class="modal-content">
                                     <div class="box box-primary">
                                       <div class="box-body box-profile">
-                                        <h3 class="profile-username text-center">Task: <b>{{ $dt->title }}</b></h3>
-                                        <p class="text-muted text-center">
-                                          Due time:
-                                          @if($time_due->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                            Today, {{ $time_due->isoFormat('hh:mm A') }}
-                                          @else
-                                            {{ $time_due->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
-                                          @endif
-                                        </p>
+                                        <h3 class="profile-username text-center">Submission for: <b>{{ $dt->title }}</b></h3>
+                                        <p class="text-muted text-center">Type: <b>Exam</b></p>
                                         <ul class="list-group list-group-unbordered">
-                                          <li class="list-group-item">
-                                            {{ $dt->description }}
-                                          </li>
+                                          <?php $j = 0; $flag = 0; ?>
+                                          @foreach($course_registration->session_registrations as $sr)
+                                            @foreach($sr->task_submissions as $ts)
+                                              @if($ts->task_id == $dt->id)
+                                                <?php $flag = 1; ?>
+                                                <li class="list-group-item">
+                                                  <b>Submission #{{ $j + 1 }}</b>,
+                                                    download your submission:
+                                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $ts->path_1 }}">Download</a>
+                                                    <br />
+                                                  Submitted on
+                                                    <?php
+                                                      $submission_time = \Carbon\Carbon::parse($ts->path_1_submitted_at)->setTimezone(Auth::user()->timezone);
+                                                    ?>
+                                                    {{ $submission_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                                    <br />
+                                                  <b>Title:</b> {{ $ts->title }}<br />
+                                                  <b>Description:</b><br />
+                                                    {{ $ts->description }}<br />
+                                                    <br />
+                                                  <b>Submission status:</b>
+                                                    @if($ts->status == 'Accepted')
+                                                      <b style="color:#007700;">{{ $ts->status }}</b><br />
+                                                    @else
+                                                      <b style="color:#ff0000;">{{ $ts->status }}</b><br />
+                                                    @endif
+                                                  <b>Score:</b>
+                                                    @if($ts->status == 'Accepted')
+                                                      {{ $ts->score }}<br />
+                                                    @else
+                                                      <i class="text-muted">Not Available</i><br />
+                                                    @endif
+                                                  <b>Instructor reply:</b><br />
+                                                    @if($ts->status == 'Accepted')
+                                                      {{ $ts->instructor_reply }}<br />
+                                                    @else
+                                                      <i class="text-muted">Not Available</i><br />
+                                                    @endif
+                                                </li>
+                                                <?php $j++; ?>
+                                              @endif
+                                            @endforeach
+                                          @endforeach
+                                          @if($flag == 0)
+                                            <div class="text-center">No data available.</div>
+                                          @endif
                                         </ul>
                                         <button onclick="document.getElementById('ExamGrading{{$dt->id}}').className = 'modal fade'; document.getElementById('ExamGrading{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
                                       </div>
