@@ -837,7 +837,7 @@
                         <dt><i class="fa fa-download margin-r-5"></i> File Download</dt>
                         <dd>
                           Each course (not session) consists of at least one assignment, and exactly one (final) exam.<br />
-                          Click "link" button to download each file given!
+                          Click "link" button to download each task given!
                         </dd>
                       </dl>
                       <hr>
@@ -865,15 +865,16 @@
               </div>
               <div class="col-md-9">
                 <?php
-                  $has_an_assignment = 0;
-                  $has_an_exam = 0;
+                  $task_submission_flag = 0;
+                  $assignment_flag = 0;
+                  $exam_flag = 0;
                   foreach($course_registration->course->sessions as $s) {
                     foreach($s->tasks as $dt) {
                       if($dt->type == 'Assignment')
-                        $has_an_assignment = 1;
+                        $assignment_flag = 1;
                       else if($dt->type == 'Exam')
-                        $has_an_exam = 1;
-                      if($has_an_assignment == 1 && $has_an_exam == 1)
+                        $exam_flag = 1;
+                      if($assignment_flag == 1 && $exam_flag == 1)
                         break;
                     }
                   }
@@ -886,7 +887,7 @@
                     </div>
                   </div>
                   <div class="box-body">
-                    @if($has_an_assignment == 1)
+                    @if($assignment_flag)
                       <table class="table table-bordered">
                         <tr>
                           <th style="width:2%;" class="text-right">#</th>
@@ -928,16 +929,18 @@
                                   <div class="modal-content">
                                     <div class="box box-primary">
                                       <div class="box-body box-profile">
-                                        <h3 class="profile-username text-center">Terms of Service</h3>
-                                        <!--p class="text-muted text-center">More description here...</p-->
+                                        <h3 class="profile-username text-center">Task: <b>{{ $dt->title }}</b></h3>
+                                        <p class="text-muted text-center">
+                                          Due time:
+                                          @if($time_due->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                            Today, {{ $time_due->isoFormat('hh:mm A') }}
+                                          @else
+                                            {{ $time_due->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                          @endif
+                                        </p>
                                         <ul class="list-group list-group-unbordered">
                                           <li class="list-group-item">
-                                            <ol>
-                                              <li>&nbsp;&nbsp;&nbsp;Learners must attend all sessions in NUSIA's free classes.<br>&nbsp;&nbsp;&nbsp;If learners cannot attend some of them, they cannot reschedule the sessions.</li>
-                                              <li>&nbsp;&nbsp;&nbsp;Learners must read the learning materials on the dashboard before joining each session.</li>
-                                              <li>&nbsp;&nbsp;&nbsp;Learners must give feedback on the link provided in the dashboard<br>&nbsp;&nbsp;&nbsp;after finishing each session.</li>
-                                              <li>&nbsp;&nbsp;&nbsp;All sessions in the free classes are recorded.<br>&nbsp;&nbsp;&nbsp;Learners allow NUSIA to employ the video recordings for research and marketing purposes<br>&nbsp;&nbsp;&nbsp;(If you disagree with this term, please contact us via email on <a href="mailto:nusia.helpdesk@gmail.com">nusia.helpdesk@gmail.com</a>.)</li>
-                                            </ol>
+                                            {{ $dt->description }}
                                           </li>
                                         </ul>
                                         <button onclick="document.getElementById('Assignment{{$dt->id}}').className = 'modal fade'; document.getElementById('Assignment{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
@@ -1055,7 +1058,7 @@
                     </div>
                   </div>
                   <div class="box-body">
-                    @if($has_an_exam == 1)
+                    @if($exam_flag)
                       <table class="table table-bordered">
                         <tr>
                           <th style="width:2%;" class="text-right">#</th>
@@ -1069,7 +1072,11 @@
                             @if($dt->type == 'Exam')
                               <tr>
                                 <td class="text-right">{{ $i + 1 }}</td>
-                                <td>{{ $dt->title }}</td>
+                                <td>
+                                  <a href="#" data-toggle="modal" data-target="#Exam{{$dt->id}}" {{-- class="btn btn-s btn-primary" --}}>
+                                    {{ $dt->title }}
+                                  </a>
+                                </td>
                                 <td>
                                   <?php
                                     $time_due = \Carbon\Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone);
@@ -1088,6 +1095,35 @@
                                   @endif
                                 </td>
                               </tr>
+                              <div class="modal fade" id="Exam{{$dt->id}}">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="box box-primary">
+                                      <div class="box-body box-profile">
+                                        <h3 class="profile-username text-center">Task: <b>{{ $dt->title }}</b></h3>
+                                        <p class="text-muted text-center">
+                                          Due time:
+                                          @if($time_due->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                            Today, {{ $time_due->isoFormat('hh:mm A') }}
+                                          @else
+                                            {{ $time_due->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                          @endif
+                                        </p>
+                                        <ul class="list-group list-group-unbordered">
+                                          <li class="list-group-item">
+                                            {{ $dt->description }}
+                                          </li>
+                                        </ul>
+                                        <button onclick="document.getElementById('Exam{{$dt->id}}').className = 'modal fade'; document.getElementById('Exam{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
+                                      </div>
+                                      <!-- /.box-body -->
+                                    </div>
+                                    <!-- /.box -->
+                                  </div>
+                                  <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                              </div>
                               <?php $i++; ?>
                             @endif
                           @endforeach
@@ -1215,25 +1251,15 @@
                   <form>
                     <div class="box-body">
                       <dl>
-                        <dt><i class="fa fa-download margin-r-5"></i> File Download</dt>
+                        <dt><i class="fa fa-commenting-o margin-r-5"></i> Note</dt>
                         <dd>
-                          Each course (not session) consists of at least one assignment, and exactly one (final) exam.<br />
-                          Click "download" button to get the working instruction!
-                        </dd>
-                      </dl>
-                      <hr>
-                      <dl>
-                        <dt><i class="fa fa-upload margin-r-5"></i> Task Submission</dt>
-                        <dd>
-                          After completing a task, fill out the submission form and click "submit" button!<br />
-                          If you have uploaded a file, please check whether the file has been submitted successfully.
-                        </dd>
-                      </dl>
-                      <hr>
-                      <dl>
-                        <dt><i class="fa fa-file-text-o margin-r-5"></i> More Information</dt>
-                        <dd>
-                          Please note the due date for each task.<br />
+                          Each task submission and grading (including exam) can be found here.<br />
+                          Click "detail" button to view your instructor's reply for your
+                          @if($task_submission_flag != 1)
+                            submissions!<br />
+                          @else
+                            submission!<br />
+                          @endif
                           <span style="color:#ff0000;">* Contact your instructor if you encounter a problem.</span>
                         </dd>
                       </dl>
@@ -1246,33 +1272,44 @@
               </div>
               <div class="col-md-9">
                 <?php
-                  $has_an_assignment = 0;
-                  $has_an_exam = 0;
-                  foreach($course_registration->course->sessions as $s) {
-                    foreach($s->tasks as $dt) {
-                      if($dt->type == 'Assignment')
-                        $has_an_assignment = 1;
-                      else if($dt->type == 'Exam')
-                        $has_an_exam = 1;
-                      if($has_an_assignment == 1 && $has_an_exam == 1)
+                  $task_submission_flag = 0;
+                  $assignment_flag = 0;
+                  $exam_flag = 0;
+                  foreach($course_registration->session_registrations as $sr) {
+                    foreach($sr->task_submissions as $dt) {
+                      $task_submission_flag++;
+                      if($dt->task->type == 'Assignment')
+                        $assignment_flag++;
+                      else if($dt->task->type == 'Exam')
+                        $exam_flag++;
+                      if($task_submission_flag > 1)
                         break;
                     }
                   }
                 ?>
                 <div class="box box-primary">
                   <div class="box-header">
-                    <h3 class="box-title"><b>Grades for Assignments</b></h3>
+                    <h3 class="box-title">
+                      <b>
+                        @if($assignment_flag != 1)
+                          Submissions
+                        @else
+                          Submission
+                        @endif
+                        for Assignments
+                      </b>
+                    </h3>
                     <div class="box-tools pull-right">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                   </div>
                   <div class="box-body">
-                    @if($has_an_assignment == 1)
+                    @if($assignment_flag)
                       <table class="table table-bordered">
                         <tr>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Task</th>
-                          <th>Due Date</th>
+                          <th>Last Done on</th>
                           <th style="width:5%;">Link</th>
                         </tr>
                         <?php $i = 0; ?>
@@ -1281,18 +1318,54 @@
                             @if($dt->type == 'Assignment')
                               <tr>
                                 <td class="text-right">{{ $i + 1 }}</td>
-                                <td>{{ $dt->title }}</td>
                                 <td>
-                                  {{ $dt->due_date }}
+                                  <a href="#" data-toggle="modal" data-target="#AssignmentGrading{{$dt->id}}" {{-- class="btn btn-s btn-primary" --}}>
+                                    {{ $dt->title }}
+                                  </a>
                                 </td>
-                                <td class="text-center">
-                                  @if($dt->path_1)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Link</a>
+                                <td>
+                                  @if($dt->task_submissions->last())
+                                    <?php
+                                      $last_submitted_at = \Carbon\Carbon::parse($dt->task_submissions->last()->path_1_submitted_at)->setTimezone(Auth::user()->timezone);
+                                    ?>
+                                    {{ $last_submitted_at->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
                                   @else
                                     <i class="text-muted">Not Available</i>
                                   @endif
                                 </td>
+                                <td class="text-center">
+                                  <a href="#" data-toggle="modal" data-target="#AssignmentGrading{{$dt->id}}" class="btn btn-flat btn-xs bg-purple">Detail</a>
+                                </td>
                               </tr>
+                              <div class="modal fade" id="AssignmentGrading{{$dt->id}}">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="box box-primary">
+                                      <div class="box-body box-profile">
+                                        <h3 class="profile-username text-center">Task: <b>{{ $dt->title }}</b></h3>
+                                        <p class="text-muted text-center">
+                                          Due time:
+                                          @if($time_due->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                            Today, {{ $time_due->isoFormat('hh:mm A') }}
+                                          @else
+                                            {{ $time_due->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                          @endif
+                                        </p>
+                                        <ul class="list-group list-group-unbordered">
+                                          <li class="list-group-item">
+                                            {{ $dt->description }}
+                                          </li>
+                                        </ul>
+                                        <button onclick="document.getElementById('AssignmentGrading{{$dt->id}}').className = 'modal fade'; document.getElementById('AssignmentGrading{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
+                                      </div>
+                                      <!-- /.box-body -->
+                                    </div>
+                                    <!-- /.box -->
+                                  </div>
+                                  <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                              </div>
                               <?php $i++; ?>
                             @endif
                           @endforeach
@@ -1305,18 +1378,27 @@
                 </div>
                 <div class="box box-primary">
                   <div class="box-header">
-                    <h3 class="box-title"><b>Grades for Exam</b></h3>
+                    <h3 class="box-title">
+                      <b>
+                        @if($exam_flag != 1)
+                          Submissions
+                        @else
+                          Submission
+                        @endif
+                        for Exam
+                      </b>
+                    </h3>
                     <div class="box-tools pull-right">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                   </div>
                   <div class="box-body">
-                    @if($has_an_exam == 1)
+                    @if($exam_flag)
                       <table class="table table-bordered">
                         <tr>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Task</th>
-                          <th>Due Date</th>
+                          <th>Last Done on</th>
                           <th style="width:5%;">Link</th>
                         </tr>
                         <?php $i = 0; ?>
@@ -1325,18 +1407,54 @@
                             @if($dt->type == 'Exam')
                               <tr>
                                 <td class="text-right">{{ $i + 1 }}</td>
-                                <td>{{ $dt->title }}</td>
                                 <td>
-                                  {{ $dt->due_date }}
+                                  <a href="#" data-toggle="modal" data-target="#ExamGrading{{$dt->id}}" {{-- class="btn btn-s btn-primary" --}}>
+                                    {{ $dt->title }}
+                                  </a>
                                 </td>
-                                <td class="text-center">
-                                  @if($dt->path_1)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Link</a>
+                                <td>
+                                  <?php
+                                    $time_due = \Carbon\Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone);
+                                  ?>
+                                  @if($time_due->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                    Today, {{ $time_due->isoFormat('hh:mm A') }}
                                   @else
-                                    <i class="text-muted">Not Available</i>
+                                    {{ $time_due->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
                                   @endif
                                 </td>
+                                <td class="text-center">
+                                  <a href="#" data-toggle="modal" data-target="#AssignmentGrading{{$dt->id}}" class="btn btn-flat btn-xs bg-purple">Detail</a>
+                                </td>
                               </tr>
+                              <div class="modal fade" id="ExamGrading{{$dt->id}}">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="box box-primary">
+                                      <div class="box-body box-profile">
+                                        <h3 class="profile-username text-center">Task: <b>{{ $dt->title }}</b></h3>
+                                        <p class="text-muted text-center">
+                                          Due time:
+                                          @if($time_due->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                            Today, {{ $time_due->isoFormat('hh:mm A') }}
+                                          @else
+                                            {{ $time_due->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                          @endif
+                                        </p>
+                                        <ul class="list-group list-group-unbordered">
+                                          <li class="list-group-item">
+                                            {{ $dt->description }}
+                                          </li>
+                                        </ul>
+                                        <button onclick="document.getElementById('ExamGrading{{$dt->id}}').className = 'modal fade'; document.getElementById('ExamGrading{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
+                                      </div>
+                                      <!-- /.box-body -->
+                                    </div>
+                                    <!-- /.box -->
+                                  </div>
+                                  <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                              </div>
                               <?php $i++; ?>
                             @endif
                           @endforeach
