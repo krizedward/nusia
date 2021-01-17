@@ -630,7 +630,7 @@
                         <tr>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>File Name</th>
-                          <th>File Type</th>
+                          <th style="width:25%;">File Type</th>
                           <th style="width:5%;">Link</th>
                         </tr>
                         @foreach($course_registration->course->course_package->material_publics as $i => $dt)
@@ -639,14 +639,18 @@
                             <td>{{ $dt->name }}</td>
                             <td>
                               @if($dt->path)
-                                {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
+                                @if(strpos($dt->path, '://') !== 0)
+                                  Link
+                                @else
+                                  {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
+                                @endif
                               @else
                                 <i class="text-muted">Not Available</i>
                               @endif
                             </td>
                             <td class="text-center">
                               @if($dt->path)
-                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Link</a>
+                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->path }}">Link</a>
                               @else
                                 <i class="text-muted">Not Available</i>
                               @endif
@@ -654,63 +658,6 @@
                           </tr>
                         @endforeach
                       </table>
-                      <div class="box-header">
-                        <h4>Edit Main Material Information</h4>
-                      </div>
-                      <div class="box-body">
-                        <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
-                          @csrf
-                          @method('PUT')
-                          <div class="box-body">
-                            <div class="row">
-                              <div class="col-md-6">
-                                <div class="col-md-12">
-                                  <div class="form-group @error('id') has-error @enderror">
-                                    <label for="id">Material Name</label>
-                                    <select name="id" type="text" class="@error('id') is-invalid @enderror form-control">
-                                      <option selected="selected" value="">-- Enter Material Name --</option>
-                                      @foreach($course_registration->course->course_package->material_publics as $mp)
-                                        @if(old('id') == Str::slug($mp->updated_at.$mp->name.$mp->created_at))
-                                          <option selected="selected" value="{{ Str::slug($mp->updated_at.$mp->name.$mp->created_at) }}">{{ $mp->name }}</option>
-                                        @else
-                                          <option value="{{ Str::slug($mp->updated_at.$mp->name.$mp->created_at) }}">{{ $mp->name }}</option>
-                                        @endif
-                                      @endforeach
-                                    </select>
-                                    @error('id')
-                                      <p style="color:red">{{ $message }}</p>
-                                    @enderror
-                                  </div>
-                                </div>
-                                <div class="col-md-12">
-                                  <div class="form-group @error('name') has-error @enderror">
-                                    <label for="name">Change Name (optional)</label>
-                                    <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter Name (optional)">
-                                    @error('name')
-                                      <p style="color:red">{{ $message }}</p>
-                                    @enderror
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <div class="col-md-12">
-                                  <div class="form-group @error('path') has-error @enderror">
-                                    <label for="name">Upload Material</label>
-                                    <span style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</span>
-                                    <input name="path" type="file" accept="image/*" class="@error('path') is-invalid @enderror form-control">
-                                    @error('path')
-                                      <p style="color:red">{{ $message }}</p>
-                                    @enderror
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="box-footer">
-                            <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
-                          </div>
-                        </form>
-                      </div>
                     @else
                       <div class="text-center">No data available.</div>
                     @endif
@@ -730,7 +677,7 @@
                           <tr>
                             <th style="width:2%;" class="text-right">#</th>
                             <th>File Name</th>
-                            <th>File Type</th>
+                            <th style="width:25%;">File Type</th>
                             <th style="width:5%;">Link</th>
                           </tr>
                           @foreach($s->material_sessions as $j => $dt)
@@ -754,63 +701,6 @@
                             </tr>
                           @endforeach
                         </table>
-                        <div class="box-header">
-                          <h4>Edit Supplementary Material Information</h4>
-                        </div>
-                        <div class="box-body">
-                          <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-                            <div class="box-body">
-                              <div class="row">
-                                <div class="col-md-6">
-                                  <div class="col-md-12">
-                                    <div class="form-group @error('id') has-error @enderror">
-                                      <label for="id">Material Name</label>
-                                      <select name="id" type="text" class="@error('id') is-invalid @enderror form-control">
-                                        <option selected="selected" value="">-- Enter Material Name --</option>
-                                        @foreach($s->material_sessions as $ms)
-                                          @if(old('id') == Str::slug($ms->updated_at.$ms->name.$ms->created_at))
-                                            <option selected="selected" value="{{ Str::slug($ms->updated_at.$ms->name.$ms->created_at) }}">{{ $ms->name }}</option>
-                                          @else
-                                            <option value="{{ Str::slug($ms->updated_at.$ms->name.$ms->created_at) }}">{{ $ms->name }}</option>
-                                          @endif
-                                        @endforeach
-                                      </select>
-                                      @error('id')
-                                        <p style="color:red">{{ $message }}</p>
-                                      @enderror
-                                    </div>
-                                  </div>
-                                  <div class="col-md-12">
-                                    <div class="form-group @error('name') has-error @enderror">
-                                      <label for="name">Change Name (optional)</label>
-                                      <input name="name" value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control" placeholder="Enter Name (optional)">
-                                      @error('name')
-                                        <p style="color:red">{{ $message }}</p>
-                                      @enderror
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col-md-6">
-                                  <div class="col-md-12">
-                                    <div class="form-group @error('path') has-error @enderror">
-                                      <label for="name">Upload Material</label>
-                                      <span style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</span>
-                                      <input name="path" type="file" accept="image/*" class="@error('path') is-invalid @enderror form-control">
-                                      @error('path')
-                                        <p style="color:red">{{ $message }}</p>
-                                      @enderror
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="box-footer">
-                              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
-                            </div>
-                          </form>
-                        </div>
                       @else
                         <div class="text-center">No data available.</div>
                       @endif
