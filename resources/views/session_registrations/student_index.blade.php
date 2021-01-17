@@ -28,11 +28,11 @@
     <div class="col-md-12">
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-          <li class="active"><a href="#upcoming_sessions" data-toggle="tab"><b>Upcoming Sessions</b></a></li>
+          <li class="active"><a href="#current_sessions" data-toggle="tab"><b>Current Sessions</b></a></li>
           <li><a href="#all_courses" data-toggle="tab"><b>All Courses</b></a></li>
         </ul>
         <div class="tab-content">
-          <div class="active tab-pane" id="upcoming_sessions">
+          <div class="active tab-pane" id="current_sessions">
             <div class="row">
               <div class="col-md-3">
                 <div class="box">
@@ -47,7 +47,7 @@
                         <dt style="font-size:18px;"><i class="fa fa-file-text-o margin-r-5"></i> Note</dt>
                         <dd>
                           Click "link" button to join your session!<br />
-                          <span style="color:#ff0000;">* Contact us if you encounter a problem.</span><br />
+                          <span style="color:#ff0000;">* Contact your instructor if you encounter a problem.</span>
                         </dd>
                         {{--
                         <hr>
@@ -67,27 +67,53 @@
                 <div class="col-md-12">
                   <div class="box box-primary">
                     <div class="box-header">
-                      <h3 class="box-title"><b>All Upcoming Sessions</b></h3>
+                      <h3 class="box-title"><b>All Current Sessions</b></h3>
                       <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                       </div>
                     </div>
                     <div class="box-body">
-                      @if(Auth::user()->student->course_registrations->toArray() != 0)
-                        <table id="example1" class="table table-bordered">
+                      <?php
+                        $has_a_schedule = 0;
+                        $schedule_times = [];
+                        $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                        foreach($session_registrations as $dt) {
+                          $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                          if($schedule_now <= $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')) {
+                            $has_a_schedule = 1;
+                            array_push($schedule_times, $schedule_time);
+                          }
+                        }
+                      ?>
+                      @if($has_a_schedule)
+                        <table class="table table-bordered">
                           <tr>
                             <th style="width:2%;" class="text-right">#</th>
-                            <th>Course/Session</th>
+                            <th>Course / Session</th>
                             <th>Time</th>
                             <th style="width:5%;">Link</th>
                           </tr>
-                          @foreach(Auth::user()->student->course_registrations as $i => $dt)
-                            <tr>
-                              <td class="text-right">{{ $i + 1 }}</td>
-                              <td>{{ $dt->course->title }}</td>
-                              <td>#</td>
-                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Link</a></td>
-                            </tr>
+                          @foreach($session_registrations as $i => $dt)
+                            @if($schedule_now <= $schedule_times[$i]->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes'))
+                              <tr>
+                                <td class="text-right">{{ $i + 1 }}</td>
+                                <td>{{ $dt->session->course->title }} / {{ $dt->session->title }}</td>
+                                <td>
+                                  @if($schedule_times[$i]->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                    Today, {{ $schedule_times[$i]->isoFormat('hh:mm A') }} {{ $schedule_times[$i]->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                  @else
+                                    {{ $schedule_times[$i]->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_times[$i]->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                  @endif
+                                </td>
+                                <td class="text-center">
+                                  @if($dt->session->link_zoom)
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a>
+                                  @else
+                                    <a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a>
+                                  @endif
+                                </td>
+                              </tr>
+                            @endif
                           @endforeach
                         </table>
                       @else

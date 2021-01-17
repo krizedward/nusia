@@ -52,7 +52,7 @@ class SessionRegistrationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($course_type = 'Free Trial')
+    public function index(/*$course_type = 'Free Trial'*/)
     {
         if ($this->is_admin()){
             $data = SessionRegistration::all();
@@ -128,6 +128,7 @@ class SessionRegistrationController extends Controller
             return view('session_registrations.student_index',compact('data'));
             */
 
+            /*
             $timeStudent = Carbon::now(Auth::user()->timezone);
             $is_local_access = config('database.connections.mysql.username') == 'root';
             $data = SessionRegistration
@@ -136,6 +137,17 @@ class SessionRegistrationController extends Controller
                 ->select('session_registrations.id', 'session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
                 ->get();
             return view('session_registrations.student_index',compact('data', 'timeStudent', 'is_local_access'));
+            */
+
+            $course_registrations = Auth::user()->student->course_registrations->pluck('id');
+            $session_registrations = SessionRegistration
+                ::join('sessions', 'session_registrations.session_id', 'sessions.id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->whereIn('session_registrations.course_registration_id', $course_registrations)
+                ->orderBy('schedules.schedule_time')
+                ->select('session_registrations.id', 'session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at', 'session_registrations.deleted_at')
+                ->get();
+            return view('session_registrations.student_index', compact('session_registrations'));
         } else {
             return redirect()->route('home');
         }
