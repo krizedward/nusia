@@ -438,6 +438,7 @@
                         <dd>
                           Click "link" button to join your session!<br />
                           After each session, click on "form" button to give feedbacks per session!<br />
+                          Please consider that three days after each session ends, the "form" button will eventually disappear.<br />
                           <span style="color:#ff0000;">* Contact your instructor if you encounter a problem.</span>
                         </dd>
                       </dl>
@@ -484,6 +485,9 @@
                           <th>Time</th>
                           <th style="width:5%;">Link</th>
                         </tr>
+                        <?php
+                          $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                        ?>
                         @foreach($course_registration->session_registrations as $i => $dt)
                           <tr>
                             <td class="text-right">{{ $i + 1 }}</td>
@@ -491,7 +495,6 @@
                             <td>
                               <?php
                                 $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                               ?>
                               @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                 Today, {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
@@ -507,7 +510,7 @@
                                   <a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a>
                                 @endif
                               @else
-                                @if($dt->status == 'Should Submit Form')
+                                @if($dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time->add(3, 'days'))
                                   {{-- Tambahkan routing di sini untuk mengisi formulir rating setelah selesai per satu sesi. --}}
                                   <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('form_responses.create', [$dt->id]) }}">Form</a>
                                 @else
