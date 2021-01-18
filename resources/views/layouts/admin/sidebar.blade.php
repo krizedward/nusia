@@ -103,10 +103,13 @@
       <li class="{{ set_active(['session_registrations.index', 'course_registrations.show_by_student', 'form_responses.create']) }}">
         <a href="{{ route('session_registrations.index') }}"><i class="fa fa-book"> </i><span> Schedules</span></a>
       </li>
+      {{--
       <li class="{{ set_active('materials.index') }}">
         <a href="{{ route('materials.index') }}"><i class="fa fa-book"> </i><span> Materials</span></a>
       </li>
+      --}}
 
+      {{--
       <li class="header">TASKS</li>
       <li class="#">
         <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Assignments</span></a>
@@ -114,7 +117,9 @@
       <li class="#">
         <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Exams</span></a>
       </li>
+      --}}
 
+      {{--
       <li class="header">RESULTS</li>
       <li class="#">
         <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Grades</span></a>
@@ -122,6 +127,7 @@
       <li class="#">
         <a href="{{ route('course_certificates.index') }}"><i class="fa fa-book"> </i><span> Certificates</span></a>
       </li>
+      --}}
 
       <li class="header">OTHERS</li>
       <li class="{{ set_active(['student.choose_materials', 'student.complete_payment_information']) }}">
