@@ -636,7 +636,11 @@
                         @foreach($course_registration->course->course_package->material_publics as $i => $dt)
                           <tr>
                             <td class="text-right">{{ $i + 1 }}</td>
-                            <td>{{ $dt->name }}</td>
+                            <td>
+                              <a href="#" data-toggle="modal" data-target="#MainMaterial{{$dt->id}}" {{-- class="btn btn-s btn-primary" --}}>
+                                {{ $dt->name }}
+                              </a>
+                            </td>
                             <td>
                               @if($dt->path)
                                 @if(strpos($dt->path, '://') !== 0)
@@ -656,6 +660,30 @@
                               @endif
                             </td>
                           </tr>
+                          <div class="modal fade" id="MainMaterial{{$dt->id}}">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="box box-primary">
+                                  <div class="box-body box-profile">
+                                    <h3 class="profile-username text-center"><b>{{ $dt->name }}</b></h3>
+                                    <p class="text-muted text-center">
+                                      Main Material
+                                    </p>
+                                    <ul class="list-group list-group-unbordered">
+                                      <li class="list-group-item">
+                                        {{ $dt->description }}
+                                      </li>
+                                    </ul>
+                                    <button onclick="document.getElementById('MainMaterial{{$dt->id}}').className = 'modal fade'; document.getElementById('MainMaterial{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
+                                  </div>
+                                  <!-- /.box-body -->
+                                </div>
+                                <!-- /.box -->
+                              </div>
+                              <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                          </div>
                         @endforeach
                       </table>
                     @else
@@ -683,10 +711,18 @@
                           @foreach($s->material_sessions as $j => $dt)
                             <tr>
                               <td class="text-right">{{ $j + 1 }}</td>
-                              <td>{{ $dt->name }}</td>
+                              <td>
+                                <a href="#" data-toggle="modal" data-target="#SupplementaryMaterial{{$dt->id}}" {{-- class="btn btn-s btn-primary" --}}>
+                                  {{ $dt->name }}
+                                </a>
+                              </td>
                               <td>
                                 @if($dt->path)
-                                  {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
+                                  @if(strpos($dt->path, '://') !== 0)
+                                    Link
+                                  @else
+                                    {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
+                                  @endif
                                 @else
                                   <i class="text-muted">Not Available</i>
                                 @endif
@@ -699,6 +735,30 @@
                                 @endif
                               </td>
                             </tr>
+                            <div class="modal fade" id="SupplementaryMaterial{{$dt->id}}">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="box box-primary">
+                                    <div class="box-body box-profile">
+                                      <h3 class="profile-username text-center"><b>{{ $dt->name }}</b></h3>
+                                      <p class="text-muted text-center">
+                                        Supplementary Material for #{{ $i + 1 }} - {{ $s->title }}
+                                      </p>
+                                      <ul class="list-group list-group-unbordered">
+                                        <li class="list-group-item">
+                                          {{ $dt->description }}
+                                        </li>
+                                      </ul>
+                                      <button onclick="document.getElementById('SupplementaryMaterial{{$dt->id}}').className = 'modal fade'; document.getElementById('SupplementaryMaterial{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
+                                    </div>
+                                    <!-- /.box-body -->
+                                  </div>
+                                  <!-- /.box -->
+                                </div>
+                                <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                            </div>
                           @endforeach
                         </table>
                       @else
