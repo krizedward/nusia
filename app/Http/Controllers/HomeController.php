@@ -486,12 +486,18 @@ class HomeController extends Controller
         }
 
         if(Auth::user()->citizenship != 'Not Available') {
-            if(Auth::user()->student->course_registrations->count() == 0) {
+            if(Auth::user()->student->course_registrations->toArray() == null) {
                 // Jika Student belum terdaftar dalam class manapun,
                 // tetapi sudah melakukan pengisian kuisioner.
                 // Contoh kasus: Student mengumpulkan kuisioner, kemudian logout, kemudian login lagi.
                 //return redirect()->route('courses.index');
                 return redirect()->route('student.choose_materials');
+            } else if(Auth::user()->student->course_registrations->first()->course_payments->toArray() == null) {
+                // Student belum mengisi informasi pembayaran.
+            } else if(Auth::user()->student->course_registrations->first()->placement_test->toArray() == null) {
+                // Student belum mengunggah hasil placement test.
+            } else if(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && strpos(Auth::user()->student->course_registrations->first()->course->course_package->title, 'Early Registration') === false) {
+                // Student sudah mengikuti placement test, tetapi belum memilih jadwal.
             }
             return redirect()->route('home');
         }
