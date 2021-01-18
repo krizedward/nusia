@@ -14,6 +14,7 @@
   @csrf
     <input type="hidden" id="choice" name="choice" value="">
     <input type="hidden" id="choice_mt" name="choice_mt" value="">
+    <input type="hidden" id="older_choice" name="older_choice" value="{{ $current_course_registration }}">
     <div class="row">
       @foreach($material_types as $mt)
         <div class="col-md-12">
@@ -76,7 +77,7 @@
                           </ul>
                         </div>
                       @endif
-                      @if($mt->name == 'Indonesian Culture')
+                      @if($mt->name == 'Cultural Classes')
                         @foreach($ct->course_packages as $i => $cp)
                           <div class="box-body" style="@if($i % 2 == 0) height:400px; @else height:275px; @endif">
                             @if($i % 2 == 0)
@@ -109,7 +110,7 @@
                               </button>
                             @else
                               <button class="btn btn-default btn-block disabled" type="reset" onclick="alert('You can only register in one course per material, at a time.');">
-                                <b>Unavailable, you are currently registered in this material.</b>
+                                <b>Unavailable, you are currently registered in the similar material.</b>
                               </button>
                             @endif
                           </div>
@@ -143,7 +144,7 @@
                             </button>
                           @else
                             <button class="btn btn-default btn-block disabled" type="reset" onclick="alert('You can only register in one course per material, at a time.');">
-                              <b>Currently registered in this material.</b>
+                              <b>Unavailable, you are currently registered in the similar material.</b>
                             </button>
                           @endif
                         </div>
