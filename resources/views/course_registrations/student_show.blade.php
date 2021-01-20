@@ -61,8 +61,8 @@
                           $schedule_time = null;
                       ?>
                       <table>
-                        <tr>
-                          <td><b>Day</b></td>
+                        <tr style="vertical-align:baseline;">
+                          <td width="35"><b>Day</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($schedule_time)
@@ -72,8 +72,8 @@
                             @endif
                           </td>
                         </tr>
-                        <tr>
-                          <td><b>Date</b></td>
+                        <tr style="vertical-align:baseline;">
+                          <td width="35"><b>Date</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($schedule_time)
@@ -89,13 +89,13 @@
                     <strong><i class="fa fa-credit-card margin-r-5"></i> Course Payment</strong>
                     <p>
                       <table>
-                        <tr>
-                          <td><b>Price</b></td>
+                        <tr style="vertical-align:baseline;">
+                          <td width="50"><b>Price</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>${{ $course_registration->course->course_package->price }}</td>
                         </tr>
-                        <tr>
-                          <td><b>Status</b></td>
+                        <tr style="vertical-align:baseline;">
+                          <td width="50"><b>Status</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             <?php
@@ -120,8 +120,8 @@
                             @endif
                           </td>
                         </tr>
-                        <tr>
-                          <td><b>Paid at</b></td>
+                        <tr style="vertical-align:baseline;">
+                          <td width="50"><b>Paid at</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($course_registration->course->course_package->price != 0)
@@ -146,7 +146,7 @@
                     <strong><i class="fa fa-file-video-o margin-r-5"></i> Student Placement Test</strong>
                     <p>
                       <table>
-                        <tr>
+                        <tr style="vertical-align:baseline;">
                           <td width="75"><b>Link</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
@@ -161,7 +161,7 @@
                             @endif
                           </td>
                         </tr>
-                        <tr>
+                        <tr style="vertical-align:baseline;">
                           <td width="75"><b>Result</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
@@ -178,7 +178,7 @@
                             @endif
                           </td>
                         </tr>
-                        <tr>
+                        <tr style="vertical-align:baseline;">
                           <td width="75"><b>Final Level</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
@@ -193,7 +193,7 @@
                             @endif
                           </td>
                         </tr>
-                        <tr>
+                        <tr style="vertical-align:baseline;">
                           <td width="75"><b>Updated at</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
