@@ -147,8 +147,8 @@
                     <p>
                       <table>
                         <tr>
-                          <td><b>Link</b></td>
-                          <td>&nbsp;&nbsp;:&nbsp;&nbsp;</td>
+                          <td width="75"><b>Link</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($course_registration->placement_test)
                               @if($course_registration->placement_test->path)
@@ -162,8 +162,8 @@
                           </td>
                         </tr>
                         <tr>
-                          <td><b>Result</b></td>
-                          <td>&nbsp;&nbsp;:&nbsp;&nbsp;</td>
+                          <td width="75"><b>Result</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($course_registration->placement_test)
                               @if($course_registration->placement_test->status == 'Passed')
@@ -179,8 +179,8 @@
                           </td>
                         </tr>
                         <tr>
-                          <td><b>Final Level</b></td>
-                          <td>&nbsp;&nbsp;:&nbsp;&nbsp;</td>
+                          <td width="75"><b>Final Level</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($course_registration->placement_test)
                               @if($course_registration->placement_test->status == 'Passed')
@@ -194,8 +194,8 @@
                           </td>
                         </tr>
                         <tr>
-                          <td><b>Updated at</b></td>
-                          <td>&nbsp;&nbsp;:&nbsp;&nbsp;</td>
+                          <td width="75"><b>Updated at</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($course_registration->placement_test)
                               @if($course_registration->placement_test->status)
@@ -430,15 +430,32 @@
                       <dl>
                         <dt>
                           @if($course_registration->course->course_registrations->count() == 1)
-                            <i class="fa fa-user-circle-o margin-r-5"></i> Note
+                            <i class="fa fa-user-circle-o margin-r-5"></i> Joining Sessions
                           @else
-                            <i class="fa fa-users margin-r-5"></i> Note
+                            <i class="fa fa-users margin-r-5"></i> Joining Sessions
                           @endif
                         </dt>
                         <dd>
-                          Click "link" button to join your session!<br />
+                          Click "link" button to join your sessions!
+                        </dd>
+                      </dl>
+                      <hr>
+                      <dl>
+                        <dt>
+                          <i class="fa fa-edit margin-r-5"></i> Giving Feedbacks
+                        </dt>
+                        <dd>
                           After each session, click on "form" button to give feedbacks per session!<br />
-                          Please consider that three days after each session ends, the "form" button will eventually disappear.<br />
+                          Please consider that three days after each session ends, the "form" button will eventually disappear.
+                        </dd>
+                      </dl>
+                      <hr>
+                      <dl>
+                        <dt>
+                          <i class="fa fa-file-text-o margin-r-5"></i> More Information
+                        </dt>
+                        <dd>
+                          You are <b>required</b> to give feedbacks (for each session) in order to complete your attendance information.<br />
                           <span style="color:#ff0000;">* Contact your instructor if you encounter a problem.</span>
                         </dd>
                       </dl>
@@ -491,7 +508,11 @@
                         @foreach($course_registration->session_registrations as $i => $dt)
                           <tr>
                             <td class="text-right">{{ $i + 1 }}</td>
-                            <td>{{ $dt->session->title }}</td>
+                            <td>
+                              <a href="#" data-toggle="modal" data-target="#Session{{$dt->id}}" {{-- class="btn btn-s btn-primary" --}}>
+                                {{ $dt->session->title }}
+                              </a>
+                            </td>
                             <td>
                               <?php
                                 $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
@@ -519,6 +540,35 @@
                               @endif
                             </td>
                           </tr>
+                          <div class="modal fade" id="Session{{$dt->id}}">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="box box-primary">
+                                  <div class="box-body box-profile">
+                                    <h3 class="profile-username text-center"><b>{{ $dt->session->title }}</b></h3>
+                                    <p class="text-muted text-center">
+                                      Scheduled
+                                      @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                        today, {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                      @else
+                                        on {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                      @endif
+                                    </p>
+                                    <ul class="list-group list-group-unbordered">
+                                      <li class="list-group-item">
+                                        {{ $dt->session->description }}
+                                      </li>
+                                    </ul>
+                                    <button onclick="document.getElementById('Session{{$dt->id}}').className = 'modal fade'; document.getElementById('Session{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
+                                  </div>
+                                  <!-- /.box-body -->
+                                </div>
+                                <!-- /.box -->
+                              </div>
+                              <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                          </div>
                         @endforeach
                       </table>
                     @else
