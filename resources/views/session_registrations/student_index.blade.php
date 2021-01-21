@@ -4,6 +4,8 @@
 
 {{-- @include('layouts.css_and_js.form_general') --}}
 
+{{-- @include('layouts.css_and_js.calendar') --}}
+
 @include('layouts.css_and_js.table')
 
 @section('content-header')

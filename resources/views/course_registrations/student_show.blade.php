@@ -469,25 +469,6 @@
               <div class="col-md-9">
                 <div class="box box-primary">
                   <div class="box-header">
-                    <h3 class="box-title"><b>Calendar</b></h3>
-                    {{--
-                    <div>
-                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                        Add Session
-                      </a>
-                    </div>
-                    --}}
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    </div>
-                  </div>
-                  <div class="box-body">
-                    <p>Tampilkan kalender pada bagian ini.</p>
-                  </div>
-                </div>
-                <div class="box box-primary">
-                  <div class="box-header">
                     <h3 class="box-title"><b>Schedules</b></h3>
                     <div class="box-tools pull-right">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
