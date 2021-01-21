@@ -77,13 +77,17 @@
                     <div class="box-body">
                       <?php
                         $has_a_schedule = 0;
-                        $schedule_times = [];
+                        $schedule_times_begin = [];
+                        $schedule_times_end = [];
                         $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                         foreach($session_registrations as $dt) {
-                          $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                          if($schedule_now <= $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')) {
+                          $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                          $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                          $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
+                          if($schedule_now <= $schedule_time_end) {
                             $has_a_schedule = 1;
-                            array_push($schedule_times, $schedule_time);
+                            array_push($schedule_times_begin, $schedule_time_begin);
+                            array_push($schedule_times_end, $schedule_time_end);
                           }
                         }
                       ?>
@@ -96,15 +100,15 @@
                             <th style="width:5%;">Link</th>
                           </tr>
                           @foreach($session_registrations as $i => $dt)
-                            @if($schedule_now <= $schedule_times[$i]->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes'))
+                            @if($schedule_now <= $schedule_times_end[$i])
                               <tr>
                                 <td class="text-right">{{ $i + 1 }}</td>
                                 <td>{{ $dt->session->course->title }} / {{ $dt->session->title }}</td>
                                 <td>
-                                  @if($schedule_times[$i]->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                    Today, {{ $schedule_times[$i]->isoFormat('hh:mm A') }} {{ $schedule_times[$i]->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                  @if($schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                    Today, {{ $schedule_times_begin[$i]->isoFormat('hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
                                   @else
-                                    {{ $schedule_times[$i]->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_times[$i]->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                    {{ $schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
                                   @endif
                                 </td>
                                 <td class="text-center">
