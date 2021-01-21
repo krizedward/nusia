@@ -68,11 +68,13 @@
                     <?php $i = $dt->course_package->count_session; ?>
                     @foreach($dt->sessions as $j => $s)
                       <?php
-                        $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                        $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                        $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                        $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
                       ?>
                       <div class="col-md-12">
                         <b>Session {{ $j + 1 }}</b>
-                        <p>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}</p>
+                        <p>{{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}</p>
                       </div>
                       <?php $i--; ?>
                     @endforeach

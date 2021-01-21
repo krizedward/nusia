@@ -225,13 +225,15 @@
                             @endif
                             @if($dt->schedule->schedule_time)
                               <?php
-                                $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                 $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                                $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                               ?>
-                              @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                              @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                 <span class="label label-success pull-right">Today</span>
                               @else
-                                <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM DD \'YY') }}</span>
+                                <span class="label label-info pull-right">{{ $schedule_time_begin->isoFormat('MMM DD \'YY') }}</span>
                               @endif
                             @else 
                               <span class="label label-danger pull-right">N/A</span>
@@ -245,7 +247,7 @@
                                 Join <a href="{{ $dt->link_zoom }}" target="_blank">here</a>.
                               @endif
                             @else
-                              {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                              {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                             @endif
                           </span>
                         </div>

@@ -67,15 +67,17 @@
                                     {{--session pakai attribut title untuk penamaan persession di halaman dashboard--}}
                                     <td>{{ $s->title }}</td>
                                     <?php
-                                      $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                       $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
                                     ?>
                                     <td>
-                                      <span class="hidden">{{ $schedule_time->isoFormat('YYMMDDAhhmm') }}</span>
-                                      @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                        Today, {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                      <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                      @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                        Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                                       @else
-                                        {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                        {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                                       @endif
                                     </td>
                                     @if($s->link_zoom)
@@ -160,15 +162,17 @@
                                   </div>
                                   <div class="product-info">
                                     <?php
-                                      $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                       $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
                                     ?>
                                     <div class="product-title">
                                       {{ $s->course->course_package->course_level->name }} - {{ $s->course->title }} - {{ $s->title }}
-                                      @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                         <span class="label label-success pull-right">Today</span>
                                       @else
-                                        <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM DD \'YY') }}</span>
+                                        <span class="label label-info pull-right">{{ $schedule_time_begin->isoFormat('MMM DD \'YY') }}</span>
                                       @endif
                                     </div>
                                     <span class="product-description">
@@ -178,7 +182,7 @@
                                           Join <a href="{{ $s->link_zoom }}" target="_blank">here</a>.
                                         @endif
                                       @else
-                                        {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                        {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                                       @endif
                                     </span>
                                   </div>

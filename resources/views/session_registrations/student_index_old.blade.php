@@ -75,22 +75,26 @@
                     <td>{{ $dt->session->title }}</td>
                     @if($dt->session->schedule->schedule_time)
                       <?php
-                        $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                        $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                        $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                        $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
                       ?>
                       <td>
-                        <span class="hidden">{{ $schedule_time->isoFormat('YYMMDDAhhmm') }}</span>
-                        {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                        <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                        {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                       </td>
                     @else
                       <td><i>N/A</i></td>
                     @endif
                     @if($dt->status == 'Not Assigned')
                       <?php
-                        $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                        $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                        $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                        $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
                       ?>
-                      @if(now() < $schedule_time)
+                      @if(now() < $schedule_time_begin)
                         <td><label class="badge bg-gray">Upcoming</label></td>
-                      @elseif(now() < $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes'))
+                      @elseif(now() < $schedule_time_end)
                         <td><label class="badge bg-yellow">Ongoing</label></td>
                       @else
                         <td><label class="badge bg-blue">Attendance Check</label></td>
@@ -103,16 +107,20 @@
                       <td><label class="badge bg-green">Present</label></td>
                     @endif
                     <?php
-                      $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                      $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                      $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                      $schedule_time_end_form = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                      $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
+                      $schedule_time_end_form->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                     ?>
-                    @if(now() <= $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes'))
+                    @if(now() <= $schedule_time_end)
                       @if($dt->session->link_zoom)
                         <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
                       @else
                         <td><a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a></td>
                       @endif
                     @else
-                      @if($dt->status == 'Should Submit Form')
+                      @if($dt->status == 'Should Submit Form' && now() <= $schedule_time_end_form)
                         <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('form_responses.create', [$dt->id]) }}">Form Link</a></td>
                       @else
                         <td><i>N/A</i></td>

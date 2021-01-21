@@ -141,29 +141,32 @@
                       <!--td>{{ date('l, M d Y', strtotime($dt->session->schedule->schedule_time)) }}</td-->
                       @if($dt->session->schedule->schedule_time)
                         <?php
-                          $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                           $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                          $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                          $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                          $schedule_time_end_form = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                          $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
+                          $schedule_time_end_form->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                         ?>
-                        {{--aku tambah 2 jam biar sama jadwalnya di web dengan di punya kita--}}
                         <td>
-                          <span class="hidden">{{ $schedule_time->isoFormat('YYMMDDAhhmm') }}</span>
-                          @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                            Today, {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                          <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                          @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                            Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                           @else
-                            {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                            {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                           @endif
                         </td>
                       @else
                         <td><i>Not Available</i></td>
                       @endif
-                      @if(now() <= $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes'))
+                      @if(now() <= $schedule_time_end)
                         @if($dt->session->link_zoom)
                           <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a></td>
                         @else
                           <td><a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a></td>
                         @endif
                       @else
-                        @if($dt->status == 'Should Submit Form')
+                        @if($dt->status == 'Should Submit Form' && now() <= $schedule_time_end_form)
                           <td><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('form_responses.create', [$dt->id]) }}">Form Link</a></td>
                         @else
                           <td><i>N/A</i></td>
@@ -259,13 +262,15 @@
                       @endif
                       @if($dt->schedule->schedule_time)
                         <?php
-                          $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                           $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                          $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                          $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                          $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
                         ?>
-                        @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                        @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                           <span class="label label-success pull-right">Today</span>
                         @else
-                          <span class="label label-info pull-right">{{ $schedule_time->isoFormat('MMM DD \'YY') }}</span>
+                          <span class="label label-info pull-right">{{ $schedule_time_begin->isoFormat('MMM DD \'YY') }}</span>
                         @endif
                       @else
                         <span class="label label-danger pull-right">N/A</span>
@@ -279,7 +284,7 @@
                           Join <a href="{{ $dt->link_zoom }}" target="_blank">here</a>.
                         @endif
                       @else
-                        {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                        {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                       @endif
                     </span>
                   </div>

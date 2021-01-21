@@ -78,11 +78,13 @@
                             <td>{{ $dt->title }}</td>
                             @if($dt->schedule->schedule_time)
                               <?php
-                                $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                               ?>
                               <td>
-                                <span class="hidden">{{ $schedule_time->isoFormat('YYMMDDAhhmm') }}</span>
-                                {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                               </td>
                             @else
                               <td><i>N/A</i></td>
@@ -93,9 +95,11 @@
                                 <td class="text-center"><a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a></td>
                             @endif
                             <?php
-                              $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                              $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                              $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                              $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                             ?>
-                            @if(now() > $schedule_time->add($dt->course->course_package->material_type->duration_in_minute, 'minutes'))
+                            @if(now() > $schedule_time_end)
                               <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('attendances.edit', $dt->id) }}">Link</a></td>
                             @else
                               <td class="text-center"><a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a></td>

@@ -1214,11 +1214,13 @@
                               <td>
                                 @if($dt->status == 'Not Assigned')
                                   <?php
-                                    $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
                                   ?>
-                                  @if(now() < $schedule_time)
+                                  @if(now() < $schedule_time_begin)
                                     <label class="label bg-gray">Upcoming</label>
-                                  @elseif(now() < $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes'))
+                                  @elseif(now() < $schedule_time_end)
                                     <label class="label bg-yellow">Ongoing</label>
                                   @else
                                     <label class="label bg-blue">Attendance Check</label>
