@@ -575,7 +575,9 @@ class HomeController extends Controller
 
     public function choose_materials($id = 0) {
         if($this->is_trial()) {
-            $material_types = MaterialType::all();
+            $material_types = MaterialType
+              ::where('name', 'NOT LIKE', '%Trial%')
+              ->get();
             $course_types = CourseType::where('name', 'LIKE', '%Free%')->orWhere('name', 'LIKE', '%Test%')->orWhere('name', 'LIKE', '%Trial%')->get();
             $course_packages = CoursePackage::where('title', 'LIKE', '%Free%')->orWhere('title', 'LIKE', '%Test%')->orWhere('title', 'LIKE', '%Trial%')->get();
             $course_package_discounts = CoursePackageDiscount
@@ -643,7 +645,9 @@ class HomeController extends Controller
                 ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
                 ->get();
         } else {
-            $material_types = MaterialType::all();
+            $material_types = MaterialType
+              ::where('name', 'NOT LIKE', '%Trial%')
+              ->get();
             $course_types = CourseType
                 ::where('name', 'NOT LIKE', '%Free%')
                 ->where('name', 'NOT LIKE', '%Test%')
