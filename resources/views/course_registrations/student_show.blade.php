@@ -23,7 +23,7 @@
           <li class="active"><a href="#overview" data-toggle="tab"><b>Overview</b></a></li>
           <li><a href="#sessions" data-toggle="tab"><b>Sessions</b></a></li>
           <li><a href="#materials" data-toggle="tab"><b>Materials</b></a></li>
-          <li><a href="#tasks" data-toggle="tab"><b>Tasks</b></a></li>
+          <li><a href="#tasks" data-toggle="tab"><b>Tasks & Exams</b></a></li>
           <li><a href="#grades" data-toggle="tab"><b>Grades</b></a></li>
           <li><a href="#certificate" data-toggle="tab"><b>Certificate</b></a></li>
         </ul>
@@ -496,23 +496,27 @@
                             </td>
                             <td>
                               <?php
-                                $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                $schedule_time_end_form = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
+                                $schedule_time_end_form->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                               ?>
-                              @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                Today, {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                              @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                               @else
-                                {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                               @endif
                             </td>
                             <td class="text-center">
-                              @if($schedule_now <= $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes'))
+                              @if($schedule_now <= $schedule_time_end)
                                 @if($dt->session->link_zoom)
                                   <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a>
                                 @else
                                   <a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a>
                                 @endif
                               @else
-                                @if($dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time->add(3, 'days'))
+                                @if($dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form)
                                   {{-- Tambahkan routing di sini untuk mengisi formulir rating setelah selesai per satu sesi. --}}
                                   <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('form_responses.create', [$dt->id]) }}">Form</a>
                                 @else
@@ -529,10 +533,10 @@
                                     <h3 class="profile-username text-center"><b>{{ $dt->session->title }}</b></h3>
                                     <p class="text-muted text-center">
                                       Scheduled
-                                      @if($schedule_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                        today, {{ $schedule_time->isoFormat('hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                      @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                        today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                                       @else
-                                        on {{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->isoFormat('[-] hh:mm A') }}
+                                        on {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                                       @endif
                                     </p>
                                     <ul class="list-group list-group-unbordered">
@@ -579,11 +583,13 @@
                             <td>
                               @if($dt->status == 'Not Assigned')
                                 <?php
-                                  $schedule_time = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
                                 ?>
-                                @if(now() < $schedule_time)
+                                @if(now() < $schedule_time_begin)
                                   <label class="label bg-gray">Upcoming</label>
-                                @elseif(now() < $schedule_time->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes'))
+                                @elseif(now() < $schedule_time_end)
                                   <label class="label bg-yellow">Ongoing</label>
                                 @else
                                   <label class="label bg-blue">Attendance Check</label>
@@ -830,7 +836,6 @@
                       <dl>
                         <dt><i class="fa fa-download margin-r-5"></i> File Download</dt>
                         <dd>
-                          Each course (not session) consists of at least one assignment, and exactly one (final) exam.<br />
                           Click "link" button to download each task given!
                         </dd>
                       </dl>
@@ -956,7 +961,7 @@
                         @endforeach
                       </table>
                       <div class="box-header">
-                        <h4>Submit an Assignment</h4>
+                        <h4><b>Submit an Assignment</b></h4>
                         <p class="no-padding" style="color:#ff0000;">* This field is required</p>
                       </div>
                       <div class="box-body">
@@ -1127,7 +1132,7 @@
                         @endforeach
                       </table>
                       <div class="box-header">
-                        <h4>Submit an Exam</h4>
+                        <h4><b>Submit an Exam</b></h4>
                         <p class="no-padding" style="color:#ff0000;">* This field is required</p>
                       </div>
                       <div class="box-body">
@@ -1547,7 +1552,7 @@
                       <dl>
                         <dt><i class="fa fa-check margin-r-5"></i> Requirements</dt>
                         <dd>
-                          After finishing the session, we will evaluate your attendances {{-- and gradings --}}for this course.<br />
+                          After completing this course, we will evaluate your attendances.<br />
                           A minimum of <b>80% attendances (of all sessions)</b> is required to get the course certificate.
                         </dd>
                       </dl>
@@ -1593,7 +1598,7 @@
                         <?php
                           $i = 0;
                           foreach($course_registration->session_registrations as $dt) {
-                            if($dt->status == 'Present' || $dt->status == 'Should Submit Form') {
+                            if($dt->status == 'Present') {
                               $i++;
                             }
                           }
