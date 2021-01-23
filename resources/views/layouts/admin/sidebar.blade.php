@@ -65,12 +65,17 @@
           </a>
         </li>
       @elseif(Auth::user()->student->course_registrations->first()->course_payments->toArray() == null)
-        <li class="{{ set_active(['student.complete_payment_information']) }}">
-          <a href="{{ route('student.complete_payment_information', [Auth::user()->student->course_registrations->first()->id])}}">
-            <i class="fa fa-book"></i> <span>Complete Payment Information</span>
+        <li class="{{ set_active(['student.choose_materials']) }}">
+          <a href="{{ route('student.choose_materials', [Auth::user()->student->course_registrations->first()->id])}}">
+            <i class="fa fa-book"></i> <span>Choose a Course</span>
           </a>
         </li>
-      @elseif(Auth::user()->student->course_registrations->first()->placement_test->toArray() == null)
+        <li class="{{ set_active(['student.complete_payment_information']) }}">
+          <a href="{{ route('student.complete_payment_information', [Auth::user()->student->course_registrations->first()->id])}}">
+            <i class="fa fa-book"></i> <span>Complete Payment Info</span>
+          </a>
+        </li>
+      @elseif(Auth::user()->student->course_registrations->first()->placement_test == null)
         <li class="{{ set_active(['student.complete_placement_tests']) }}">
           <a href="{{ route('student.complete_placement_tests', [Auth::user()->student->course_registrations->first()->id])}}">
             <i class="fa fa-book"></i> <span>Complete Placement Test</span>
@@ -97,7 +102,7 @@
       </li>
     @endif
 
-    @if(Auth::user()->roles == 'Student' && Auth::user()->citizenship != 'Not Available' && Auth::user()->student->course_registrations->count() > 0)
+    @if(Auth::user()->roles == 'Student' && Auth::user()->citizenship != 'Not Available' && Auth::user()->student->course_registrations->toArray() != null && strpos(Auth::user()->student->course_registrations->first()->course->course_package->title, 'Early Registration') !== false)
       <!-- Head_Navigasi -->
       <li class="header">COURSES</li>
       <li class="{{ set_active(['session_registrations.index', 'course_registrations.show_by_student', 'form_responses.create']) }}">
@@ -133,9 +138,11 @@
       <li class="{{ set_active(['student.choose_materials', 'student.complete_payment_information']) }}">
         <a href="{{ route('student.choose_materials') }}"><i class="fa fa-book"> </i><span> Choose a Course</span></a>
       </li>
+      {{--
       <li class="{{ set_active('course_payments.index') }}">
         <a href="{{ route('course_payments.index',1) }}"><i class="fa fa-book"> </i><span> Payments</span></a>
       </li>
+      --}}
     @endif
     {{-- End Student Navigation --}}
 
