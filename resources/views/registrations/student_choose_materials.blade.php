@@ -16,6 +16,15 @@
     <input type="hidden" id="choice_mt" name="choice_mt" value="">
     <input type="hidden" id="older_choice" name="older_choice" value="{{ $current_course_registration }}">
     <div class="row">
+      @if(session('error_message'))
+        <div class="col-md-12">
+          <div class="alert alert-danger alert-dismissible">
+            <h4><i class="icon fa fa-book"></i> Please choose another material type.</h4>
+            {{ session('error_message') }}
+            {{ session(['error_message' => null]) }}
+          </div>
+        </div>
+      @endif
       <div class="col-md-12">
         <div class="nav-tabs-custom">
           <ul class="nav nav-tabs">
@@ -352,17 +361,31 @@
         <div class="box-body">
           <table class="table table-bordered">
             <tr>
-              <th class="text-right" style="width:40px;">#</th>
-              <th>Registered in</th>
-              <th>Registration Time</th>
-              <th style="width:40px;">Edit</th>
+              <th class="text-right" style="width:5%;">#</th>
+              <th>Course</th>
+              <th>Registered at</th>
+              <th style="width:5%;">Continue</th>
             </tr>
-            @foreach($all_not_assigned_courses as $i => $dt)
+            @foreach($all_not_completely_registered_courses as $i => $dt)
               <tr>
                 <td class="text-right">{{ $i + 1 }}</td>
                 <td>{{ $dt->course->course_package->title }}</td>
                 <td>{{ $dt->created_at }}</td>
-                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('student.choose_materials', [$dt->id]) }}">Link</a></td>
+                <td class="text-center">
+                  @if($dt->course_payments->toArray() == null)
+                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-primary" href="{{ route('student.complete_payment_information', [$dt->id]) }}">
+                      Link
+                    </a>
+                  @elseif($dt->placement_test == null)
+                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-primary" href="{{ route('student.complete_placement_tests', [$dt->id]) }}">
+                      Link
+                    </a>
+                  @elseif($dt->placement_test->status == 'Passed' && strpos($dt->course->course_package->title, 'Not Assigned') !== false)
+                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-primary" href="{{ route('student.complete_course_registrations', [$dt->id]) }}">
+                      Link
+                    </a>
+                  @endif
+                </td>
               </tr>
             @endforeach
           </table>

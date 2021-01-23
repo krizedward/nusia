@@ -170,9 +170,15 @@ class HomeController extends Controller
         if($this->is_student()) {
             if(Auth::user()->citizenship == 'Not Available') {
                 return redirect()->route('layouts.questionnaire');
-            } else if(Auth::user()->student->course_registrations->count() == 0) {
-                //return redirect()->route('courses.index'); // KHUSUS UNTUK FREE CLASSES, mungkin ada bug di CLASS PRIVATE DAN/ATAU GROUP.
+            } else if(Auth::user()->student->course_registrations->toArray() == null) {
+                //return redirect()->route('courses.index'); // KHUSUS UNTUK 1st FREE CLASSES, mungkin ada bug di CLASS PRIVATE DAN/ATAU GROUP.
                 return redirect()->route('student.choose_materials');
+            } else if(Auth::user()->student->course_registrations->first()->course_payments->toArray() == null) {
+                return redirect()->route('student.complete_payment_information', [Auth::user()->student->course_registrations->first()->id]);
+            } else if(Auth::user()->student->course_registrations->first()->placement_test == null) {
+                return redirect()->route('student.complete_placement_tests', [Auth::user()->student->course_registrations->first()->id]);
+            } else if(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && strpos(Auth::user()->student->course_registrations->first()->course->course_package->title, 'Early Registration') === false) {
+                return redirect()->route('student.complete_course_registrations', [Auth::user()->student->course_registrations->first()->id]);
             }
 
             //$temp_nation = $c->where('name.common', Auth::user()->timezone)->first()->hydrate('timezones')->timezones->first()->zone_name;
@@ -630,7 +636,7 @@ class HomeController extends Controller
 
             // Menyimpan daftar course_registrations yang bersifat "Not Registered".
             // Hal ini dilakukan untuk mengetahui daftar course yang berstatus masih dalam proses pendaftaran.
-            $all_not_assigned_courses = CourseRegistration
+            $all_not_completely_registered_courses = CourseRegistration
                 ::join('courses', 'course_registrations.course_id', 'courses.id')
                 ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
@@ -705,7 +711,7 @@ class HomeController extends Controller
 
             // Menyimpan daftar course_registrations yang bersifat "Not Registered".
             // Hal ini dilakukan untuk mengetahui daftar course yang berstatus masih dalam proses pendaftaran.
-            $all_not_assigned_courses = CourseRegistration
+            $all_not_completely_registered_courses = CourseRegistration
                 ::join('courses', 'course_registrations.course_id', 'courses.id')
                 ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
@@ -736,25 +742,22 @@ class HomeController extends Controller
             // GANTI KODE DI BAGIAN INI DENGAN KODE YANG SESUAI.
             $current_course_registration = -1;
         } else {
-            // Ditanyakan ke Mbak Nina, apakah pendaftaran 2 course pada 2 tipe berbeda,
-            // dapat dilakukan pada satu waktu yang sama?
-            // Pertimbangan:
-            // Penjadwalan dapat berbenturan apabila semua jadwal dipilih pada satu waktu yang sama.
-
-            // Jika bisa.
-            
-
-            // Jika tidak bisa.
-
-
-            // Tambahan kode.
-            $current_course_registration = 0; //null;
+            if($all_not_completely_registered_courses->count() == 0) {
+                // Jika Student BELUM/TIDAK melakukan pendaftaran dalam course manapun,
+                // ubah nilai $current_course_registration menjadi -1.
+                $current_course_registration = -1;
+            } else {
+                // Jika Student SUDAH pernah mendaftar course sebelumnya,
+                // (dan mungkin pendaftaran belum/tidak dilanjutkan hingga selesai),
+                // ubah nilai $current_course_registration menjadi 0 (tampilkan format view tabel).
+                $current_course_registration = 0;
+            }
         }
 
         return view('registrations.student_choose_materials', compact(
             'material_types', 'course_types', 'course_packages', 'course_package_discounts',
             'current_course_registration',
-            'registered_early_classes', 'all_current_running_course_registrations', 'all_not_assigned_courses'
+            'registered_early_classes', 'all_current_running_course_registrations', 'all_not_completely_registered_courses'
         ));
     }
 
@@ -778,8 +781,9 @@ class HomeController extends Controller
             // Jika Student sudah melakukan pendaftaran satu (atau lebih) course "lain"
             // pada material type yang sama, selain pendaftaran course yang ini.
 
-            // KURANG: Tambahkan penjelasan dalam bentuk pesan error, bahwa
+            // Tambahkan penjelasan dalam bentuk pesan error, bahwa
             // sudah ada course terdaftar pada jenis materi tersebut, yang juga belum dialokasikan.
+            session(['error_message' => 'You cannot register in two classes with same material type. Please choose another.']);
 
             return redirect()->back();
         }
@@ -942,82 +946,29 @@ class HomeController extends Controller
         }
     }
 
-    public function complete_payment_information($course_package_id) {
-        // Apabila Student belum pernah melakukan pendaftaran course sebelumnya, maka sistem 1x free trial berlaku.
-        if(Auth::user()->student->course_registrations->count() == 0) {
-            //
-        }
+    public function complete_payment_information($course_registration_id) {
+        // Fungsi ini hanya dapat diakses oleh Student
+        // yang sudah pernah mendaftar dalam material type yang sama (sebelumnya).
+        // Sehingga memasuki fungsi ini, sistem early registration (1 sesi trial) tidak berlaku.
 
+        // Ambil informasi course_registration Student.
+        $course_registration = CourseRegistration::where('id', $course_registration_id)->get()->first();
+
+        // Apakah Student memilih ID yang sesuai dengan ID course_package yang ditampilkan pada layar?
+        // Bagaimana jika ID yang dimasukkan sudah diedit pada inspect elements, pada value input?
+        // Berikut daftar ID yang diperbolehkan untuk melanjutkan ke langkah berikutnya.
         // Pengeditan array dilakukan secara MANUAL.
         $arr_available = [7, 16, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39];
-        if(!in_array($course_package_id, $arr_available)) {
+        if(!in_array($course_registration->course->course_package_id, $arr_available)) {
             return redirect()->route('student.choose_materials');
         }
 
-        if($this->is_trial()) {
-            $current_course_package = CoursePackage::find($course_package_id);
-
-            if($current_course_package->material_type->name == 'Cultural Classes') {
-                $new_course_package_id = CoursePackage
-                    ::where(function($q) {
-                        $q
-                            ->where('title', 'LIKE', '%Free%')
-                            ->orWhere('title', 'LIKE', '%Test%')
-                            ->orWhere('title', 'LIKE', '%Trial%');
-                    })
-                    ->where('title', 'LIKE', '%Not Assigned%')
-                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
-                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
-                    ->where('title', 'LIKE', '%'.$current_course_package->title.'%')
-                    ->first()->id;
-            } else {
-                $new_course_package_id = CoursePackage
-                    ::where(function($q) {
-                        $q
-                            ->where('title', 'LIKE', '%Free%')
-                            ->orWhere('title', 'LIKE', '%Test%')
-                            ->orWhere('title', 'LIKE', '%Trial%');
-                    })
-                    ->where('title', 'LIKE', '%Not Assigned%')
-                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
-                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
-                    ->first()->id;
-            }
-
-            return view('registrations.student_complete_payment_information', compact(
-                'new_course_package_id'
-            ));
-        } else {
-            $current_course_package = CoursePackage::find($course_package_id);
-
-            if($current_course_package->material_type->name == 'Cultural Classes') {
-                $new_course_package_id = CoursePackage
-                    ::where('title', 'NOT LIKE', '%Free%')
-                    ->where('title', 'NOT LIKE', '%Test%')
-                    ->where('title', 'NOT LIKE', '%Trial%')
-                    ->where('title', 'LIKE', '%Not Assigned%')
-                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
-                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
-                    ->where('title', 'LIKE', '%'.$current_course_package->title.'%')
-                    ->first()->id;
-            } else {
-                $new_course_package_id = CoursePackage
-                    ::where('title', 'NOT LIKE', '%Free%')
-                    ->where('title', 'NOT LIKE', '%Test%')
-                    ->where('title', 'NOT LIKE', '%Trial%')
-                    ->where('title', 'LIKE', '%Not Assigned%')
-                    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
-                    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
-                    ->first()->id;
-            }
-
-            return view('registrations.student_complete_payment_information', compact(
-                'new_course_package_id'
-            ));
-        }
+        return view('registrations.student_complete_payment_information', compact(
+            'course_registration'
+        ));
     }
 
-    public function store_payment_information(Request $request, $course_registration_id) {
+    public function store_payment_information(Request $request) {
         //
     }
 
@@ -1030,6 +981,18 @@ class HomeController extends Controller
     }
 
     public function complete_placement_tests($course_registration_id) {
+        //
+    }
+
+    public function store_placement_tests(Request $request) {
+        //
+    }
+
+    public function complete_course_registrations($course_registration_id) {
+        //
+    }
+
+    public function update_course_registrations(Request $request, $course_registration_id) {
         //
     }
 
