@@ -143,10 +143,14 @@ class SessionRegistrationController extends Controller
             $session_registrations = SessionRegistration
                 ::join('sessions', 'session_registrations.session_id', 'sessions.id')
                 ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
                 ->whereIn('session_registrations.course_registration_id', $course_registrations)
                 ->orderBy('schedules.schedule_time')
                 ->select('session_registrations.id', 'session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at', 'session_registrations.deleted_at')
                 ->get();
+            // di atas sudah ditambahkan seleksi untuk TIDAK MENAMPILKAN YANG "Not Assigned Course".
             return view('session_registrations.student_index', compact('session_registrations'));
         } else {
             return redirect()->route('home');

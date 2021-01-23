@@ -46,10 +46,10 @@
                   <form>
                     <div class="box-body">
                       <dl>
-                        <dt style="font-size:18px;"><i class="fa fa-file-text-o margin-r-5"></i> Note</dt>
+                        <dt style="font-size:18px;"><i class="fa fa-users margin-r-5"></i> Note</dt>
                         <dd>
                           Click "link" button to join your session!<br />
-                          <span style="color:#ff0000;">* Contact your instructor if you encounter a problem.</span>
+                          <span style="color:#ff0000;">* Contact us if you encounter a problem.</span>
                         </dd>
                         {{--
                         <hr>
@@ -136,176 +136,211 @@
           <!-- /.tab-pane -->
           <div class="tab-pane" id="all_courses">
             <div class="row">
-              <div class="col-md-12">
-                <div class="box-group" id="accordion">
-                  <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                  <div class="panel box box-warning">
-                    <div class="box-header with-border">
-                      <h4 class="box-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" style="color:#000000;">
-                          <b>All Courses</b>
-                        </a>
-                      </h4>
+              <div class="col-md-3">
+                <div class="box">
+                  {{--
+                  <div class="box-header">
+                    <h3 class="box-title">Section Title</h3>
+                  </div>
+                  --}}
+                  <form>
+                    <div class="box-body">
+                      <dl>
+                        <dt style="font-size:18px;"><i class="fa fa-book margin-r-5"></i> Note</dt>
+                        <dd>
+                          Click "link" button view more information about each course!<br />
+                          <span style="color:#ff0000;">* Contact us if you encounter a problem.</span>
+                        </dd>
+                        {{--
+                        <hr>
+                        <dt style="font-size:18px;"><i class="fa fa-pencil margin-r-5"></i> Feedback</dt>
+                        <dd>
+                          After participating in EACH session,<br />you may give us your feedback.<br />
+                          <span style="color:#ff0000;">** Giving feedbacks for improvement is greatly appreciated.</span>
+                        </dd>
+                        --}}
+                      </dl>
+                      {{-- <!--hr--> --}}
                     </div>
-                    <div id="collapseOne" class="panel-collapse collapse in">
-                      <div class="box-body">
-                        @if(Auth::user()->student->course_registrations->toArray() != 0)
-                          <table class="table table-bordered">
+                  </form>
+                </div>
+              </div>
+              <div class="col-md-9">
+                <div class="box box-warning">
+                  <div class="box-header">
+                    <h3 class="box-title"><b>All Courses</b></h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    @if(Auth::user()->student->course_registrations->toArray() != 0)
+                      <table class="table table-bordered">
+                        <tr>
+                          <th style="width:2%;" class="text-right">#</th>
+                          <th>Course</th>
+                          <th>Type</th>
+                          <th style="width:5%;">Detail</th-->
+                        </tr>
+                        @foreach(Auth::user()->student->course_registrations as $i => $dt)
+                          @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
                             <tr>
-                              <th style="width:2%;" class="text-right">#</th>
-                              <th>Course</th>
-                              <th>Type</th>
-                              <th style="width:5%;">Detail</th-->
+                              <td class="text-right">{{ $i + 1 }}</td>
+                              <td>{{ $dt->course->title }}</td>
+                              <td>{{ $dt->course->course_package->material_type->name }}/{{ $dt->course->course_package->course_type->name }}</td>
+                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
                             </tr>
-                            @foreach(Auth::user()->student->course_registrations as $i => $dt)
+                          @endif
+                        @endforeach
+                      </table>
+                    @else
+                      <div class="text-center">No data available.</div>
+                    @endif
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+                <div class="box box-success">
+                  <?php
+                    $type = 'General Indonesian Language';
+                    $count = 0;
+                    foreach(Auth::user()->student->course_registrations as $dt) {
+                      if($dt->course->course_package->material_type->name == $type) {
+                        if(strpos($dt->course->course_package->title, 'Not Assigned') === false) {
+                          $count++;
+                        }
+                      }
+                    }
+                  ?>
+                  <div class="box-header">
+                    <h3 class="box-title"><b>{{ $type }}</b></h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    @if($count > 0)
+                      <table class="table table-bordered">
+                        <tr>
+                          <th style="width:2%;" class="text-right">#</th>
+                          <th>Course</th>
+                          <th>Type</th>
+                          <th style="width:5%;">Detail</th-->
+                        </tr>
+                        @foreach(Auth::user()->student->course_registrations as $i => $dt)
+                          @if($dt->course->course_package->material_type->name == $type)
+                            @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
                               <tr>
                                 <td class="text-right">{{ $i + 1 }}</td>
                                 <td>{{ $dt->course->title }}</td>
-                                <td>{{ $dt->course->course_package->material_type->name }}/{{ $dt->course->course_package->course_type->name }}</td>
+                                <td>{{ $dt->course->course_package->course_type->name }}</td>
                                 <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
                               </tr>
-                            @endforeach
-                          </table>
-                        @else
-                          <div class="text-center">No data available.</div>
-                        @endif
-                      </div>
-                    </div>
+                            @endif
+                          @endif
+                        @endforeach
+                      </table>
+                    @else
+                      <div class="text-center">No data available.</div>
+                    @endif
                   </div>
-                  <div class="panel box box-success">
-                    <div class="box-header with-border">
-                      <h4 class="box-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" style="color:#000000;">
-                          <b>General Indonesian Language</b>
-                        </a>
-                      </h4>
-                    </div>
-                    <div id="collapseTwo" class="panel-collapse collapse">
-                      <div class="box-body">
-                        <?php
-                          $type = 'General Indonesian Language';
-                          $count = 0;
-                          foreach(Auth::user()->student->course_registrations as $dt) {
-                            if($dt->course->course_package->material_type->name == $type) {
-                              $count++;
-                            }
-                          }
-                        ?>
-                        @if(Auth::user()->student->course_registrations->toArray() != 0 && $count > 0)
-                          <table class="table table-bordered">
-                            <tr>
-                              <th style="width:2%;" class="text-right">#</th>
-                              <th>Course</th>
-                              <th>Type</th>
-                              <th style="width:5%;">Detail</th-->
-                            </tr>
-                            @foreach(Auth::user()->student->course_registrations as $i => $dt)
-                              @if($dt->course->course_package->material_type->name == $type)
-                                <tr>
-                                  <td class="text-right">{{ $i + 1 }}</td>
-                                  <td>{{ $dt->course->title }}</td>
-                                  <td>{{ $dt->course->course_package->course_type->name }}</td>
-                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
-                                </tr>
-                              @endif
-                            @endforeach
-                          </table>
-                        @else
-                          <div class="text-center">No data available.</div>
-                        @endif
-                      </div>
-                      <!-- End -->
-                    </div>
-                  </div>
-                  <div class="panel box box-primary">
-                    <div class="box-header with-border">
-                      <h4 class="box-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" style="color:#000000;">
-                          <b>Language Partners</b>
-                        </a>
-                      </h4>
-                    </div>
-                    <div id="collapseThree" class="panel-collapse collapse">
-                      <div class="box-body">
-                        <?php
-                          $type = 'Language Partners';
-                          $count = 0;
-                          foreach(Auth::user()->student->course_registrations as $dt) {
-                            if($dt->course->course_package->material_type->name == $type) {
-                              $count++;
-                            }
-                          }
-                        ?>
-                        @if(Auth::user()->student->course_registrations->toArray() != 0 && $count > 0)
-                          <table class="table table-bordered">
-                            <tr>
-                              <th style="width:2%;" class="text-right">#</th>
-                              <th>Course</th>
-                              <th>Type</th>
-                              <th style="width:5%;">Detail</th-->
-                            </tr>
-                            @foreach(Auth::user()->student->course_registrations as $i => $dt)
-                              @if($dt->course->course_package->material_type->name == $type)
-                                <tr>
-                                  <td class="text-right">{{ $i + 1 }}</td>
-                                  <td>{{ $dt->course->title }}</td>
-                                  <td>{{ $dt->course->course_package->course_type->name }}</td>
-                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
-                                </tr>
-                              @endif
-                            @endforeach
-                          </table>
-                        @else
-                          <div class="text-center">No data available.</div>
-                        @endif
-                      </div>
-                    </div>
-                  </div>
-                  <div class="panel box box-info">
-                    <div class="box-header with-border">
-                      <h4 class="box-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" style="color:#000000;">
-                          <b>Cultural Classes</b>
-                        </a>
-                      </h4>
-                    </div>
-                    <div id="collapseFour" class="panel-collapse collapse">
-                      <div class="box-body">
-                        <?php
-                          $type = 'Cultural Classes';
-                          $count = 0;
-                          foreach(Auth::user()->student->course_registrations as $dt) {
-                            if($dt->course->course_package->material_type->name == $type) {
-                              $count++;
-                            }
-                          }
-                        ?>
-                        @if(Auth::user()->student->course_registrations->toArray() != 0 && $count > 0)
-                          <table class="table table-bordered">
-                            <tr>
-                              <th style="width:2%;" class="text-right">#</th>
-                              <th>Course</th>
-                              <th>Type</th>
-                              <th style="width:5%;">Detail</th-->
-                            </tr>
-                            @foreach(Auth::user()->student->course_registrations as $i => $dt)
-                              @if($dt->course->course_package->material_type->name == $type)
-                                <tr>
-                                  <td class="text-right">{{ $i + 1 }}</td>
-                                  <td>{{ $dt->course->title }}</td>
-                                  <td>{{ $dt->course->course_package->course_type->name }}</td>
-                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
-                                </tr>
-                              @endif
-                            @endforeach
-                          </table>
-                        @else
-                          <div class="text-center">No data available.</div>
-                        @endif
-                      </div>
-                    </div>
-                  </div>
+                  <!-- /.box-body -->
                 </div>
+                <!-- /.box -->
+                <div class="box box-primary">
+                  <?php
+                    $type = 'Language Partners';
+                    $count = 0;
+                    foreach(Auth::user()->student->course_registrations as $dt) {
+                      if($dt->course->course_package->material_type->name == $type) {
+                        if(strpos($dt->course->course_package->title, 'Not Assigned') === false) {
+                          $count++;
+                        }
+                      }
+                    }
+                  ?>
+                  <div class="box-header">
+                    <h3 class="box-title"><b>{{ $type }}</b></h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    @if($count > 0)
+                      <table class="table table-bordered">
+                        <tr>
+                          <th style="width:2%;" class="text-right">#</th>
+                          <th>Course</th>
+                          <th>Type</th>
+                          <th style="width:5%;">Detail</th-->
+                        </tr>
+                        @foreach(Auth::user()->student->course_registrations as $i => $dt)
+                          @if($dt->course->course_package->material_type->name == $type)
+                            @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
+                              <tr>
+                                <td class="text-right">{{ $i + 1 }}</td>
+                                <td>{{ $dt->course->title }}</td>
+                                <td>{{ $dt->course->course_package->course_type->name }}</td>
+                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
+                              </tr>
+                            @endif
+                          @endif
+                        @endforeach
+                      </table>
+                    @else
+                      <div class="text-center">No data available.</div>
+                    @endif
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+                <div class="box box-info">
+                  <?php
+                    $type = 'Cultural Classes';
+                    $count = 0;
+                    foreach(Auth::user()->student->course_registrations as $dt) {
+                      if($dt->course->course_package->material_type->name == $type) {
+                        if(strpos($dt->course->course_package->title, 'Not Assigned') === false) {
+                          $count++;
+                        }
+                      }
+                    }
+                  ?>
+                  <div class="box-header">
+                    <h3 class="box-title"><b>{{ $type }}</b></h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    @if($count > 0)
+                      <table class="table table-bordered">
+                        <tr>
+                          <th style="width:2%;" class="text-right">#</th>
+                          <th>Course</th>
+                          <th>Type</th>
+                          <th style="width:5%;">Detail</th-->
+                        </tr>
+                        @foreach(Auth::user()->student->course_registrations as $i => $dt)
+                          @if($dt->course->course_package->material_type->name == $type)
+                            @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
+                              <tr>
+                                <td class="text-right">{{ $i + 1 }}</td>
+                                <td>{{ $dt->course->title }}</td>
+                                <td>{{ $dt->course->course_package->course_type->name }}</td>
+                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
+                              </tr>
+                            @endif
+                          @endif
+                        @endforeach
+                      </table>
+                    @else
+                      <div class="text-center">No data available.</div>
+                    @endif
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
               </div>
             </div>
           </div>
