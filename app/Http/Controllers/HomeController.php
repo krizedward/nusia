@@ -954,21 +954,12 @@ class HomeController extends Controller
         // Ambil informasi course_registration Student.
         $course_registration = CourseRegistration::where('id', $course_registration_id)->get()->first();
 
-        // Apakah Student memilih ID yang sesuai dengan ID course_package yang ditampilkan pada layar?
-        // Bagaimana jika ID yang dimasukkan sudah diedit pada inspect elements, pada value input?
-        // Berikut daftar ID yang diperbolehkan untuk melanjutkan ke langkah berikutnya.
-        // Pengeditan array dilakukan secara MANUAL.
-        $arr_available = [7, 16, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39];
-        if(!in_array($course_registration->course->course_package_id, $arr_available)) {
-            return redirect()->route('student.choose_materials');
-        }
-
         return view('registrations.student_complete_payment_information', compact(
             'course_registration'
         ));
     }
 
-    public function store_payment_information(Request $request) {
+    public function store_payment_information(Request $request, $course_registration_id) {
         //
     }
 
@@ -981,10 +972,15 @@ class HomeController extends Controller
     }
 
     public function complete_placement_tests($course_registration_id) {
-        //
+        // Ambil informasi course_registration Student.
+        $course_registration = CourseRegistration::where('id', $course_registration_id)->get()->first();
+
+        return view('registrations.student_complete_placement_tests', compact(
+            'course_registration'
+        ));
     }
 
-    public function store_placement_tests(Request $request) {
+    public function store_placement_tests(Request $request, $course_registration_id) {
         //
     }
 
