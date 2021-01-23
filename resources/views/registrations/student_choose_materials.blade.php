@@ -11,7 +11,7 @@
 @section('content')
 @if($current_course_registration)
   <form role="form" method="post" action="{{ route('student.store_materials') }}" enctype="multipart/form-data">
-  @csrf
+    @csrf
     <input type="hidden" id="choice" name="choice" value="">
     <input type="hidden" id="choice_mt" name="choice_mt" value="">
     <input type="hidden" id="older_choice" name="older_choice" value="{{ $current_course_registration }}">
