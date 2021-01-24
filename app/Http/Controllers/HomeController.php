@@ -975,8 +975,25 @@ class HomeController extends Controller
         // Ambil informasi course_registration Student.
         $course_registration = CourseRegistration::where('id', $course_registration_id)->get()->first();
 
+        // Simpan nilai status placement test Student.
+        $has_uploaded_for_placement_test = 0;
+
+        if($course_registration->placement_test == null) {
+            // Jika data placement test belum dibuat sama sekali, arahkan ke halaman placement test,
+            // sehingga Student dapat mengunggah hasil placement test.
+            $has_uploaded_for_placement_test = 0;
+        } else if($course_registration->placement_test->status == 'Not Passed') {
+            // Jika hasil test sudah diunggah tetapi masih 'Not Passed', tampilkan halaman "waiting".
+            $has_uploaded_for_placement_test = 1;
+        } else if($course_registration->placement_test->status == 'Passed') {
+            // Jika hasil test sudah diunggah dan 'Passed', redirect ke langkah berikutnya.
+            return redirect()->route('student.complete_course_registrations', [$course_registration->id]);
+        }
+
+        // Halaman "upload-enabled" dan "waiting" digabungkan dalam satu view yang sama,
+        // dipisahkan menggunakan seleksi nilai pada variabel $has_uploaded_for_placement_test.
         return view('registrations.student_complete_placement_tests', compact(
-            'course_registration'
+            'course_registration', 'has_uploaded_for_placement_test',
         ));
     }
 
@@ -985,7 +1002,10 @@ class HomeController extends Controller
     }
 
     public function complete_course_registrations($course_registration_id) {
-        //
+        // Ambil informasi course_registration Student.
+        $course_registration = CourseRegistration::where('id', $course_registration_id)->get()->first();
+
+        // ...
     }
 
     public function update_course_registrations(Request $request, $course_registration_id) {

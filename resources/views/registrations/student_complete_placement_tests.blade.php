@@ -1,19 +1,31 @@
 @extends('layouts.admin.default')
 
-@section('title','Complete Placement Test')
+@section('title','Placement Test')
 
 @include('layouts.css_and_js.form_advanced')
 
 @section('content-header')
-  <h1><b>Indonesian Proficiency Placement Test for You!</b></h1>
+  <h1><b>Indonesian Proficiency Placement Test</b></h1>
 @stop
 
 @section('content')
+<div class="row">
+<div class="col-md-3">
+  <div class="box box-default">
+    <div class="box-header with-border">
+      <h3 class="box-title"><b>Placement Test Information</b></h3>
+    </div>
+    <div class="box-body">
+      <p>Info</p>
+    </div>
+  </div>
+</div>
+<div class="col-md-9">
   <div class="box box-primary">
     <div class="box-header with-border">
-      <h3 class="box-title"><b>New Student Registration Form</b></h3>
+      <h3 class="box-title"><b>Submit Your Test Result</b></h3>
     </div>
-    <form role="form" method="post" action="{{ route('questionnaire.store') }}" enctype="multipart/form-data">
+    <form role="form" method="post" action="{{ route('student.store_placement_tests', [$course_registration->id]) }}" enctype="multipart/form-data">
       @csrf
       <div class="box-body">
         <div class="row">
@@ -331,4 +343,6 @@
     </form>
   </div>
   <!-- /.box -->
+</div>
+</div>
 @stop
