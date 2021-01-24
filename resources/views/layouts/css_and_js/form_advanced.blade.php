@@ -38,7 +38,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.js"></script>
 
     <!-- Intro.js -->
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/intro.js/minified/introjs.min.css">
+    <link {{-- rel="stylesheet" --}} type="text/css" href="https://unpkg.com/intro.js/minified/introjs.min.css">
     <script type="text/javascript" src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
  
     <!-- Google Font -->

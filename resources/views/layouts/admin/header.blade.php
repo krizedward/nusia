@@ -2,7 +2,7 @@
     <a href="{{ route('home') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <!--span class="logo-mini"><b>N</b></span-->
-      <span class="logo-mini"><img src="{{ asset('header.ico') }}"></span>
+      <span class="logo-mini"><img src="{{ asset('header.ico') }}" alt="Header"></span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>Nusantara</b> Indonesia</span>
     </a>
@@ -19,12 +19,14 @@
           <li class="dropdown messages-menu">
             <a href="{{ route('contact') }}" class="dropdown-toggle">
               <i class="fa fa-envelope-o"></i>
+              <span class="sr-only">Toggle chat features</span>
             </a>
           </li>
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
+              <span class="sr-only">Toggle notification features</span>
             </a>
             <ul class="dropdown-menu">
               <li class="header">You don't have notifications</li>
