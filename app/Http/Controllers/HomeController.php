@@ -993,7 +993,7 @@ class HomeController extends Controller
         // Halaman "upload-enabled" dan "waiting" digabungkan dalam satu view yang sama,
         // dipisahkan menggunakan seleksi nilai pada variabel $has_uploaded_for_placement_test.
         return view('registrations.student_complete_placement_tests', compact(
-            'course_registration', 'has_uploaded_for_placement_test',
+            'course_registration', 'has_uploaded_for_placement_test'
         ));
     }
 
