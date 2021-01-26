@@ -998,7 +998,18 @@ class HomeController extends Controller
     }
 
     public function store_placement_tests(Request $request, $course_registration_id) {
-        //
+        $data = $request->all();
+        $data = Validator::make($data, [
+            'video link' => ['bail', 'required'],
+        ]);
+
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+
+        
     }
 
     public function complete_course_registrations($course_registration_id) {
