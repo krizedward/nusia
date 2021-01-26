@@ -308,7 +308,7 @@
       </div>
       <!-- /.box-body -->
       <div class="box-footer">
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
       </div>
     </form>
   </div>
