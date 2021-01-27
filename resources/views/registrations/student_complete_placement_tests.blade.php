@@ -104,12 +104,14 @@
               ?>
               <p class="text-center">
                 <b style="color:#cc0000;">
-                  Submitted at {{ $submitted_at->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}.<br />
+                  Submitted on {{ $submitted_at->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}.<br />
                   The result will be announced by email in 7 days after this time.
                 </b>
               </p>
             @else
-              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(document.getElementById('video_link').value == '') { alert('The video link cannot be empty.'); return false; } if( confirm('Are you sure to submit this link: ' + document.getElementById('video_link').value + '?') ) return true; else return false;">
+                Submit
+              </button>
             @endif
           </div>
         </form>
