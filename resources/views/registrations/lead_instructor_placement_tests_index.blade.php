@@ -81,7 +81,7 @@
                                 <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->path }}">View</a>
                               </td>
                               <td class="text-center">
-                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('placement_tests.show', [$dt->id]) }}">Detail</a>
+                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('placement_tests.show', [$dt->course_registration_id]) }}">Detail</a>
                               </td>
                             </tr>
                           @endforeach
@@ -161,7 +161,7 @@
                                   <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->path }}">View</a>
                                 </td>
                                 <td class="text-center">
-                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('placement_tests.show', [$dt->id]) }}">Detail</a>
+                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('placement_tests.show', [$dt->course_registration_id]) }}">Detail</a>
                                 </td>
                               </tr>
                             @endif

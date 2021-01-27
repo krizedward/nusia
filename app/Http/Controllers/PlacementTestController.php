@@ -91,10 +91,10 @@ class PlacementTestController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $course_registration_id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($course_registration_id)
     {
         //
     }

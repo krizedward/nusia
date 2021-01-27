@@ -99,7 +99,7 @@ Route::group(['middleware'=>'auth'], function() {
         Route::put('/course-payments/{id}', 'CoursePaymentController@update')->name('course_payments.update'); // Daftar model dimodifikasi: CoursePayment.
         // for role Lead Instructor and Admin
         Route::get('/placement-tests', 'PlacementTestController@index')->name('placement_tests.index'); // View ini digunakan untuk melihat daftar informasi placement test untuk seluruh Student, dalam proficiency masing-masing.
-        Route::get('/placement-tests/{id}', 'PlacementTestController@show')->name('placement_tests.show'); // ID digunakan adalah placement_test_id. View ini digunakan untuk melihat informasi detail placement test untuk setiap Student.
+        Route::get('/placement-tests/{id}', 'PlacementTestController@show')->name('placement_tests.show'); // ID digunakan adalah course_registration_id. View ini digunakan untuk melihat informasi detail placement test untuk setiap Student.
         Route::put('/placement-tests/{id}', 'PlacementTestController@update')->name('placement_tests.update'); // Daftar model dimodifikasi: PlacementTest.
 
         // NEW ROUTING FOR REGISTERED STUDENT: 13 Januari 2021 dan selanjutnya.
