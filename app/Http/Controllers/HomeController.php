@@ -17,6 +17,7 @@ use App\Models\Instructor;
 use App\Models\MaterialPublic;
 use App\Models\MaterialSession;
 use App\Models\MaterialType;
+use App\Models\PlacementTest;
 use App\Models\Metadata;
 use App\Models\Schedule;
 use App\Models\Session;
@@ -998,9 +999,18 @@ class HomeController extends Controller
     }
 
     public function store_placement_tests(Request $request, $course_registration_id) {
+        // Melakukan validasi apakah link yang digunakan adalah secure https?
+        $has_valid_link = (strpos($request->video_link, 'https://') !== false);
+
         $data = $request->all();
+        if($has_valid_link) {
+            // jika link valid, lanjutkan proses.
+        } else {
+            // jika link tidak valid, sesuaikan pada validasi 'url' untuk di-redirect (fail) ke view.
+            $data['video_link'] = 'invalid url';
+        }
         $data = Validator::make($data, [
-            'video link' => ['bail', 'required'],
+            'video_link' => ['bail', 'required', 'url'],
         ]);
 
         if($data->fails()) {
@@ -1009,7 +1019,15 @@ class HomeController extends Controller
                 ->withInput();
         }
 
-        
+        // Untuk valid link.
+        PlacementTest::create([
+            'course_registration_id' => $course_registration_id,
+            'path' => $request->video_link,
+            'status' => 'Not Passed',
+            'submitted_at' => now(),
+        ]);
+
+        return redirect()->route('student.complete_placement_tests', [$course_registration_id]);
     }
 
     public function complete_course_registrations($course_registration_id) {

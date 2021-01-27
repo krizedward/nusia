@@ -60,8 +60,10 @@
         <div class="box-header with-border">
           <h3 class="box-title"><b>Submit Your Result</b></h3>
         </div>
-        <form role="form" method="post" action="{{ route('student.store_placement_tests', [$course_registration->id]) }}" enctype="multipart/form-data">
-          @csrf
+        <form role="form" method="post" action="@if($has_uploaded_for_placement_test) # @else {{ route('student.store_placement_tests', [$course_registration->id]) }} @endif" enctype="multipart/form-data">
+          @if($has_uploaded_for_placement_test == 0)
+            @csrf
+          @endif
           <div class="box-body">
             <div class="row">
               {{--Form Kiri--}}
@@ -79,10 +81,14 @@
               {{--Form Kanan--}}
               <div class="col-md-6">
                 <div class="col-md-12">
-                  <div class="form-group @error('video link') has-error @enderror">
-                    <label for="video_link">Video Link</label>
-                    <input id="video_link" name="video link" type="text" class="@error('video link') is-invalid @enderror form-control" placeholder="Enter Video Link" value="{{ old('video link') }}">
-                    @error('video link')
+                  <div class="form-group @error('video_link') has-error @enderror">
+                    <label for="video_link">Video Link (https)</label>
+                    @if($has_uploaded_for_placement_test)
+                      <input id="video_link" name="video_link" type="text" class="@error('video_link') is-invalid @enderror form-control" placeholder="Enter Video Link (https link only)" disabled value="{{ $course_registration->placement_test->path }}">
+                    @else
+                      <input id="video_link" name="video_link" type="text" class="@error('video_link') is-invalid @enderror form-control" placeholder="Enter Video Link (https link only)" value="{{ old('video_link') }}">
+                    @endif
+                    @error('video_link')
                       <p style="color:red">{{ $message }}</p>
                     @enderror
                   </div>
@@ -92,7 +98,19 @@
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
-            <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+            @if($has_uploaded_for_placement_test)
+              <?php
+                $submitted_at = \Carbon\Carbon::parse($course_registration->placement_test->submitted_at)->setTimezone(Auth::user()->timezone);
+              ?>
+              <p class="text-center">
+                <b style="color:#cc0000;">
+                  Submitted at {{ $submitted_at->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}.<br />
+                  The result will be announced by email in 7 days after this time.
+                </b>
+              </p>
+            @else
+              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+            @endif
           </div>
         </form>
       </div>
