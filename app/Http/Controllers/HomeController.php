@@ -176,7 +176,7 @@ class HomeController extends Controller
                 return redirect()->route('student.choose_materials');
             } else if(Auth::user()->student->course_registrations->first()->course_payments->toArray() == null) {
                 return redirect()->route('student.complete_payment_information', [Auth::user()->student->course_registrations->first()->id]);
-            } else if(Auth::user()->student->course_registrations->first()->placement_test == null) {
+            } else if(Auth::user()->student->course_registrations->first()->placement_test == null || Auth::user()->student->course_registrations->first()->placement_test->status == 'Not Passed') {
                 return redirect()->route('student.complete_placement_tests', [Auth::user()->student->course_registrations->first()->id]);
             } else if(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && strpos(Auth::user()->student->course_registrations->first()->course->course_package->title, 'Early Registration') === false) {
                 return redirect()->route('student.complete_course_registrations', [Auth::user()->student->course_registrations->first()->id]);
@@ -503,7 +503,7 @@ class HomeController extends Controller
             } else if(Auth::user()->student->course_registrations->first()->course_payments->toArray() == null) {
                 // Student belum mengisi informasi pembayaran.
                 return redirect()->route('student.complete_payment_information', [Auth::user()->student->course_registrations->first()->id]);
-            } else if(Auth::user()->student->course_registrations->first()->placement_test->toArray() == null) {
+            } else if(Auth::user()->student->course_registrations->first()->placement_test == null || Auth::user()->student->course_registrations->first()->placement_test->status == 'Not Passed') {
                 // Student belum mengunggah hasil placement test.
                 return redirect()->route('student.complete_placement_tests', [Auth::user()->student->course_registrations->first()->id]);
             } else if(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && strpos(Auth::user()->student->course_registrations->first()->course->course_package->title, 'Early Registration') === false) {

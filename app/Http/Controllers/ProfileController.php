@@ -117,8 +117,15 @@ class ProfileController extends Controller
         } else if($this->is_student()){
             if(Auth::user()->citizenship == 'Not Available') {
                 return redirect()->route('layouts.questionnaire');
-            } else if(Auth::user()->student->course_registrations->count() == 0) {
-                return redirect()->route('courses.index'); // KHUSUS UNTUK FREE CLASSES, mungkin ada bug di CLASS PRIVATE DAN/ATAU GROUP.
+            } else if(Auth::user()->student->course_registrations->toArray() == null) {
+                //return redirect()->route('courses.index'); // KHUSUS UNTUK 1st FREE CLASSES, mungkin ada bug di CLASS PRIVATE DAN/ATAU GROUP.
+                return redirect()->route('student.choose_materials');
+            } else if(Auth::user()->student->course_registrations->first()->course_payments->toArray() == null) {
+                return redirect()->route('student.complete_payment_information', [Auth::user()->student->course_registrations->first()->id]);
+            } else if(Auth::user()->student->course_registrations->first()->placement_test == null || Auth::user()->student->course_registrations->first()->placement_test->status == 'Not Passed') {
+                return redirect()->route('student.complete_placement_tests', [Auth::user()->student->course_registrations->first()->id]);
+            } else if(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && strpos(Auth::user()->student->course_registrations->first()->course->course_package->title, 'Early Registration') === false) {
+                return redirect()->route('student.complete_course_registrations', [Auth::user()->student->course_registrations->first()->id]);
             }
 
             /*$countries = [

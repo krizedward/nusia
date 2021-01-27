@@ -75,7 +75,7 @@
             <i class="fa fa-book"></i> <span>Complete Payment Info</span>
           </a>
         </li>
-      @elseif(Auth::user()->student->course_registrations->first()->placement_test == null)
+      @elseif(Auth::user()->student->course_registrations->first()->placement_test == null || Auth::user()->student->course_registrations->first()->placement_test->status == 'Not Passed')
         <li class="{{ set_active(['student.complete_placement_tests']) }}">
           <a href="{{ route('student.complete_placement_tests', [Auth::user()->student->course_registrations->first()->id])}}">
             <i class="fa fa-book"></i> <span>Complete Placement Test</span>
