@@ -96,7 +96,15 @@ class PlacementTestController extends Controller
      */
     public function show($course_registration_id)
     {
-        //
+        if($this->is_admin() || $this->is_lead_instructor()) {
+            $course_registration = PlacementTest::where('course_registration_id', $course_registration_id)->get()->first()->course_registration;
+
+            return view('registrations.lead_instructor_placement_tests_show', compact(
+                'course_registration',
+            ));
+        } else {
+            return redirect()->route('home');
+        }
     }
 
     /**
