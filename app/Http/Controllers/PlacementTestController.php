@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\MaterialType;
+use App\Models\PlacementTest;
+
 class PlacementTestController extends Controller
 {
     /**
@@ -45,7 +48,18 @@ class PlacementTestController extends Controller
      */
     public function index()
     {
-        //
+        $material_types = MaterialType::where('name', 'NOT LIKE', '%Trial%')->get();
+        $placement_tests = PlacementTest
+            ::join('course_registrations', 'placement_tests.course_registration_id', 'course_registrations.id')
+            ->join('courses', 'course_registrations.course_id', 'courses.id')
+            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+            ->where('course_packages.title', 'LIKE', '%Not Assigned%')
+            ->where('placement_tests.status', 'Not Passed')
+            ->get();
+
+        return view('registrations.lead_instructor_placement_tests_index', compact(
+            'material_types', 'placement_tests',
+        ));
     }
 
     /**
