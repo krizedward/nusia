@@ -376,7 +376,7 @@
                     <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-primary" href="{{ route('student.complete_payment_information', [$dt->id]) }}">
                       Link
                     </a>
-                  @elseif($dt->placement_test == null)
+                  @elseif($dt->placement_test == null || $dt->placement_test->status == 'Not Passed')
                     <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-primary" href="{{ route('student.complete_placement_tests', [$dt->id]) }}">
                       Link
                     </a>
