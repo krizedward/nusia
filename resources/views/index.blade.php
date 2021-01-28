@@ -1,1 +1,1 @@
-@include('front_end.old_landing_page')
+@include('front_end.landing_page')

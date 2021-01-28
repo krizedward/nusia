@@ -1,10 +1,25 @@
 @extends('front_end.layouts')
 
 @section('content')
+<!-- row-01-banner -->
 <div class="container" style="margin-top:30px">
-  <div class="row">
-    <div class="col-sm-4">
-      <h2>About Me</h2>
+  <div class="row mb-5 p-5">
+    <div class="col-6">
+      <h1>Speak Like A Native!</h1>
+      <p>Don't think you can speak the Indonesia language fluently?</p>
+      <p>Join Nusia's online courses and see how easy it can be!</p>
+    </div>
+    <!-- End_Colmn -->
+    <div class="col-6">
+      <img src="https://placeholder.pics/svg/500x250" class="rounded float-right" >
+    </div>
+    <!-- End_Colmn -->
+  </div>
+</div>
+<!-- row-02-information -->
+<div class="bg-warning mb-5 p-5">
+  <div class="container">
+    <h2>About Me</h2>
       <h5>Photo of me:</h5>
       <div class="fakeimg">Fake Image</div>
       <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
@@ -25,20 +40,36 @@
         </li>
       </ul>
       <hr class="d-sm-none">
+  </div>
+</div>
+<!-- row-03-best-photo -->
+<div class="container">
+  <p>none</p>
+</div>
+<!-- row-04-why-us -->
+<div class="container p-5">
+  <div class="row p-5">
+    <div class="col-12 mb-5">
+      <h3 class="float-right">Why Nusia ?</h3>
     </div>
-    <div class="col-sm-8">
-      <h2>TITLE HEADING</h2>
-      <h5>Title description, Dec 7, 2017</h5>
-      <div class="fakeimg">Fake Image</div>
-      <p>Some text..</p>
-      <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-      <br>
-      <h2>TITLE HEADING</h2>
-      <h5>Title description, Sep 2, 2017</h5>
-      <div class="fakeimg">Fake Image</div>
-      <p>Some text..</p>
-      <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+    <!-- End_Colmn -->
+    <div class="col-6">
+      <ul>
+        <li>Enganging Learning Activities</li>
+        <li>Communicative Approach</li>
+      </ul>
+    </div>
+    <!-- End_Colmn -->
+    <div class="col-6">
+      <ul>
+        <li>Flipped Learning Method</li>
+        <li>Flexible Scheduling</li>
+      </ul>
     </div>
   </div>
 </div>
+<!-- row-04-our-english-program -->
+<!-- row-05-step-register -->
+<!-- row-06-testimoni -->
+<!-- row-07-footer -->
 @endsection
