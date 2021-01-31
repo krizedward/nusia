@@ -11,7 +11,7 @@
 |
 */
 
-//Route::redirect('/', 'login');
+Route::redirect('/', 'login');
 //akses untuk menguji tampilan draft
 
 /*
@@ -20,7 +20,7 @@ Route::get('/test', function () {
 });
 */
 
-Route::get('/', 'HomeController@landing_page')->name('index');
+//Route::get('/', 'HomeController@landing_page')->name('index');
 
 Route::get('/terms-of-service', function() {
     return view('terms');
