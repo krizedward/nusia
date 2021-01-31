@@ -173,7 +173,7 @@
       {{-- Menu Tambahan untuk Lead Instructor --}}
       @if(Auth::user()->roles == 'Lead Instructor')
         <li class="header">REGISTRATIONS</li>
-        <li class="{{ set_active('placement_tests.index') }}">
+        <li class="{{ set_active(['placement_tests.index', 'placement_tests.show']) }}">
           <a href="{{ route('placement_tests.index') }}">
             <i class="fa fa-file-text-o"></i> <span>Placement Tests</span>
           </a>

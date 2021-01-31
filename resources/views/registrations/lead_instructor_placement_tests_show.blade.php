@@ -7,7 +7,7 @@
 @include('layouts.css_and_js.form_advanced')
 
 @section('content-header')
-  <h1><b>Placement Tests Detail</b></h1>
+  <h1><b>Placement Test Detail</b></h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('home') }}">Home</a></li>
     <li><a href="{{ route('placement_tests.index') }}">Placement Tests</a></li>
@@ -21,7 +21,7 @@
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
           <li class="active"><a href="#overview" data-toggle="tab"><b>Overview</b></a></li>
-          <li><a href="#placement_test" data-toggle="tab"><b>Placement Test</b></a></li>
+          <li><a href="#decision_form" data-toggle="tab"><b>Decision Form</b></a></li>
         </ul>
         <div class="tab-content">
           <div class="active tab-pane" id="overview">
@@ -29,9 +29,10 @@
               <div class="col-md-3">
                 <div class="box box-default">
                   <div class="box-header with-border">
-                    <h3 class="box-title">Registered at <b>{{ $course_registration->course->title }}</b></h3>
+                    <h3 class="box-title"><b>{{ $course_registration->course->course_package->material_type->name }}</b></h3>
                     <p class="no-margin">
-                      Includes
+                      {{ $course_registration->course->course_package->course_type->name }}<br />
+                      Proficiency: <b>{{ $course_registration->student->indonesian_language_proficiency }}</b>
                     </p>
                   </div>
                   <!-- /.box-header -->
@@ -70,126 +71,43 @@
                       </table>
                     </p>
                     <hr>
-                    <strong><i class="fa fa-credit-card margin-r-5"></i> Course Payment</strong>
+                    <strong><i class="fa fa-file-video-o margin-r-5"></i> Placement Test</strong>
                     <p>
+                      <?php
+                        if($course_registration->placement_test->submitted_at != null)
+                          $submitted_at = \Carbon\Carbon::parse($course_registration->placement_test->submitted_at)->setTimezone(Auth::user()->timezone);
+                        else
+                          $submitted_at = null;
+                      ?>
                       <table>
                         <tr style="vertical-align:baseline;">
-                          <td width="50"><b>Price</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>${{ $course_registration->course->course_package->price }}</td>
-                        </tr>
-                        <tr style="vertical-align:baseline;">
-                          <td width="50"><b>Status</b></td>
+                          <td width="35"><b>Day</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
-                            <?php
-                              $sum = 0;
-                              foreach($course_registration->course_payments as $dt) {
-                                if($dt->status == 'Confirmed') {
-                                  $sum += $dt->amount;
-                                }
-                              }
-                            ?>
-                            @if($course_registration->course->course_package->price != 0)
-                              {{-- Kode untuk memeriksa status pembayaran untuk course berbayar. --}}
-                              @if($sum > $course_registration->course->course_package->price)
-                                <span style="color:red;">Possible bug, please report to us.</span>
-                              @elseif($sum == $course_registration->course->course_package->price)
-                                <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Paid</span>
-                              @else
-                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Fully Paid</span>
-                              @endif
-                            @else
-                              <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Free of Charge</span>
-                            @endif
-                          </td>
-                        </tr>
-                        <tr style="vertical-align:baseline;">
-                          <td width="50"><b>Paid at</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($course_registration->course->course_package->price != 0)
-                              @if($sum > $course_registration->course->course_package->price)
-                                <span style="color:red;">Possible bug, please report to us.</span>
-                              @elseif($sum == $course_registration->course->course_package->price)
-                                <?php
-                                  $payment_time = \Carbon\Carbon::parse($course_registration->course_payments->last()->payment_time)->setTimezone(Auth::user()->timezone);
-                                ?>
-                                {{ $payment_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
-                              @else
-                                Not Fully Paid
-                              @endif
-                            @else
-                              <i class="text-muted">Not Available</i>
-                            @endif
-                          </td>
-                        </tr>
-                      </table>
-                    </p>
-                    <hr>
-                    <strong><i class="fa fa-file-video-o margin-r-5"></i> Student Placement Test</strong>
-                    <p>
-                      <table>
-                        <tr style="vertical-align:baseline;">
-                          <td width="75"><b>Link</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($course_registration->placement_test)
-                              @if($course_registration->placement_test->path)
-                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $course_registration->placement_test->path }}">Link</a></td>
-                              @else
-                                <i class="text-muted">Not Available</i>
-                              @endif
+                            @if($submitted_at)
+                              {{ $submitted_at->isoFormat('dddd') }}
                             @else
                               <i class="text-muted">Not Available</i>
                             @endif
                           </td>
                         </tr>
                         <tr style="vertical-align:baseline;">
-                          <td width="75"><b>Result</b></td>
+                          <td width="35"><b>Date</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
-                            @if($course_registration->placement_test)
-                              @if($course_registration->placement_test->status == 'Passed')
-                                <span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Passed</span>
-                              @elseif($course_registration->placement_test->status == 'Not Passed')
-                                <span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Passed</span>
-                              @else
-                                <i class="text-muted">Not Available</i>
-                              @endif
+                            @if($submitted_at)
+                              {{ $submitted_at->isoFormat('MMMM Do YYYY, hh:mm A') }}
                             @else
                               <i class="text-muted">Not Available</i>
                             @endif
                           </td>
                         </tr>
                         <tr style="vertical-align:baseline;">
-                          <td width="75"><b>Final Level</b></td>
+                          <td width="35"><b>Link</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
-                            @if($course_registration->placement_test)
-                              @if($course_registration->placement_test->status == 'Passed')
-                                {{ $course_registration->course->course_package->course_level->name }}
-                              @else
-                                <i class="text-muted">Not Available</i>
-                              @endif
-                            @else
-                              <i class="text-muted">Not Available</i>
-                            @endif
-                          </td>
-                        </tr>
-                        <tr style="vertical-align:baseline;">
-                          <td width="75"><b>Updated at</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($course_registration->placement_test)
-                              @if($course_registration->placement_test->status)
-                                <?php
-                                  $update_time = \Carbon\Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone);
-                                ?>
-                                {{ $update_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
-                              @else
-                                <i class="text-muted">Not Available</i>
-                              @endif
+                            @if($course_registration->placement_test->path)
+                              <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $course_registration->placement_test->path }}">Link</a>
                             @else
                               <i class="text-muted">Not Available</i>
                             @endif
@@ -206,21 +124,13 @@
                 <div class="col-md-12">
                   <div class="box box-primary">
                     <div class="box-header">
-                      <h3 class="box-title"><b>Overview</b></h3>
-                      {{--
-                      <div>
-                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">
-                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add User
-                        </a>
-                      </div>
-                      --}}
+                      <h3 class="box-title"><b>Student Registration</b></h3>
                       <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse" aria-label="Minimize"><i class="fa fa-minus"></i></button>
                       </div>
                     </div>
                     <div class="box-body">
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Material Type</strong>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Chosen Material Type</strong>
                       <p>
                         @if($course_registration->course->course_package->material_type->description)
                           @if($course_registration->course->course_package->material_type->name == 'General Indonesian Language')
@@ -235,28 +145,106 @@
                         @endif
                       </p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Course Type</strong>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Student Name</strong>
+                      <p>{{ $course_registration->student->user->first_name }} {{ $course_registration->student->user->last_name }}</p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Nationality</strong>
                       <p>
-                        @if($course_registration->course->course_package->course_type->description)
-                          <u>{{ $course_registration->course->course_package->course_type->name }}</u><br>
-                          {{ $course_registration->course->course_package->course_type->description }}
+                        @if($course_registration->student->user->citizenship != 'Not Available')
+                          {{ $course_registration->student->user->citizenship }}
                         @else
-                          {{ $course_registration->course->course_package->course_type->name }}
+                          <i>Not Available</i>
                         @endif
                       </p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Course Proficiency Level</strong>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Where do you live now</strong>
                       <p>
-                        @if($course_registration->course->course_package->course_level->description)
-                          <u>{{ $course_registration->course->course_package->course_level->name }}</u><br>
-                          {{ $course_registration->course->course_package->course_level->description }}
+                        @if($course_registration->student->user->domicile)
+                          {{ $course_registration->student->user->domicile }}
                         @else
-                          {{ $course_registration->course->course_package->course_level->name }}
+                          <i>Not Available</i>
                         @endif
                       </p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Course Title</strong>
-                      <p>{{ $course_registration->course->title }}</p>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Age</strong>
+                      <p>
+                        @if($course_registration->student->age != 0)
+                          {{ $course_registration->student->age }}
+                        @else
+                          <i>Not Available</i>
+                        @endif
+                      </p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
+                      <p>
+                        @if($course_registration->student->interest)
+                          <?php
+                            $interest = explode(', ', $course_registration->student->interest);
+                          ?>
+                          @for($i = 0; $i < count($interest); $i = $i + 1)
+                            {{ $i + 1 }}. {{ $interest[$i] }}
+                            @if($i + 1 != count($interest))
+                              <br>
+                            @endif
+                          @endfor
+                        @else
+                          <i>Not Available</i>
+                        @endif
+                      </p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Job Status</strong>
+                      <p>
+                        @if($course_registration->student->status_description)
+                          {{ $course_registration->student->status_job }} at {{ $course_registration->student->status_description }}
+                        @else
+                          <i>Not Available</i>
+                        @endif
+                      </p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesia Language Proficiency</strong>
+                      <p>
+                        @if($course_registration->student->age != 0)
+                          {{ $course_registration->student->indonesian_language_proficiency }}
+                        @else
+                          <i>Not Available</i>
+                        @endif
+                      </p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Target Language Experience</strong>
+                      <p>
+                        @if($course_registration->student->age != 0)
+                          @if($course_registration->student->target_language_experience != 'Others')
+                            {{ $course_registration->student->target_language_experience }}
+                          @else
+                            {{ $course_registration->student->target_language_experience_value }}
+                            @if($course_registration->student->target_language_experience_value == 1)
+                              year
+                            @else
+                              years
+                            @endif
+                          @endif
+                        @else
+                          <i>Not Available</i>
+                        @endif
+                      </p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Description of Course Taken</strong>
+                      <p>
+                        @if($course_registration->student->description_of_course_taken)
+                          {{ $course_registration->student->description_of_course_taken }}
+                        @else
+                          <i>Not Available</i>
+                        @endif
+                      </p>
+                      <hr>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Learning Objective</strong>
+                      <p>
+                        @if($course_registration->student->learning_objective)
+                          {{ $course_registration->student->learning_objective }}
+                        @else
+                          <i>Not Available</i>
+                        @endif
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -264,213 +252,170 @@
             </div>
           </div>
           <!-- /.tab-pane -->
-          <div class="tab-pane" id="placement_test">
+          <div class="tab-pane" id="decision_form">
             <div class="row">
               <div class="col-md-3">
-                <div class="box">
+                <div class="box box-default">
                   <div class="box-header with-border">
-                    <h3 class="box-title">Registered at <b>{{ $course_registration->course->title }}</b></h3>
+                    <h3 class="box-title"><b>{{ $course_registration->course->course_package->material_type->name }}</b></h3>
                     <p class="no-margin">
-                      Includes
-                      <b>
-                        {{--
-                          dapat juga menggunakan variabel
-                          $course_registration->course->course_package->count_session
-                        --}}
-                        {{ $course_registration->course->sessions->count() }}
-                        @if($course_registration->course->sessions->count() != 1)
-                          sessions
-                        @else
-                          session
-                        @endif
-                      </b>
+                      {{ $course_registration->course->course_package->course_type->name }}<br />
+                      Proficiency: <b>{{ $course_registration->student->indonesian_language_proficiency }}</b>
                     </p>
                   </div>
                   <!-- /.box-header -->
-                  <form>
-                    <div class="box-body">
-                      <dl>
-                        <dt>
-                          @if($course_registration->course->course_registrations->count() == 1)
-                            <i class="fa fa-user-circle-o margin-r-5"></i> Joining Sessions
-                          @else
-                            <i class="fa fa-users margin-r-5"></i> Joining Sessions
-                          @endif
-                        </dt>
-                        <dd>
-                          Click "link" button to join your sessions!
-                        </dd>
-                      </dl>
-                      <hr>
-                      <dl>
-                        <dt>
-                          <i class="fa fa-edit margin-r-5"></i> Giving Feedbacks
-                        </dt>
-                        <dd>
-                          After each session, click on "form" button to give feedbacks per session!<br />
-                          Please consider that three days after each session ends, the "form" button will eventually disappear.
-                        </dd>
-                      </dl>
-                      <hr>
-                      <dl>
-                        <dt>
-                          <i class="fa fa-file-text-o margin-r-5"></i> More Information
-                        </dt>
-                        <dd>
-                          You are <b>required</b> to give feedbacks (for each session) in order to complete your attendance information.<br />
-                          <span style="color:#ff0000;">* Contact your instructor if you encounter a problem.</span>
-                        </dd>
-                      </dl>
-                      {{--
-                      <hr>
-                      --}}
-                    </div>
-                  </form>
+                  <div class="box-body">
+                    <strong><i class="fa fa-clock-o margin-r-5"></i> Registration Time</strong>
+                    <p>
+                      <?php
+                        if($course_registration->created_at != null)
+                          $schedule_time = \Carbon\Carbon::parse($course_registration->created_at)->setTimezone(Auth::user()->timezone);
+                        else
+                          $schedule_time = null;
+                      ?>
+                      <table>
+                        <tr style="vertical-align:baseline;">
+                          <td width="35"><b>Day</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>
+                            @if($schedule_time)
+                              {{ $schedule_time->isoFormat('dddd') }}
+                            @else
+                              <i class="text-muted">Not Available</i>
+                            @endif
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:baseline;">
+                          <td width="35"><b>Date</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>
+                            @if($schedule_time)
+                              {{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}
+                            @else
+                              <i class="text-muted">Not Available</i>
+                            @endif
+                          </td>
+                        </tr>
+                      </table>
+                    </p>
+                    <hr>
+                    <strong><i class="fa fa-file-video-o margin-r-5"></i> Placement Test</strong>
+                    <p>
+                      <?php
+                        if($course_registration->placement_test->submitted_at != null)
+                          $submitted_at = \Carbon\Carbon::parse($course_registration->placement_test->submitted_at)->setTimezone(Auth::user()->timezone);
+                        else
+                          $submitted_at = null;
+                      ?>
+                      <table>
+                        <tr style="vertical-align:baseline;">
+                          <td width="35"><b>Day</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>
+                            @if($submitted_at)
+                              {{ $submitted_at->isoFormat('dddd') }}
+                            @else
+                              <i class="text-muted">Not Available</i>
+                            @endif
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:baseline;">
+                          <td width="35"><b>Date</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>
+                            @if($submitted_at)
+                              {{ $submitted_at->isoFormat('MMMM Do YYYY, hh:mm A') }}
+                            @else
+                              <i class="text-muted">Not Available</i>
+                            @endif
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:baseline;">
+                          <td width="35"><b>Link</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>
+                            @if($course_registration->placement_test->path)
+                              <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $course_registration->placement_test->path }}">Link</a>
+                            @else
+                              <i class="text-muted">Not Available</i>
+                            @endif
+                          </td>
+                        </tr>
+                      </table>
+                    </p>
+                  </div>
+                  <!-- /.box-body -->
                 </div>
+                <!-- /.box -->
               </div>
               <div class="col-md-9">
                 <div class="box box-primary">
                   <div class="box-header">
-                    <h3 class="box-title"><b>Schedules</b></h3>
+                    <h3 class="box-title"><b>Decide</b></h3>
                     <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse" aria-label="Minimize"><i class="fa fa-minus"></i></button>
                     </div>
                   </div>
                   <div class="box-body">
-                    @if($course_registration->session_registrations)
-                      <table class="table table-bordered">
-                        <tr>
-                          <th style="width:2%;" class="text-right">#</th>
-                          <th>Title</th>
-                          <th>Time</th>
-                          <th style="width:5%;">Link</th>
-                        </tr>
-                        <?php
-                          $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
-                        ?>
-                        @foreach($course_registration->session_registrations as $i => $dt)
-                          <tr>
-                            <td class="text-right">{{ $i + 1 }}</td>
-                            <td>
-                              <a href="#" data-toggle="modal" data-target="#Session{{$dt->id}}" {{-- class="btn btn-s btn-primary" --}}>
-                                {{ $dt->session->title }}
-                              </a>
-                            </td>
-                            <td>
-                              <?php
-                                $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                $schedule_time_end_form = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
-                                $schedule_time_end_form->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
-                              ?>
-                              @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
-                              @else
-                                {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
-                              @endif
-                            </td>
-                            <td class="text-center">
-                              @if($schedule_now <= $schedule_time_end)
-                                @if($dt->session->link_zoom)
-                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a>
-                                @else
-                                  <a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a>
-                                @endif
-                              @else
-                                @if($dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form)
-                                  {{-- Tambahkan routing di sini untuk mengisi formulir rating setelah selesai per satu sesi. --}}
-                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('form_responses.create', [$dt->id]) }}">Form</a>
-                                @else
-                                  <i class="text-muted">-</i>
-                                @endif
-                              @endif
-                            </td>
-                          </tr>
-                          <div class="modal fade" id="Session{{$dt->id}}">
-                            <div class="modal-dialog">
-                              <div class="modal-content">
-                                <div class="box box-primary">
-                                  <div class="box-body box-profile">
-                                    <h3 class="profile-username text-center"><b>{{ $dt->session->title }}</b></h3>
-                                    <p class="text-muted text-center">
-                                      Scheduled
-                                      @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                        today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
-                                      @else
-                                        on {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
-                                      @endif
-                                    </p>
-                                    <ul class="list-group list-group-unbordered">
-                                      <li class="list-group-item">
-                                        {{ $dt->session->description }}
-                                      </li>
-                                    </ul>
-                                    <button onclick="document.getElementById('Session{{$dt->id}}').className = 'modal fade'; document.getElementById('Session{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
-                                  </div>
-                                  <!-- /.box-body -->
-                                </div>
-                                <!-- /.box -->
+                    <form role="form" method="post" action="{{ route('placement_tests.update', [$course_registration->id]) }}" enctype="multipart/form-data">
+                      @csrf
+                      @method('PUT')
+                      {{ session(['crid' => $course_registration->id]) }}
+                      <input type="hidden" id="crid" name="crid" value="{{ $course_registration->id }}">
+                      <div class="box-body">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="col-md-12">
+                              <div class="form-group @error('status') has-error @enderror">
+                                <label for="status">Test Result</label>
+                                <select id="status" name="status" type="text" class="@error('status') is-invalid @enderror form-control" onChange="if(document.getElementById('status').value == 'Passed') {document.getElementById('old_proficiency_div').className = 'form-group'; document.getElementById('indonesian_language_proficiency_div').className = 'form-group';} else {document.getElementById('old_proficiency_div').className = 'form-group hidden'; document.getElementById('indonesian_language_proficiency_div').className = 'form-group hidden';}">
+                                  <option selected="selected" value="">-- Enter Test Result --</option>
+                                  <option value="Passed">Passed</option>
+                                  <option value="Not Passed">Not Passed</option>
+                                </select>
+                                @error('status')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
                               </div>
-                              <!-- /.modal-content -->
                             </div>
-                            <!-- /.modal-dialog -->
                           </div>
-                        @endforeach
-                      </table>
-                    @else
-                      <div class="text-center">No data available.</div>
-                    @endif
+                          <div class="col-md-6">
+                            <div class="col-md-12">
+                              <div id="old_proficiency_div" class="form-group hidden @error('old_proficiency') has-error @enderror">
+                                <label for="old_proficiency">Old Proficiency Level (Student self-assessment)</label>
+                                <input id="old_proficiency" name="old_proficiency" type="text" class="@error('old_proficiency') is-invalid @enderror form-control" disabled value="{{ $course_registration->student->indonesian_language_proficiency }}">
+                                @error('old_proficiency')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="col-md-12">
+                              <div id="indonesian_language_proficiency_div" class="form-group hidden @error('indonesian_language_proficiency') has-error @enderror">
+                                <label for="indonesian_language_proficiency">New Proficiency Level</label>
+                                <select id="indonesian_language_proficiency" name="indonesian_language_proficiency" type="text" class="@error('indonesian_language_proficiency') is-invalid @enderror form-control">
+                                  <option selected="selected" value="">-- Enter New Proficiency Level --</option>
+                                  @foreach($course_levels as $dt)
+                                    <option value="{{ $dt->id }}">{{ $dt->name }}</option>
+                                  @endforeach
+                                </select>
+                                @error('indonesian_language_proficiency')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="box-footer">
+                        <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(document.getElementById('video_link').value == '') { alert('The video link cannot be empty.'); return false; } if( confirm('Are you sure to submit this link: ' + document.getElementById('video_link').value + '?') ) return true; else return false;">
+                          Submit
+                        </button>
+                      </div>
+                    </form>
                   </div>
-                </div>
-                <div class="box box-primary">
-                  <div class="box-header">
-                    <h3 class="box-title"><b>Attendance Information</b></h3>
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    </div>
-                  </div>
-                  <div class="box-body">
-                    @if($course_registration->session_registrations)
-                      <table class="table table-bordered">
-                        <tr>
-                          <th style="width:2%;" class="text-right">#</th>
-                          <th>Title</th>
-                          <th style="width:20%;">Attendance</th>
-                        </tr>
-                        @foreach($course_registration->session_registrations as $i => $dt)
-                          <tr>
-                            <td class="text-right">{{ $i + 1 }}</td>
-                            <td>{{ $dt->session->title }}</td>
-                            <td>
-                              @if($dt->status == 'Not Assigned')
-                                <?php
-                                  $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
-                                ?>
-                                @if(now() < $schedule_time_begin)
-                                  <label class="label bg-gray">Upcoming</label>
-                                @elseif(now() < $schedule_time_end)
-                                  <label class="label bg-yellow">Ongoing</label>
-                                @else
-                                  <label class="label bg-blue">Attendance Check</label>
-                                @endif
-                              @elseif($dt->status == 'Not Present')
-                                <label class="label bg-red">Not Present</label>
-                              @elseif($dt->status == 'Should Submit Form')
-                                <label class="label bg-purple">Should Submit Form</label>
-                              @elseif($dt->status == 'Present')
-                                <label class="label bg-green">Present</label>
-                              @endif
-                            </td>
-                          </tr>
-                        @endforeach
-                      </table>
-                    @else
-                      <div class="text-center">No data available.</div>
-                    @endif
-                  </div>
+                  <!-- /.box-body -->
                 </div>
               </div>
             </div>
