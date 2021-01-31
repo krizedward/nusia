@@ -83,7 +83,7 @@
                           </dt>
                           <dd>
                             Click on each
-                            <a href="#" data-toggle="modal" data-target="#popuptutorial" {{-- class="btn btn-s btn-primary" --}}>
+                            <a href="#" data-toggle="modal" data-target="#popuptutorial{{ $i }}" {{-- class="btn btn-s btn-primary" --}}>
                               blue-colored text
                             </a>
                             to display a pop-up describing more about the course discounts!<br />
@@ -95,7 +95,7 @@
                         --}}
                       </div>
                     </div>
-                    <div class="modal fade" id="popuptutorial">
+                    <div class="modal fade" id="popuptutorial{{ $i }}">
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="box box-primary">
@@ -108,7 +108,7 @@
                                   Click on each blue-colored text to display a pop-up describing more about the course discounts!
                                 </li>
                               </ul>
-                              <button onclick="document.getElementById('popuptutorial').className = 'modal fade'; document.getElementById('popuptutorial').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open'); return false;" class="btn btn-s btn-default" style="width:100%;">Close</button>
+                              <button onclick="document.getElementById('popuptutorial{{ $i }}').className = 'modal fade'; document.getElementById('popuptutorial{{ $i }}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open'); return false;" class="btn btn-s btn-default" style="width:100%;">Close</button>
                             </div>
                             <!-- /.box-body -->
                           </div>
