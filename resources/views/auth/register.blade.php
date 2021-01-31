@@ -66,7 +66,7 @@
 @section('content')
   <div class="register-box">
     <div class="register-logo">
-      <a href="{{url('/')}}"><b>Nusantara</b> Indonesia</a>
+      <a href="https://nusia.id/"><b>Nusantara</b> Indonesia</a>
     </div>
     <div class="register-box-body">
       <p class="login-box-msg">Registration Form</p>

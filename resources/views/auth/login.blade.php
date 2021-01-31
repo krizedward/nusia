@@ -110,7 +110,7 @@
 @section('content')
     <div class="login-box">
         <div class="login-logo">
-            <a href="{{url('/')}}"><b>Nusantara</b> Indonesia</a>
+            <a href="https://nusia.id/"><b>Nusantara</b> Indonesia</a>
         </div>
         <!-- /.login-logo -->
         <div class="login-box-body">
