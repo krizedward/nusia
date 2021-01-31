@@ -984,8 +984,16 @@ class HomeController extends Controller
             // sehingga Student dapat mengunggah hasil placement test.
             $has_uploaded_for_placement_test = 0;
         } else if($course_registration->placement_test->status == 'Not Passed') {
-            // Jika hasil test sudah diunggah tetapi masih 'Not Passed', tampilkan halaman "waiting".
-            $has_uploaded_for_placement_test = 1;
+            // Jika hasil test masih 'Not Passed' (entah sudah diunggah atau belum).
+            if($course_registration->placement_test->path == null) {
+                // Jika hasil test BELUM/TIDAK DIUNGGAH,
+                // atau ditolak oleh Lead Instructor,
+                // Student dapat mengunggah hasil placement test [berikutnya].
+                $has_uploaded_for_placement_test = 0;
+            } else {
+                // Jika hasil test sudah diunggah tetapi masih 'Not Passed', tampilkan halaman "waiting".
+                $has_uploaded_for_placement_test = 1;
+            }
         } else if($course_registration->placement_test->status == 'Passed') {
             // Jika hasil test sudah diunggah dan 'Passed', redirect ke langkah berikutnya.
             return redirect()->route('student.complete_course_registrations', [$course_registration->id]);
@@ -1020,12 +1028,26 @@ class HomeController extends Controller
         }
 
         // Untuk valid link.
-        PlacementTest::create([
-            'course_registration_id' => $course_registration_id,
-            'path' => $request->video_link,
-            'status' => 'Not Passed',
-            'submitted_at' => now(),
-        ]);
+
+        $course_registration = CourseRegistration::where('id', $course_registration_id)->get()->first();
+
+        // Jika sebelumnya model PlacementTest belum/tidak dibuat dalam course_registration ini.
+        if($course_registration->placement_test == null) {
+            // Buat model baru dalam course_registration ini.
+            PlacementTest::create([
+                'course_registration_id' => $course_registration_id,
+                'path' => $request->video_link,
+                'status' => 'Not Passed',
+                'submitted_at' => now(),
+            ]);
+        } else {
+            // Update model yang sudah ada dalam course_registration ini.
+            $course_registration->placement_test->update([
+                'path' => $request->video_link,
+                'submitted_at' => now(),
+                'result_updated_at' => null,
+            ]);
+        }
 
         return redirect()->route('student.complete_placement_tests', [$course_registration_id]);
     }
@@ -1035,6 +1057,7 @@ class HomeController extends Controller
         $course_registration = CourseRegistration::where('id', $course_registration_id)->get()->first();
 
         // ...
+        dd('Passed');
     }
 
     public function update_course_registrations(Request $request, $course_registration_id) {

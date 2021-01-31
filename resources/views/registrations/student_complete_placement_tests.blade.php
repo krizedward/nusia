@@ -63,6 +63,7 @@
         <form role="form" method="post" action="@if($has_uploaded_for_placement_test) # @else {{ route('student.store_placement_tests', [$course_registration->id]) }} @endif" enctype="multipart/form-data">
           @if($has_uploaded_for_placement_test == 0)
             @csrf
+            @method('PUT')
           @endif
           <div class="box-body">
             <div class="row">
