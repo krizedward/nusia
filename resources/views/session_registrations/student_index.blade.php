@@ -94,7 +94,6 @@
                       @if($has_a_schedule)
                         <table class="table table-bordered">
                           <tr>
-                            <th style="width:2%;" class="text-right">#</th>
                             <th>Course / Session</th>
                             <th>Time</th>
                             <th style="width:5%;">Link</th>
@@ -102,7 +101,6 @@
                           @foreach($session_registrations as $i => $dt)
                             @if($schedule_now <= $schedule_times_end[$i])
                               <tr>
-                                <td class="text-right">{{ $i + 1 }}</td>
                                 <td>{{ $dt->session->course->title }} / {{ $dt->session->title }}</td>
                                 <td>
                                   @if($schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
@@ -177,7 +175,6 @@
                     @if(Auth::user()->student->course_registrations->toArray() != 0)
                       <table class="table table-bordered">
                         <tr>
-                          <th style="width:2%;" class="text-right">#</th>
                           <th>Course</th>
                           <th>Type</th>
                           <th style="width:5%;">Detail</th-->
@@ -185,7 +182,6 @@
                         @foreach(Auth::user()->student->course_registrations as $i => $dt)
                           @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
                             <tr>
-                              <td class="text-right">{{ $i + 1 }}</td>
                               <td>{{ $dt->course->title }}</td>
                               <td>{{ $dt->course->course_package->material_type->name }}/{{ $dt->course->course_package->course_type->name }}</td>
                               <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
@@ -222,7 +218,6 @@
                     @if($count > 0)
                       <table class="table table-bordered">
                         <tr>
-                          <th style="width:2%;" class="text-right">#</th>
                           <th>Course</th>
                           <th>Type</th>
                           <th style="width:5%;">Detail</th-->
@@ -231,7 +226,6 @@
                           @if($dt->course->course_package->material_type->name == $type)
                             @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
                               <tr>
-                                <td class="text-right">{{ $i + 1 }}</td>
                                 <td>{{ $dt->course->title }}</td>
                                 <td>{{ $dt->course->course_package->course_type->name }}</td>
                                 <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
@@ -269,7 +263,6 @@
                     @if($count > 0)
                       <table class="table table-bordered">
                         <tr>
-                          <th style="width:2%;" class="text-right">#</th>
                           <th>Course</th>
                           <th>Type</th>
                           <th style="width:5%;">Detail</th-->
@@ -278,7 +271,6 @@
                           @if($dt->course->course_package->material_type->name == $type)
                             @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
                               <tr>
-                                <td class="text-right">{{ $i + 1 }}</td>
                                 <td>{{ $dt->course->title }}</td>
                                 <td>{{ $dt->course->course_package->course_type->name }}</td>
                                 <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
@@ -316,7 +308,6 @@
                     @if($count > 0)
                       <table class="table table-bordered">
                         <tr>
-                          <th style="width:2%;" class="text-right">#</th>
                           <th>Course</th>
                           <th>Type</th>
                           <th style="width:5%;">Detail</th-->
@@ -325,7 +316,6 @@
                           @if($dt->course->course_package->material_type->name == $type)
                             @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
                               <tr>
-                                <td class="text-right">{{ $i + 1 }}</td>
                                 <td>{{ $dt->course->title }}</td>
                                 <td>{{ $dt->course->course_package->course_type->name }}</td>
                                 <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
