@@ -725,10 +725,10 @@ class HomeController extends Controller
                 ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
                 ->get();
             foreach($registered_early_classes as $rec)
-              if($rec->session_registrations->toArray() == null)
-                array_push($not_completed_registrations, $rec->id);
+                if($rec->session_registrations->toArray() == null)
+                    array_push($not_completed_registrations, $rec->id);
             foreach($not_assigned_registrations as $nar)
-              array_push($not_completed_registrations, $nar->id);
+                array_push($not_completed_registrations, $nar->id);
             $all_not_completely_registered_courses = CourseRegistration
                 ::whereIn('course_registrations.id', $not_completed_registrations)
                 ->get();
