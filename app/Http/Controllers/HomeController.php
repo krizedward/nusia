@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SessionRegistration;
 use Illuminate\Http\Request;
 
 use App\User;
@@ -21,6 +20,7 @@ use App\Models\PlacementTest;
 use App\Models\Metadata;
 use App\Models\Schedule;
 use App\Models\Session;
+use App\Models\SessionRegistration;
 use App\Models\Student;
 use Str;
 use Illuminate\Support\Facades\Validator;
@@ -684,11 +684,11 @@ class HomeController extends Controller
                 ::join('courses', 'course_registrations.course_id', 'courses.id')
                 ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
-                ->where('course_packages.title', 'LIKE', '%Early Registration%')
+                ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
                 ->where('course_packages.title', 'NOT LIKE', '%Free%')
                 ->where('course_packages.title', 'NOT LIKE', '%Test%')
                 ->where('course_packages.title', 'NOT LIKE', '%Trial%')
-                ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+                ->where('course_packages.title', 'LIKE', '%Early Registration%')
                 ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
                 ->get();
 
@@ -712,7 +712,8 @@ class HomeController extends Controller
 
             // Menyimpan daftar course_registrations yang bersifat "Not Registered".
             // Hal ini dilakukan untuk mengetahui daftar course yang berstatus masih dalam proses pendaftaran.
-            $all_not_completely_registered_courses = CourseRegistration
+            $not_completed_registrations = [];
+            $not_assigned_registrations = CourseRegistration
                 ::join('courses', 'course_registrations.course_id', 'courses.id')
                 ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
@@ -722,6 +723,14 @@ class HomeController extends Controller
                 ->where('course_packages.title', 'NOT LIKE', '%Early Registration%')
                 ->where('course_packages.title', 'LIKE', '%Not Assigned%')
                 ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
+                ->get();
+            foreach($registered_early_classes as $rec)
+              if($rec->session_registrations->toArray() == null)
+                array_push($not_completed_registrations, $rec->id);
+            foreach($not_assigned_registrations as $nar)
+              array_push($not_completed_registrations, $nar->id);
+            $all_not_completely_registered_courses = CourseRegistration
+                ::whereIn('course_registrations.id', $not_completed_registrations)
                 ->get();
         }
 
