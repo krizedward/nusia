@@ -172,14 +172,14 @@
                     </div>
                   </div>
                   <div class="box-body">
-                    @if(Auth::user()->student->course_registrations->toArray() != 0)
+                    @if($course_registrations->toArray() != 0)
                       <table class="table table-bordered">
                         <tr>
                           <th>Course</th>
                           <th>Type</th>
                           <th style="width:5%;">Detail</th-->
                         </tr>
-                        @foreach(Auth::user()->student->course_registrations as $i => $dt)
+                        @foreach($course_registrations as $i => $dt)
                           @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
                             <tr>
                               <td>{{ $dt->course->title }}</td>
@@ -200,7 +200,7 @@
                   <?php
                     $type = 'General Indonesian Language';
                     $count = 0;
-                    foreach(Auth::user()->student->course_registrations as $dt) {
+                    foreach($course_registrations as $dt) {
                       if($dt->course->course_package->material_type->name == $type) {
                         if(strpos($dt->course->course_package->title, 'Not Assigned') === false) {
                           $count++;
@@ -222,7 +222,7 @@
                           <th>Type</th>
                           <th style="width:5%;">Detail</th-->
                         </tr>
-                        @foreach(Auth::user()->student->course_registrations as $i => $dt)
+                        @foreach($course_registrations as $i => $dt)
                           @if($dt->course->course_package->material_type->name == $type)
                             @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
                               <tr>
@@ -245,7 +245,7 @@
                   <?php
                     $type = 'Language Partners';
                     $count = 0;
-                    foreach(Auth::user()->student->course_registrations as $dt) {
+                    foreach($course_registrations as $dt) {
                       if($dt->course->course_package->material_type->name == $type) {
                         if(strpos($dt->course->course_package->title, 'Not Assigned') === false) {
                           $count++;
@@ -267,7 +267,7 @@
                           <th>Type</th>
                           <th style="width:5%;">Detail</th-->
                         </tr>
-                        @foreach(Auth::user()->student->course_registrations as $i => $dt)
+                        @foreach($course_registrations as $i => $dt)
                           @if($dt->course->course_package->material_type->name == $type)
                             @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
                               <tr>
@@ -290,7 +290,7 @@
                   <?php
                     $type = 'Cultural Classes';
                     $count = 0;
-                    foreach(Auth::user()->student->course_registrations as $dt) {
+                    foreach($course_registrations as $dt) {
                       if($dt->course->course_package->material_type->name == $type) {
                         if(strpos($dt->course->course_package->title, 'Not Assigned') === false) {
                           $count++;
@@ -312,7 +312,7 @@
                           <th>Type</th>
                           <th style="width:5%;">Detail</th-->
                         </tr>
-                        @foreach(Auth::user()->student->course_registrations as $i => $dt)
+                        @foreach($course_registrations as $i => $dt)
                           @if($dt->course->course_package->material_type->name == $type)
                             @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
                               <tr>

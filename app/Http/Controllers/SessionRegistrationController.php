@@ -139,6 +139,38 @@ class SessionRegistrationController extends Controller
             return view('session_registrations.student_index',compact('data', 'timeStudent', 'is_local_access'));
             */
 
+            // Menyimpan keseluruhan ID course yang sudah terdaftar (untuk Student ybs).
+            $completed_registrations = [];
+
+            // Melakukan seleksi daftar early registrations
+            // (karena ada Early Registration yang belum/tidak selesai pendaftarannya
+            // karena belum/tidak menentukan jadwal [dan instruktur]).
+            $early_registrations = CourseRegistration
+                ::join('courses', 'course_registrations.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+                ->where('course_packages.title', 'LIKE', '%Early Registration%')
+                ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
+                ->get();
+            foreach($early_registrations as $er)
+                if($er->session_registrations->toArray() != null)
+                    array_push($completed_registrations, $er->id);
+
+            $other_registrations = CourseRegistration
+                ::join('courses', 'course_registrations.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+                ->where('course_packages.title', 'NOT LIKE', '%Early Registration%')
+                ->pluck('course_registrations.id');
+            foreach($other_registrations as $or)
+                // Nilai dalam array bersifat otomatis distinct()
+                // karena ada seleksi penggunaan kata "Early Registration" dalam course_package.
+                // Sehingga, tidak perlu digunakan PHP function in_array().
+                array_push($completed_registrations, $or->id);
+
+            // Bagian ini untuk mengambil daftar sesi yang diikuti oleh Student.
             $course_registrations = Auth::user()->student->course_registrations->pluck('id');
             $session_registrations = SessionRegistration
                 ::join('sessions', 'session_registrations.session_id', 'sessions.id')
@@ -150,8 +182,15 @@ class SessionRegistrationController extends Controller
                 ->orderBy('schedules.schedule_time')
                 ->select('session_registrations.id', 'session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at', 'session_registrations.deleted_at')
                 ->get();
-            // di atas sudah ditambahkan seleksi untuk TIDAK MENAMPILKAN YANG "Not Assigned Course".
-            return view('session_registrations.student_index', compact('session_registrations'));
+
+            // Bagian ini untuk mengambil daftar course yang diikuti oleh Student.
+            $course_registrations = CourseRegistration
+                ::whereIn('id', $completed_registrations)
+                ->get();
+
+            return view('session_registrations.student_index', compact(
+                'session_registrations', 'course_registrations',
+            ));
         } else {
             return redirect()->route('home');
         }
