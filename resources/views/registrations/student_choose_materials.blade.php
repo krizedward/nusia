@@ -380,7 +380,7 @@
                     <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-primary" href="{{ route('student.complete_placement_tests', [$dt->id]) }}">
                       Link
                     </a>
-                  @elseif($dt->placement_test->status == 'Passed' && strpos($dt->course->course_package->title, 'Not Assigned') !== false)
+                  @elseif($dt->placement_test->status == 'Passed' && $dt->session_registrations->toArray() == null)
                     <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-primary" href="{{ route('student.complete_course_registrations', [$dt->id]) }}">
                       Link
                     </a>
