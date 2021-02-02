@@ -81,7 +81,7 @@
             <i class="fa fa-book"></i> <span>Complete Placement Test</span>
           </a>
         </li>
-      @elseif(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && strpos(Auth::user()->student->course_registrations->first()->course->course_package->title, 'Early Registration') === false)
+      @elseif(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && Auth::user()->student->course_registrations->first()->session_registrations->toArray() == null)
         <li class="{{ set_active(['student.complete_course_registrations']) }}">
           <a href="{{ route('student.complete_course_registrations', [Auth::user()->student->course_registrations->first()->id])}}">
             <i class="fa fa-book"></i> <span>Complete Course Registration</span>

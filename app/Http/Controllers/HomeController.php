@@ -178,7 +178,7 @@ class HomeController extends Controller
                 return redirect()->route('student.complete_payment_information', [Auth::user()->student->course_registrations->first()->id]);
             } else if(Auth::user()->student->course_registrations->first()->placement_test == null || Auth::user()->student->course_registrations->first()->placement_test->status == 'Not Passed') {
                 return redirect()->route('student.complete_placement_tests', [Auth::user()->student->course_registrations->first()->id]);
-            } else if(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && strpos(Auth::user()->student->course_registrations->first()->course->course_package->title, 'Early Registration') === false) {
+            } else if(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && Auth::user()->student->course_registrations->first()->session_registrations->toArray() == null) {
                 return redirect()->route('student.complete_course_registrations', [Auth::user()->student->course_registrations->first()->id]);
             }
 
@@ -506,7 +506,7 @@ class HomeController extends Controller
             } else if(Auth::user()->student->course_registrations->first()->placement_test == null || Auth::user()->student->course_registrations->first()->placement_test->status == 'Not Passed') {
                 // Student belum mengunggah hasil placement test.
                 return redirect()->route('student.complete_placement_tests', [Auth::user()->student->course_registrations->first()->id]);
-            } else if(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && strpos(Auth::user()->student->course_registrations->first()->course->course_package->title, 'Early Registration') === false) {
+            } else if(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && Auth::user()->student->course_registrations->first()->session_registrations->toArray() == null) {
                 // Student sudah mengikuti placement test, tetapi belum memilih jadwal.
                 return redirect()->route('student.complete_course_registrations', [Auth::user()->student->course_registrations->first()->id]);
             }
