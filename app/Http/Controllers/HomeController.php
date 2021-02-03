@@ -13,6 +13,7 @@ use App\Models\CoursePayment;
 use App\Models\CourseRegistration;
 use App\Models\CourseType;
 use App\Models\Instructor;
+use App\Models\InstructorSchedule;
 use App\Models\MaterialPublic;
 use App\Models\MaterialSession;
 use App\Models\MaterialType;
@@ -1065,8 +1066,59 @@ class HomeController extends Controller
         // Ambil informasi course_registration Student.
         $course_registration = CourseRegistration::where('id', $course_registration_id)->get()->first();
 
-        // ...
-        dd('Passed');
+        // Periksa apakah Student mendaftar dalam kelas "PRIVATE" (atau tidak).
+        // Jika ya, variabel bernilai true, selain itu maka false.
+        $course_registration_is_private = ( strpos(
+            strtolower($course_registration->course->course_package->course_type->name),
+            'private'
+        ) !== false );
+
+        // Jika Student mendaftar dalam kelas "PRIVATE",
+        // maka diperlukan untuk menampilkan daftar instruktur yang mengajar.
+        if($course_registration_is_private) {
+            // Hubungkan dengan instruktur yang memiliki jadwal dalam materi yang sama.
+            // Walaupun instruktur sedang busy semua jadwalnya, tetap ditampilkan,
+            // dengan tujuan agar terlihat kepada Student daftar semua instruktur NUSIA yang tersedia,
+            // sehingga tidak berkesan bahwa jumlah instruktur adalah sedikit.
+            // Model InstructorSchedule digunakan untuk menghindari querying
+            // terhadap pendaftaran course Student, karena memang terdapat dalam course package yang sama,
+            // seperti dapat dilihat dalam seleksi where() pada kode di bawah ini.
+            $instructors = InstructorSchedule
+                ::join('instructors', 'instructor_schedules.instructor_id', 'instructors.id')
+                ->join('schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+                ->join('sessions', 'sessions.schedule_id', 'schedules.id')
+                ->join('courses', 'sessions.course_id', 'courses.id')
+                ->where('courses.course_package_id', $course_registration->course->course_package_id)
+                ->select('instructors.id', 'instructors.code', 'instructors.user_id', 'instructors.interest', 'instructors.working_experience', 'instructors.created_at', 'instructors.updated_at', 'instructors.deleted_at')
+                ->distinct()->get();
+        } else {
+            // Jika Student tidak mendaftar dalam kelas "PRIVATE",
+            // maka tidak diperlukan daftar instruktur yang mengajar,
+            // karena memang tidak dapat dilihat oleh Student.
+            $instructors = null;
+        }
+
+        // Hubungkan dengan daftar course yang tersedia,
+        // untuk course_package dan instruktur yang siap mengajar
+        // (entah data instruktur ditampilkan atau tidak).
+        // Walaupun course tersebut sudah penuh kuota pendaftarannya, tetap ditampilkan,
+        // dengan tujuan agar terlihat kepada Student daftar semua course NUSIA yang tersedia (entah available atau already full),
+        // sehingga tidak berkesan bahwa jumlah course yang tersedia adalah sedikit.
+        // Model InstructorSchedule digunakan untuk menghindari querying
+        // terhadap pendaftaran course Student, karena memang terdapat dalam course package yang sama,
+        // seperti dapat dilihat dalam seleksi where() pada kode di bawah ini.
+        $courses = InstructorSchedule
+            ::join('instructors', 'instructor_schedules.instructor_id', 'instructors.id')
+            ->join('schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+            ->join('sessions', 'sessions.schedule_id', 'schedules.id')
+            ->join('courses', 'sessions.course_id', 'courses.id')
+            ->where('courses.course_package_id', $course_registration->course->course_package_id)
+            ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at', 'courses.deleted_at')
+            ->distinct()->get();
+
+        return view('registrations.student_complete_course_registrations', compact(
+            'course_registration', 'course_registration_is_private', 'instructors', 'courses',
+        ));
     }
 
     public function update_course_registrations(Request $request, $course_registration_id) {
