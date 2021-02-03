@@ -102,7 +102,7 @@
       </li>
     @endif
 
-    @if(Auth::user()->roles == 'Student' && Auth::user()->citizenship != 'Not Available' && Auth::user()->student->course_registrations->toArray() != null && strpos(Auth::user()->student->course_registrations->first()->course->course_package->title, 'Early Registration') !== false)
+    @if(Auth::user()->roles == 'Student' && Auth::user()->citizenship != 'Not Available' && Auth::user()->student->course_registrations->toArray() != null && Auth::user()->student->course_registrations->first()->session_registrations->toArray() != null)
       <!-- Head_Navigasi -->
       <li class="header">COURSES</li>
       <li class="{{ set_active(['session_registrations.index', 'course_registrations.show_by_student', 'form_responses.create']) }}">
