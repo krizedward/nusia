@@ -132,7 +132,7 @@ class HomeController extends Controller
         if($this->is_instructor()) {
             $timeNusia = Carbon::now();
             $timeStudent = Carbon::now(Auth::user()->timezone);
-            $sessions = Session
+            /*$sessions = Session
                 ::join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->join('instructors', 'schedules.instructor_id_2', 'instructors.id')
                 ->join('users', 'instructors.user_id', 'users.id')
@@ -143,8 +143,19 @@ class HomeController extends Controller
                 })
                 ->where('schedules.schedule_time', '>=', now())
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at', 'schedules.instructor_id_2', 'users.image_profile')
+                ->get();*/
+            $sessions = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+                ->join('instructors', 'instructor_schedules.instructor_id', 'instructors.id')
+                ->join('users', 'instructors.user_id', 'users.id')
+                ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
+                ->where('schedules.schedule_time', '>=', now())
+                ->distinct()
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at', 'instructor_schedules.instructor_id')
                 ->get();
-            $sessions_order_by_schedule_time = Session
+
+            /*$sessions_order_by_schedule_time = Session
                 ::join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->join('instructors', 'schedules.instructor_id_2', 'instructors.id')
                 ->join('users', 'instructors.user_id', 'users.id')
@@ -157,16 +168,30 @@ class HomeController extends Controller
                 ->orderBy('schedules.schedule_time')
                 ->take(5)
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at', 'schedules.instructor_id_2', 'users.image_profile')
+                ->get();*/
+            $sessions_order_by_schedule_time = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+                ->join('instructors', 'instructor_schedules.instructor_id', 'instructors.id')
+                ->join('users', 'instructors.user_id', 'users.id')
+                ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
+                ->where('schedules.schedule_time', '>=', now())
+                ->distinct()
+                ->orderBy('schedules.schedule_time')
+                ->take(5)
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at', 'instructor_schedules.instructor_id')
                 ->get();
 
-            $sessions = Session
+            /*$sessions = Session
                 ::join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->where('schedules.instructor_id', Auth::user()->instructor->id)
                 ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id)
-                ->get();
+                ->get();*/
 
-            $is_local_access = config('database.connections.mysql.username') == 'root';
-            return view('dashboard.instructor_index', compact('sessions', 'sessions_order_by_schedule_time', 'timeNusia', 'timeStudent', 'sessions', 'is_local_access'));
+            //$is_local_access = config('database.connections.mysql.username') == 'root';
+            return view('dashboard.instructor_index', compact(
+                'sessions', 'sessions_order_by_schedule_time', 'timeNusia', 'timeStudent', 'sessions',
+            ));
         }
 
         if($this->is_student()) {
