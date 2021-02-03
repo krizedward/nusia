@@ -62,6 +62,7 @@
         'info'        : true,
         'autoWidth'   : false
       })
+      $('.example1').DataTable()
     })
   </script>
 @endpush
