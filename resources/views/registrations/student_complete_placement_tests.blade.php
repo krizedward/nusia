@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title','Placement Test')
+@section('title', 'Completing Placement Test')
 
 @include('layouts.css_and_js.form_advanced')
 

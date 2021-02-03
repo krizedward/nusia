@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title','Complete Payment Information')
+@section('title','Filling Payment Information')
 
 @include('layouts.css_and_js.form_advanced')
 

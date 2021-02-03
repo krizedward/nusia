@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title', 'New Course Registration')
+@section('title', 'Choosing Course Registrations')
 
 @include('layouts.css_and_js.table')
 
@@ -86,7 +86,7 @@
                             <a href="#" data-toggle="modal" data-target="#popuptutorial{{ $i }}" {{-- class="btn btn-s btn-primary" --}}>
                               blue-colored text
                             </a>
-                            to display a pop-up describing more about the course discounts!<br />
+                            to display a pop-up describing more information about the course discounts!<br />
                             <span style="color:#ff0000;">* Contact us if you encounter a problem.</span>
                           </dd>
                         </dl>
@@ -105,7 +105,7 @@
                               <ul class="list-group list-group-unbordered">
                                 <li class="list-group-item text-center">
                                   This is the sample text for this pop-up.<br />
-                                  Click on each blue-colored text to display a pop-up describing more about the course discounts!
+                                  Click on each blue-colored text to display a pop-up describing more information about the course discounts!
                                 </li>
                               </ul>
                               <button onclick="document.getElementById('popuptutorial{{ $i }}').className = 'modal fade'; document.getElementById('popuptutorial{{ $i }}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open'); return false;" class="btn btn-s btn-default" style="width:100%;">Close</button>
