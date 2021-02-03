@@ -153,8 +153,8 @@
     @if(Auth::user()->roles == 'Instructor' || Auth::user()->roles == 'Lead Instructor')
       <!-- Head_Navigasi -->
       <li class="header">COURSES</li>
-      <li class="{{ set_active(['sessions.index', 'course_registrations.index_by_course_id', 'profiles.show']) }}">
-        <a href="{{ route('sessions.index') }}">
+      <li class="{{ set_active(['instructors.index_course', 'instructors.show_course', 'course_registrations.index_by_course_id', 'profiles.show']) }}">
+        <a href="{{ route('instructors.index_course') }}">
           <i class="fa fa-calendar"></i> <span>Schedules</span>
         </a>
       </li>

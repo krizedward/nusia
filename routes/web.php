@@ -107,6 +107,10 @@ Route::group(['middleware'=>'auth'], function() {
         Route::put('/view/course/{course_registration_id}', 'CourseRegistrationController@update_by_student')->name('course_registrations.update_by_student'); // dilakukan pada view course_registrations.show
         //Route::delete('/view/course/{course_registration_id}', 'CourseRegistrationController@destroy_by_student')->name('course_registrations.destroy_by_student'); // dilakukan pada view course_registrations.show
 
+        // NEW ROUTING FOR LEAD INSTRUCTOR AND INSTRUCTOR: 3 Februari 2021 dan selanjutnya.
+        Route::get('/schedules/index', 'InstructorController@index_course')->name('instructors.index_course');
+        Route::get('/schedules/course/{course_id}', 'InstructorController@show_course')->name('instructors.show_course');
+
 	/*Route::get('/home', function() {
             return view('home');
 	})->name('home');*/

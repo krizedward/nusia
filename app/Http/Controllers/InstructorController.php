@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\User;
 
 use Str;
+use App\Models\Course;
 use App\Models\Instructor;
+use App\Models\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -69,6 +71,32 @@ class InstructorController extends Controller
 
         //$data = Instructor::all();
         //return view('users.instructors.index', compact('data'));
+    }
+
+    public function index_course()
+    {
+        if ($this->is_lead_instructor() || $this->is_instructor()) {
+            $courses = Course
+                ::join('sessions', 'courses.id', 'sessions.course_id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+                ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
+                //->where('instructor_schedules.status', 'Busy')
+                ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at')
+                ->distinct()
+                ->get();
+            $sessions = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+                ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
+                ->distinct()
+                ->orderBy('schedules.schedule_time')
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at')
+                ->get();
+            return view('instructors.instructor_index_course', compact(
+                'courses', 'sessions',
+            ));
+        } else return redirect()->route('home');
     }
 
     /**
@@ -343,6 +371,23 @@ class InstructorController extends Controller
             return view('instructors.admin_show',compact('instructor','id'));
         }
         return view('users.instructors.show', compact('instructor','id'));
+    }
+
+    public function show_course($course_id)
+    {
+        if ($this->is_lead_instructor() || $this->is_instructor()) {
+            $course = Course
+                ::join('sessions', 'sessions.course_id', 'courses.id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+                ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
+                ->where('courses.id', $course_id)
+                ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at', 'courses.deleted_at')
+                ->distinct()->get()->first();
+            return view('instructors.instructor_show_course', compact(
+                'course',
+            ));
+        } else return redirect()->route('sessions.index'); // for Lead Instructor and Instructor.
     }
 
     /**
