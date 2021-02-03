@@ -158,6 +158,7 @@
           <i class="fa fa-calendar"></i> <span>Schedules</span>
         </a>
       </li>
+      {{--
       <li class="{{ set_active('material_types.index') }}">
         <a href="{{ route('material_types.index') }}">
           <i class="fa fa-book"> </i><span> Materials</span>
@@ -169,6 +170,7 @@
       <li class="#">
         <a href="{{ route('home') }}"><i class="fa fa-book"> </i><span> Exams</span></a>
       </li>
+      --}}
 
       {{-- Menu Tambahan untuk Lead Instructor --}}
       @if(Auth::user()->roles == 'Lead Instructor')
