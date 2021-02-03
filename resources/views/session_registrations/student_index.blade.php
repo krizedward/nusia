@@ -177,7 +177,7 @@
                         <tr>
                           <th>Course</th>
                           <th>Type</th>
-                          <th style="width:5%;">Detail</th-->
+                          <th style="width:5%;">Detail</th>
                         </tr>
                         @foreach($course_registrations as $i => $dt)
                           @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
@@ -220,7 +220,7 @@
                         <tr>
                           <th>Course</th>
                           <th>Type</th>
-                          <th style="width:5%;">Detail</th-->
+                          <th style="width:5%;">Detail</th>
                         </tr>
                         @foreach($course_registrations as $i => $dt)
                           @if($dt->course->course_package->material_type->name == $type)
@@ -265,7 +265,7 @@
                         <tr>
                           <th>Course</th>
                           <th>Type</th>
-                          <th style="width:5%;">Detail</th-->
+                          <th style="width:5%;">Detail</th>
                         </tr>
                         @foreach($course_registrations as $i => $dt)
                           @if($dt->course->course_package->material_type->name == $type)
@@ -310,7 +310,7 @@
                         <tr>
                           <th>Course</th>
                           <th>Type</th>
-                          <th style="width:5%;">Detail</th-->
+                          <th style="width:5%;">Detail</th>
                         </tr>
                         @foreach($course_registrations as $i => $dt)
                           @if($dt->course->course_package->material_type->name == $type)
