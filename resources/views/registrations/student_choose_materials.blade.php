@@ -70,9 +70,11 @@
                           <dd>
                             {{ $mt->description }}<br />
                             <ul>
-                              @foreach($mt->material_type_values as $mtv)
-                                <li>{{ $mtv->value }}</li>
-                              @endforeach
+                              @if($mt->name == 'Language Partners')
+                                @foreach($mt->material_type_values as $mtv)
+                                  <li>{{ $mtv->value }}</li>
+                                @endforeach
+                              @endif
                             </ul>
                           </dd>
                         </dl>
@@ -213,7 +215,9 @@
                                             <div class="box-body box-profile">
                                               <h3 class="profile-username text-center"><b>{{ $cp->title }}</b></h3>
                                               <p class="text-muted text-center">
-                                                <label class="label label-success">$ {{ $cp->price - $cp->course_package_discounts->last()->price }} savings</label>
+                                                <!--span style="font-size:153%;">$ {{ $cp->price - $cp->course_package_discounts->last()->price }} savings</span-->
+                                                <!--label class="label label-success">$ {{ $cp->price - $cp->course_package_discounts->last()->price }} savings</label-->
+                                                <label class="label label-success" style="font-size:153%;">$ {{ $cp->price - $cp->course_package_discounts->last()->price }} savings</label>
                                               </p>
                                               <ul class="list-group list-group-unbordered">
                                                 <li class="list-group-item text-center">
@@ -288,12 +292,11 @@
                                       <div class="modal-content">
                                         <div class="box box-primary">
                                           <div class="box-body box-profile">
-                                            <h3 class="profile-username text-center"><b>{{ $ct->name }}</b></h3>
-                                            <p class="text-muted text-center">
-                                              <label class="label label-success">$ {{ $ct->course_packages->last()->price - $ct->course_packages->last()->course_package_discounts->last()->price }} savings</label>
-                                            </p>
+                                            <h3 class="profile-username text-center" style="font-size:235%;"><b>{{ $ct->name }}</b></h3>
+                                            {{--<p class="text-muted text-center">&nbsp;</p>--}}
                                             <ul class="list-group list-group-unbordered">
                                               <li class="list-group-item text-center">
+                                                <label class="label label-success" style="font-size:120%;">$ {{ $ct->course_packages->last()->price - $ct->course_packages->last()->course_package_discounts->last()->price }} savings</label><br />
                                                 <b style="font-size:153%;"><strike>${{ $ct->course_packages->last()->price }}</strike></b><br />
                                                 {{ $ct->course_packages->last()->course_package_discounts->last()->description }}<br />
                                                 <b style="font-size:135%;">Now is only ${{ $ct->course_packages->last()->course_package_discounts->last()->price }}/level</b><br />
