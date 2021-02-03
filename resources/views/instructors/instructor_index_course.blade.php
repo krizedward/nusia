@@ -56,7 +56,7 @@
         </div>
         <form>
           <div class="box-body">
-            <table id="example1" class="table no-margin">
+            <table class="table no-margin no-padding example1">
               <thead>
                 <tr>
                   <th>Class</th>
@@ -89,7 +89,7 @@
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
           <li class="active"><a href="#current_sessions" data-toggle="tab"><b>Current Sessions</b></a></li>
-          <li><a href="#your_courses" data-toggle="tab"><b>Your Courses</b></a></li>
+          <li><a href="#all_courses" data-toggle="tab"><b>All Courses</b></a></li>
         </ul>
         <div class="tab-content">
           <div class="active tab-pane" id="current_sessions">
@@ -150,33 +150,37 @@
                         }
                       ?>
                       @if($has_a_schedule)
-                        <table class="table table-bordered">
-                          <tr>
-                            <th>Course / Session</th>
-                            <th>Time</th>
-                            <th style="width:5%;">Link</th>
-                          </tr>
-                          @foreach($sessions as $i => $dt)
-                            @if($schedule_now <= $schedule_times_end[$i])
-                              <tr>
-                                <td>{{ $dt->course->title }} / {{ $dt->title }}</td>
-                                <td>
-                                  @if($schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                    Today, {{ $schedule_times_begin[$i]->isoFormat('hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
-                                  @else
-                                    {{ $schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
-                                  @endif
-                                </td>
-                                <td class="text-center">
-                                  @if($dt->link_zoom)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Link</a>
-                                  @else
-                                    <a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a>
-                                  @endif
-                                </td>
-                              </tr>
-                            @endif
-                          @endforeach
+                        <table class="table no-margin no-padding example1">
+                          <thead>
+                            <tr>
+                              <th>Course / Session</th>
+                              <th>Time</th>
+                              <th style="width:5%;">Link</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @foreach($sessions as $i => $dt)
+                              @if($schedule_now <= $schedule_times_end[$i])
+                                <tr>
+                                  <td>{{ $dt->course->title }} / {{ $dt->title }}</td>
+                                  <td>
+                                    @if($schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      Today, {{ $schedule_times_begin[$i]->isoFormat('hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
+                                    @else
+                                      {{ $schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
+                                    @endif
+                                  </td>
+                                  <td class="text-center">
+                                    @if($dt->link_zoom)
+                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Link</a>
+                                    @else
+                                      <a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a>
+                                    @endif
+                                  </td>
+                                </tr>
+                              @endif
+                            @endforeach
+                          </tbody>
                         </table>
                       @else
                         <div class="text-center">No data available.</div>
@@ -190,7 +194,7 @@
             </div>
           </div>
           <!-- /.tab-pane -->
-          <div class="tab-pane" id="your_courses">
+          <div class="tab-pane" id="all_courses">
             <div class="row">
               <div class="col-md-3">
                 <div class="box">
@@ -224,26 +228,30 @@
               <div class="col-md-9">
                 <div class="box box-warning">
                   <div class="box-header">
-                    <h3 class="box-title"><b>Your Courses</b></h3>
+                    <h3 class="box-title"><b>All Courses</b></h3>
                     <div class="box-tools pull-right">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                   </div>
                   <div class="box-body">
                     @if($courses->toArray() != 0)
-                      <table class="table table-bordered">
-                        <tr>
-                          <th>Course</th>
-                          <th>Type</th>
-                          <th style="width:5%;">Detail</th-->
-                        </tr>
-                        @foreach($courses as $i => $dt)
+                      <table class="table no-margin no-padding example1">
+                        <thead>
                           <tr>
-                            <td>{{ $dt->title }}</td>
-                            <td>{{ $dt->course_package->material_type->name }}/{{ $dt->course_package->course_type->name }}</td>
-                            <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('instructors.show_course', [$dt->id]) }}">Link</a></td>
+                            <th>Course</th>
+                            <th>Type</th>
+                            <th style="width:5%;">Detail</th>
                           </tr>
-                        @endforeach
+                        </thead>
+                        <tbody>
+                          @foreach($courses as $i => $dt)
+                            <tr>
+                              <td>{{ $dt->title }}</td>
+                              <td>{{ $dt->course_package->material_type->name }}/{{ $dt->course_package->course_type->name }}</td>
+                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('instructors.show_course', [$dt->id]) }}">Link</a></td>
+                            </tr>
+                          @endforeach
+                        </tbody>
                       </table>
                     @else
                       <div class="text-center">No data available.</div>
@@ -270,21 +278,25 @@
                   </div>
                   <div class="box-body">
                     @if($count > 0)
-                      <table class="table table-bordered">
-                        <tr>
-                          <th>Course</th>
-                          <th>Type</th>
-                          <th style="width:5%;">Detail</th-->
-                        </tr>
-                        @foreach($courses as $i => $dt)
-                          @if($dt->course_package->material_type->name == $type)
-                            <tr>
-                              <td>{{ $dt->title }}</td>
-                              <td>{{ $dt->course_package->course_type->name }}</td>
-                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('instructors.show_course', [$dt->id]) }}">Link</a></td>
-                            </tr>
-                          @endif
-                        @endforeach
+                      <table class="table no-margin no-padding example1">
+                        <thead>
+                          <tr>
+                            <th>Course</th>
+                            <th>Type</th>
+                            <th style="width:5%;">Detail</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($courses as $i => $dt)
+                            @if($dt->course_package->material_type->name == $type)
+                              <tr>
+                                <td>{{ $dt->title }}</td>
+                                <td>{{ $dt->course_package->course_type->name }}</td>
+                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('instructors.show_course', [$dt->id]) }}">Link</a></td>
+                              </tr>
+                            @endif
+                          @endforeach
+                        </tbody>
                       </table>
                     @else
                       <div class="text-center">No data available.</div>
@@ -311,21 +323,25 @@
                   </div>
                   <div class="box-body">
                     @if($count > 0)
-                      <table class="table table-bordered">
-                        <tr>
-                          <th>Course</th>
-                          <th>Type</th>
-                          <th style="width:5%;">Detail</th-->
-                        </tr>
-                        @foreach($courses as $i => $dt)
-                          @if($dt->course_package->material_type->name == $type)
-                            <tr>
-                              <td>{{ $dt->title }}</td>
-                              <td>{{ $dt->course_package->course_type->name }}</td>
-                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('instructors.show_course', [$dt->id]) }}">Link</a></td>
-                            </tr>
-                          @endif
-                        @endforeach
+                      <table class="table no-margin no-padding example1">
+                        <thead>
+                          <tr>
+                            <th>Course</th>
+                            <th>Type</th>
+                            <th style="width:5%;">Detail</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($courses as $i => $dt)
+                            @if($dt->course_package->material_type->name == $type)
+                              <tr>
+                                <td>{{ $dt->title }}</td>
+                                <td>{{ $dt->course_package->course_type->name }}</td>
+                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('instructors.show_course', [$dt->id]) }}">Link</a></td>
+                              </tr>
+                            @endif
+                          @endforeach
+                        </tbody>
                       </table>
                     @else
                       <div class="text-center">No data available.</div>
@@ -352,21 +368,25 @@
                   </div>
                   <div class="box-body">
                     @if($count > 0)
-                      <table class="table table-bordered">
-                        <tr>
-                          <th>Course</th>
-                          <th>Type</th>
-                          <th style="width:5%;">Detail</th-->
-                        </tr>
-                        @foreach($courses as $i => $dt)
-                          @if($dt->course_package->material_type->name == $type)
-                            <tr>
-                              <td>{{ $dt->title }}</td>
-                              <td>{{ $dt->course_package->course_type->name }}</td>
-                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('instructors.show_course', [$dt->id]) }}">Link</a></td>
-                            </tr>
-                          @endif
-                        @endforeach
+                      <table class="table no-margin no-padding example1">
+                        <thead>
+                          <tr>
+                            <th>Course</th>
+                            <th>Type</th>
+                            <th style="width:5%;">Detail</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($courses as $i => $dt)
+                            @if($dt->course_package->material_type->name == $type)
+                              <tr>
+                                <td>{{ $dt->title }}</td>
+                                <td>{{ $dt->course_package->course_type->name }}</td>
+                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('instructors.show_course', [$dt->id]) }}">Link</a></td>
+                              </tr>
+                            @endif
+                          @endforeach
+                        </tbody>
                       </table>
                     @else
                       <div class="text-center">No data available.</div>
