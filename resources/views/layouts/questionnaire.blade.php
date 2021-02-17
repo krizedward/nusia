@@ -277,8 +277,13 @@
             </div>
             <div class="col-md-12">
               <div class="form-group hidden @error('description_of_course_taken') has-error @enderror" id="description_of_course_taken_div">
-                <label for="description_of_course_taken">Your Learning Experiences</label>
-                <textarea id="description_of_course_taken" name="description_of_course_taken" class="@error('description_of_course_taken') is-invalid @enderror form-control" rows="5" placeholder="If you have studied the Indonesian language, briefly describe any courses you have taken! (write in the Indonesian language—if possible)">{{ old('description_of_course_taken') }}</textarea>
+                <label for="description_of_course_taken">
+                  Your Learning Experiences<br />
+                  <i>
+                    If you have studied the Indonesian language, briefly describe any courses you have taken! (write in the Indonesian language—if possible)
+                  </i>
+                </label>
+                <textarea id="description_of_course_taken" name="description_of_course_taken" class="@error('description_of_course_taken') is-invalid @enderror form-control" rows="5" placeholder="Enter Your Learning Experiences">{{ old('description_of_course_taken') }}</textarea>
                 @error('description_of_course_taken')
                   <p style="color:red">{{ $message }}</p>
                 @enderror
@@ -286,8 +291,13 @@
             </div>
             <div class="col-md-12">
               <div class="form-group @error('learning_objective') has-error @enderror" id="learning_objective_div">
-                <label for="learning_objective">Your Learning Objectives</label>
-                <textarea id="learning_objective" name="learning_objective" class="@error('learning_objective') is-invalid @enderror form-control" rows="5" placeholder="Why do you want to learn the Indonesian language? (Briefly describe your learning objectives in the Indonesian language—if possible!)">{{ old('learning_objective') }}</textarea>
+                <label for="learning_objective">
+                  Your Learning Objectives<br />
+                  <i>
+                    Why do you want to learn the Indonesian language? (Briefly describe your learning objectives in the Indonesian language—if possible!)
+                  </i>
+                </label>
+                <textarea id="learning_objective" name="learning_objective" class="@error('learning_objective') is-invalid @enderror form-control" rows="5" placeholder="Enter Your Learning Objectives">{{ old('learning_objective') }}</textarea>
                 @error('learning_objective')
                   <p style="color:red">{{ $message }}</p>
                 @enderror
