@@ -50,48 +50,6 @@ class AttendanceController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -103,7 +61,21 @@ class AttendanceController extends Controller
             $session_registrations = SessionRegistration::where('session_id', $session_id)->get();
             $session = Session::findOrFail($session_id);
 
-            return view('attendances.admin_edit', compact('session_registrations', 'session'));
+            return view('role_admin.attendances_edit', compact('session_registrations', 'session'));
+        } else if($this->is_lead_instructor()) {
+            $session_registrations = SessionRegistration::where('session_id', $session_id)->get();
+            if($session_registrations->count() == 0) {
+                return redirect()->route('session_registrations.index');
+            }
+            
+            $session = Session::findOrFail($session_id);
+            $schedule_time = Carbon::parse($session->schedule->schedule_time);
+            if(now() <= $schedule_time->add(80, 'minutes')) {
+                // tidak diperbolehkan mengakses link.
+                return redirect()->back();
+            }
+
+            return view('role_lead_instructor.attendances_edit', compact('session_registrations', 'session'));
         } else if($this->is_instructor()) {
             $session_registrations = SessionRegistration::where('session_id', $session_id)->get();
             if($session_registrations->count() == 0) {
@@ -117,7 +89,7 @@ class AttendanceController extends Controller
                 return redirect()->back();
             }
 
-            return view('attendances.instructor_edit', compact('session_registrations', 'session'));
+            return view('role_instructor.attendances_edit', compact('session_registrations', 'session'));
         } else {
             return redirect()->back();
         }
@@ -132,7 +104,7 @@ class AttendanceController extends Controller
      */
     public function update(Request $request, $session_id)
     {
-        if($this->is_admin() || $this->is_instructor()) {
+        if($this->is_admin() || $this->is_lead_instructor() || $this->is_instructor()) {
             foreach(Session::findOrFail($session_id)->session_registrations as $sr) {
                 $flag = 0;
                 foreach($request->all() as $key => $val) {
@@ -156,16 +128,5 @@ class AttendanceController extends Controller
         }
 
         return redirect()->route('attendances.edit', $session_id);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

@@ -49,14 +49,14 @@ class CourseCertificateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index() // TIDAK DIGUNAKAN
     {
         if($this->is_admin()) {
             $data = CourseCertificate::all();
-            return view('course_certificates.admin_index', compact('data'));
+            return view('role_admin.course_certificates_index', compact('data'));
         } else if($this->is_student()) {
             $data = CourseCertificate::all();
-            return view('courses.certificates.index', compact('data'));
+            return view('role_student.course_certificates_index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -67,10 +67,14 @@ class CourseCertificateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create() // TIDAK DIGUNAKAN
     {
-        if($this->is_admin() || $this->is_instructor()) {
-            return view('courses.certificates.create');
+        if($this->is_admin()) {
+            return view('role_admin.course_certificates_create');
+        } else if($this->is_lead_instructor()) {
+            return view('role_lead_instructor.course_certificates_create');
+        } else if($this->is_instructor()) {
+            return view('role_instructor.course_certificates_create');
         } else {
             // Tidak memiliki hak akses.
         }
@@ -82,7 +86,7 @@ class CourseCertificateController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request) // TIDAK DIGUNAKAN
     {
         $data = $request->all();
         $data = Validator::make($data, [
@@ -116,12 +120,12 @@ class CourseCertificateController extends Controller
             // Tidak memiliki hak akses.
         }
 
-        if($this->is_admin() || $this->is_instructor()) {
+        if($this->is_admin()) {
             $data = CourseCertificate::all();
-            return view('courses.certificates.index', compact('data'));
+            return view('role_admin.course_certificates_index', compact('data'));
         } else if($this->is_student()) {
             $data = CourseCertificate::all();
-            return view('courses.certificates.index', compact('data'));
+            return view('role_student.course_certificates_index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -133,7 +137,7 @@ class CourseCertificateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id) // TIDAK DIGUNAKAN
     {
         $data = CourseCertificate::findOrFail($id);
         if($data == null) {
@@ -141,10 +145,14 @@ class CourseCertificateController extends Controller
             // Return?
         }
 
-        if($this->is_admin() || $this->is_instructor()) {
-            return view('courses.certificates.show', compact('data'));
+        if($this->is_admin()) {
+            return view('role_admin.course_certificates_show', compact('data'));
+        } else if($this->is_lead_instructor()) {
+            return view('role_lead_instructor.course_certificates_show', compact('data'));
+        } else if($this->is_instructor()) {
+            return view('role_instructor.course_certificates_show', compact('data'));
         } else if($this->is_student()) {
-            return view('courses.certificates.show', compact('data'));
+            return view('role_student.course_certificates_show', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -156,7 +164,7 @@ class CourseCertificateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id) // TIDAK DIGUNAKAN
     {
         $data = CourseCertificate::findOrFail($id);
         if($data == null) {
@@ -164,8 +172,12 @@ class CourseCertificateController extends Controller
             // Return?
         }
 
-        if($this->is_admin() || $this->is_instructor()) {
-            return view('courses.certificates.edit', compact('data'));
+        if($this->is_admin()) {
+            return view('role_admin.course_certificates_edit', compact('data'));
+        } else if($this->is_lead_instructor()) {
+            return view('role_lead_instructor.course_certificates_edit', compact('data'));
+        } else if($this->is_instructor()) {
+            return view('role_instructor.course_certificates_edit', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -178,7 +190,7 @@ class CourseCertificateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id) // TIDAK DIGUNAKAN
     {
         $course_certificate = CourseCertificate::firstOrFail($id);
         if($course_certificate == null) {
@@ -213,10 +225,14 @@ class CourseCertificateController extends Controller
         }
 
         $data = $course_certificate;
-        if($this->is_admin() || $this->is_instructor()) {
-            return view('courses.certificates.show', compact('data'));
+        if($this->is_admin()) {
+            return view('role_admin.course_certificates_show', compact('data'));
+        } else if($this->is_lead_instructor()) {
+            return view('role_lead_instructor.course_certificates_show', compact('data'));
+        } else if($this->is_instructor()) {
+            return view('role_instructor.course_certificates_show', compact('data'));
         } else if($this->is_student()) {
-            return view('courses.certificates.show', compact('data'));
+            return view('role_student.course_certificates_show', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }
@@ -228,7 +244,7 @@ class CourseCertificateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id) // TIDAK DIGUNAKAN
     {
         $data = CourseCertificate::findOrFail($id);
         if($data == null) {
@@ -242,12 +258,12 @@ class CourseCertificateController extends Controller
             // Tidak memiliki hak akses.
         }
 
-        if($this->is_admin() || $this->is_instructor()) {
+        if($this->is_admin()) {
             $data = CourseCertificate::all();
-            return view('courses.certificates.index', compact('data'));
+            return view('role_admin.course_certificates_index', compact('data'));
         } else if($this->is_student()) {
             $data = CourseCertificate::all();
-            return view('courses.certificates.index', compact('data'));
+            return view('role_student.course_certificates_index', compact('data'));
         } else {
             // Tidak memiliki hak akses.
         }

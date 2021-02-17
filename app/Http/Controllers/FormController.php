@@ -64,7 +64,7 @@ class FormController extends Controller
         if($this->is_admin()) {
             $forms = Form::all();
 
-            return view('forms.admin_index',compact(
+            return view('role_admin.forms_index',compact(
                 'forms'
             ));
         } else {

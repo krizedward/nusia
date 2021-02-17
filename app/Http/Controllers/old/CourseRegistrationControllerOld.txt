@@ -52,6 +52,17 @@ class CourseRegistrationController extends Controller
         return ($this->user_roles() == "Student")? 1 : 0;
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index() // TIDAK DIGUNAKAN
+    {
+        $data = CourseRegistration::all();
+        return view('registrations.courses.index', compact('data'));
+    }
+
     public function index_by_course_id($course_id)
     {
         if($this->is_lead_instructor()) {
@@ -60,6 +71,20 @@ class CourseRegistrationController extends Controller
         } else if($this->is_instructor()) {
             $data = Course::findOrFail($course_id);
             return view('role_instructor.course_registrations_index_by_course_id', compact('data'));
+        }
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create() // TIDAK DIGUNAKAN
+    {
+        if($this->is_admin()) {
+            return view('registrations.courses.create');
+        } else {
+            // Tidak memiliki hak akses.
         }
     }
 

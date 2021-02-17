@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\CourseType;
+use App\Models\CourseLevel;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
-
-class CourseTypeController extends Controller
+class CourseLevelController extends Controller
 {
     /**
      * Memeriksa role User saat ini.
@@ -47,6 +46,35 @@ class CourseTypeController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index() // TIDAK DIGUNAKAN
+    {
+        if ($this->is_admin()){
+            $data = CourseLevel::all();
+            return view('course_levels.admin_index', compact('data'));
+        }
+        //$data = CourseLevel::all();
+        //return view('courses.levels.index', compact('data'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create() // TIDAK DIGUNAKAN
+    {
+        if($this->is_admin()) {
+            return view('courses.levels.create');
+        } else {
+            // Tidak memiliki hak akses.
+        }
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -58,17 +86,18 @@ class CourseTypeController extends Controller
         $data = Validator::make($data, [
             //'code' => [
             //    'bail', 'required',
-            //    Rule::unique('course_types', 'code'),
+            //    Rule::unique('course_levels', 'code'),
             //    'size:1'
             //],
             'name' => [
                 'bail', 'required',
-                Rule::unique('course_types', 'name'),
+                Rule::unique('course_levels', 'name'),
                 'max:100'
             ],
             'description' => ['bail', 'sometimes', 'max:5000'],
-            'count_student_min' => ['bail', 'sometimes', 'min:0', 'max:1000'],
-            'count_student_max' => ['bail', 'sometimes', 'min:0', 'max:1000']
+            'assignment_score_min' => ['bail','sometimes','min:0','max:100'],
+            'mid_score_min' => ['bail','sometimes','min:0','max:100'],
+            'final_score_min' => ['bail','sometimes','min:0','max:100'],
         ]);
 
         if($data->fails()) {
@@ -81,26 +110,68 @@ class CourseTypeController extends Controller
         //$data = "";
         //while(1) {
         //    $data = Str::random(255);
-        //    if(CourseType::where('slug', $data)->first() === null) break;
+        //    if(CourseLevel::where('slug', $data)->first() === null) break;
         //}
 
         if($this->is_admin()) {
-            CourseType::create([
+            CourseLevel::create([
                 //'slug' => $data,
                 //'code' => $request->code,
                 'name' => $request->name,
                 'description' => $request->description,
-                'count_student_min' => $request->count_student_min,
-                'count_student_max' => $request->count_student_max
+                'assignment_score_min' => $request->assignment_score_min,
+                'mid_exam_score_min' => $request->mid_exam_score_min,
+                'final_exam_score_min' => $request->final_exam_score_min,
             ]);
         } else {
             // Tidak memiliki hak akses.
         }
 
-        $data = CourseType::all();
-        //return view('courses.types.index', compact('data'));
-        Alert::success('Success', 'Create Course Type Berhasil !!!');
-        return redirect()->route('courses.index');
+        $data = CourseLevel::all();
+        //return view('courses.levels.index', compact('data'));
+        Alert::success('Success', 'Create Course Level Berhasil !!!');
+        return redirect()->route('courses.index'); 
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id) // TIDAK DIGUNAKAN
+    {
+        if ($this->is_admin()) {
+            
+            $data = CourseLevel::findOrFail($id);
+            
+            if($data == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+            return view('course_levels.admin_show', compact('data'));
+        }
+        return view('courses.levels.show', compact('data'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id) // TIDAK DIGUNAKAN
+    {
+        if($this->is_admin()) {
+            $data = CourseLevel::findOrFail($id);
+            if($data == null) {
+                // Data yang dicari tidak ditemukan.
+                // Return?
+            }
+            return view('courses.levels.edit', compact('data'));
+        } else {
+            // Tidak memiliki hak akses.
+        }
     }
 
     /**
@@ -112,27 +183,26 @@ class CourseTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $course_type = CourseType::findOrFail($id);
-        if($course_type == null) {
+        $course_level = CourseLevel::findOrFail($id);
+        if($course_level == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
         }
 
         $data = $request->all();
+
         $data = Validator::make($data, [
             'code' => [
                 'bail', 'required',
-                Rule::unique('course_types', 'code')->ignore($id, 'id'),
+                Rule::unique('course_levels', 'code')->ignore($id, 'id'),
                 'size:1'
             ],
             'name' => [
                 'bail', 'required',
-                Rule::unique('course_types', 'name')->ignore($id, 'id'),
+                Rule::unique('course_levels', 'name')->ignore($id, 'id'),
                 'max:100'
             ],
-            'description' => ['bail', 'sometimes', 'max:5000'],
-            'count_student_min' => ['bail', 'sometimes', 'min:0', 'max:1000'],
-            'count_student_max' => ['bail', 'sometimes', 'min:0', 'max:1000']
+            'description' => ['bail', 'sometimes', 'max:5000']
         ]);
 
         if($data->fails()) {
@@ -142,19 +212,17 @@ class CourseTypeController extends Controller
         }
 
         if($this->is_admin()) {
-            $course_type->update([
+            $course_level->update([
                 'code' => $request->code,
                 'name' => $request->name,
-                'description' => $request->description,
-                'count_student_min' => $request->count_student_min,
-                'count_student_max' => $request->count_student_max
+                'description' => $request->description
             ]);
         } else {
             // Tidak memiliki hak akses.
         }
 
-        $data = $course_type;
-        return view('courses.types.show', compact('data'));
+        $data = $course_level;
+        return view('courses.levels.show', compact('data'));
     }
 
     /**
@@ -165,7 +233,7 @@ class CourseTypeController extends Controller
      */
     public function destroy($id)
     {
-        $data = CourseType::findOrFail($id);
+        $data = CourseLevel::findOrFail($id);
         if($data == null) {
             // Data yang dicari tidak ditemukan.
             // Return?
@@ -182,7 +250,7 @@ class CourseTypeController extends Controller
             // Tidak memiliki hak akses.
         }
 
-        $data = CourseType::all();
-        return view('courses.types.index', compact('data'));
+        $data = CourseLevel::all();
+        return view('courses.levels.index', compact('data'));
     }
 }

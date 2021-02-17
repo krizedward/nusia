@@ -46,35 +46,6 @@ class CourseLevelController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        if ($this->is_admin()){
-            $data = CourseLevel::all();
-            return view('course_levels.admin_index', compact('data'));
-        }
-        //$data = CourseLevel::all();
-        //return view('courses.levels.index', compact('data'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        if($this->is_admin()) {
-            return view('courses.levels.create');
-        } else {
-            // Tidak memiliki hak akses.
-        }
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -131,47 +102,6 @@ class CourseLevelController extends Controller
         //return view('courses.levels.index', compact('data'));
         Alert::success('Success', 'Create Course Level Berhasil !!!');
         return redirect()->route('courses.index'); 
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        if ($this->is_admin()) {
-            
-            $data = CourseLevel::findOrFail($id);
-            
-            if($data == null) {
-                // Data yang dicari tidak ditemukan.
-                // Return?
-            }
-            return view('course_levels.admin_show', compact('data'));
-        }
-        return view('courses.levels.show', compact('data'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        if($this->is_admin()) {
-            $data = CourseLevel::findOrFail($id);
-            if($data == null) {
-                // Data yang dicari tidak ditemukan.
-                // Return?
-            }
-            return view('courses.levels.edit', compact('data'));
-        } else {
-            // Tidak memiliki hak akses.
-        }
     }
 
     /**
