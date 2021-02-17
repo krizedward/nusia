@@ -136,7 +136,7 @@
 
       <li class="header">OTHERS</li>
       <li class="{{ set_active(['student.choose_materials', 'student.complete_payment_information', 'student.complete_placement_tests', 'student.complete_course_registrations']) }}">
-        <a href="{{ route('student.choose_materials') }}"><i class="fa fa-book"> </i><span> Choose a Course</span></a>
+        <a href="{{ route('student.choose_materials') }}"><i class="fa fa-book"> </i><span> Choose New Courses</span></a>
       </li>
       {{--
       <li class="{{ set_active('course_payments.index') }}">

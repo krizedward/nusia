@@ -44,7 +44,7 @@
           <dl>
             <dt><i class="fa fa-file-text-o margin-r-5"></i> More Information</dt>
             <dd>
-              The result will be announced by email <b>7 days after submission</b>.<br />
+              The result will be announced by email <b>no later than 7 days after submission</b>.<br />
               Proceeding to the course scheduling is required to finish the registration.<br />
               <span style="color:#ff0000;">* Contact us if you encounter a problem.</span>
             </dd>
@@ -106,7 +106,7 @@
               <p class="text-center">
                 <b style="color:#cc0000;">
                   Submitted on {{ $submitted_at->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}.<br />
-                  The result will be announced by email in 7 days after this time.
+                  The result will be announced by email no later than 7 days after this time.
                 </b>
               </p>
             @else

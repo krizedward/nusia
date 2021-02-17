@@ -5,7 +5,11 @@
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-  <h1><b>Choose the right course for your needs!</b></h1>
+  @if($current_course_registration)
+    <h1><b>Choose the right course for your needs!</b></h1>
+  @else
+    <h1><b>Choose the right courses for your needs!</b></h1>
+  @endif
 @stop
 
 @section('content')
@@ -57,7 +61,7 @@
                         ?>
                         @if($flag_registered_early_classes)
                           <p class="no-margin" style="color:#ff0000;">
-                            <b>This material has a free class for one-time only!</b>
+                            <b>This course has one free class so you will gain 16 sessions in total!</b>
                           </p>
                         @endif
                       </div>
@@ -69,13 +73,15 @@
                           </dt>
                           <dd>
                             {{ $mt->description }}<br />
-                            <ul>
-                              @if($mt->name == 'Language Partners')
+                            {{--
+                            @if($mt->name == 'Language Partners')
+                              <ul>
                                 @foreach($mt->material_type_values as $mtv)
                                   <li>{{ $mtv->value }}</li>
                                 @endforeach
-                              @endif
-                            </ul>
+                              </ul>
+                            @endif
+                            --}}
                           </dd>
                         </dl>
                         <hr>
@@ -162,6 +168,13 @@
                                     <li>{{ $ctv->value }}</li>
                                   @endforeach
                                 </ul>
+                              @else
+                                <strong><i class="fa fa-circle-o margin-r-5"></i> Features</strong>
+                                <ul>
+                                  @foreach($mt->material_type_values as $mtv)
+                                    <li>{{ $mtv->value }}</li>
+                                  @endforeach
+                                </ul>
                               @endif
                               {{-- <hr> --}}
                               @if($mt->name == 'Cultural Classes')
@@ -203,7 +216,7 @@
                                           </button>
                                         @else
                                           <button class="btn btn-xs btn-flat btn-default disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
-                                            <b>BOOK NOW!</b>
+                                            <b>Not Available</b>
                                           </button>
                                         @endif
                                       </td>
@@ -233,11 +246,76 @@
                                                 </button>
                                               @else
                                                 <button style="width:100%;" class="btn btn-s btn-default disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
-                                                  <b>BOOK NOW!</b>
+                                                  <b>Not Available</b>
                                                 </button>
                                               @endif
                                               <br /><br />
                                               <button onclick="document.getElementById('CourseChoice{{$cp->id}}').className = 'modal fade'; document.getElementById('CourseChoice{{$cp->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open'); return false;" class="btn btn-s btn-default" style="width:100%;">Close</button>
+                                            </div>
+                                            <!-- /.box-body -->
+                                          </div>
+                                          <!-- /.box -->
+                                        </div>
+                                        <!-- /.modal-content -->
+                                      </div>
+                                      <!-- /.modal-dialog -->
+                                    </div>
+                                    <tr>
+                                      <td>
+                                        <a href="#" data-toggle="modal" data-target="#CourseChoiceFree{{$cp->id}}" {{-- class="btn btn-s btn-primary" --}}>
+                                          {{ $cp->title }} (Free Classes)
+                                        </a>
+                                      </td>
+                                      <td>
+                                        <strike>${{ $cp->price }}</strike>
+                                        <b style="font-size:115%; color:#007700;">$0</b><br />
+                                      </td>
+                                      <td class="text-center">
+                                        <?php
+                                          $is_allowed_to_register = 1;
+                                          foreach($all_current_running_course_registrations as $acrcr) {
+                                            if($acrcr->course->course_package->material_type == $mt->id) {
+                                              $is_allowed_to_register = 0;
+                                              break;
+                                            }
+                                          }
+                                        ?>
+                                        {{-- 1 baris kode di bawah ini hanya untuk sementara --}}
+                                        <?php $is_allowed_to_register = 0; ?>
+                                        @if($is_allowed_to_register)
+                                          <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                            <b>BOOK NOW!</b>
+                                          </button>
+                                        @else
+                                          <button class="btn btn-xs btn-flat btn-default disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
+                                            <b>Not Available</b>
+                                          </button>
+                                        @endif
+                                      </td>
+                                    </tr>
+                                    <div class="modal fade" id="CourseChoiceFree{{$cp->id}}">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="box box-primary">
+                                            <div class="box-body box-profile">
+                                              <h3 class="profile-username text-center"><b>{{ $cp->title }} (Free Classes)</b></h3>
+                                              <ul class="list-group list-group-unbordered">
+                                                <li class="list-group-item text-center">
+                                                  <b style="font-size:153%;">$0</b><br />
+                                                  Book our free classes to experience fun bahasa Indonesia learning!<br />
+                                                </li>
+                                              </ul>
+                                              @if($is_allowed_to_register)
+                                                <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                                  <b>BOOK NOW!</b>
+                                                </button>
+                                              @else
+                                                <button style="width:100%;" class="btn btn-s btn-default disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
+                                                  <b>Not Available</b>
+                                                </button>
+                                              @endif
+                                              <br /><br />
+                                              <button onclick="document.getElementById('CourseChoiceFree{{$cp->id}}').className = 'modal fade'; document.getElementById('CourseChoiceFree{{$cp->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open'); return false;" class="btn btn-s btn-default" style="width:100%;">Close</button>
                                             </div>
                                             <!-- /.box-body -->
                                           </div>
@@ -282,7 +360,7 @@
                                         </button>
                                       @else
                                         <button class="btn btn-xs btn-flat btn-default disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
-                                          <b>BOOK NOW!</b>
+                                          <b>Not Available</b>
                                         </button>
                                       @endif
                                     </td>
@@ -309,11 +387,77 @@
                                               </button>
                                             @else
                                               <button style="width:100%;" class="btn btn-s btn-default disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
-                                                <b>BOOK NOW!</b>
+                                                <b>Not Available</b>
                                               </button>
                                             @endif
                                             <br /><br />
                                             <button onclick="document.getElementById('CourseChoice{{$ct->course_packages->last()->id}}').className = 'modal fade'; document.getElementById('CourseChoice{{$ct->course_packages->last()->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open'); return false;" class="btn btn-s btn-default" style="width:100%;">Close</button>
+                                          </div>
+                                          <!-- /.box-body -->
+                                        </div>
+                                        <!-- /.box -->
+                                      </div>
+                                      <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                  </div>
+                                  <tr>
+                                    <td>
+                                      <a href="#" data-toggle="modal" data-target="#CourseChoiceFree{{$ct->course_packages->last()->id}}" {{-- class="btn btn-s btn-primary" --}}>
+                                        {{ $ct->name }} (Free Classes)
+                                      </a>
+                                    </td>
+                                    <td>
+                                      <strike>${{ $ct->course_packages->last()->price }}</strike>
+                                      <b style="font-size:115%; color:#007700;">$0</b><br />
+                                    </td>
+                                    <td class="text-center">
+                                      <?php
+                                        $is_allowed_to_register = 1;
+                                        foreach($all_current_running_course_registrations as $acrcr) {
+                                          if($acrcr->course->course_package->material_type == $mt->id) {
+                                            $is_allowed_to_register = 0;
+                                            break;
+                                          }
+                                        }
+                                      ?>
+                                      {{-- 1 baris kode di bawah ini hanya untuk sementara --}}
+                                      <?php $is_allowed_to_register = 0; ?>
+                                      @if($is_allowed_to_register)
+                                        <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('choice').value = '{{ $ct->course_packages->first()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                          <b>BOOK NOW!</b>
+                                        </button>
+                                      @else
+                                        <button class="btn btn-xs btn-flat btn-default disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
+                                          <b>Not Available</b>
+                                        </button>
+                                      @endif
+                                    </td>
+                                  </tr>
+                                  <div class="modal fade" id="CourseChoiceFree{{$ct->course_packages->last()->id}}">
+                                    <div class="modal-dialog">
+                                      <div class="modal-content">
+                                        <div class="box box-primary">
+                                          <div class="box-body box-profile">
+                                            <h3 class="profile-username text-center" style="font-size:235%;"><b>{{ $ct->name }} (Free Classes)</b></h3>
+                                            {{--<p class="text-muted text-center">&nbsp;</p>--}}
+                                            <ul class="list-group list-group-unbordered">
+                                              <li class="list-group-item text-center">
+                                                <b style="font-size:153%;">$0</b><br />
+                                                Book our free classes to experience fun bahasa Indonesia learning!<br />
+                                              </li>
+                                            </ul>
+                                            @if($is_allowed_to_register)
+                                              <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                                <b>BOOK NOW!</b>
+                                              </button>
+                                            @else
+                                              <button style="width:100%;" class="btn btn-s btn-default disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
+                                                <b>Not Available</b>
+                                              </button>
+                                            @endif
+                                            <br /><br />
+                                            <button onclick="document.getElementById('CourseChoiceFree{{$ct->course_packages->last()->id}}').className = 'modal fade'; document.getElementById('CourseChoiceFree{{$ct->course_packages->last()->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open'); return false;" class="btn btn-s btn-default" style="width:100%;">Close</button>
                                           </div>
                                           <!-- /.box-body -->
                                         </div>
@@ -352,7 +496,7 @@
           <div>
             <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('student.choose_materials', [-1]) }}">
             <i class="fa fa-plus"></i>&nbsp;&nbsp;
-              Register in New Course
+              Register in a New Course
             </a>
           </div>
           {{--
