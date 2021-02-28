@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
-use App\Models\Schedule;
-use App\Models\SessionRegistration;
 use Illuminate\Http\Request;
-use App\Models\Instructor;
 
-use App\Models\Session;
+use App\Models\MaterialSession;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
-class SessionController extends Controller
+class MaterialSessionController extends Controller
 {
     /**
      * Memeriksa role User saat ini.
@@ -55,10 +51,50 @@ class SessionController extends Controller
      */
     public function index()
     {
-        if ($this->is_student()){
-            $session = Session::all();
-            return view('role_student.sessions_index', compact('session'));
-        }
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
     }
 
     /**
@@ -70,14 +106,17 @@ class SessionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $session = Session::findOrFail($id);
+        //
+    }
 
-        if($this->is_lead_instructor() || $this->is_instructor()) {
-            Session::where('id',$request->session_registration)->update([
-                'link_zoom' => $request->link_zoom,
-            ]);
-
-            return redirect()->route('session_registrations.index');
-        }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 }

@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instructor;
 use Illuminate\Http\Request;
 
+use App\Models\Schedule;
+use App\Models\CourseRegistration;
 use App\Models\Course;
-use App\Models\CoursePackage;
-//use App\Models\CourseLevelDetail;
-use App\Models\CourseLevel;
-use App\Models\CourseType;
-use App\Models\MaterialPublic;
-use App\Models\MaterialType;
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
-class CourseController extends Controller
+class ScheduleController extends Controller
 {
     /**
      * Memeriksa role User saat ini.
@@ -55,17 +53,63 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($course_type = 'Free Trial')
     {
-        if ($this->is_admin()){
-            $course = Course::orderBy('course_package_id')->get();
-            $course_package = CoursePackage::all();
-            $course_level   = CourseLevel::orderBy('name')->get();
-            //$course_level_detail = CourseLevelDetail::all();
-            $course_type = CourseType::orderBy('name')->get();
-            $material_public = MaterialPublic::all();
-            $material_type = MaterialType::orderBy('name')->get();
-            return view('role_admin.courses_index', compact('course','course_package','course_level', 'course_type','material_type'));
-        }
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 }

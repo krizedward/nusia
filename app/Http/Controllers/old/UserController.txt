@@ -68,9 +68,82 @@ class UserController extends Controller
                 ->where('roles', '<>', 'Instructor')
                 ->where('roles', '<>', 'Student')
                 ->get();
-            return view('role_admin.users_index', compact(
+            /*Ada Beberapa Versi Tampilan Sebagai Opsi Lain*/
+            /*Tinggal Menyesuaikan Di Folder User*/
+
+            /*Reply: ok sip*/
+            
+            //return view('users.admin_index', compact(
+            //    'users', 'lead_instructors', 'instructors', 'students', 'other_users'
+            //));
+
+            //return view('users.admin_index_v1', compact(
+            //    'users', 'lead_instructors', 'instructors', 'students', 'other_users'
+            //));
+
+            return view('users.admin_index_v2', compact(
                 'users', 'lead_instructors', 'instructors', 'students', 'other_users'
             ));
+        }
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //return view('users.index');
+        //return "Hello World";
+        if ($this->is_admin()) {
+            //$user = User::all();
+            //Pagination
+            $user = User::orderBy('id', 'asc')->simplePaginate(5);
+            return view('users.admin_create',compact('user'));
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'email'         => ['required'],
+            'first_name'    => ['required'],
+            'last_name'     => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Menyimpan dari fungsi create
+        if ($this->is_admin()) {
+            //draft
+            User::create([
+                'first_name'    => $request->first_name,
+                'last_name'     => $request->last_name,
+                'email'         => $request->email,
+                'roles'         => $request->roles,
+                'password'      => Hash::make("12345678"),
+                'citizenship'   => "No Data",
+                'domicile'      => "No Data",
+                'timezone'      => "Asia/Jakarta",
+                'phone'         => "000",
+                'image_profile' => "user.jpg",
+            ]);
+
+            Alert::success('Success', 'Input Berhasil !!!');
+            return redirect()->back();  
         }
     }
 
@@ -160,8 +233,42 @@ class UserController extends Controller
                 ->get();
         }
 
-        return view('role_'.Str::slug(Auth::user()->roles, '_').'.users_show_'.Str::slug($user->roles, '_'), compact(
+        return view('users.'.Str::slug(Auth::user()->roles, '_').'_show_'.Str::slug($user->roles, '_'), compact(
             'user', 'interests', 'timezones', 'placement_tests', 'courses'
         ));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 }

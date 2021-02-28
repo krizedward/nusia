@@ -58,33 +58,38 @@ class ProfileController extends Controller
     public function index()
     {
         if($this->is_admin()){
-            return view('role_admin.profile');
-        } else if($this->is_lead_instructor()){
-            $interests = [
-                'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Art', 'Aviation',
-                'Baking', 'Baseball', 'Basketball', 'Blogging', 'Boating', 'Bowling',
-                'Broadcasting', 'Business', 'Camping', 'Chess', 'Child caring',
-                'Clothing', 'Collecting', 'Community service', 'Cooking', 'Cosmetics', 'Crafting', 'Creative Writing', 'Culinary', 'Culture',
-                'Cycling', 'Dancing', 'Design', 'Discussion', 'Driving/racing',
-                'Electronics', 'Entrepreneurship', 'Event organizing', 'Fashion', 'Finance',
-                'Fishing', 'Foods & beverages', 'Football', 'Formulate Teaching Methods', 'Gardening', 'Gender Studies', 'Golf',
-                'Hairstyling', 'Handicrafting', 'Health', 'Higher education', 'Hiking',
-                'History', 'Home decoration', 'Horseback riding', 'Housecleaning', 'Hunting',
-                'Ice hockey', 'Jogging', 'Knowledge', 'Korean Pop Culture', 'Lacrosse', 'Laundry/ironing', 'Law',
-                'Leadership', 'Leatherworking', 'Listening', 'Listening Music', 'Literature', 'Management', 'Marketing',
-                'Mechanics', 'Motivating', 'Movie', 'Music', 'Nursing',
-                'Outdoor recreation', 'Photography', 'Physical exercise', 'Politics', 'Pop Culture', 'Pottery',
-                'Programming', 'Reading', 'Real estate', 'Research', 'Retail',
-                'Running (marathon)', 'Running (sprint)', 'Science Fiction', 'Scouting', 'Sewing/needle work', 'Sharing', 'Sharing Culture', 'Shopping',
-                'Singing', 'Skiing', 'Snorkeling', 'Snowboarding', 'Soccer', 'Social',
-                'Speaking (1-on-1)', 'Speaking (public)', 'Sports', 'Surfing', 'Swimming',
-                'Teaching', 'Technology', 'Tennis', 'Thriathlons', 'Tourism', 'Travelling',
-                'Videographing', 'Volleyball', 'Volunteering', 'Walking', 'Wrestling', 'Writing',
-                'Woodworking',
-            ];
-
-            return view('role_lead_instructor.profile',compact('interests'));
+            return view('profile.admin');
         } else if($this->is_instructor()){
+            /*$countries = [
+                'Afghanistan', 'Albania', 'Algeria', 'Antigua and Barbuda', 'Argentina',
+                'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Azores',
+                'Bahamas', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium',
+                'Belize', 'Bermuda', 'Bolivia', 'Bosnia & Herzegovina', 'Brazil',
+                'Bulgaria', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde',
+                'Chile', 'China', 'Columbia', 'Costa Rica', 'Croatia',
+                'Cuba', 'Cyprus', 'Czech Republic', 'Czechoslovakia', 'Denmark',
+                'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador',
+                'Eritrea', 'Ethiopia', 'Fiji', 'Finland', 'France',
+                'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada',
+                'Guam', 'Guatemala', 'Guyana', 'Haiti', 'Honduras',
+                'Hong Kong', 'Hungary', 'India', 'Indonesia', 'Iran',
+                'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica',
+                'Japan', 'Jordan', 'Kenya', 'Kosovo', 'Kuwait',
+                'Laos', 'Latvia', 'Lebanon', 'Liberia', 'Lithuania',
+                'Macedonia', 'Malaysia', 'Mexico', 'Moldova', 'Morocco',
+                'Myanmar (Burma)', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua',
+                'Nigeria', 'North Korea', 'Northern Ireland', 'Norway', 'Pakistan',
+                'Panama', 'Paraguay', 'Peru', 'Philippines', 'Poland',
+                'Portugal', 'Puerto Rico', 'Romania', 'Russia', 'Samoa',
+                'Saudi Arabia', 'Scotland', 'Senegal', 'Serbia', 'Sierra Leone',
+                'Singapore', 'Slovakia', 'Somalia', 'South Africa', 'South Korea',
+                'Spain', 'Sri Lanka', 'St. Kitts--Nevis', 'St. Lucia', 'St. Vincent and the Grenadines',
+                'Sudan', 'Sweden', 'Switzerland', 'Syria', 'Taiwan',
+                'Tanzania', 'Thailand', 'Tonga', 'Trinidad and Tobago', 'Turkey',
+                'U. S. Virgin Islands', 'Uganda', 'Ukraine', 'United Kingdom', 'United States',
+                'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam', 'Wales',
+                'Yemen', 'Yugoslavia', 'Zimbabwe'
+            ];*/
             $interests = [
                 'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Art', 'Aviation',
                 'Baking', 'Baseball', 'Basketball', 'Blogging', 'Boating', 'Bowling',
@@ -108,7 +113,7 @@ class ProfileController extends Controller
                 'Woodworking',
             ];
 
-            return view('role_instructor.profile',compact('interests'));
+            return view('profile.instructor',compact(/*'countries',*/ 'interests'));
         } else if($this->is_student()){
             if(Auth::user()->citizenship == 'Not Available') {
                 return redirect()->route('layouts.questionnaire');
@@ -122,6 +127,37 @@ class ProfileController extends Controller
             } else if(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && Auth::user()->student->course_registrations->first()->session_registrations->toArray() == null) {
                 return redirect()->route('student.complete_course_registrations', [Auth::user()->student->course_registrations->first()->id]);
             }
+
+            /*$countries = [
+                'Afghanistan', 'Albania', 'Algeria', 'Antigua and Barbuda', 'Argentina',
+                'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Azores',
+                'Bahamas', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium',
+                'Belize', 'Bermuda', 'Bolivia', 'Bosnia & Herzegovina', 'Brazil',
+                'Bulgaria', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde',
+                'Chile', 'China', 'Columbia', 'Costa Rica', 'Croatia',
+                'Cuba', 'Cyprus', 'Czech Republic', 'Czechoslovakia', 'Denmark',
+                'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador',
+                'Eritrea', 'Ethiopia', 'Fiji', 'Finland', 'France',
+                'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada',
+                'Guam', 'Guatemala', 'Guyana', 'Haiti', 'Honduras',
+                'Hong Kong', 'Hungary', 'India', 'Indonesia', 'Iran',
+                'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica',
+                'Japan', 'Jordan', 'Kenya', 'Kosovo', 'Kuwait',
+                'Laos', 'Latvia', 'Lebanon', 'Liberia', 'Lithuania',
+                'Macedonia', 'Malaysia', 'Mexico', 'Moldova', 'Morocco',
+                'Myanmar (Burma)', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua',
+                'Nigeria', 'North Korea', 'Northern Ireland', 'Norway', 'Pakistan',
+                'Panama', 'Paraguay', 'Peru', 'Philippines', 'Poland',
+                'Portugal', 'Puerto Rico', 'Romania', 'Russia', 'Samoa',
+                'Saudi Arabia', 'Scotland', 'Senegal', 'Serbia', 'Sierra Leone',
+                'Singapore', 'Slovakia', 'Somalia', 'South Africa', 'South Korea',
+                'Spain', 'Sri Lanka', 'St. Kitts--Nevis', 'St. Lucia', 'St. Vincent and the Grenadines',
+                'Sudan', 'Sweden', 'Switzerland', 'Syria', 'Taiwan',
+                'Tanzania', 'Thailand', 'Tonga', 'Trinidad and Tobago', 'Turkey',
+                'U. S. Virgin Islands', 'Uganda', 'Ukraine', 'United Kingdom', 'United States',
+                'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam', 'Wales',
+                'Yemen', 'Yugoslavia', 'Zimbabwe'
+            ];*/
             $interests = [
                 'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Art', 'Aviation',
                 'Baking', 'Baseball', 'Basketball', 'Blogging', 'Boating', 'Bowling',
@@ -151,10 +187,31 @@ class ProfileController extends Controller
                 '+00', '+01', '+02', '+03', '+04', '+04:30', '+05', '+05:30', '+05:45', '+06',
                 '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
             ];
-            return view('role_student.profile',compact('interests', 'timezones'));
+            return view('profile.student',compact(/*'countries',*/ 'interests', 'timezones'));
         } else {
             return redirect()->back();
         }
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
     }
 
     /**
@@ -165,9 +222,12 @@ class ProfileController extends Controller
      */
     public function show($student_id)
     {
-        if($this->is_lead_instructor()) {
-            // PERLU MENGUBAH KEMBALI KODE INI SESUAI UPDATE DB YANG BARU
+        if($this->is_admin()) {
+            $student = Student::findOrFail($student_id);
 
+            return view('profile_details.instructor_show', compact('student'));
+        }
+        if($this->is_instructor()) {
             $student = Student::findOrFail($student_id);
 
             $flag = 0;
@@ -185,37 +245,24 @@ class ProfileController extends Controller
             }
 
             if($flag == 1) {
-                return view('role_lead_instructor.student_profile_show', compact('student'));
-            } else {
-                return redirect()->back();
-            }
-        } else if($this->is_instructor()) {
-            // PERLU MENGUBAH KEMBALI KODE INI SESUAI UPDATE DB YANG BARU
-
-            $student = Student::findOrFail($student_id);
-
-            $flag = 0;
-            foreach($student->course_registrations as $cr) {
-                foreach($cr->session_registrations as $sr) {
-                    if($sr->session->schedule->instructor_id == Auth::user()->instructor->id) {
-                        $flag = 1;
-                        break;
-                    } else if($sr->session->schedule->instructor_id_2 == Auth::user()->instructor->id) {
-                        $flag = 1;
-                        break;
-                    }
-                }
-                if($flag == 1) break;
-            }
-
-            if($flag == 1) {
-                return view('role_instructor.student_profile_show', compact('student'));
+                return view('profile_details.instructor_show', compact('student'));
             } else {
                 return redirect()->back();
             }
         } else {
             return redirect()->back();
         }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
     }
 
     /**
@@ -439,5 +486,16 @@ class ProfileController extends Controller
         } else {
             return redirect()->route('profile');
         }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 }

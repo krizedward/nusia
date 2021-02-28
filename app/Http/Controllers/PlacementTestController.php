@@ -52,7 +52,7 @@ class PlacementTestController extends Controller
      */
     public function index()
     {
-        if($this->is_admin() || $this->is_lead_instructor()) {
+        if($this->is_lead_instructor()) {
             $material_types = MaterialType::where('name', 'NOT LIKE', '%Trial%')->get();
             $placement_tests = PlacementTest
                 ::join('course_registrations', 'placement_tests.course_registration_id', 'course_registrations.id')
@@ -63,22 +63,12 @@ class PlacementTestController extends Controller
                 ->where('placement_tests.path', '<>', null)
                 ->get();
 
-            return view('registrations.lead_instructor_placement_tests_index', compact(
+            return view('role_lead_instructor.placement_tests_index', compact(
                 'material_types', 'placement_tests',
             ));
         } else {
             return redirect()->route('home');
         }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -89,8 +79,8 @@ class PlacementTestController extends Controller
      */
     public function show($course_registration_id)
     {
-        // Jika fungsi ini tidak diakses baik oleh admin atau oleh lead instructor.
-        if(!$this->is_admin() && !$this->is_lead_instructor()) {
+        // Jika fungsi ini tidak diakses oleh lead instructor.
+        if(!$this->is_lead_instructor()) {
             return redirect()->route('placement_tests.index');
         }
 
@@ -111,7 +101,7 @@ class PlacementTestController extends Controller
             ->distinct()->select('course_levels.id', 'course_levels.code', 'course_levels.name', 'course_levels.assignment_score_min', 'course_levels.exam_score_min', 'course_levels.created_at', 'course_levels.updated_at', 'course_levels.deleted_at')
             ->get();
 
-        return view('registrations.lead_instructor_placement_tests_show', compact(
+        return view('role_lead_instructor.placement_tests_show', compact(
             'course_registration', 'course_levels',
         ));
     }
@@ -125,8 +115,8 @@ class PlacementTestController extends Controller
      */
     public function update(Request $request, $course_registration_id)
     {
-        // Jika fungsi ini tidak diakses baik oleh admin atau oleh lead instructor.
-        if(!$this->is_admin() && !$this->is_lead_instructor()) {
+        // Jika fungsi ini tidak diakses oleh lead instructor.
+        if(!$this->is_lead_instructor()) {
             return redirect()->route('placement_tests.index');
         }
 
