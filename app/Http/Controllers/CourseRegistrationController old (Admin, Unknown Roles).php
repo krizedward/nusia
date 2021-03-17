@@ -9,14 +9,43 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
-use App\Models\CourseRegistration;
+use App\User;
 use App\Models\Course;
-use App\Models\SessionRegistration;
-use App\Models\Session;
-use App\Models\MaterialType;
-use App\Models\CourseType;
+use App\Models\CourseCertificate;
 use App\Models\CourseLevel;
+use App\Models\CoursePackage;
+use App\Models\CoursePackageDiscount;
 use App\Models\CoursePayment;
+use App\Models\CourseRegistration;
+use App\Models\CourseType;
+use App\Models\CourseTypeValue;
+use App\Models\Form;
+use App\Models\FormQuestion;
+use App\Models\FormQuestionChoice;
+use App\Models\FormResponse;
+use App\Models\FormResponseDetail;
+use App\Models\Instructor;
+use App\Models\InstructorSchedule;
+use App\Models\MaterialPublic;
+use App\Models\MaterialSession;
+use App\Models\MaterialType;
+use App\Models\MaterialTypeValue;
+use App\Models\Message;
+use App\Models\Metadata;
+use App\Models\Notification;
+use App\Models\NotificationDuration;
+use App\Models\NotificationLabel;
+use App\Models\OtherUser;
+use App\Models\PlacementTest;
+use App\Models\Rating;
+use App\Models\Schedule;
+use App\Models\Session;
+use App\Models\SessionRegistration;
+use App\Models\SessionRegistrationForm;
+use App\Models\Student;
+use App\Models\Task;
+use App\Models\TaskSubmission;
+use App\Models\UserNotification;
 
 class CourseRegistrationController extends Controller
 {
@@ -46,21 +75,11 @@ class CourseRegistrationController extends Controller
         return ($this->user_roles() == "Lead Instructor")? 1 : 0;
     }
     public function is_instructor() {
-        return ($this->user_roles() == "Instructor")? 1 : 0;
+        return ($this->user_roles() == "Instructor"
+            || $this->user_roles() == "Lead Instructor")? 1 : 0;
     }
     public function is_student() {
         return ($this->user_roles() == "Student")? 1 : 0;
-    }
-
-    public function index_by_course_id($course_id)
-    {
-        if($this->is_lead_instructor()) {
-            $data = Course::findOrFail($course_id);
-            return view('role_lead_instructor.course_registrations_index_by_course_id', compact('data'));
-        } else if($this->is_instructor()) {
-            $data = Course::findOrFail($course_id);
-            return view('role_instructor.course_registrations_index_by_course_id', compact('data'));
-        }
     }
 
     /**
@@ -93,7 +112,7 @@ class CourseRegistrationController extends Controller
                 ->withInput();
         }
 
-        if($this->is_admin() || $this->is_student()) {
+        if($this->is_admin()) {
             CourseRegistration::create([
                 'course_id' => $request->course_id,
                 'student_id' => $request->student_id
@@ -108,66 +127,10 @@ class CourseRegistrationController extends Controller
                     'status' => 'Not Assigned',
                 ]);
             }
-        } else {
-            // Tidak memiliki hak akses.
-        }
-
-        if($this->is_student()) {
-            return redirect()->route('home');
         }
 
         $data = CourseRegistration::all();
         return view('registrations.courses.index', compact('data'));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $user_id
-     * @param  int  $course_id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($user_id, $course_id)
-    {
-        $course_registrations = CourseRegistration::all();
-        $course_registration = null;
-        $flag = 0;
-        foreach($course_registrations as $dt) {
-            if(
-                Str::slug(
-                $dt->student->user->password.
-                $dt->student->user->first_name.
-                '-'.$dt->student->user->last_name) == $user_id
-                &&
-                Str::slug($dt->created_at.'-'.$dt->course->title) == $course_id
-            ) {
-                $course_registration = $dt;
-                $flag = 1;
-                break;
-            }
-        }
-        if($flag == 0) {
-            if(session('redirect_again') != 1) {
-                session(['redirect_again' => 1]);
-                return redirect()->back();
-            } else {
-                session(['redirect_again' => null]);
-                return redirect()->route('users.index');
-            }
-        }
-
-        $material_types = MaterialType::all();
-        $course_types = CourseType::all();
-        $course_levels = CourseLevel::all();
-
-        $course_payments = CoursePayment
-            ::where('course_registration_id', $course_registration->id)
-            ->orderBy('payment_time')
-            ->get();
-
-        return view('role_'.Str::slug(Auth::user()->roles, '_').'.course_registrations_show_'.Str::slug($course_registration->student->user->roles, '_'), compact(
-            'course_registration', 'material_types', 'course_types', 'course_levels', 'course_payments',
-        ));
     }
 
     public function show_by_admin($user_id, $course_id)
@@ -209,24 +172,6 @@ class CourseRegistrationController extends Controller
             ->get();
 
         return view('role_'.Str::slug(Auth::user()->roles, '_').'.course_registrations_show_'.Str::slug($course_registration->student->user->roles, '_'), compact(
-            'course_registration', 'material_types', 'course_types', 'course_levels', 'course_payments',
-        ));
-    }
-
-    public function show_by_student($course_registration_id)
-    {
-        $course_registration = CourseRegistration::findOrFail($course_registration_id);
-
-        $material_types = MaterialType::all();
-        $course_types = CourseType::all();
-        $course_levels = CourseLevel::all();
-
-        $course_payments = CoursePayment
-            ::where('course_registration_id', $course_registration->id)
-            ->orderBy('payment_time')
-            ->get();
-
-        return view('role_student.course_registrations_show', compact(
             'course_registration', 'material_types', 'course_types', 'course_levels', 'course_payments',
         ));
     }

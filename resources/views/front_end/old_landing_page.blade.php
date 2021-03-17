@@ -82,7 +82,7 @@
                     <li>Experienced & professional instructors</li>
                 </ul>
                 @if(Auth::check())
-                  <a href="{{ route('home') }}" class="btn btn-primary btn-lg"> Go To Dashboard</a>
+                  <a href="{{ route('registered.dashboard.index') }}" class="btn btn-primary btn-lg"> Go To Dashboard</a>
                 @else
                   <a href="{{ route('login') }}" class="btn btn-primary btn-lg"> Start My Class</a>
                 @endif
@@ -103,7 +103,7 @@
                 <!-- Grid column -->
                 <div class="col-md-3 mt-md-0 mt-3" style="color: #ffffff">
                     <!-- Content -->
-                    <h5 class="text-uppercase"><a href="{{ route('terms') }}" style="text-decoration:none; color:#ffffff;">Terms of Service</a></h5>
+                    <h5 class="text-uppercase"><a href="{{ route('non_registered.terms.index') }}" style="text-decoration:none; color:#ffffff;">Terms of Service</a></h5>
                 </div>
                 <!-- Grid column -->
                 <div class="col-md-6 mb-md-0 mb-3"  style="color: #ffffff">

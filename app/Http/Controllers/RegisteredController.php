@@ -2,21 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SessionRegistration;
 use Illuminate\Http\Request;
 
 use App\User;
+use App\Models\Course;
+use App\Models\CourseCertificate;
+use App\Models\CourseLevel;
+use App\Models\CoursePackage;
+use App\Models\CoursePackageDiscount;
+use App\Models\CoursePayment;
+use App\Models\CourseRegistration;
+use App\Models\CourseType;
+use App\Models\CourseTypeValue;
+use App\Models\Form;
+use App\Models\FormQuestion;
+use App\Models\FormQuestionChoice;
+use App\Models\FormResponse;
+use App\Models\FormResponseDetail;
 use App\Models\Instructor;
+use App\Models\InstructorSchedule;
+use App\Models\MaterialPublic;
+use App\Models\MaterialSession;
+use App\Models\MaterialType;
+use App\Models\MaterialTypeValue;
+use App\Models\Message;
+use App\Models\Metadata;
+use App\Models\Notification;
+use App\Models\NotificationDuration;
+use App\Models\NotificationLabel;
+use App\Models\OtherUser;
+use App\Models\PlacementTest;
+use App\Models\Rating;
+use App\Models\Schedule;
+use App\Models\Session;
+use App\Models\SessionRegistration;
+use App\Models\SessionRegistrationForm;
 use App\Models\Student;
+use App\Models\Task;
+use App\Models\TaskSubmission;
+use App\Models\UserNotification;
+
 use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use PragmaRX\Countries\Package\Countries;
 use Illuminate\Support\Facades\File;
+use RealRashid\SweetAlert\Facades\Alert;
 
-class ProfileController extends Controller
+class RegisteredController extends Controller
 {
     /**
      * Memeriksa role User saat ini.
@@ -44,19 +80,179 @@ class ProfileController extends Controller
         return ($this->user_roles() == "Lead Instructor")? 1 : 0;
     }
     public function is_instructor() {
-        return ($this->user_roles() == "Instructor")? 1 : 0;
+        return ($this->user_roles() == "Instructor"
+            || $this->user_roles() == "Lead Instructor")? 1 : 0;
     }
     public function is_student() {
         return ($this->user_roles() == "Student")? 1 : 0;
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Memeriksa apakah saat ini website ada dalam mode "Trial" atau "Full Version".
+     * Return boolean (1 dan 0).
      */
-    public function index()
+    public function is_trial() {
+        return (Metadata::find(1)->value == 'Trial');
+    }
+
+    public function dashboard_index()
     {
+        // menampilkan dashboard
+
+        //04.11.2020
+        //Membuat Akses Untuk Financial Team
+        if ($this->is_financial_team()) {
+            return view('role_financial_team.dashboard');
+        }
+
+        //Membuat Akses Untuk Customer Service
+        if ($this->is_customer_service()) {
+            # code...
+            return view('role_customer_service.dashboard');
+        }
+
+        //03.11.2020
+        //Membuat Akses Untuk Lead Instructor
+        if ($this->is_lead_instructor()) {
+            
+            return view('role_lead_instructor.dashboard');
+        }
+
+        if($this->is_admin()) {
+            Alert::success('Success', 'Login Berhasil !!!');
+            $timeNusia = Carbon::now()->setTimezone('Asia/Jakarta');
+            $timeStudent = Carbon::now()->setTimezone(Auth::user()->timezone);
+            $student = Student::all();
+            $instructor = Instructor::all();
+            $session = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where('schedules.schedule_time', '>=', $timeStudent)
+                ->orderBy('schedules.schedule_time')
+                /*->take(7)*/
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')
+                ->get();
+
+            $course = Course::all();
+            return view('role_admin.dashboard',compact(
+                'student','instructor','timeNusia','timeStudent',
+                'session', /*'session_reg',*/ 'course'
+            ));
+        }
+
+        if($this->is_instructor()) {
+            $timeNusia = Carbon::now()->setTimezone('Asia/Jakarta');
+            $timeStudent = Carbon::now(Auth::user()->timezone);
+            $sessions = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+                ->join('instructors', 'instructor_schedules.instructor_id', 'instructors.id')
+                ->join('users', 'instructors.user_id', 'users.id')
+                ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
+                ->where('schedules.schedule_time', '>=', $timeStudent)
+                ->distinct()
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at', 'instructor_schedules.instructor_id')
+                ->get();
+
+            $sessions_order_by_schedule_time = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+                ->join('instructors', 'instructor_schedules.instructor_id', 'instructors.id')
+                ->join('users', 'instructors.user_id', 'users.id')
+                ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
+                ->where('schedules.schedule_time', '>=', $timeStudent)
+                ->distinct()
+                ->orderBy('schedules.schedule_time')
+                ->take(5)
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at', 'instructor_schedules.instructor_id')
+                ->get();
+
+            return view('role_instructor.dashboard', compact(
+                'sessions', 'sessions_order_by_schedule_time', 'timeNusia', 'timeStudent', 'sessions',
+            ));
+        }
+
+        if($this->is_student()) {
+            if(Auth::user()->citizenship == 'Not Available') {
+                return redirect()->route('student.student_registration_form.index');
+            } else if(Auth::user()->student->course_registrations->toArray() == null) {
+                return redirect()->route('student.choose_course.index');
+            } else if(Auth::user()->student->course_registrations->first()->course_payments->toArray() == null) {
+                return redirect()->route('student.complete_payment_information.show', [Auth::user()->student->course_registrations->first()->id]);
+            } else if(Auth::user()->student->course_registrations->first()->course_payments->last()->status == 'Not Confirmed') {
+                return redirect()->route('student.upload_payment_evidence.show', [Auth::user()->student->course_registrations->first()->id]);
+            } else if(Auth::user()->student->course_registrations->first()->placement_test == null || Auth::user()->student->course_registrations->first()->placement_test->status == 'Not Passed') {
+                return redirect()->route('student.upload_placement_test.show', [Auth::user()->student->course_registrations->first()->id]);
+            } else if(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && Auth::user()->student->course_registrations->first()->session_registrations->toArray() == null) {
+                return redirect()->route('student.choose_course_registration.show', [Auth::user()->student->course_registrations->first()->id]);
+            }
+            
+            //untuk mengubah zona waktu isi didalam dengan lokasi
+            $timeNusia = Carbon::now()->setTimezone('Asia/Jakarta');
+            $timeStudent = Carbon::now()->setTimezone(Auth::user()->timezone);
+            $session_registration = SessionRegistration
+                ::join('sessions', 'session_registrations.session_id', 'sessions.id')
+                ->join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where('schedules.schedule_time', '>=', $timeStudent->add(120, 'minutes')->add(3, 'days'))
+                ->select('session_registrations.id', 'session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
+                ->get();
+            $session_order_by_schedule_time = Session
+                ::join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where('schedules.schedule_time', '>=', $timeStudent->add(120, 'minutes')->add(3, 'days'))
+                ->orderBy('schedules.schedule_time')
+                ->take(5)
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')
+                ->get();
+            $material = MaterialSession::all();
+            
+            // Menyimpan daftar course_registrations yang memiliki jadwal sesi yang belum berjalan.
+            // Query ini menghilangkan daftar course_registrations yang sudah SEPENUHNYA selesai.
+            $course_registrations = Schedule
+                ::join('sessions', 'schedules.id', 'sessions.schedule_id')
+                ->join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where('course_packages.title', 'NOT LIKE', '%Free%')
+                ->where('course_packages.title', 'NOT LIKE', '%Test%')
+                ->where('course_packages.title', 'NOT LIKE', '%Trial%')
+                ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+                ->where('schedules.schedule_time', '>=', $timeStudent)
+                ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
+                ->distinct()
+                ->get();
+            
+            $instructors = Instructor::where('id',Auth::user()->id);
+            $is_local_access = config('database.connections.mysql.username') == 'root';
+            return view('role_student.dashboard', compact(
+                'session_registration', /*session,*/ 'session_order_by_schedule_time',
+                'material', 'course_registrations', 'instructors','timeNusia','timeStudent', 'is_local_access'
+            ));
+        }
+    }
+
+    public function contact_index()
+    {
+        // menampilkan NUSIA contact person
+        return view('contact');
+    }
+
+    public function chat_index()
+    {
+        // membuka fitur chat
+        if($this->is_student()) {
+            return view('role_student.chat_index');
+        }
+    }
+
+    public function profile_index()
+    {
+        // melihat informasi profil
         if($this->is_admin()){
             return view('role_admin.profile');
         } else if($this->is_lead_instructor()){
@@ -111,16 +307,17 @@ class ProfileController extends Controller
             return view('role_instructor.profile',compact('interests'));
         } else if($this->is_student()){
             if(Auth::user()->citizenship == 'Not Available') {
-                return redirect()->route('layouts.questionnaire');
+                return redirect()->route('student.student_registration_form.index');
             } else if(Auth::user()->student->course_registrations->toArray() == null) {
-                //return redirect()->route('courses.index'); // KHUSUS UNTUK 1st FREE CLASSES, mungkin ada bug di CLASS PRIVATE DAN/ATAU GROUP.
-                return redirect()->route('student.choose_materials');
+                return redirect()->route('student.choose_course.index');
             } else if(Auth::user()->student->course_registrations->first()->course_payments->toArray() == null) {
-                return redirect()->route('student.complete_payment_information', [Auth::user()->student->course_registrations->first()->id]);
+                return redirect()->route('student.complete_payment_information.show', [Auth::user()->student->course_registrations->first()->id]);
+            } else if(Auth::user()->student->course_registrations->first()->course_payments->last()->status == 'Not Confirmed') {
+                return redirect()->route('student.upload_payment_evidence.show', [Auth::user()->student->course_registrations->first()->id]);
             } else if(Auth::user()->student->course_registrations->first()->placement_test == null || Auth::user()->student->course_registrations->first()->placement_test->status == 'Not Passed') {
-                return redirect()->route('student.complete_placement_tests', [Auth::user()->student->course_registrations->first()->id]);
+                return redirect()->route('student.upload_placement_test.show', [Auth::user()->student->course_registrations->first()->id]);
             } else if(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && Auth::user()->student->course_registrations->first()->session_registrations->toArray() == null) {
-                return redirect()->route('student.complete_course_registrations', [Auth::user()->student->course_registrations->first()->id]);
+                return redirect()->route('student.choose_course_registration.show', [Auth::user()->student->course_registrations->first()->id]);
             }
             $interests = [
                 'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Art', 'Aviation',
@@ -157,76 +354,9 @@ class ProfileController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($student_id)
+    public function profile_update(Request $request)
     {
-        if($this->is_lead_instructor()) {
-            // PERLU MENGUBAH KEMBALI KODE INI SESUAI UPDATE DB YANG BARU
-
-            $student = Student::findOrFail($student_id);
-
-            $flag = 0;
-            foreach($student->course_registrations as $cr) {
-                foreach($cr->session_registrations as $sr) {
-                    if($sr->session->schedule->instructor_id == Auth::user()->instructor->id) {
-                        $flag = 1;
-                        break;
-                    } else if($sr->session->schedule->instructor_id_2 == Auth::user()->instructor->id) {
-                        $flag = 1;
-                        break;
-                    }
-                }
-                if($flag == 1) break;
-            }
-
-            if($flag == 1) {
-                return view('role_lead_instructor.student_profile_show', compact('student'));
-            } else {
-                return redirect()->back();
-            }
-        } else if($this->is_instructor()) {
-            // PERLU MENGUBAH KEMBALI KODE INI SESUAI UPDATE DB YANG BARU
-
-            $student = Student::findOrFail($student_id);
-
-            $flag = 0;
-            foreach($student->course_registrations as $cr) {
-                foreach($cr->session_registrations as $sr) {
-                    if($sr->session->schedule->instructor_id == Auth::user()->instructor->id) {
-                        $flag = 1;
-                        break;
-                    } else if($sr->session->schedule->instructor_id_2 == Auth::user()->instructor->id) {
-                        $flag = 1;
-                        break;
-                    }
-                }
-                if($flag == 1) break;
-            }
-
-            if($flag == 1) {
-                return view('role_instructor.student_profile_show', compact('student'));
-            } else {
-                return redirect()->back();
-            }
-        } else {
-            return redirect()->back();
-        }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
+        // memodifikasi informasi profil
         if($this->is_admin()) {
             // update tampilan profil admin (?).
 
@@ -433,11 +563,17 @@ class ProfileController extends Controller
                 'interest' => $interest,
             ]);
 
-            return redirect()->route('profile');
+            return redirect()->route('registered.profile.index');
         } else if($this->is_student()) {
             // update tampilan profil student.
         } else {
-            return redirect()->route('profile');
+            return redirect()->route('registered.profile.index');
         }
+    }
+
+    public function logout_get_index()
+    {
+        // apabila proses logout error (metode GET tidak didukung)
+        return redirect()->route('registered.dashboard.index');
     }
 }

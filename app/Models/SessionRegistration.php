@@ -65,9 +65,9 @@ class SessionRegistration extends Model
     /**
      * Define a relationship.
      */
-    public function ratings()
+    public function rating()
     {
-    	return $this->hasMany(Rating::class);
+    	return $this->hasOne(Rating::class);
     }
 
     /**

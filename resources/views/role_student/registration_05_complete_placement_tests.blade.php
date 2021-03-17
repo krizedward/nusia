@@ -46,7 +46,7 @@
             <dd>
               The result will be announced by email <b>no later than 7 days after submission</b>.<br />
               Proceeding to the course scheduling is required to finish the registration.<br />
-              <span style="color:#ff0000;">* Contact us if you encounter a problem.</span>
+              <span style="color:#ff0000;">Contact us if you encounter a problem.</span>
             </dd>
           </dl>
           {{--
@@ -60,7 +60,7 @@
         <div class="box-header with-border">
           <h3 class="box-title"><b>Submit Your Result</b></h3>
         </div>
-        <form role="form" method="post" action="@if($has_uploaded_for_placement_test) # @else {{ route('student.store_placement_tests', [$course_registration->id]) }} @endif" enctype="multipart/form-data">
+        <form role="form" method="post" action="@if($has_uploaded_for_placement_test) # @else {{ route('student.upload_placement_test.update', [$course_registration->id]) }} @endif" enctype="multipart/form-data">
           @if($has_uploaded_for_placement_test == 0)
             @csrf
             @method('PUT')

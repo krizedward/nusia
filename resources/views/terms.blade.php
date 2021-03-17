@@ -57,9 +57,9 @@
                     </li>
                 </ul>-->
                 <ul class="navbar-nav ml-auto">
-                  <li class="nav-item"><a class="nav-link" style="color: #000;" href="{{ route('index') }}"> HOME </a></li>
+                  <li class="nav-item"><a class="nav-link" style="color: #000;" href="{{ url('/') }}"> HOME </a></li>
                   @if(Auth::check())
-                    <li class="nav-item"><a class="nav-link" style="color: #000;" href="{{ route('login') }}"> DASHBOARD </a></li>
+                    <li class="nav-item"><a class="nav-link" style="color: #000;" href="{{ route('registered.dashboard.index') }}"> DASHBOARD </a></li>
                   @else
                     <li class="nav-item"><a class="nav-link" style="color: #000;" href="{{ route('login') }}"> LOGIN </a></li>
                   @endif

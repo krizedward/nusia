@@ -107,7 +107,7 @@
                         <dt style="font-size:18px;"><i class="fa fa-users margin-r-5"></i> Note</dt>
                         <dd>
                           Click "link" button to join your session!<br />
-                          <span style="color:#ff0000;">* Contact us if you encounter a problem.</span>
+                          <span style="color:#ff0000;">Contact us if you encounter a problem.</span>
                         </dd>
                         {{--
                         <hr>
@@ -209,7 +209,7 @@
                         <dt style="font-size:18px;"><i class="fa fa-book margin-r-5"></i> Note</dt>
                         <dd>
                           Click "link" button view more information about each course!<br />
-                          <span style="color:#ff0000;">* Contact us if you encounter a problem.</span>
+                          <span style="color:#ff0000;">Contact us if you encounter a problem.</span>
                         </dd>
                         {{--
                         <hr>

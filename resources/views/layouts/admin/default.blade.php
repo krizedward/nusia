@@ -26,14 +26,16 @@
     
     <section class="content">
       @include('layouts.admin.flash_message')
-
       @yield('content')
     </section>
 
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
+    {{--
     <strong>Made with <i class="fa fa-heart-o"></i> by <a href="https://hehe.co.id">Hehe Corp</a>.</strong>
+    --}}
+    <strong>Made with <i class="fa fa-heart-o"></i> by <a href="https://nusia.id">Nusantara Indonesia</a>.</strong>
   </footer>
 
   <!-- Control Sidebar -->

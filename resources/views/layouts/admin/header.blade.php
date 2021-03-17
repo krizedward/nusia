@@ -1,5 +1,5 @@
   <!-- Logo -->
-    <a href="{{ route('home') }}" class="logo">
+    <a href="{{ route('registered.dashboard.index') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <!--span class="logo-mini"><b>N</b></span-->
       <span class="logo-mini"><img src="{{ asset('header.ico') }}" alt="Header"></span>
@@ -15,14 +15,22 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-          <!-- Messages: style can be found in dropdown.less-->
+          <!-- Chat: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
-            <a href="{{ route('contact') }}" class="dropdown-toggle">
+            <a href="{{ route('registered.chat.index') }}" class="dropdown-toggle">
               <i class="fa fa-envelope-o"></i>
               <span class="sr-only">Toggle chat features</span>
             </a>
           </li>
-          <!-- Notifications: style can be found in dropdown.less -->
+          <!-- Contact: style can be found in dropdown.less-->
+          <li class="dropdown messages-menu">
+            <a href="{{ route('registered.contact.index') }}" class="dropdown-toggle">
+              <i class="fa fa-question-circle-o"></i>
+              <span class="sr-only">Toggle contact features</span>
+            </a>
+          </li>
+          {{--
+          <!-- Notification: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
@@ -37,6 +45,7 @@
               </li>
             </ul>
           </li>
+          --}}
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -67,7 +76,7 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="{{ route('profile') }}" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{{ route('registered.profile.index') }}" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
                   <form id="logout-form" action="{{ route('logout') }}" method="POST">

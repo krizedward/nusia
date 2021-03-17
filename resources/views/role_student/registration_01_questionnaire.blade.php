@@ -9,7 +9,7 @@
     <div class="box-header with-border">
       <h3 class="box-title"><b>New Student Registration Form</b></h3>
     </div>
-    <form role="form" method="post" action="{{ route('questionnaire.store') }}" enctype="multipart/form-data">
+    <form role="form" method="post" action="{{ route('student.student_registration_form.update', [Auth::user()->id]) }}" enctype="multipart/form-data">
       @csrf
       <div class="box-body">
         <div class="row">
@@ -138,14 +138,14 @@
                   <input id="radioAnswer1" name="indonesian_language_proficiency" type="radio" value="Novice" onchange="if(document.getElementById('radioAnswer1').checked) { document.getElementById('descriptionNovice').className = ''; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
                 @endif
                 <label for="radioAnswer1" class="custom-control-label">Novice</label>
-                <br>
+                <br />
                 @if(old('indonesian_language_proficiency') == 'Intermediate')
                   <input checked id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
                 @else
                   <input id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
                 @endif
                 <label for="radioAnswer2" class="custom-control-label">Intermediate</label>
-                <br>
+                <br />
                 @if(old('indonesian_language_proficiency') == 'Advanced')
                   <input checked id="radioAnswer3" name="indonesian_language_proficiency" type="radio" value="Advanced" onchange="if(document.getElementById('radioAnswer3').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = ''; }">
                 @else

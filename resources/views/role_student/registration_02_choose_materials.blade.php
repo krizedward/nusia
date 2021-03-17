@@ -95,7 +95,7 @@
                               blue-colored text
                             </a>
                             to display a pop-up describing more information about the course discounts!<br />
-                            <span style="color:#ff0000;">* Contact us if you encounter a problem.</span>
+                            <span style="color:#ff0000;">Contact us if you encounter a problem.</span>
                           </dd>
                         </dl>
                         {{--

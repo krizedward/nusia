@@ -46,10 +46,13 @@ use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use PragmaRX\Countries\Package\Countries;
 use Illuminate\Support\Facades\File;
+use RealRashid\SweetAlert\Facades\Alert;
 
-class AttendanceController extends Controller
+class NonRegisteredController extends Controller
 {
     /**
      * Memeriksa role User saat ini.
@@ -85,55 +88,32 @@ class AttendanceController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Memeriksa apakah saat ini website ada dalam mode "Trial" atau "Full Version".
+     * Return boolean (1 dan 0).
      */
-    public function edit($session_id)
-    {
-        if($this->is_admin()) {
-            $session_registrations = SessionRegistration::where('session_id', $session_id)->get();
-            $session = Session::findOrFail($session_id);
-
-            return view('role_admin.attendances_edit', compact('session_registrations', 'session'));
-        } else {
-            return redirect()->back();
-        }
+    public function is_trial() {
+        return (Metadata::find(1)->value == 'Trial');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $session_id)
+    public function request_price_index()
     {
-        if($this->is_admin()) {
-            foreach(Session::findOrFail($session_id)->session_registrations as $sr) {
-                $flag = 0;
-                foreach($request->all() as $key => $val) {
-                    if($key == 'flag'.$sr->course_registration->student->id && $val == 'true') {
-                        $sr->update([
-                            'status' => 'Should Submit Form',
-                        ]);
-                        $flag = 1;
-                        break;
-                    }
-                }
-                if($flag == 0) {
-                    $sr->update([
-                        'status' => 'Not Present',
-                    ]);
-                }
-            }
-        } else {
-            // Tidak memiliki hak akses.
-            return redirect()->back();
-        }
+        // melakukan request daftar harga course untuk negara tertentu
+    }
 
-        return redirect()->route('attendances.edit', $session_id);
+    public function request_price_store(Request $request)
+    {
+        // melakukan request daftar harga course untuk negara tertentu
+    }
+
+    public function terms_index()
+    {
+        // melihat syarat dan ketentuan layanan
+        return view('terms');
+    }
+
+    public function policy_index()
+    {
+        // melihat syarat dan ketentuan layanan
+        //return view('policy');
     }
 }

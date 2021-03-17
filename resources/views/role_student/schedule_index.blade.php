@@ -11,7 +11,7 @@
 @section('content-header')
   <h1><b>Schedules</b></h1>
   <ol class="breadcrumb">
-    <li><a href="{{ route('home') }}">Home</a></li>
+    <li><a href="{{ route('registered.dashboard.index') }}">Home</a></li>
     <li class="active">Schedules</li>
   </ol>
 @stop
@@ -49,7 +49,7 @@
                         <dt style="font-size:18px;"><i class="fa fa-users margin-r-5"></i> Note</dt>
                         <dd>
                           Click "link" button to join your session!<br />
-                          <span style="color:#ff0000;">* Contact us if you encounter a problem.</span>
+                          <span style="color:#ff0000;">Contact us if you encounter a problem.</span>
                         </dd>
                         {{--
                         <hr>
@@ -79,46 +79,53 @@
                         $has_a_schedule = 0;
                         $schedule_times_begin = [];
                         $schedule_times_end = [];
+                        $schedule_times_end_form = [];
                         $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                         foreach($session_registrations as $dt) {
                           $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                           $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                          $schedule_time_end_form = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                           $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
-                          if($schedule_now <= $schedule_time_end) {
+                          $schedule_time_end_form->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
+                          if($schedule_now <= $schedule_time_end_form) {
                             $has_a_schedule = 1;
                             array_push($schedule_times_begin, $schedule_time_begin);
                             array_push($schedule_times_end, $schedule_time_end);
+                            array_push($schedule_times_end_form, $schedule_time_end_form);
                           }
                         }
                       ?>
                       @if($has_a_schedule)
-                        <table class="table table-bordered">
-                          <tr>
+                        <table class="table table-bordered example1">
+                          <thead>
                             <th>Course / Session</th>
                             <th>Time</th>
                             <th style="width:5%;">Link</th>
-                          </tr>
-                          @foreach($session_registrations as $i => $dt)
-                            @if($schedule_now <= $schedule_times_end[$i])
-                              <tr>
-                                <td>{{ $dt->session->course->title }} / {{ $dt->session->title }}</td>
-                                <td>
-                                  @if($schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                    Today, {{ $schedule_times_begin[$i]->isoFormat('hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
-                                  @else
-                                    {{ $schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
-                                  @endif
-                                </td>
-                                <td class="text-center">
-                                  @if($dt->session->link_zoom)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a>
-                                  @else
-                                    <a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a>
-                                  @endif
-                                </td>
-                              </tr>
-                            @endif
-                          @endforeach
+                          </thead>
+                          <tbody>
+                            @foreach($session_registrations as $i => $dt)
+                              @if($schedule_now <= $schedule_times_end[$i])
+                                <tr>
+                                  <td>{{ $dt->session->course->title }} / {{ $dt->session->title }}</td>
+                                  <td>
+                                    <span class="hidden">{{ $schedule_times_begin[$i]->isoFormat('YYMMDDAhhmm') }}</span>
+                                    @if($schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      Today, {{ $schedule_times_begin[$i]->isoFormat('hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
+                                    @else
+                                      {{ $schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
+                                    @endif
+                                  </td>
+                                  <td class="text-center">
+                                    @if($dt->session->link_zoom)
+                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Link</a>
+                                    @else
+                                      <a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a>
+                                    @endif
+                                  </td>
+                                </tr>
+                              @endif
+                            @endforeach
+                          </tbody>
                         </table>
                       @else
                         <div class="text-center">No data available.</div>
@@ -147,7 +154,7 @@
                         <dt style="font-size:18px;"><i class="fa fa-book margin-r-5"></i> Note</dt>
                         <dd>
                           Click "link" button view more information about each course!<br />
-                          <span style="color:#ff0000;">* Contact us if you encounter a problem.</span>
+                          <span style="color:#ff0000;">Contact us if you encounter a problem.</span>
                         </dd>
                         {{--
                         <hr>
@@ -173,21 +180,23 @@
                   </div>
                   <div class="box-body">
                     @if($course_registrations->toArray() != 0)
-                      <table class="table table-bordered">
-                        <tr>
+                      <table class="table table-bordered example1">
+                        <thead>
                           <th>Course</th>
                           <th>Type</th>
                           <th style="width:5%;">Detail</th>
-                        </tr>
-                        @foreach($course_registrations as $i => $dt)
-                          @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
-                            <tr>
-                              <td>{{ $dt->course->title }}</td>
-                              <td>{{ $dt->course->course_package->material_type->name }}/{{ $dt->course->course_package->course_type->name }}</td>
-                              <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
-                            </tr>
-                          @endif
-                        @endforeach
+                        </thead>
+                        <tbody>
+                          @foreach($course_registrations as $i => $dt)
+                            @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
+                              <tr>
+                                <td>{{ $dt->course->title }}</td>
+                                <td>{{ $dt->course->course_package->material_type->name }}/{{ $dt->course->course_package->course_type->name }}</td>
+                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('student.schedule.show', [$dt->id]) }}">Link</a></td>
+                              </tr>
+                            @endif
+                          @endforeach
+                        </tbody>
                       </table>
                     @else
                       <div class="text-center">No data available.</div>
@@ -216,23 +225,25 @@
                   </div>
                   <div class="box-body">
                     @if($count > 0)
-                      <table class="table table-bordered">
-                        <tr>
+                      <table class="table table-bordered example1">
+                        <thead>
                           <th>Course</th>
                           <th>Type</th>
                           <th style="width:5%;">Detail</th>
-                        </tr>
-                        @foreach($course_registrations as $i => $dt)
-                          @if($dt->course->course_package->material_type->name == $type)
-                            @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
-                              <tr>
-                                <td>{{ $dt->course->title }}</td>
-                                <td>{{ $dt->course->course_package->course_type->name }}</td>
-                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
-                              </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($course_registrations as $i => $dt)
+                            @if($dt->course->course_package->material_type->name == $type)
+                              @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
+                                <tr>
+                                  <td>{{ $dt->course->title }}</td>
+                                  <td>{{ $dt->course->course_package->course_type->name }}</td>
+                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
+                                </tr>
+                              @endif
                             @endif
-                          @endif
-                        @endforeach
+                          @endforeach
+                        </tbody>
                       </table>
                     @else
                       <div class="text-center">No data available.</div>
@@ -261,23 +272,25 @@
                   </div>
                   <div class="box-body">
                     @if($count > 0)
-                      <table class="table table-bordered">
-                        <tr>
+                      <table class="table table-bordered example1">
+                        <thead>
                           <th>Course</th>
                           <th>Type</th>
                           <th style="width:5%;">Detail</th>
-                        </tr>
-                        @foreach($course_registrations as $i => $dt)
-                          @if($dt->course->course_package->material_type->name == $type)
-                            @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
-                              <tr>
-                                <td>{{ $dt->course->title }}</td>
-                                <td>{{ $dt->course->course_package->course_type->name }}</td>
-                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
-                              </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($course_registrations as $i => $dt)
+                            @if($dt->course->course_package->material_type->name == $type)
+                              @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
+                                <tr>
+                                  <td>{{ $dt->course->title }}</td>
+                                  <td>{{ $dt->course->course_package->course_type->name }}</td>
+                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
+                                </tr>
+                              @endif
                             @endif
-                          @endif
-                        @endforeach
+                          @endforeach
+                        </tbody>
                       </table>
                     @else
                       <div class="text-center">No data available.</div>
@@ -306,23 +319,25 @@
                   </div>
                   <div class="box-body">
                     @if($count > 0)
-                      <table class="table table-bordered">
-                        <tr>
+                      <table class="table table-bordered example1">
+                        <thead>
                           <th>Course</th>
                           <th>Type</th>
                           <th style="width:5%;">Detail</th>
-                        </tr>
-                        @foreach($course_registrations as $i => $dt)
-                          @if($dt->course->course_package->material_type->name == $type)
-                            @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
-                              <tr>
-                                <td>{{ $dt->course->title }}</td>
-                                <td>{{ $dt->course->course_package->course_type->name }}</td>
-                                <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
-                              </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($course_registrations as $i => $dt)
+                            @if($dt->course->course_package->material_type->name == $type)
+                              @if(strpos($dt->course->course_package->title, 'Not Assigned') === false)
+                                <tr>
+                                  <td>{{ $dt->course->title }}</td>
+                                  <td>{{ $dt->course->course_package->course_type->name }}</td>
+                                  <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('course_registrations.show_by_student', [$dt->id]) }}">Link</a></td>
+                                </tr>
+                              @endif
                             @endif
-                          @endif
-                        @endforeach
+                          @endforeach
+                        </tbody>
                       </table>
                     @else
                       <div class="text-center">No data available.</div>

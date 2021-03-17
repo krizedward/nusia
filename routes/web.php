@@ -11,409 +11,417 @@
 |
 */
 
-Route::redirect('/', 'login');
-//akses untuk menguji tampilan draft
+// daftar route
+// use case digunakan: v3.4.5
+// last update Maret 2021
 
-/*
-Route::get('/test', function () {
-    return view('courses.student_private_schedule');
-});
-*/
-
-//Route::get('/', 'HomeController@landing_page')->name('index');
-
-Route::get('/terms-of-service', function() {
-    return view('terms');
-})->name('terms');
+// daftar use case unregistered users
+    // melakukan request daftar harga course untuk negara tertentu
+    Route::get('/request-price', 'NonRegisteredController@request_price_index')->name('non_registered.request_price.index');
+    Route::post('/request-price/store', 'NonRegisteredController@request_price_store')->name('non_registered.request_price.store');
+    
+    // melakukan login
+    // mendaftar akun baru
+    // (dihandle oleh auth routes)
+    
+    // melihat syarat dan ketentuan layanan
+    Route::get('/terms-of-service', 'NonRegisteredController@terms_index')->name('non_registered.terms.index');
+    Route::get('/privacy-policy', 'NonRegisteredController@policy_index')->name('non_registered.policy.index');
+    
+    // lain-lain (redirection)
+    Route::redirect('/', '/login');
 
 Route::group(['middleware'=>'auth'], function() {
+    // daftar use case registered users
+        // menampilkan dashboard
+        Route::get('/dashboard', 'RegisteredController@dashboard_index')->name('registered.dashboard.index');
+        
+        // menampilkan NUSIA contact person
+        Route::get('/contact-us', 'RegisteredController@contact_index')->name('registered.contact.index');
+        
+        // membuka fitur chat
+        Route::get('/chat', 'RegisteredController@chat_index')->name('registered.chat.index');
+        
+        // melihat informasi profil
+        Route::get('/profile', 'RegisteredController@profile_index')->name('registered.profile.index');
+        
+        // memodifikasi informasi profil
+        Route::put('/profile/update', 'RegisteredController@profile_update')->name('registered.profile.update');
+        
+        // lain-lain (redirection)
+        // apabila proses logout error (metode GET tidak didukung)
+        Route::get('/logout', 'RegisteredController@logout_get_index')->name('registered.logout_get.index');
+    
+    // daftar use case non-admin users
+        // menghubungi admin (via chat)
+        Route::get('/non-admin/chat/admin', 'NonAdminController@chat_admin_index')->name('non_admin.chat_admin.index');
+        Route::get('/non-admin/chat/admin/{user_id}', 'NonAdminController@chat_admin_show')->name('non_admin.chat_admin.show');
+        Route::post('/non-admin/chat/admin/{user_id}/store', 'NonAdminController@chat_admin_store')->name('non_admin.chat_admin.store');
+        Route::redirect('/non-admin', '/non-admin/chat/admin');
+        Route::redirect('/non-admin/chat', '/non-admin/chat/admin');
+        
+    // daftar use case student
+        // mendaftar course: mengisi formulir registrasi student
+        Route::get('/student-registration-form', 'StudentController@student_registration_form_index')->name('student.student_registration_form.index');
+        Route::put('/student-registration-form/{user_id}/update', 'StudentController@student_registration_form_update')->name('student.student_registration_form.update');
+        
+        // mendaftar course: memilih jenis course
+        Route::get('/choose-course/{course_registration_id?}', 'StudentController@choose_course_index')->name('student.choose_course.index');
+        Route::post('/choose-course/store', 'StudentController@choose_course_store')->name('student.choose_course.store');
+        
+        // mendaftar course: melengkapi informasi pembayaran
+        Route::get('/complete-payment-information/{course_registration_id}', 'StudentController@complete_payment_information_show')->name('student.complete_payment_information.show');
+        Route::put('/complete-payment-information/{course_registration_id}/update', 'StudentController@complete_payment_information_update')->name('student.complete_payment_information.update');
+        
+        // mendaftar course: mengirim bukti pembayaran
+        Route::get('/upload-payment-evidence/{course_registration_id}', 'StudentController@upload_payment_evidence_show')->name('student.upload_payment_evidence.show');
+        Route::put('/upload-payment-evidence/{course_registration_id}/update', 'StudentController@upload_payment_evidence_update')->name('student.upload_payment_evidence.update');
+        
+        // mendaftar course: menghubungi financial team (via chat)
+        Route::get('/registration-info/chat/financial-team', 'StudentController@chat_financial_team_index')->name('student.chat_financial_team.index');
+        Route::get('/registration-info/chat/financial-team/{user_id}', 'StudentController@chat_financial_team_show')->name('student.chat_financial_team.show');
+        Route::post('/registration-info/chat/financial-team/{user_id}/store', 'StudentController@chat_financial_team_store')->name('student.chat_financial_team.store');
+        Route::redirect('/registration-info', '/registration-info/chat/financial-team');
+        Route::redirect('/registration-info/chat', '/registration-info/chat/financial-team');
+        
+        // mendaftar course: mengirim hasil placement test
+        Route::get('/upload-placement-test/{course_registration_id}', 'StudentController@upload_placement_test_show')->name('student.upload_placement_test.show');
+        Route::put('/upload-placement-test/{course_registration_id}/update', 'StudentController@upload_placement_test_update')->name('student.upload_placement_test.update');
+        
+        // mendaftar course: menghubungi lead instructor (via chat)
+        Route::get('/placement-test/chat/reviewer-team', 'StudentController@chat_lead_instructor_index')->name('student.chat_lead_instructor.index');
+        Route::get('/placement-test/chat/reviewer-team/{user_id}', 'StudentController@chat_lead_instructor_show')->name('student.chat_lead_instructor.show');
+        Route::post('/placement-test/chat/reviewer-team/{user_id}/store', 'StudentController@chat_lead_instructor_store')->name('student.chat_lead_instructor.store');
+        Route::redirect('/placement-test', '/placement-test/chat/reviewer-team');
+        Route::redirect('/placement-test/chat', '/placement-test/chat/reviewer-team');
+        
+        // mendaftar course: memilih jadwal & memilih instructor
+        Route::get('/choose-course-registration/{course_registration_id}', 'StudentController@choose_course_registration_show')->name('student.choose_course_registration.show');
+        
+        // mendaftar course: mengonfirmasi jadwal & mengonfirmasi instructor
+        Route::get('/confirm-course-registration/{course_registration_id}/choose/{course_id}', 'StudentController@confirm_course_registration_show')->name('student.confirm_course_registration.show');
+        Route::put('/confirm-course-registration/{course_registration_id}/choose/{course_id}/update', 'StudentController@confirm_course_registration_update')->name('student.confirm_course_registration.update');
+        
+        // melihat daftar course dalam proses registrasi
+        Route::get('/view-course-registration', 'StudentController@view_course_registration_index')->name('student.view_course_registration.index');
+        
+        // melihat daftar sesi yang sedang atau akan berlangsung
+        // & mengikuti kelas (via meeting link)
+        // & melihat daftar course yang diikuti
+        // & melihat hasil filter daftar course sesuai jenis course
+        Route::get('/student/schedule', 'StudentController@schedule_index')->name('student.schedule.index');
+        
+        // melihat informasi detail masing-masing course
+        // & melihat daftar sesi
+        // & mengikuti kelas (via meeting link)
+        // & melihat status kehadiran masing-masing sesi
+        // & melihat daftar materi
+        // & melihat daftar tugas
+        // & melihat nilai tugas
+        // & melihat hasil koreksi tugas
+        // & melihat daftar ujian
+        // & melihat nilai ujian
+        // & melihat hasil koreksi ujian
+        // & melihat daftar instructor course
+        // & melihat daftar student dalam course
+        // & melihat status penerimaan sertifikat keikutsertaan dalam course
+        Route::get('/student/schedule/{course_registration_id}', 'StudentController@schedule_show')->name('student.schedule.show');
+        
+        // mengirim feedback per sesi
+        Route::post('/student/schedule/{course_registration_id}/feedback/{session_registration_id}/store', 'StudentController@feedback_store')->name('student.feedback.store');
+        
+        // mengunduh materi
+        Route::get('/student/schedule/{course_registration_id}/material/{material_type}/{material_id}/download', 'StudentController@material_download')->name('student.material.download');
+        
+        // mengunduh tugas
+        Route::get('/student/schedule/{course_registration_id}/assignment/{assignment_id}/download', 'StudentController@assignment_download')->name('student.assignment.download');
+        
+        // mengumpulkan tugas
+        Route::post('/student/schedule/{course_registration_id}/assignment-submission/store', 'StudentController@assignment_submission_store')->name('student.assignment_submission.store');
+        
+        // mengunduh pengumpulan tugas
+        Route::get('/student/schedule/{course_registration_id}/assignment-submission/{submission_id}/download', 'StudentController@assignment_submission_download')->name('student.assignment_submission.download');
+        
+        // mengunduh ujian
+        Route::get('/student/schedule/{course_registration_id}/exam/{exam_id}/download', 'StudentController@exam_download')->name('student.exam.download');
+        
+        // mengumpulkan ujian
+        Route::post('/student/schedule/{course_registration_id}/exam-submission/store', 'StudentController@exam_submission_store')->name('student.exam_submission.store');
+        
+        // mengunduh pengumpulan ujian
+        Route::get('/student/schedule/{course_registration_id}/exam-submission/{submission_id}/download', 'StudentController@exam_submission_download')->name('student.exam_submission.download');
+        
+        // mengunduh sertifikat
+        Route::get('/student/schedule/{course_registration_id}/certificate/download', 'StudentController@certificate_download')->name('student.certificate.download');
+        
+        // menghubungi instructor course (via chat)
+        Route::get('/student/study/chat/instructor', 'StudentController@chat_instructor_index')->name('student.chat_instructor.index');
+        Route::get('/student/study/chat/instructor/{user_id}', 'StudentController@chat_instructor_show')->name('student.chat_instructor.show');
+        Route::post('/student/study/chat/instructor/{user_id}/store', 'StudentController@chat_instructor_store')->name('student.chat_instructor.store');
+        Route::redirect('/student/study', '/student/study/chat/instructor');
+        Route::redirect('/student/study/chat', '/student/study/chat/instructor');
+        
+        // menghubungi member course (via group chat)
+        Route::get('/student/team/chat/group', 'StudentController@chat_group_index')->name('student.chat_group.index');
+        Route::get('/student/team/chat/group/{course_id}', 'StudentController@chat_group_show')->name('student.chat_group.show');
+        Route::post('/student/team/chat/group/{course_id}/store', 'StudentController@chat_group_store')->name('student.chat_group.store');
+        Route::redirect('/student/team', '/student/team/chat/group');
+        Route::redirect('/student/team/chat', '/student/team/chat/group');
+        
+        // menghubungi cs (via chat)
+        Route::get('/student-course-info/chat/customer-service', 'StudentController@chat_customer_service_index')->name('student.chat_customer_service.index');
+        Route::get('/student-course-info/chat/customer-service/{user_id}', 'StudentController@chat_customer_service_show')->name('student.chat_customer_service.show');
+        Route::post('/student-course-info/chat/customer-service/{user_id}/store', 'StudentController@chat_customer_service_store')->name('student.chat_customer_service.store');
+        Route::redirect('/student-course-info', '/student-course-info/chat/customer-service');
+        Route::redirect('/student-course-info/chat', '/student-course-info/chat/customer-service');
+        
+        // lain-lain (redirection)
+        Route::redirect('/student', '/dashboard');
+        
+    // daftar use case instructor
+        // melihat jadwal mengajar yang diintegrasikan dengan sesi, yang sedang atau akan berlangsung
+        // & melaksanakan kelas (via meeting link)
+        // & melihat ketersediaan jadwal mengajar yang pernah dibuat, secara menyeluruh
+        // & melihat daftar course yang diajar
+        // & melihat hasil filter daftar course sesuai jenis course
+        Route::get('/instructor/schedule', 'InstructorController@schedule_index')->name('instructor.schedule.index');
+        
+        // menambah ketersediaan jadwal mengajar
+        Route::post('/instructor/schedule/store', 'InstructorController@schedule_store')->name('instructor.schedule.store');
+        
+        // memodifikasi ketersediaan jadwal mengajar
+        Route::put('/instructor/schedule/{schedule_id}/update', 'InstructorController@schedule_update')->name('instructor.schedule.update');
+        
+        // mengintegrasikan ketersediaan jadwal mengajar dengan sesi tertentu
+        Route::put('/instructor/schedule/{schedule_id}/integrate-with-session/update', 'InstructorController@schedule_integrate_update')->name('instructor.schedule_integrate.update');
+        
+        // menghapus ketersediaan jadwal mengajar
+        Route::delete('/instructor/schedule/{schedule_id}/destroy', 'InstructorController@schedule_destroy')->name('instructor.schedule.destroy');
+        
+        // melihat informasi detail masing-masing course
+        // & melihat daftar sesi
+        // & melaksanakan kelas (via meeting link)
+        // & melihat daftar materi
+        // & melihat daftar tugas diberikan
+        // & melihat daftar pengumpulan tugas
+        // & melihat daftar ujian diberikan
+        // & melihat daftar pengumpulan ujian
+        // & melihat daftar instructor course
+        // & melihat daftar student dalam course
+        Route::get('/instructor/course/{course_id}', 'InstructorController@course_show')->name('instructor.course.show');
+        
+        // membuat sesi baru
+        // & mengintegrasikan ketersediaan jadwal mengajar dengan sesi tertentu
+        // & menambah ketersediaan jadwal mengajar
+        Route::post('/instructor/course/{course_id}/session/store', 'InstructorController@session_store')->name('instructor.session.store');
+        
+        // memodifikasi informasi umum mengenai sesi
+        // & memodifikasi ketersediaan jadwal mengajar
+        Route::put('/instructor/course/{course_id}/session/{session_id}/update', 'InstructorController@session_update')->name('instructor.session.update');
+        
+        // menghapus informasi sesi
+        // & menghapus ketersediaan jadwal mengajar
+        Route::delete('/instructor/course/{course_id}/session/{session_id}/destroy', 'InstructorController@session_destroy')->name('instructor.session.destroy');
+        
+        // melihat status kehadiran student dalam setiap sesi
+        Route::get('/instructor/course/{course_id}/session/{session_id}/attendance', 'InstructorController@student_attendance_index')->name('instructor.student_attendance.index');
+        
+        // mengubah status kehadiran student dalam satu sesi
+        Route::put('/instructor/course/{course_id}/session/{session_id}/attendance/update', 'InstructorController@student_attendance_update')->name('instructor.student_attendance.update');
+        
+        // melihat feedback per sesi
+        Route::get('/instructor/course/{course_id}/session/{session_id}/feedback', 'InstructorController@session_feedback_index')->name('instructor.session_feedback.index');
+        
+        // mengunggah materi
+        Route::post('/instructor/course/{course_id}/material/store', 'InstructorController@material_store')->name('instructor.material.store');
+        
+        // mengunduh materi
+        Route::get('/instructor/course/material/{material_type}/{material_id}/download', 'InstructorController@material_download')->name('instructor.material.download');
+        
+        // memodifikasi informasi materi
+        Route::put('/instructor/course/{course_id}/material/{material_type}/{material_id}/update', 'InstructorController@material_update')->name('instructor.material.update');
+        
+        // menghapus informasi materi
+        Route::delete('/instructor/course/{course_id}/material/{material_type}/{material_id}/destroy', 'InstructorController@material_destroy')->name('instructor.material.destroy');
+        
+        // mengunggah tugas
+        Route::post('/instructor/course/{course_id}/assignment/store', 'InstructorController@assignment_store')->name('instructor.assignment.store');
+        
+        // mengunduh tugas
+        Route::get('/instructor/course/{course_id}/assignment/{assignment_id}/download', 'InstructorController@assignment_download')->name('instructor.assignment.download');
+        
+        // memodifikasi informasi tugas
+        Route::put('/instructor/course/{course_id}/assignment/{assignment_id}/update', 'InstructorController@assignment_update')->name('instructor.assignment.update');
+        
+        // menghapus informasi tugas
+        Route::delete('/instructor/course/{course_id}/assignment/{assignment_id}/destroy', 'InstructorController@assignment_destroy')->name('instructor.assignment.destroy');
+        
+        // mengunduh pengumpulan tugas
+        Route::get('/instructor/course/{course_id}/assignment-submission/{submission_id}/download', 'InstructorController@assignment_submission_download')->name('instructor.assignment_submission.download');
+        
+        // mengoreksi pengumpulan tugas
+        Route::put('/instructor/course/{course_id}/assignment-submission/{submission_id}/update', 'InstructorController@assignment_submission_update')->name('instructor.assignment_submission.update');
+        
+        // mengunggah ujian
+        Route::post('/instructor/course/{course_id}/exam/store', 'InstructorController@exam_store')->name('instructor.exam.store');
+        
+        // mengunduh ujian
+        Route::get('/instructor/course/{course_id}/exam/{exam_id}/download', 'InstructorController@exam_download')->name('instructor.exam.download');
+        
+        // memodifikasi informasi ujian
+        Route::put('/instructor/course/{course_id}/exam/{exam_id}/update', 'InstructorController@exam_update')->name('instructor.exam.update');
+        
+        // menghapus informasi ujian
+        Route::delete('/instructor/course/{course_id}/exam/{exam_id}/destroy', 'InstructorController@exam_destroy')->name('instructor.exam.destroy');
+        
+        // mengunduh pengumpulan ujian
+        Route::get('/instructor/course/{course_id}/exam-submission/{submission_id}/download', 'InstructorController@exam_submission_download')->name('instructor.exam_submission.download');
+        
+        // mengoreksi pengumpulan ujian
+        Route::put('/instructor/course/{course_id}/exam-submission/{submission_id}/update', 'InstructorController@exam_submission_update')->name('instructor.exam_submission.update');
+        
+        // melihat informasi profil instructor lain
+        Route::get('/instructor/show-instructor-profile/{user_id}', 'InstructorController@instructor_profile_show')->name('instructor.instructor_profile.show');
+        
+        // menghubungi instructor lain (via chat)
+        Route::get('/instructor/take-part/chat/other-instructor', 'InstructorController@chat_instructor_index')->name('instructor.chat_instructor.index');
+        Route::get('/instructor/take-part/chat/other-instructor/{user_id}', 'InstructorController@chat_instructor_show')->name('instructor.chat_instructor.show');
+        Route::post('/instructor/take-part/chat/other-instructor/{user_id}/store', 'InstructorController@chat_instructor_store')->name('instructor.chat_instructor.store');
+        Route::redirect('/instructor/take-part', '/instructor/take-part/chat/other-instructor');
+        Route::redirect('/instructor/take-part/chat', '/instructor/take-part/chat/other-instructor');
+        
+        // melihat informasi profil student
+        Route::get('/instructor/show-student-profile/{user_id}', 'InstructorController@student_profile_show')->name('instructor.student_profile.show');
+        
+        // menghubungi member course (via group chat)
+        Route::get('/instructor/team/chat/group', 'InstructorController@chat_group_index')->name('instructor.chat_group.index');
+        Route::get('/instructor/team/chat/group/{course_id}', 'InstructorController@chat_group_show')->name('instructor.chat_group.show');
+        Route::post('/instructor/team/chat/group/{course_id}/store', 'InstructorController@chat_group_store')->name('instructor.chat_group.store');
+        Route::redirect('/instructor/team', '/instructor/team/chat/group');
+        Route::redirect('/instructor/team/chat', '/instructor/team/chat/group');
+        
+        // menghubungi student (via chat)
+        Route::get('/instructor/discuss/chat/student', 'InstructorController@chat_student_index')->name('instructor.chat_student.index');
+        Route::get('/instructor/discuss/chat/student/{user_id}', 'InstructorController@chat_student_show')->name('instructor.chat_student.show');
+        Route::post('/instructor/discuss/chat/student/{user_id}/store', 'InstructorController@chat_student_store')->name('instructor.chat_student.store');
+        
+        // lain-lain (redirection)
+        Route::redirect('/instructor', '/dashboard');
+        
+    // daftar use case tambahan (untuk lead instructor)
+        // melihat informasi registrasi student
+        // & melihat daftar jadwal meeting alternatif placement test
+        Route::get('/reviewer/student-registration', 'LeadInstructorController@student_registration_index')->name('lead_instructor.student_registration.index');
+        
+        // melihat informasi profil student
+        Route::get('/reviewer/student-registration/{course_registration_id}', 'LeadInstructorController@student_registration_show')->name('lead_instructor.student_registration.show');
+        
+        // menghubungi student (via chat)
+        Route::get('/reviewer/placement-test/chat/student', 'LeadInstructorController@chat_student_index')->name('lead_instructor.chat_student.index');
+        Route::get('/reviewer/placement-test/chat/student/{user_id}', 'LeadInstructorController@chat_student_show')->name('lead_instructor.chat_student.show');
+        Route::post('/reviewer/placement-test/chat/student/{user_id}/store', 'LeadInstructorController@chat_student_store')->name('lead_instructor.chat_student.store');
+        Route::redirect('/reviewer/placement-test', '/reviewer/placement-test/chat/student');
+        Route::redirect('/reviewer/placement-test/chat', '/reviewer/placement-test/chat/student');
+        
+        // mengonfirmasi hasil placement test
+        Route::put('/reviewer/student-registration/{course_registration_id}/placement-test/by-video/update', 'LeadInstructorController@placement_test_by_video_update')->name('lead_instructor.placement_test_by_video.update');
+        
+        // menambahkan jadwal meeting alternatif
+        Route::post('/reviewer/student-registration/placement-test/by-meeting/store', 'LeadInstructorController@placement_test_by_meeting_store')->name('lead_instructor.placement_test_by_meeting.store');
+        
+        // memodifikasi informasi jadwal meeting alternatif
+        Route::put('/reviewer/student-registration/placement-test/by-meeting/{session_id}/update', 'LeadInstructorController@placement_test_by_meeting_update')->name('lead_instructor.placement_test_by_meeting.update');
+        
+        // menghapus informasi jadwal meeting alternatif
+        Route::delete('/reviewer/student-registration/placement-test/by-meeting/{session_id}/destroy', 'LeadInstructorController@placement_test_by_meeting_destroy')->name('lead_instructor.placement_test_by_meeting.destroy');
+        
+        // melihat daftar student peserta meeting alternatif
+        Route::get('/reviewer/student-registration/placement-test/by-meeting/{session_id}', 'LeadInstructorController@placement_test_by_meeting_index')->name('lead_instructor.placement_test_by_meeting.index');
+        
+        // melihat informasi profil student
+        Route::get('/reviewer/student-registration/placement-test/by-meeting/{session_id}/participant/{course_registration_id}', 'LeadInstructorController@placement_test_by_meeting_student_profile_show')->name('lead_instructor.placement_test_by_meeting_student_profile.show');
+        
+        // menghubungi student (via chat)
+        Route::get('/reviewer/placement-test-by-meeting/chat/student', 'LeadInstructorController@chat_student_alternative_meeting_index')->name('lead_instructor.chat_student_alternative_meeting.index');
+        Route::get('/reviewer/placement-test-by-meeting/chat/student/{user_id}', 'LeadInstructorController@chat_student_alternative_meeting_show')->name('lead_instructor.chat_student_alternative_meeting.show');
+        Route::post('/reviewer/placement-test-by-meeting/chat/student/{user_id}/store', 'LeadInstructorController@chat_student_alternative_meeting_store')->name('lead_instructor.chat_student_alternative_meeting.store');
+        Route::redirect('/reviewer/placement-test-by-meeting', '/reviewer/placement-test-by-meeting/chat/student');
+        Route::redirect('/reviewer/placement-test-by-meeting/chat', '/reviewer/placement-test-by-meeting/chat/student');
+        
+        // mengonfirmasi hasil placement test (menurut hasil meeting)
+        Route::put('/reviewer/student-registration/{course_registration_id}/placement-test/by-meeting/update', 'LeadInstructorController@placement_test_by_meeting_update')->name('lead_instructor.placement_test_by_meeting.update');
+        
+        // lain-lain (redirection)
+        Route::redirect('/reviewer', '/dashboard');
+        
+    // daftar use case customer service
+        // melihat daftar student
+        Route::get('/customer-service/student', 'CustomerServiceController@student_index')->name('customer_service.student.index');
+        
+        // melihat informasi profil student
+        Route::get('/customer-service/student/{user_id}', 'CustomerServiceController@student_show')->name('customer_service.student.show');
+        
+        // menghubungi student (via chat)
+        Route::get('/customer-service/chat/student', 'CustomerServiceController@chat_student_index')->name('customer_service.chat_student.index');
+        Route::get('/customer-service/chat/student/{user_id}', 'CustomerServiceController@chat_student_show')->name('customer_service.chat_student.show');
+        Route::post('/customer-service/chat/student/{user_id}/store', 'CustomerServiceController@chat_student_store')->name('customer_service.chat_student.store');
+        
+        // melihat informasi daftar course yang diikuti oleh student
+        Route::get('/customer-service/student/{user_id}/course-registration', 'CustomerServiceController@student_course_registration_index')->name('customer_service.student_course_registration.index');
+        
+        // melihat informasi detail masing-masing course
+        // & melihat daftar sesi
+        // & melihat feedback per sesi yang diberikan oleh student
+        // & melihat status kehadiran student dalam setiap sesi
+        // & melihat daftar materi
+        // & melihat daftar tugas diberikan
+        // & melihat daftar pengumpulan tugas
+        // & melihat daftar ujian diberikan
+        // & melihat daftar pengumpulan ujian
+        // & melihat daftar instructor course
+        // & melihat informasi profil instructor
+        // & melihat daftar student dalam course
+        // & melihat status penerimaan sertifikat keikutsertaan dalam course
+        Route::get('/customer-service/course-registration/{course_registration_id}', 'CustomerServiceController@student_course_registration_show')->name('customer_service.student_course_registration.show');
+        
+        // mengunduh sertifikat
+        Route::get('/customer-service/course-registration/{course_registration_id}/course-certificate/download', 'CustomerServiceController@course_certificate_download')->name('customer_service.course_certificate.download');
+        
+        // mengunggah sertifikat
+        Route::put('/customer-service/course-registration/{course_registration_id}/course-certificate/update', 'CustomerServiceController@course_certificate_update')->name('customer_service.course_certificate.update');
+        
+        // lain-lain (redirection)
+        Route::redirect('/customer-service', '/dashboard');
+    // daftar use case financial team
+        // melihat daftar pembayaran student
+        Route::get('/finance/student-payment', 'FinancialTeamController@student_payment_index')->name('financial_team.student_payment.index');
+        
+        // melihat detail informasi pembayaran student
+        Route::get('/finance/student-payment/{course_payment_id}', 'FinancialTeamController@student_payment_show')->name('financial_team.student_payment.show');
+        
+        // mengunduh bukti pembayaran
+        Route::get('/finance/student-payment/{course_payment_id}/download', 'FinancialTeamController@student_payment_download')->name('financial_team.student_payment.download');
+        
+        // mengonfirmasi bukti pembayaran
+        Route::put('/finance/student-payment/{course_payment_id}/update', 'FinancialTeamController@student_payment_update')->name('financial_team.student_payment.update');
+        
+        // menghubungi student (via chat)
+        Route::get('/finance/chat/student', 'FinancialTeamController@chat_student_index')->name('financial_team.chat_student.index');
+        Route::get('/finance/chat/student/{course_payment_id}', 'FinancialTeamController@chat_student_show')->name('financial_team.chat_student.show');
+        Route::post('/finance/chat/student/{course_payment_id}/store', 'FinancialTeamController@chat_student_store')->name('financial_team.chat_student.store');
+        Route::redirect('/finance', '/finance/chat/student');
+        Route::redirect('/finance/chat', '/finance/chat/student');
+        
+        // lain-lain (redirection)
+        Route::redirect('/finance', '/dashboard');
 
-        // NEW ROUTING FOR ADMIN: 9 Oktober 2020 dan selanjutnya.
-        /* VIEW (SIDEBAR) */
-        Route::get('/courses', 'CourseController@index')->name('courses.index');
-        Route::post('/courses', 'MaterialTypeController@store')->name('material_types.index'); // dilakukan pada view courses.index
-        Route::post('/courses', 'CourseTypeController@store')->name('course_types.index'); // dilakukan pada view courses.index
-        Route::post('/courses', 'CourseLevelController@store')->name('course_levels.index'); // dilakukan pada view courses.index
-        Route::post('/courses', 'CoursePackageController@store')->name('course_packages.index'); // dilakukan pada view courses.index
-        Route::post('/courses', 'CourseController@store')->name('courses.index'); // dilakukan pada view courses.index
-        Route::put('/data/{id}', 'MaterialTypeController@update')->name('material_types.update'); // dilakukan pada view courses.index
-        Route::put('/data/{id}', 'CourseTypeController@update')->name('course_types.update'); // dilakukan pada view courses.index
-        Route::put('/data/{id}', 'CourseLevelController@update')->name('course_levels.update'); // dilakukan pada view courses.index
-        Route::put('/data/{id}', 'CoursePackageController@update')->name('course_packages.update'); // dilakukan pada view courses.index
-        //Route::delete('/data/{id}', 'MaterialTypeController@destroy')->name('material_types.destroy'); // dilakukan pada view courses.index
-        //Route::delete('/data/{id}', 'CourseTypeController@destroy')->name('course_types.destroy'); // dilakukan pada view courses.index
-        //Route::delete('/data/{id}', 'CourseLevelController@destroy')->name('course_levels.destroy'); // dilakukan pada view courses.index
-        //Route::delete('/data/{id}', 'CoursePackageController@destroy')->name('course_packages.destroy'); // dilakukan pada view courses.index
-        /* VIEW */
-        Route::get('/courses/{id}', 'CourseController@show')->name('courses.show');
-        Route::put('/courses/{id}', 'CourseController@update')->name('courses.update'); // dilakukan pada view courses.show
-        //Route::delete('/courses/{id}', 'CourseController@destroy')->name('courses.destroy'); // dilakukan pada view courses.show
-        Route::post('/schedules', 'ScheduleController@store')->name('schedules.index'); // dilakukan pada view courses.show
-        Route::post('/sessions', 'SessionController@store')->name('sessions.index'); // dilakukan pada view courses.show
-
-        /* VIEW (SIDEBAR) */
-        Route::get('/users', 'UserController@index')->name('users.index');
-        Route::get('/users/create', 'UserController@create')->name('users.create');
-        Route::post('/users', 'UserController@store')->name('users.store'); // dilakukan pada view users.index
-        /* VIEW */
-        Route::get('/users/{id}', 'UserController@show')->name('users.show');
-        Route::put('/users/{id}', 'UserController@update')->name('users.update'); // dilakukan pada view users.show
-        //Route::delete('/users/{id}', 'UserController@destroy')->name('users.destroy'); // dilakukan pada view users.show
-        Route::post('/users', 'CourseRegistrationController@store')->name('course_registrations.store'); // dilakukan pada view users.show
-        /* VIEW */
-        Route::get('/users/{user_id}/courses/{course_id}', 'CourseRegistrationController@show_by_admin')->name('course_registrations.show_by_admin');
-        Route::put('/users/{user_id}/courses/{course_id}', 'CourseRegistrationController@update_by_admin')->name('course_registrations.update_by_admin'); // dilakukan pada view course_registrations.show
-        //Route::delete('/users/{user_id}/courses/{course_id}', 'CourseRegistrationController@destroy_by_admin')->name('course_registrations.destroy_by_admin'); // dilakukan pada view course_registrations.show
-        Route::put('/courses/{id}', 'CourseController@update')->name('courses.update'); // dilakukan pada view course_registrations.show
-        Route::put('/sessions/{id}', 'SessionController@update')->name('sessions.update'); // dilakukan pada view course_registrations.show
-        Route::put('/schedules/{id}', 'ScheduleController@update')->name('schedules.update'); // dilakukan pada view course_registrations.show
-        /* VIEW */
-        Route::get('/users/{user_id}/courses/{course_id}/sessions/{session_id}', 'SessionRegistrationController@show')->name('session_registrations.show');
-        Route::put('/users/{user_id}/courses/{course_id}/sessions/{session_id}', 'SessionRegistrationController@update')->name('session_registrations.update'); // dilakukan pada view session_registrations.show
-        //Route::destroy('/users/{user_id}/courses/{course_id}/sessions/{session_id}', 'SessionRegistrationController@destroy')->name('session_registrations.destroy'); // dilakukan pada view session_registrations.show
-        Route::post('/submission', 'TaskSubmissionController@store')->name('task_submissions.store'); // dilakukan pada view session_registrations.show
-        Route::put('/submission/{id}', 'TaskSubmissionController@update')->name('task_submissions.update'); // dilakukan pada view session_registrations.show
-        //Route::destroy('/submission/{id}', 'TaskSubmissionController@destroy')->name('task_submissions.destroy'); // dilakukan pada view session_registrations.show
-        Route::put('/task/{id}', 'TaskController@update')->name('tasks.update'); // dilakukan pada view session_registrations.show
-
-        /* VIEW */
-        Route::get('/forms', 'FormController@index')->name('forms.index');
-
-        /* VIEW */
-        Route::get('/website-ratings', 'FormResponseController@index')->name('form_responses.index_admin');
-
-        // NEW ROUTING FOR STUDENT REGISTRATION: 18 Oktober 2020 dan selanjutnya.
-        // for role Student
-        Route::get('/student/choose-materials/{id?}', 'HomeController@choose_materials')->name('student.choose_materials'); // ID digunakan adalah course_registration_id, apabila sebelumnya sudah pernah dilakukan registrasi (yang belum diselesaikan). View ini digunakan untuk memilih jenis course package.
-        Route::post('/student/choose-materials/{id?}', 'HomeController@store_materials')->name('student.store_materials'); // Mengumpulkan informasi. Daftar model dibuat: Course, CourseRegistration.
-        Route::get('/student/complete-payment-information/{id}', 'HomeController@complete_payment_information')->name('student.complete_payment_information'); // ID digunakan adalah course_registration_id yang merujuk pada course sementara (sebelum pada akhirnya dialokasikan kembali setelah placement test ditetapkan "Passed"). View ini digunakan untuk mengisi informasi pembayaran. Student dapat kembali ke langkah sebelumnya untuk melakukan pembaruan informasi, apabila diperlukan (kecuali langkah untuk mengisi profil Student).
-        Route::post('/student/complete-payment-information/{id}', 'HomeController@store_payment_information')->name('student.store_payment_information'); // Mengumpulkan informasi. Daftar model dibuat: CoursePayment.
-        Route::get('/student/upload-payment-evidence/{id}', 'HomeController@upload_payment_evidence')->name('student.upload_payment_evidence'); // ID digunakan adalah course_registration_id yang merujuk pada pendaftaran course sementara (sebelum pada akhirnya dialokasikan kembali setelah placement test ditetapkan "Passed"). View ini digunakan untuk mengunggah bukti pembayaran. Student TIDAK DAPAT MEMBARUKAN KEMBALI INFORMASI YANG TELAH DI-SUBMIT PADA LANGKAH SEBELUMNYA.
-        Route::put('/student/upload-payment-evidence/{id}', 'HomeController@update_payment_evidence')->name('student.update_payment_evidence'); // Mengumpulkan informasi. Daftar model dibarukan: CoursePayment.
-        Route::get('/student/complete-placement-tests/{id}', 'HomeController@complete_placement_tests')->name('student.complete_placement_tests'); // ID digunakan adalah course_registration_id. View ini berisi informasi placement test. Student bisa logout, kemudian pada waktu login kembali, jika sudah pernah masuk dashboard, maka ada 1 opsi sidebar untuk melihat daftar placement test dan mengumpulkan video placement test. Jika Student belum pernah mendaftar sebelumnya, maka setelah login, Student langsung diarahkan ke tampilan ini untuk mengumpulkan hasil placement test. Student TIDAK DAPAT MEMBARUKAN KEMBALI INFORMASI YANG TELAH DI-SUBMIT PADA LANGKAH SEBELUMNYA.
-        Route::put('/student/complete-placement-tests/{id}', 'HomeController@store_placement_tests')->name('student.store_placement_tests'); // Mengumpulkan informasi. Daftar model dibuat: PlacementTest. Informasi pada model CoursePayment dimodifikasi.
-        Route::get('/student/complete-course-registrations/{id}', 'HomeController@complete_course_registrations')->name('student.complete_course_registrations'); // ID digunakan adalah course_registration_id. View ini digunakan untuk memilih jadwal course (dan, apabila diterapkan, informasi Instructor) sesuai pilihan Student. Student TIDAK DAPAT MEMBARUKAN KEMBALI INFORMASI YANG TELAH DI-SUBMIT PADA LANGKAH SEBELUMNYA.
-        Route::put('/student/complete-course-registrations/{id}', 'HomeController@update_course_registrations')->name('student.update_course_registrations'); // Mengumpulkan informasi. Dalam model CourseRegistration, course_id diganti ke id yang dipilih oleh Student. Tampilkan popup registrasi berhasil dilakukan, kemudian arahkan ke dashboard.
-        // for role Financial Team and Admin
-        Route::get('/course-payments', 'CoursePaymentController@index')->name('course_payments.index'); // View ini digunakan untuk melihat daftar informasi course payment untuk seluruh Student, dalam proficiency masing-masing.
-        Route::put('/course-payments/{id}', 'CoursePaymentController@update')->name('course_payments.update'); // Daftar model dimodifikasi: CoursePayment.
-        // for role Lead Instructor and Admin
-        Route::get('/placement-tests', 'PlacementTestController@index')->name('placement_tests.index'); // View ini digunakan untuk melihat daftar informasi placement test untuk seluruh Student, dalam proficiency masing-masing.
-        Route::get('/placement-tests/{id}', 'PlacementTestController@show')->name('placement_tests.show'); // ID digunakan adalah course_registration_id. View ini digunakan untuk melihat informasi detail placement test untuk setiap Student.
-        Route::put('/placement-tests/{id}', 'PlacementTestController@update')->name('placement_tests.update'); // Daftar model dimodifikasi: PlacementTest.
-
-        // NEW ROUTING FOR REGISTERED STUDENT: 13 Januari 2021 dan selanjutnya.
-        Route::get('/view/course/{course_registration_id}', 'CourseRegistrationController@show_by_student')->name('course_registrations.show_by_student');
-        Route::put('/view/course/{course_registration_id}', 'CourseRegistrationController@update_by_student')->name('course_registrations.update_by_student'); // dilakukan pada view course_registrations.show
-        //Route::delete('/view/course/{course_registration_id}', 'CourseRegistrationController@destroy_by_student')->name('course_registrations.destroy_by_student'); // dilakukan pada view course_registrations.show
-
-        // NEW ROUTING FOR LEAD INSTRUCTOR AND INSTRUCTOR: 3 Februari 2021 dan selanjutnya.
-        Route::get('/schedules/index', 'InstructorController@index_course')->name('instructors.index_course');
-        Route::get('/schedules/course/{course_id}', 'InstructorController@show_course')->name('instructors.show_course');
-
-	/*Route::get('/home', function() {
-            return view('home');
-	})->name('home');*/
-
-	//Route::get('/home/{id}', 'HomeController@index')->name('home');
-
-	Route::get('/home', 'HomeController@index')->name('home');
-
-        // bug apabila proses logout error, maka metode GET tidak didukung.
-        Route::get('/logout', function() {
-            return redirect()->route('home');
-        });
-
-        Route::get('/material/private', 'MaterialController@private_index')->name('materials.private_index');
-        Route::get('/material/free-trial', 'MaterialController@free_trial_index')->name('materials.free_trial_index');
-        Route::get('/material/group', 'MaterialController@group_index')->name('materials.group_index');
-        Route::get('/material/create', 'MaterialController@create')->name('materials.create');
-        Route::post('/material/create', 'MaterialController@store')->name('materials.store');
-        Route::get('/material/edit/{id}', 'MaterialController@edit')->name('materials.edit');
-        Route::put('/material/edit/{id}', 'MaterialController@update')->name('materials.update');
-        Route::delete('/material/destroy/{id}', 'MaterialController@destroy')->name('materials.destroy');
-        Route::get('/material/download/{id}', 'MaterialController@download')->name('materials.download');
-
-        //Private Course Class
-        Route::get('/course/private','CourseController@private')->name('courses.private');//menampilkan macam course yang dipilih
-        Route::get('/course/instructor/private','InstructorController@private')->name('instructors.private');//menampilkan instructor
-        //Route::get('/course/instructor/{id}/private','InstructorController@privates')->name('instructors.privates');
-        Route::get('/course/instructor/schedules/private/{id}','ScheduleController@private')->name('schedules.private');//menampilkan jadwal instructor
-
-        // REGISTRASI PRIVATE & GROUP CLASSES
-          // Dari form registrasi Student, lanjut ke memilih MaterialType (General Indonesian Language, Basic Conversation, etc)
-          //Route::get('/student/materials', 'MaterialTypeController@index')->name('material_types.index');
-
-          // Dari memilih MaterialType, lanjut ke memilih CourseType (Private/Public) via CoursePackage
-          ////Route::get('/student/courses/{material_type_id}', 'CoursePackageController@index_material_type')->name('course_packages.index_material_type');
-
-        //Admin
-        Route::get('/schedules/instructor/choose','ScheduleController@instructor')->name('schedules.admin_instrucstor');
-        Route::get('/schedules/instructor/{code}/detail','ScheduleController@detail')->name('schedules.admin_index');
-
-        Route::get('/sessions/instructor/choose','SessionController@instructor')->name('sessions.admin_instrucstor');
-        Route::get('/sessions/instructor/{code}/detail','SessionController@detail')->name('sessions.admin_index');
-
-        // Apabila berencana membuat routing
-        // selain Route::resource(s) (pada keyword yang sama),
-        // lakukan deklarasi SEBELUM menulis baris kode Route::resource(s).
-        Route::resources([
-            'payment_types'                 => 'PlacementTypeController',
-            'placement_tests'               => 'PlacementTestController',
-            'tasks'                         => 'TaskController',
-            'task_submissions'              => 'TaskSubmissionController',
-            'form_questions'                => 'FormQuestionController',
-            'form_question_choices'         => 'FormQuestionChoiceController',
-            'form_response_details'         => 'FormResponseDetailController',
-            'other_users'                   => 'OtherUserControllerController',
-            'messages'                      => 'MessageController',
-            'notification_datas'            => 'NotificationDataController',
-            'notification_durations'        => 'NotificationDurationController',
-            'content_labels'                => 'ContentLabelController',
-            'notification_labels'           => 'NotificationLabelController',
-            'notifications'                 => 'NotificationController',
-            'notification_transactions'     => 'NotificationTransactionController',
-            'user_notifications'            => 'UserNotificationController',
-            'material_types'                => 'MaterialTypeController',
-            'course_types'                  => 'CourseTypeController',
-            'course_levels'                 => 'CourseLevelController',
-            'course_level_details'          => 'CourseLevelDetailController',
-            'course_packages'               => 'CoursePackageController',
-            'courses'                       => 'CourseController',
-            'sessions'                      => 'SessionController',
-            'course_certificates'           => 'CourseCertificateController',
-            'material_publics'              => 'MaterialPublicController',
-            'material_sessions'             => 'MaterialSessionController',
-            'users'                         => 'UserController'
-        ]);
-
-        // menggunakan nested resources: /courses/{course}/registrations/{user}
-        /*Route::resource('courses-registrations', 'CourseRegistrationController')
-            ->only(['index', 'create', 'store', 'destroy'])
-            ->names([
-                'index'   => 'course_registrations.index',
-                'create'  => 'course_registrations.create',
-                'store'   => 'course_registrations.store',
-                'destroy' => 'course_registrations.destroy'
-            ])
-            ->parameters([
-                'registrations' => 'user'
-            ]);*/
-
-        // menggunakan nested resources: /courses/{course}/payments/{user}
-        Route::resource('courses.payments', 'CoursePaymentController')
-            ->names([
-                'index'   => 'course_payments.index',
-                'create'  => 'course_payments.create',
-                'store'   => 'course_payments.store',
-                'show'    => 'course_payments.show',
-                'edit'    => 'course_payments.edit',
-                'update'  => 'course_payments.update',
-                'destroy' => 'course_payments.destroy'
-            ])
-            ->parameters([
-                'payments' => 'user'
-            ]);
-
-        // menggunakan nested resources: /session-registrations/{session_registration}
-        Route::resource('session-registrations', 'SessionRegistrationController')
-            ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])
-            ->names([
-                'index'   => 'session_registrations.index',
-                'create'  => 'session_registrations.create',
-                'store'   => 'session_registrations.store',
-                'show'    => 'session_registrations.show',
-                'edit'    => 'session_registrations.edit',
-                'update'  => 'session_registrations.update',
-                'destroy' => 'session_registrations.destroy'
-            ])
-            ->parameters([
-                'registrations' => 'user'
-            ]);
-
-        // menggunakan resources: /schedules/{user}
-        Route::resource('schedules', 'ScheduleController')
-            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
-            ->parameters([
-                'schedules' => 'user'
-            ]);
-
-        // menggunakan resources: /ratings/{session}
-        Route::resource('ratings', 'RatingController')
-            ->only(['index', 'store', 'destroy'])
-            ->parameters([
-                'ratings' => 'session'
-            ]);
-
-        // menggunakan resources: /instructors/{user}
-        Route::resource('instructors', 'InstructorController')
-            ->parameters([
-                'instructors' => 'user'
-            ]);
-
-        // menggunakan resources: /students/{user}
-        Route::resource('students', 'StudentController')
-            ->parameters([
-                'students' => 'user'
-            ]);
-
-    /*link custom*/
-    //halaman instructor
-    Route::get('/schedules/{course_type?}', 'ScheduleController@index')->name('schedules.index');
-    Route::get('/schedules/group','ScheduleController@group')->name('schedules.group');
-
-    Route::get('/session/private', 'SessionController@private')->name('session.private');
-    Route::get('/session/group', 'SessionController@group')->name('session.group');
-
-    Route::get('/materials', 'MaterialController@index')->name('materials.index');
-    Route::get('/materials/create', 'MaterialController@create')->name('materials.create');
-    Route::get('/materials/download/{public_or_session}/{id}', 'MaterialController@download')->name('materials.download');
-
-    //halaman student
-    Route::get('/registration/student/trial','RegistrationController@trial')->name('registration.trial');
-    Route::get('/registration/student/private','RegistrationController@private')->name('registration.private');
-    Route::get('/registration/student/private/instructor','RegistrationController@instructor')->name('registration.private-instructor');
-    Route::get('/registration/student/private/instructor/time','RegistrationController@time')->name('registration.private-time');
-    Route::get('/registration/student/group','RegistrationController@group')->name('registration.group');
-
-    Route::get('/schedules/student/private','ScheduleController@private')->name('schedules.student.private');
-    Route::get('/schedules/student/group','ScheduleController@group')->name('schedules.student.group');
-
-    Route::get('/courses','CourseController@index')->name('courses.index');
-    Route::post('/courses','CourseRegistrationController@store')->name('course_registrations.store');
-
-    //halaman questionnaire
-    //questionnaire aku taruh di HomeController
-    Route::get('student/registration-form', 'HomeController@questionnaire')->name('layouts.questionnaire');
-    Route::post('student/registration-form', 'HomeController@store')->name('questionnaire.store');
-
-    // menampilkan profil akun
-    Route::get('profile/', 'ProfileController@index')->name('profile');
-
-    // sebagai catatan, Admin dapat mengedit profil Instructor dan Student, apabila diperlukan.
-    Route::put('profile/', 'ProfileController@update')->name('profile.update');
-
-    // menampilkan profile Student (dilakukan oleh Instructor)
-    Route::get('profile/student/{student_id}', 'ProfileController@show')->name('profiles.show');
-
-    // menampilkan contact
-    Route::get('contact/', 'HomeController@contact')->name('contact');
-
-    // BAGIAN FORMULIR
-        // tampilan admin
-        Route::get('/forms', 'FormController@index')->name('forms.index');               // Melihat daftar "formnya" (formnya, bukan responnya).
-        Route::get('/forms/create', 'FormController@create')->name('forms.create');      // TIDAK DIGUNAKAN: Membuat "formnya" yang baru (formnya, bukan responnya).
-        Route::post('/forms/create', 'FormController@store')->name('forms.store');       // TIDAK DIGUNAKAN: Membuat "formnya" yang baru (formnya, bukan responnya).
-        Route::get('/forms/show/{id}', 'FormController@show')->name('forms.show');       // TIDAK DIGUNAKAN: Melihat struktur "formnya" secara detail (formnya, bukan responnya).
-        Route::get('/forms/edit/{id}', 'FormController@edit')->name('forms.edit');       // TIDAK DIGUNAKAN: Mengedit struktur "formnya" (formnya, bukan responnya).
-        Route::put('/forms/update/{id}', 'FormController@update')->name('forms.update'); // TIDAK DIGUNAKAN: Mengedit struktur "formnya" (formnya, bukan responnya).
-        Route::delete('/forms/{id}', 'FormController@destroy')->name('forms.destroy');   // TIDAK DIGUNAKAN: Menghapus struktur "formnya" (formnya DAN SEMUA RESPONNYA).
-
-        // tampilan admin dan/atau instructor (melihat atribut Forms::is_accessible_by)
-        Route::get('/forms/responses', 'FormResponseController@index')->name('form_responses.index'); // Menampilkan semua form respon.
-        Route::get('/forms/responses/form/{form_id}', 'FormResponseController@index_form')->name('form_responses.index_form'); // Menampilkan semua form respon untuk form id tertentu (bisa jadi tergabung dari banyak sesi berbeda).
-        Route::get('/forms/responses/session/{session_id}', 'FormResponseController@index_session')->name('form_responses.index_session'); // Menampilkan semua form respon untuk sesi tertentu (tentu saja memiliki form id yang sama).
-        Route::get('/forms/responses/{session_registration_id}', 'FormResponseController@show')->name('form_responses.show'); // 1 session_registration_id hanya memiliki 1 jenis form tertentu, sesuai dengan sesinya masing-masing
-
-        // TEMP REDIRECT FOR DEVELOPMENT PURPOSES
-        //Route::redirect('/forms/responses', '/home');
-        Route::redirect('/forms/responses/form', '/home');
-        Route::redirect('/forms/responses/session', '/home');
-
-        // tampilan student
-        Route::get('/forms/student/create/{session_registration_id}', 'FormResponseController@create')->name('form_responses.create'); // Membuat form response yang baru.
-        Route::post('/forms/student/create/{session_registration_id}', 'FormResponseController@store')->name('form_responses.store');  // Membuat form response yang baru.
-
-    // BAGIAN ABSENSI
-        // tampilan instructor (juga admin) untuk form absensi. untuk melihat tampilan ini, instructor (khusus instructor) harus mengakses melalui tampilan session_registrations.index
-        // (hanya dapat diakses oleh kedua instructor yang mengajar pada kelas ybs. hanya 1 instructor saja yang perlu mengisi form absensi)
-        Route::get('/forms/student/attendance/{session_id}', 'AttendanceController@edit')->name('attendances.edit');
-        Route::put('/forms/student/attendance/{session_id}', 'AttendanceController@update')->name('attendances.update');
-
-        // tampilan instructor (juga admin) untuk melihat pendaftaran mahasiswa pada satu kelas.
-        Route::get('/class-registration/{course_id}', 'CourseRegistrationController@index_by_course_id')->name('course_registrations.index_by_course_id');
-
-    /*end link*/
+    // daftar use case admin
+        
+        // lain-lain (redirection)
+        Route::redirect('/admin', '/dashboard');
 });
 
 Auth::routes();
 
 //verifikasi email user
 Auth::routes(['verify' => true]);
-
-
-/**************************************************************************************************
-**************************************************************************************************
-**************************************************************************************************
-**************************************************************************************************
-**************************************************************************************************
-_____  _____   __        __      _  _
-  |      |    |  \      /  \     | /
-  |      |    |   \    /----\    |<
-  |      |    |   /   /      \   | \
-  `    `````  ````   `        `  `  `
-
-
-              __    _____   ___   _   _  _   _      __      _  _      __      _   _
-             |  \     |    |      |   |  |\  |     /  \     | /      /  \     |\  |
-             |   \    |    |  __  |   |  | \ |    /----\    |<      /----\    | \ |
-             |   /    |    |   |  |   |  |  \|   /      \   | \    /      \   |  \|
-             ````   `````   ```    ```   `   `  `        `  `  `  `        `  `   `
-**************************************************************************************************
-**************************************************************************************************
-**************************************************************************************************
-**************************************************************************************************
-**************************************************************************************************/
-
-	//menampilkan detail dari schedule
-	//Route::get('/schedule/detail/{id_schedule}','ScheduleController@detail')->name('schedule.detail');
-	//menampilkan halaman schedule
-	//Route::get('/schedule/{user_id}', 'ScheduleController@index')->name('schedule.index');
-	//url create schedule instuctor
-	//Route::post('/create/schedule/instuctor/{id}','InstructorsController@schedule');
-	//url pilih instructor
-	//Route::get('/schedule/{user_id}/{instructor_id}', 'ScheduleController@choose')->name('choose');
-	//url simpan data
-	//Route::post('/schedule/store', 'ScheduleController@store')->name('store');
-	//url halaman pilih instructor
-	//Route::get('/classroom/{id}/instructors/','InstructorsController@index')->name('instructors.index');
-	//url memilih instrutor
-	//Route::get('/choose/classroom/{id_class}/instructors/{id_instructors}','InstructorsController@choose')->name('instructors.choose');
-	//url verifikasi jadwal
-	//Route::get('/verfication-schedule/{user_id}/{vs_id}','ScheduleController@verfication')->name('verfication');
-	//url pilih session
-	//Route::get('/session/{user_id}','ScheduleController@session')->name('session');
-	//menampilkan halaman share material
-	//Route::get('/material','MaterialClassController@index')->name('material.index');
-	//menampilkan halaman detail share material
-	//Route::get('/material/share/detail/{class_id}','MaterialClassController@detail')->name('material.detail');
-	//url simpan data
-	//Route::post('/material/store','MaterialClassController@store');
-	//url download material
-	//Route::get('/material/download/{id}','MaterialClassController@download');
-	//url akses material di student
-	//Route::get('/material/student/{id_class}','MaterialClassController@student')->name('material.student');
-	//url halaman jadwal instructor
-	//Route::get('/schedule/instructors','ScheduleController@instructors');
-	//url halaman classrooms
-	//Route::get('/classroom','ClassroomController@index')->name('classroom.index');
-	//url memilih kelas di student
-	//Route::get('/choose/classroom/{id_class}','ClassroomController@choose')->name('classroom.choose');
-	//url halaman calendar
-	//Route::get('/classroom/{id_class}/instructors/{id_instructors}/time','ScheduleController@calendar')->name('time.index');
-	//url schedule selesai pilih
-	//Route::get('/classroom/{id_class}/instructors/{id_instructors}/time/{id_schedule}','ScheduleController@summary')->name('schedule.summary');
-	//menyimpan url schedule
-	//Route::get('/classroom/{id_class}/instructors/{id_instructors}/time/{id_time}/date/{id_date}/user/{id_user}','ScheduleController@savesummary')->name('schedule.savesummary');
-	/*
-	Route::get('/home', function() {
-
-		$parameter =[
-			'id' 	=> Auth::user()->id,
-			'nama' 	=> Auth::user()->name,
-		];
-
-		$enkripsi= \Crypt::encrypt($parameter);
-		return view('home',compact('enkripsi'));
-	})->name('home');
-	*/
