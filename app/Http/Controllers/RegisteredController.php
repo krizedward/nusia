@@ -246,7 +246,14 @@ class RegisteredController extends Controller
     {
         // membuka fitur chat
         if($this->is_student()) {
-            return view('role_student.chat_index');
+            $user_id_senders = Message::where('user_id_sender', 'NOT LIKE', Auth::user()->id)->pluck('user_id_sender')->toArray();
+            $user_id_recipients = Message::where('user_id_recipient', 'NOT LIKE', Auth::user()->id)->pluck('user_id_recipient')->toArray();
+            $user_ids = array_unique(array_merge($user_id_senders, $user_id_recipients));
+            $users = User::whereIn('id', $user_ids)->get();
+            $messages = Message::whereIn('user_id_sender', $user_ids)
+                ->orWhereIn('user_id_recipient', $user_ids)
+                ->get();
+            return view('role_student.chat_index', compact('users', 'messages'));
         }
     }
 

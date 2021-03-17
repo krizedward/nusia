@@ -124,12 +124,12 @@ class FinancialTeamController extends Controller
         // menghubungi student (via chat)
     }
 
-    public function chat_student_show($course_payment_id)
+    public function chat_student_show($user_id)
     {
         // menghubungi student (via chat)
     }
 
-    public function chat_student_store(Request $request, $course_payment_id)
+    public function chat_student_store(Request $request, $user_id)
     {
         // menghubungi student (via chat)
     }

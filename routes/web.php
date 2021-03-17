@@ -407,8 +407,8 @@ Route::group(['middleware'=>'auth'], function() {
         
         // menghubungi student (via chat)
         Route::get('/finance/chat/student', 'FinancialTeamController@chat_student_index')->name('financial_team.chat_student.index');
-        Route::get('/finance/chat/student/{course_payment_id}', 'FinancialTeamController@chat_student_show')->name('financial_team.chat_student.show');
-        Route::post('/finance/chat/student/{course_payment_id}/store', 'FinancialTeamController@chat_student_store')->name('financial_team.chat_student.store');
+        Route::get('/finance/chat/student/{user_id}', 'FinancialTeamController@chat_student_show')->name('financial_team.chat_student.show');
+        Route::post('/finance/chat/student/{user_id}/store', 'FinancialTeamController@chat_student_store')->name('financial_team.chat_student.store');
         Route::redirect('/finance', '/finance/chat/student');
         Route::redirect('/finance/chat', '/finance/chat/student');
         
