@@ -88,9 +88,17 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Define a relationship.
      */
-    public function messages()
+    public function messages_as_sender()
     {
-    	return $this->hasMany('App\Models\Messages', 'user_id');
+    	return $this->hasMany('App\Models\Message', 'user_id_sender');
+    }
+
+    /**
+     * Define a relationship.
+     */
+    public function messages_as_recipient()
+    {
+    	return $this->hasMany('App\Models\Message', 'user_id_recipient');
     }
 
     /**

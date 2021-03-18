@@ -252,6 +252,7 @@ class RegisteredController extends Controller
             $users = User::whereIn('id', $user_ids)->get();
             $messages = Message::whereIn('user_id_sender', $user_ids)
                 ->orWhereIn('user_id_recipient', $user_ids)
+                ->orderBy('created_at', 'DESC')
                 ->get();
             return view('role_student.chat_index', compact('users', 'messages'));
         }
