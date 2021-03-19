@@ -113,6 +113,23 @@ class CustomerServiceController extends Controller
     public function chat_student_show($course_payment_id)
     {
         // menghubungi student (via chat)
+        $user_id_senders = Message::where('user_id_sender', 'NOT LIKE', Auth::user()->id)->pluck('user_id_sender')->toArray();
+        $user_id_recipients = Message::where('user_id_recipient', 'NOT LIKE', Auth::user()->id)->pluck('user_id_recipient')->toArray();
+        $user_ids = array_unique(array_merge($user_id_senders, $user_id_recipients));
+        $users = User::whereIn('id', $user_ids)->get();
+        $messages = Message::whereIn('user_id_sender', $user_ids)
+            ->orWhereIn('user_id_recipient', $user_ids)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        
+        $partner = User::findOrFail($user_id);
+        $partner_messages = Message
+            ::where('user_id_sender', $user_id)
+            ->orWhere('user_id_recipient', $user_id)
+            ->select('user_id_sender', 'user_id_recipient', 'message', 'created_at')
+            ->orderBy('created_at')
+            ->get();
+        return view('role_customer_service.chat_show', compact('users', 'messages', 'partner', 'partner_messages'));
     }
 
     public function chat_student_store(Request $request, $course_payment_id)

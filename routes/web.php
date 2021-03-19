@@ -20,7 +20,6 @@
     Route::get('/request-price', 'NonRegisteredController@request_price_index')->name('non_registered.request_price.index');
     Route::post('/request-price/store', 'NonRegisteredController@request_price_store')->name('non_registered.request_price.store');
     
-    // melakukan login
     // mendaftar akun baru
     // (dihandle oleh auth routes)
     
@@ -33,6 +32,9 @@
 
 Route::group(['middleware'=>'auth'], function() {
     // daftar use case registered users
+        // mendaftar akun baru
+        // (dihandle oleh auth routes)
+        
         // menampilkan dashboard
         Route::get('/dashboard', 'RegisteredController@dashboard_index')->name('registered.dashboard.index');
         
@@ -40,7 +42,7 @@ Route::group(['middleware'=>'auth'], function() {
         Route::get('/contact-us', 'RegisteredController@contact_index')->name('registered.contact.index');
         
         // membuka fitur chat
-        Route::get('/chat', 'RegisteredController@chat_index')->name('registered.chat.index');
+        Route::get('/chat/{change_skin?}/{change_chat_color?}', 'RegisteredController@chat_index')->name('registered.chat.index');
         
         // melihat informasi profil
         Route::get('/profile', 'RegisteredController@profile_index')->name('registered.profile.index');
@@ -48,8 +50,8 @@ Route::group(['middleware'=>'auth'], function() {
         // memodifikasi informasi profil
         Route::put('/profile/update', 'RegisteredController@profile_update')->name('registered.profile.update');
         
-        // lain-lain (redirection)
-        // apabila proses logout error (metode GET tidak didukung)
+        // melakukan logout
+        // redirection, apabila proses logout error (metode GET tidak didukung)
         Route::get('/logout', 'RegisteredController@logout_get_index')->name('registered.logout_get.index');
     
     // daftar use case non-admin users
@@ -324,7 +326,7 @@ Route::group(['middleware'=>'auth'], function() {
         Route::redirect('/reviewer/placement-test/chat', '/reviewer/placement-test/chat/student');
         
         // mengonfirmasi hasil placement test
-        Route::put('/reviewer/student-registration/{course_registration_id}/placement-test/by-video/update', 'LeadInstructorController@placement_test_by_video_update')->name('lead_instructor.placement_test_by_video.update');
+        Route::put('/reviewer/student-registration/{course_registration_id}/placement-test/by-video/update', 'LeadInstructorController@confirmation_by_video_update')->name('lead_instructor.confirmation_by_video.update');
         
         // menambahkan jadwal meeting alternatif
         Route::post('/reviewer/student-registration/placement-test/by-meeting/store', 'LeadInstructorController@placement_test_by_meeting_store')->name('lead_instructor.placement_test_by_meeting.store');
@@ -349,7 +351,7 @@ Route::group(['middleware'=>'auth'], function() {
         Route::redirect('/reviewer/placement-test-by-meeting/chat', '/reviewer/placement-test-by-meeting/chat/student');
         
         // mengonfirmasi hasil placement test (menurut hasil meeting)
-        Route::put('/reviewer/student-registration/{course_registration_id}/placement-test/by-meeting/update', 'LeadInstructorController@placement_test_by_meeting_update')->name('lead_instructor.placement_test_by_meeting.update');
+        Route::put('/reviewer/student-registration/{course_registration_id}/placement-test/by-meeting/update', 'LeadInstructorController@confirmation_by_meeting_update')->name('lead_instructor.confirmation_by_meeting.update');
         
         // lain-lain (redirection)
         Route::redirect('/reviewer', '/dashboard');

@@ -750,6 +750,23 @@ class StudentController extends Controller
     public function chat_financial_team_show($user_id)
     {
         // mendaftar course: menghubungi financial team (via chat)
+        $user_id_senders = Message::where('user_id_sender', 'NOT LIKE', Auth::user()->id)->pluck('user_id_sender')->toArray();
+        $user_id_recipients = Message::where('user_id_recipient', 'NOT LIKE', Auth::user()->id)->pluck('user_id_recipient')->toArray();
+        $user_ids = array_unique(array_merge($user_id_senders, $user_id_recipients));
+        $users = User::whereIn('id', $user_ids)->get();
+        $messages = Message::whereIn('user_id_sender', $user_ids)
+            ->orWhereIn('user_id_recipient', $user_ids)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        
+        $partner = User::findOrFail($user_id);
+        $partner_messages = Message
+            ::where('user_id_sender', $user_id)
+            ->orWhere('user_id_recipient', $user_id)
+            ->select('user_id_sender', 'user_id_recipient', 'message', 'created_at')
+            ->orderBy('created_at')
+            ->get();
+        return view('role_student.chat_show', compact('users', 'messages', 'partner', 'partner_messages'));
     }
 
     public function chat_financial_team_store(Request $request, $user_id)
@@ -851,6 +868,23 @@ class StudentController extends Controller
     public function chat_lead_instructor_show($user_id)
     {
         // mendaftar course: menghubungi lead instructor (via chat)
+        $user_id_senders = Message::where('user_id_sender', 'NOT LIKE', Auth::user()->id)->pluck('user_id_sender')->toArray();
+        $user_id_recipients = Message::where('user_id_recipient', 'NOT LIKE', Auth::user()->id)->pluck('user_id_recipient')->toArray();
+        $user_ids = array_unique(array_merge($user_id_senders, $user_id_recipients));
+        $users = User::whereIn('id', $user_ids)->get();
+        $messages = Message::whereIn('user_id_sender', $user_ids)
+            ->orWhereIn('user_id_recipient', $user_ids)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        
+        $partner = User::findOrFail($user_id);
+        $partner_messages = Message
+            ::where('user_id_sender', $user_id)
+            ->orWhere('user_id_recipient', $user_id)
+            ->select('user_id_sender', 'user_id_recipient', 'message', 'created_at')
+            ->orderBy('created_at')
+            ->get();
+        return view('role_student.chat_show', compact('users', 'messages', 'partner', 'partner_messages'));
     }
 
     public function chat_lead_instructor_store(Request $request, $user_id)
@@ -1360,6 +1394,23 @@ class StudentController extends Controller
     public function chat_customer_service_show($user_id)
     {
         // menghubungi cs (via chat)
+        $user_id_senders = Message::where('user_id_sender', 'NOT LIKE', Auth::user()->id)->pluck('user_id_sender')->toArray();
+        $user_id_recipients = Message::where('user_id_recipient', 'NOT LIKE', Auth::user()->id)->pluck('user_id_recipient')->toArray();
+        $user_ids = array_unique(array_merge($user_id_senders, $user_id_recipients));
+        $users = User::whereIn('id', $user_ids)->get();
+        $messages = Message::whereIn('user_id_sender', $user_ids)
+            ->orWhereIn('user_id_recipient', $user_ids)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        
+        $partner = User::findOrFail($user_id);
+        $partner_messages = Message
+            ::where('user_id_sender', $user_id)
+            ->orWhere('user_id_recipient', $user_id)
+            ->select('user_id_sender', 'user_id_recipient', 'message', 'created_at')
+            ->orderBy('created_at')
+            ->get();
+        return view('role_student.chat_show', compact('users', 'messages', 'partner', 'partner_messages'));
     }
 
     public function chat_customer_service_store(Request $request, $user_id)

@@ -3,7 +3,7 @@
 <head>
   @include('layouts.admin._head')
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition @if(session('skin')) {{ session('skin') }} @else skin-blue @endif sidebar-mini">
 <div class="wrapper">
 
   <header class="main-header">

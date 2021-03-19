@@ -242,19 +242,76 @@ class RegisteredController extends Controller
         return view('contact');
     }
 
-    public function chat_index()
+    public function get_relevant_user_ids_for_chat()
+    {
+        // ambil daftar sender dan recipient pesan yang dikirim oleh user
+        // (tidak termasuk ID user yang login akun ini, tetapi merupakan ID lawan bicaranya)
+        // return array
+        $user_id_senders = Message
+            ::where('user_id_sender', 'NOT LIKE', Auth::user()->id) // ambil ID lawan bicara
+            ->where('user_id_recipient', 'LIKE', Auth::user()->id)
+            ->pluck('user_id_sender')->toArray();
+        $user_id_recipients = Message
+            ::where('user_id_sender', 'LIKE', Auth::user()->id)
+            ->where('user_id_recipient', 'NOT LIKE', Auth::user()->id) // ambil ID lawan bicara
+            ->pluck('user_id_recipient')->toArray();
+        return array_unique(array_merge($user_id_senders, $user_id_recipients));
+    }
+
+    public function chat_index($change_skin = 0, $change_chat_color = 0)
     {
         // membuka fitur chat
+        if($change_skin) {
+            if(session('skin') == 'skin-blue') $arr = array('skin-blue-light', 'skin-red', 'skin-red-light', 'skin-yellow', 'skin-yellow-light', 'skin-green', 'skin-green-light', 'skin-purple', 'skin-purple-light', 'skin-black', 'skin-black-light');
+            else if(session('skin') == 'skin-blue-light') $arr = array('skin-blue', 'skin-red', 'skin-red-light', 'skin-yellow', 'skin-yellow-light', 'skin-green', 'skin-green-light', 'skin-purple', 'skin-purple-light', 'skin-black', 'skin-black-light');
+            else if(session('skin') == 'skin-red') $arr = array('skin-blue', 'skin-blue-light', 'skin-red-light', 'skin-yellow', 'skin-yellow-light', 'skin-green', 'skin-green-light', 'skin-purple', 'skin-purple-light', 'skin-black', 'skin-black-light');
+            else if(session('skin') == 'skin-red-light') $arr = array('skin-blue', 'skin-blue-light', 'skin-red', 'skin-yellow', 'skin-yellow-light', 'skin-green', 'skin-green-light', 'skin-purple', 'skin-purple-light', 'skin-black', 'skin-black-light');
+            else if(session('skin') == 'skin-yellow') $arr = array('skin-blue', 'skin-blue-light', 'skin-red', 'skin-red-light', 'skin-yellow-light', 'skin-green', 'skin-green-light', 'skin-purple', 'skin-purple-light', 'skin-black', 'skin-black-light');
+            else if(session('skin') == 'skin-yellow-light') $arr = array('skin-blue', 'skin-blue-light', 'skin-red', 'skin-red-light', 'skin-yellow', 'skin-green', 'skin-green-light', 'skin-purple', 'skin-purple-light', 'skin-black', 'skin-black-light');
+            else if(session('skin') == 'skin-green') $arr = array('skin-blue', 'skin-blue-light', 'skin-red', 'skin-red-light', 'skin-yellow', 'skin-yellow-light', 'skin-green-light', 'skin-purple', 'skin-purple-light', 'skin-black', 'skin-black-light');
+            else if(session('skin') == 'skin-green-light') $arr = array('skin-blue', 'skin-blue-light', 'skin-red', 'skin-red-light', 'skin-yellow', 'skin-yellow-light', 'skin-green', 'skin-purple', 'skin-purple-light', 'skin-black', 'skin-black-light');
+            else if(session('skin') == 'skin-purple') $arr = array('skin-blue', 'skin-blue-light', 'skin-red', 'skin-red-light', 'skin-yellow', 'skin-yellow-light', 'skin-green', 'skin-green-light', 'skin-purple-light', 'skin-black', 'skin-black-light');
+            else if(session('skin') == 'skin-purple-light') $arr = array('skin-blue', 'skin-blue-light', 'skin-red', 'skin-red-light', 'skin-yellow', 'skin-yellow-light', 'skin-green', 'skin-green-light', 'skin-purple', 'skin-black', 'skin-black-light');
+            else if(session('skin') == 'skin-black') $arr = array('skin-blue', 'skin-blue-light', 'skin-red', 'skin-red-light', 'skin-yellow', 'skin-yellow-light', 'skin-green', 'skin-green-light', 'skin-purple', 'skin-purple-light', 'skin-black-light');
+            else if(session('skin') == 'skin-black-light') $arr = array('skin-blue', 'skin-blue-light', 'skin-red', 'skin-red-light', 'skin-yellow', 'skin-yellow-light', 'skin-green', 'skin-green-light', 'skin-purple', 'skin-purple-light', 'skin-black');
+            else $arr = array('skin-blue', 'skin-blue-light', 'skin-red', 'skin-red-light', 'skin-yellow', 'skin-yellow-light', 'skin-green', 'skin-green-light', 'skin-purple', 'skin-purple-light', 'skin-black', 'skin-black-light');
+            session(['skin' => $arr[array_rand($arr)]]);
+        }
+        if($change_chat_color) {
+            if(session('chat-color') == 'primary') $arr = array('warning', 'danger', 'success');
+            else if(session('chat-color') == 'warning') $arr = array('primary', 'danger', 'success');
+            else if(session('chat-color') == 'danger') $arr = array('primary', 'warning', 'success');
+            else if(session('chat-color') == 'success') $arr = array('primary', 'warning', 'danger');
+            else $arr = array('primary', 'warning', 'danger', 'success');
+            session(['chat-color' => $arr[array_rand($arr)]]);
+        }
+        
+        $users = User::whereIn('id', app(Controller::class)->get_relevant_user_ids_for_chat())->get();
+        $messages = Message
+            ::where(function($q) {
+                $q
+                    ->whereIn('user_id_sender', app(Controller::class)->get_relevant_user_ids_for_chat())
+                    ->where('user_id_recipient', 'LIKE', Auth::user()->id);
+            })
+            ->orWhere(function($q) {
+                $q
+                    ->where('user_id_sender', 'LIKE', Auth::user()->id)
+                    ->whereIn('user_id_recipient', app(Controller::class)->get_relevant_user_ids_for_chat());
+            })
+            ->orderBy('created_at', 'DESC')
+            ->get();
         if($this->is_student()) {
-            $user_id_senders = Message::where('user_id_sender', 'NOT LIKE', Auth::user()->id)->pluck('user_id_sender')->toArray();
-            $user_id_recipients = Message::where('user_id_recipient', 'NOT LIKE', Auth::user()->id)->pluck('user_id_recipient')->toArray();
-            $user_ids = array_unique(array_merge($user_id_senders, $user_id_recipients));
-            $users = User::whereIn('id', $user_ids)->get();
-            $messages = Message::whereIn('user_id_sender', $user_ids)
-                ->orWhereIn('user_id_recipient', $user_ids)
-                ->orderBy('created_at', 'DESC')
-                ->get();
             return view('role_student.chat_index', compact('users', 'messages'));
+        } else if($this->is_instructor()) {
+            return view('role_instructor.chat_index', compact('users', 'messages'));
+        } else if($this->is_lead_instructor()) {
+            return view('role_lead_instructor.chat_index', compact('users', 'messages'));
+        } else if($this->is_customer_service()) {
+            return view('role_customer_service.chat_index', compact('users', 'messages'));
+        } else if($this->is_financial_team()) {
+            return view('role_financial_team.chat_index', compact('users', 'messages'));
+        } else if($this->is_admin()) {
+            return view('role_admin.chat_index', compact('users', 'messages'));
         }
     }
 
