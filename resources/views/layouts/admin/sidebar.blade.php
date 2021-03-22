@@ -21,9 +21,9 @@
       @elseif(Auth::user()->roles == 'Instructor' || Auth::user()->roles == 'Lead Instructor')
         <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
       @elseif(Auth::user()->roles == 'Customer Service')
-        <p>CS Team: {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
+        <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
       @elseif(Auth::user()->roles == 'Financial Team')
-        <p>Financial Team: {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
+        <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
       @elseif(Auth::user()->roles == 'Admin')
         <p>Admin</p>
       @endif
