@@ -196,7 +196,7 @@ class InstructorController extends Controller
         // mengunggah materi
     }
 
-    public function material_download($course_id, $material_type, $material_id) {
+    public function material_download($material_type, $material_id) {
         // mengunduh materi
         // 1 untuk MaterialPublic
         // 2 untuk MaterialSession
@@ -295,7 +295,7 @@ class InstructorController extends Controller
         // menghubungi instructor lain (via chat)
     }
 
-    public function chat_instructor_show($user_id) {
+    public function chat_instructor_show($user_id) {
         // menghubungi instructor lain (via chat)
         //$users = User::whereIn('id', app(Controller::class)->get_relevant_user_ids_for_chat())->get();
         $users = User::all();
@@ -331,7 +331,7 @@ class InstructorController extends Controller
         return view('role_instructor.chat_show', compact('users', 'messages', 'partner', 'partner_messages'));
     }
 
-    public function chat_instructor_store(Request $request, $user_id) {
+    public function chat_instructor_store(Request $request, $user_id) {
         // menghubungi instructor lain (via chat)
         $data = Validator::make($request->all(), [
             'messageAs' . Str::slug(Auth::user()->roles, '-') . 'To' . $user_id => ['bail', 'required',],

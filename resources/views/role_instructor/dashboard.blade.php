@@ -94,7 +94,7 @@
         {{--
         @if($sessions->count() > 0)
           <div class="box-footer text-center">
-            <a href="{{ route('session_registrations.index') }}" class="uppercase">View All Sessions</a>
+            <a href="{{ route('instructor.schedule.index') }}" class="uppercase">View All Sessions</a>
           </div>
         @endif
         --}}
@@ -204,7 +204,7 @@
         <!-- /.box-body -->
         @if($sessions->count() > 0)
           <div class="box-footer text-center">
-            <a href="{{ route('session_registrations.index') }}" class="uppercase">View All Sessions</a>
+            <a href="{{ route('instructor.schedule.index') }}" class="uppercase">View All Sessions</a>
           </div>
           <!-- /.box-footer -->
         @endif
@@ -260,7 +260,7 @@
                                 @endif
                               </div>
                               <span class="product-description">
-                                <a target="_blank" rel="noopener noreferrer" href="{{ route('materials.download', ['Public', $dt->id]) }}">Download</a>
+                                <a target="_blank" rel="noopener noreferrer" href="{{ route('instructor.material.download', [1, $dt->id]) }}">Download</a>
                               </span>
                             </div>
                           </li>
@@ -286,7 +286,7 @@
                                   @endif
                                 </div>
                                 <span class="product-description">
-                                  <a target="_blank" rel="noopener noreferrer" href="{{ route('materials.download', ['Session', $dt->id]) }}">Download</a>
+                                  <a target="_blank" rel="noopener noreferrer" href="{{ route('instructor.material.download', [2, $dt->id]) }}">Download</a>
                                 </span>
                               </div>
                             </li>
@@ -312,10 +312,12 @@
           </div>
         </div>
         <!-- /.box-body -->
+        {{--
         <div class="box-footer text-center">
           <a href="{{ route('materials.index') }}" class="uppercase">View All Materials</a>
         </div>
         <!-- /.box-footer -->
+        --}}
       </div>
       <!-- /.box -->
     </div>

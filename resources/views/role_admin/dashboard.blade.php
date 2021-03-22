@@ -94,7 +94,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer text-center">
-                  <a href="{{ route('students.index') }}" class="uppercase">View All Students</a>
+                  <a href="{{-- route('students.index') --}}" class="uppercase">View All Students</a>
                 </div>
                 <!-- /.box-footer -->
             </div>
@@ -134,7 +134,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer text-center">
-                  <a href="{{ route('instructors.index') }}" class="uppercase">View All Instructors</a>
+                  <a href="{{-- route('instructors.index') --}}" class="uppercase">View All Instructors</a>
                 </div>
                 <!-- /.box-footer -->
             </div>
@@ -176,7 +176,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer text-center">
-                  <a href="{{ route('schedules.index') }}" class="uppercase">View All Schedules</a>
+                  <a href="{{-- route('schedules.index') --}}" class="uppercase">View All Schedules</a>
                 </div>
                 <!-- /.box-footer -->
             </div>
@@ -265,7 +265,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer text-center">
-                  <a href="{{ route('sessions.index') }}" class="uppercase">View All Sessions</a>
+                  <a href="{{-- route('sessions.index') --}}" class="uppercase">View All Sessions</a>
                 </div>
                 <!-- /.box-footer -->
             </div>
