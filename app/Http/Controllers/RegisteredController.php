@@ -242,22 +242,6 @@ class RegisteredController extends Controller
         return view('contact');
     }
 
-    public function get_relevant_user_ids_for_chat()
-    {
-        // ambil daftar sender dan recipient pesan yang dikirim oleh user
-        // (tidak termasuk ID user yang login akun ini, tetapi merupakan ID lawan bicaranya)
-        // return array
-        $user_id_senders = Message
-            ::where('user_id_sender', 'NOT LIKE', Auth::user()->id) // ambil ID lawan bicara
-            ->where('user_id_recipient', 'LIKE', Auth::user()->id)
-            ->pluck('user_id_sender')->toArray();
-        $user_id_recipients = Message
-            ::where('user_id_sender', 'LIKE', Auth::user()->id)
-            ->where('user_id_recipient', 'NOT LIKE', Auth::user()->id) // ambil ID lawan bicara
-            ->pluck('user_id_recipient')->toArray();
-        return array_unique(array_merge($user_id_senders, $user_id_recipients));
-    }
-
     public function chat_index($change_skin = 0, $change_chat_color = 0)
     {
         // membuka fitur chat
@@ -284,6 +268,11 @@ class RegisteredController extends Controller
             else if(session('chat-color') == 'success') $arr = array('primary', 'warning', 'danger');
             else $arr = array('primary', 'warning', 'danger', 'success');
             session(['chat-color' => $arr[array_rand($arr)]]);
+            
+            if(session('chat-color') == 'primary') session(['chat-color-alias' => 'blue']);
+            else if(session('chat-color') == 'warning') session(['chat-color-alias' => 'yellow']);
+            else if(session('chat-color') == 'danger') session(['chat-color-alias' => 'red']);
+            else if(session('chat-color') == 'success') session(['chat-color-alias' => 'green']);
         }
         
         $users = User::whereIn('id', app(Controller::class)->get_relevant_user_ids_for_chat())->get();

@@ -103,19 +103,34 @@ class NonAdminController extends Controller
     public function chat_admin_show($user_id)
     {
         // menghubungi admin (via chat)
-        $user_id_senders = Message::where('user_id_sender', 'NOT LIKE', Auth::user()->id)->pluck('user_id_sender')->toArray();
-        $user_id_recipients = Message::where('user_id_recipient', 'NOT LIKE', Auth::user()->id)->pluck('user_id_recipient')->toArray();
-        $user_ids = array_unique(array_merge($user_id_senders, $user_id_recipients));
-        $users = User::whereIn('id', $user_ids)->get();
-        $messages = Message::whereIn('user_id_sender', $user_ids)
-            ->orWhereIn('user_id_recipient', $user_ids)
+        //$users = User::whereIn('id', app(Controller::class)->get_relevant_user_ids_for_chat())->get();
+        $users = User::all();
+        $messages = Message
+            ::where(function($q) {
+                $q
+                    ->whereIn('user_id_sender', app(Controller::class)->get_relevant_user_ids_for_chat())
+                    ->where('user_id_recipient', Auth::user()->id);
+            })
+            ->orWhere(function($q) {
+                $q
+                    ->where('user_id_sender', Auth::user()->id)
+                    ->whereIn('user_id_recipient', app(Controller::class)->get_relevant_user_ids_for_chat());
+            })
             ->orderBy('created_at', 'DESC')
             ->get();
         
         $partner = User::findOrFail($user_id);
         $partner_messages = Message
-            ::where('user_id_sender', $user_id)
-            ->orWhere('user_id_recipient', $user_id)
+            ::where(function($q) use($user_id){
+                $q
+                    ->where('user_id_sender', $user_id)
+                    ->where('user_id_recipient', Auth::user()->id);
+            })
+            ->orWhere(function($q) use($user_id){
+                $q
+                    ->where('user_id_sender', Auth::user()->id)
+                    ->where('user_id_recipient', $user_id);
+            })
             ->select('user_id_sender', 'user_id_recipient', 'message', 'created_at')
             ->orderBy('created_at')
             ->get();
@@ -125,5 +140,21 @@ class NonAdminController extends Controller
     public function chat_admin_store(Request $request, $user_id)
     {
         // menghubungi admin (via chat)
+        $data = Validator::make($request->all(), [
+            'messageAs' . Str::slug(Auth::user()->roles, '-') . 'To' . $user_id => ['bail', 'required',],
+        ]);
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+        Message::create([
+            'user_id_sender' => Auth::user()->id,
+            'user_id_recipient' => $user_id,
+            'subject' => 'Unknown Subject',
+            'message' => $request['messageAs' . Str::slug(Auth::user()->roles, '-') . 'To' . $user_id],
+            'created_at' => now(),
+        ]);
+        return redirect()->back();
     }
 }

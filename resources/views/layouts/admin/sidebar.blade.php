@@ -32,7 +32,7 @@
       @if(Auth::user()->roles == 'Student' && (Auth::user()->citizenship == 'Not Available' || Auth::user()->student->course_registrations->count() == 0))
         <a href="{{ route('registered.dashboard.index') }}"><i class="fa fa-circle text-info"></i> Registering</a>
       @else
-        <a href="{{ route('registered.profile.index') }}"><i class="fa fa-circle text-success"></i> Online</a>
+        <a href="{{ route('registered.chat.index') }}"><i class="fa fa-circle text-success"></i> Online</a>
       @endif
     </div>
   </div>
@@ -52,7 +52,7 @@
   <ul class="sidebar-menu" data-widget="tree">
     <li class="header">GENERAL</li>
     @if(Auth::user()->roles != 'Student')
-      <li class="{{ set_active('registered.dashboard.index') }}">
+      <li class="{{ set_active(['registered.dashboard.index', 'registered.contact.index', 'registered.chat.index', 'registered.profile.index', 'non_admin.chat_admin.show', 'student.chat_financial_team.show', 'student.chat_lead_instructor.show', 'student.chat_instructor.show', 'student.chat_customer_service.show', 'instructor.chat_instructor.show', 'instructor.chat_student.show', 'lead_instructor.chat_student.show', 'lead_instructor.chat_student_alternative_meeting.show', 'customer_service.chat_student.show', 'financial_team.chat_student.show']) }}">
         <a href="{{ route('registered.dashboard.index')}}">
           <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
@@ -88,7 +88,7 @@
           </a>
         </li>
       @else
-        <li class="{{ set_active('registered.dashboard.index') }}">
+        <li class="{{ set_active(['registered.dashboard.index', 'registered.contact.index', 'registered.chat.index', 'registered.profile.index', 'non_admin.chat_admin.show', 'student.chat_financial_team.show', 'student.chat_lead_instructor.show', 'student.chat_instructor.show', 'student.chat_customer_service.show', 'instructor.chat_instructor.show', 'instructor.chat_student.show', 'lead_instructor.chat_student.show', 'lead_instructor.chat_student_alternative_meeting.show', 'customer_service.chat_student.show', 'financial_team.chat_student.show']) }}">
           <a href="{{ route('registered.dashboard.index')}}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>

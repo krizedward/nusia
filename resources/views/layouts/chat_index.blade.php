@@ -102,19 +102,30 @@
                       @endif
                       <div class="contacts-list-info">
                         <span class="contacts-list-name text-black">
-                          <?php $name = $dt->first_name . ' ' . $dt->last_name; ?>
-                          {{ Str::limit($name, 14) }}
                           <?php
+                            $name = $dt->first_name . ' ' . $dt->last_name;
                             $get_time = \Carbon\Carbon::parse($m->created_at)->setTimezone(Auth::user()->timezone);
                           ?>
+                          @if(Str::length($name) > 14)
+                            <span data-toggle="tooltip" title data-original-title="{{ $name }}">
+                              {{ Str::limit($name, 14) }}
+                            </span>
+                          @else
+                            {{ $name }}
+                          @endif
                           <small class="contacts-list-date pull-right">{{ $get_time->isoFormat('YYYY/MM/DD') }}</small>
                         </span>
                         <span class="contacts-list-msg">
-                          {{-- Str::limit($m->message, 40) --}}
                           @if($m->user_id_sender == Auth::user()->id)
                             <i class="fa fa-check"></i>
                           @endif
-                          {{ $m->message }}
+                          @if(Str::length($m->message) > 50)
+                            <span data-toggle="tooltip" title data-original-title="{{ $m->message }}">
+                              {{ Str::limit($m->message, 50) }}
+                            </span>
+                          @else
+                            {{ $m->message }}
+                          @endif
                         </span>
                       </div>
                     </a>
@@ -142,7 +153,7 @@
           --}}
         </div>
         <div class="box-body">
-          <div class="direct-chat-messages">
+          <div class="direct-chat-messages" {{-- style="height:100%;" --}}>
             <div class="direct-chat-msg">
               <div class="direct-chat-info clearfix">
                 <span class="direct-chat-name pull-left">How to use this feature</span>
@@ -178,7 +189,7 @@
               @endif
               <div class="direct-chat-text">
                 Want to try these buttons? But don't forget the schedules :)<br />
-                <a class="btn btn-xs btn-default" href="{{ route('registered.chat.index', [0, 1]) }}">More than yellow?</a>
+                <a class="btn btn-xs btn-default" href="{{ route('registered.chat.index', [0, 1]) }}">More than @if(session('chat-color-alias')) {{ session('chat-color-alias') }}? @else yellow? @endif</a>
                 <a class="btn btn-xs btn-default" href="{{ route('registered.chat.index', [1]) }}">@if(session('skin')) Feel free to decorate your dashboard @else Feeling lucky @endif :)</a>
               </div>
             </div>
@@ -187,7 +198,7 @@
         <div class="box-footer">
           <div class="input-group">
             <input type="text" name="message" placeholder="Chat is disabled for this contact." class="form-control" disabled>
-            <span class="input-group-btn">
+            <span class="input-group-btn" data-toggle="tooltip" title data-original-title="Send message">
               <button type="button" class="btn @if(session('chat-color')) {{ 'btn-' . session('chat-color') }} @else btn-warning @endif" disabled aria-label="Chat is disabled for this contact."><i class="fa fa-send-o"></i></button>
             </span>
           </div>

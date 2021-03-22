@@ -18,10 +18,11 @@
           <!-- Chat: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
             <a href="{{ route('registered.chat.index') }}" class="dropdown-toggle">
-              <i class="fa fa-envelope-o"></i>
+              <i class="fa fa-envelope-o"></i>&nbsp;&nbsp;&nbsp;Chat
               <span class="sr-only">Toggle chat features</span>
             </a>
           </li>
+          {{--
           <!-- Contact: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
             <a href="{{ route('registered.contact.index') }}" class="dropdown-toggle">
@@ -29,6 +30,7 @@
               <span class="sr-only">Toggle contact features</span>
             </a>
           </li>
+          --}}
           {{--
           <!-- Notification: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">

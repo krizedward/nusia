@@ -42,92 +42,108 @@
               <?php
                 $arr = [];
               ?>
-              @foreach($messages as $m)
-                <?php
-                  $user_id = ($m->user_id_sender != Auth::user()->id)? $m->user_id_sender : $m->user_id_recipient;
-                  $dt = $users->where('id', $user_id)->first();
-                  if(in_array($user_id, $arr)) continue;
-                  array_push($arr, $user_id);
-                  
-                  if(Auth::user()->roles == 'Student') {
-                    if($dt->roles == 'Admin') {
-                      $route_name = 'non_admin.chat_admin.show';
-                    } else if($dt->roles == 'Financial Team') {
-                      $route_name = 'student.chat_financial_team.show';
-                    } else if($dt->roles == 'Lead Instructor') {
-                      $route_name = 'student.chat_lead_instructor.show';
-                    } else if($dt->roles == 'Instructor') {
-                      $route_name = 'student.chat_instructor.show';
-                    } else if($dt->roles == 'Customer Service') {
-                      $route_name = 'student.chat_customer_service.show';
+              @if($messages->toArray() != null)
+                @foreach($messages as $m)
+                  <?php
+                    $user_id = ($m->user_id_sender != Auth::user()->id)? $m->user_id_sender : $m->user_id_recipient;
+                    $dt = $users->where('id', $user_id)->first();
+                    if(in_array($user_id, $arr)) continue;
+                    array_push($arr, $user_id);
+                    
+                    if(Auth::user()->roles == 'Student') {
+                      if($dt->roles == 'Admin') {
+                        $route_name = 'non_admin.chat_admin.show';
+                      } else if($dt->roles == 'Financial Team') {
+                        $route_name = 'student.chat_financial_team.show';
+                      } else if($dt->roles == 'Lead Instructor') {
+                        $route_name = 'student.chat_lead_instructor.show';
+                      } else if($dt->roles == 'Instructor') {
+                        $route_name = 'student.chat_instructor.show';
+                      } else if($dt->roles == 'Customer Service') {
+                        $route_name = 'student.chat_customer_service.show';
+                      }
+                    } else if(Auth::user()->roles == 'Instructor') {
+                      if($dt->roles == 'Admin') {
+                        $route_name = 'non_admin.chat_admin.show';
+                      } else if($dt->roles == 'Instructor') {
+                        $route_name = 'instructor.chat_instructor.show';
+                      } else if($dt->roles == 'Student') {
+                        $route_name = 'instructor.chat_student.show';
+                      }
+                    } else if(Auth::user()->roles == 'Lead Instructor') {
+                      if($dt->roles == 'Admin') {
+                        $route_name = 'non_admin.chat_admin.show';
+                      } else if($dt->roles == 'Instructor') {
+                        $route_name = 'instructor.chat_instructor.show';
+                      } else if($dt->roles == 'Student') {
+                        $route_name = 'lead_instructor.chat_student.show';
+                        //$route_name_2 = 'lead_instructor.chat_student_alternative_meeting.show';
+                      }
+                    } else if(Auth::user()->roles == 'Customer Service') {
+                      if($dt->roles == 'Admin') {
+                        $route_name = 'non_admin.chat_admin.show';
+                      } else if($dt->roles == 'Student') {
+                        $route_name = 'customer_service.chat_student.show';
+                      }
+                    } else if(Auth::user()->roles == 'Financial Team') {
+                      if($dt->roles == 'Admin') {
+                        $route_name = 'non_admin.chat_admin.show';
+                      } else if($dt->roles == 'Student') {
+                        $route_name = 'financial_team.chat_student.show';
+                      }
                     }
-                  } else if(Auth::user()->roles == 'Instructor') {
-                    if($dt->roles == 'Admin') {
-                      $route_name = 'non_admin.chat_admin.show';
-                    } else if($dt->roles == 'Instructor') {
-                      $route_name = 'instructor.chat_instructor.show';
-                    } else if($dt->roles == 'Student') {
-                      $route_name = 'instructor.chat_student.show';
-                    }
-                  } else if(Auth::user()->roles == 'Lead Instructor') {
-                    if($dt->roles == 'Admin') {
-                      $route_name = 'non_admin.chat_admin.show';
-                    } else if($dt->roles == 'Instructor') {
-                      $route_name = 'instructor.chat_instructor.show';
-                    } else if($dt->roles == 'Student') {
-                      $route_name = 'lead_instructor.chat_student.show';
-                      //$route_name_2 = 'lead_instructor.chat_student_alternative_meeting.show';
-                    }
-                  } else if(Auth::user()->roles == 'Customer Service') {
-                    if($dt->roles == 'Admin') {
-                      $route_name = 'non_admin.chat_admin.show';
-                    } else if($dt->roles == 'Student') {
-                      $route_name = 'customer_service.chat_student.show';
-                    }
-                  } else if(Auth::user()->roles == 'Financial Team') {
-                    if($dt->roles == 'Admin') {
-                      $route_name = 'non_admin.chat_admin.show';
-                    } else if($dt->roles == 'Student') {
-                      $route_name = 'financial_team.chat_student.show';
-                    }
-                  }
-                ?>
-                <li @if($partner->id == $dt->id) class="bg-gray" @endif>
-                  <a href="{{ route($route_name, [$dt->id]) }}">
-                    @if($dt->image_profile != 'user.jpg')
-                      @if($dt->roles == 'Student')
-                        <img class="contacts-list-img" src="{{ asset('uploads/student/profile/' . $dt->image_profile) }}" alt="User image.">
-                      @elseif($dt->roles == 'Instructor' || $dt->roles == 'Lead Instructor')
-                        <img class="contacts-list-img" src="{{ asset('uploads/instructor/' . $dt->image_profile) }}" alt="User image.">
-                      @elseif($dt->roles == 'Customer Service')
-                        <img class="contacts-list-img" src="{{ asset('uploads/cs-profile/' . $dt->image_profile) }}" alt="User image.">
-                      @elseif($dt->roles == 'Financial Team')
-                        <img class="contacts-list-img" src="{{ asset('uploads/finance-profile/' . $dt->image_profile) }}" alt="User image.">
-                      @elseif($dt->roles == 'Admin')
+                  ?>
+                  <li @if($partner->id == $dt->id) class="bg-gray" @endif>
+                    <a href="{{ route($route_name, [$dt->id]) }}">
+                      @if($dt->image_profile != 'user.jpg')
+                        @if($dt->roles == 'Student')
+                          <img class="contacts-list-img" src="{{ asset('uploads/student/profile/' . $dt->image_profile) }}" alt="User image.">
+                        @elseif($dt->roles == 'Instructor' || $dt->roles == 'Lead Instructor')
+                          <img class="contacts-list-img" src="{{ asset('uploads/instructor/' . $dt->image_profile) }}" alt="User image.">
+                        @elseif($dt->roles == 'Customer Service')
+                          <img class="contacts-list-img" src="{{ asset('uploads/cs-profile/' . $dt->image_profile) }}" alt="User image.">
+                        @elseif($dt->roles == 'Financial Team')
+                          <img class="contacts-list-img" src="{{ asset('uploads/finance-profile/' . $dt->image_profile) }}" alt="User image.">
+                        @elseif($dt->roles == 'Admin')
+                          <img class="contacts-list-img" src="{{ asset('uploads/user.jpg') }}" alt="User image.">
+                        @endif
+                      @else
                         <img class="contacts-list-img" src="{{ asset('uploads/user.jpg') }}" alt="User image.">
                       @endif
-                    @else
-                      <img class="contacts-list-img" src="{{ asset('uploads/user.jpg') }}" alt="User image.">
-                    @endif
-                    <div class="contacts-list-info">
-                      <span class="contacts-list-name text-black">
-                        {{ $dt->first_name }} {{ $dt->last_name }}
-                        <?php
-                          $get_time = \Carbon\Carbon::parse($m->created_at)->setTimezone(Auth::user()->timezone);
-                        ?>
-                        <small class="contacts-list-date pull-right">{{ $get_time->isoFormat('YYYY/MM/DD') }}</small>
-                      </span>
-                      <span class="contacts-list-msg">
-                        {{-- Str::limit($m->message, 40) --}}
-                        @if($m->user_id_sender == Auth::user()->id)
-                          <i class="fa fa-check"></i>
-                        @endif
-                        {{ $m->message }}
-                      </span>
-                    </div>
-                  </a>
-                </li>
-              @endforeach
+                      <div class="contacts-list-info">
+                        <span class="contacts-list-name text-black">
+                          <?php
+                            $name = $dt->first_name . ' ' . $dt->last_name;
+                            $get_time = \Carbon\Carbon::parse($m->created_at)->setTimezone(Auth::user()->timezone);
+                          ?>
+                          @if(Str::length($name) > 14)
+                            <span data-toggle="tooltip" title data-original-title="{{ $name }}">
+                              {{ Str::limit($name, 14) }}
+                            </span>
+                          @else
+                            {{ $name }}
+                          @endif
+                          <small class="contacts-list-date pull-right">{{ $get_time->isoFormat('YYYY/MM/DD') }}</small>
+                        </span>
+                        <span class="contacts-list-msg">
+                          @if($m->user_id_sender == Auth::user()->id)
+                            <i class="fa fa-check"></i>
+                          @endif
+                          @if(Str::length($m->message) > 50)
+                            <span data-toggle="tooltip" title data-original-title="{{ $m->message }}">
+                              {{ Str::limit($m->message, 50) }}
+                            </span>
+                          @else
+                            {{ $m->message }}
+                          @endif
+                        </span>
+                      </div>
+                    </a>
+                  </li>
+                @endforeach
+              @else
+                <p class="text-muted">No contacts available.</p>
+              @endif
             </ul>
           </div>
         </div>
@@ -147,8 +163,8 @@
           --}}
         </div>
         <div class="box-body">
-          <div class="direct-chat-messages">
-            @foreach($partner_messages as $m)
+          <div class="direct-chat-messages" {{-- style="height:100%;" --}}>
+            @foreach($partner_messages as $i => $m)
               <?php
                 $get_time = \Carbon\Carbon::parse($m->created_at)->setTimezone(Auth::user()->timezone);
               ?>
@@ -159,8 +175,16 @@
                     <span class="direct-chat-timestamp pull-right">{{ $get_time->isoFormat('dddd, MMMM Do YYYY hh:mm A') }}</span>
                   </div>
                   @if($partner->image_profile != 'user.jpg')
-                    @if($partner->roles == 'Instructor')
-                      <img class="direct-chat-img" src="{{ asset('uploads/instructor/' . $partner->image_profile) }}">
+                    @if($partner->roles == 'Student')
+                      <img class="direct-chat-img" src="{{ asset('uploads/student/profile/' . $partner->image_profile) }}" alt="User image.">
+                    @elseif($partner->roles == 'Instructor' || $partner->roles == 'Lead Instructor')
+                      <img class="direct-chat-img" src="{{ asset('uploads/instructor/' . $partner->image_profile) }}" alt="User image.">
+                    @elseif($partner->roles == 'Customer Service')
+                      <img class="direct-chat-img" src="{{ asset('uploads/cs-profile/' . $partner->image_profile) }}" alt="User image.">
+                    @elseif($partner->roles == 'Financial Team')
+                      <img class="direct-chat-img" src="{{ asset('uploads/finance-profile/' . $partner->image_profile) }}" alt="User image.">
+                    @elseif($partner->roles == 'Admin')
+                      <img class="direct-chat-img" src="{{ asset('uploads/user.jpg') }}" alt="User image.">
                     @endif
                   @else
                     <img class="direct-chat-img" src="{{ asset('uploads/user.jpg') }}">
@@ -177,7 +201,15 @@
                   </div>
                   @if(Auth::user()->image_profile != 'user.jpg')
                     @if(Auth::user()->roles == 'Student')
-                      <img class="direct-chat-img" src="{{ asset('uploads/student/profile/' . Auth::user()->image_profile) }}">
+                      <img class="direct-chat-img" src="{{ asset('uploads/student/profile/' . Auth::user()->image_profile) }}" alt="User image.">
+                    @elseif(Auth::user()->roles == 'Instructor' || Auth::user()->roles == 'Lead Instructor')
+                      <img class="direct-chat-img" src="{{ asset('uploads/instructor/' . Auth::user()->image_profile) }}" alt="User image.">
+                    @elseif(Auth::user()->roles == 'Customer Service')
+                      <img class="direct-chat-img" src="{{ asset('uploads/cs-profile/' . Auth::user()->image_profile) }}" alt="User image.">
+                    @elseif(Auth::user()->roles == 'Financial Team')
+                      <img class="direct-chat-img" src="{{ asset('uploads/finance-profile/' . Auth::user()->image_profile) }}" alt="User image.">
+                    @elseif(Auth::user()->roles == 'Admin')
+                      <img class="direct-chat-img" src="{{ asset('uploads/user.jpg') }}" alt="User image.">
                     @endif
                   @else
                     <img class="direct-chat-img" src="{{ asset('uploads/user.jpg') }}">
@@ -189,14 +221,65 @@
               @endif
             @endforeach
           </div>
+          {{-- script untuk scroll chat ke bawah, menggunakan jQuery (belum berhasil) --}}
+          {{--
+          <script>
+            $('.direct-chat-messages').scrollTop(9999999999);
+          </script>
+          --}}
         </div>
         <div class="box-footer">
-          <form role="form" method="post" action="#">
+          <?php
+            if(Auth::user()->roles == 'Student') {
+              if($partner->roles == 'Admin') {
+                $route_name = 'non_admin.chat_admin.store';
+              } else if($partner->roles == 'Financial Team') {
+                $route_name = 'student.chat_financial_team.store';
+              } else if($partner->roles == 'Lead Instructor') {
+                $route_name = 'student.chat_lead_instructor.store';
+              } else if($partner->roles == 'Instructor') {
+                $route_name = 'student.chat_instructor.store';
+              } else if($partner->roles == 'Customer Service') {
+                $route_name = 'student.chat_customer_service.store';
+              }
+            } else if(Auth::user()->roles == 'Instructor') {
+              if($partner->roles == 'Admin') {
+                $route_name = 'non_admin.chat_admin.store';
+              } else if($partner->roles == 'Instructor') {
+                $route_name = 'instructor.chat_instructor.store';
+              } else if($partner->roles == 'Student') {
+                $route_name = 'instructor.chat_student.store';
+              }
+            } else if(Auth::user()->roles == 'Lead Instructor') {
+              if($partner->roles == 'Admin') {
+                $route_name = 'non_admin.chat_admin.store';
+              } else if($partner->roles == 'Instructor') {
+                $route_name = 'instructor.chat_instructor.store';
+              } else if($partner->roles == 'Student') {
+                $route_name = 'lead_instructor.chat_student.store';
+                //$route_name_2 = 'lead_instructor.chat_student_alternative_meeting.store';
+              }
+            } else if(Auth::user()->roles == 'Customer Service') {
+              if($partner->roles == 'Admin') {
+                $route_name = 'non_admin.chat_admin.store';
+              } else if($partner->roles == 'Student') {
+                $route_name = 'customer_service.chat_student.store';
+              }
+            } else if(Auth::user()->roles == 'Financial Team') {
+              if($partner->roles == 'Admin') {
+                $route_name = 'non_admin.chat_admin.store';
+              } else if($partner->roles == 'Student') {
+                $route_name = 'financial_team.chat_student.store';
+              }
+            }
+          ?>
+          <form role="form" method="post" action="{{ route($route_name, [$partner->id]) }}">
+            @csrf
             <div class="input-group">
-              <input type="text" name="message" placeholder="Type message..." class="form-control">
-              <span class="input-group-btn">
-                {{--<button type="button" class="btn @if(session('chat-color')) {{ 'btn-' . session('chat-color') }} @else btn-warning @endif">Send</button>--}}
-                <button type="button" class="btn @if(session('chat-color')) {{ 'btn-' . session('chat-color') }} @else btn-warning @endif" aria-label="Send message."><i class="fa fa-send-o"></i></button>
+              <input type="text" name="messageAs{{ Str::slug(Auth::user()->roles, '-') }}To{{ $partner->id }}" placeholder="Type message..." class="form-control">
+              <span class="input-group-btn" data-toggle="tooltip" title data-original-title="Send message">
+                {{--<button type="submit" class="btn @if(session('chat-color')) {{ 'btn-' . session('chat-color') }} @else btn-warning @endif">Send</button>--}}
+                <button type="submit" class="btn @if(session('chat-color')) {{ 'btn-' . session('chat-color') }} @else btn-warning @endif" aria-label="Send message."><i class="fa fa-send-o"></i></button>
               </span>
             </div>
           </form>
