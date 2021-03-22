@@ -119,7 +119,7 @@ class RegisteredController extends Controller
         }
 
         if($this->is_admin()) {
-            Alert::success('Success', 'Login Berhasil !!!');
+            //Alert::success('Success', 'Login Berhasil !!!');
             $timeNusia = Carbon::now()->setTimezone('Asia/Jakarta');
             $timeStudent = Carbon::now()->setTimezone(Auth::user()->timezone);
             $student = Student::all();
@@ -135,7 +135,7 @@ class RegisteredController extends Controller
             $course = Course::all();
             return view('role_admin.dashboard',compact(
                 'student','instructor','timeNusia','timeStudent',
-                'session', /*'session_reg',*/ 'course'
+                'session', 'course'
             ));
         }
 
