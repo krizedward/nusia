@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title', 'Student | View Course')
+@section('title', 'Course Information')
 
 @include('layouts.css_and_js.table')
 

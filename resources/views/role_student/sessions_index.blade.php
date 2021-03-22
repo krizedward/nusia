@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title','Student | Schedules')
+@section('title','Schedules')
 
 @include('layouts.css_and_js.table')
 

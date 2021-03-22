@@ -1,15 +1,15 @@
 @extends('layouts.admin.default')
 
-@section('title','Admin | Profile')
+@section('title', 'Profile')
 
 @include('layouts.css_and_js.table')
 
 @section('content-header')
-    <h1>Profile</h1>
-    <ol class="breadcrumb">
-        <li><a href="{{ route('home') }}">Home</a></li>
-        <li class="active">Profile</li>
-    </ol>
+  <h1><b>Profile - Admin</b></h1>
+  <ol class="breadcrumb">
+    <li><a href="{{ route('home') }}">Home</a></li>
+    <li class="active">Profile</li>
+  </ol>
 @stop
 
 @section('content')
