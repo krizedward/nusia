@@ -110,7 +110,7 @@ class CustomerServiceController extends Controller
         // menghubungi student (via chat)
     }
 
-    public function chat_student_show($course_payment_id)
+    public function chat_student_show($user_id)
     {
         // menghubungi student (via chat)
         //$users = User::whereIn('id', app(Controller::class)->get_relevant_user_ids_for_chat())->get();
@@ -147,7 +147,7 @@ class CustomerServiceController extends Controller
         return view('role_customer_service.chat_show', compact('users', 'messages', 'partner', 'partner_messages'));
     }
 
-    public function chat_student_store(Request $request, $course_payment_id)
+    public function chat_student_store(Request $request, $user_id)
     {
         // menghubungi student (via chat)
         $data = Validator::make($request->all(), [
