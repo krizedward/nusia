@@ -163,12 +163,12 @@ Route::group(['middleware'=>'auth'], function() {
         Route::redirect('/student/study', '/student/study/chat/instructor');
         Route::redirect('/student/study/chat', '/student/study/chat/instructor');
         
-        // menghubungi member course (via group chat)
-        Route::get('/student/team/chat/group', 'StudentController@chat_group_index')->name('student.chat_group.index');
-        Route::get('/student/team/chat/group/{course_id}', 'StudentController@chat_group_show')->name('student.chat_group.show');
-        Route::post('/student/team/chat/group/{course_id}/store', 'StudentController@chat_group_store')->name('student.chat_group.store');
-        Route::redirect('/student/team', '/student/team/chat/group');
-        Route::redirect('/student/team/chat', '/student/team/chat/group');
+        // menghubungi student course (via chat)
+        Route::get('/student/discuss/chat/friend', 'StudentController@chat_student_index')->name('student.chat_student.index');
+        Route::get('/student/discuss/chat/friend/{course_id}', 'StudentController@chat_student_show')->name('student.chat_student.show');
+        Route::post('/student/discuss/chat/friend/{course_id}/store', 'StudentController@chat_student_store')->name('student.chat_student.store');
+        Route::redirect('/student/discuss', '/student/discuss/chat/friend');
+        Route::redirect('/student/discuss/chat', '/student/discuss/chat/friend');
         
         // menghubungi cs (via chat)
         Route::get('/student-course-info/chat/customer-service', 'StudentController@chat_customer_service_index')->name('student.chat_customer_service.index');
@@ -295,17 +295,12 @@ Route::group(['middleware'=>'auth'], function() {
         // melihat informasi profil student
         Route::get('/instructor/show-student-profile/{user_id}', 'InstructorController@student_profile_show')->name('instructor.student_profile.show');
         
-        // menghubungi member course (via group chat)
-        Route::get('/instructor/team/chat/group', 'InstructorController@chat_group_index')->name('instructor.chat_group.index');
-        Route::get('/instructor/team/chat/group/{course_id}', 'InstructorController@chat_group_show')->name('instructor.chat_group.show');
-        Route::post('/instructor/team/chat/group/{course_id}/store', 'InstructorController@chat_group_store')->name('instructor.chat_group.store');
-        Route::redirect('/instructor/team', '/instructor/team/chat/group');
-        Route::redirect('/instructor/team/chat', '/instructor/team/chat/group');
-        
         // menghubungi student (via chat)
-        Route::get('/instructor/discuss/chat/student', 'InstructorController@chat_student_index')->name('instructor.chat_student.index');
-        Route::get('/instructor/discuss/chat/student/{user_id}', 'InstructorController@chat_student_show')->name('instructor.chat_student.show');
-        Route::post('/instructor/discuss/chat/student/{user_id}/store', 'InstructorController@chat_student_store')->name('instructor.chat_student.store');
+        Route::get('/instructor/mentoring/chat/student', 'InstructorController@chat_student_index')->name('instructor.chat_student.index');
+        Route::get('/instructor/mentoring/chat/student/{user_id}', 'InstructorController@chat_student_show')->name('instructor.chat_student.show');
+        Route::post('/instructor/mentoring/chat/student/{user_id}/store', 'InstructorController@chat_student_store')->name('instructor.chat_student.store');
+        Route::redirect('/instructor/mentoring', '/instructor/mentoring/chat/student');
+        Route::redirect('/instructor/mentoring/chat', '/instructor/mentoring/chat/student');
         
         // lain-lain (redirection)
         Route::redirect('/instructor', '/dashboard');

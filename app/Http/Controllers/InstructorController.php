@@ -90,13 +90,9 @@ class InstructorController extends Controller
         // & melihat ketersediaan jadwal mengajar yang pernah dibuat, secara menyeluruh
         // & melihat daftar course yang diajar
         // & melihat hasil filter daftar course sesuai jenis course
-        $data = Session
-            ::join('schedules', 'sessions.schedule_id', 'schedules.id')
-            ->where('schedules.instructor_id', Auth::user()->instructor->id)
-            ->orWhere('schedules.instructor_id_2', Auth::user()->instructor->id)
-            ->get();
+        $instructor_schedules = InstructorSchedule::where('instructor_id', Auth::user()->instructor->id)->get();
         // BUG: Cara menampilkan di formulir <select>, hanya Session yang belum dimulai. Jika sudah selesai, untuk apa mengganti link Zoom ?
-        return view('role_instructor.session_registrations_index',compact('data'));
+        return view('role_instructor.schedule_index', compact('instructor_schedules'));
     }
 
     public function schedule_store(Request $request) {
@@ -376,18 +372,6 @@ class InstructorController extends Controller
         } else {
             return redirect()->back();
         }
-    }
-
-    public function chat_group_index() {
-        // menghubungi member course (via group chat)
-    }
-
-    public function chat_group_show($course_id) {
-        // menghubungi member course (via group chat)
-    }
-
-    public function chat_group_store(Request $request, $course_id) {
-        // menghubungi member course (via group chat)
     }
 
     public function chat_student_index() {
