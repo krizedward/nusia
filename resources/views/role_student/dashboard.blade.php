@@ -70,11 +70,13 @@
     <div class="row">
         <div class="col-md-6">
             <div class="alert alert-dismissible">
+                <?php $timeNusia = \Carbon\Carbon::now()->setTimezone('Asia/Jakarta'); ?>
                 <h4 class="text-center"><i class="icon fa fa-clock-o"></i> {{ __('custom_dashboard.panel_time.wib_text') }} <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm A') }}</span></h4>
             </div>
         </div>
         <div class="col-md-6">
             <div class="alert alert-dismissible">
+                <?php $timeStudent = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone); ?>
                 <h4 class="text-center"><i class="icon fa fa-clock-o"></i> {{ __('custom_dashboard.panel_time.other_tz_text') }} <span id="time_student">{{ $timeStudent->isoFormat('h:mm A') }}</span></h4>
             </div>
         </div>

@@ -1464,19 +1464,67 @@ class StudentController extends Controller
         return redirect()->back();
     }
 
-    public function chat_group_index()
+    public function chat_student_index()
     {
-        // menghubungi member course (via group chat)
+        // menghubungi student course (via chat)
     }
 
-    public function chat_group_show($course_id)
+    public function chat_student_show($user_id)
     {
-        // menghubungi member course (via group chat)
+        // menghubungi student course (via chat)
+        //$users = User::whereIn('id', app(Controller::class)->get_relevant_user_ids_for_chat())->get();
+        $users = User::all();
+        $messages = Message
+            ::where(function($q) {
+                $q
+                    ->whereIn('user_id_sender', app(Controller::class)->get_relevant_user_ids_for_chat())
+                    ->where('user_id_recipient', Auth::user()->id);
+            })
+            ->orWhere(function($q) {
+                $q
+                    ->where('user_id_sender', Auth::user()->id)
+                    ->whereIn('user_id_recipient', app(Controller::class)->get_relevant_user_ids_for_chat());
+            })
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        
+        $partner = User::findOrFail($user_id);
+        $partner_messages = Message
+            ::where(function($q) use($user_id){
+                $q
+                    ->where('user_id_sender', $user_id)
+                    ->where('user_id_recipient', Auth::user()->id);
+            })
+            ->orWhere(function($q) use($user_id){
+                $q
+                    ->where('user_id_sender', Auth::user()->id)
+                    ->where('user_id_recipient', $user_id);
+            })
+            ->select('user_id_sender', 'user_id_recipient', 'message', 'created_at')
+            ->orderBy('created_at')
+            ->get();
+        return view('role_student.chat_show', compact('users', 'messages', 'partner', 'partner_messages'));
     }
 
-    public function chat_group_store(Request $request, $course_id)
+    public function chat_student_store(Request $request, $user_id)
     {
-        // menghubungi member course (via group chat)
+        // menghubungi student course (via chat)
+        $data = Validator::make($request->all(), [
+            'messageAs' . Str::slug(Auth::user()->roles, '-') . 'To' . $user_id => ['bail', 'required',],
+        ]);
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+        Message::create([
+            'user_id_sender' => Auth::user()->id,
+            'user_id_recipient' => $user_id,
+            'subject' => 'Unknown Subject',
+            'message' => $request['messageAs' . Str::slug(Auth::user()->roles, '-') . 'To' . $user_id],
+            'created_at' => now(),
+        ]);
+        return redirect()->back();
     }
 
     public function chat_customer_service_index()

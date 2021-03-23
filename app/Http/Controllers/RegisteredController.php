@@ -187,7 +187,6 @@ class RegisteredController extends Controller
             }
             
             //untuk mengubah zona waktu isi didalam dengan lokasi
-            $timeNusia = Carbon::now()->setTimezone('Asia/Jakarta');
             $timeStudent = Carbon::now()->setTimezone(Auth::user()->timezone);
             $session_registration = SessionRegistration
                 ::join('sessions', 'session_registrations.session_id', 'sessions.id')
@@ -231,7 +230,7 @@ class RegisteredController extends Controller
             $is_local_access = config('database.connections.mysql.username') == 'root';
             return view('role_student.dashboard', compact(
                 'session_registration', /*session,*/ 'session_order_by_schedule_time',
-                'material', 'course_registrations', 'instructors','timeNusia','timeStudent', 'is_local_access'
+                'material', 'course_registrations', 'instructors', 'is_local_access'
             ));
         }
     }
@@ -402,7 +401,32 @@ class RegisteredController extends Controller
                 '+00', '+01', '+02', '+03', '+04', '+04:30', '+05', '+05:30', '+05:45', '+06',
                 '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
             ];
-            return view('role_student.profile',compact('interests', 'timezones'));
+            $zone_names = [
+                /* -11 */ 'Pacific/Pago_Pago',      /* -10 */ 'Pacific/Rarotonga',
+                /* -09:30 */ 'Pacific/Marquesas',   /* -09 */ 'Pacific/Gambier',
+                /* -08 */ 'Pacific/Pitcairn',       /* -07 */ 'America/Phoenix',
+                /* -06 */ 'America/Costa_Rica',     /* -05 */ 'America/Panama',
+                /* -04 */ 'America/Port_of_Spain',  /* -03 */ 'America/Montevideo',
+                /* -02 */ 'Atlantic/South_Georgia', /* -01 */ 'Atlantic/Cape_Verde',
+                /* +00 */ 'Africa/Abidjan',         /* +01 */ 'Africa/Lagos',
+                /* +02 */ 'Africa/Maputo',          /* +03 */ 'Africa/Nairobi',
+                /* +04 */ 'Asia/Dubai',             /* +04:30 */ 'Asia/Kabul',
+                /* +05 */ 'Asia/Ashgabat',          /* +05:30 */ 'Asia/Colombo',
+                /* +05:45 */ 'Asia/Kathmandu',      /* +06 */ 'Asia/Dhaka',
+                /* +06:30 */ 'Asia/Yangon',         /* +07 */ 'Asia/Bangkok',
+                /* +08 */ 'Asia/Macau',             /* +08:45 */ 'Australia/Eucla',
+                /* +09 */ 'Asia/Tokyo',             /* +09:30 */ 'Australia/Darwin',
+                /* +10 */ 'Asia/Vladivostok',       /* +11 */ 'Pacific/Pohnpei',
+                /* +12 */ 'Pacific/Nauru',          /* +13 */ 'Pacific/Fakaofo',
+                /* +14 */ 'Pacific/Kiritimati',
+            ];
+            for($i = 0; $i < count($timezones); $i++) {
+                if(Auth::user()->timezone == $zone_names[$i]) {
+                    $tz_old = $timezones[$i];
+                    break;
+                }
+            }
+            return view('role_student.profile',compact('interests', 'timezones', 'tz_old'));
         } else {
             return redirect()->back();
         }
@@ -616,13 +640,110 @@ class RegisteredController extends Controller
                 'working_experience' => $working_experience,
                 'interest' => $interest,
             ]);
-
-            return redirect()->route('registered.profile.index');
         } else if($this->is_student()) {
-            // update tampilan profil student.
-        } else {
-            return redirect()->route('registered.profile.index');
+            $interest = array(
+                $request->interest_1, $request->interest_2, $request->interest_3,
+                $request->interest_4, $request->interest_5, $request->interest_6
+            );
+            for($i = 0; $i < 6; $i = $i + 1) if($interest[$i] == null) unset($interest[$i]);
+            $interest = implode(', ', $interest);
+            $data = $request->all();
+            $data['interest_1'] = ($interest != null)? 'PASS' : null;
+            
+            $timezones = [
+                '-11', '-10', '-09:30', '-09', '-08', '-07', '-06', '-05', '-04', '-03', '-02', '-01',
+                '+00', '+01', '+02', '+03', '+04', '+04:30', '+05', '+05:30', '+05:45', '+06',
+                '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
+            ];
+            $zone_names = [
+                /* -11 */ 'Pacific/Pago_Pago',      /* -10 */ 'Pacific/Rarotonga',
+                /* -09:30 */ 'Pacific/Marquesas',   /* -09 */ 'Pacific/Gambier',
+                /* -08 */ 'Pacific/Pitcairn',       /* -07 */ 'America/Phoenix',
+                /* -06 */ 'America/Costa_Rica',     /* -05 */ 'America/Panama',
+                /* -04 */ 'America/Port_of_Spain',  /* -03 */ 'America/Montevideo',
+                /* -02 */ 'Atlantic/South_Georgia', /* -01 */ 'Atlantic/Cape_Verde',
+                /* +00 */ 'Africa/Abidjan',         /* +01 */ 'Africa/Lagos',
+                /* +02 */ 'Africa/Maputo',          /* +03 */ 'Africa/Nairobi',
+                /* +04 */ 'Asia/Dubai',             /* +04:30 */ 'Asia/Kabul',
+                /* +05 */ 'Asia/Ashgabat',          /* +05:30 */ 'Asia/Colombo',
+                /* +05:45 */ 'Asia/Kathmandu',      /* +06 */ 'Asia/Dhaka',
+                /* +06:30 */ 'Asia/Yangon',         /* +07 */ 'Asia/Bangkok',
+                /* +08 */ 'Asia/Macau',             /* +08:45 */ 'Australia/Eucla',
+                /* +09 */ 'Asia/Tokyo',             /* +09:30 */ 'Australia/Darwin',
+                /* +10 */ 'Asia/Vladivostok',       /* +11 */ 'Pacific/Pohnpei',
+                /* +12 */ 'Pacific/Nauru',          /* +13 */ 'Pacific/Fakaofo',
+                /* +14 */ 'Pacific/Kiritimati',
+            ];
+            for($i = 0; $i < count($timezones); $i++) {
+                if($request->timezone == $timezones[$i]) {
+                    $request->timezone = $zone_names[$i];
+                    break;
+                }
+            }
+            
+            $data = Validator::make($data, [
+                'domicile' => ['bail', 'required'],
+                'interest_1' => ['bail', 'required'],
+                'image_profile_flag' => ['bail', 'required'],
+                'image_profile' => ['bail', 'sometimes', 'max:8000'],
+                'timezone' => ['bail', 'required'],
+            ]);
+            if($data->fails()) {
+                session(['caption-danger' => 'Your profile information has not been updated. Try again.']);
+                return redirect()->back()->withErrors($data)->withInput();
+            }
+            
+            if($request->image_profile_flag != 0 && Auth::user()->image_profile != 'user.jpg') {
+                // mengganti atau menghapus foto profil, maka foto sebelumnya dihapus dari storage
+                $destinationPath = 'uploads/student/profile/';
+                File::delete($destinationPath . Auth::user()->image_profile);
+            }
+            $file = $request->file('image_profile');
+            if($file) {
+                // mengunggah foto profil baru
+                if($request->image_profile_flag == 1) {
+                    // mengganti foto profil dengan foto yang baru
+                    $file_name = Str::random(50) . '.' . $file->extension();
+                    $destinationPath = 'uploads/student/profile/';
+                    $file->move($destinationPath, $file_name);
+                } else if($request->image_profile_flag == 0) {
+                    // tidak mengubah foto profil, maka seleksi ini tidak ada
+                    // tetapi untuk keamanan, ganti foto profil dengan foto profil user saat ini
+                    $file_name = Auth::user()->image_profile;
+                } else if($request->image_profile_flag == -1) {
+                    // menghapus foto profil tidak perlu up, maka seleksi ini tidak ada,
+                    // tetapi untuk keamanan, ganti foto profil dengan 'user.jpg'
+                    $file_name = 'user.jpg';
+                }
+            } else {
+                // tidak mengunggah foto profil baru
+                if($request->image_profile_flag == 1) {
+                    // ingin mengganti foto profil, tetapi tidak ada foto profil baru yang diunggah
+                    // maka, ganti foto profil dengan 'user.jpg'
+                    $file_name = 'user.jpg';
+                } else if($request->image_profile_flag == 0) {
+                    // tidak mengubah foto profil, maka seleksi ini tidak ada
+                    // tetapi untuk keamanan, ganti foto profil dengan foto profil user saat ini
+                    $file_name = Auth::user()->image_profile;
+                } else if($request->image_profile_flag == -1) {
+                    // menghapus foto profil, maka ganti foto profil dengan 'user.jpg'
+                    $file_name = 'user.jpg';
+                }
+            }
+            Student::where('user_id', Auth::user()->id)->update([
+                'user_id' => Auth::user()->id,
+                'interest' => $interest,
+                'updated_at' => now(),
+            ]);
+            User::find(Auth::user()->id)->update([
+                'domicile' => $request->domicile,
+                'timezone' => $request->timezone,
+                'image_profile' => $file_name,
+                'updated_at' => now(),
+            ]);
+            session(['caption-success' => 'Your profile information has been updated. Thank you!']);
         }
+        return redirect()->back();
     }
 
     public function logout_get_index()

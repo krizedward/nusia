@@ -310,6 +310,7 @@
                           <th>Name</th>
                           <th style="width:25%;">Interest</th>
                           <th style="width:12%;">Picture</th>
+                          <th style="width:5%;">Chat</th>
                         </thead>
                         <tbody>
                           @foreach($data as $dt)
@@ -319,7 +320,6 @@
                                 <?php
                                   if($dt->instructor->interest) {
                                     $interest = explode(', ', $dt->instructor->interest);
-                                    sort($interest);
                                   } else $interest = null;
                                 ?>
                                 @if($interest)
@@ -336,6 +336,9 @@
                                 @else
                                   <img src="{{ asset('uploads/user.jpg') }}" style="width:100%">
                                 @endif
+                              </td>
+                              <td>
+                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.chat_instructor.show', $dt->instructor->user->id) }}">Link</a>
                               </td>
                             </tr>
                           @endforeach
@@ -382,7 +385,6 @@
                                 <?php
                                   if($dt->student->interest) {
                                     $interest = explode(', ', $dt->student->interest);
-                                    sort($interest);
                                   } else $interest = null;
                                 ?>
                                 @if($interest)
