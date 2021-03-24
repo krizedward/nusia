@@ -219,7 +219,7 @@ Route::group(['middleware'=>'auth'], function() {
         
         // memodifikasi informasi umum mengenai sesi
         // & memodifikasi ketersediaan jadwal mengajar
-        Route::put('/instructor/course/{course_id}/session/{session_id}/update', 'InstructorController@session_update')->name('instructor.session.update');
+        Route::put('/instructor/course/session/update', 'InstructorController@session_update')->name('instructor.session.update');
         
         // menghapus informasi sesi
         // & menghapus ketersediaan jadwal mengajar

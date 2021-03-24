@@ -48,6 +48,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
+use Carbon\Carbon;
 
 class InstructorController extends Controller
 {
@@ -132,13 +133,27 @@ class InstructorController extends Controller
         // & menambah ketersediaan jadwal mengajar
     }
 
-    public function session_update(Request $request, $course_id, $session_id) {
+    public function session_update(Request $request) {
         // memodifikasi informasi umum mengenai sesi
         // & memodifikasi ketersediaan jadwal mengajar
-        Session::where('id', $request->session_registration)->update([
-            'link_zoom' => $request->link_zoom,
+        $data = Validator::make($request->all(), [
+            'schedule_time_date' => ['bail', Rule::requiredIf($request->schedule_time_flag == 1)],
+            'schedule_time_time' => ['bail', Rule::requiredIf($request->schedule_time_flag == 1)],
         ]);
-        return redirect()->route('instructor.course.show', [$course_id]);
+        if($data->fails()) {
+            session(['caption-danger' => 'This session information has not been changed. Try again.']);
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+        
+        if($request->schedule_time_flag == 1) $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
+        else $schedule_time = null;
+        $session = Session::findOrFail($request->session_id);
+        if($request->link_zoom_flag == 1) $session->update(['link_zoom' => $request->link_zoom]);
+        if($schedule_time) $session->schedule->update(['schedule_time' => $schedule_time]);
+        session(['caption-success' => 'This session information has been changed. Thank you!']);
+        return redirect()->back();
     }
 
     public function session_destroy($course_id, $session_id) {
