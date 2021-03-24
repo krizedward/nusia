@@ -63,13 +63,19 @@
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                  @if(Auth::user()->roles == 'Student' && Auth::user()->image_profile != 'user.jpg')
-                      <img src="{{ asset('uploads/student/profile/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
-                  @elseif(Auth::user()->roles == 'Instructor' && Auth::user()->image_profile != 'user.jpg')
-                      <img src="{{ asset('uploads/instructor/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
-                  @else
-                      <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="img-circle" alt="User Image">
-                  @endif
+                @if(Auth::user()->image_profile != 'user.jpg')
+                    @if(Auth::user()->roles == 'Student')
+                        <img src="{{ asset('uploads/student/profile/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
+                    @elseif(Auth::user()->roles == 'Instructor' || Auth::user()->roles == 'Lead Instructor')
+                        <img src="{{ asset('uploads/instructor/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
+                    @elseif(Auth::user()->roles == 'Customer Service')
+                        <img src="{{ asset('uploads/cs-profile/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
+                    @elseif(Auth::user()->roles == 'Financial Team')
+                        <img src="{{ asset('uploads/finance-profile/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
+                    @endif
+                @else
+                    <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="img-circle" alt="User Image">
+                @endif
                 <p>
                   {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} - {{ Auth::user()->roles }}
                   <small>Joined {{ \Carbon\Carbon::parse(Auth::user()->created_at)->setTimezone(Auth::user()->timezone)->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}</small>
