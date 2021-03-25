@@ -110,6 +110,12 @@ class InstructorController extends Controller
 
     public function schedule_destroy($schedule_id) {
         // menghapus ketersediaan jadwal mengajar
+        $schedule = Schedule::findOrFail($schedule_id);
+        foreach($schedule->instructor_schedules as $dt) if($dt->instructor_id == Auth::user()->instructor->id)
+            $dt->delete();
+        $schedule->delete();
+        session(['caption-success' => 'This session information has been deleted. Thank you!']);
+        return redirect()->back();
     }
 
     public function course_show($course_id) {
@@ -147,12 +153,95 @@ class InstructorController extends Controller
                 ->withInput();
         }
         
-        if($request->schedule_time_flag == 1) $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
+        if($request->schedule_time_flag == 1) {
+            $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
+            if($schedule_time < now()) {
+                session(['caption-danger' => 'Cannot change the time schedule as the inputted time is invalid.']);
+                return redirect()->back()->withInput();
+            }
+        }
         else $schedule_time = null;
-        $session = Session::findOrFail($request->session_id);
-        if($request->link_zoom_flag == 1) $session->update(['link_zoom' => $request->link_zoom]);
-        if($schedule_time) $session->schedule->update(['schedule_time' => $schedule_time]);
-        session(['caption-success' => 'This session information has been changed. Thank you!']);
+        
+        $schedule_time_is_exist = 0;
+        $already_existed_instructor_schedule = null;
+        if($schedule_time) {
+            foreach(Auth::user()->instructor->instructor_schedules as $dt) {
+                if($dt->schedule->schedule_time == $schedule_time) {
+                    $schedule_time_is_exist = 1;
+                    $already_existed_instructor_schedule = $dt;
+                    break;
+                }
+            }
+        }
+        
+        if($request->session_id) {
+            // memodifikasi informasi sesi yang sudah ada
+            $session = Session::findOrFail($request->session_id);
+            if($request->link_zoom_flag == 1) {
+                // memodifikasi link meeting
+                $session->update([
+                    'link_zoom' => $request->link_zoom,
+                    'updated_at' => now(),
+                ]);
+                session(['caption-success' => 'This session information has been changed. Thank you!']);
+            }
+            if($schedule_time) {
+                // memodifikasi jadwal meeting
+                if($schedule_time_is_exist) {
+                    // terdapat jadwal meeting yang sama dengan schedule_time
+                    // maka tukar ketersediaan waktu antara jadwal lama dengan jadwal baru
+                    if($already_existed_instructor_schedule->status == 'Busy') {
+                        // jadwal yang ditukar telah diintegrasikan dengan sesi lain
+                        // maka tidak dapat dilakukan penukaran jadwal
+                        session(['caption-danger' => 'Cannot change the time schedule as the inputted time has been assigned to another session.']);
+                    } else if($already_existed_instructor_schedule->status == 'Available') {
+                        // jadwal yang ditukar belum diintegrasikan dengan sesi lain
+                        // maka dilakukan penukaran jadwal
+                        $session->schedule->instructor_schedules->first()->update([
+                            'status' => 'Available',
+                            'updated_at' => now(),
+                        ]);
+                        $session->update([
+                            'schedule_id' => $already_existed_instructor_schedule->schedule_id,
+                            'updated_at' => now(),
+                        ]);
+                        $already_existed_instructor_schedule->update([
+                            'status' => 'Busy',
+                            'updated_at' => now(),
+                        ]);
+                        session(['caption-success' => 'This session information has been changed. Thank you!']);
+                    }
+                } else {
+                    // tidak ada jadwal meeting yang sama dengan jadwal baru ini
+                    $session->schedule->update([
+                        'schedule_time' => $schedule_time,
+                        'updated_at' => now(),
+                    ]);
+                    session(['caption-success' => 'This session information has been changed. Thank you!']);
+                }
+            }
+        } else {
+            // menambah informasi jadwal atau informasi sesi baru
+            if($schedule_time) {
+                if($schedule_time_is_exist) {
+                    // jadwal tersebut sudah ada, sehingga tidak dilakukan perubahan
+                    session(['caption-danger' => 'This schedule has been previously registered. No changes are made.']);
+                    return redirect()->back()->withInput();
+                } else {
+                    // jadwal tersebut belum ada, sehingga dibuat sebagai jadwal baru
+                    InstructorSchedule::create([
+                        'instructor_id' => Auth::user()->instructor->id,
+                        'schedule_id' => Schedule::create([
+                            'schedule_time' => $schedule_time,
+                            'created_at' => now(),
+                        ])->id,
+                        'status' => 'Available',
+                        'created_at' => now(),
+                    ]);
+                    session(['caption-success' => 'This schedule information has been added. Thank you!']);
+                }
+            }
+        }
         return redirect()->back();
     }
 
