@@ -92,8 +92,14 @@ class InstructorController extends Controller
         // & melihat daftar course yang diajar
         // & melihat hasil filter daftar course sesuai jenis course
         $instructor_schedules = InstructorSchedule::where('instructor_id', Auth::user()->instructor->id)->get();
-        // BUG: Cara menampilkan di formulir <select>, hanya Session yang belum dimulai. Jika sudah selesai, untuk apa mengganti link Zoom ?
-        return view('role_instructor.schedule_index', compact('instructor_schedules'));
+        $courses = Course
+            ::join('sessions', 'sessions.course_id', 'courses.id')
+            ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+            ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+            ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
+            ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at', 'courses.deleted_at')
+            ->distinct()->get();
+        return view('role_instructor.schedule_index', compact('instructor_schedules', 'courses'));
     }
 
     public function schedule_store(Request $request) {
@@ -129,8 +135,15 @@ class InstructorController extends Controller
         // & melihat daftar pengumpulan ujian
         // & melihat daftar instructor course
         // & melihat daftar student dalam course
-        $data = Course::findOrFail($course_id);
-        return view('role_instructor.course_registrations_index_by_course_id', compact('data'));
+        $course = Course::findOrFail($course_id);
+        
+        $material_types = MaterialType::all();
+        $course_types = CourseType::all();
+        $course_levels = CourseLevel::all();
+        
+        return view('role_instructor.course_show', compact(
+            'course', 'material_types', 'course_types', 'course_levels',
+        ));
     }
 
     public function session_store(Request $request, $course_id) {

@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title','Instructor | Session')
+@section('title', 'Schedules')
 
 @include('layouts.css_and_js.all')
 
@@ -9,10 +9,10 @@
 {{-- @include('layouts.css_and_js.form_advanced') --}}
 
 @section('content-header')
-  <h1><b>Session</b></h1>
+  <h1><b>Schedules</b></h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('registered.dashboard.index') }}">Home</a></li>
-    <li class="active">Schedule</li>
+    <li class="active">Schedules</li>
   </ol>
 @stop
 
@@ -110,7 +110,8 @@
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
           <li class="active"><a href="#ready" data-toggle="tab"><b>Ready</b></a></li>
-          <li><a href="#all" data-toggle="tab"><b>All Schedules</b></a></li>
+          <li><a href="#all_schedules" data-toggle="tab"><b>All Schedules</b></a></li>
+          <li><a href="#all_classes" data-toggle="tab"><b>All Classes</b></a></li>
         </ul>
         <div class="tab-content">
           <div class="active tab-pane" id="ready">
@@ -208,12 +209,12 @@
                                   @if($dt->schedule->session->link_zoom)
                                     <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->schedule->session->link_zoom }}">Link</a></td>
                                   @else
-                                    <td class="text-center"><a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a></td>
+                                    <td class="text-center"><a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Link</a></td>
                                   @endif
                                   @if($schedule_now > $schedule_time_end)
                                     <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('instructor.student_attendance.index', [$dt->schedule->session->course_id, $dt->schedule->session->id]) }}">Link</a></td>
                                   @else
-                                    <td class="text-center"><a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a></td>
+                                    <td class="text-center"><a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Link</a></td>
                                   @endif
                                 </tr>
                               @endif
@@ -230,7 +231,7 @@
             </div>
           </div>
           <!-- /.tab-pane -->
-          <div class="tab-pane" id="all">
+          <div class="tab-pane" id="all_schedules">
             <div class="row">
               <div class="col-md-12 no-padding">
                 <div class="col-md-12">
@@ -295,17 +296,164 @@
                                     @endif
                                   @endif
                                 </td>
-                                @if($schedule_now <= $schedule_time_begin && $dt->status == 'Available')
-                                  <td class="text-center">
+                                <td class="text-center">
+                                  @if($schedule_now <= $schedule_time_begin && $dt->status == 'Available')
+                                    <span class="hidden">1</span>
                                     <form role="form" action="{{ route('instructor.schedule.destroy', [$dt->schedule_id]) }}" method="post">
                                       @csrf
                                       @method('DELETE')
                                       <button type="submit" class="btn btn-flat btn-xs btn-danger" onclick="if(confirm('This schedule will be deleted: {{ $schedule_time_begin_iso }}.')) return true; else return false;"><i class="fa fa-trash"></i></button>
                                     </form>
+                                  @else
+                                    <span class="hidden">2</span>
+                                    <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#"><i class="fa fa-trash"></i></a>
+                                  @endif
+                                </td>
+                              </tr>
+                            @endforeach
+                          @else
+                            <p class="text-muted">No schedules available.</p>
+                          @endif
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.tab-pane -->
+          <div class="tab-pane" id="all_classes">
+            <div class="row">
+              <div class="col-md-12 no-padding">
+                <div class="col-md-12">
+                  <div class="box box-default">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>All Assigned Courses</b></h3>
+                      {{--
+                      <div>
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('registered.dashboard.index') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add User
+                        </a>
+                      </div>
+                      --}}
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      </div>
+                    </div>
+                    <div class="box-body">
+                      <strong><i class="fa fa-edit margin-r-5"></i> Types of Class Status</strong>
+                      <p>
+                        <label data-toggle="tooltip" title class="label bg-red" data-original-title="This class sessions are not ready to be published yet. Please check whether all schedules for this class have been assigned.">Not Ready</label>
+                        <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This class has not started yet.">Upcoming</label>
+                        <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This class is in progress.">Ongoing</label>
+                        <label data-toggle="tooltip" title class="label bg-green" data-original-title="This class has been completed. Please make sure that all session attendances for this class have been checked.">Done</label>
+                      </p>
+                      <hr>
+                      <table class="table table-bordered table-striped example1">
+                        <thead>
+                          <th>Next Meeting Time</th>
+                          <th>Class Status</th>
+                          {{--
+                          <th>First Meet in Class</th>
+                          <th>Last Meet in Class</th>
+                          --}}
+                          <th>Class Name</th>
+                          <th style="width:5%;">View</th>
+                        </thead>
+                        <tbody>
+                          @if($courses->toArray() != null)
+                            @foreach($courses as $dt)
+                              <?php
+                                // UNTUK KOLOM "Next Meeting Time" dan "Class Status"
+                                $next_meeting_time = null;
+                                $next_meeting_link = null;
+                                $course_time_begin = null;
+                                $course_time_end = null;
+                                $class_status = null;
+                                if($dt->sessions) {
+                                  foreach($dt->sessions as $s) {
+                                    $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    // UNTUK KOLOM "Next Meeting Time"
+                                    if($schedule_time >= $schedule_now) {
+                                      if($next_meeting_time == null) {
+                                        $next_meeting_time = $schedule_time;
+                                        $next_meeting_link = $s->link_zoom;
+                                      }
+                                      if($next_meeting_time > $schedule_time) {
+                                        $next_meeting_time = $schedule_time;
+                                        $next_meeting_link = $s->link_zoom;
+                                      }
+                                    }
+                                    // UNTUK KOLOM "Class Status"
+                                    if($course_time_begin == null) $course_time_begin = $schedule_time;
+                                    if($course_time_end == null) $course_time_end = $schedule_time;
+                                    if($course_time_begin > $schedule_time) $course_time_begin = $schedule_time;
+                                    if($course_time_end < $schedule_time) $course_time_end = $schedule_time;
+                                  }
+                                  // SIMPAN NILAI VARIABEL UNTUK SELEKSI KOLOM "Class Status"
+                                  if($dt->sessions->count() < $dt->course_package->count_session) $class_status = 1; // Not Ready
+                                  if($schedule_now < $course_time_begin) $class_status = 2; // Upcoming
+                                  else if($schedule_now <= $course_time_end) $class_status = 3; // Ongoing
+                                  else if($schedule_now > $course_time_end) $class_status = 4; // Done
+                                } else {
+                                  $class_status = 1; // Not Ready
+                                }
+                              ?>
+                              <tr>
+                                {{--
+                                @if($course_time_begin)
+                                  <td>
+                                    <span class="hidden">{{ $course_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                    {{ $course_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
                                   </td>
                                 @else
-                                  <td class="text-center"><a class="btn btn-flat btn-xs btn-default disabled" href="#"><i class="fa fa-trash"></i></a></td>
+                                  <td><i>N/A</i></td>
                                 @endif
+                                @if($course_time_end)
+                                  <td>
+                                    <span class="hidden">{{ $course_time_end->isoFormat('YYMMDDAhhmm') }}</span>
+                                    {{ $course_time_end->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                  </td>
+                                @else
+                                  <td><i>N/A</i></td>
+                                @endif
+                                --}}
+                                <td>
+                                  @if($next_meeting_time)
+                                    <span class="hidden">{{ $next_meeting_time->isoFormat('YYMMDDAhhmm') }}</span>
+                                    {{ $next_meeting_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                    <div class="pull-right">
+                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $next_meeting_link }}">Link</a>
+                                      &nbsp;&nbsp;
+                                    </div>
+                                  @else
+                                    <span class="hidden">N/A</span>
+                                    <i>N/A</i>
+                                    <div class="pull-right">
+                                      <button disabled class="btn btn-flat btn-xs btn-default btn-disabled">Link</button>
+                                      &nbsp;&nbsp;
+                                    </div>
+                                  @endif
+                                </td>
+                                <td class="text-center">
+                                  @if($class_status == 1)
+                                    <span class="hidden">1</span>
+                                    <label data-toggle="tooltip" title class="label bg-red" data-original-title="This class sessions are not ready to be published yet. Please check whether all schedules for this class have been assigned.">Not Ready</label>
+                                  @elseif($class_status == 2)
+                                    <span class="hidden">2</span>
+                                    <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This class has not started yet.">Upcoming</label>
+                                  @elseif($class_status == 3)
+                                    <span class="hidden">3</span>
+                                    <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This class is in progress.">Ongoing</label>
+                                  @elseif($class_status == 4)
+                                    <span class="hidden">4</span>
+                                    <label data-toggle="tooltip" title class="label bg-green" data-original-title="This class has been completed. Please make sure that all session attendances for this class have been checked.">Done</label>
+                                  @endif
+                                </td>
+                                <td>{{ $dt->title }}</td>
+                                <td class="text-center"><a target="_blank" class="btn btn-flat btn-xs bg-purple" href="{{ route('instructor.course.show', [$dt->id]) }}">Info</a></td>
                               </tr>
                             @endforeach
                           @else

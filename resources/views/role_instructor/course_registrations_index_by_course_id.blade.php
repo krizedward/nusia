@@ -9,8 +9,8 @@
         Class Students
     </b></h1>
     <ol class="breadcrumb">
-        <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="{{ route('sessions.index') }}">Schedule</a></li>
+        <li><a href="{{ route('registered.dashboard.index') }}">Home</a></li>
+        <li><a href="{{ route('instructor.schedule.index') }}">Schedules</a></li>
         <li class="active">Class Students</li>
     </ol>
 @stop
