@@ -33,12 +33,18 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('non_registered.terms.index') }}">Terms of Service</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('login') }}">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('register') }}">Register</a>
-        </li>
+        @if(Auth::check())
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('registered.dashboard.index') }}">Go To Dashboard</a>
+          </li>
+        @else
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('login') }}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('register') }}">Register</a>
+          </li>
+        @endif
         <li class="nav-item">
           <a class="nav-link" href="mailto:nusia.helpdesk@gmail.com">Email Us</a>
         </li>    
