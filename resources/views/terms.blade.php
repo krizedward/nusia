@@ -82,7 +82,7 @@
                     <li>All sessions in the free classes are recorded.<br>Learners allow NUSIA to employ the video recordings<br>for research and marketing purposes<br>(If you disagree with this term, please contact us<br>via email on <a href="mailto:nusia.helpdesk@gmail.com">nusia.helpdesk@gmail.com</a>.)</p>
                 </ol>
                 @if(Auth::check())
-                  <a href="{{ route('home') }}" class="btn btn-primary btn-md col-md-12"> Go To Dashboard</a>
+                  <a href="{{ route('registered.dashboard.index') }}" class="btn btn-primary btn-md col-md-12"> Go To Dashboard</a>
                 @else
                   <a href="{{ route('login') }}" class="btn btn-primary btn-md col-md-12"> Start My Class</a>
                 @endif

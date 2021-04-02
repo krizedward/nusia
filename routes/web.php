@@ -37,6 +37,12 @@ Route::group(['middleware'=>'auth'], function() {
         
         // menampilkan dashboard
         Route::get('/dashboard', 'RegisteredController@dashboard_index')->name('registered.dashboard.index');
+        Route::get('/dashboard', 'RegisteredController@dashboard_index')->name('registered.dashboard.index');
+        Route::get('/coming-soon', function() {
+            return view('in-development');
+        })->name('registered.in-development.index');
+        Route::redirect('/dashboard', '/coming-soon');
+        Route::get('/db', 'RegisteredController@dashboard_index');
         
         // menampilkan NUSIA contact person
         Route::get('/contact-us', 'RegisteredController@contact_index')->name('registered.contact.index');
