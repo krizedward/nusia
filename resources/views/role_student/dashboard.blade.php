@@ -502,7 +502,7 @@
             <div class="box box-success">
               <div class="box-header with-border">
                 <h3 class="box-title"><b>Materials</b></h3>
-                <p class="text-muted" style="margin-bottom:0px;">Click on a course name to view the course materials.</p>
+                <p class="text-muted" style="margin-bottom:0px;">Click on a class name to view the class materials.</p>
               </div>
               <!-- /.box-header -->
               <div class="box-body">
@@ -573,12 +573,12 @@
                               @endforeach
                               @if($i == 0)
                                 <div style="color:#555555">
-                                  No materials for this course.
+                                  No materials for this class.
                                   <br /><br />
                                 </div>
                               @endif
                               <div class="box-footer text-center">
-                                <a href="{{ route('student.schedule.show', [$cr->id]) }}" class="uppercase">View This Course Information</a>
+                                <a href="{{ route('student.schedule.show', [$cr->id]) }}" class="uppercase">View This Class Information</a>
                               </div>
                             </ul>
                           </div>

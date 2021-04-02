@@ -31,7 +31,7 @@
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
           <li class="active"><a href="#current_sessions" data-toggle="tab"><b>Current Sessions</b></a></li>
-          <li><a href="#all_courses" data-toggle="tab"><b>All Courses</b></a></li>
+          <li><a href="#all_classes" data-toggle="tab"><b>All Classes</b></a></li>
         </ul>
         <div class="tab-content">
           <div class="active tab-pane" id="current_sessions">
@@ -98,7 +98,7 @@
                       @if($has_a_schedule)
                         <table class="table table-bordered example1">
                           <thead>
-                            <th>Course / Session</th>
+                            <th>Class / Session</th>
                             <th>Time</th>
                             <th style="width:5%;">Link</th>
                           </thead>
@@ -139,7 +139,7 @@
             </div>
           </div>
           <!-- /.tab-pane -->
-          <div class="tab-pane" id="all_courses">
+          <div class="tab-pane" id="all_classes">
             <div class="row">
               <div class="col-md-3">
                 <div class="box">
@@ -153,7 +153,7 @@
                       <dl>
                         <dt style="font-size:18px;"><i class="fa fa-book margin-r-5"></i> Note</dt>
                         <dd>
-                          Click "link" button view more information about each course!<br />
+                          Click "link" button view more information about each class!<br />
                           <span style="color:#ff0000;">Contact us if you encounter a problem.</span>
                         </dd>
                         {{--
@@ -173,7 +173,7 @@
               <div class="col-md-9">
                 <div class="box box-warning">
                   <div class="box-header">
-                    <h3 class="box-title"><b>All Courses</b></h3>
+                    <h3 class="box-title"><b>All Classes</b></h3>
                     <div class="box-tools pull-right">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
@@ -182,7 +182,7 @@
                     @if($course_registrations->toArray() != 0)
                       <table class="table table-bordered example1">
                         <thead>
-                          <th>Course</th>
+                          <th>Class</th>
                           <th>Type</th>
                           <th style="width:5%;">Detail</th>
                         </thead>
@@ -227,7 +227,7 @@
                     @if($count > 0)
                       <table class="table table-bordered example1">
                         <thead>
-                          <th>Course</th>
+                          <th>Class</th>
                           <th>Type</th>
                           <th style="width:5%;">Detail</th>
                         </thead>
@@ -274,7 +274,7 @@
                     @if($count > 0)
                       <table class="table table-bordered example1">
                         <thead>
-                          <th>Course</th>
+                          <th>Class</th>
                           <th>Type</th>
                           <th style="width:5%;">Detail</th>
                         </thead>
@@ -321,7 +321,7 @@
                     @if($count > 0)
                       <table class="table table-bordered example1">
                         <thead>
-                          <th>Course</th>
+                          <th>Class</th>
                           <th>Type</th>
                           <th style="width:5%;">Detail</th>
                         </thead>

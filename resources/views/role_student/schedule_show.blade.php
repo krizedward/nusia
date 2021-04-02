@@ -1,17 +1,17 @@
 @extends('layouts.admin.default')
 
-@section('title', 'Course Information')
+@section('title', 'Class Information')
 
 @include('layouts.css_and_js.table')
 
 {{-- @include('layouts.css_and_js.form_advanced') --}}
 
 @section('content-header')
-  <h1><b>Course Information</b></h1>
+  <h1><b>Class Information</b></h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('registered.dashboard.index') }}">Home</a></li>
     <li><a href="{{ route('student.schedule.index') }}">Schedules</a></li>
-    <li class="active">Course Information</li>
+    <li class="active">Class Information</li>
   </ol>
 @stop
 
@@ -86,7 +86,7 @@
                       </table>
                     </p>
                     <hr>
-                    <strong><i class="fa fa-credit-card margin-r-5"></i> Course Payment</strong>
+                    <strong><i class="fa fa-credit-card margin-r-5"></i> Class Payment</strong>
                     <p>
                       <table>
                         <tr style="vertical-align:baseline;">
@@ -107,19 +107,19 @@
                               }
                             ?>
                             @if($course_registration->course->course_package->price != 0)
-                              {{-- Kode untuk memeriksa status pembayaran untuk course berbayar. --}}
+                              {{-- Kode untuk memeriksa status pembayaran untuk class berbayar. --}}
                               @if($sum > $course_registration->course->course_package->price)
                                 <span style="color:red;">Possible bug, please report to us.</span>
                               @elseif($sum == $course_registration->course->course_package->price)
                                 {{--<span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Paid</span>--}}
-                                <span data-toggle="tooltip" title class="label label-success" data-original-title="This course has been fully paid."><i class="fa fa-check"></i>&nbsp;&nbsp;Paid</span>
+                                <span data-toggle="tooltip" title class="label label-success" data-original-title="This class has been fully paid."><i class="fa fa-check"></i>&nbsp;&nbsp;Paid</span>
                               @else
                                 {{--<span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Fully Paid</span>--}}
-                                <span data-toggle="tooltip" title class="label label-danger" data-original-title="This course has not been fully paid."><i class="fa fa-times"></i>&nbsp;&nbsp;Not Fully Paid</span>
+                                <span data-toggle="tooltip" title class="label label-danger" data-original-title="This class has not been fully paid."><i class="fa fa-times"></i>&nbsp;&nbsp;Not Fully Paid</span>
                               @endif
                             @else
                               {{--<span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Free of Charge</span>--}}
-                              <span data-toggle="tooltip" title class="label label-success" data-original-title="This course is free of charge."><i class="fa fa-check"></i>&nbsp;&nbsp;Free of Charge</span>
+                              <span data-toggle="tooltip" title class="label label-success" data-original-title="This class is free of charge."><i class="fa fa-check"></i>&nbsp;&nbsp;Free of Charge</span>
                             @endif
                           </td>
                         </tr>
@@ -171,10 +171,10 @@
                             @if($course_registration->placement_test)
                               @if($course_registration->placement_test->status == 'Passed')
                                 {{--<span class="label label-success"><i class="fa fa-check"></i>&nbsp;&nbsp;Passed</span>--}}
-                                <span data-toggle="tooltip" title class="label label-success" data-original-title="You have passed the student placement test for this course."><i class="fa fa-check"></i>&nbsp;&nbsp;Passed</span>
+                                <span data-toggle="tooltip" title class="label label-success" data-original-title="You have passed the student placement test for this class."><i class="fa fa-check"></i>&nbsp;&nbsp;Passed</span>
                               @elseif($course_registration->placement_test->status == 'Not Passed')
                                 {{--<span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Passed</span>--}}
-                                <span data-toggle="tooltip" title class="label label-danger" data-original-title="You have not passed the student placement test for this course. Your submitted result may be still in check."><i class="fa fa-times"></i>&nbsp;&nbsp;Not Passed</span>
+                                <span data-toggle="tooltip" title class="label label-danger" data-original-title="You have not passed the student placement test for this class. Your submitted result may be still in check."><i class="fa fa-times"></i>&nbsp;&nbsp;Not Passed</span>
                               @else
                                 <i class="text-muted">Not Available</i>
                               @endif
@@ -241,7 +241,7 @@
                       </div>
                     </div>
                     <div class="box-body">
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Material Type</strong>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Course Type</strong>
                       <p>
                         @if($course_registration->course->course_package->material_type->description)
                           @if($course_registration->course->course_package->material_type->name == 'General Indonesian Language')
@@ -256,7 +256,7 @@
                         @endif
                       </p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Course Type</strong>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Learning Type</strong>
                       <p>
                         @if($course_registration->course->course_package->course_type->description)
                           <u>{{ $course_registration->course->course_package->course_type->name }}</u><br>
@@ -266,7 +266,7 @@
                         @endif
                       </p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Course Proficiency Level</strong>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Class Proficiency Level</strong>
                       <p>
                         @if($course_registration->course->course_package->course_level->description)
                           <u>{{ $course_registration->course->course_package->course_level->name }}</u><br>
@@ -276,7 +276,7 @@
                         @endif
                       </p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Course Title</strong>
+                      <strong><i class="fa fa-circle-o margin-r-5"></i> Class Title</strong>
                       <p>{{ $course_registration->course->title }}</p>
                     </div>
                   </div>
@@ -305,45 +305,49 @@
                       </div>
                     </div>
                     <div class="box-body">
-                      <table class="table table-bordered">
-                        <thead>
-                          <th>Name</th>
-                          <th style="width:25%;">Interest</th>
-                          <th style="width:12%;">Picture</th>
-                          <th style="width:5%;">Chat</th>
-                        </thead>
-                        <tbody>
-                          @foreach($data as $dt)
-                            <tr>
-                              <td>{{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}</td>
-                              <td>
-                                <?php
-                                  if($dt->instructor->interest) {
-                                    $interest = explode(', ', $dt->instructor->interest);
-                                  } else $interest = null;
-                                ?>
-                                @if($interest)
-                                  @for($i = 0; $i < count($interest); $i = $i + 1)
-                                    <span class="label label-success">{{ $interest[$i] }}</span>
-                                  @endfor
-                                @else
-                                  <span class="text-muted"><i>Not Available</i></span>
-                                @endif
-                              </td>
-                              <td>
-                                @if($dt->instructor->user->image_profile != 'user.jpg')
-                                  <img src="{{ asset('uploads/instructor/'.$dt->instructor->user->image_profile) }}" style="width:100%">
-                                @else
-                                  <img src="{{ asset('uploads/user.jpg') }}" style="width:100%">
-                                @endif
-                              </td>
-                              <td>
-                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.chat_instructor.show', $dt->instructor->user->id) }}">Link</a>
-                              </td>
-                            </tr>
-                          @endforeach
-                        </tbody>
-                      </table>
+                      @if($data->toArray() != null)
+                        <table class="table table-bordered">
+                          <thead>
+                            <th>Name</th>
+                            <th style="width:25%;">Interest</th>
+                            <th style="width:12%;">Picture</th>
+                            <th style="width:5%;">Chat</th>
+                          </thead>
+                          <tbody>
+                            @foreach($data as $dt)
+                              <tr>
+                                <td>{{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}</td>
+                                <td>
+                                  <?php
+                                    if($dt->instructor->interest) {
+                                      $interest = explode(', ', $dt->instructor->interest);
+                                    } else $interest = null;
+                                  ?>
+                                  @if($interest)
+                                    @for($i = 0; $i < count($interest); $i = $i + 1)
+                                      <span class="label label-success">{{ $interest[$i] }}</span>
+                                    @endfor
+                                  @else
+                                    <span class="text-muted"><i>Not Available</i></span>
+                                  @endif
+                                </td>
+                                <td>
+                                  @if($dt->instructor->user->image_profile != 'user.jpg')
+                                    <img src="{{ asset('uploads/instructor/'.$dt->instructor->user->image_profile) }}" style="width:100%">
+                                  @else
+                                    <img src="{{ asset('uploads/user.jpg') }}" style="width:100%">
+                                  @endif
+                                </td>
+                                <td>
+                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.chat_instructor.show', $dt->instructor->user->id) }}">Link</a>
+                                </td>
+                              </tr>
+                            @endforeach
+                          </tbody>
+                        </table>
+                      @else
+                        <p class="text-muted">No data available.</p>
+                      @endif
                     </div>
                   </div>
                   <div class="box box-info">
@@ -371,41 +375,45 @@
                       </div>
                     </div>
                     <div class="box-body">
-                      <table class="table table-bordered">
-                        <thead>
-                          <th>Name</th>
-                          <th style="width:25%;">Interest</th>
-                          <th style="width:12%;">Picture</th>
-                        </thead>
-                        <tbody>
-                          @foreach($data as $dt)
-                            <tr>
-                              <td>{{ $dt->student->user->first_name }} {{ $dt->student->user->last_name }}</td>
-                              <td>
-                                <?php
-                                  if($dt->student->interest) {
-                                    $interest = explode(', ', $dt->student->interest);
-                                  } else $interest = null;
-                                ?>
-                                @if($interest)
-                                  @for($i = 0; $i < count($interest); $i = $i + 1)
-                                    <span class="label label-success">{{ $interest[$i] }}</span>
-                                  @endfor
-                                @else
-                                  <span class="text-muted"><i>Not Available</i></span>
-                                @endif
-                              </td>
-                              <td>
-                                @if($dt->student->user->image_profile != 'user.jpg')
-                                  <img src="{{ asset('uploads/student/profile/'.$dt->student->user->image_profile) }}" style="width:100%">
-                                @else
-                                  <img src="{{ asset('uploads/user.jpg') }}" style="width:100%">
-                                @endif
-                              </td>
-                            </tr>
-                          @endforeach
-                        </tbody>
-                      </table>
+                      @if($data->toArray() != null)
+                        <table class="table table-bordered">
+                          <thead>
+                            <th>Name</th>
+                            <th style="width:25%;">Interest</th>
+                            <th style="width:12%;">Picture</th>
+                          </thead>
+                          <tbody>
+                            @foreach($data as $dt)
+                              <tr>
+                                <td>{{ $dt->student->user->first_name }} {{ $dt->student->user->last_name }}</td>
+                                <td>
+                                  <?php
+                                    if($dt->student->interest) {
+                                      $interest = explode(', ', $dt->student->interest);
+                                    } else $interest = null;
+                                  ?>
+                                  @if($interest)
+                                    @for($i = 0; $i < count($interest); $i = $i + 1)
+                                      <span class="label label-success">{{ $interest[$i] }}</span>
+                                    @endfor
+                                  @else
+                                    <span class="text-muted"><i>Not Available</i></span>
+                                  @endif
+                                </td>
+                                <td>
+                                  @if($dt->student->user->image_profile != 'user.jpg')
+                                    <img src="{{ asset('uploads/student/profile/'.$dt->student->user->image_profile) }}" style="width:100%">
+                                  @else
+                                    <img src="{{ asset('uploads/user.jpg') }}" style="width:100%">
+                                  @endif
+                                </td>
+                              </tr>
+                            @endforeach
+                          </tbody>
+                        </table>
+                      @else
+                        <p class="text-muted">No data available.</p>
+                      @endif
                     </div>
                   </div>
                 </div>
@@ -1701,7 +1709,7 @@
                       <dl>
                         <dt><i class="fa fa-check margin-r-5"></i> Requirements</dt>
                         <dd>
-                          After completing this course, we will evaluate your attendances.<br />
+                          After completing this class, we will evaluate your attendances.<br />
                           A minimum of <b>80% completed attendances (of all sessions)</b> is required to get the course certificate.
                         </dd>
                       </dl>
@@ -1737,7 +1745,7 @@
                     </div>
                   </div>
                   <div class="box-body">
-                    @if($assignment_flag)
+                    @if($task_submission_flag)
                       <table class="table table-bordered">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
