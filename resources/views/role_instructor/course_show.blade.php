@@ -67,16 +67,21 @@
                               if($next_meeting_time == null) {
                                 $next_meeting_time = $schedule_time;
                                 $next_meeting_link = $s->link_zoom;
+                                $session_title = strtoupper($s->title);
                               }
                               if($next_meeting_time > $schedule_time) {
                                 $next_meeting_time = $schedule_time;
                                 $next_meeting_link = $s->link_zoom;
+                                $session_title = strtoupper($s->title);
                               }
                             }
                           }
                         }
                       ?>
                       <table>
+                        <tr style="vertical-align:baseline;">
+                          <td colspan="3"><b><u>{{ $session_title }}</u></b></td>
+                        </tr>
                         <tr style="vertical-align:baseline;">
                           <td width="45"><b>Day</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
@@ -212,7 +217,7 @@
                     </div>
                     <div class="box-body">
                       @if($data->toArray() != null)
-                        <table class="table table-bordered">
+                        <table class="table table-bordered example1">
                           <thead>
                             <th>Name</th>
                             <th style="width:25%;">Interest</th>
@@ -286,7 +291,7 @@
                     </div>
                     <div class="box-body">
                       @if($data->toArray() != null)
-                        <table class="table table-bordered">
+                        <table class="table table-bordered example1">
                           <thead>
                             <th>Name</th>
                             <th style="width:25%;">Interest</th>
@@ -363,25 +368,26 @@
                       <dl>
                         <dt>
                           @if($course->course_registrations->count() == 1)
-                            <i class="fa fa-user-circle-o margin-r-5"></i> Joining Sessions
+                            <i class="fa fa-user-circle-o margin-r-5"></i> Starting Sessions
                           @else
-                            <i class="fa fa-users margin-r-5"></i> Joining Sessions
+                            <i class="fa fa-users margin-r-5"></i> Starting Sessions
                           @endif
                         </dt>
                         <dd>
-                          Click "link" button to join your sessions!
+                          Click "link" button to start your sessions!
                         </dd>
                       </dl>
                       <hr>
                       <dl>
                         <dt>
-                          <i class="fa fa-edit margin-r-5"></i> Giving Feedbacks
+                          <i class="fa fa-edit margin-r-5"></i> Receiving Feedbacks
                         </dt>
                         <dd>
                           After each session ends, a "Form" button will appear replacing the meeting link.
-                          Click the "Form" button to give feedbacks per session.<br />
-                          You are <b>required</b> to give feedbacks in order to complete your attendance information, for each session.
-                          Otherwise, your attendance (for that session) will not be counted.
+                          Click the "Form" button to view feedbacks per session.<br />
+                          Students are <b>required</b> to give feedbacks in order to complete their attendance information, for each session.
+                          Their chances are limited to <b>three days</b> after the session ends.
+                          You are permitted to remind the students to give feedbacks, respectively for each session.
                         </dd>
                       </dl>
                       <hr>
@@ -390,9 +396,9 @@
                           <i class="fa fa-file-text-o margin-r-5"></i> More Information
                         </dt>
                         <dd>
-                          Three days after each session ends, the "Form" button will eventually disappear.<br />
-                          Please consider that a minimum of <b>80% completed attendances (of all sessions)</b> is required to get the course certificate.<br />
-                          <span style="color:#ff0000;">Contact your instructor if you encounter a problem.</span>
+                          Please consider that a minimum of <b>80% completed attendances (of all sessions)</b> is required for a student to get the course certificate.<br />
+                          Reminding the students about what should they do, is subject to <b>NUSIA terms for Instructors.</b><br />
+                          <span style="color:#ff0000;">Contact NUSIA Admin or Lead Instructor if you encounter a problem.</span>
                         </dd>
                       </dl>
                       {{--
@@ -411,8 +417,7 @@
                     </div>
                   </div>
                   <div class="box-body">
-                    @if($course == null)
-                    {{--@if($course_registration->session_registrations)--}}
+                    @if($course->sessions->toArray() != null)
                       <table class="table table-bordered">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
@@ -421,21 +426,21 @@
                           <th style="width:5%;">Link</th>
                         </thead>
                         <tbody>
-                          @foreach($course_registration->session_registrations as $i => $dt)
+                          @foreach($course->sessions as $i => $dt)
                             <tr>
                               <td class="text-right">{{ $i + 1 }}</td>
                               <td>
                                 <a href="#" data-toggle="modal" data-target="#Session{{$dt->id}}" {{-- class="btn btn-s btn-primary" --}}>
-                                  {{ $dt->session->title }}
+                                  {{ $dt->title }}
                                 </a>
                               </td>
                               <td>
                                 <?php
-                                  $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_end_form = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
-                                  $schedule_time_end_form->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
+                                  $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end_form = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
+                                  $schedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                                 ?>
                                 @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                   Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
@@ -445,17 +450,13 @@
                               </td>
                               <td class="text-center">
                                 @if($schedule_now <= $schedule_time_end)
-                                  @if($dt->session->link_zoom)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Join</a>
+                                  @if($dt->link_zoom)
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Join</a>
                                   @else
                                     <a class="btn btn-flat btn-xs btn-default disabled" href="#">Join</a>
                                   @endif
                                 @else
-                                  @if($dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form)
-                                    <a href="#" data-toggle="modal" data-target="#FillForm{{$dt->id}}" class="btn btn-xs btn-flat bg-purple">Form</a>
-                                  @else
-                                    <i class="text-muted">-</i>
-                                  @endif
+                                  <a href="#" data-toggle="modal" data-target="#Form{{$dt->id}}" class="btn btn-flat btn-xs bg-purple">Form</a>
                                 @endif
                               </td>
                             </tr>
@@ -464,7 +465,7 @@
                                 <div class="modal-content">
                                   <div class="box box-primary">
                                     <div class="box-body box-profile">
-                                      <h3 class="profile-username text-center"><b>{{ $dt->session->title }}</b></h3>
+                                      <h3 class="profile-username text-center"><b>{{ $dt->title }}</b></h3>
                                       <p class="text-muted text-center">
                                         Scheduled
                                         @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
@@ -475,7 +476,7 @@
                                       </p>
                                       <ul class="list-group list-group-unbordered">
                                         <li class="list-group-item">
-                                          {{ $dt->session->description }}
+                                          {{ $dt->description }}
                                         </li>
                                       </ul>
                                       <button onclick="document.getElementById('Session{{$dt->id}}').className = 'modal fade'; document.getElementById('Session{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
@@ -488,94 +489,101 @@
                               </div>
                               <!-- /.modal-dialog -->
                             </div>
-                            @if($dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form)
-                              <div class="modal fade" id="FillForm{{$dt->id}}">
-                                <div class="modal-dialog">
-                                  <div class="modal-content">
-                                    <div class="box box-primary">
-                                      <div class="box-body box-profile">
-                                        <form role="form" method="post" action="@if($schedule_now > $schedule_time_end && $dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form) {{ route('student.feedback.store', [$course_registration->id, $dt->id]) }} @else {{ route('logout') }} @endif" enctype="multipart/form-data">
-                                          @csrf
-                                          <h3 class="profile-username text-center"><b>Feedback for {{ $dt->session->title }}</b></h3>
-                                          <p class="text-muted text-center">
-                                            Scheduled
-                                            @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                              today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
-                                            @else
-                                              on {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
-                                            @endif
-                                          </p>
-                                          @if($schedule_now > $schedule_time_end && $dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form)
-                                            <ul class="list-group list-group-unbordered">
-                                              <li class="list-group-item text-red">
-                                                Fill out this form to complete your attendance information!
-                                              </li>
-                                              <li class="list-group-item">
-                                                <div class="row">
-                                                  <div class="col-md-12">
-                                                    <div class="form-group @error('rating{{ $dt->id }}') has-error @enderror">
-                                                      <label for="rating{{ $dt->id }}">
-                                                        Overall, are you satisfied with this session? <span class="text-red">*</span><br />
-                                                        <i>Check the radio box below.</i>
-                                                      </label>
-                                                      <br />
-                                                      <input id="radioAnswer1For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="5">
-                                                      <label for="radioAnswer1For{{ $dt->id }}" class="custom-control-label">Very Satisfied</label>
-                                                      <br />
-                                                      <input id="radioAnswer2For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="4">
-                                                      <label for="radioAnswer2For{{ $dt->id }}" class="custom-control-label">Satisfied</label>
-                                                      <br />
-                                                      <input id="radioAnswer3For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="3">
-                                                      <label for="radioAnswer3For{{ $dt->id }}" class="custom-control-label">Neutral</label>
-                                                      <br />
-                                                      <input id="radioAnswer4For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="2">
-                                                      <label for="radioAnswer4For{{ $dt->id }}" class="custom-control-label">Dissatisfied</label>
-                                                      <br />
-                                                      <input id="radioAnswer5For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="1">
-                                                      <label for="radioAnswer5For{{ $dt->id }}" class="custom-control-label">Very Dissatisfied</label>
-                                                      @error('rating{{ $dt->id }}')
-                                                        <p style="color:red">{{ $message }}</p>
-                                                      @enderror
-                                                    </div>
-                                                    <div class="form-group @error('comment') has-error @enderror">
-                                                      <label for="comment">
-                                                        Explain your reason:<br />
-                                                        <i>Feel free to tell your suggestion(s) here.</i>
-                                                      </label>
-                                                      <textarea id="comment" name="comment" class="@error('comment') is-invalid @enderror form-control" rows="3" placeholder="Explain your reason">{{ old('comment') }}</textarea>
-                                                      @error('comment')
-                                                        <p style="color:red">{{ $message }}</p>
-                                                      @enderror
-                                                    </div>
-                                                    <div class="text-red">* This field is required</div>
-                                                  </div>
-                                                </div>
-                                              </li>
-                                            </ul>
-                                            <button type="submit" class="btn btn-s btn-primary" style="width:100%;">Submit</button>
-                                            <br /><br />
-                                          @else
-                                            <ul class="list-group list-group-unbordered">
-                                              <li class="list-group-item">
-                                                Sorry, you are ineligible to fill out this form.
-                                              </li>
-                                            </ul>
+                            <div class="modal fade" id="Form{{$dt->id}}">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="box box-primary">
+                                    <div class="box-body box-profile">
+                                      <h3 class="profile-username text-center"><b>{{ $dt->title }}</b></h3>
+                                      <p class="text-muted text-center">
+                                        Received Feedbacks
+                                      </p>
+                                      <ul class="list-group list-group-unbordered">
+                                        @foreach($dt->session_registrations as $sr)
+                                          @if($sr->rating)
+                                            <li class="list-group-item">
+                                              {{ $sr->rating->rating }}: {{ $sr->rating->comment }}
+                                            </li>
                                           @endif
-                                        </form>
-                                        <button onclick="document.getElementById('FillForm{{$dt->id}}').className = 'modal fade'; document.getElementById('FillForm{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-default" style="width:100%;">Close</button>
-                                      </div>
-                                      <!-- /.box-body -->
+                                        @endforeach
+                                      </ul>
+                                      <button onclick="document.getElementById('Form{{$dt->id}}').className = 'modal fade'; document.getElementById('Form{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
                                     </div>
-                                    <!-- /.box -->
+                                    <!-- /.box-body -->
                                   </div>
-                                  <!-- /.modal-content -->
+                                  <!-- /.box -->
                                 </div>
-                                <!-- /.modal-dialog -->
+                                <!-- /.modal-content -->
                               </div>
-                            @endif
+                              <!-- /.modal-dialog -->
+                            </div>
                           @endforeach
                         </tbody>
                       </table>
+                      {{-- Formulir untuk reschedule, saat ini belum/tidak digunakan --}}
+                      <div class="box-header hidden">
+                        <h4><b>Reschedule a Session</b></h4>
+                        <p class="no-padding" style="color:#ff0000;">* This field is required</p>
+                      </div>
+                      <div class="box-body hidden">
+                        <form role="form" method="post" action="#" enctype="multipart/form-data">
+                          @csrf
+                          <div class="box-body">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="col-md-12">
+                                  <div class="form-group @error('assignment_id') has-error @enderror">
+                                    <label for="assignment_id">
+                                      Session ID
+                                      <span style="color:#ff0000;">*</span>
+                                    </label>
+                                    <select name="assignment_id" type="text" class="@error('assignment_id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Session ID --</option>
+                                      <?php
+                                        $i = 0;
+                                        $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                                      ?>
+                                      @foreach($course->sessions as $i => $dt)
+                                        @if(old('assignment_id') == $dt->id))
+                                          <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
+                                        @else
+                                          <option value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
+                                        @endif
+                                        <?php $i++; ?>
+                                      @endforeach
+                                    </select>
+                                    @error('assignment_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('schedule_time_date') has-error @enderror @error('schedule_time_time') has-error @enderror">
+                                    <label for="schedule_time_date">Reschedule This Session to</label>
+                                    <p class="text-red">The time schedule inputted is adjusted with your local time.</p>
+                                    <div class="input-group date">
+                                      <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                      <input name="schedule_time_date" type="text" class="form-control pull-right datepicker">
+                                    </div>
+                                    <label for="schedule_time_time" class="hidden">Schedule (set the time)</label><br />
+                                    <div class="input-group">
+                                      <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                                      <input name="schedule_time_time" type="text" class="form-control pull-right timepicker">
+                                    </div>
+                                    @error('schedule_time_date')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                    @error('schedule_time_time')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="box-footer">
+                            <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                          </div>
+                        </form>
+                      </div>
                     @else
                       <div class="text-center">No data available.</div>
                     @endif
@@ -599,54 +607,57 @@
                       <label data-toggle="tooltip" title class="label bg-green" data-original-title="You have attended this session and completed the feedback form for this session.">Present</label>
                     </p>
                     <hr>
-                    @if($course == null)
-                    {{--@if($course_registration->session_registrations)--}}
-                      <table class="table table-bordered">
-                        <thead>
-                          <th style="width:2%;" class="text-right">#</th>
-                          <th>Title</th>
-                          <th style="width:20%;">Attendance</th>
-                        </thead>
-                        <tbody>
-                          <?php
-                            $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
-                          ?>
-                          @foreach($course_registration->session_registrations as $i => $dt)
-                            <tr>
-                              <td class="text-right">{{ $i + 1 }}</td>
-                              <td>{{ $dt->session->title }}</td>
-                              <td>
-                                @if($dt->status == 'Not Assigned')
-                                  <?php
-                                    $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                    $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                    $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
-                                  ?>
-                                  @if($schedule_now < $schedule_time_begin)
-                                    {{--<label class="label bg-gray">Upcoming</label>--}}
-                                    <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This session has not started yet.">Upcoming</label>
-                                  @elseif($schedule_now < $schedule_time_end)
-                                    {{--<label class="label bg-yellow">Ongoing</label>--}}
-                                    <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This session is in progress.">Ongoing</label>
-                                  @else
-                                    {{--<label class="label bg-blue">Attendance Check</label>--}}
-                                    <label data-toggle="tooltip" title class="label bg-blue" data-original-title="This session attendance is being checked by your instructor.">Attendance Check</label>
-                                  @endif
-                                @elseif($dt->status == 'Not Present')
-                                  {{--<label class="label bg-red">Not Present</label>--}}
-                                  <label data-toggle="tooltip" title class="label bg-red" data-original-title="You don't attend this session.">Not Present</label>
-                                @elseif($dt->status == 'Should Submit Form')
-                                  {{--<label class="label bg-purple">Should Submit Form</label>--}}
-                                  <label data-toggle="tooltip" title class="label bg-purple" data-original-title="You have attended this session, but are still required to complete the feedback form.">Should Submit Form</label>
-                                @elseif($dt->status == 'Present')
-                                  {{--<label class="label bg-green">Present</label>--}}
-                                  <label data-toggle="tooltip" title class="label bg-green" data-original-title="You have attended this session and completed the feedback form for this session.">Present</label>
-                                @endif
-                              </td>
-                            </tr>
-                          @endforeach
-                        </tbody>
-                      </table>
+                    @if($course->sessions->toArray() != null)
+                      @foreach($course->sessions as $j => $s)
+                        @if($j != 0)
+                          <hr>
+                        @endif
+                        <h4><b>{{ $s->title }}</b></h4>
+                        @if($s->session_registrations->toArray() != null)
+                          <table class="table table-bordered">
+                            <thead>
+                              <th style="width:2%;" class="text-right">#</th>
+                              <th>Name</th>
+                              <th style="width:20%;">Attendance</th>
+                            </thead>
+                            <tbody>
+                              <?php
+                                $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                              ?>
+                              @foreach($s->session_registrations as $i => $dt)
+                                <tr>
+                                  <td class="text-right">{{ $i + 1 }}</td>
+                                  <td>{{ $dt->course_registration->student->user->first_name }} {{ $dt->course_registration->student->user->last_name }}</td>
+                                  <td>
+                                    @if($dt->status == 'Not Assigned')
+                                      <?php
+                                        $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                        $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                        $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
+                                      ?>
+                                      @if($schedule_now < $schedule_time_begin)
+                                        <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This session has not started yet.">Upcoming</label>
+                                      @elseif($schedule_now < $schedule_time_end)
+                                        <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This session is in progress.">Ongoing</label>
+                                      @else
+                                        <label data-toggle="tooltip" title class="label bg-blue" data-original-title="This session attendance is being checked by your instructor.">Attendance Check</label>
+                                      @endif
+                                    @elseif($dt->status == 'Not Present')
+                                      <label data-toggle="tooltip" title class="label bg-red" data-original-title="You don't attend this session.">Not Present</label>
+                                    @elseif($dt->status == 'Should Submit Form')
+                                      <label data-toggle="tooltip" title class="label bg-purple" data-original-title="You have attended this session, but are still required to complete the feedback form.">Should Submit Form</label>
+                                    @elseif($dt->status == 'Present')
+                                      <label data-toggle="tooltip" title class="label bg-green" data-original-title="You have attended this session and completed the feedback form for this session.">Present</label>
+                                    @endif
+                                  </td>
+                                </tr>
+                              @endforeach
+                            </tbody>
+                          </table>
+                        @else
+                          <div class="text-center">No data available.</div>
+                        @endif
+                      @endforeach
                     @else
                       <div class="text-center">No data available.</div>
                     @endif

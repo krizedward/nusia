@@ -109,18 +109,18 @@
     <div class="col-md-9">
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-          <li class="active"><a href="#ready" data-toggle="tab"><b>Ready</b></a></li>
-          <li><a href="#all_schedules" data-toggle="tab"><b>All Schedules</b></a></li>
-          <li><a href="#all_classes" data-toggle="tab"><b>All Classes</b></a></li>
+          <li class="active"><a href="#sessions" data-toggle="tab"><b>Sessions</b></a></li>
+          <li><a href="#teaching_availability" data-toggle="tab"><b>Teaching Availability</b></a></li>
+          <li><a href="#class_information" data-toggle="tab"><b>Class Information</b></a></li>
         </ul>
         <div class="tab-content">
-          <div class="active tab-pane" id="ready">
+          <div class="active tab-pane" id="sessions">
             <div class="row">
               <div class="col-md-12 no-padding">
                 <div class="col-md-12">
                   <div class="box box-default">
                     <div class="box-header">
-                      <h3 class="box-title"><b>All Ready Sessions</b></h3>
+                      <h3 class="box-title"><b>All Sessions</b></h3>
                       {{--
                       <div>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('registered.dashboard.index') }}">
@@ -144,10 +144,10 @@
                       <hr>
                       <table class="table table-bordered table-striped example2">
                         <thead>
+                          <th>Course</th>
                           <th>Class</th>
                           <th>Session</th>
-                          <th>Course</th>
-                          <th>Level</th>
+                          {{--<th>Level</th>--}}
                           <th>Meeting Time</th>
                           <th>Meeting Status</th>
                           <th style="width:16%;">Meeting Link</th>
@@ -158,10 +158,10 @@
                             @foreach($instructor_schedules as $dt)
                               @if($dt->schedule->session)
                                 <tr>
+                                  <td>{{ $dt->schedule->session->course->course_package->material_type->name }} - {{ $dt->schedule->session->course->course_package->course_type->name }} - {{ $dt->schedule->session->course->course_package->course_level->name }}</td>
                                   <td>{{ $dt->schedule->session->course->title }}</td>
                                   <td>{{ $dt->schedule->session->title }}</td>
-                                  <td>{{ $dt->schedule->session->course->course_package->material_type->name }} - {{ $dt->schedule->session->course->course_package->course_type->name }}</td>
-                                  <td>{{ $dt->schedule->session->course->course_package->course_level->name }}</td>
+                                  {{--<td>{{ $dt->schedule->session->course->course_package->course_level->name }}</td>--}}
                                   @if($dt->schedule->schedule_time)
                                     <?php
                                       $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
@@ -231,7 +231,7 @@
             </div>
           </div>
           <!-- /.tab-pane -->
-          <div class="tab-pane" id="all_schedules">
+          <div class="tab-pane" id="teaching_availability">
             <div class="row">
               <div class="col-md-12 no-padding">
                 <div class="col-md-12">
@@ -323,7 +323,7 @@
             </div>
           </div>
           <!-- /.tab-pane -->
-          <div class="tab-pane" id="all_classes">
+          <div class="tab-pane" id="class_information">
             <div class="row">
               <div class="col-md-12 no-padding">
                 <div class="col-md-12">
@@ -452,7 +452,7 @@
                                     <label data-toggle="tooltip" title class="label bg-green" data-original-title="This class has been completed. Please make sure that all session attendances for this class have been checked.">Done</label>
                                   @endif
                                 </td>
-                                <td>{{ $dt->title }}</td>
+                                <td>{{ $dt->course_package->material_type->name }} - {{ $dt->course_package->course_type->name }} - {{ $dt->title }}</td>
                                 <td class="text-center"><a target="_blank" class="btn btn-flat btn-xs bg-purple" href="{{ route('instructor.course.show', [$dt->id]) }}">Info</a></td>
                               </tr>
                             @endforeach
