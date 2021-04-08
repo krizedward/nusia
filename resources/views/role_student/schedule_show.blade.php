@@ -52,6 +52,81 @@
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
+                    <strong><i class="fa fa-clock-o margin-r-5"></i> Next Meeting Time</strong>
+                    <p>
+                      <?php
+                        $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                        $next_meeting_time = null;
+                        $next_meeting_link = null;
+                        if($course_registration->course->sessions) {
+                          foreach($course_registration->course->sessions as $s) {
+                            $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                            if($schedule_time >= $schedule_now) {
+                              if($next_meeting_time == null) {
+                                $next_meeting_time = $schedule_time;
+                                $next_meeting_link = $s->link_zoom;
+                                $session_title = strtoupper($s->title);
+                              }
+                              if($next_meeting_time > $schedule_time) {
+                                $next_meeting_time = $schedule_time;
+                                $next_meeting_link = $s->link_zoom;
+                                $session_title = strtoupper($s->title);
+                              }
+                            }
+                          }
+                        }
+                      ?>
+                      <table>
+                        <tr style="vertical-align:baseline;">
+                          <td colspan="3"><b><u>{{ $session_title }}</u></b></td>
+                        </tr>
+                        <tr style="vertical-align:baseline;">
+                          <td width="45"><b>Day</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>
+                            @if($next_meeting_time)
+                              {{ $next_meeting_time->isoFormat('dddd') }}
+                            @else
+                              <i class="text-muted">Not Available</i>
+                            @endif
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:baseline;">
+                          <td width="45"><b>Date</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>
+                            @if($next_meeting_time)
+                              {{ $next_meeting_time->isoFormat('MMMM Do YYYY') }}
+                            @else
+                              <i class="text-muted">Not Available</i>
+                            @endif
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:baseline;">
+                          <td width="45"><b>Time</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>
+                            @if($next_meeting_time)
+                              {{ $next_meeting_time->isoFormat('hh:mm A') }}
+                            @else
+                              <i class="text-muted">Not Available</i>
+                            @endif
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:baseline;">
+                          <td width="45"><b>Link</b></td>
+                          <td>&nbsp;:&nbsp;&nbsp;</td>
+                          <td>
+                            @if($next_meeting_link)
+                              <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $next_meeting_link }}">Link</a>
+                            @else
+                              <i class="text-muted">Not Available</i>
+                            @endif
+                          </td>
+                        </tr>
+                      </table>
+                    </p>
+                    <hr>
                     <strong><i class="fa fa-clock-o margin-r-5"></i> Registration Time</strong>
                     <p>
                       <?php
@@ -461,12 +536,12 @@
                       <hr>
                       <dl>
                         <dt>
-                          <i class="fa fa-edit margin-r-5"></i> Giving Feedbacks
+                          <i class="fa fa-edit margin-r-5"></i> Giving Feedback
                         </dt>
                         <dd>
                           After each session ends, a "Form" button will appear replacing the meeting link.
-                          Click the "Form" button to give feedbacks per session.<br />
-                          You are <b>required</b> to give feedbacks in order to complete your attendance information, for each session.
+                          Click the "Form" button to give feedback per session.<br />
+                          You are <b>required</b> to give feedback in order to complete your attendance information, for each session.
                           Otherwise, your attendance (for that session) will not be counted.
                         </dd>
                       </dl>
@@ -977,7 +1052,7 @@
                         <dt><i class="fa fa-upload margin-r-5"></i> Task Submission</dt>
                         <dd>
                           After completing a task, fill out the submission form and click "submit" button!<br />
-                          If you have uploaded a file, please check whether the file has been submitted successfully.
+                          If you have uploaded a file, please check <b>whether or not</b> the file has been submitted successfully.
                         </dd>
                       </dl>
                       <hr>
@@ -1054,7 +1129,7 @@
                                   </td>
                                   <td class="text-center">
                                     @if($dt->path_1)
-                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.assignment.download', [$course_registration->id, $dt->id]) }}">Link</a>
+                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.assignment.download', [$course_registration->id, $dt->id]) }}"><i class="fa fa-download"></i></a>
                                     @else
                                       <i class="text-muted">Not Available</i>
                                     @endif
@@ -1405,7 +1480,7 @@
                         <dt><i class="fa fa-commenting-o margin-r-5"></i> Note</dt>
                         <dd>
                           Each task submission and grading (including exam) can be found here.<br />
-                          Click on each task's title to view your submission
+                          <b>Click on each task's title</b> to view your submission
                           @if($task_submission_flag != 1)
                             details
                           @else
@@ -1745,11 +1820,19 @@
                     </div>
                   </div>
                   <div class="box-body">
+                    <strong><i class="fa fa-edit margin-r-5"></i> Types of Certificate Status</strong>
+                    <p>
+                      <label data-toggle="tooltip" title class="label bg-red" data-original-title="You did not complete the minimum attendance to get the certificate.">Ineligible</label>
+                      <label data-toggle="tooltip" title class="label bg-gray" data-original-title="The customer service has not uploaded the certificate yet. Please wait until the certificate has been uploaded.">Pending</label>
+                      <label data-toggle="tooltip" title class="label bg-green" data-original-title="You are eligible to get the certificate.">Eligible</label>
+                    </p>
+                    <hr>
                     @if($task_submission_flag)
                       <table class="table table-bordered">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Total Attendances</th>
+                          <th>Status</th>
                           <th style="width:5%;">Link</th>
                         </thead>
                         <tbody>
@@ -1767,15 +1850,26 @@
                             <td>
                               {{ $i }}/{{ $total_sessions }}
                             </td>
-                            <td class="text-center">
+                            <td>
+                              @if($i >= 80 * $total_sessions / 100)
+                                @if($course_registration->course_certificate->path)
+                                  <label data-toggle="tooltip" title class="label bg-green" data-original-title="You are eligible to get the certificate.">Eligible</label>
+                                @else
+                                  <label data-toggle="tooltip" title class="label bg-gray" data-original-title="The customer service has not uploaded the certificate yet. Please wait until the certificate has been uploaded.">Pending</label>
+                                @endif
+                              @else
+                                <label data-toggle="tooltip" title class="label bg-red" data-original-title="You did not complete the minimum attendance to get the certificate.">Ineligible</label>
+                              @endif
+                            </td>
+                            <td>
                               @if($i >= 80 * $total_sessions / 100)
                                 @if($course_registration->course_certificate->path)
                                   <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.certificate.download') }}">Link</a>
                                 @else
-                                  <a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-warning disabled" href="#">Pending</a>
+                                  <a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a>
                                 @endif
                               @else
-                                <a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default disabled" href="#">Ineligible</a>
+                                <a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a>
                               @endif
                             </td>
                           </tr>
