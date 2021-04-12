@@ -374,7 +374,7 @@
                           @endif
                         </dt>
                         <dd>
-                          Click "link" button to start your sessions!
+                          Click "join" button to start your sessions!
                         </dd>
                       </dl>
                       <hr>
@@ -424,6 +424,7 @@
                           <th>Title</th>
                           <th>Time</th>
                           <th style="width:5%;">Link</th>
+                          <th style="width:10%;">Attendance</th>
                         </thead>
                         <tbody>
                           @foreach($course->sessions as $i => $dt)
@@ -437,9 +438,13 @@
                               <td>
                                 <?php
                                   $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_10_mins_before_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                   $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_30_mins_after_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                   $schedule_time_end_form = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_10_mins_before_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->sub(10, 'minutes');
                                   $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
+                                  $schedule_time_30_mins_after_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
                                   $schedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                                 ?>
                                 @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
@@ -456,7 +461,14 @@
                                     <a class="btn btn-flat btn-xs btn-default disabled" href="#">Join</a>
                                   @endif
                                 @else
-                                  <a href="#" data-toggle="modal" data-target="#Form{{$dt->id}}" class="btn btn-flat btn-xs bg-purple">Form</a>
+                                  <a href="#" data-toggle="modal" data-target="#Form{{$dt->id}}" class="btn btn-flat btn-xs btn-primary">Form</a>
+                                @endif
+                              </td>
+                              <td class="text-center">
+                                @if($schedule_now >= $schedule_time_10_mins_before_end && $schedule_now <= $schedule_time_30_mins_after_end)
+                                  <a rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('instructor.student_attendance.index', [$dt->course_id, $dt->id]) }}">Link</a>
+                                @else
+                                  <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Link</a>
                                 @endif
                               </td>
                             </tr>
@@ -520,12 +532,12 @@
                           @endforeach
                         </tbody>
                       </table>
-                      {{-- Formulir untuk reschedule, saat ini belum/tidak digunakan --}}
-                      <div class="box-header hidden">
+                      <hr>
+                      <div class="box-header">
                         <h4><b>Reschedule a Session</b></h4>
                         <p class="no-padding" style="color:#ff0000;">* This field is required</p>
                       </div>
-                      <div class="box-body hidden">
+                      <div class="box-body">
                         <form role="form" method="post" action="#" enctype="multipart/form-data">
                           @csrf
                           <div class="box-body">
@@ -583,6 +595,118 @@
                             <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
                           </div>
                         </form>
+                      </div>
+                      <hr>
+                      <div class="box-header">
+                        <h4><b>Approve a Reschedule Request(s)</b></h4>
+                      </div>
+                      <div class="box-body">
+                        <table class="table table-bordered">
+                          <thead>
+                            <th style="width:2%;" class="text-right">#</th>
+                            <th>Title</th>
+                            <th>Current Time</th>
+                            <th>Requested Time</th>
+                            <th style="width:5%;">Link</th>
+                          </thead>
+                          <tbody>
+                            @foreach($course->sessions as $i => $dt)
+                              <tr>
+                                <td class="text-right">{{ $i + 1 }}</td>
+                                <td>
+                                  <a href="#" data-toggle="modal" data-target="#Session{{$dt->id}}" {{-- class="btn btn-s btn-primary" --}}>
+                                    {{ $dt->title }}
+                                  </a>
+                                </td>
+                                <td>
+                                  <?php
+                                    $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end_form = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
+                                    $schedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
+                                  ?>
+                                  @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                    Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                                  @else
+                                    {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                                  @endif
+                                </td>
+                                <td>
+                                  @if($dt->requirement)
+                                    <?php
+                                      $reschedule_time_begin = \Carbon\Carbon::parse($dt->requirement)->setTimezone(Auth::user()->timezone);
+                                      $reschedule_time_end = \Carbon\Carbon::parse($dt->requirement)->setTimezone(Auth::user()->timezone);
+                                      $reschedule_time_end_form = \Carbon\Carbon::parse($dt->requirement)->setTimezone(Auth::user()->timezone);
+                                      $reschedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
+                                      $reschedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
+                                    ?>
+                                    @if($reschedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      Today, {{ $reschedule_time_begin->isoFormat('hh:mm A') }} {{ $reschedule_time_end->isoFormat('[-] hh:mm A') }}
+                                    @else
+                                      {{ $reschedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $reschedule_time_end->isoFormat('[-] hh:mm A') }}
+                                    @endif
+                                  @else
+                                    <i class="text-muted">Not Available</i>
+                                  @endif
+                                </td>
+                                <td class="text-center">
+                                  @if($dt->requirement)
+                                    <a href="#" data-toggle="modal" data-target="#Approval{{$dt->id}}" class="btn btn-flat btn-xs bg-purple">Action</a>
+                                  @else
+                                    <a href="#" class="btn btn-flat btn-xs btn-default disabled" disabled>Action</a>
+                                  @endif
+                                </td>
+                              </tr>
+                              @if($dt->requirement)
+                                <div class="modal fade" id="Approval{{$dt->id}}">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="box box-primary">
+                                        <div class="box-body box-profile">
+                                          <form role="form" method="post" action="#" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('PUT')
+                                            <h3 class="profile-username text-center"><b>Reschedule Confirmation for {{ $dt->title }}</b></h3>
+                                            <p class="text-muted text-center">
+                                              Rescheduled from
+                                              @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                                <b>today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}</b>
+                                              @else
+                                                <b>{{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}</b>
+                                              @endif
+                                              <br />to
+                                              @if($reschedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                                <b>today, {{ $reschedule_time_begin->isoFormat('hh:mm A') }} {{ $reschedule_time_end->isoFormat('[-] hh:mm A') }}</b>
+                                              @else
+                                                <b>{{ $reschedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $reschedule_time_end->isoFormat('[-] hh:mm A') }}</b>
+                                              @endif
+                                            </p>
+                                            <input type="hidden" name="approval_status" value="-1" id="approval_status">
+                                            <div class="col-md-6">
+                                              <button type="submit" class="btn btn-s btn-primary" style="width:100%;" onclick="document.getElementById('approval_status').value = 1;">Accept</button>
+                                            </div>
+                                            <div class="col-md-6">
+                                              <button type="submit" class="btn btn-s btn-danger" style="width:100%;" onclick="document.getElementById('approval_status').value = 0;">Decline</button>
+                                            </div>
+                                            <br /><br />
+                                          </form>
+                                          <div class="col-md-12">
+                                            <button onclick="document.getElementById('Approval{{$dt->id}}').className = 'modal fade'; document.getElementById('Approval{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-default" style="width:100%;">Close</button>
+                                          </div>
+                                        </div>
+                                        <!-- /.box-body -->
+                                      </div>
+                                      <!-- /.box -->
+                                    </div>
+                                    <!-- /.modal-content -->
+                                  </div>
+                                  <!-- /.modal-dialog -->
+                                </div>
+                              @endif
+                            @endforeach
+                          </tbody>
+                        </table>
                       </div>
                     @else
                       <div class="text-center">No data available.</div>

@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title','Attendance')
+@section('title', 'Attendance')
 
 {{-- @include('layouts.css_and_js.form_general') --}}
 
@@ -9,9 +9,8 @@
 @section('content-header')
     <h1><b>Attendance for [{{ $session->course->course_package->course_level->name }}] {{ $session->course->title }} - {{ $session->title }}</b></h1>
     <ol class="breadcrumb">
-        <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="{{ route('session_registrations.index') }}">Attendance</a></li>
-        <li class="active">Sessions</li>
+        <li><a href="{{ route('registered.dashboard.index') }}">Home</a></li>
+        <li class="active">Attendance Information</li>
     </ol>
 @stop
 
@@ -40,10 +39,10 @@
         <div class="col-md-8">
             <div class="box box-warning">
                 <div class="box-header">
-                    <h3 class="box-title">List of Students</h3>
+                    <h3 class="box-title"><b>List of Students</b></h3>
                 </div>
                 @if($session_registrations->first()->status == 'Not Assigned')
-                <form method="POST" action="{{ route('attendances.update', $session->id) }}">
+                <form method="POST" action="{{ route('instructor.student_attendance.update', [$session->course->id, $session->id]) }}">
                   @csrf
                   @method('PUT')
                 @endif

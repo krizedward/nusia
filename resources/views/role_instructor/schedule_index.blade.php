@@ -165,8 +165,12 @@
                                   @if($dt->schedule->schedule_time)
                                     <?php
                                       $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_10_mins_before_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                       $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_30_mins_after_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_10_mins_before_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->sub(10, 'minutes');
                                       $schedule_time_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes');
+                                      $schedule_time_30_mins_after_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
                                     ?>
                                     <td>
                                       <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
@@ -211,8 +215,8 @@
                                   @else
                                     <td class="text-center"><a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Link</a></td>
                                   @endif
-                                  @if($schedule_now > $schedule_time_end)
-                                    <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('instructor.student_attendance.index', [$dt->schedule->session->course_id, $dt->schedule->session->id]) }}">Link</a></td>
+                                  @if($schedule_now >= $schedule_time_10_mins_before_end && $schedule_now <= $schedule_time_30_mins_after_end)
+                                    <td class="text-center"><a rel="noopener noreferrer" class="btn btn-flat btn-xs bg-purple" href="{{ route('instructor.student_attendance.index', [$dt->schedule->session->course_id, $dt->schedule->session->id]) }}">Link</a></td>
                                   @else
                                     <td class="text-center"><a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Link</a></td>
                                   @endif
@@ -237,7 +241,7 @@
                 <div class="col-md-12">
                   <div class="box box-default">
                     <div class="box-header">
-                      <h3 class="box-title"><b>All Assigned Meeting Times</b></h3>
+                      <h3 class="box-title"><b>All Teaching Availability</b></h3>
                       {{--
                       <div>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('registered.dashboard.index') }}">

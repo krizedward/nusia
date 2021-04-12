@@ -164,11 +164,13 @@
                     <strong><i class="fa fa-credit-card margin-r-5"></i> Class Payment</strong>
                     <p>
                       <table>
+                        {{--
                         <tr style="vertical-align:baseline;">
                           <td width="50"><b>Price</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>${{ $course_registration->course->course_package->price }}</td>
                         </tr>
+                        --}}
                         <tr style="vertical-align:baseline;">
                           <td width="50"><b>Status</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
@@ -530,7 +532,7 @@
                           @endif
                         </dt>
                         <dd>
-                          Click "link" button to join your sessions!
+                          Click "join" button to join your sessions!
                         </dd>
                       </dl>
                       <hr>

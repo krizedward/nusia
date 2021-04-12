@@ -1162,7 +1162,15 @@ class StudentController extends Controller
             'course_registration', 'material_types', 'course_types', 'course_levels', 'course_payments',
         ));
     }
-
+    
+    public function schedule_reschedule_update(Request $request) {
+        // mengajukan reschedule
+    }
+    
+    public function schedule_reschedule_approval_update(Request $request, $session_id) {
+        // menyetujui reschedule
+    }
+    
     public function feedback_store(Request $request, $course_registration_id, $session_registration_id)
     {
         // mengirim feedback per sesi

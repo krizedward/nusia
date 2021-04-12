@@ -135,6 +135,12 @@ Route::group(['middleware'=>'auth'], function() {
         // & melihat status penerimaan sertifikat keikutsertaan dalam course
         Route::get('/student/schedule/{course_registration_id}', 'StudentController@schedule_show')->name('student.schedule.show');
         
+        // mengajukan reschedule
+        Route::put('/student/schedule/reschedule/update', 'StudentController@schedule_reschedule_update')->name('student.schedule_reschedule.update');
+        
+        // menyetujui reschedule
+        Route::put('/student/schedule/reschedule/approval/{session_id}/update', 'StudentController@schedule_reschedule_approval_update')->name('student.schedule_reschedule_approval.update');
+        
         // mengirim feedback per sesi
         Route::post('/student/schedule/{course_registration_id}/feedback/{session_registration_id}/store', 'StudentController@feedback_store')->name('student.feedback.store');
         
@@ -226,6 +232,12 @@ Route::group(['middleware'=>'auth'], function() {
         // memodifikasi informasi umum mengenai sesi
         // & memodifikasi ketersediaan jadwal mengajar
         Route::put('/instructor/course/session/update', 'InstructorController@session_update')->name('instructor.session.update');
+        
+        // mengajukan reschedule
+        Route::put('/instructor/course/session/reschedule/update', 'InstructorController@session_reschedule_update')->name('instructor.session_reschedule.update');
+        
+        // menyetujui reschedule
+        Route::put('/instructor/course/session/reschedule/approval/{session_id}/update', 'InstructorController@session_reschedule_approval_update')->name('instructor.session_reschedule_approval.update');
         
         // menghapus informasi sesi
         // & menghapus ketersediaan jadwal mengajar

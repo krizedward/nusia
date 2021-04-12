@@ -257,7 +257,15 @@ class InstructorController extends Controller
         }
         return redirect()->back();
     }
-
+    
+    public function session_reschedule_update(Request $request) {
+        // mengajukan reschedule
+    }
+    
+    public function session_reschedule_approval_update(Request $request, $session_id) {
+        // menyetujui reschedule
+    }
+    
     public function session_destroy($course_id, $session_id) {
         // menghapus informasi sesi
         // & menghapus ketersediaan jadwal mengajar
@@ -267,7 +275,8 @@ class InstructorController extends Controller
         // melihat status kehadiran student dalam setiap sesi
         $session_registrations = SessionRegistration::where('session_id', $session_id)->get();
         if($session_registrations->count() == 0) {
-            return redirect()->route('instructor.student_attendance.index');
+            session(['caption-danger' => 'Cannot edit this session attendance, as no students are available in this session.']);
+            return redirect()->back();
         }
         
         $session = Session::findOrFail($session_id);
@@ -277,7 +286,7 @@ class InstructorController extends Controller
             return redirect()->back();
         }
         
-        return view('role_instructor.attendances_edit', compact('session_registrations', 'session'));
+        return view('role_instructor.attendances_index', compact('session_registrations', 'session'));
     }
 
     public function student_attendance_update(Request $request, $course_id, $session_id) {
