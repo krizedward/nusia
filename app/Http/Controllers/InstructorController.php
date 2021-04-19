@@ -439,12 +439,27 @@ class InstructorController extends Controller
                 ]);
                 session(['caption-success' => 'This material information has been updated. Thank you!']);
             }
-        }
+        } else return redirect()->route('login');
         return redirect()->back();
     }
 
     public function material_destroy($course_id, $material_type, $material_id) {
         // menghapus informasi materi
+        if($material_type == 1) {
+            // material public
+            $material = MaterialPublic::findOrFail($material_id);
+        } else if($material_type == 2) {
+            // material session
+            $material = MaterialSession::findOrFail($material_id);
+        } else return redirect()->route('login');
+        
+        if($material->path) {
+            $destination_path = 'uploads/material/';
+            File::delete($destination_path . $material->path);
+        }
+        $material->delete();
+        session(['caption-success' => 'This material information has been deleted. Thank you!']);
+        return redirect()->back();
     }
 
     public function assignment_store(Request $request, $course_id) {

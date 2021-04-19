@@ -855,6 +855,7 @@
                           <th>File Name</th>
                           <th style="width:25%;">File Type</th>
                           <th style="width:5%;">Link</th>
+                          <th style="width:5%;">Delete</th>
                         </thead>
                         <tbody>
                           @foreach($course->course_package->material_publics as $i => $dt)
@@ -882,6 +883,13 @@
                                 @else
                                   <i class="text-muted">-</i>
                                 @endif
+                              </td>
+                              <td class="text-center">
+                                <form role="form" method="post" action="{{ route('instructor.material.destroy', [$course->id, 1, $dt->id]) }}">
+                                  @csrf
+                                  @method('DELETE')
+                                  <button type="submit" class="btn btn-flat btn-xs btn-danger" onclick="if(confirm('Are you sure to delete this material: {{ $dt->name }} ?')) return true; else return false;"><i class="fa fa-trash"></i></button>
+                                </form>
                               </td>
                             </tr>
                             <div class="modal fade" id="MainMaterial{{$dt->id}}">
@@ -1031,6 +1039,7 @@
                             <th>File Name</th>
                             <th style="width:25%;">File Type</th>
                             <th style="width:5%;">Link</th>
+                            <th style="width:5%;">Delete</th>
                           </thead>
                           <tbody>
                             @foreach($s->material_sessions as $j => $dt)
@@ -1058,6 +1067,13 @@
                                   @else
                                     <i class="text-muted">-</i>
                                   @endif
+                                </td>
+                                <td class="text-center">
+                                  <form role="form" method="post" action="{{ route('instructor.material.destroy', [$course->id, 2, $dt->id]) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-flat btn-xs btn-danger" onclick="if(confirm('Are you sure to delete this material: {{ $dt->name }} ?')) return true; else return false;"><i class="fa fa-trash"></i></button>
+                                  </form>
                                 </td>
                               </tr>
                               <div class="modal fade" id="SupplementaryMaterial{{$dt->id}}">
@@ -1255,7 +1271,7 @@
                   </div>
                   <div class="box-body">
                     @if($assignment_flag)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Task</th>
@@ -1288,7 +1304,7 @@
                                     @if($dt->path_1 == null)
                                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.assignment.download', [$course_registration->id, $dt->id]) }}">Link</a>
                                     @else
-                                      <i class="text-muted">Not Available</i>
+                                      <i class="text-muted">-</i>
                                     @endif
                                   </td>
                                 </tr>
@@ -1434,7 +1450,7 @@
                   </div>
                   <div class="box-body">
                     @if($exam_flag)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Task</th>
@@ -1467,7 +1483,7 @@
                                     @if($dt->path_1 == null)
                                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.exam.download', [$course_registration->id, $dt->id]) }}">Link</a>
                                     @else
-                                      <i class="text-muted">Not Available</i>
+                                      <i class="text-muted">-</i>
                                     @endif
                                   </td>
                                 </tr>
