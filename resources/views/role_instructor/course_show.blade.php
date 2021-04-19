@@ -895,7 +895,11 @@
                                       </p>
                                       <ul class="list-group list-group-unbordered">
                                         <li class="list-group-item">
-                                          {{ $dt->description }}
+                                          @if($dt->description)
+                                            {{ $dt->description }}
+                                          @else
+                                            <i class="text-muted">No information for this material.</i>
+                                          @endif
                                         </li>
                                       </ul>
                                       <button onclick="document.getElementById('MainMaterial{{$dt->id}}').className = 'modal fade'; document.getElementById('MainMaterial{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
@@ -1067,7 +1071,11 @@
                                         </p>
                                         <ul class="list-group list-group-unbordered">
                                           <li class="list-group-item">
-                                            {{ $dt->description }}
+                                            @if($dt->description)
+                                              {{ $dt->description }}
+                                            @else
+                                              <i class="text-muted">No information for this material.</i>
+                                            @endif
                                           </li>
                                         </ul>
                                         <button onclick="document.getElementById('SupplementaryMaterial{{$dt->id}}').className = 'modal fade'; document.getElementById('SupplementaryMaterial{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
@@ -1092,6 +1100,7 @@
                           <form role="form" method="post" action="{{ route('instructor.material.update', [$course->id, 2]) }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
+                            <input type="hidden" name="material_session_updated_id" value="{{ $s->id }}">
                             <div class="box-body">
                               <div class="row">
                                 <div class="col-md-12">

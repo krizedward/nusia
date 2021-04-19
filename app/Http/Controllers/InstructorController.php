@@ -46,6 +46,7 @@ use Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
@@ -329,8 +330,117 @@ class InstructorController extends Controller
         return response()->download($path, $file_name);
     }
 
-    public function material_update(Request $request, $course_id, $material_type, $material_id) {
+    public function material_update(Request $request, $course_id, $material_type) {
         // memodifikasi informasi materi
+        $course = Course::findOrFail($course_id);
+        if($material_type == 1) {
+            // material public
+            $sessions = Session::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where('sessions.course_id', $course_id)
+                ->orderBy('schedules.schedule_time')
+                ->get();
+            foreach($sessions as $i => $s) {
+                if($s->id == $request->material_public_session_name) {
+                    $session_number = $i + 1;
+                    break;
+                }
+            }
+            
+            $data = Validator::make($request->all(), [
+                'material_public_id' => ['bail', 'required'],
+                'material_public_session_name' => ['bail', 'required', 'numeric'],
+                'material_public_name' => ['bail', 'required', 'max:255'],
+                'material_public_description' => ['bail', 'sometimes'],
+                'material_public_path' => ['bail', 'sometimes', 'max:8000'],
+            ]);
+            if($data->fails()) {
+                session(['caption-danger' => 'Your material has not been uploaded. Try again.']);
+                return redirect()->back()->withErrors($data)->withInput();
+            }
+            
+            $file = $request->file('material_public_path');
+            if($file) {
+                $file_name = Str::random(50).'.'.$file->extension();
+                $destination_path = 'uploads/material/';
+                $file->move($destination_path, $file_name);
+            }
+            
+            if($request->material_public_id == 0) {
+                // add a new material
+                MaterialPublic::create([
+                    'course_package_id' => $course->course_package_id,
+                    'session_number' => $session_number,
+                    'name' => 'Session ' . $session_number . ' - ' . $request->material_public_name,
+                    'description' => $request->material_public_description,
+                    'path' => ($file)? $file_name : null,
+                    'created_at' => now(),
+                ]);
+                session(['caption-success' => 'This material information has been added. Thank you!']);
+            } else {
+                // update an existing material
+                $material_public = MaterialPublic::findOrFail($request->material_public_id);
+                if($material_public->path) {
+                    $destination_path = 'uploads/material/';
+                    File::delete($destination_path . $material_public->path);
+                }
+                $material_public->update([
+                    'course_package_id' => $course->course_package_id,
+                    'session_number' => $session_number,
+                    'name' => 'Session ' . $session_number . ' - ' . $request->material_public_name,
+                    'description' => $request->material_public_description,
+                    'path' => ($file)? $file_name : null,
+                    'updated_at' => now(),
+                ]);
+                session(['caption-success' => 'This material information has been updated. Thank you!']);
+            }
+        } else if($material_type == 2) {
+            // material session
+            $data = Validator::make($request->all(), [
+                'material_session_id' => ['bail', 'required'],
+                'material_session_name' => ['bail', 'required', 'max:255'],
+                'material_session_description' => ['bail', 'sometimes'],
+                'material_session_path' => ['bail', 'sometimes', 'max:8000'],
+            ]);
+            if($data->fails()) {
+                session(['caption-danger' => 'Your material has not been uploaded. Try again.']);
+                return redirect()->back()->withErrors($data)->withInput();
+            }
+            
+            $file = $request->file('material_session_path');
+            if($file) {
+                $file_name = Str::random(50).'.'.$file->extension();
+                $destination_path = 'uploads/material/';
+                $file->move($destination_path, $file_name);
+            }
+            
+            if($request->material_session_id == 0) {
+                // add a new material
+                MaterialSession::create([
+                    'session_id' => $request->material_session_updated_id,
+                    'name' => $request->material_session_name,
+                    'description' => $request->material_session_description,
+                    'path' => ($file)? $file_name : null,
+                    'created_at' => now(),
+                ]);
+                session(['caption-success' => 'This material information has been added. Thank you!']);
+            } else {
+                // update an existing material
+                $material_session = MaterialSession::findOrFail($request->material_session_id);
+                if($material_session->path) {
+                    $destination_path = 'uploads/material/';
+                    File::delete($destination_path . $material_session->path);
+                }
+                $material_session->update([
+                    'session_id' => $request->material_session_updated_id,
+                    'name' => $request->material_session_name,
+                    'description' => $request->material_session_description,
+                    'path' => ($file)? $file_name : null,
+                    'updated_at' => now(),
+                ]);
+                session(['caption-success' => 'This material information has been updated. Thank you!']);
+            }
+        }
+        return redirect()->back();
     }
 
     public function material_destroy($course_id, $material_type, $material_id) {
