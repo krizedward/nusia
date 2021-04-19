@@ -427,7 +427,7 @@
                                 <td>
                                   @if($next_meeting_time)
                                     <span class="hidden">{{ $next_meeting_time->isoFormat('YYMMDDAhhmm') }}</span>
-                                    {{ $next_meeting_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                    {{ $next_meeting_time->isoFormat('ddd, MMM Do YYYY, hh:mm A') }}
                                     <div class="pull-right">
                                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $next_meeting_link }}">Link</a>
                                       &nbsp;&nbsp;
