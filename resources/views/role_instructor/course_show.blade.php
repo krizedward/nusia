@@ -345,7 +345,7 @@
               <div class="col-md-3">
                 <div class="box">
                   <div class="box-header with-border">
-                    <h3 class="box-title">Registered at <b>{{ $course->title }}</b></h3>
+                    <h3 class="box-title">Assigned in <b>{{ $course->title }}</b></h3>
                     <p class="no-margin">
                       Includes
                       <b>
@@ -418,9 +418,9 @@
                   </div>
                   <div class="box-body">
                     @if($course->sessions->toArray() != null)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
-                          <th style="width:2%;" class="text-right">#</th>
+                          {{--<th style="width:2%;" class="text-right">#</th>--}}
                           <th>Title</th>
                           <th>Time</th>
                           <th style="width:5%;">Link</th>
@@ -429,7 +429,7 @@
                         <tbody>
                           @foreach($course->sessions as $i => $dt)
                             <tr>
-                              <td class="text-right">{{ $i + 1 }}</td>
+                              {{--<td class="text-right">{{ $i + 1 }}</td>--}}
                               <td>
                                 <a href="#" data-toggle="modal" data-target="#Session{{$dt->id}}" {{-- class="btn btn-s btn-primary" --}}>
                                   {{ $dt->title }}
@@ -447,6 +447,7 @@
                                   $schedule_time_30_mins_after_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
                                   $schedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                                 ?>
+                                <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
                                 @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                   Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                                 @else
@@ -544,19 +545,19 @@
                             <div class="row">
                               <div class="col-md-12">
                                 <div class="col-md-12">
-                                  <div class="form-group @error('assignment_id') has-error @enderror">
-                                    <label for="assignment_id">
+                                  <div class="form-group @error('session_id') has-error @enderror">
+                                    <label for="session_id">
                                       Session ID
                                       <span style="color:#ff0000;">*</span>
                                     </label>
-                                    <select name="assignment_id" type="text" class="@error('assignment_id') is-invalid @enderror form-control">
+                                    <select name="session_id" type="text" class="@error('session_id') is-invalid @enderror form-control">
                                       <option selected="selected" value="">-- Enter Session ID --</option>
                                       <?php
                                         $i = 0;
                                         $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                                       ?>
                                       @foreach($course->sessions as $i => $dt)
-                                        @if(old('assignment_id') == $dt->id))
+                                        @if(old('session_id') == $dt->id))
                                           <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
                                         @else
                                           <option value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
@@ -564,7 +565,7 @@
                                         <?php $i++; ?>
                                       @endforeach
                                     </select>
-                                    @error('assignment_id')
+                                    @error('session_id')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
                                   </div>
@@ -601,9 +602,9 @@
                         <h4><b>Approve a Reschedule Request(s)</b></h4>
                       </div>
                       <div class="box-body">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered example1">
                           <thead>
-                            <th style="width:2%;" class="text-right">#</th>
+                            {{--<th style="width:2%;" class="text-right">#</th>--}}
                             <th>Title</th>
                             <th>Current Time</th>
                             <th>Requested Time</th>
@@ -612,7 +613,7 @@
                           <tbody>
                             @foreach($course->sessions as $i => $dt)
                               <tr>
-                                <td class="text-right">{{ $i + 1 }}</td>
+                                {{--<td class="text-right">{{ $i + 1 }}</td>--}}
                                 <td>
                                   <a href="#" data-toggle="modal" data-target="#Session{{$dt->id}}" {{-- class="btn btn-s btn-primary" --}}>
                                     {{ $dt->title }}
@@ -626,11 +627,15 @@
                                     $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                                     $schedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                                   ?>
+                                  <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                  {{ $schedule_time_begin->isoFormat('MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                                  {{--
                                   @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                     Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                                   @else
                                     {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                                   @endif
+                                  --}}
                                 </td>
                                 <td>
                                   @if($dt->requirement)
@@ -641,11 +646,15 @@
                                       $reschedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                                       $reschedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                                     ?>
+                                    <span class="hidden">{{ $reschedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                    {{ $reschedule_time_begin->isoFormat('MMMM Do YYYY, hh:mm A') }} {{ $reschedule_time_end->isoFormat('[-] hh:mm A') }}
+                                    {{--
                                     @if($reschedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                       Today, {{ $reschedule_time_begin->isoFormat('hh:mm A') }} {{ $reschedule_time_end->isoFormat('[-] hh:mm A') }}
                                     @else
                                       {{ $reschedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $reschedule_time_end->isoFormat('[-] hh:mm A') }}
                                     @endif
+                                    --}}
                                   @else
                                     <i class="text-muted">Not Available</i>
                                   @endif
@@ -738,7 +747,7 @@
                         @endif
                         <h4><b>{{ $s->title }}</b></h4>
                         @if($s->session_registrations->toArray() != null)
-                          <table class="table table-bordered">
+                          <table class="table table-bordered example1">
                             <thead>
                               <th style="width:2%;" class="text-right">#</th>
                               <th>Name</th>
@@ -796,7 +805,7 @@
               <div class="col-md-3">
                 <div class="box">
                   <div class="box-header with-border">
-                    <h3 class="box-title">Registered at <b>{{ $course->title }}</b></h3>
+                    <h3 class="box-title">Assigned in <b>{{ $course->title }}</b></h3>
                     <p class="no-margin">
                       Includes
                       <b>
@@ -840,7 +849,7 @@
                   </div>
                   <div class="box-body">
                     @if($course->course_package->material_publics)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>File Name</th>
@@ -868,8 +877,8 @@
                                 @endif
                               </td>
                               <td class="text-center">
-                                @if($dt->path == null)
-                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Link</a>
+                                @if($dt->path)
+                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.material.download', [1, $dt->id]) }}">Link</a>
                                 @else
                                   <i class="text-muted">-</i>
                                 @endif
@@ -902,6 +911,101 @@
                           @endforeach
                         </tbody>
                       </table>
+                      <hr>
+                      <div class="box-header">
+                        <h4><b>Add or Modify a Main Material</b></h4>
+                        <p class="no-padding" style="color:#ff0000;">* This field is required</p>
+                      </div>
+                      <div class="box-body">
+                        <form role="form" method="post" action="{{ route('instructor.material.update', [$course->id, 1]) }}" enctype="multipart/form-data">
+                          @csrf
+                          @method('PUT')
+                          <div class="box-body">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="col-md-6">
+                                  <div class="form-group @error('material_public_id') has-error @enderror">
+                                    <label for="material_public_id">
+                                      Main Material ID
+                                      <span style="color:#ff0000;">*</span>
+                                    </label>
+                                    <select name="material_public_id" type="text" class="@error('material_public_id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Main Material ID --</option>
+                                      <option value="0">Add a New Material</option>
+                                      @foreach($course->course_package->material_publics as $i => $mp)
+                                        @if(old('material_public_id') == $mp->id))
+                                          <option selected="selected" value="{{ $mp->id }}">#{{ $i + 1 }} - {{ $mp->name }}</option>
+                                        @else
+                                          <option value="{{ $mp->id }}">#{{ $i + 1 }} - {{ $mp->name }}</option>
+                                        @endif
+                                        <?php $i++; ?>
+                                      @endforeach
+                                    </select>
+                                    @error('material_public_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group @error('material_public_session_name') has-error @enderror">
+                                    <label for="material_public_session_name">
+                                      For Session
+                                      <span style="color:#ff0000;">*</span>
+                                    </label>
+                                    <select name="material_public_session_name" type="text" class="@error('material_public_session_name') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Session Name --</option>
+                                      @foreach($course->sessions as $i => $dt)
+                                        @if(old('material_public_session_name') == $dt->id))
+                                          <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
+                                        @else
+                                          <option value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
+                                        @endif
+                                        <?php $i++; ?>
+                                      @endforeach
+                                    </select>
+                                    @error('material_public_session_name')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group @error('material_public_name') has-error @enderror">
+                                    <label for="material_public_name">
+                                      Material Name
+                                      <span style="color:#ff0000;">*</span>
+                                    </label>
+                                    <input name="material_public_name" value="{{ old('material_public_name') }}" type="text" class="@error('material_public_name') is-invalid @enderror form-control" placeholder="Enter Material Name">
+                                    @error('material_public_name')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('material_public_description') has-error @enderror">
+                                    <label for="material_public_description">
+                                      Material Description
+                                    </label>
+                                    <textarea name="material_public_description" class="@error('material_public_description') is-invalid @enderror form-control" rows="5" placeholder="Enter Material Description">{{ old('material_public_description') }}</textarea>
+                                    @error('material_public_description')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('material_public_path') has-error @enderror">
+                                    <label for="material_public_path">Upload File (any type)</label>
+                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
+                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
+                                    <input name="material_public_path" type="file" accept="*" class="@error('material_public_path') is-invalid @enderror form-control">
+                                    @error('material_public_path')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="box-footer">
+                            <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                          </div>
+                        </form>
+                      </div>
                     @else
                       <div class="text-center">No data available.</div>
                     @endif
@@ -917,7 +1021,7 @@
                     </div>
                     <div class="box-body">
                       @if($s->material_sessions->toArray())
-                        <table class="table table-bordered">
+                        <table class="table table-bordered example1">
                           <thead>
                             <th style="width:2%;" class="text-right">#</th>
                             <th>File Name</th>
@@ -945,8 +1049,8 @@
                                   @endif
                                 </td>
                                 <td class="text-center">
-                                  @if($dt->path == null)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="#">Link</a>
+                                  @if($dt->path)
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.material.download', [2, $dt->id]) }}">Link</a>
                                   @else
                                     <i class="text-muted">-</i>
                                   @endif
@@ -979,6 +1083,77 @@
                             @endforeach
                           </tbody>
                         </table>
+                        <hr>
+                        <div class="box-header">
+                          <h4><b>Add or Modify a Supplementary Material for {{ $s->title }}</b></h4>
+                          <p class="no-padding" style="color:#ff0000;">* This field is required</p>
+                        </div>
+                        <div class="box-body">
+                          <form role="form" method="post" action="{{ route('instructor.material.update', [$course->id, 2]) }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="box-body">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <div class="col-md-12">
+                                    <div class="form-group @error('material_session_id') has-error @enderror">
+                                      <label for="material_session_id">
+                                        Supplementary Material ID
+                                        <span style="color:#ff0000;">*</span>
+                                      </label>
+                                      <select name="material_session_id" type="text" class="@error('material_session_id') is-invalid @enderror form-control">
+                                        <option selected="selected" value="">-- Enter Supplementary Material ID --</option>
+                                        <option value="0">Add a New Material</option>
+                                        @foreach($s->material_sessions as $i => $ms)
+                                          @if(old('material_session_id') == $ms->id))
+                                            <option selected="selected" value="{{ $ms->id }}">#{{ $i + 1 }} - {{ $ms->name }}</option>
+                                          @else
+                                            <option value="{{ $ms->id }}">#{{ $i + 1 }} - {{ $ms->name }}</option>
+                                          @endif
+                                          <?php $i++; ?>
+                                        @endforeach
+                                      </select>
+                                      @error('material_session_id')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                    <div class="form-group @error('material_session_name') has-error @enderror">
+                                      <label for="material_session_name">
+                                        Material Name
+                                        <span style="color:#ff0000;">*</span>
+                                      </label>
+                                      <input name="material_session_name" value="{{ old('material_session_name') }}" type="text" class="@error('material_session_name') is-invalid @enderror form-control" placeholder="Enter Material Name">
+                                      @error('material_session_name')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                    <div class="form-group @error('material_session_description') has-error @enderror">
+                                      <label for="material_session_description">
+                                        Material Description
+                                      </label>
+                                      <textarea name="material_session_description" class="@error('material_session_description') is-invalid @enderror form-control" rows="5" placeholder="Enter Material Description">{{ old('material_session_description') }}</textarea>
+                                      @error('material_session_description')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                    <div class="form-group @error('material_session_path') has-error @enderror">
+                                      <label for="material_session_path">Upload File (any type)</label>
+                                      <p style="color:#ff0000; padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
+                                      <p style="color:#ff0000; padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
+                                      <input name="material_session_path" type="file" accept="*" class="@error('material_session_path') is-invalid @enderror form-control">
+                                      @error('material_session_path')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="box-footer">
+                              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                            </div>
+                          </form>
+                        </div>
                       @else
                         <div class="text-center">No data available.</div>
                       @endif
@@ -994,7 +1169,7 @@
               <div class="col-md-3">
                 <div class="box">
                   <div class="box-header with-border">
-                    <h3 class="box-title">Registered at <b>{{ $course->title }}</b></h3>
+                    <h3 class="box-title">Assigned in <b>{{ $course->title }}</b></h3>
                     <p class="no-margin">
                       Includes
                       <b>
@@ -1429,7 +1604,7 @@
               <div class="col-md-3">
                 <div class="box">
                   <div class="box-header with-border">
-                    <h3 class="box-title">Registered at <b>{{ $course->title }}</b></h3>
+                    <h3 class="box-title">Assigned in <b>{{ $course->title }}</b></h3>
                     <p class="no-margin">
                       Includes
                       <b>
@@ -1738,7 +1913,7 @@
               <div class="col-md-3">
                 <div class="box">
                   <div class="box-header with-border">
-                    <h3 class="box-title">Registered at <b>{{ $course->title }}</b></h3>
+                    <h3 class="box-title">Assigned in <b>{{ $course->title }}</b></h3>
                     <p class="no-margin">
                       Includes
                       <b>

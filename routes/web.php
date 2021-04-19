@@ -259,7 +259,7 @@ Route::group(['middleware'=>'auth'], function() {
         Route::get('/instructor/course/material/{material_type}/{material_id}/download', 'InstructorController@material_download')->name('instructor.material.download');
         
         // memodifikasi informasi materi
-        Route::put('/instructor/course/{course_id}/material/{material_type}/{material_id}/update', 'InstructorController@material_update')->name('instructor.material.update');
+        Route::put('/instructor/course/{course_id}/material/{material_type}/update', 'InstructorController@material_update')->name('instructor.material.update');
         
         // menghapus informasi materi
         Route::delete('/instructor/course/{course_id}/material/{material_type}/{material_id}/destroy', 'InstructorController@material_destroy')->name('instructor.material.destroy');
