@@ -271,7 +271,7 @@ Route::group(['middleware'=>'auth'], function() {
         Route::get('/instructor/course/{course_id}/assignment/{assignment_id}/download', 'InstructorController@assignment_download')->name('instructor.assignment.download');
         
         // memodifikasi informasi tugas
-        Route::put('/instructor/course/{course_id}/assignment/{assignment_id}/update', 'InstructorController@assignment_update')->name('instructor.assignment.update');
+        Route::put('/instructor/course/{course_id}/assignment/update', 'InstructorController@assignment_update')->name('instructor.assignment.update');
         
         // menghapus informasi tugas
         Route::delete('/instructor/course/{course_id}/assignment/{assignment_id}/destroy', 'InstructorController@assignment_destroy')->name('instructor.assignment.destroy');
@@ -289,7 +289,7 @@ Route::group(['middleware'=>'auth'], function() {
         Route::get('/instructor/course/{course_id}/exam/{exam_id}/download', 'InstructorController@exam_download')->name('instructor.exam.download');
         
         // memodifikasi informasi ujian
-        Route::put('/instructor/course/{course_id}/exam/{exam_id}/update', 'InstructorController@exam_update')->name('instructor.exam.update');
+        Route::put('/instructor/course/{course_id}/exam/update', 'InstructorController@exam_update')->name('instructor.exam.update');
         
         // menghapus informasi ujian
         Route::delete('/instructor/course/{course_id}/exam/{exam_id}/destroy', 'InstructorController@exam_destroy')->name('instructor.exam.destroy');

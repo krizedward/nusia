@@ -43,8 +43,8 @@
                           dapat juga menggunakan variabel
                           $course->course_package->count_session
                         --}}
-                        {{ $course->sessions->count() }}
-                        @if($course->sessions->count() != 1)
+                        {{ $sessions->count() }}
+                        @if($sessions->count() != 1)
                           sessions
                         @else
                           session
@@ -60,8 +60,8 @@
                         $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                         $next_meeting_time = null;
                         $next_meeting_link = null;
-                        if($course->sessions) {
-                          foreach($course->sessions as $s) {
+                        if($sessions->toArray() != null) {
+                          foreach($sessions as $s) {
                             $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                             if($schedule_time >= $schedule_now) {
                               if($next_meeting_time == null) {
@@ -195,7 +195,7 @@
                     <div class="box-header">
                       <h3 class="box-title">
                         <?php
-                          $data = $course->sessions->first()->schedule->instructor_schedules;
+                          $data = $sessions->first()->schedule->instructor_schedules;
                         ?>
                         @if($data->count() == 1)
                           <b>Instructor</b>
@@ -353,8 +353,8 @@
                           dapat juga menggunakan variabel
                           $course->course_package->count_session
                         --}}
-                        {{ $course->sessions->count() }}
-                        @if($course->sessions->count() != 1)
+                        {{ $sessions->count() }}
+                        @if($sessions->count() != 1)
                           sessions
                         @else
                           session
@@ -398,7 +398,7 @@
                         <dd>
                           Please consider that a minimum of <b>80% completed attendances (of all sessions)</b> is required for a student to get the course certificate.<br />
                           Reminding the students about what should they do, is subject to <b>NUSIA terms for Instructors.</b><br />
-                          <span style="color:#ff0000;">Contact NUSIA Admin or Lead Instructor if you encounter a problem.</span>
+                          <span class="text-red">Contact NUSIA Admin or Lead Instructor if you encounter a problem.</span>
                         </dd>
                       </dl>
                       {{--
@@ -417,7 +417,7 @@
                     </div>
                   </div>
                   <div class="box-body">
-                    @if($course->sessions->toArray() != null)
+                    @if($sessions->toArray() != null)
                       <table class="table table-bordered example1">
                         <thead>
                           {{--<th style="width:2%;" class="text-right">#</th>--}}
@@ -427,7 +427,7 @@
                           <th style="width:10%;">Attendance</th>
                         </thead>
                         <tbody>
-                          @foreach($course->sessions as $i => $dt)
+                          @foreach($sessions as $i => $dt)
                             <tr>
                               {{--<td class="text-right">{{ $i + 1 }}</td>--}}
                               <td>
@@ -536,7 +536,7 @@
                       <hr>
                       <div class="box-header">
                         <h4><b>Reschedule a Session</b></h4>
-                        <p class="no-padding" style="color:#ff0000;">* This field is required</p>
+                        <p class="no-padding text-red">* This field is required</p>
                       </div>
                       <div class="box-body">
                         <form role="form" method="post" action="#" enctype="multipart/form-data">
@@ -548,7 +548,7 @@
                                   <div class="form-group @error('session_id') has-error @enderror">
                                     <label for="session_id">
                                       Session ID
-                                      <span style="color:#ff0000;">*</span>
+                                      <span class="text-red">*</span>
                                     </label>
                                     <select name="session_id" type="text" class="@error('session_id') is-invalid @enderror form-control">
                                       <option selected="selected" value="">-- Enter Session ID --</option>
@@ -556,7 +556,7 @@
                                         $i = 0;
                                         $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                                       ?>
-                                      @foreach($course->sessions as $i => $dt)
+                                      @foreach($sessions as $i => $dt)
                                         @if(old('session_id') == $dt->id))
                                           <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
                                         @else
@@ -611,7 +611,7 @@
                             <th style="width:5%;">Link</th>
                           </thead>
                           <tbody>
-                            @foreach($course->sessions as $i => $dt)
+                            @foreach($sessions as $i => $dt)
                               <tr>
                                 {{--<td class="text-right">{{ $i + 1 }}</td>--}}
                                 <td>
@@ -740,8 +740,8 @@
                       <label data-toggle="tooltip" title class="label bg-green" data-original-title="You have attended this session and completed the feedback form for this session.">Present</label>
                     </p>
                     <hr>
-                    @if($course->sessions->toArray() != null)
-                      @foreach($course->sessions as $j => $s)
+                    @if($sessions->toArray() != null)
+                      @foreach($sessions as $j => $s)
                         @if($j != 0)
                           <hr>
                         @endif
@@ -813,8 +813,8 @@
                           dapat juga menggunakan variabel
                           $course->course_package->count_session
                         --}}
-                        {{ $course->sessions->count() }}
-                        @if($course->sessions->count() != 1)
+                        {{ $sessions->count() }}
+                        @if($sessions->count() != 1)
                           sessions
                         @else
                           session
@@ -829,7 +829,7 @@
                         <dt><i class="fa fa-files-o margin-r-5"></i> Note</dt>
                         <dd>
                           Click "link" button to download the materials!<br />
-                          <span style="color:#ff0000;">Contact your instructor if you encounter a problem.</span>
+                          <span class="text-red">Contact your instructor if you encounter a problem.</span>
                         </dd>
                       </dl>
                       {{--
@@ -926,7 +926,7 @@
                       <hr>
                       <div class="box-header">
                         <h4><b>Add or Modify a Main Material</b></h4>
-                        <p class="no-padding" style="color:#ff0000;">* This field is required</p>
+                        <p class="no-padding text-red">* This field is required</p>
                       </div>
                       <div class="box-body">
                         <form role="form" method="post" action="{{ route('instructor.material.update', [$course->id, 1]) }}" enctype="multipart/form-data">
@@ -939,7 +939,7 @@
                                   <div class="form-group @error('material_public_id') has-error @enderror">
                                     <label for="material_public_id">
                                       Main Material ID
-                                      <span style="color:#ff0000;">*</span>
+                                      <span class="text-red">*</span>
                                     </label>
                                     <select name="material_public_id" type="text" class="@error('material_public_id') is-invalid @enderror form-control">
                                       <option selected="selected" value="">-- Enter Main Material ID --</option>
@@ -962,11 +962,11 @@
                                   <div class="form-group @error('material_public_session_name') has-error @enderror">
                                     <label for="material_public_session_name">
                                       For Session
-                                      <span style="color:#ff0000;">*</span>
+                                      <span class="text-red">*</span>
                                     </label>
                                     <select name="material_public_session_name" type="text" class="@error('material_public_session_name') is-invalid @enderror form-control">
                                       <option selected="selected" value="">-- Enter Session Name --</option>
-                                      @foreach($course->sessions as $i => $dt)
+                                      @foreach($sessions as $i => $dt)
                                         @if(old('material_public_session_name') == $dt->id))
                                           <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
                                         @else
@@ -984,7 +984,7 @@
                                   <div class="form-group @error('material_public_name') has-error @enderror">
                                     <label for="material_public_name">
                                       Material Name
-                                      <span style="color:#ff0000;">*</span>
+                                      <span class="text-red">*</span>
                                     </label>
                                     <input name="material_public_name" value="{{ old('material_public_name') }}" type="text" class="@error('material_public_name') is-invalid @enderror form-control" placeholder="Enter Material Name">
                                     @error('material_public_name')
@@ -1002,8 +1002,8 @@
                                   </div>
                                   <div class="form-group @error('material_public_path') has-error @enderror">
                                     <label for="material_public_path">Upload File (any type)</label>
-                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
-                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
+                                    <p class="text-red" style="padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
+                                    <p class="text-red" style="padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
                                     <input name="material_public_path" type="file" accept="*" class="@error('material_public_path') is-invalid @enderror form-control">
                                     @error('material_public_path')
                                       <p style="color:red">{{ $message }}</p>
@@ -1023,7 +1023,7 @@
                     @endif
                   </div>
                 </div>
-                @foreach($course->sessions as $i => $s)
+                @foreach($sessions as $i => $s)
                   <div class="box box-warning">
                     <div class="box-header">
                       <h3 class="box-title"><b>Supplementary Materials for #{{ $i + 1 }} - {{ $s->title }}</b></h3>
@@ -1110,7 +1110,7 @@
                         <hr>
                         <div class="box-header">
                           <h4><b>Add or Modify a Supplementary Material for {{ $s->title }}</b></h4>
-                          <p class="no-padding" style="color:#ff0000;">* This field is required</p>
+                          <p class="no-padding text-red">* This field is required</p>
                         </div>
                         <div class="box-body">
                           <form role="form" method="post" action="{{ route('instructor.material.update', [$course->id, 2]) }}" enctype="multipart/form-data">
@@ -1124,7 +1124,7 @@
                                     <div class="form-group @error('material_session_id') has-error @enderror">
                                       <label for="material_session_id">
                                         Supplementary Material ID
-                                        <span style="color:#ff0000;">*</span>
+                                        <span class="text-red">*</span>
                                       </label>
                                       <select name="material_session_id" type="text" class="@error('material_session_id') is-invalid @enderror form-control">
                                         <option selected="selected" value="">-- Enter Supplementary Material ID --</option>
@@ -1145,7 +1145,7 @@
                                     <div class="form-group @error('material_session_name') has-error @enderror">
                                       <label for="material_session_name">
                                         Material Name
-                                        <span style="color:#ff0000;">*</span>
+                                        <span class="text-red">*</span>
                                       </label>
                                       <input name="material_session_name" value="{{ old('material_session_name') }}" type="text" class="@error('material_session_name') is-invalid @enderror form-control" placeholder="Enter Material Name">
                                       @error('material_session_name')
@@ -1163,8 +1163,8 @@
                                     </div>
                                     <div class="form-group @error('material_session_path') has-error @enderror">
                                       <label for="material_session_path">Upload File (any type)</label>
-                                      <p style="color:#ff0000; padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
-                                      <p style="color:#ff0000; padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
+                                      <p class="text-red" style="padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
+                                      <p class="text-red" style="padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
                                       <input name="material_session_path" type="file" accept="*" class="@error('material_session_path') is-invalid @enderror form-control">
                                       @error('material_session_path')
                                         <p style="color:red">{{ $message }}</p>
@@ -1202,8 +1202,8 @@
                           dapat juga menggunakan variabel
                           $course->course_package->count_session
                         --}}
-                        {{ $course->sessions->count() }}
-                        @if($course->sessions->count() != 1)
+                        {{ $sessions->count() }}
+                        @if($sessions->count() != 1)
                           sessions
                         @else
                           session
@@ -1233,7 +1233,7 @@
                         <dt><i class="fa fa-file-text-o margin-r-5"></i> More Information</dt>
                         <dd>
                           Please note the due time for each task.<br />
-                          <span style="color:#ff0000;">Contact your instructor if you encounter a problem.</span>
+                          <span class="text-red">Contact your instructor if you encounter a problem.</span>
                         </dd>
                       </dl>
                       {{--
@@ -1248,7 +1248,7 @@
                   $task_submission_flag = 0;
                   $assignment_flag = 0;
                   $exam_flag = 0;
-                  foreach($course->sessions as $s) {
+                  foreach($sessions as $s) {
                     foreach($s->tasks as $dt) {
                       $task_submission_flag++;
                       if($dt->type == 'Assignment')
@@ -1277,10 +1277,11 @@
                           <th>Task</th>
                           <th>Due Time</th>
                           <th style="width:5%;">Link</th>
+                          <th style="width:5%;">Delete</th>
                         </thead>
                         <tbody>
                           <?php $i = 0; ?>
-                          @foreach($course->sessions as $s)
+                          @foreach($sessions as $s)
                             @foreach($s->tasks as $dt)
                               @if($dt->type == 'Assignment')
                                 <tr>
@@ -1301,11 +1302,18 @@
                                     @endif
                                   </td>
                                   <td class="text-center">
-                                    @if($dt->path_1 == null)
-                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.assignment.download', [$course_registration->id, $dt->id]) }}">Link</a>
+                                    @if($dt->path_1)
+                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.assignment.download', [$course->id, $dt->id]) }}">Link</a>
                                     @else
                                       <i class="text-muted">-</i>
                                     @endif
+                                  </td>
+                                  <td class="text-center">
+                                    <form role="form" method="post" action="{{ route('instructor.assignment.destroy', [$course->id, $dt->id]) }}">
+                                      @csrf
+                                      @method('DELETE')
+                                      <button type="submit" class="btn btn-flat btn-xs btn-danger" onclick="if(confirm('Are you sure to delete this assignment: {{ $dt->title }} ?')) return true; else return false;"><i class="fa fa-trash"></i></button>
+                                    </form>
                                   </td>
                                 </tr>
                                 <div class="modal fade" id="Assignment{{$dt->id}}">
@@ -1324,7 +1332,11 @@
                                           </p>
                                           <ul class="list-group list-group-unbordered">
                                             <li class="list-group-item">
-                                              {{ $dt->description }}
+                                              @if($dt->description)
+                                                {{ $dt->description }}
+                                              @else
+                                                <i class="text-muted">No information for this assignment.</i>
+                                              @endif
                                             </li>
                                           </ul>
                                           <button onclick="document.getElementById('Assignment{{$dt->id}}').className = 'modal fade'; document.getElementById('Assignment{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
@@ -1343,30 +1355,39 @@
                           @endforeach
                         </tbody>
                       </table>
+                    @else
+                      <div class="text-center">
+                        There is no assignments here... :(<br />
+                        Kindly check periodically.
+                      </div>
+                    @endif
+                    @if(1)
                       <div class="box-header">
-                        <h4><b>Submit an Assignment</b></h4>
-                        <p class="no-padding" style="color:#ff0000;">* This field is required</p>
+                        <h4><b>Add or Modify an Assignment</b></h4>
+                        <p class="no-padding text-red">* This field is required</p>
                       </div>
                       <div class="box-body">
-                        <form role="form" method="post" action="#{{-- route('student.assignment_submission.store', [$course_registration->id]) --}}" enctype="multipart/form-data">
+                        <form role="form" method="post" action="{{ route('instructor.assignment.update', [$course->id]) }}" enctype="multipart/form-data">
                           @csrf
+                          @method('PUT')
                           <input type="hidden" name="type" value="Assignment">
                           <div class="box-body">
                             <div class="row">
-                              <div class="col-md-6">
-                                <div class="col-md-12">
+                              <div class="col-md-12">
+                                <div class="col-md-6">
                                   <div class="form-group @error('assignment_id') has-error @enderror">
                                     <label for="assignment_id">
                                       Assignment ID
-                                      <span style="color:#ff0000;">*</span>
+                                      <span class="text-red">*</span>
                                     </label>
                                     <select name="assignment_id" type="text" class="@error('assignment_id') is-invalid @enderror form-control">
                                       <option selected="selected" value="">-- Enter Assignment ID --</option>
+                                      <option value="0">Add a New Assignment</option>
                                       <?php
                                         $i = 0;
                                         $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                                       ?>
-                                      @foreach($course->sessions as $s)
+                                      @foreach($sessions as $s)
                                         @foreach($s->tasks as $dt)
                                           @if($dt->type == 'Assignment')
                                             <?php $due_date = \Carbon\Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone); ?>
@@ -1387,13 +1408,38 @@
                                     @enderror
                                   </div>
                                 </div>
+                                <div class="col-md-6">
+                                  <div class="form-group @error('assignment_session_id') has-error @enderror">
+                                    <label for="assignment_session_id">
+                                      For Session
+                                      <span class="text-red">*</span>
+                                    </label>
+                                    <select name="assignment_session_id" type="text" class="@error('assignment_session_id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Session Name --</option>
+                                      @foreach($sessions as $i => $dt)
+                                        <?php $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone); ?>
+                                        @if($schedule_now <= $schedule_time->add(3, 'days'))
+                                          @if(old('assignment_session_id') == $dt->id))
+                                            <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
+                                          @else
+                                            <option value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
+                                          @endif
+                                        @endif
+                                        <?php $i++; ?>
+                                      @endforeach
+                                    </select>
+                                    @error('assignment_session_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
                                 <div class="col-md-12">
                                   <div class="form-group @error('assignment_title') has-error @enderror">
                                     <label for="assignment_title">
-                                      Subject
-                                      <span style="color:#ff0000;">*</span>
+                                      Assignment Name
+                                      <span class="text-red">*</span>
                                     </label>
-                                    <input name="assignment_title" value="{{ old('assignment_title') }}" type="text" class="@error('assignment_title') is-invalid @enderror form-control" placeholder="Enter Subject">
+                                    <input name="assignment_title" value="{{ old('assignment_title') }}" type="text" class="@error('assignment_title') is-invalid @enderror form-control" placeholder="Enter Assignment Name">
                                     @error('assignment_title')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -1402,23 +1448,41 @@
                                 <div class="col-md-12">
                                   <div class="form-group @error('assignment_description') has-error @enderror">
                                     <label for="assignment_description">
-                                      Description
-                                      <span style="color:#ff0000;">*</span>
+                                      Assignment Description
                                     </label>
-                                    <textarea name="assignment_description" class="@error('assignment_description') is-invalid @enderror form-control" rows="5" placeholder="Enter Description">{{ old('assignment_description') }}</textarea>
+                                    <textarea name="assignment_description" class="@error('assignment_description') is-invalid @enderror form-control" rows="5" placeholder="Enter Assignment Description">{{ old('assignment_description') }}</textarea>
                                     @error('assignment_description')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
                                   </div>
                                 </div>
-                              </div>
-                              <div class="col-md-6">
                                 <div class="col-md-12">
+                                  <div class="form-group @error('assignment_due_date_date') has-error @enderror @error('assignment_due_date_date') has-error @enderror">
+                                    <label for="assignment_due_date_date">
+                                      Assignment Due Time
+                                      <span class="text-red">*</span>
+                                    </label>
+                                    <p class="text-red">The due time inputted is adjusted with your local time.</p>
+                                    <div class="input-group date">
+                                      <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                      <input name="assignment_due_date_date" type="text" class="form-control pull-right datepicker">
+                                    </div>
+                                    <label for="assignment_due_date_time" class="hidden">Assignment due time (set the time for the next input form)</label><br />
+                                    <div class="input-group">
+                                      <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                                      <input name="assignment_due_date_time" type="text" class="form-control pull-right timepicker">
+                                    </div>
+                                    @error('assignment_due_date_date')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                    @error('assignment_due_date_time')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
                                   <div class="form-group @error('assignment_path_1') has-error @enderror">
                                     <label for="assignment_path_1">Upload File (any type)</label>
-                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
-                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
-                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">Up to 10 submissions are allowed for each assignment</p>
+                                    <p class="text-red" style="padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
+                                    <p class="text-red" style="padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
                                     <input name="assignment_path_1" type="file" accept="*" class="@error('assignment_path_1') is-invalid @enderror form-control">
                                     @error('assignment_path_1')
                                       <p style="color:red">{{ $message }}</p>
@@ -1432,11 +1496,6 @@
                             <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
                           </div>
                         </form>
-                      </div>
-                    @else
-                      <div class="text-center">
-                        There is no assignments here... :(<br />
-                        Kindly check periodically.
                       </div>
                     @endif
                   </div>
@@ -1456,10 +1515,11 @@
                           <th>Task</th>
                           <th>Due Date</th>
                           <th style="width:5%;">Link</th>
+                          <th style="width:5%;">Delete</th>
                         </thead>
                         <tbody>
                           <?php $i = 0; ?>
-                          @foreach($course->sessions as $s)
+                          @foreach($sessions as $s)
                             @foreach($s->tasks as $dt)
                               @if($dt->type == 'Exam')
                                 <tr>
@@ -1480,11 +1540,18 @@
                                     @endif
                                   </td>
                                   <td class="text-center">
-                                    @if($dt->path_1 == null)
-                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.exam.download', [$course_registration->id, $dt->id]) }}">Link</a>
+                                    @if($dt->path_1)
+                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.exam.download', [$course->id, $dt->id]) }}">Link</a>
                                     @else
                                       <i class="text-muted">-</i>
                                     @endif
+                                  </td>
+                                  <td class="text-center">
+                                    <form role="form" method="post" action="{{ route('instructor.exam.destroy', [$course->id, $dt->id]) }}">
+                                      @csrf
+                                      @method('DELETE')
+                                      <button type="submit" class="btn btn-flat btn-xs btn-danger" onclick="if(confirm('Are you sure to delete this exam: {{ $dt->title }} ?')) return true; else return false;"><i class="fa fa-trash"></i></button>
+                                    </form>
                                   </td>
                                 </tr>
                                 <div class="modal fade" id="Exam{{$dt->id}}">
@@ -1503,7 +1570,11 @@
                                           </p>
                                           <ul class="list-group list-group-unbordered">
                                             <li class="list-group-item">
-                                              {{ $dt->description }}
+                                              @if($dt->description)
+                                                {{ $dt->description }}
+                                              @else
+                                                <i class="text-muted">No information for this exam.</i>
+                                              @endif
                                             </li>
                                           </ul>
                                           <button onclick="document.getElementById('Exam{{$dt->id}}').className = 'modal fade'; document.getElementById('Exam{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
@@ -1522,30 +1593,53 @@
                           @endforeach
                         </tbody>
                       </table>
+                    @else
+                      <div class="text-center">
+                        There is no exam here... :(<br />
+                        Kindly check periodically.
+                      </div>
+                    @endif
+                    @if(1)
                       <div class="box-header">
-                        <h4><b>Submit an Exam</b></h4>
-                        <p class="no-padding" style="color:#ff0000;">* This field is required</p>
+                        <h4><b>Add or Modify an Exam</b></h4>
+                        <p class="no-padding text-red">* This field is required</p>
                       </div>
                       <div class="box-body">
-                        <form role="form" method="post" action="#{{-- route('student.exam_submission.store', [$course_registration->id]) --}}" enctype="multipart/form-data">
+                        <form role="form" method="post" action="{{ route('instructor.exam.update', [$course->id]) }}" enctype="multipart/form-data">
                           @csrf
+                          @method('PUT')
                           <input type="hidden" name="type" value="Exam">
                           <div class="box-body">
                             <div class="row">
-                              <div class="col-md-6">
-                                <div class="col-md-12">
+                              <div class="col-md-12">
+                                <div class="col-md-6">
                                   <div class="form-group @error('exam_id') has-error @enderror">
                                     <label for="exam_id">
                                       Exam ID
-                                      <span style="color:#ff0000;">*</span>
+                                      <span class="text-red">*</span>
                                     </label>
                                     <select name="exam_id" type="text" class="@error('exam_id') is-invalid @enderror form-control">
                                       <option selected="selected" value="">-- Enter Exam ID --</option>
+                                      <?php $has_exam = 0; ?>
+                                      @foreach($sessions as $s)
+                                        @foreach($s->tasks as $dt)
+                                          @if($dt->type == 'Exam')
+                                            <?php $has_exam = 1; ?>
+                                            @break
+                                          @endif
+                                        @endforeach
+                                        @if($has_exam)
+                                          @break
+                                        @endif
+                                      @endforeach
+                                      @if($has_exam == 0)
+                                        <option value="0">Add a New Exam</option>
+                                      @endif
                                       <?php
                                         $i = 0;
                                         $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                                       ?>
-                                      @foreach($course->sessions as $s)
+                                      @foreach($sessions as $s)
                                         @foreach($s->tasks as $dt)
                                           @if($dt->type == 'Exam')
                                             <?php $due_date = \Carbon\Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone); ?>
@@ -1566,13 +1660,27 @@
                                     @enderror
                                   </div>
                                 </div>
+                                <div class="col-md-6">
+                                  <div class="form-group @error('exam_session_id') has-error @enderror">
+                                    <label for="exam_session_id">
+                                      For Session
+                                      <span class="text-red">*</span>
+                                    </label>
+                                    <select name="exam_session_id" type="text" class="@error('exam_session_id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="{{ $sessions->last()->id }}">#{{ $sessions->count() }} - {{ $sessions->last()->title }}</option>
+                                    </select>
+                                    @error('exam_session_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
                                 <div class="col-md-12">
                                   <div class="form-group @error('exam_title') has-error @enderror">
                                     <label for="exam_title">
-                                      Subject
-                                      <span style="color:#ff0000;">*</span>
+                                      Exam Name
+                                      <span class="text-red">*</span>
                                     </label>
-                                    <input name="exam_title" value="{{ old('exam_title') }}" type="text" class="@error('exam_title') is-invalid @enderror form-control" placeholder="Enter Subject">
+                                    <input name="exam_title" value="{{ old('exam_title') }}" type="text" class="@error('exam_title') is-invalid @enderror form-control" placeholder="Enter Exam Name">
                                     @error('exam_title')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
@@ -1581,23 +1689,41 @@
                                 <div class="col-md-12">
                                   <div class="form-group @error('exam_description') has-error @enderror">
                                     <label for="exam_description">
-                                      Description
-                                      <span style="color:#ff0000;">*</span>
+                                      Exam Description
                                     </label>
-                                    <textarea name="exam_description" class="@error('exam_description') is-invalid @enderror form-control" rows="5" placeholder="Enter Description">{{ old('exam_description') }}</textarea>
+                                    <textarea name="exam_description" class="@error('exam_description') is-invalid @enderror form-control" rows="5" placeholder="Enter Exam Description">{{ old('exam_description') }}</textarea>
                                     @error('exam_description')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
                                   </div>
                                 </div>
-                              </div>
-                              <div class="col-md-6">
                                 <div class="col-md-12">
+                                  <div class="form-group @error('exam_due_date_date') has-error @enderror @error('exam_due_date_date') has-error @enderror">
+                                    <label for="exam_due_date_date">
+                                      Exam Due Time
+                                      <span class="text-red">*</span>
+                                    </label>
+                                    <p class="text-red">The due time inputted is adjusted with your local time.</p>
+                                    <div class="input-group date">
+                                      <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                      <input name="exam_due_date_date" type="text" class="form-control pull-right datepicker">
+                                    </div>
+                                    <label for="exam_due_date_time" class="hidden">Exam due time (set the time for the next input form)</label><br />
+                                    <div class="input-group">
+                                      <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                                      <input name="exam_due_date_time" type="text" class="form-control pull-right timepicker">
+                                    </div>
+                                    @error('exam_due_date_date')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                    @error('exam_due_date_time')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
                                   <div class="form-group @error('exam_path_1') has-error @enderror">
                                     <label for="exam_path_1">Upload File (any type)</label>
-                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
-                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
-                                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">Up to 3 submissions are allowed for each exam</p>
+                                    <p class="text-red" style="padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
+                                    <p class="text-red" style="padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
                                     <input name="exam_path_1" type="file" accept="*" class="@error('exam_path_1') is-invalid @enderror form-control">
                                     @error('exam_path_1')
                                       <p style="color:red">{{ $message }}</p>
@@ -1611,11 +1737,6 @@
                             <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
                           </div>
                         </form>
-                      </div>
-                    @else
-                      <div class="text-center">
-                        There is no exam here... :(<br />
-                        Kindly check periodically.
                       </div>
                     @endif
                   </div>
@@ -1637,8 +1758,8 @@
                           dapat juga menggunakan variabel
                           $course->course_package->count_session
                         --}}
-                        {{ $course->sessions->count() }}
-                        @if($course->sessions->count() != 1)
+                        {{ $sessions->count() }}
+                        @if($sessions->count() != 1)
                           sessions
                         @else
                           session
@@ -1666,7 +1787,7 @@
                             submission
                           @endif
                           (after being checked)!<br />
-                          <span style="color:#ff0000;">Contact your instructor if you encounter a problem.</span>
+                          <span class="text-red">Contact your instructor if you encounter a problem.</span>
                         </dd>
                       </dl>
                       {{--
@@ -1695,16 +1816,15 @@
                   </div>
                   <div class="box-body">
                     @if($assignment_flag)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th style="width:25%;">Task</th>
-                          <th>Last Done on</th>
-                          <th style="width:5%;">Score</th>
+                          <th style="width:5%;">Average Score</th>
                         </thead>
                         <tbody>
                           <?php $i = 0; ?>
-                          @foreach($course->sessions as $s)
+                          @foreach($sessions as $s)
                             @foreach($s->tasks as $dt)
                               @if($dt->type == 'Assignment')
                                 <tr>
@@ -1714,19 +1834,19 @@
                                       {{ $dt->title }}
                                     </a>
                                   </td>
-                                  <td>
-                                    @if($dt->task_submissions->last())
-                                      <?php
-                                        $last_submitted_at = \Carbon\Carbon::parse($dt->task_submissions->last()->path_1_submitted_at)->setTimezone(Auth::user()->timezone);
-                                      ?>
-                                      {{ $last_submitted_at->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
-                                    @else
-                                      <i class="text-muted">Not Available</i>
-                                    @endif
-                                  </td>
                                   <td class="text-right">
-                                    @if($dt->task_submissions->last() && $dt->task_submissions->last()->score)
-                                      {{ $dt->task_submissions->last()->score }}
+                                    <?php
+                                      $assignment_score = 0;
+                                      $count = 0;
+                                      foreach($dt->task_submissions as $ts) {
+                                        if($ts->score) {
+                                          $assignment_score += $ts->score;
+                                          $count++;
+                                        }
+                                      }
+                                    ?>
+                                    @if($assignment_score)
+                                      {{ $assignment_score / $count }}
                                     @else
                                       <i class="text-muted">-</i>
                                     @endif
@@ -1821,16 +1941,15 @@
                   </div>
                   <div class="box-body">
                     @if($exam_flag)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th style="width:25%;">Task</th>
-                          <th>Last Done on</th>
-                          <th style="width:5%;">Score</th>
+                          <th style="width:5%;">Average Score</th>
                         </thead>
                         <tbody>
                           <?php $i = 0; ?>
-                          @foreach($course->sessions as $s)
+                          @foreach($sessions as $s)
                             @foreach($s->tasks as $dt)
                               @if($dt->type == 'Exam')
                                 <tr>
@@ -1840,19 +1959,19 @@
                                       {{ $dt->title }}
                                     </a>
                                   </td>
-                                  <td>
-                                    @if($dt->task_submissions->last())
-                                      <?php
-                                        $last_submitted_at = \Carbon\Carbon::parse($dt->task_submissions->last()->path_1_submitted_at)->setTimezone(Auth::user()->timezone);
-                                      ?>
-                                      {{ $last_submitted_at->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
-                                    @else
-                                      <i class="text-muted">Not Available</i>
-                                    @endif
-                                  </td>
                                   <td class="text-right">
-                                    @if($dt->task_submissions->last() && $dt->task_submissions->last()->score)
-                                      {{ $dt->task_submissions->last()->score }}
+                                    <?php
+                                      $exam_score = 0;
+                                      $count = 0;
+                                      foreach($dt->task_submissions as $ts) {
+                                        if($ts->score) {
+                                          $exam_score += $ts->score;
+                                          $count++;
+                                        }
+                                      }
+                                    ?>
+                                    @if($exam_score)
+                                      {{ $exam_score / $count }}
                                     @else
                                       <i class="text-muted">-</i>
                                     @endif
@@ -1946,8 +2065,8 @@
                           dapat juga menggunakan variabel
                           $course->course_package->count_session
                         --}}
-                        {{ $course->sessions->count() }}
-                        @if($course->sessions->count() != 1)
+                        {{ $sessions->count() }}
+                        @if($sessions->count() != 1)
                           sessions
                         @else
                           session
@@ -1978,7 +2097,7 @@
                         <dd>
                           Please consider attending all sessions so you may adapt with the materials given.<br />
                           On completing this course, you may choose another course for learning.<br />
-                          <span style="color:#ff0000;">Contact your instructor if you encounter a problem.</span>
+                          <span class="text-red">Contact your instructor if you encounter a problem.</span>
                         </dd>
                       </dl>
                       {{--

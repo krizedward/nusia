@@ -137,13 +137,18 @@ class InstructorController extends Controller
         // & melihat daftar instructor course
         // & melihat daftar student dalam course
         $course = Course::findOrFail($course_id);
+        $sessions = Session::join('schedules', 'sessions.schedule_id', 'schedules.id')
+            ->where('sessions.course_id', $course_id)
+            ->orderBy('schedules.schedule_time')
+            ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at')
+            ->get();
         
         $material_types = MaterialType::all();
         $course_types = CourseType::all();
         $course_levels = CourseLevel::all();
         
         return view('role_instructor.course_show', compact(
-            'course', 'material_types', 'course_types', 'course_levels',
+            'course', 'sessions', 'material_types', 'course_types', 'course_levels',
         ));
     }
 
@@ -354,7 +359,12 @@ class InstructorController extends Controller
                 'material_public_path' => ['bail', 'sometimes', 'max:8000'],
             ]);
             if($data->fails()) {
-                session(['caption-danger' => 'Your material has not been uploaded. Try again.']);
+                if($request->material_public_id == 0)
+                    // add a new material
+                    session(['caption-danger' => 'Your material has not been uploaded. Try again.']);
+                else
+                    // update an existing material
+                    session(['caption-danger' => 'Your material has not been updated. Try again.']);
                 return redirect()->back()->withErrors($data)->withInput();
             }
             
@@ -370,7 +380,7 @@ class InstructorController extends Controller
                 MaterialPublic::create([
                     'course_package_id' => $course->course_package_id,
                     'session_number' => $session_number,
-                    'name' => 'Session ' . $session_number . ' - ' . $request->material_public_name,
+                    'name' => $request->material_public_name, // 'Session ' . $session_number . ' - ' . $request->material_public_name,
                     'description' => $request->material_public_description,
                     'path' => ($file)? $file_name : null,
                     'created_at' => now(),
@@ -386,7 +396,7 @@ class InstructorController extends Controller
                 $material_public->update([
                     'course_package_id' => $course->course_package_id,
                     'session_number' => $session_number,
-                    'name' => 'Session ' . $session_number . ' - ' . $request->material_public_name,
+                    'name' => $request->material_public_name, // 'Session ' . $session_number . ' - ' . $request->material_public_name,
                     'description' => $request->material_public_description,
                     'path' => ($file)? $file_name : null,
                     'updated_at' => now(),
@@ -402,7 +412,12 @@ class InstructorController extends Controller
                 'material_session_path' => ['bail', 'sometimes', 'max:8000'],
             ]);
             if($data->fails()) {
-                session(['caption-danger' => 'Your material has not been uploaded. Try again.']);
+                if($request->material_session_id == 0)
+                    // add a new material
+                    session(['caption-danger' => 'Your material has not been uploaded. Try again.']);
+                else
+                    // update an existing material
+                    session(['caption-danger' => 'Your material has not been updated. Try again.']);
                 return redirect()->back()->withErrors($data)->withInput();
             }
             
@@ -468,18 +483,90 @@ class InstructorController extends Controller
 
     public function assignment_download($course_id, $assignment_id) {
         // mengunduh tugas
-        $data = Task::where('type', 'Assignment')->where('id', $assignment_id)->get()->first();
-        $file_name = 'NUSIA_' . Carbon::now()->setTimezone(Auth::user()->timezone)->isoFormat('YYYY_MM_DD') . '_' . $data->path;
-        $path = 'uploads/assignment/' . $data->path;
-        return response()->download($path, $file_name);
+        /*$data = Task::where('type', 'Assignment')->where('id', $assignment_id)->get()->first();
+        $file_name = 'NUSIA_' . Carbon::now()->setTimezone(Auth::user()->timezone)->isoFormat('YYYY_MM_DD') . '_' . $data->path_1;
+        $path = 'uploads/assignment/' . $data->path_1;
+        return response()->download($path, $file_name);*/
     }
 
-    public function assignment_update(Request $request, $course_id, $assignment_id) {
+    public function assignment_update(Request $request, $course_id) {
         // memodifikasi informasi tugas
+        $data = Validator::make($request->all(), [
+            'assignment_id' => ['bail', 'required'],
+            'assignment_session_id' => ['bail', 'required', 'numeric'],
+            'assignment_title' => ['bail', 'required', 'max:255'],
+            'assignment_description' => ['bail', 'sometimes'],
+            'assignment_due_date_date' => ['bail', 'required'],
+            'assignment_due_date_time' => ['bail', 'required'],
+            'assignment_path_1' => ['bail', 'sometimes', 'max:8000'],
+        ]);
+        if($data->fails()) {
+            if($request->assignment_id == 0)
+                // add a new assignment
+                session(['caption-danger' => 'Your assignment has not been uploaded. Try again.']);
+            else
+                // update an existing assignment
+                session(['caption-danger' => 'Your assignment has not been updated. Try again.']);
+            return redirect()->back()->withErrors($data)->withInput();
+        }
+        
+        $due_date = Carbon::createFromFormat('m/d/Y H:i A', $request->assignment_due_date_date . ' ' . $request->assignment_due_date_time)->toDateTimeString();
+        if($due_date < now()) {
+            session(['caption-danger' => 'Cannot change the due time as the inputted time is invalid.']);
+            return redirect()->back()->withInput();
+        }
+        
+        $file = $request->file('assignment_path_1');
+        if($file) {
+            $file_name = Str::random(50).'.'.$file->extension();
+            $destination_path = 'uploads/assignment/';
+            $file->move($destination_path, $file_name);
+        }
+        
+        $course = Course::findOrFail($course_id);
+        if($request->assignment_id == 0) {
+            // add a new assignment
+            Task::create([
+                'session_id' => $request->assignment_session_id,
+                'type' => 'Assignment',
+                'title' => $request->assignment_title,
+                'description' => $request->assignment_description,
+                'due_date' => $due_date,
+                'path_1' => ($file)? $file_name : null,
+                'created_at' => now(),
+            ]);
+            session(['caption-success' => 'This assignment information has been added. Thank you!']);
+        } else {
+            // update an existing assignment
+            $assignment = Task::findOrFail($request->assignment_id);
+            if($assignment->path_1) {
+                $destination_path = 'uploads/assignment/';
+                File::delete($destination_path . $assignment->path_1);
+            }
+            $assignment->update([
+                'session_id' => $request->assignment_session_id,
+                'type' => 'Assignment',
+                'title' => $request->assignment_title,
+                'description' => $request->assignment_description,
+                'due_date' => $due_date,
+                'path_1' => ($file)? $file_name : null,
+                'updated_at' => now(),
+            ]);
+            session(['caption-success' => 'This assignment information has been updated. Thank you!']);
+        }
+        return redirect()->back();
     }
 
     public function assignment_destroy(Request $request, $course_id, $assignment_id) {
         // menghapus informasi tugas
+        $assignment = Task::findOrFail($request->assignment_id);
+        if($assignment->path_1) {
+            $destination_path = 'uploads/assignment/';
+            File::delete($destination_path . $assignment->path_1);
+        }
+        $assignment->delete();
+        session(['caption-success' => 'This assignment information has been deleted. Thank you!']);
+        return redirect()->back();
     }
 
     public function assignment_submission_download($course_id, $submission_id) {
@@ -505,17 +592,89 @@ class InstructorController extends Controller
     public function exam_download($course_id, $exam_id) {
         // mengunduh ujian
         $data = Task::where('type', 'Exam')->where('id', $exam_id)->get()->first();
-        $file_name = 'NUSIA_' . Carbon::now()->setTimezone(Auth::user()->timezone)->isoFormat('YYYY_MM_DD') . '_' . $data->path;
-        $path = 'uploads/exam/' . $data->path;
+        $file_name = 'NUSIA_' . Carbon::now()->setTimezone(Auth::user()->timezone)->isoFormat('YYYY_MM_DD') . '_' . $data->path_1;
+        $path = 'uploads/exam/' . $data->path_1;
         return response()->download($path, $file_name);
     }
 
-    public function exam_update(Request $request, $course_id, $exam_id) {
+    public function exam_update(Request $request, $course_id) {
         // memodifikasi informasi ujian
+        $data = Validator::make($request->all(), [
+            'exam_id' => ['bail', 'required'],
+            'exam_session_id' => ['bail', 'required', 'numeric'],
+            'exam_title' => ['bail', 'required', 'max:255'],
+            'exam_description' => ['bail', 'sometimes'],
+            'exam_due_date_date' => ['bail', 'required'],
+            'exam_due_date_time' => ['bail', 'required'],
+            'exam_path_1' => ['bail', 'sometimes', 'max:8000'],
+        ]);
+        if($data->fails()) {
+            if($request->exam_id == 0)
+                // add a new exam
+                session(['caption-danger' => 'Your exam has not been uploaded. Try again.']);
+            else
+                // update an existing exam
+                session(['caption-danger' => 'Your exam has not been updated. Try again.']);
+            return redirect()->back()->withErrors($data)->withInput();
+        }
+        
+        $due_date = Carbon::createFromFormat('m/d/Y H:i A', $request->exam_due_date_date . ' ' . $request->exam_due_date_time)->toDateTimeString();
+        if($due_date < now()) {
+            session(['caption-danger' => 'Cannot change the due time as the inputted time is invalid.']);
+            return redirect()->back()->withInput();
+        }
+        
+        $file = $request->file('exam_path_1');
+        if($file) {
+            $file_name = Str::random(50).'.'.$file->extension();
+            $destination_path = 'uploads/exam/';
+            $file->move($destination_path, $file_name);
+        }
+        
+        $course = Course::findOrFail($course_id);
+        if($request->exam_id == 0) {
+            // add a new exam
+            Task::create([
+                'session_id' => $request->exam_session_id,
+                'type' => 'Exam',
+                'title' => $request->exam_title,
+                'description' => $request->exam_description,
+                'due_date' => $due_date,
+                'path_1' => ($file)? $file_name : null,
+                'created_at' => now(),
+            ]);
+            session(['caption-success' => 'This exam information has been added. Thank you!']);
+        } else {
+            // update an existing exam
+            $exam = Task::findOrFail($request->exam_id);
+            if($exam->path_1) {
+                $destination_path = 'uploads/exam/';
+                File::delete($destination_path . $exam->path_1);
+            }
+            $exam->update([
+                'session_id' => $request->exam_session_id,
+                'type' => 'Exam',
+                'title' => $request->exam_title,
+                'description' => $request->exam_description,
+                'due_date' => $due_date,
+                'path_1' => ($file)? $file_name : null,
+                'updated_at' => now(),
+            ]);
+            session(['caption-success' => 'This exam information has been updated. Thank you!']);
+        }
+        return redirect()->back();
     }
 
     public function exam_destroy(Request $request, $course_id, $exam_id) {
         // menghapus informasi ujian
+        $exam = Task::findOrFail($request->exam_id);
+        if($exam->path_1) {
+            $destination_path = 'uploads/exam/';
+            File::delete($destination_path . $exam->path_1);
+        }
+        $exam->delete();
+        session(['caption-success' => 'This exam information has been deleted. Thank you!']);
+        return redirect()->back();
     }
 
     public function exam_submission_download($course_id, $submission_id) {
