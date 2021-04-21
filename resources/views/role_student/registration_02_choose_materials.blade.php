@@ -215,7 +215,7 @@
                                             <b>BOOK NOW!</b>
                                           </button>
                                         @else
-                                          <button class="btn btn-xs btn-flat btn-default disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
+                                          <button disabled class="btn btn-xs btn-flat btn-default btn-disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
                                             <b>Not Available</b>
                                           </button>
                                         @endif
@@ -245,7 +245,7 @@
                                                   <b>BOOK NOW!</b>
                                                 </button>
                                               @else
-                                                <button style="width:100%;" class="btn btn-s btn-default disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
+                                                <button disabled style="width:100%;" class="btn btn-s btn-default btn-disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
                                                   <b>Not Available</b>
                                                 </button>
                                               @endif
@@ -287,7 +287,7 @@
                                             <b>BOOK NOW!</b>
                                           </button>
                                         @else
-                                          <button class="btn btn-xs btn-flat btn-default disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
+                                          <button disabled class="btn btn-xs btn-flat btn-default btn-disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
                                             <b>Not Available</b>
                                           </button>
                                         @endif
@@ -310,7 +310,7 @@
                                                   <b>BOOK NOW!</b>
                                                 </button>
                                               @else
-                                                <button style="width:100%;" class="btn btn-s btn-default disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
+                                                <button disabled style="width:100%;" class="btn btn-s btn-default btn-disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
                                                   <b>Not Available</b>
                                                 </button>
                                               @endif
@@ -359,7 +359,7 @@
                                           <b>BOOK NOW!</b>
                                         </button>
                                       @else
-                                        <button class="btn btn-xs btn-flat btn-default disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
+                                        <button disabled class="btn btn-xs btn-flat btn-default btn-disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
                                           <b>Not Available</b>
                                         </button>
                                       @endif
@@ -386,7 +386,7 @@
                                                 <b>BOOK NOW!</b>
                                               </button>
                                             @else
-                                              <button style="width:100%;" class="btn btn-s btn-default disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
+                                              <button disabled style="width:100%;" class="btn btn-s btn-default btn-disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
                                                 <b>Not Available</b>
                                               </button>
                                             @endif
@@ -428,7 +428,7 @@
                                           <b>BOOK NOW!</b>
                                         </button>
                                       @else
-                                        <button class="btn btn-xs btn-flat btn-default disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
+                                        <button disabled class="btn btn-xs btn-flat btn-default btn-disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
                                           <b>Not Available</b>
                                         </button>
                                       @endif
@@ -452,7 +452,7 @@
                                                 <b>BOOK NOW!</b>
                                               </button>
                                             @else
-                                              <button style="width:100%;" class="btn btn-s btn-default disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
+                                              <button disabled style="width:100%;" class="btn btn-s btn-default btn-disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
                                                 <b>Not Available</b>
                                               </button>
                                             @endif

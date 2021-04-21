@@ -257,13 +257,13 @@
                           @if($dt->session->link_zoom)
                             <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Join</a>
                           @else
-                            <a class="btn btn-flat btn-xs btn-default disabled" href="#">Join</a>
+                            <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Join</a>
                           @endif
                         @else
                           @if($dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form)
                             <a href="#" data-toggle="modal" data-target="#FillForm{{$dt->id}}" class="btn btn-xs btn-flat bg-purple">Form</a>
                           @else
-                            <a class="btn btn-flat btn-xs btn-default disabled" href="#">Form</a>
+                            <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Form</a>
                           @endif
                         @endif
                       </td>

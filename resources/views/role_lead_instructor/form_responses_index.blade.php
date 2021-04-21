@@ -173,7 +173,7 @@
                   </td>
                   <td>
                     <a class="btn btn-xs btn-success" href="{{ route('form_responses.index_form', $dt->id) }}">View Details</a>
-                    {{-- <a class="btn btn-xs btn-default disabled" href="#?">In Development</a> --}}
+                    {{-- <a disabled class="btn btn-xs btn-default btn-disabled" href="#?">In Development</a> --}}
                   </td>
                 </tr>
               @endforeach

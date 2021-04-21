@@ -174,7 +174,7 @@
                                     @if($dt->link_zoom)
                                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Link</a>
                                     @else
-                                      <a class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a>
+                                      <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Link</a>
                                     @endif
                                   </td>
                                 </tr>

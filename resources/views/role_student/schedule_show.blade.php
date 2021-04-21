@@ -613,7 +613,7 @@
                                   @if($dt->session->link_zoom)
                                     <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Join</a>
                                   @else
-                                    <a class="btn btn-flat btn-xs btn-default disabled" href="#">Join</a>
+                                    <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Join</a>
                                   @endif
                                 @else
                                   @if($dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form)
@@ -1868,10 +1868,10 @@
                                 @if($course_registration->course_certificate->path)
                                   <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.certificate.download') }}">Link</a>
                                 @else
-                                  <a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a>
+                                  <a disabled rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Link</a>
                                 @endif
                               @else
-                                <a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default disabled" href="#">Link</a>
+                                <a disabled rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Link</a>
                               @endif
                             </td>
                           </tr>

@@ -86,7 +86,7 @@
                       @if($session_registrations->first()->status == 'Not Assigned')
                         <input type="submit" class="btn btn-submit btn-xs btn-primary" value="Submit">
                       @else
-                        <input type="submit" class="btn btn-submit btn-xs btn-default disabled" value="Submit">
+                        <input disabled type="submit" class="btn btn-submit btn-xs btn-default btn-disabled" value="Submit">
                       @endif
                     </div>
                 @if($session_registrations->first()->status == 'Not Assigned')
