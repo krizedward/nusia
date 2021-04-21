@@ -137,10 +137,18 @@ class InstructorController extends Controller
         // & melihat daftar instructor course
         // & melihat daftar student dalam course
         $course = Course::findOrFail($course_id);
-        $sessions = Session::join('schedules', 'sessions.schedule_id', 'schedules.id')
+        $sessions = Session
+            ::join('schedules', 'sessions.schedule_id', 'schedules.id')
             ->where('sessions.course_id', $course_id)
             ->orderBy('schedules.schedule_time')
             ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at')
+            ->get();
+        $task_submissions = TaskSubmission
+            ::join('tasks', 'task_submissions.task_id', 'tasks.id')
+            ->join('sessions', 'tasks.session_id', 'sessions.id')
+            ->where('sessions.course_id', $course_id)
+            ->orderBy('task_submissions.path_1_submitted_at')
+            ->select('task_submissions.id', 'task_submissions.code', 'task_submissions.session_registration_id', 'task_submissions.task_id', 'task_submissions.title', 'task_submissions.description', 'task_submissions.status', 'task_submissions.score', 'task_submissions.instructor_reply', 'task_submissions.path_1', 'task_submissions.path_1_submitted_at', 'task_submissions.path_2', 'task_submissions.path_2_submitted_at', 'task_submissions.path_3', 'task_submissions.path_3_submitted_at', 'task_submissions.created_at', 'task_submissions.updated_at', 'task_submissions.deleted_at')
             ->get();
         
         $material_types = MaterialType::all();
@@ -148,7 +156,7 @@ class InstructorController extends Controller
         $course_levels = CourseLevel::all();
         
         return view('role_instructor.course_show', compact(
-            'course', 'sessions', 'material_types', 'course_types', 'course_levels',
+            'course', 'sessions', 'task_submissions', 'material_types', 'course_types', 'course_levels',
         ));
     }
 
@@ -370,7 +378,7 @@ class InstructorController extends Controller
             
             $file = $request->file('material_public_path');
             if($file) {
-                $file_name = Str::random(50).'.'.$file->extension();
+                $file_name = Str::random(10) . '_' . $request['material_public_name'] . '.' . $file->extension();
                 $destination_path = 'uploads/material/';
                 $file->move($destination_path, $file_name);
             }
@@ -423,7 +431,7 @@ class InstructorController extends Controller
             
             $file = $request->file('material_session_path');
             if($file) {
-                $file_name = Str::random(50).'.'.$file->extension();
+                $file_name = Str::random(10) . '_' . $request['material_session_name'] . '.' . $file->extension();
                 $destination_path = 'uploads/material/';
                 $file->move($destination_path, $file_name);
             }
@@ -483,10 +491,10 @@ class InstructorController extends Controller
 
     public function assignment_download($course_id, $assignment_id) {
         // mengunduh tugas
-        /*$data = Task::where('type', 'Assignment')->where('id', $assignment_id)->get()->first();
+        $data = Task::where('type', 'Assignment')->where('id', $assignment_id)->get()->first();
         $file_name = 'NUSIA_' . Carbon::now()->setTimezone(Auth::user()->timezone)->isoFormat('YYYY_MM_DD') . '_' . $data->path_1;
         $path = 'uploads/assignment/' . $data->path_1;
-        return response()->download($path, $file_name);*/
+        return response()->download($path, $file_name);
     }
 
     public function assignment_update(Request $request, $course_id) {
@@ -518,7 +526,7 @@ class InstructorController extends Controller
         
         $file = $request->file('assignment_path_1');
         if($file) {
-            $file_name = Str::random(50).'.'.$file->extension();
+            $file_name = Str::random(10) . '_' . $request['assignment_title'] . '.' . $file->extension();
             $destination_path = 'uploads/assignment/';
             $file->move($destination_path, $file_name);
         }
@@ -583,6 +591,29 @@ class InstructorController extends Controller
 
     public function assignment_submission_update(Request $request, $course_id, $submission_id) {
         // mengoreksi pengumpulan tugas
+        $data = Validator::make($request->all(), [
+            'assignment_submission_score' => ['bail', 'required', 'numeric'],
+            'assignment_submission_instructor_reply' => ['bail', 'required'],
+        ]);
+        if($data->fails()) {
+            session(['caption-danger' => 'The submission information has not been updated. Try again.']);
+            return redirect()->back()->withErrors($data)->withInput();
+        }
+        
+        $task_submission = TaskSubmission::findOrFail($submission_id);
+        if($task_submission->task->session->course_id == $course_id) {
+            $task_submission->update([
+                'score' => $request->assignment_submission_score,
+                'instructor_reply' => $request->assignment_submission_instructor_reply,
+                'status' => 'Accepted',
+                'updated_at' => now(),
+            ]);
+            session(['caption-success' => 'This submission information has been updated. Thank you!']);
+        } else {
+            session(['caption-danger' => 'You are not authorized to update this information.']);
+            return redirect()->back()->withErrors($data)->withInput();
+        }
+        return redirect()->back();
     }
 
     public function exam_store(Request $request, $course_id) {
@@ -626,7 +657,7 @@ class InstructorController extends Controller
         
         $file = $request->file('exam_path_1');
         if($file) {
-            $file_name = Str::random(50).'.'.$file->extension();
+            $file_name = Str::random(10) . '_' . $request['exam_title'] . '.' . $file->extension();
             $destination_path = 'uploads/exam/';
             $file->move($destination_path, $file_name);
         }

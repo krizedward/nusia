@@ -459,7 +459,7 @@
                                   @if($dt->link_zoom)
                                     <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->link_zoom }}">Join</a>
                                   @else
-                                    <a class="btn btn-flat btn-xs btn-default disabled" href="#">Join</a>
+                                    <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Join</a>
                                   @endif
                                 @else
                                   <a href="#" data-toggle="modal" data-target="#Form{{$dt->id}}" class="btn btn-flat btn-xs btn-primary">Form</a>
@@ -663,7 +663,7 @@
                                   @if($dt->requirement)
                                     <a href="#" data-toggle="modal" data-target="#Approval{{$dt->id}}" class="btn btn-flat btn-xs bg-purple">Action</a>
                                   @else
-                                    <a href="#" class="btn btn-flat btn-xs btn-default disabled" disabled>Action</a>
+                                    <a disabled href="#" class="btn btn-flat btn-xs btn-default btn-disabled" disabled>Action</a>
                                   @endif
                                 </td>
                               </tr>
@@ -1861,48 +1861,87 @@
                                           <p class="text-muted text-center">Type: <b>Assignment</b></p>
                                           <ul class="list-group list-group-unbordered">
                                             <?php $j = 0; $flag = 0; ?>
-                                            @if($course == null)
-                                            @foreach($course_registration->session_registrations as $sr)
-                                              @foreach($sr->task_submissions as $ts)
-                                                @if($ts->task_id == $dt->id)
-                                                  <?php $flag = 1; ?>
-                                                  <li class="list-group-item">
-                                                    @if($ts->path_1)
-                                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.assignment_submission.download', [$course_registration->id, $ts->id]) }}">Download</a>
-                                                        <br />
-                                                    @endif
-                                                    <b>Submission #{{ $j + 1 }}</b> (
-                                                      <?php
-                                                        $submission_time = \Carbon\Carbon::parse($ts->path_1_submitted_at)->setTimezone(Auth::user()->timezone);
-                                                      ?>
-                                                      {{ $submission_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
-                                                      )<br />
-                                                    <b>Title:</b> {{ $ts->title }}<br />
-                                                    <b>Description:</b>
-                                                      {{ $ts->description }}<br />
-                                                    <b>Submission status:</b>
-                                                      @if($ts->status == 'Accepted')
-                                                        <b style="color:#007700;">Checked</b><br />
-                                                      @else
-                                                        <i class="text-muted">Not Available</i><br />
-                                                      @endif
+                                            @foreach($task_submissions as $ts)
+                                              @if($ts->task_id == $dt->id)
+                                                <?php $flag = 1; ?>
+                                                <li class="list-group-item">
+                                                  @if($ts->path_1)
+                                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.assignment_submission.download', [$course->id, $ts->id]) }}"><i class="fa fa-download"></i>&nbsp;&nbsp;Download File</a>
+                                                      <br />
+                                                  @endif
+                                                  <b><u>Submission #{{ $j + 1 }}</u></b> (
+                                                    <?php
+                                                      $submission_time = \Carbon\Carbon::parse($ts->path_1_submitted_at)->setTimezone(Auth::user()->timezone);
+                                                    ?>
+                                                    {{ $submission_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                                    )<br />
+                                                  <b>Student name:</b> {{ $ts->session_registration->course_registration->student->user->first_name }} {{ $ts->session_registration->course_registration->student->user->last_name }}<br />
+                                                  <b>Title:</b> {{ $ts->title }}<br />
+                                                  <b>Description:</b>
+                                                    {{ $ts->description }}<br />
+                                                  <b>Submission status:</b>
                                                     @if($ts->status == 'Accepted')
-                                                      <b>Score:</b>
-                                                        {{ $ts->score }}<br />
-                                                      <b>Instructor reply:</b><br />
-                                                        {{ $ts->instructor_reply }}<br />
+                                                      <b style="color:#007700;">Checked</b><br />
+                                                    @else
+                                                      <i class="text-muted">Not Available</i><br />
                                                     @endif
-                                                  </li>
-                                                  <?php $j++; ?>
-                                                @endif
-                                              @endforeach
+                                                  @if($ts->status == 'Accepted')
+                                                    <b>Score:</b>
+                                                      {{ $ts->score }}<br />
+                                                    <b>Instructor reply:</b><br />
+                                                      {{ $ts->instructor_reply }}<br />
+                                                  @else
+                                                    <?php $has_more_recent_submission = 0; $has_more_than_one_submission = 0; ?>
+                                                    @foreach($task_submissions as $ts1)
+                                                      @if($ts->id != $ts1->id && $ts->task_id == $ts1->task_id && $ts->session_registration_id == $ts1->session_registration_id)
+                                                        <?php $has_more_than_one_submission = 1; ?>
+                                                        @if($ts->path_1_submitted_at < $ts1->path_1_submitted_at)
+                                                          <?php $has_more_recent_submission = 1; ?>
+                                                          @break
+                                                        @endif
+                                                      @endif
+                                                    @endforeach
+                                                    @if(($has_more_than_one_submission == 1 && $has_more_recent_submission == 0) || $has_more_than_one_submission == 0)
+                                                      <form role="form" method="post" action="{{ route('instructor.assignment_submission.update', [$course->id, $ts->id]) }}">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <div class="form-group @error('assignment_submission_score') has-error @enderror">
+                                                          <label for="assignment_submission_score">
+                                                            Add score:
+                                                            <span class="text-red">*</span>
+                                                          </label>
+                                                          <input name="assignment_submission_score" value="{{ old('assignment_submission_score') }}" type="text" class="@error('assignment_submission_score') is-invalid @enderror form-control" placeholder="Enter Score">
+                                                          @error('assignment_submission_score')
+                                                            <p style="color:red">{{ $message }}</p>
+                                                          @enderror
+                                                        </div>
+                                                        <div class="form-group @error('assignment_submission_instructor_reply') has-error @enderror">
+                                                          <label for="assignment_submission_instructor_reply">
+                                                            Add instructor reply:
+                                                            <span class="text-red">*</span>
+                                                          </label>
+                                                          <textarea name="assignment_submission_instructor_reply" class="@error('assignment_submission_instructor_reply') is-invalid @enderror form-control" rows="5" placeholder="Enter Instructor Reply">{{ old('assignment_submission_instructor_reply') }}</textarea>
+                                                          @error('assignment_submission_instructor_reply')
+                                                            <p style="color:red">{{ $message }}</p>
+                                                          @enderror
+                                                        </div>
+                                                        <div class="form-group">
+                                                          <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                                                        </div>
+                                                      </form>
+                                                    @endif
+                                                  @endif
+                                                </li>
+                                                <?php $j++; ?>
+                                              @endif
                                             @endforeach
-                                            @endif
                                             @if($flag == 0)
-                                              <div class="text-muted">You haven't submitted your working for this assignment.</div>
+                                              <li class="list-group-item">
+                                                There are no submissions for this assignment.
+                                              </li>
                                             @endif
                                           </ul>
-                                          <button onclick="document.getElementById('AssignmentGrading{{$dt->id}}').className = 'modal fade'; document.getElementById('AssignmentGrading{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
+                                          <button onclick="document.getElementById('AssignmentGrading{{$dt->id}}').className = 'modal fade'; document.getElementById('AssignmentGrading{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-default" style="width:100%;">Close</button>
                                         </div>
                                         <!-- /.box-body -->
                                       </div>
@@ -1986,48 +2025,87 @@
                                           <p class="text-muted text-center">Type: <b>Exam</b></p>
                                           <ul class="list-group list-group-unbordered">
                                             <?php $j = 0; $flag = 0; ?>
-                                            @if($course == null)
-                                            @foreach($course_registration->session_registrations as $sr)
-                                              @foreach($sr->task_submissions as $ts)
-                                                @if($ts->task_id == $dt->id)
-                                                  <?php $flag = 1; ?>
-                                                  <li class="list-group-item">
-                                                    @if($ts->path_1)
-                                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.exam_submission.download', [$course_registration->id, $ts->id]) }}">Download</a>
-                                                        <br />
-                                                    @endif
-                                                    <b>Submission #{{ $j + 1 }}</b> (
-                                                      <?php
-                                                        $submission_time = \Carbon\Carbon::parse($ts->path_1_submitted_at)->setTimezone(Auth::user()->timezone);
-                                                      ?>
-                                                      {{ $submission_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
-                                                      )<br />
-                                                    <b>Title:</b> {{ $ts->title }}<br />
-                                                    <b>Description:</b>
-                                                      {{ $ts->description }}<br />
-                                                    <b>Submission status:</b>
-                                                      @if($ts->status == 'Accepted')
-                                                        <b style="color:#007700;">Checked</b><br />
-                                                      @else
-                                                        <i class="text-muted">Not Available</i><br />
-                                                      @endif
+                                            @foreach($task_submissions as $ts)
+                                              @if($ts->task_id == $dt->id)
+                                                <?php $flag = 1; ?>
+                                                <li class="list-group-item">
+                                                  @if($ts->path_1)
+                                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.assignment_submission.download', [$course->id, $ts->id]) }}"><i class="fa fa-download"></i>&nbsp;&nbsp;Download File</a>
+                                                      <br />
+                                                  @endif
+                                                  <b><u>Submission #{{ $j + 1 }}</u></b> (
+                                                    <?php
+                                                      $submission_time = \Carbon\Carbon::parse($ts->path_1_submitted_at)->setTimezone(Auth::user()->timezone);
+                                                    ?>
+                                                    {{ $submission_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                                    )<br />
+                                                  <b>Student name:</b> {{ $ts->session_registration->course_registration->student->user->first_name }} {{ $ts->session_registration->course_registration->student->user->last_name }}<br />
+                                                  <b>Title:</b> {{ $ts->title }}<br />
+                                                  <b>Description:</b>
+                                                    {{ $ts->description }}<br />
+                                                  <b>Submission status:</b>
                                                     @if($ts->status == 'Accepted')
-                                                      <b>Score:</b>
-                                                        {{ $ts->score }}<br />
-                                                      <b>Instructor reply:</b><br />
-                                                        {{ $ts->instructor_reply }}<br />
+                                                      <b style="color:#007700;">Checked</b><br />
+                                                    @else
+                                                      <i class="text-muted">Not Available</i><br />
                                                     @endif
-                                                  </li>
-                                                  <?php $j++; ?>
-                                                @endif
-                                              @endforeach
+                                                  @if($ts->status == 'Accepted')
+                                                    <b>Score:</b>
+                                                      {{ $ts->score }}<br />
+                                                    <b>Instructor reply:</b><br />
+                                                      {{ $ts->instructor_reply }}<br />
+                                                  @else
+                                                    <?php $has_more_recent_submission = 0; $has_more_than_one_submission = 0; ?>
+                                                    @foreach($task_submissions as $ts1)
+                                                      @if($ts->id != $ts1->id && $ts->task_id == $ts1->task_id && $ts->session_registration_id == $ts1->session_registration_id)
+                                                        <?php $has_more_than_one_submission = 1; ?>
+                                                        @if($ts->path_1_submitted_at < $ts1->path_1_submitted_at)
+                                                          <?php $has_more_recent_submission = 1; ?>
+                                                          @break
+                                                        @endif
+                                                      @endif
+                                                    @endforeach
+                                                    @if(($has_more_than_one_submission == 1 && $has_more_recent_submission == 0) || $has_more_than_one_submission == 0)
+                                                      <form role="form" method="post" action="{{ route('instructor.exam_submission.update', [$course->id, $ts->id]) }}">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <div class="form-group @error('exam_submission_score') has-error @enderror">
+                                                          <label for="exam_submission_score">
+                                                            Add score:
+                                                            <span class="text-red">*</span>
+                                                          </label>
+                                                          <input name="exam_submission_score" value="{{ old('exam_submission_score') }}" type="text" class="@error('exam_submission_score') is-invalid @enderror form-control" placeholder="Enter Score">
+                                                          @error('exam_submission_score')
+                                                            <p style="color:red">{{ $message }}</p>
+                                                          @enderror
+                                                        </div>
+                                                        <div class="form-group @error('exam_submission_instructor_reply') has-error @enderror">
+                                                          <label for="exam_submission_instructor_reply">
+                                                            Add instructor reply:
+                                                            <span class="text-red">*</span>
+                                                          </label>
+                                                          <textarea name="exam_submission_instructor_reply" class="@error('exam_submission_instructor_reply') is-invalid @enderror form-control" rows="5" placeholder="Enter Instructor Reply">{{ old('exam_submission_instructor_reply') }}</textarea>
+                                                          @error('exam_submission_instructor_reply')
+                                                            <p style="color:red">{{ $message }}</p>
+                                                          @enderror
+                                                        </div>
+                                                        <div class="form-group">
+                                                          <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                                                        </div>
+                                                      </form>
+                                                    @endif
+                                                  @endif
+                                                </li>
+                                                <?php $j++; ?>
+                                              @endif
                                             @endforeach
-                                            @endif
                                             @if($flag == 0)
-                                              <div class="text-muted">You haven't submitted your working for this exam.</div>
+                                              <li class="list-group-item">
+                                                There are no submissions for this exam.
+                                              </li>
                                             @endif
                                           </ul>
-                                          <button onclick="document.getElementById('ExamGrading{{$dt->id}}').className = 'modal fade'; document.getElementById('ExamGrading{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-primary" style="width:100%;">Close</button>
+                                          <button onclick="document.getElementById('ExamGrading{{$dt->id}}').className = 'modal fade'; document.getElementById('ExamGrading{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-default" style="width:100%;">Close</button>
                                         </div>
                                         <!-- /.box-body -->
                                       </div>
@@ -2117,42 +2195,45 @@
                   </div>
                   <div class="box-body">
                     @if($task_submission_flag)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
+                          <th>Student Name</th>
                           <th>Total Attendances</th>
                           <th style="width:5%;">Link</th>
                         </thead>
                         <tbody>
-                          <?php
-                            /*$i = 0;
-                            foreach($course_registration->session_registrations as $dt) {
-                              if($dt->status == 'Present') {
-                                $i++;
-                              }
-                            }
-                            $total_sessions = $course_registration->course->course_package->count_session;
-                            */
-                          ?>
-                          <tr>
-                            <td class="text-right">1</td>
-                            <td>
-                              {{-- $i --}}/{{-- $total_sessions --}}
-                            </td>
-                            <td class="text-center">
-                              {{--
-                              @if($i >= 80 * $total_sessions / 100)
-                                @if($course_registration->course_certificate->path)
-                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.certificate.download') }}">Link</a>
+                          <?php $total_sessions = $course->course_package->count_session; ?>
+                          @foreach($course->course_registrations as $i => $cr)
+                            <?php
+                              $count_present = 0;
+                              foreach($cr->session_registrations as $sr)
+                                if($sr->status == 'Present')
+                                  $count_present++;
+                            ?>
+                            <tr>
+                              <td class="text-right">{{ $i + 1 }}</td>
+                              <td>
+                                Nama Student
+                              </td>
+                              <td>
+                                {{ $count_present }}/{{ $total_sessions }}
+                              </td>
+                              <td class="text-center">
+                                {{--
+                                @if($i >= 80 * $total_sessions / 100)
+                                  @if($course_registration->course_certificate->path)
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.certificate.download') }}">Link</a>
+                                  @else
+                                    <a disabled rel="noopener noreferrer" class="btn btn-flat btn-xs btn-warning btn-disabled" href="#">Pending</a>
+                                  @endif
                                 @else
-                                  <a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-warning disabled" href="#">Pending</a>
+                                  <a disabled rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Ineligible</a>
                                 @endif
-                              @else
-                                <a rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default disabled" href="#">Ineligible</a>
-                              @endif
-                              --}}
-                            </td>
-                          </tr>
+                                --}}
+                              </td>
+                            </tr>
+                          @endforeach
                         </tbody>
                       </table>
                     @else
