@@ -89,7 +89,7 @@
                             @if($next_meeting_time)
                               {{ $next_meeting_time->isoFormat('dddd') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -100,7 +100,7 @@
                             @if($next_meeting_time)
                               {{ $next_meeting_time->isoFormat('MMMM Do YYYY') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -111,7 +111,7 @@
                             @if($next_meeting_time)
                               {{ $next_meeting_time->isoFormat('hh:mm A') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -122,7 +122,7 @@
                             @if($next_meeting_link)
                               <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $next_meeting_link }}">Link</a>
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -222,12 +222,19 @@
                             <th>Name</th>
                             <th style="width:25%;">Interest</th>
                             <th style="width:12%;">Picture</th>
-                            <th style="width:5%;">Chat</th>
+                            <th class="hidden-xs hidden-sm" style="width:5%;">Chat</th>
                           </thead>
                           <tbody>
                             @foreach($data as $dt)
                               <tr>
-                                <td>{{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}</td>
+                                <td>
+                                  {{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}
+                                  <span class="hidden-md hidden-lg hidden-xl">
+                                    @if($dt->instructor_id != Auth::user()->instructor->id)
+                                      <br /><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.chat_instructor.show', $dt->instructor->user_id) }}">Chat</a>
+                                    @endif
+                                  </span>
+                                </td>
                                 <td>
                                   <?php
                                     if($dt->instructor->interest) {
@@ -239,7 +246,7 @@
                                       <span class="label label-success">{{ $interest[$i] }}</span>
                                     @endfor
                                   @else
-                                    <span class="text-muted"><i>Not Available</i></span>
+                                    <span class="text-muted"><i>N/A</i></span>
                                   @endif
                                 </td>
                                 <td>
@@ -249,11 +256,11 @@
                                     <img src="{{ asset('uploads/user.jpg') }}" style="width:100%">
                                   @endif
                                 </td>
-                                <td>
+                                <td class="hidden-xs hidden-sm text-center">
                                   @if($dt->instructor_id != Auth::user()->instructor->id)
                                     <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.chat_instructor.show', $dt->instructor->user_id) }}">Link</a>
                                   @else
-                                    <i>N/A</i>
+                                    <i class="text-muted">N/A</i>
                                   @endif
                                 </td>
                               </tr>
@@ -296,12 +303,17 @@
                             <th>Name</th>
                             <th style="width:25%;">Interest</th>
                             <th style="width:12%;">Picture</th>
-                            <th style="width:5%;">Chat</th>
+                            <th class="hidden-xs hidden-sm" style="width:5%;">Chat</th>
                           </thead>
                           <tbody>
                             @foreach($data as $dt)
                               <tr>
-                                <td>{{ $dt->student->user->first_name }} {{ $dt->student->user->last_name }}</td>
+                                <td>
+                                  {{ $dt->student->user->first_name }} {{ $dt->student->user->last_name }}
+                                  <span class="hidden-md hidden-lg hidden-xl">
+                                    <br /><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.chat_student.show', $dt->student->user_id) }}">Chat</a>
+                                  </span>
+                                </td>
                                 <td>
                                   <?php
                                     if($dt->student->interest) {
@@ -313,7 +325,7 @@
                                       <span class="label label-success">{{ $interest[$i] }}</span>
                                     @endfor
                                   @else
-                                    <span class="text-muted"><i>Not Available</i></span>
+                                    <span class="text-muted"><i>N/A</i></span>
                                   @endif
                                 </td>
                                 <td>
@@ -323,7 +335,7 @@
                                     <img src="{{ asset('uploads/user.jpg') }}" style="width:100%">
                                   @endif
                                 </td>
-                                <td>
+                                <td class="hidden-xs hidden-sm text-center">
                                   <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.chat_student.show', $dt->student->user_id) }}">Link</a>
                                 </td>
                               </tr>
@@ -656,7 +668,7 @@
                                     @endif
                                     --}}
                                   @else
-                                    <i class="text-muted">Not Available</i>
+                                    <i class="text-muted">N/A</i>
                                   @endif
                                 </td>
                                 <td class="text-center">
@@ -745,11 +757,39 @@
                         @if($j != 0)
                           <hr>
                         @endif
-                        <h4><b>{{ $s->title }}</b></h4>
                         @if($s->session_registrations->toArray() != null)
+                          <?php
+                            $session_attendance_flag = 0; // 0 upcoming/ongoing/attendance check, 1 present/not present/should submit form
+                            $count_present = 0;
+                            $count_should_submit_form = 0;
+                            $count_not_present = 0;
+                            if($s->session_registrations->first()->status != 'Not Assigned') {
+                              $session_attendance_flag = 1;
+                              foreach($s->session_registrations as $sr) {
+                                if($sr->status == 'Present') $count_present++;
+                                else if($sr->status == 'Should Submit Form') $count_should_submit_form++;
+                                else if($sr->status == 'Not Present') $count_not_present++;
+                              }
+                            }
+                          ?>
+                          <h4>
+                            <b>{{ $s->title }}</b>
+                            <div class="pull-right">
+                              @if($session_attendance_flag)
+                                <span data-toggle="tooltip" title class="badge bg-green" data-original-title="Present">{{ $count_present }}</span>
+                                <span data-toggle="tooltip" title class="badge bg-purple" data-original-title="Should Submit Form">{{ $count_should_submit_form }}</span>
+                                <span data-toggle="tooltip" title class="badge bg-red" data-original-title="Not Present">{{ $count_not_present }}</span>
+                                <span data-toggle="tooltip" title class="badge bg-gray" data-original-title="Not Assigned">0</span>
+                              @else
+                                <span data-toggle="tooltip" title class="badge bg-green" data-original-title="Present">0</span>
+                                <span data-toggle="tooltip" title class="badge bg-purple" data-original-title="Should Submit Form">0</span>
+                                <span data-toggle="tooltip" title class="badge bg-red" data-original-title="Not Present">0</span>
+                                <span data-toggle="tooltip" title class="badge bg-gray" data-original-title="Not Assigned">{{ $s->session_registrations->count() }}</span>
+                              @endif
+                            </div>
+                          </h4>
                           <table class="table table-bordered example1">
                             <thead>
-                              <th style="width:2%;" class="text-right">#</th>
                               <th>Name</th>
                               <th style="width:20%;">Attendance</th>
                             </thead>
@@ -757,9 +797,8 @@
                               <?php
                                 $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                               ?>
-                              @foreach($s->session_registrations as $i => $dt)
+                              @foreach($s->session_registrations as $dt)
                                 <tr>
-                                  <td class="text-right">{{ $i + 1 }}</td>
                                   <td>{{ $dt->course_registration->student->user->first_name }} {{ $dt->course_registration->student->user->last_name }}</td>
                                   <td>
                                     @if($dt->status == 'Not Assigned')
@@ -788,6 +827,7 @@
                             </tbody>
                           </table>
                         @else
+                          <h4><b>{{ $s->title }}</b></h4>
                           <div class="text-center">No data available.</div>
                         @endif
                       @endforeach
@@ -851,7 +891,7 @@
                     @if($course->course_package->material_publics)
                       <table class="table table-bordered example1">
                         <thead>
-                          <th style="width:2%;" class="text-right">#</th>
+                          <th class="text-right">#</th>
                           <th>File Name</th>
                           <th style="width:25%;">File Type</th>
                           <th style="width:5%;">Link</th>
@@ -874,7 +914,7 @@
                                     {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
                                   @endif
                                 @else
-                                  <i class="text-muted">Not Available</i>
+                                  <i class="text-muted">N/A</i>
                                 @endif
                               </td>
                               <td class="text-center">
@@ -1058,7 +1098,7 @@
                                       {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
                                     @endif
                                   @else
-                                    <i class="text-muted">Not Available</i>
+                                    <i class="text-muted">N/A</i>
                                   @endif
                                 </td>
                                 <td class="text-center">
@@ -1883,7 +1923,7 @@
                                                     @if($ts->status == 'Accepted')
                                                       <b style="color:#007700;">Checked</b><br />
                                                     @else
-                                                      <i class="text-muted">Not Available</i><br />
+                                                      <i class="text-muted">N/A</i><br />
                                                     @endif
                                                   @if($ts->status == 'Accepted')
                                                     <b>Score:</b>
@@ -2047,7 +2087,7 @@
                                                     @if($ts->status == 'Accepted')
                                                       <b style="color:#007700;">Checked</b><br />
                                                     @else
-                                                      <i class="text-muted">Not Available</i><br />
+                                                      <i class="text-muted">N/A</i><br />
                                                     @endif
                                                   @if($ts->status == 'Accepted')
                                                     <b>Score:</b>
@@ -2194,13 +2234,20 @@
                     </div>
                   </div>
                   <div class="box-body">
+                    <strong><i class="fa fa-edit margin-r-5"></i> Types of Certificate Status</strong>
+                    <p>
+                      <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This certificate has not been uploaded yet.">Not Ready</label>
+                      <label data-toggle="tooltip" title class="label bg-red" data-original-title="This student is ineligible to get the course certificate.">Ineligible</label>
+                      {{--<label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This course is still in progress.">Ongoing</label>--}}
+                      <label data-toggle="tooltip" title class="label bg-green" data-original-title="This student is eligible to get the course certificate.">Eligible</label>
+                    </p>
+                    <hr>
                     @if($task_submission_flag)
                       <table class="table table-bordered example1">
                         <thead>
-                          <th style="width:2%;" class="text-right">#</th>
                           <th>Student Name</th>
                           <th>Total Attendances</th>
-                          <th style="width:5%;">Link</th>
+                          <th>Certificate Status</th>
                         </thead>
                         <tbody>
                           <?php $total_sessions = $course->course_package->count_session; ?>
@@ -2212,25 +2259,22 @@
                                   $count_present++;
                             ?>
                             <tr>
-                              <td class="text-right">{{ $i + 1 }}</td>
                               <td>
-                                Nama Student
+                                {{ $cr->student->user->first_name }} {{ $cr->student->user->last_name }}
                               </td>
                               <td>
                                 {{ $count_present }}/{{ $total_sessions }}
                               </td>
                               <td class="text-center">
-                                {{--
-                                @if($i >= 80 * $total_sessions / 100)
-                                  @if($course_registration->course_certificate->path)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.certificate.download') }}">Link</a>
+                                @if($cr->course_certificate->path)
+                                  @if($count_present >= 80 * $total_sessions / 100)
+                                    <label data-toggle="tooltip" title class="label bg-green" data-original-title="This student is eligible to get the course certificate.">Eligible</label>
                                   @else
-                                    <a disabled rel="noopener noreferrer" class="btn btn-flat btn-xs btn-warning btn-disabled" href="#">Pending</a>
+                                    <label data-toggle="tooltip" title class="label bg-red" data-original-title="This student is ineligible to get the course certificate.">Ineligible</label>
                                   @endif
                                 @else
-                                  <a disabled rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Ineligible</a>
+                                  <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This certificate has not been uploaded yet.">Not Ready</label>
                                 @endif
-                                --}}
                               </td>
                             </tr>
                           @endforeach

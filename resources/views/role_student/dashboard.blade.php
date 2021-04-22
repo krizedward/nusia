@@ -250,7 +250,7 @@
                           @endif
                         </td>
                       @else
-                        <td><i>Not Available</i></td>
+                        <td><i>N/A</i></td>
                       @endif
                       <td>
                         @if($schedule_now <= $schedule_time_end)

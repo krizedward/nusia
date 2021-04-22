@@ -54,7 +54,7 @@
               @endfor
             </p>
           @else
-            <p><i>Not Available</i></p>
+            <p><i>N/A</i></p>
           @endif
         </div>
         <!-- /.box-body -->
@@ -96,7 +96,7 @@
                 @endfor
               </p>
             @else
-              <p><i>Not Available</i></p>
+              <p><i>N/A</i></p>
             @endif
             <hr>
 
@@ -114,7 +114,7 @@
                 @endfor
               </p>
             @else
-              <p><i>Not Available</i></p>
+              <p><i>N/A</i></p>
             @endif
             <hr>
           </div>

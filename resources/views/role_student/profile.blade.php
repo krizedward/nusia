@@ -41,14 +41,14 @@
           <p class="text-muted">{{ Auth::user()->citizenship }}</p>
           <hr>
           <strong>&nbsp;<i class="fa fa-map-marker margin-r-5"></i>&nbsp;&nbsp;Where do you live now</strong>
-          <p class="text-muted">@if(Auth::user()->domicile) {{ Auth::user()->domicile }} @else Not Available @endif</p>
+          <p class="text-muted">@if(Auth::user()->domicile) {{ Auth::user()->domicile }} @else N/A @endif</p>
           <hr>
           <strong><i class="fa fa-clock-o margin-r-5"></i>&nbsp;&nbsp;Timezone</strong>
           @if(Auth::user()->timezone)
             <?php $tzname = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone)->getOffsetString(); ?>
             <p class="text-muted">GMT{{ $tzname }}</p>
           @else
-            <p class="text-muted">Not Available</p>
+            <p class="text-muted">N/A</p>
           @endif
           {{--<hr>--}}
         </div>
@@ -83,7 +83,7 @@
                 @endforeach
               </p>
             @else
-              <p class="text-muted">Not Available</p>
+              <p class="text-muted">N/A</p>
             @endif
             <hr>
             <strong>
@@ -117,7 +117,7 @@
               @if(Auth::user()->student->description_of_course_taken)
                 {{ Auth::user()->student->description_of_course_taken }}
               @else
-                <span class="text-muted">Not Available</span>
+                <span class="text-muted">N/A</span>
               @endif
             </p>
             <hr>
@@ -126,7 +126,7 @@
               @if(Auth::user()->student->learning_objective)
                 {{ Auth::user()->student->learning_objective }}
               @else
-                <span class="text-muted">Not Available</span>
+                <span class="text-muted">N/A</span>
               @endif
             </p>
             {{-- <hr> --}}

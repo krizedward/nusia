@@ -216,7 +216,7 @@
                                           </button>
                                         @else
                                           <button disabled class="btn btn-xs btn-flat btn-default btn-disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
-                                            <b>Not Available</b>
+                                            <b>N/A</b>
                                           </button>
                                         @endif
                                       </td>
@@ -246,7 +246,7 @@
                                                 </button>
                                               @else
                                                 <button disabled style="width:100%;" class="btn btn-s btn-default btn-disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
-                                                  <b>Not Available</b>
+                                                  <b>N/A</b>
                                                 </button>
                                               @endif
                                               <br /><br />
@@ -288,7 +288,7 @@
                                           </button>
                                         @else
                                           <button disabled class="btn btn-xs btn-flat btn-default btn-disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
-                                            <b>Not Available</b>
+                                            <b>N/A</b>
                                           </button>
                                         @endif
                                       </td>
@@ -311,7 +311,7 @@
                                                 </button>
                                               @else
                                                 <button disabled style="width:100%;" class="btn btn-s btn-default btn-disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
-                                                  <b>Not Available</b>
+                                                  <b>N/A</b>
                                                 </button>
                                               @endif
                                               <br /><br />
@@ -360,7 +360,7 @@
                                         </button>
                                       @else
                                         <button disabled class="btn btn-xs btn-flat btn-default btn-disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
-                                          <b>Not Available</b>
+                                          <b>N/A</b>
                                         </button>
                                       @endif
                                     </td>
@@ -387,7 +387,7 @@
                                               </button>
                                             @else
                                               <button disabled style="width:100%;" class="btn btn-s btn-default btn-disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
-                                                <b>Not Available</b>
+                                                <b>N/A</b>
                                               </button>
                                             @endif
                                             <br /><br />
@@ -429,7 +429,7 @@
                                         </button>
                                       @else
                                         <button disabled class="btn btn-xs btn-flat btn-default btn-disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
-                                          <b>Not Available</b>
+                                          <b>N/A</b>
                                         </button>
                                       @endif
                                     </td>
@@ -453,7 +453,7 @@
                                               </button>
                                             @else
                                               <button disabled style="width:100%;" class="btn btn-s btn-default btn-disabled" type="reset" onclick="alert('Sorry, this class is currently unavailable.'); return false;">
-                                                <b>Not Available</b>
+                                                <b>N/A</b>
                                               </button>
                                             @endif
                                             <br /><br />

@@ -53,7 +53,7 @@
                             @if($schedule_time)
                               {{ $schedule_time->isoFormat('dddd') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -64,7 +64,7 @@
                             @if($schedule_time)
                               {{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -87,7 +87,7 @@
                             @if($submitted_at)
                               {{ $submitted_at->isoFormat('dddd') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -98,7 +98,7 @@
                             @if($submitted_at)
                               {{ $submitted_at->isoFormat('MMMM Do YYYY, hh:mm A') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -109,7 +109,7 @@
                             @if($course_registration->placement_test->path)
                               <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $course_registration->placement_test->path }}">Link</a>
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -153,7 +153,7 @@
                         @if($course_registration->student->user->citizenship != 'Not Available')
                           {{ $course_registration->student->user->citizenship }}
                         @else
-                          <i>Not Available</i>
+                          <i>N/A</i>
                         @endif
                       </p>
                       <hr>
@@ -162,7 +162,7 @@
                         @if($course_registration->student->user->domicile)
                           {{ $course_registration->student->user->domicile }}
                         @else
-                          <i>Not Available</i>
+                          <i>N/A</i>
                         @endif
                       </p>
                       <hr>
@@ -171,7 +171,7 @@
                         @if($course_registration->student->age != 0)
                           {{ $course_registration->student->age }}
                         @else
-                          <i>Not Available</i>
+                          <i>N/A</i>
                         @endif
                       </p>
                       <hr>
@@ -188,7 +188,7 @@
                             @endif
                           @endfor
                         @else
-                          <i>Not Available</i>
+                          <i>N/A</i>
                         @endif
                       </p>
                       <hr>
@@ -197,7 +197,7 @@
                         @if($course_registration->student->status_description)
                           {{ $course_registration->student->status_job }} at {{ $course_registration->student->status_description }}
                         @else
-                          <i>Not Available</i>
+                          <i>N/A</i>
                         @endif
                       </p>
                       <hr>
@@ -206,7 +206,7 @@
                         @if($course_registration->student->age != 0)
                           {{ $course_registration->student->indonesian_language_proficiency }}
                         @else
-                          <i>Not Available</i>
+                          <i>N/A</i>
                         @endif
                       </p>
                       <hr>
@@ -224,7 +224,7 @@
                             @endif
                           @endif
                         @else
-                          <i>Not Available</i>
+                          <i>N/A</i>
                         @endif
                       </p>
                       <hr>
@@ -233,7 +233,7 @@
                         @if($course_registration->student->description_of_course_taken)
                           {{ $course_registration->student->description_of_course_taken }}
                         @else
-                          <i>Not Available</i>
+                          <i>N/A</i>
                         @endif
                       </p>
                       <hr>
@@ -242,7 +242,7 @@
                         @if($course_registration->student->learning_objective)
                           {{ $course_registration->student->learning_objective }}
                         @else
-                          <i>Not Available</i>
+                          <i>N/A</i>
                         @endif
                       </p>
                     </div>
@@ -281,7 +281,7 @@
                             @if($schedule_time)
                               {{ $schedule_time->isoFormat('dddd') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -292,7 +292,7 @@
                             @if($schedule_time)
                               {{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -315,7 +315,7 @@
                             @if($submitted_at)
                               {{ $submitted_at->isoFormat('dddd') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -326,7 +326,7 @@
                             @if($submitted_at)
                               {{ $submitted_at->isoFormat('MMMM Do YYYY, hh:mm A') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -337,7 +337,7 @@
                             @if($course_registration->placement_test->path)
                               <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $course_registration->placement_test->path }}">Link</a>
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>

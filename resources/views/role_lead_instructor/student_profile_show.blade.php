@@ -87,7 +87,7 @@
                                 @if($student->user->citizenship != 'Not Available')
                                   {{ $student->user->citizenship }}
                                 @else
-                                  <i>Not Available</i>
+                                  <i>N/A</i>
                                 @endif
                             </p>
                             <hr>
@@ -97,7 +97,7 @@
                                 @if($student->user->domicile)
                                   {{ $student->user->domicile }}
                                 @else
-                                  <i>Not Available</i>
+                                  <i>N/A</i>
                                 @endif
                             </p>
                             <hr>
@@ -107,7 +107,7 @@
                                 @if($student->age != 0)
                                   {{ $student->age }}
                                 @else
-                                  <i>Not Available</i>
+                                  <i>N/A</i>
                                 @endif
                             </p>
                             <hr>
@@ -126,7 +126,7 @@
                                       @endfor
                                     </p>
                                 @else
-                                    <p><i>Not Available</i></p>
+                                    <p><i>N/A</i></p>
                                 @endif
                             <hr>
 
@@ -135,7 +135,7 @@
                                 @if($student->status_description)
                                   {{ $student->status_job }} at {{ $student->status_description }}
                                 @else
-                                  <i>Not Available</i>
+                                  <i>N/A</i>
                                 @endif
                             </p>
                             <hr>
@@ -145,7 +145,7 @@
                                 @if($student->age != 0)
                                   {{ $student->indonesian_language_proficiency }}
                                 @else
-                                  <i>Not Available</i>
+                                  <i>N/A</i>
                                 @endif
                             </p>
                             <hr>
@@ -164,7 +164,7 @@
                                   @endif
                                 @endif
                               @else
-                                <i>Not Available</i>
+                                <i>N/A</i>
                               @endif
                             </p>
                             <hr>
@@ -174,7 +174,7 @@
                                 @if($student->description_of_course_taken)
                                   {{ $student->description_of_course_taken }}
                                 @else
-                                  <i>Not Available</i>
+                                  <i>N/A</i>
                                 @endif
                             </p>
                             <hr>
@@ -184,7 +184,7 @@
                                 @if($student->learning_objective)
                                   {{ $student->learning_objective }}
                                 @else
-                                  <i>Not Available</i>
+                                  <i>N/A</i>
                                 @endif
                             </p>
                             <!--hr-->

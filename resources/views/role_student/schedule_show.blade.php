@@ -87,7 +87,7 @@
                             @if($next_meeting_time)
                               {{ $next_meeting_time->isoFormat('dddd') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -98,7 +98,7 @@
                             @if($next_meeting_time)
                               {{ $next_meeting_time->isoFormat('MMMM Do YYYY') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -109,7 +109,7 @@
                             @if($next_meeting_time)
                               {{ $next_meeting_time->isoFormat('hh:mm A') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -120,7 +120,7 @@
                             @if($next_meeting_link)
                               <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $next_meeting_link }}">Link</a>
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -143,7 +143,7 @@
                             @if($schedule_time)
                               {{ $schedule_time->isoFormat('dddd') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -154,7 +154,7 @@
                             @if($schedule_time)
                               {{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -216,7 +216,7 @@
                                 Not Fully Paid
                               @endif
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -234,10 +234,10 @@
                               @if($course_registration->placement_test->path)
                                 <td class="text-center"><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $course_registration->placement_test->path }}">Link</a></td>
                               @else
-                                <i class="text-muted">Not Available</i>
+                                <i class="text-muted">N/A</i>
                               @endif
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -253,10 +253,10 @@
                                 {{--<span class="label label-danger"><i class="fa fa-times"></i>&nbsp;&nbsp;Not Passed</span>--}}
                                 <span data-toggle="tooltip" title class="label label-danger" data-original-title="You have not passed the student placement test for this class. Your submitted result may be still in check."><i class="fa fa-times"></i>&nbsp;&nbsp;Not Passed</span>
                               @else
-                                <i class="text-muted">Not Available</i>
+                                <i class="text-muted">N/A</i>
                               @endif
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -268,10 +268,10 @@
                               @if($course_registration->placement_test->status == 'Passed')
                                 {{ $course_registration->course->course_package->course_level->name }}
                               @else
-                                <i class="text-muted">Not Available</i>
+                                <i class="text-muted">N/A</i>
                               @endif
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -286,10 +286,10 @@
                                 ?>
                                 {{ $update_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
                               @else
-                                <i class="text-muted">Not Available</i>
+                                <i class="text-muted">N/A</i>
                               @endif
                             @else
-                              <i class="text-muted">Not Available</i>
+                              <i class="text-muted">N/A</i>
                             @endif
                           </td>
                         </tr>
@@ -405,7 +405,7 @@
                                       <span class="label label-success">{{ $interest[$i] }}</span>
                                     @endfor
                                   @else
-                                    <span class="text-muted"><i>Not Available</i></span>
+                                    <span class="text-muted"><i>N/A</i></span>
                                   @endif
                                 </td>
                                 <td>
@@ -474,7 +474,7 @@
                                       <span class="label label-success">{{ $interest[$i] }}</span>
                                     @endfor
                                   @else
-                                    <span class="text-muted"><i>Not Available</i></span>
+                                    <span class="text-muted"><i>N/A</i></span>
                                   @endif
                                 </td>
                                 <td>
@@ -893,7 +893,7 @@
                                     {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
                                   @endif
                                 @else
-                                  <i class="text-muted">Not Available</i>
+                                  <i class="text-muted">N/A</i>
                                 @endif
                               </td>
                               <td class="text-center">
@@ -970,7 +970,7 @@
                                       {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
                                     @endif
                                   @else
-                                    <i class="text-muted">Not Available</i>
+                                    <i class="text-muted">N/A</i>
                                   @endif
                                 </td>
                                 <td class="text-center">
@@ -1133,7 +1133,7 @@
                                     @if($dt->path_1)
                                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.assignment.download', [$course_registration->id, $dt->id]) }}"><i class="fa fa-download"></i></a>
                                     @else
-                                      <i class="text-muted">Not Available</i>
+                                      <i class="text-muted">N/A</i>
                                     @endif
                                   </td>
                                 </tr>
@@ -1312,7 +1312,7 @@
                                     @if($dt->path_1)
                                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.exam.download', [$course_registration->id, $dt->id]) }}">Link</a>
                                     @else
-                                      <i class="text-muted">Not Available</i>
+                                      <i class="text-muted">N/A</i>
                                     @endif
                                   </td>
                                 </tr>
@@ -1550,7 +1550,7 @@
                                       ?>
                                       {{ $last_submitted_at->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
                                     @else
-                                      <i class="text-muted">Not Available</i>
+                                      <i class="text-muted">N/A</i>
                                     @endif
                                   </td>
                                   <td class="text-right">
@@ -1592,7 +1592,7 @@
                                                       @if($ts->status == 'Accepted')
                                                         <b style="color:#007700;">Checked</b><br />
                                                       @else
-                                                        <i class="text-muted">Not Available</i><br />
+                                                        <i class="text-muted">N/A</i><br />
                                                       @endif
                                                     @if($ts->status == 'Accepted')
                                                       <b>Score:</b>
@@ -1674,7 +1674,7 @@
                                       ?>
                                       {{ $last_submitted_at->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
                                     @else
-                                      <i class="text-muted">Not Available</i>
+                                      <i class="text-muted">N/A</i>
                                     @endif
                                   </td>
                                   <td class="text-right">
@@ -1716,7 +1716,7 @@
                                                       @if($ts->status == 'Accepted')
                                                         <b style="color:#007700;">Checked</b><br />
                                                       @else
-                                                        <i class="text-muted">Not Available</i><br />
+                                                        <i class="text-muted">N/A</i><br />
                                                       @endif
                                                     @if($ts->status == 'Accepted')
                                                       <b>Score:</b>
