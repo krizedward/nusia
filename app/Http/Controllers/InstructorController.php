@@ -638,6 +638,10 @@ class InstructorController extends Controller
             'exam_due_date_date' => ['bail', 'required'],
             'exam_due_date_time' => ['bail', 'required'],
             'exam_path_1' => ['bail', 'sometimes', 'max:8000'],
+            'session_mid_id' => ['bail', 'required'],
+            'session_last_id' => ['bail', 'required'],
+            'already_has_mid_exam' => ['bail', 'required'],
+            'already_has_final_exam' => ['bail', 'required'],
         ]);
         if($data->fails()) {
             if($request->exam_id == 0)
@@ -663,6 +667,7 @@ class InstructorController extends Controller
         }
         
         $course = Course::findOrFail($course_id);
+        // PERBAIKI SELEKSI PADA BAGIAN INI, LAKUKAN SELEKSI MENGGUNAKAN ATRIBUT exam_session_id
         if($request->exam_id == 0) {
             // add a new exam
             Task::create([

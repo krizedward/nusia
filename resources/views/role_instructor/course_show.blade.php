@@ -1649,6 +1649,29 @@
                           @csrf
                           @method('PUT')
                           <input type="hidden" name="type" value="Exam">
+                          <?php
+                            $session_mid_id = ceil($sessions->count() / 2);
+                            $session_last_id = $sessions->count();
+                            foreach($sessions as $i => $s) {
+                              if($i + 1 == $session_mid_id) {
+                                $session_mid_id = $s->id;
+                              } else if($i + 1 == $session_last_id) {
+                                $session_last_id = $s->id;
+                              }
+                            }
+                            $already_has_mid_exam = 0;
+                            $already_has_final_exam = 0;
+                            foreach($sessions as $s) foreach($s->tasks as $t) if($t->type == 'Exam') {
+                              if($t->session_id == $session_mid_id) $already_has_mid_exam = 1;
+                              else if($t->session_id == $session_last_id) $already_has_final_exam = 1;
+                              if($already_has_mid_exam && $already_has_final_exam) break;
+                            }
+                          ?>
+                          {{-- GANTI PADA BARIS SETELAH INI UNTUK input hidden, untuk session_mid_id dsb --}}
+                          <input type="hidden" name="session_mid_id" value="{{ $session_mid_id }}">
+                          <input type="hidden" name="session_last_id" value="{{ $session_last_id }}">
+                          <input type="hidden" name="already_has_mid_exam" value="{{ $already_has_mid_exam }}">
+                          <input type="hidden" name="already_has_final_exam" value="{{ $already_has_final_exam }}">
                           <div class="box-body">
                             <div class="row">
                               <div class="col-md-12">
@@ -1664,15 +1687,17 @@
                                       @foreach($sessions as $s)
                                         @foreach($s->tasks as $dt)
                                           @if($dt->type == 'Exam')
-                                            <?php $has_exam = 1; ?>
-                                            @break
+                                            <?php $has_exam++; ?>
+                                            @if($has_exam == 2)
+                                              @break
+                                            @endif
                                           @endif
                                         @endforeach
-                                        @if($has_exam)
+                                        @if($has_exam == 2)
                                           @break
                                         @endif
                                       @endforeach
-                                      @if($has_exam == 0)
+                                      @if($has_exam < 2)
                                         <option value="0">Add a New Exam</option>
                                       @endif
                                       <?php
@@ -1707,7 +1732,17 @@
                                       <span class="text-red">*</span>
                                     </label>
                                     <select name="exam_session_id" type="text" class="@error('exam_session_id') is-invalid @enderror form-control">
-                                      <option selected="selected" value="{{ $sessions->last()->id }}">#{{ $sessions->count() }} - {{ $sessions->last()->title }}</option>
+                                      <option selected="selected" value="">-- Enter Session Name --</option>
+                                      @if($already_has_mid_exam)
+                                        <option value="{{ $session_mid_id }}">Mid Exam (Edit)</option>
+                                      @else
+                                        <option value="{{ $session_mid_id }}">Mid Exam</option>
+                                      @endif
+                                      @if($already_has_final_exam)
+                                        <option value="{{ $session_last_id }}">Final Exam (Edit)</option>
+                                      @else
+                                        <option value="{{ $session_last_id }}">Final Exam</option>
+                                      @endif
                                     </select>
                                     @error('exam_session_id')
                                       <p style="color:red">{{ $message }}</p>
