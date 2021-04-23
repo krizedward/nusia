@@ -99,7 +99,7 @@
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             {{-- Kode pada bagian ini perlu ditambahkan kembali. --}}
-                            <i class="text-muted">Not Available</i>
+                            <i class="text-muted">N/A</i>
                           </td>
                         </tr>
                       </table>
@@ -492,7 +492,7 @@
                     <strong><i class="fa fa-circle-o margin-r-5"></i> Payment Time (fully paid)</strong>
                     <p>
                       {{-- Kode pada bagian ini perlu ditambahkan kembali. --}}
-                      <i class="text-muted">Not Available</i>
+                      <i class="text-muted">N/A</i>
                     </p>
                     <hr>
                     <strong><i class="fa fa-circle-o margin-r-5"></i> Placement Test Link</strong>
@@ -500,7 +500,7 @@
                       @if($course_registration->placement_test && $course_registration->placement_test->path)
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ $course_registration->placement_test->path }}">View</a>
                       @else
-                        <i class="text-muted">Not Available</i>
+                        <i class="text-muted">N/A</i>
                       @endif
                     </p>
                     <hr>
@@ -536,7 +536,7 @@
                                   {{-- Link untuk mengunduh bukti pembayaran. --}}
                                   <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('home') }}">Link</a>
                                 @else
-                                  <span class="text-muted">Not Available</span>
+                                  <span class="text-muted">N/A</span>
                                 @endif
                               </td>
                             </tr>
@@ -784,7 +784,7 @@
                     @if($course_registration->student->user->timezone)
                       <p>{{ $course_registration->student->user->timezone }}</p>
                     @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <p class="text-muted"><i>N/A</i></p>
                     @endif
                     <hr>
                     <strong><i class="fa fa-street-view margin-r-5"></i> Interest</strong>
@@ -799,7 +799,7 @@
                         @endfor
                       </p>
                     @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <p class="text-muted"><i>N/A</i></p>
                     @endif
                   </div>
                   <!-- /.box-body -->
@@ -841,7 +841,7 @@
                     @if($course_registration->course->sessions->first()->schedule->instructor->user->timezone)
                       <p>{{ $course_registration->course->sessions->first()->schedule->instructor->user->timezone }}</p>
                     @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <p class="text-muted"><i>N/A</i></p>
                     @endif
                     <hr>
                     <strong><i class="fa fa-street-view margin-r-5"></i> Interest</strong>
@@ -856,7 +856,7 @@
                         @endfor
                       </p>
                     @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <p class="text-muted"><i>N/A</i></p>
                     @endif
                   </div>
                   <!-- /.box-body -->
@@ -955,7 +955,7 @@
                                 @if($dt->session->link_zoom)
                                   <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ $dt->session->link_zoom }}">Link</a>
                                 @else
-                                  <i class="text-muted">Not Available</i>
+                                  <i class="text-muted">N/A</i>
                                 @endif
                               </td>
                             </tr>
@@ -1165,14 +1165,14 @@
                               @if($dt->path)
                                 {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
                               @else
-                                <i class="text-muted">Not Available</i>
+                                <i class="text-muted">N/A</i>
                               @endif
                             </td>
                             <td class="text-center">
                               @if($dt->path)
                                 <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Link</a>
                               @else
-                                <i class="text-muted">Not Available</i>
+                                <i class="text-muted">N/A</i>
                               @endif
                             </td>
                           </tr>
@@ -1271,14 +1271,14 @@
                                 @if($dt->path)
                                   {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
                                 @else
-                                  <i class="text-muted">Not Available</i>
+                                  <i class="text-muted">N/A</i>
                                 @endif
                               </td>
                               <td class="text-center">
                                 @if($dt->path)
                                   <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('home') }}">Link</a>
                                 @else
-                                  <i class="text-muted">Not Available</i>
+                                  <i class="text-muted">N/A</i>
                                 @endif
                               </td>
                             </tr>

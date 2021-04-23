@@ -55,21 +55,21 @@
                     @if($user->domicile)
                       <p>{{ $user->domicile }}</p>
                     @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <p class="text-muted"><i>N/A</i></p>
                     @endif
                     <hr>
                     <strong><i class="fa fa-map-marker margin-r-5"></i> Current local time zone</strong>
                     @if($user->timezone)
                       <p>{{ $user->timezone }}</p>
                     @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <p class="text-muted"><i>N/A</i></p>
                     @endif
                     <hr>
                     <strong><i class="fa fa-map-marker margin-r-5"></i> Current website language</strong>
                     @if($user->website_language)
                       <p>{{ $user->website_language }}</p>
                     @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <p class="text-muted"><i>N/A</i></p>
                     @endif
                   </div>
                   <!-- /.box-body -->
@@ -199,21 +199,21 @@
                       @if($user->domicile)
                         <p>{{ $user->domicile }}</p>
                       @else
-                        <p class="text-muted"><i>Not Available</i></p>
+                        <p class="text-muted"><i>N/A</i></p>
                       @endif
                       <hr>
                       <strong><i class="fa fa-circle-o margin-r-5"></i> Current local time zone</strong>
                       @if($user->timezone)
                         <p>{{ $user->timezone }}</p>
                       @else
-                        <p class="text-muted"><i>Not Available</i></p>
+                        <p class="text-muted"><i>N/A</i></p>
                       @endif
                       <hr>
                       <strong><i class="fa fa-circle-o margin-r-5"></i> Current website language</strong>
                       @if($user->website_language)
                         <p>{{ $user->website_language }}</p>
                       @else
-                        <p class="text-muted"><i>Not Available</i></p>
+                        <p class="text-muted"><i>N/A</i></p>
                       @endif
                       <hr>
                       <strong><i class="fa fa-circle-o margin-r-5"></i> Age</strong>
@@ -227,21 +227,21 @@
                           @endif
                         </p>
                       @else
-                        <p class="text-muted"><i>Not Available</i></p>
+                        <p class="text-muted"><i>N/A</i></p>
                       @endif
                       <hr>
                       <strong><i class="fa fa-circle-o margin-r-5"></i> Job Status</strong>
                       @if($user->student->status_description)
                         <p>{{ $user->student->status_job }} at {{ $user->student->status_description }}</p>
                       @else
-                        <p class="text-muted"><i>Not Available</i></p>
+                        <p class="text-muted"><i>N/A</i></p>
                       @endif
                       <hr>
                       <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesia Language Proficiency</strong>
                       @if($user->student->age != 0)
                         <p>{{ $user->student->indonesian_language_proficiency }}</p>
                       @else
-                        <p class="text-muted"><i>Not Available</i></p>
+                        <p class="text-muted"><i>N/A</i></p>
                       @endif
                       <hr>
                       <strong><i class="fa fa-circle-o margin-r-5"></i> Target Language Experience</strong>
@@ -259,21 +259,21 @@
                           </p>
                         @endif
                       @else
-                        <p class="text-muted"><i>Not Available</i></p>
+                        <p class="text-muted"><i>N/A</i></p>
                       @endif
                       <hr>
                       <strong><i class="fa fa-circle-o margin-r-5"></i> Description of Course Taken</strong>
                       @if($user->student->description_of_course_taken)
                         <p>{{ $user->student->description_of_course_taken }}</p>
                       @else
-                        <p class="text-muted"><i>Not Available</i></p>
+                        <p class="text-muted"><i>N/A</i></p>
                       @endif
                       <hr>
                       <strong><i class="fa fa-circle-o margin-r-5"></i> Learning Objective</strong>
                       @if($user->student->learning_objective)
                         <p>{{ $user->student->learning_objective }}</p>
                       @else
-                        <p class="text-muted"><i>Not Available</i></p>
+                        <p class="text-muted"><i>N/A</i></p>
                       @endif
                       <hr>
                       <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
@@ -288,7 +288,7 @@
                           @endfor
                         </p>
                       @else
-                        <p class="text-muted"><i>Not Available</i></p>
+                        <p class="text-muted"><i>N/A</i></p>
                       @endif
                       <hr>
                       <h3 class="box-title"><b>Table Data</b></h3>
@@ -828,7 +828,7 @@
                               @if($dt->path)
                                 <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-green" href="{{ $dt->path }}">Link</a>
                               @else
-                                <i class="text-muted">Not Available</i>
+                                <i class="text-muted">N/A</i>
                               @endif
                             </td>
                           </tr>

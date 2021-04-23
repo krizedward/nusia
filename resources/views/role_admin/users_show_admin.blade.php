@@ -53,21 +53,21 @@
                     @if($user->domicile)
                       <p>{{ $user->domicile }}</p>
                     @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <p class="text-muted"><i>N/A</i></p>
                     @endif
                     <hr>
                     <strong><i class="fa fa-map-marker margin-r-5"></i> Current local time zone</strong>
                     @if($user->timezone)
                       <p>{{ $user->timezone }}</p>
                     @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <p class="text-muted"><i>N/A</i></p>
                     @endif
                     <hr>
                     <strong><i class="fa fa-map-marker margin-r-5"></i> Current website language</strong>
                     @if($user->website_language)
                       <p>{{ $user->website_language }}</p>
                     @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <p class="text-muted"><i>N/A</i></p>
                     @endif
                   </div>
                   <!-- /.box-body -->
@@ -101,21 +101,21 @@
                     @if($user->domicile)
                       <p>{{ $user->domicile }}</p>
                     @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <p class="text-muted"><i>N/A</i></p>
                     @endif
                     <hr>
                     <strong><i class="fa fa-circle-o margin-r-5"></i> Current local time zone</strong>
                     @if($user->timezone)
                       <p>{{ $user->timezone }}</p>
                     @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <p class="text-muted"><i>N/A</i></p>
                     @endif
                     <hr>
                     <strong><i class="fa fa-circle-o margin-r-5"></i> Current website language</strong>
                     @if($user->website_language)
                       <p>{{ $user->website_language }}</p>
                     @else
-                      <p class="text-muted"><i>Not Available</i></p>
+                      <p class="text-muted"><i>N/A</i></p>
                     @endif
                     <hr>
                     <h3 class="box-title"><b>Table Data</b></h3>
