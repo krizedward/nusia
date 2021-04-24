@@ -1650,6 +1650,7 @@
                           @method('PUT')
                           <input type="hidden" name="type" value="Exam">
                           <?php
+                            $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                             $session_mid_id = ceil($sessions->count() / 2);
                             $session_last_id = $sessions->count();
                             foreach($sessions as $i => $s) {
@@ -1661,9 +1662,18 @@
                             }
                             $already_has_mid_exam = 0;
                             $already_has_final_exam = 0;
+                            $can_edit_mid_exam = 1;
+                            $can_edit_final_exam = 1;
                             foreach($sessions as $s) foreach($s->tasks as $t) if($t->type == 'Exam') {
-                              if($t->session_id == $session_mid_id) $already_has_mid_exam = 1;
-                              else if($t->session_id == $session_last_id) $already_has_final_exam = 1;
+                              $due_date = \Carbon\Carbon::parse($t->due_date)->setTimezone(Auth::user()->timezone);
+                              if($t->session_id == $session_mid_id) {
+                                $already_has_mid_exam = 1;
+                                if($schedule_now > $due_date) $can_edit_mid_exam = 0;
+                              }
+                              else if($t->session_id == $session_last_id) {
+                                $already_has_final_exam = 1;
+                                if($schedule_now > $due_date) $can_edit_final_exam = 0;
+                              }
                               if($already_has_mid_exam && $already_has_final_exam) break;
                             }
                           ?>
@@ -1675,73 +1685,27 @@
                           <div class="box-body">
                             <div class="row">
                               <div class="col-md-12">
-                                <div class="col-md-6">
-                                  <div class="form-group @error('exam_id') has-error @enderror">
-                                    <label for="exam_id">
+                                <div class="col-md-12">
+                                  <div class="form-group @error('exam_session_id') has-error @enderror">
+                                    <label for="exam_session_id">
                                       Exam ID
                                       <span class="text-red">*</span>
                                     </label>
-                                    <select name="exam_id" type="text" class="@error('exam_id') is-invalid @enderror form-control">
-                                      <option selected="selected" value="">-- Enter Exam ID --</option>
-                                      <?php $has_exam = 0; ?>
-                                      @foreach($sessions as $s)
-                                        @foreach($s->tasks as $dt)
-                                          @if($dt->type == 'Exam')
-                                            <?php $has_exam++; ?>
-                                            @if($has_exam == 2)
-                                              @break
-                                            @endif
-                                          @endif
-                                        @endforeach
-                                        @if($has_exam == 2)
-                                          @break
-                                        @endif
-                                      @endforeach
-                                      @if($has_exam < 2)
-                                        <option value="0">Add a New Exam</option>
-                                      @endif
-                                      <?php
-                                        $i = 0;
-                                        $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
-                                      ?>
-                                      @foreach($sessions as $s)
-                                        @foreach($s->tasks as $dt)
-                                          @if($dt->type == 'Exam')
-                                            <?php $due_date = \Carbon\Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone); ?>
-                                            @if($schedule_now <= $due_date)
-                                              @if(old('exam_id') == $dt->id))
-                                                <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
-                                              @else
-                                                <option value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
-                                              @endif
-                                              <?php $i++; ?>
-                                            @endif
-                                          @endif
-                                        @endforeach
-                                      @endforeach
-                                    </select>
-                                    @error('exam_id')
-                                      <p style="color:red">{{ $message }}</p>
-                                    @enderror
-                                  </div>
-                                </div>
-                                <div class="col-md-6">
-                                  <div class="form-group @error('exam_session_id') has-error @enderror">
-                                    <label for="exam_session_id">
-                                      For Session
-                                      <span class="text-red">*</span>
-                                    </label>
                                     <select name="exam_session_id" type="text" class="@error('exam_session_id') is-invalid @enderror form-control">
-                                      <option selected="selected" value="">-- Enter Session Name --</option>
-                                      @if($already_has_mid_exam)
-                                        <option value="{{ $session_mid_id }}">Mid Exam (Edit)</option>
-                                      @else
-                                        <option value="{{ $session_mid_id }}">Mid Exam</option>
+                                      <option selected="selected" value="">-- Enter Exam ID --</option>
+                                      @if($can_edit_mid_exam)
+                                        @if($already_has_mid_exam)
+                                          <option value="{{ $session_mid_id }}">Mid Exam (Edit)</option>
+                                        @else
+                                          <option value="{{ $session_mid_id }}">Mid Exam</option>
+                                        @endif
                                       @endif
-                                      @if($already_has_final_exam)
-                                        <option value="{{ $session_last_id }}">Final Exam (Edit)</option>
-                                      @else
-                                        <option value="{{ $session_last_id }}">Final Exam</option>
+                                      @if($can_edit_final_exam)
+                                        @if($already_has_final_exam)
+                                          <option value="{{ $session_last_id }}">Final Exam (Edit)</option>
+                                        @else
+                                          <option value="{{ $session_last_id }}">Final Exam</option>
+                                        @endif
                                       @endif
                                     </select>
                                     @error('exam_session_id')

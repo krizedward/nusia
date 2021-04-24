@@ -631,25 +631,37 @@ class InstructorController extends Controller
     public function exam_update(Request $request, $course_id) {
         // memodifikasi informasi ujian
         $data = Validator::make($request->all(), [
-            'exam_id' => ['bail', 'required'],
             'exam_session_id' => ['bail', 'required', 'numeric'],
             'exam_title' => ['bail', 'required', 'max:255'],
             'exam_description' => ['bail', 'sometimes'],
             'exam_due_date_date' => ['bail', 'required'],
             'exam_due_date_time' => ['bail', 'required'],
             'exam_path_1' => ['bail', 'sometimes', 'max:8000'],
-            'session_mid_id' => ['bail', 'required'],
-            'session_last_id' => ['bail', 'required'],
-            'already_has_mid_exam' => ['bail', 'required'],
-            'already_has_final_exam' => ['bail', 'required'],
+            'session_mid_id' => ['bail', 'required', 'numeric'],
+            'session_last_id' => ['bail', 'required', 'numeric'],
+            'already_has_mid_exam' => ['bail', 'required', 'numeric'],
+            'already_has_final_exam' => ['bail', 'required', 'numeric'],
         ]);
         if($data->fails()) {
-            if($request->exam_id == 0)
-                // add a new exam
-                session(['caption-danger' => 'Your exam has not been uploaded. Try again.']);
-            else
-                // update an existing exam
-                session(['caption-danger' => 'Your exam has not been updated. Try again.']);
+            if($request->exam_session_id == $request->session_mid_id) {
+                // for "mid" exam
+                if($request->already_has_mid_exam == 0) {
+                    // add a new "mid" exam
+                    session(['caption-danger' => 'Your mid exam has not been uploaded. Try again.']);
+                } else {
+                    // update the "mid" exam
+                    session(['caption-danger' => 'Your mid exam has not been updated. Try again.']);
+                }
+            } else if($request->exam_session_id == $request->session_last_id) {
+                // for "final" exam
+                if($request->already_has_final_exam == 0) {
+                    // add a new "final" exam
+                    session(['caption-danger' => 'Your final exam has not been uploaded. Try again.']);
+                } else {
+                    // update the "final" exam
+                    session(['caption-danger' => 'Your final exam has not been updated. Try again.']);
+                }
+            } else return redirect()->route('login');
             return redirect()->back()->withErrors($data)->withInput();
         }
         
@@ -659,6 +671,9 @@ class InstructorController extends Controller
             return redirect()->back()->withInput();
         }
         
+        if($request->exam_session_id != $request->session_mid_id && $request->exam_session_id != $request->session_last_id)
+            return redirect()->route('login');
+        
         $file = $request->file('exam_path_1');
         if($file) {
             $file_name = Str::random(10) . '_' . $request['exam_title'] . '.' . $file->extension();
@@ -667,36 +682,70 @@ class InstructorController extends Controller
         }
         
         $course = Course::findOrFail($course_id);
-        // PERBAIKI SELEKSI PADA BAGIAN INI, LAKUKAN SELEKSI MENGGUNAKAN ATRIBUT exam_session_id
-        if($request->exam_id == 0) {
-            // add a new exam
-            Task::create([
-                'session_id' => $request->exam_session_id,
-                'type' => 'Exam',
-                'title' => $request->exam_title,
-                'description' => $request->exam_description,
-                'due_date' => $due_date,
-                'path_1' => ($file)? $file_name : null,
-                'created_at' => now(),
-            ]);
-            session(['caption-success' => 'This exam information has been added. Thank you!']);
-        } else {
-            // update an existing exam
-            $exam = Task::findOrFail($request->exam_id);
-            if($exam->path_1) {
-                $destination_path = 'uploads/exam/';
-                File::delete($destination_path . $exam->path_1);
+        if($request->exam_session_id == $request->session_mid_id) {
+            // for "mid" exam
+            if($request->already_has_mid_exam == 0) {
+                // add a new "mid" exam
+                Task::create([
+                    'session_id' => $request->exam_session_id,
+                    'type' => 'Exam',
+                    'title' => $request->exam_title,
+                    'description' => $request->exam_description,
+                    'due_date' => $due_date,
+                    'path_1' => ($file)? $file_name : null,
+                    'created_at' => now(),
+                ]);
+                session(['caption-success' => 'This mid exam information has been added. Thank you!']);
+            } else {
+                // update the "mid" exam
+                $exam = Task::where('session_id', $request->exam_session_id)->first();
+                if($exam->path_1) {
+                    $destination_path = 'uploads/exam/';
+                    File::delete($destination_path . $exam->path_1);
+                }
+                $exam->update([
+                    'session_id' => $request->exam_session_id,
+                    'type' => 'Exam',
+                    'title' => $request->exam_title,
+                    'description' => $request->exam_description,
+                    'due_date' => $due_date,
+                    'path_1' => ($file)? $file_name : null,
+                    'updated_at' => now(),
+                ]);
+                session(['caption-success' => 'This mid exam information has been updated. Thank you!']);
             }
-            $exam->update([
-                'session_id' => $request->exam_session_id,
-                'type' => 'Exam',
-                'title' => $request->exam_title,
-                'description' => $request->exam_description,
-                'due_date' => $due_date,
-                'path_1' => ($file)? $file_name : null,
-                'updated_at' => now(),
-            ]);
-            session(['caption-success' => 'This exam information has been updated. Thank you!']);
+        } else if($request->exam_session_id == $request->session_last_id) {
+            // for "final" exam
+            if($request->already_has_final_exam == 0) {
+                // add a new "final" exam
+                Task::create([
+                    'session_id' => $request->exam_session_id,
+                    'type' => 'Exam',
+                    'title' => $request->exam_title,
+                    'description' => $request->exam_description,
+                    'due_date' => $due_date,
+                    'path_1' => ($file)? $file_name : null,
+                    'created_at' => now(),
+                ]);
+                session(['caption-success' => 'This final exam information has been added. Thank you!']);
+            } else {
+                // update the "final" exam
+                $exam = Task::where('session_id', $request->exam_session_id)->first();
+                if($exam->path_1) {
+                    $destination_path = 'uploads/exam/';
+                    File::delete($destination_path . $exam->path_1);
+                }
+                $exam->update([
+                    'session_id' => $request->exam_session_id,
+                    'type' => 'Exam',
+                    'title' => $request->exam_title,
+                    'description' => $request->exam_description,
+                    'due_date' => $due_date,
+                    'path_1' => ($file)? $file_name : null,
+                    'updated_at' => now(),
+                ]);
+                session(['caption-success' => 'This final exam information has been updated. Thank you!']);
+            }
         }
         return redirect()->back();
     }
