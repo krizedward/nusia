@@ -458,6 +458,7 @@
                             <th>Name</th>
                             <th style="width:25%;">Interest</th>
                             <th style="width:12%;">Picture</th>
+                            <th style="width:5%;">Chat</th>
                           </thead>
                           <tbody>
                             @foreach($data as $dt)
@@ -482,6 +483,13 @@
                                     <img src="{{ asset('uploads/student/profile/'.$dt->student->user->image_profile) }}" style="width:100%">
                                   @else
                                     <img src="{{ asset('uploads/user.jpg') }}" style="width:100%">
+                                  @endif
+                                </td>
+                                <td>
+                                  @if($dt->student->user_id != Auth::user()->id)
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.chat_student.show', $dt->student->user->id) }}">Link</a>
+                                  @else
+                                    <i class="text-muted">N/A</i>
                                   @endif
                                 </td>
                               </tr>
@@ -1853,14 +1861,14 @@
                               {{ $i }}/{{ $total_sessions }}
                             </td>
                             <td>
-                              @if($i >= 80 * $total_sessions / 100)
-                                @if($course_registration->course_certificate->path)
+                              @if($course_registration->course_certificate->path)
+                                @if($i >= 80 * $total_sessions / 100)
                                   <label data-toggle="tooltip" title class="label bg-green" data-original-title="You are eligible to get the certificate.">Eligible</label>
                                 @else
-                                  <label data-toggle="tooltip" title class="label bg-gray" data-original-title="The customer service has not uploaded the certificate yet. Please wait until the certificate has been uploaded.">Pending</label>
+                                  <label data-toggle="tooltip" title class="label bg-red" data-original-title="You did not complete the minimum attendance to get the certificate.">Ineligible</label>
                                 @endif
                               @else
-                                <label data-toggle="tooltip" title class="label bg-red" data-original-title="You did not complete the minimum attendance to get the certificate.">Ineligible</label>
+                                <label data-toggle="tooltip" title class="label bg-gray" data-original-title="The customer service has not uploaded the certificate yet. Please wait until the certificate has been uploaded.">Pending</label>
                               @endif
                             </td>
                             <td>

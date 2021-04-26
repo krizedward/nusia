@@ -776,6 +776,29 @@ class InstructorController extends Controller
 
     public function exam_submission_update(Request $request, $course_id, $submission_id) {
         // mengoreksi pengumpulan ujian
+        $data = Validator::make($request->all(), [
+            'exam_submission_score' => ['bail', 'required', 'numeric'],
+            'exam_submission_instructor_reply' => ['bail', 'required'],
+        ]);
+        if($data->fails()) {
+            session(['caption-danger' => 'The submission information has not been updated. Try again.']);
+            return redirect()->back()->withErrors($data)->withInput();
+        }
+        
+        $task_submission = TaskSubmission::findOrFail($submission_id);
+        if($task_submission->task->session->course_id == $course_id) {
+            $task_submission->update([
+                'score' => $request->exam_submission_score,
+                'instructor_reply' => $request->exam_submission_instructor_reply,
+                'status' => 'Accepted',
+                'updated_at' => now(),
+            ]);
+            session(['caption-success' => 'This submission information has been updated. Thank you!']);
+        } else {
+            session(['caption-danger' => 'You are not authorized to update this information.']);
+            return redirect()->back()->withErrors($data)->withInput();
+        }
+        return redirect()->back();
     }
 
     public function instructor_profile_show($user_id) {

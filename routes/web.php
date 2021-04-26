@@ -177,8 +177,8 @@ Route::group(['middleware'=>'auth'], function() {
         
         // menghubungi student course (via chat)
         Route::get('/student/discuss/chat/friend', 'StudentController@chat_student_index')->name('student.chat_student.index');
-        Route::get('/student/discuss/chat/friend/{course_id}', 'StudentController@chat_student_show')->name('student.chat_student.show');
-        Route::post('/student/discuss/chat/friend/{course_id}/store', 'StudentController@chat_student_store')->name('student.chat_student.store');
+        Route::get('/student/discuss/chat/friend/{user_id}', 'StudentController@chat_student_show')->name('student.chat_student.show');
+        Route::post('/student/discuss/chat/friend/{user_id}/store', 'StudentController@chat_student_store')->name('student.chat_student.store');
         Route::redirect('/student/discuss', '/student/discuss/chat/friend');
         Route::redirect('/student/discuss/chat', '/student/discuss/chat/friend');
         

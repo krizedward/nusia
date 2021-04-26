@@ -2069,7 +2069,7 @@
                                                 <?php $flag = 1; ?>
                                                 <li class="list-group-item">
                                                   @if($ts->path_1)
-                                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.assignment_submission.download', [$course->id, $ts->id]) }}"><i class="fa fa-download"></i>&nbsp;&nbsp;Download File</a>
+                                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.exam_submission.download', [$course->id, $ts->id]) }}"><i class="fa fa-download"></i>&nbsp;&nbsp;Download File</a>
                                                       <br />
                                                   @endif
                                                   <b><u>Submission #{{ $j + 1 }}</u></b> (
