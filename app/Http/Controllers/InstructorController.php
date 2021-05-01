@@ -274,10 +274,53 @@ class InstructorController extends Controller
     
     public function session_reschedule_update(Request $request) {
         // mengajukan reschedule
+        $session = Session::findOrFail($request->session_id);
+        if($session->reschedule_technical_issue_instructor > 0) {
+            session(['caption-danger' => 'Cannot reschedule as the limit for instructor has been reached for this session.']);
+            return redirect()->back()->withInput();
+        }
+        
+        $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
+        if($schedule_time < now()) {
+            session(['caption-danger' => 'Cannot reschedule as the inputted time is invalid.']);
+            return redirect()->back()->withInput();
+        }
+        $session->update([
+            'requirement' => $schedule_time,
+            'reschedule_technical_issue_instructor' => -1,
+            'updated_at' => now(),
+        ]);
+        session(['caption-success' => 'This reschedule information has been added. Thank you!']);
+        return redirect()->back();
     }
     
     public function session_reschedule_approval_update(Request $request, $session_id) {
         // menyetujui reschedule
+        $session = Session::findOrFail($request->session_id);
+        if($session->requirement < now()) {
+            session(['caption-danger' => 'Cannot approve this reschedule information, as the inputted time is invalid.']);
+            return redirect()->back()->withInput();
+        }
+        if($request->approval_status == 0) {
+            $session->update([
+                'requirement' => null,
+                'reschedule_technical_issue_student' => 0,
+                'updated_at' => now(),
+            ]);
+            session(['caption-success' => 'This reschedule information has been approved not to be changed. Thank you!']);
+        } else if($request->approval_status == 1) {
+            $session->schedule->update([
+                'schedule_time' => $session->requirement,
+                'updated_at' => now(),
+            ]);
+            $session->update([
+                'requirement' => null,
+                'reschedule_technical_issue_student' => 1,
+                'updated_at' => now(),
+            ]);
+            session(['caption-success' => 'This reschedule information has been approved for change. Kindly check the most recent time schedule for this session. Thank you!']);
+        }
+        return redirect()->back();
     }
     
     public function session_destroy($course_id, $session_id) {
@@ -379,7 +422,9 @@ class InstructorController extends Controller
                 'material_public_session_name' => ['bail', 'required', 'numeric'],
                 'material_public_name' => ['bail', 'required', 'max:255'],
                 'material_public_description' => ['bail', 'sometimes'],
-                'material_public_path' => ['bail', 'sometimes', 'max:8000'],
+                'material_public_path_type' => ['bail', 'required'],
+                'material_public_path_link' => ['bail', 'required_if:material_public_path_type,link'],
+                'material_public_path_file' => ['bail', 'required_if:material_public_path_type,file', 'max:8000'],
             ]);
             if($data->fails()) {
                 if($request->material_public_id == 0)
@@ -391,11 +436,15 @@ class InstructorController extends Controller
                 return redirect()->back()->withErrors($data)->withInput();
             }
             
-            $file = $request->file('material_public_path');
+            $material_public_path = null;
+            $file = $request->file('material_public_path_file');
             if($file) {
                 $file_name = Str::random(10) . '_' . $request['material_public_name'] . '.' . $file->extension();
                 $destination_path = 'uploads/material/';
                 $file->move($destination_path, $file_name);
+                $material_public_path = $file_name;
+            } else if($request->material_public_path_type == 'link') {
+                $material_public_path = $request->material_public_path_link;
             }
             
             if($request->material_public_id == 0) {
@@ -405,7 +454,7 @@ class InstructorController extends Controller
                     'session_number' => $session_number,
                     'name' => $request->material_public_name, // 'Session ' . $session_number . ' - ' . $request->material_public_name,
                     'description' => $request->material_public_description,
-                    'path' => ($file)? $file_name : null,
+                    'path' => $material_public_path,
                     'created_at' => now(),
                 ]);
                 session(['caption-success' => 'This material information has been added. Thank you!']);
@@ -421,7 +470,7 @@ class InstructorController extends Controller
                     'session_number' => $session_number,
                     'name' => $request->material_public_name, // 'Session ' . $session_number . ' - ' . $request->material_public_name,
                     'description' => $request->material_public_description,
-                    'path' => ($file)? $file_name : null,
+                    'path' => $material_public_path,
                     'updated_at' => now(),
                 ]);
                 session(['caption-success' => 'This material information has been updated. Thank you!']);
@@ -433,6 +482,9 @@ class InstructorController extends Controller
                 'material_session_name' => ['bail', 'required', 'max:255'],
                 'material_session_description' => ['bail', 'sometimes'],
                 'material_session_path' => ['bail', 'sometimes', 'max:8000'],
+                'material_session_path_type' => ['bail', 'required'],
+                'material_session_path_link' => ['bail', 'required_if:material_session_path_type,link'],
+                'material_session_path_file' => ['bail', 'required_if:material_session_path_type,file', 'max:8000'],
             ]);
             if($data->fails()) {
                 if($request->material_session_id == 0)
@@ -444,11 +496,15 @@ class InstructorController extends Controller
                 return redirect()->back()->withErrors($data)->withInput();
             }
             
+            $material_session_path = null;
             $file = $request->file('material_session_path');
             if($file) {
                 $file_name = Str::random(10) . '_' . $request['material_session_name'] . '.' . $file->extension();
                 $destination_path = 'uploads/material/';
                 $file->move($destination_path, $file_name);
+                $material_session_path = $file_name;
+            } else if($request->material_session_path_type == 'link') {
+                $material_session_path = $request->material_session_path_link;
             }
             
             if($request->material_session_id == 0) {
@@ -457,7 +513,7 @@ class InstructorController extends Controller
                     'session_id' => $request->material_session_updated_id,
                     'name' => $request->material_session_name,
                     'description' => $request->material_session_description,
-                    'path' => ($file)? $file_name : null,
+                    'path' => $material_session_path,
                     'created_at' => now(),
                 ]);
                 session(['caption-success' => 'This material information has been added. Thank you!']);
@@ -472,7 +528,7 @@ class InstructorController extends Controller
                     'session_id' => $request->material_session_updated_id,
                     'name' => $request->material_session_name,
                     'description' => $request->material_session_description,
-                    'path' => ($file)? $file_name : null,
+                    'path' => $material_session_path,
                     'updated_at' => now(),
                 ]);
                 session(['caption-success' => 'This material information has been updated. Thank you!']);
@@ -492,8 +548,10 @@ class InstructorController extends Controller
         } else return redirect()->route('login');
         
         if($material->path) {
-            $destination_path = 'uploads/material/';
-            File::delete($destination_path . $material->path);
+            if(strpos($material->path, '://') !== false || strpos($material->path, 'www.') !== false) {
+                $destination_path = 'uploads/material/';
+                File::delete($destination_path . $material->path);
+            }
         }
         $material->delete();
         session(['caption-success' => 'This material information has been deleted. Thank you!']);

@@ -563,8 +563,9 @@
                         <p class="no-padding text-red">* This field is required</p>
                       </div>
                       <div class="box-body">
-                        <form role="form" method="post" action="#" enctype="multipart/form-data">
+                        <form role="form" method="post" action="{{ route('instructor.session_reschedule.update') }}" enctype="multipart/form-data">
                           @csrf
+                          @method('PUT')
                           <div class="box-body">
                             <div class="row">
                               <div class="col-md-12">
@@ -685,9 +686,13 @@
                                 </td>
                                 <td class="text-center">
                                   @if($dt->requirement)
-                                    <a href="#" data-toggle="modal" data-target="#Approval{{$dt->id}}" class="btn btn-flat btn-xs bg-purple">Action</a>
+                                    @if($dt->reschedule_technical_issue_student == '-1')
+                                      <a href="#" data-toggle="modal" data-target="#Approval{{$dt->id}}" class="btn btn-flat btn-xs bg-purple">Action</a>
+                                    @else
+                                      <a disabled href="#" class="btn btn-flat btn-xs btn-default btn-disabled" disabled>Pending</a>
+                                    @endif
                                   @else
-                                    <a disabled href="#" class="btn btn-flat btn-xs btn-default btn-disabled" disabled>Action</a>
+                                    -
                                   @endif
                                 </td>
                               </tr>
@@ -697,9 +702,6 @@
                                     <div class="modal-content">
                                       <div class="box box-primary">
                                         <div class="box-body box-profile">
-                                          <form role="form" method="post" action="#" enctype="multipart/form-data">
-                                            @csrf
-                                            @method('PUT')
                                             <h3 class="profile-username text-center"><b>Reschedule Confirmation for {{ $dt->title }}</b></h3>
                                             <p class="text-muted text-center">
                                               Rescheduled from
@@ -715,15 +717,23 @@
                                                 <b>{{ $reschedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $reschedule_time_end->isoFormat('[-] hh:mm A') }}</b>
                                               @endif
                                             </p>
-                                            <input type="hidden" name="approval_status" value="-1" id="approval_status">
                                             <div class="col-md-6">
+                                          <form role="form" method="post" action="{{ route('instructor.session_reschedule_approval.update', [$dt->id]) }}" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="approval_status" value="1" id="approval_status">
                                               <button type="submit" class="btn btn-s btn-primary" style="width:100%;" onclick="document.getElementById('approval_status').value = 1;">Accept</button>
+                                          </form>
                                             </div>
                                             <div class="col-md-6">
+                                          <form role="form" method="post" action="{{ route('instructor.session_reschedule_approval.update', [$dt->id]) }}" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="approval_status" value="0" id="approval_status">
                                               <button type="submit" class="btn btn-s btn-danger" style="width:100%;" onclick="document.getElementById('approval_status').value = 0;">Decline</button>
+                                          </form>
                                             </div>
                                             <br /><br />
-                                          </form>
                                           <div class="col-md-12">
                                             <button onclick="document.getElementById('Approval{{$dt->id}}').className = 'modal fade'; document.getElementById('Approval{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-default" style="width:100%;">Close</button>
                                           </div>
@@ -920,7 +930,7 @@
                               </td>
                               <td>
                                 @if($dt->path)
-                                  @if(strpos($dt->path, '://') !== false)
+                                  @if(strpos($dt->path, '://') !== false || strpos($dt->path, 'www.') !== false)
                                     Link
                                   @else
                                     {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
@@ -931,7 +941,11 @@
                               </td>
                               <td class="text-center">
                                 @if($dt->path)
-                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.material.download', [1, $dt->id]) }}">Link</a>
+                                  @if(strpos($dt->path, '://') !== false || strpos($dt->path, 'www.') !== false)
+                                    <a target="_blank" rel="noopener noreferrer nofollow" class="btn btn-flat btn-xs btn-success" href="{{ $dt->path }}">Link</a>
+                                  @else
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.material.download', [1, $dt->id]) }}">Link</a>
+                                  @endif
                                 @else
                                   <i class="text-muted">-</i>
                                 @endif
@@ -1052,12 +1066,39 @@
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
                                   </div>
-                                  <div class="form-group @error('material_public_path') has-error @enderror">
-                                    <label for="material_public_path">Upload File (any type)</label>
+                                  <div class="form-group @error('material_public_path_type') has-error @enderror">
+                                    <label for="material_public_path_type">
+                                      Insert a Link or Upload a File
+                                      <span class="text-red">*</span>
+                                    </label>
+                                    <select id="material_public_path_type" name="material_public_path_type" type="text" class="@error('material_public_path_type') is-invalid @enderror form-control" onchange="if(document.getElementById('material_public_path_type').value == 'link') { document.getElementById('material_public_path_link_div').className = 'form-group'; document.getElementById('material_public_path_file_div').className = 'form-group hidden'; } else if(document.getElementById('material_public_path_type').value == 'file') { document.getElementById('material_public_path_link_div').className = 'form-group hidden'; document.getElementById('material_public_path_file_div').className = 'form-group'; } else { document.getElementById('material_public_path_link_div').className = 'form-group hidden'; document.getElementById('material_public_path_file_div').className = 'form-group hidden'; }">
+                                      <option selected="selected" value="0">-- Enter Your Choice --</option>
+                                      <option value="link">Insert a Link</option>
+                                      <option value="file">Upload a File</option>
+                                    </select>
+                                    @error('material_public_path_type')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div id="material_public_path_link_div" class="form-group @error('material_public_path_link') has-error @enderror hidden">
+                                    <label for="material_public_path_link">
+                                      Insert a Link
+                                      <span class="text-red">*</span>
+                                    </label>
+                                    <input name="material_public_path_link" value="{{ old('material_public_path_link') }}" type="text" class="@error('material_public_path_link') is-invalid @enderror form-control" placeholder="Enter a Link">
+                                    @error('material_public_path_link')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div id="material_public_path_file_div" class="form-group @error('material_public_path_file') has-error @enderror hidden">
+                                    <label for="material_public_path_file">
+                                      Upload File (any type)
+                                      <span class="text-red">*</span>
+                                    </label>
                                     <p class="text-red" style="padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
                                     <p class="text-red" style="padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
-                                    <input name="material_public_path" type="file" accept="*" class="@error('material_public_path') is-invalid @enderror form-control">
-                                    @error('material_public_path')
+                                    <input name="material_public_path_file" type="file" accept="*" class="@error('material_public_path_file') is-invalid @enderror form-control">
+                                    @error('material_public_path_file')
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
                                   </div>
@@ -1104,7 +1145,7 @@
                                 </td>
                                 <td>
                                   @if($dt->path)
-                                    @if(strpos($dt->path, '://') !== false)
+                                    @if(strpos($dt->path, '://') !== false || strpos($dt->path, 'www.') !== false)
                                       Link
                                     @else
                                       {{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }}
@@ -1115,7 +1156,11 @@
                                 </td>
                                 <td class="text-center">
                                   @if($dt->path)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.material.download', [2, $dt->id]) }}">Link</a>
+                                    @if(strpos($dt->path, '://') !== false || strpos($dt->path, 'www.') !== false)
+                                      <a target="_blank" rel="noopener noreferrer nofollow" class="btn btn-flat btn-xs btn-success" href="{{ $dt->path }}">Link</a>
+                                    @else
+                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.material.download', [2, $dt->id]) }}">Link</a>
+                                    @endif
                                   @else
                                     <i class="text-muted">-</i>
                                   @endif
@@ -1213,12 +1258,39 @@
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
                                     </div>
-                                    <div class="form-group @error('material_session_path') has-error @enderror">
-                                      <label for="material_session_path">Upload File (any type)</label>
+                                    <div class="form-group @error('material_session_path_type') has-error @enderror">
+                                      <label for="material_session_path_type">
+                                        Insert a Link or Upload a File
+                                        <span class="text-red">*</span>
+                                      </label>
+                                      <select id="material_session_path_type{{ $s->id }}" name="material_session_path_type" type="text" class="@error('material_session_path_type') is-invalid @enderror form-control" onchange="if(document.getElementById('material_session_path_type{{ $s->id }}').value == 'link') { document.getElementById('material_session_path_link_div{{ $s->id }}').className = 'form-group'; document.getElementById('material_session_path_file_div{{ $s->id }}').className = 'form-group hidden'; } else if(document.getElementById('material_session_path_type{{ $s->id }}').value == 'file') { document.getElementById('material_session_path_link_div{{ $s->id }}').className = 'form-group hidden'; document.getElementById('material_session_path_file_div{{ $s->id }}').className = 'form-group'; } else { document.getElementById('material_session_path_link_div{{ $s->id }}').className = 'form-group hidden'; document.getElementById('material_session_path_file_div{{ $s->id }}').className = 'form-group hidden'; }">
+                                        <option selected="selected" value="0">-- Enter Your Choice --</option>
+                                        <option value="link">Insert a Link</option>
+                                        <option value="file">Upload a File</option>
+                                      </select>
+                                      @error('material_session_path_type')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                    <div id="material_session_path_link_div{{ $s->id }}" class="form-group @error('material_session_path_link') has-error @enderror hidden">
+                                      <label for="material_session_path_link">
+                                        Insert a Link
+                                        <span class="text-red">*</span>
+                                      </label>
+                                      <input name="material_session_path_link" value="{{ old('material_session_path_link') }}" type="text" class="@error('material_session_path_link') is-invalid @enderror form-control" placeholder="Enter a Link">
+                                      @error('material_session_path_link')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                    <div id="material_session_path_file_div{{ $s->id }}" class="form-group @error('material_session_path_file') has-error @enderror hidden">
+                                      <label for="material_session_path_file">
+                                        Upload File (any type)
+                                        <span class="text-red">*</span>
+                                      </label>
                                       <p class="text-red" style="padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
                                       <p class="text-red" style="padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
-                                      <input name="material_session_path" type="file" accept="*" class="@error('material_session_path') is-invalid @enderror form-control">
-                                      @error('material_session_path')
+                                      <input name="material_session_path_file" type="file" accept="*" class="@error('material_session_path_file') is-invalid @enderror form-control">
+                                      @error('material_session_path_file')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
                                     </div>
