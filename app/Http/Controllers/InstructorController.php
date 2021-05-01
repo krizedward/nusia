@@ -300,7 +300,7 @@ class InstructorController extends Controller
         $schedule_time_end_attendance->add($session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
         if(now() <= $schedule_time_begin_attendance || now() > $schedule_time_end_attendance) {
             // tidak diperbolehkan mengakses link.
-            session(['caption-danger' => 'Cannot edit this session attendance, as it is not ready yet to fill out the attendance information.']);
+            session(['caption-danger' => 'Cannot edit this session attendance, as it is not the time.']);
             return redirect()->route('instructor.course.show', [$course_id]);
         }
         
