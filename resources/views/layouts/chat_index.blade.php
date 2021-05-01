@@ -33,6 +33,11 @@
                 $arr = [];
               ?>
               @if($messages->toArray() != null)
+                <?php
+                  $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                  $schedule_yesterday = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                  $schedule_yesterday->sub('1', 'day');
+                ?>
                 @foreach($messages as $m)
                   <?php
                     $user_id = ($m->user_id_sender != Auth::user()->id)? $m->user_id_sender : $m->user_id_recipient;
@@ -113,7 +118,13 @@
                           @else
                             {{ $name }}
                           @endif
-                          <small class="contacts-list-date pull-right">{{ $get_time->isoFormat('YYYY/MM/DD') }}</small>
+                          @if($schedule_now->isoFormat('YYYY/MM/DD') == $get_time->isoFormat('YYYY/MM/DD'))
+                            <small class="contacts-list-date pull-right">Today</small>
+                          @elseif($schedule_yesterday->isoFormat('YYYY/MM/DD') == $get_time->isoFormat('YYYY/MM/DD'))
+                            <small class="contacts-list-date pull-right">Yesterday</small>
+                          @else
+                            <small class="contacts-list-date pull-right">{{ $get_time->isoFormat('YYYY/MM/DD') }}</small>
+                          @endif
                         </span>
                         <span class="contacts-list-msg">
                           @if($m->user_id_sender == Auth::user()->id)

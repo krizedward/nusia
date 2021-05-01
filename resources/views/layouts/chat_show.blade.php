@@ -43,6 +43,11 @@
                 $arr = [];
               ?>
               @if($messages->toArray() != null)
+                <?php
+                  $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                  $schedule_yesterday = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                  $schedule_yesterday->sub('1', 'day');
+                ?>
                 @foreach($messages as $m)
                   <?php
                     $user_id = ($m->user_id_sender != Auth::user()->id)? $m->user_id_sender : $m->user_id_recipient;
@@ -123,7 +128,13 @@
                           @else
                             {{ $name }}
                           @endif
-                          <small class="contacts-list-date pull-right">{{ $get_time->isoFormat('YYYY/MM/DD') }}</small>
+                          @if($schedule_now->isoFormat('YYYY/MM/DD') == $get_time->isoFormat('YYYY/MM/DD'))
+                            <small class="contacts-list-date pull-right">Today</small>
+                          @elseif($schedule_yesterday->isoFormat('YYYY/MM/DD') == $get_time->isoFormat('YYYY/MM/DD'))
+                            <small class="contacts-list-date pull-right">Yesterday</small>
+                          @else
+                            <small class="contacts-list-date pull-right">{{ $get_time->isoFormat('YYYY/MM/DD') }}</small>
+                          @endif
                         </span>
                         <span class="contacts-list-msg">
                           @if($m->user_id_sender == Auth::user()->id)
@@ -172,7 +183,14 @@
                 <div class="direct-chat-msg">
                   <div class="direct-chat-info clearfix">
                     <span class="direct-chat-name pull-left">{{ $partner->first_name }} {{ $partner->last_name }}</span>
-                    <span class="direct-chat-timestamp pull-right">{{ $get_time->isoFormat('dddd, MMMM Do YYYY hh:mm A') }}</span>
+                    @if($schedule_now->isoFormat('YYYY/MM/DD') == $get_time->isoFormat('YYYY/MM/DD'))
+                      <span class="direct-chat-timestamp pull-right">Today, {{ $get_time->isoFormat('hh:mm A') }}</span>
+                    @elseif($schedule_yesterday->isoFormat('YYYY/MM/DD') == $get_time->isoFormat('YYYY/MM/DD'))
+                      <span class="direct-chat-timestamp pull-right">Yesterday, {{ $get_time->isoFormat('hh:mm A') }}</span>
+                    @else
+                      <span class="direct-chat-timestamp pull-right hidden-xs hidden-sm">{{ $get_time->isoFormat('dddd, MMMM Do YYYY hh:mm A') }}</span>
+                      <span class="direct-chat-timestamp pull-right hidden-md hidden-lg hidden-xl">{{ $get_time->isoFormat('ddd, MMM Do YYYY hh:mm A') }}</span>
+                    @endif
                   </div>
                   @if($partner->image_profile != 'user.jpg')
                     @if($partner->roles == 'Student')
@@ -197,7 +215,14 @@
                 <div class="direct-chat-msg right">
                   <div class="direct-chat-info clearfix">
                     <span class="direct-chat-name pull-right">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span>
-                    <span class="direct-chat-timestamp pull-left">{{ $get_time->isoFormat('dddd, MMMM Do YYYY hh:mm A') }}</span>
+                    @if($schedule_now->isoFormat('YYYY/MM/DD') == $get_time->isoFormat('YYYY/MM/DD'))
+                      <span class="direct-chat-timestamp pull-left">Today, {{ $get_time->isoFormat('hh:mm A') }}</span>
+                    @elseif($schedule_yesterday->isoFormat('YYYY/MM/DD') == $get_time->isoFormat('YYYY/MM/DD'))
+                      <span class="direct-chat-timestamp pull-left">Yesterday, {{ $get_time->isoFormat('hh:mm A') }}</span>
+                    @else
+                      <span class="direct-chat-timestamp pull-left hidden-xs hidden-sm">{{ $get_time->isoFormat('dddd, MMMM Do YYYY hh:mm A') }}</span>
+                      <span class="direct-chat-timestamp pull-left hidden-md hidden-lg hidden-xl">{{ $get_time->isoFormat('ddd, MMM Do YYYY hh:mm A') }}</span>
+                    @endif
                   </div>
                   @if(Auth::user()->image_profile != 'user.jpg')
                     @if(Auth::user()->roles == 'Student')
