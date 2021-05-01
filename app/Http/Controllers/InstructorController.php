@@ -294,10 +294,14 @@ class InstructorController extends Controller
         }
         
         $session = Session::findOrFail($session_id);
-        $schedule_time = Carbon::parse($session->schedule->schedule_time);
-        if(now() <= $schedule_time->add($session->course->course_package->material_type->duration_in_minute, 'minutes')) {
+        $schedule_time_begin_attendance = Carbon::parse($session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+        $schedule_time_begin_attendance->add($session->course->course_package->material_type->duration_in_minute, 'minutes')->sub(10, 'minutes');
+        $schedule_time_end_attendance = Carbon::parse($session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+        $schedule_time_end_attendance->add($session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
+        if(now() <= $schedule_time_begin_attendance || now() > $schedule_time_end_attendance) {
             // tidak diperbolehkan mengakses link.
-            return redirect()->back();
+            session(['caption-danger' => 'Cannot edit this session attendance, as it is not ready yet to fill out the attendance information.']);
+            return redirect()->route('instructor.course.show', [$course_id]);
         }
         
         return view('role_instructor.attendances_index', compact('session_registrations', 'session'));
@@ -305,23 +309,34 @@ class InstructorController extends Controller
 
     public function student_attendance_update(Request $request, $course_id, $session_id) {
         // mengubah status kehadiran student dalam satu sesi
-            foreach(Session::findOrFail($session_id)->session_registrations as $sr) {
-                $flag = 0;
-                foreach($request->all() as $key => $val) {
-                    if($key == 'flag'.$sr->course_registration->student->id && $val == 'true') {
-                        $sr->update([
-                            'status' => 'Should Submit Form',
-                        ]);
-                        $flag = 1;
-                        break;
-                    }
-                }
-                if($flag == 0) {
+        $session = Session::findOrFail($session_id);
+        $schedule_now = Carbon::now()->setTimezone(Auth::user()->timezone);
+        $schedule_time_begin = Carbon::parse($session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+        $schedule_time_end_attendance = Carbon::parse($session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+        $schedule_time_end_attendance->add($session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
+        if($schedule_now > $schedule_time_end_attendance) {
+            session(['caption-danger' => 'Cannot update the attendance information, as the due time has passed. Please contact NUSIA Admin for support.']);
+            return redirect()->route('instructor.course.show', [$course_id]);
+        }
+        foreach($session->session_registrations as $sr) {
+            $flag = 0;
+            foreach($request->all() as $key => $val) {
+                if($key == 'flag'.$sr->course_registration->student->id && $val == 'true') {
                     $sr->update([
-                        'status' => 'Not Present',
+                        'status' => 'Should Submit Form',
                     ]);
+                    $flag = 1;
+                    break;
                 }
             }
+            if($flag == 0) {
+                $sr->update([
+                    'status' => 'Not Present',
+                ]);
+            }
+        }
+        session(['caption-success' => 'This attendance information has been updated. Thank you!']);
+        return redirect()->route('instructor.course.show', [$course_id]);
     }
 
     public function session_feedback_index($course_id, $session_id) {

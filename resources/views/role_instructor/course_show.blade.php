@@ -62,15 +62,17 @@
                         $next_meeting_link = null;
                         if($sessions->toArray() != null) {
                           foreach($sessions as $s) {
-                            $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                            if($schedule_time >= $schedule_now) {
+                            $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                            $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                            $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
+                            if($schedule_time_end >= $schedule_now) {
                               if($next_meeting_time == null) {
-                                $next_meeting_time = $schedule_time;
+                                $next_meeting_time = $schedule_time_begin;
                                 $next_meeting_link = $s->link_zoom;
                                 $session_title = strtoupper($s->title);
                               }
-                              if($next_meeting_time > $schedule_time) {
-                                $next_meeting_time = $schedule_time;
+                              if($schedule_time_end < $next_meeting_time) {
+                                $next_meeting_time = $schedule_time_begin;
                                 $next_meeting_link = $s->link_zoom;
                                 $session_title = strtoupper($s->title);
                               }
@@ -400,6 +402,16 @@
                           Students are <b>required</b> to give feedbacks in order to complete their attendance information, for each session.
                           Their chances are limited to <b>three days</b> after the session ends.
                           You are permitted to remind the students to give feedbacks, respectively for each session.
+                        </dd>
+                      </dl>
+                      <hr>
+                      <dl>
+                        <dt>
+                          <i class="fa fa-file-text-o margin-r-5"></i> Attendance Form
+                        </dt>
+                        <dd>
+                          For each session, attendance information can only be updated <b>10 minutes before the session ends until 30 minutes after the session ends.</b><br />
+                          After submitting the form, you cannot update it anymore.
                         </dd>
                       </dl>
                       <hr>
