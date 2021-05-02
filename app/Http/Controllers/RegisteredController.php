@@ -159,7 +159,7 @@ class RegisteredController extends Controller
                 ->join('instructors', 'instructor_schedules.instructor_id', 'instructors.id')
                 ->join('users', 'instructors.user_id', 'users.id')
                 ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
-                ->where('schedules.schedule_time', '>=', $timeStudent)
+                ->where('schedules.schedule_time', '>=', $timeStudent->add(3, 'hours')) // asumsi bahwa tidak ada kelas yang berdurasi di atas 3 jam
                 ->distinct()
                 ->orderBy('schedules.schedule_time')
                 ->take(5)

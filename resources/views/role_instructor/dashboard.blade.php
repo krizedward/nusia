@@ -150,7 +150,13 @@
           <ul class="products-list product-list-in-box">
             <?php $i = 0; ?>
             @foreach($sessions_order_by_schedule_time as $s)
-              @if($s->schedule->schedule_time >= now())
+              <?php
+                $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
+              ?>
+              @if($schedule_time_end >= now())
                 <li class="item">
                   <div class="product-img">
                     @if($s->schedule->instructor_schedules->first()->instructor_id == Auth::user()->instructor->id)
@@ -164,12 +170,6 @@
                     @endif
                   </div>
                   <div class="product-info">
-                    <?php
-                      $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
-                      $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                      $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                      $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
-                    ?>
                     <div class="product-title">
                       {{ $s->course->course_package->course_level->name }} - {{ $s->course->title }} - {{ $s->title }}
                       @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
