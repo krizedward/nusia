@@ -194,16 +194,16 @@
                                     ?>
                                     <td class="text-center">
                                       @if($schedule_now < $schedule_time_begin)
-                                        <span class="hidden">1</span>
+                                        <span class="hidden">1{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
                                         <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This session has not started yet.">Upcoming</label>
                                       @elseif($schedule_now >= $schedule_time_begin && $schedule_now <= $schedule_time_end)
-                                        <span class="hidden">2</span>
+                                        <span class="hidden">2{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
                                         <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This session is in progress.">Ongoing</label>
                                       @elseif($attendance_is_checked == 0)
-                                        <span class="hidden">3</span>
+                                        <span class="hidden">3{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
                                         <label data-toggle="tooltip" title class="label bg-blue" data-original-title="You are required to complete this session attendance information.">Attendance Check</label>
                                       @else
-                                        <span class="hidden">4</span>
+                                        <span class="hidden">4{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
                                         <label data-toggle="tooltip" title class="label bg-green" data-original-title="This session has passed its scheduled time and the attendance infomation for this session has been completed.">Done</label>
                                       @endif
                                     </td>
@@ -288,14 +288,18 @@
                                 <td class="text-center">
                                   @if($dt->status == 'Available')
                                     @if($schedule_now <= $schedule_time_begin)
+                                      <span class="hidden">1</span>
                                       <label data-toggle="tooltip" title class="label label-success" data-original-title="This schedule is available for another upcoming reservation.">Available</label>
                                     @else
+                                      <span class="hidden">2</span>
                                       <label data-toggle="tooltip" title class="label label-default" data-original-title="This schedule was available for another upcoming reservation (but already passed the current time).">Available</label>
                                     @endif
                                   @elseif($dt->status == 'Busy')
                                     @if($schedule_now <= $schedule_time_begin)
+                                      <span class="hidden">3</span>
                                       <label data-toggle="tooltip" title class="label label-danger" data-original-title="This schedule is currently assigned to a session.">Busy</label>
                                     @else
+                                      <span class="hidden">4</span>
                                       <label data-toggle="tooltip" title class="label label-default" data-original-title="This schedule was assigned to a session (but already passed the current time).">Busy</label>
                                     @endif
                                   @endif
