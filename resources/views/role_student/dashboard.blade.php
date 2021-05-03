@@ -125,7 +125,13 @@
                 $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
               ?>
               @foreach($session_order_by_schedule_time as $dt)
-                @if($dt->schedule->schedule_time >= $schedule_now)
+                <?php
+                  $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                  $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                  $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                  $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
+                ?>
+                @if($schedule_time_end >= $schedule_now)
                   <li class="item">
                     <div class="product-img">
                       @if($dt->schedule->instructor_schedules->first()->instructor->user->image_profile != 'user.jpg')
@@ -150,20 +156,10 @@
                             {{ $dt->course->course_package->course_type->name }} - Session
                           @endif
                         @endif
-                        @if($dt->schedule->schedule_time)
-                          <?php
-                            $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
-                            $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                            $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                            $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
-                          ?>
-                          @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                            <span class="label label-success pull-right">Today</span>
-                          @else
-                            <span class="label label-info pull-right">{{ $schedule_time_begin->isoFormat('MMM DD \'YY') }}</span>
-                          @endif
+                        @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                          <span class="label label-success pull-right">Today</span>
                         @else
-                          <span class="label label-danger pull-right">N/A</span>
+                          <span class="label label-info pull-right">{{ $schedule_time_begin->isoFormat('MMM DD \'YY') }}</span>
                         @endif
                       </div>
                       <span class="product-description">
@@ -222,136 +218,138 @@
                 </thead>
                 <tbody>
                   @foreach($session_registration as $dt)
-                    <tr>
-                      <td>
-                        @if($dt->session->course->title)
-                          {{ $dt->session->course->title }}
-                        @else
-                          {{ $dt->session->course->course_package->title }}
-                        @endif
-                        for {{ $dt->session->course->course_package->course_level->name }}
-                        ({{ $dt->session->title }})
-                      </td>
-                      @if($dt->session->schedule->schedule_time)
-                        <?php
-                          $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
-                          $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                          $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                          $schedule_time_end_form = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                          $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
-                          $schedule_time_end_form->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
-                        ?>
+                    @if($dt->course_registration->student_id == Auth::user()->student->id)
+                      <tr>
                         <td>
-                          <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
-                          @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                            Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                          @if($dt->session->course->title)
+                            {{ $dt->session->course->title }}
                           @else
-                            {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                            {{ $dt->session->course->course_package->title }}
+                          @endif
+                          for {{ $dt->session->course->course_package->course_level->name }}
+                          ({{ $dt->session->title }})
+                        </td>
+                        @if($dt->session->schedule->schedule_time)
+                          <?php
+                            $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                            $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                            $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                            $schedule_time_end_form = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                            $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
+                            $schedule_time_end_form->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
+                          ?>
+                          <td>
+                            <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                            @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                              Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                            @else
+                              {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                            @endif
+                          </td>
+                        @else
+                          <td><i>N/A</i></td>
+                        @endif
+                        <td>
+                          @if($schedule_now <= $schedule_time_end)
+                            @if($dt->session->link_zoom)
+                              <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Join</a>
+                            @else
+                              <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Join</a>
+                            @endif
+                          @else
+                            @if($dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form)
+                              <a href="#" data-toggle="modal" data-target="#FillForm{{$dt->id}}" class="btn btn-xs btn-flat bg-purple">Form</a>
+                            @else
+                              <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Form</a>
+                            @endif
                           @endif
                         </td>
-                      @else
-                        <td><i>N/A</i></td>
-                      @endif
-                      <td>
-                        @if($schedule_now <= $schedule_time_end)
-                          @if($dt->session->link_zoom)
-                            <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $dt->session->link_zoom }}">Join</a>
-                          @else
-                            <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Join</a>
-                          @endif
-                        @else
-                          @if($dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form)
-                            <a href="#" data-toggle="modal" data-target="#FillForm{{$dt->id}}" class="btn btn-xs btn-flat bg-purple">Form</a>
-                          @else
-                            <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Form</a>
-                          @endif
-                        @endif
-                      </td>
-                    </tr>
-                    @if($dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form)
-                      <div class="modal fade" id="FillForm{{$dt->id}}">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="box box-primary">
-                              <div class="box-body box-profile">
-                                <form role="form" method="post" action="@if($schedule_now > $schedule_time_end && $dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form) {{ route('student.feedback.store', [$dt->course_registration_id, $dt->id]) }} @else {{ route('logout') }} @endif" enctype="multipart/form-data">
-                                  @csrf
-                                  <h3 class="profile-username text-center"><b>Feedback for {{ $dt->session->title }}</b></h3>
-                                  <p class="text-muted text-center">
-                                    Scheduled
-                                    @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                      today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
-                                    @else
-                                      on {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
-                                    @endif
-                                  </p>
-                                  @if($schedule_now > $schedule_time_end && $dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form)
-                                    <ul class="list-group list-group-unbordered">
-                                      <li class="list-group-item text-red">
-                                        Fill out this form to complete your attendance information!
-                                      </li>
-                                      <li class="list-group-item">
-                                        <div class="row">
-                                          <div class="col-md-12">
-                                            <div class="form-group @error('rating{{ $dt->id }}') has-error @enderror">
-                                              <label for="rating{{ $dt->id }}">
-                                                Overall, are you satisfied with this session? <span class="text-red">*</span><br />
-                                                <i>Check the radio box below.</i>
-                                              </label>
-                                              <br />
-                                              <input id="radioAnswer1For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="5">
-                                              <label for="radioAnswer1For{{ $dt->id }}" class="custom-control-label">Very Satisfied</label>
-                                              <br />
-                                              <input id="radioAnswer2For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="4">
-                                              <label for="radioAnswer2For{{ $dt->id }}" class="custom-control-label">Satisfied</label>
-                                              <br />
-                                              <input id="radioAnswer3For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="3">
-                                              <label for="radioAnswer3For{{ $dt->id }}" class="custom-control-label">Neutral</label>
-                                              <br />
-                                              <input id="radioAnswer4For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="2">
-                                              <label for="radioAnswer4For{{ $dt->id }}" class="custom-control-label">Dissatisfied</label>
-                                              <br />
-                                              <input id="radioAnswer5For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="1">
-                                              <label for="radioAnswer5For{{ $dt->id }}" class="custom-control-label">Very Dissatisfied</label>
-                                              @error('rating{{ $dt->id }}')
-                                                <p style="color:red">{{ $message }}</p>
-                                              @enderror
+                      </tr>
+                      @if($dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form)
+                        <div class="modal fade" id="FillForm{{$dt->id}}">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="box box-primary">
+                                <div class="box-body box-profile">
+                                  <form role="form" method="post" action="@if($schedule_now > $schedule_time_end && $dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form) {{ route('student.feedback.store', [$dt->course_registration_id, $dt->id]) }} @else {{ route('logout') }} @endif" enctype="multipart/form-data">
+                                    @csrf
+                                    <h3 class="profile-username text-center"><b>Feedback for {{ $dt->session->title }}</b></h3>
+                                    <p class="text-muted text-center">
+                                      Scheduled
+                                      @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                        today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                                      @else
+                                        on {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                                      @endif
+                                    </p>
+                                    @if($schedule_now > $schedule_time_end && $dt->status == 'Should Submit Form' && $schedule_now <= $schedule_time_end_form)
+                                      <ul class="list-group list-group-unbordered">
+                                        <li class="list-group-item text-red">
+                                          Fill out this form to complete your attendance information!
+                                        </li>
+                                        <li class="list-group-item">
+                                          <div class="row">
+                                            <div class="col-md-12">
+                                              <div class="form-group @error('rating{{ $dt->id }}') has-error @enderror">
+                                                <label for="rating{{ $dt->id }}">
+                                                  Overall, are you satisfied with this session? <span class="text-red">*</span><br />
+                                                  <i>Check the radio box below.</i>
+                                                </label>
+                                                <br />
+                                                <input id="radioAnswer1For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="5">
+                                                <label for="radioAnswer1For{{ $dt->id }}" class="custom-control-label">Very Satisfied</label>
+                                                <br />
+                                                <input id="radioAnswer2For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="4">
+                                                <label for="radioAnswer2For{{ $dt->id }}" class="custom-control-label">Satisfied</label>
+                                                <br />
+                                                <input id="radioAnswer3For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="3">
+                                                <label for="radioAnswer3For{{ $dt->id }}" class="custom-control-label">Neutral</label>
+                                                <br />
+                                                <input id="radioAnswer4For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="2">
+                                                <label for="radioAnswer4For{{ $dt->id }}" class="custom-control-label">Dissatisfied</label>
+                                                <br />
+                                                <input id="radioAnswer5For{{ $dt->id }}" name="rating{{ $dt->id }}" type="radio" value="1">
+                                                <label for="radioAnswer5For{{ $dt->id }}" class="custom-control-label">Very Dissatisfied</label>
+                                                @error('rating{{ $dt->id }}')
+                                                  <p style="color:red">{{ $message }}</p>
+                                                @enderror
+                                              </div>
+                                              <div class="form-group @error('comment') has-error @enderror">
+                                                <label for="comment">
+                                                  Explain your reason:<br />
+                                                  <i>Feel free to tell your suggestion(s) here.</i>
+                                                </label>
+                                                <textarea id="comment" name="comment" class="@error('comment') is-invalid @enderror form-control" rows="3" placeholder="Explain your reason">{{ old('comment') }}</textarea>
+                                                @error('comment')
+                                                  <p style="color:red">{{ $message }}</p>
+                                                @enderror
+                                              </div>
+                                              <div class="text-red">* This field is required</div>
                                             </div>
-                                            <div class="form-group @error('comment') has-error @enderror">
-                                              <label for="comment">
-                                                Explain your reason:<br />
-                                                <i>Feel free to tell your suggestion(s) here.</i>
-                                              </label>
-                                              <textarea id="comment" name="comment" class="@error('comment') is-invalid @enderror form-control" rows="3" placeholder="Explain your reason">{{ old('comment') }}</textarea>
-                                              @error('comment')
-                                                <p style="color:red">{{ $message }}</p>
-                                              @enderror
-                                            </div>
-                                            <div class="text-red">* This field is required</div>
                                           </div>
-                                        </div>
-                                      </li>
-                                    </ul>
-                                    <button type="submit" class="btn btn-s btn-primary" style="width:100%;">Submit</button>
-                                    <br /><br />
-                                  @else
-                                    <ul class="list-group list-group-unbordered">
-                                      <li class="list-group-item">
-                                        Sorry, you are ineligible to fill out this form.
-                                      </li>
-                                    </ul>
-                                  @endif
-                                </form>
-                                <button onclick="document.getElementById('FillForm{{$dt->id}}').className = 'modal fade'; document.getElementById('FillForm{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-default" style="width:100%;">Close</button>
+                                        </li>
+                                      </ul>
+                                      <button type="submit" class="btn btn-s btn-primary" style="width:100%;">Submit</button>
+                                      <br /><br />
+                                    @else
+                                      <ul class="list-group list-group-unbordered">
+                                        <li class="list-group-item">
+                                          Sorry, you are ineligible to fill out this form.
+                                        </li>
+                                      </ul>
+                                    @endif
+                                  </form>
+                                  <button onclick="document.getElementById('FillForm{{$dt->id}}').className = 'modal fade'; document.getElementById('FillForm{{$dt->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open');" class="btn btn-s btn-default" style="width:100%;">Close</button>
+                                </div>
+                                <!-- /.box-body -->
                               </div>
-                              <!-- /.box-body -->
+                              <!-- /.box -->
                             </div>
-                            <!-- /.box -->
+                            <!-- /.modal-content -->
                           </div>
-                          <!-- /.modal-content -->
+                          <!-- /.modal-dialog -->
                         </div>
-                        <!-- /.modal-dialog -->
-                      </div>
+                      @endif
                     @endif
                   @endforeach
                 </tbody>
@@ -422,7 +420,13 @@
                 $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
               ?>
               @foreach($session_order_by_schedule_time as $dt)
-                @if($dt->schedule->schedule_time >= $schedule_now)
+                <?php
+                  $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                  $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                  $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                  $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
+                ?>
+                @if($schedule_time_end >= $schedule_now)
                   <li class="item">
                     <div class="product-img">
                       @if($dt->schedule->instructor_schedules->first()->instructor->user->image_profile != 'user.jpg')
@@ -447,20 +451,10 @@
                             {{ $dt->course->course_package->course_type->name }} - Session
                           @endif
                         @endif
-                        @if($dt->schedule->schedule_time)
-                          <?php
-                            $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
-                            $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                            $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                            $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
-                          ?>
-                          @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                            <span class="label label-success pull-right">Today</span>
-                          @else
-                            <span class="label label-info pull-right">{{ $schedule_time_begin->isoFormat('MMM DD \'YY') }}</span>
-                          @endif
+                        @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                          <span class="label label-success pull-right">Today</span>
                         @else
-                          <span class="label label-danger pull-right">N/A</span>
+                          <span class="label label-info pull-right">{{ $schedule_time_begin->isoFormat('MMM DD \'YY') }}</span>
                         @endif
                       </div>
                       <span class="product-description">

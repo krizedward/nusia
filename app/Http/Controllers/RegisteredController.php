@@ -142,30 +142,59 @@ class RegisteredController extends Controller
         if($this->is_instructor()) {
             $timeNusia = Carbon::now()->setTimezone('Asia/Jakarta');
             $timeStudent = Carbon::now(Auth::user()->timezone);
+            
             $sessions = Session
                 ::join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
-                ->join('instructors', 'instructor_schedules.instructor_id', 'instructors.id')
-                ->join('users', 'instructors.user_id', 'users.id')
                 ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
                 ->where('schedules.schedule_time', '>=', $timeStudent)
-                ->distinct()
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at', 'instructor_schedules.instructor_id')
+                ->distinct()
+                ->get();
+            $arr = [];
+            foreach($sessions as $s) {
+                // -> add 3 menit untuk antisipasi proses loading pada tampilan web
+                $schedule_time_begin = Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'minutes');
+                if($schedule_time_begin >= $timeStudent) {
+                    array_push($arr, $s->id);
+                }
+            }
+            $sessions = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+                ->whereIn('sessions.id', $arr)
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at', 'instructor_schedules.instructor_id')
+                ->distinct()
                 ->get();
 
             $sessions_order_by_schedule_time = Session
                 ::join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
-                ->join('instructors', 'instructor_schedules.instructor_id', 'instructors.id')
-                ->join('users', 'instructors.user_id', 'users.id')
                 ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
-                ->where('schedules.schedule_time', '>=', $timeStudent->add(3, 'hours')) // asumsi bahwa tidak ada kelas yang berdurasi di atas 3 jam
-                ->distinct()
-                ->orderBy('schedules.schedule_time')
-                ->take(5)
+                ->where('schedules.schedule_time', '>=', $timeStudent)
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at', 'instructor_schedules.instructor_id')
+                ->distinct()
                 ->get();
-
+            $arr = [];
+            foreach($sessions_order_by_schedule_time as $s) {
+                // -> add 3 menit untuk antisipasi proses loading pada tampilan web
+                $schedule_time_begin = Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'minutes');
+                if($schedule_time_begin >= $timeStudent) {
+                    array_push($arr, $s->id);
+                }
+            }
+            $sessions_order_by_schedule_time = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+                ->whereIn('sessions.id', $arr)
+                ->orderBy('schedules.schedule_time')
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at', 'instructor_schedules.instructor_id')
+                ->distinct()
+                ->take(5)
+                ->get();
+            
             return view('role_instructor.dashboard', compact(
                 'sessions', 'sessions_order_by_schedule_time', 'timeNusia', 'timeStudent', 'sessions',
             ));
@@ -188,25 +217,57 @@ class RegisteredController extends Controller
             
             //untuk mengubah zona waktu isi didalam dengan lokasi
             $timeStudent = Carbon::now()->setTimezone(Auth::user()->timezone);
-            $session_registration = SessionRegistration
+            
+            $session_registrations = SessionRegistration
                 ::join('sessions', 'session_registrations.session_id', 'sessions.id')
                 ->join('courses', 'sessions.course_id', 'courses.id')
                 ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
                 ->join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
-                ->where('schedules.schedule_time', '>=', $timeStudent->add(120, 'minutes')->add(3, 'days'))
+                ->where('schedules.schedule_time', '>=', $timeStudent)
                 ->select('session_registrations.id', 'session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
+                ->distinct()
                 ->get();
+            $arr = [];
+            foreach($session_registrations as $sr) {
+                // -> add 3 menit untuk antisipasi proses loading pada tampilan web
+                $schedule_time_begin = Carbon::parse($sr->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_begin->add($sr->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'minutes');
+                if($schedule_time_begin >= $timeStudent) {
+                    array_push($arr, $sr->id);
+                }
+            }
+            $session_registration = SessionRegistration::whereIn('id', $arr)->distinct()->get();
+            
             $session_order_by_schedule_time = Session
                 ::join('courses', 'sessions.course_id', 'courses.id')
                 ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
                 ->join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
-                ->where('schedules.schedule_time', '>=', $timeStudent->add(120, 'minutes')->add(3, 'days'))
-                ->orderBy('schedules.schedule_time')
-                ->take(5)
+                ->where('schedules.schedule_time', '>=', $timeStudent)
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')
+                ->distinct()
                 ->get();
+            $arr = [];
+            foreach($session_order_by_schedule_time as $s) {
+                // -> add 3 menit untuk antisipasi proses loading pada tampilan web
+                $schedule_time_begin = Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'minutes');
+                if($schedule_time_begin >= $timeStudent) {
+                    array_push($arr, $s->id);
+                }
+            }
+            $session_order_by_schedule_time = Session
+                ::join('courses', 'sessions.course_id', 'courses.id')
+                ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
+                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->whereIn('sessions.id', $arr)
+                ->orderBy('schedules.schedule_time')
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')
+                ->distinct()
+                ->take(5)
+                ->get();
+            
             $material = MaterialSession::all();
             
             // Menyimpan daftar course_registrations yang memiliki jadwal sesi yang belum berjalan.
