@@ -56,6 +56,8 @@
                         $route_name = 'student.chat_instructor.show';
                       } else if($dt->roles == 'Customer Service') {
                         $route_name = 'student.chat_customer_service.show';
+                      } else if($dt->roles == 'Student') {
+                        $route_name = 'student.chat_student.show';
                       }
                     } else if(Auth::user()->roles == 'Instructor') {
                       if($dt->roles == 'Admin') {
