@@ -385,7 +385,7 @@
                     </div>
                     <div class="box-body">
                       @if($data->toArray() != null)
-                        <table class="table table-bordered">
+                        <table class="table table-bordered example1">
                           <thead>
                             <th>Name</th>
                             <th style="width:25%;">Interest</th>
@@ -455,7 +455,7 @@
                     </div>
                     <div class="box-body">
                       @if($data->toArray() != null)
-                        <table class="table table-bordered">
+                        <table class="table table-bordered example1">
                           <thead>
                             <th>Name</th>
                             <th style="width:25%;">Interest</th>
@@ -585,7 +585,7 @@
                   </div>
                   <div class="box-body">
                     @if($course_registration->session_registrations)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Title</th>
@@ -775,7 +775,7 @@
                     </p>
                     <hr>
                     @if($course_registration->session_registrations)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Title</th>
@@ -879,7 +879,7 @@
                   </div>
                   <div class="box-body">
                     @if($course_registration->course->course_package->material_publics)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>File Name</th>
@@ -956,7 +956,7 @@
                     </div>
                     <div class="box-body">
                       @if($s->material_sessions->toArray())
-                        <table class="table table-bordered">
+                        <table class="table table-bordered example1">
                           <thead>
                             <th style="width:2%;" class="text-right">#</th>
                             <th>File Name</th>
@@ -1110,7 +1110,7 @@
                   </div>
                   <div class="box-body">
                     @if($assignment_flag)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Task</th>
@@ -1289,7 +1289,7 @@
                   </div>
                   <div class="box-body">
                     @if($exam_flag)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Task</th>
@@ -1534,7 +1534,7 @@
                   </div>
                   <div class="box-body">
                     @if($assignment_flag)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th style="width:25%;">Task</th>
@@ -1658,7 +1658,7 @@
                   </div>
                   <div class="box-body">
                     @if($exam_flag)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th style="width:25%;">Task</th>
@@ -1840,7 +1840,7 @@
                     </p>
                     <hr>
                     @if($task_submission_flag)
-                      <table class="table table-bordered">
+                      <table class="table table-bordered example1">
                         <thead>
                           <th style="width:2%;" class="text-right">#</th>
                           <th>Total Attendances</th>
