@@ -263,9 +263,18 @@
                                 @else
                                   {{ $s->course->course_package->title }} - {{ $dt->name }}
                                 @endif
+                                @if(strpos($dt->path, '://') !== false || strpos($dt->path, 'www.') !== false)
+                                  (Link)
+                                @else
+                                  ({{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }})
+                                @endif
                               </div>
                               <span class="product-description">
-                                <a target="_blank" rel="noopener noreferrer" href="{{ route('instructor.material.download', [1, $dt->id]) }}">Download</a>
+                                @if(strpos($dt->path, '://') !== false || strpos($dt->path, 'www.') !== false)
+                                  <a target="_blank" rel="noopener noreferrer nofollow" href="{{ $dt->path }}">Click here to download</a>
+                                @else
+                                  <a target="_blank" rel="noopener noreferrer" href="{{ route('instructor.material.download', [1, $dt->id]) }}">Click here to download</a>
+                                @endif
                               </span>
                             </div>
                           </li>
@@ -289,9 +298,18 @@
                                   @else
                                     {{ $ss->course->course_package->title }} - {{ $dt->name }}
                                   @endif
+                                  @if(strpos($dt->path, '://') !== false || strpos($dt->path, 'www.') !== false)
+                                    (Link)
+                                  @else
+                                    ({{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }})
+                                  @endif
                                 </div>
                                 <span class="product-description">
-                                  <a target="_blank" rel="noopener noreferrer" href="{{ route('instructor.material.download', [2, $dt->id]) }}">Download</a>
+                                  @if(strpos($dt->path, '://') !== false || strpos($dt->path, 'www.') !== false)
+                                    <a target="_blank" rel="noopener noreferrer nofollow" href="{{ $dt->path }}">Click here to download</a>
+                                  @else
+                                    <a target="_blank" rel="noopener noreferrer" href="{{ route('instructor.material.download', [2, $dt->id]) }}">Click here to download</a>
+                                  @endif
                                 </span>
                               </div>
                             </li>
