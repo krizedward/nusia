@@ -48,7 +48,7 @@
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     </div>
                   </div>
-                  <div class="box-body">
+                  <div class="box-body" style="display:none;">
                     <dl>
                       <dt><i class="fa fa-pencil-square-o margin-r-5"></i> Form</dt>
                       <dd>
@@ -91,7 +91,7 @@
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     </div>
                   </div>
-                  <div class="box-body">
+                  <div class="box-body" style="display:none;">
                     <dl>
                       <dt><i class="fa fa-pencil-square-o margin-r-5"></i> Form</dt>
                       <dd>
@@ -148,7 +148,7 @@
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     </div>
                   </div>
-                  <div class="box-body">
+                  <div class="box-body" style="display:none;">
                     <dl>
                       <dt><i class="fa fa-pencil-square-o margin-r-5"></i> Form</dt>
                       <dd>
@@ -212,7 +212,7 @@
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     </div>
                   </div>
-                  <div class="box-body">
+                  <div class="box-body" style="display:none;">
                     <dl>
                       <dt><i class="fa fa-pencil-square-o margin-r-5"></i> Form</dt>
                       <dd>

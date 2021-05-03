@@ -344,7 +344,7 @@
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     </div>
                   </div>
-                  <div class="box-body">
+                  <div class="box-body" style="display:none;">
                     <?php
                       $flag = 0;
                       foreach($students as $dt) {
@@ -392,7 +392,7 @@
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     </div>
                   </div>
-                  <div class="box-body">
+                  <div class="box-body" style="display:none;">
                     <?php
                       $flag = 0;
                       foreach($students as $dt) {
@@ -440,7 +440,7 @@
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     </div>
                   </div>
-                  <div class="box-body">
+                  <div class="box-body" style="display:none;">
                     <?php
                       $flag = 0;
                       foreach($students as $dt) {

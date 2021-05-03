@@ -1036,7 +1036,7 @@
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     </div>
                   </div>
-                  <div class="box-body">
+                  <div class="box-body" style="display:none;">
                     <form role="form" method="post" action="{{ route('home') }}" enctype="multipart/form-data">
                       @csrf
                       @method('PUT')
@@ -1101,7 +1101,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="box-footer">
+                      <div class="box-footer" style="display:none;">
                         <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
                       </div>
                     </form>
