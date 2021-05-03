@@ -332,7 +332,7 @@
                   <!-- /.box-body -->
                 </div>
                 <!-- /.box -->
-                <div class="box box-success">
+                <div class="box box-success collapsed-box">
                   <?php
                     $type = 'General Indonesian Language';
                     $count = 0;
@@ -347,10 +347,10 @@
                   <div class="box-header">
                     <h3 class="box-title"><b>{{ $type }}</b></h3>
                     <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     </div>
                   </div>
-                  <div class="box-body">
+                  <div class="box-body" style="display:none;">
                     @if($count > 0)
                       <table class="table table-bordered example1">
                         <thead>
@@ -379,7 +379,7 @@
                   <!-- /.box-body -->
                 </div>
                 <!-- /.box -->
-                <div class="box box-primary">
+                <div class="box box-primary collapsed-box">
                   <?php
                     $type = 'Language Partners';
                     $count = 0;
@@ -394,10 +394,10 @@
                   <div class="box-header">
                     <h3 class="box-title"><b>{{ $type }}</b></h3>
                     <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     </div>
                   </div>
-                  <div class="box-body">
+                  <div class="box-body" style="display:none;">
                     @if($count > 0)
                       <table class="table table-bordered example1">
                         <thead>
@@ -426,7 +426,7 @@
                   <!-- /.box-body -->
                 </div>
                 <!-- /.box -->
-                <div class="box box-info">
+                <div class="box box-info collapsed-box">
                   <?php
                     $type = 'Cultural Classes';
                     $count = 0;
@@ -441,10 +441,10 @@
                   <div class="box-header">
                     <h3 class="box-title"><b>{{ $type }}</b></h3>
                     <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     </div>
                   </div>
-                  <div class="box-body">
+                  <div class="box-body" style="display:none;">
                     @if($count > 0)
                       <table class="table table-bordered example1">
                         <thead>
