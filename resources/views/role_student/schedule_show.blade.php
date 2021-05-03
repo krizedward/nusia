@@ -60,15 +60,17 @@
                         $next_meeting_link = null;
                         if($course_registration->course->sessions) {
                           foreach($course_registration->course->sessions as $s) {
-                            $schedule_time = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                            if($schedule_time >= $schedule_now) {
+                            $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                            $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                            $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
+                            if($schedule_time_end >= $schedule_now) {
                               if($next_meeting_time == null) {
-                                $next_meeting_time = $schedule_time;
+                                $next_meeting_time = $schedule_time_begin;
                                 $next_meeting_link = $s->link_zoom;
                                 $session_title = strtoupper($s->title);
                               }
-                              if($next_meeting_time > $schedule_time) {
-                                $next_meeting_time = $schedule_time;
+                              if($schedule_time_end < $next_meeting_time) {
+                                $next_meeting_time = $schedule_time_begin;
                                 $next_meeting_link = $s->link_zoom;
                                 $session_title = strtoupper($s->title);
                               }
