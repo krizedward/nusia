@@ -147,7 +147,6 @@ class RegisteredController extends Controller
                 ::join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
                 ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
-                ->where('schedules.schedule_time', '>=', $timeStudent)
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at', 'instructor_schedules.instructor_id')
                 ->distinct()
                 ->get();
@@ -156,6 +155,7 @@ class RegisteredController extends Controller
                 // -> add 3 menit untuk antisipasi proses loading pada tampilan web
                 $schedule_time_begin = Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                 $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'minutes');
+
                 if($schedule_time_begin >= $timeStudent) {
                     array_push($arr, $s->id);
                 }
@@ -172,7 +172,6 @@ class RegisteredController extends Controller
                 ::join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
                 ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
-                ->where('schedules.schedule_time', '>=', $timeStudent)
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at', 'instructor_schedules.instructor_id')
                 ->distinct()
                 ->get();
@@ -219,12 +218,8 @@ class RegisteredController extends Controller
             $timeStudent = Carbon::now()->setTimezone(Auth::user()->timezone);
             
             $session_registrations = SessionRegistration
-                ::join('sessions', 'session_registrations.session_id', 'sessions.id')
-                ->join('courses', 'sessions.course_id', 'courses.id')
-                ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
-                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ::join('course_registrations', 'session_registrations.course_registration_id', 'course_registrations.id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
-                ->where('schedules.schedule_time', '>=', $timeStudent)
                 ->select('session_registrations.id', 'session_registrations.code', 'session_registrations.session_id', 'session_registrations.course_registration_id', 'session_registrations.registration_time', 'session_registrations.status', 'session_registrations.created_at', 'session_registrations.updated_at')
                 ->distinct()
                 ->get();
@@ -242,9 +237,7 @@ class RegisteredController extends Controller
             $session_order_by_schedule_time = Session
                 ::join('courses', 'sessions.course_id', 'courses.id')
                 ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
-                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->where('course_registrations.student_id', Auth::user()->student->id)
-                ->where('schedules.schedule_time', '>=', $timeStudent)
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')
                 ->distinct()
                 ->get();
@@ -258,9 +251,7 @@ class RegisteredController extends Controller
                 }
             }
             $session_order_by_schedule_time = Session
-                ::join('courses', 'sessions.course_id', 'courses.id')
-                ->join('course_registrations', 'courses.id', 'course_registrations.course_id')
-                ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->whereIn('sessions.id', $arr)
                 ->orderBy('schedules.schedule_time')
                 ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.created_at', 'sessions.updated_at')

@@ -163,7 +163,12 @@
                       @if($s->schedule->instructor_schedules->last()->instructor_id != Auth::user()->instructor->id)
                         <img src="{{ asset('uploads/instructor/'.$s->schedule->instructor_schedules->last()->instructor->user->image_profile) }}" alt="User Image">
                       @else
-                        <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="User Image">
+                        @if(Auth::user()->image_profile != 'user.jpg')
+                          <img src="{{ asset('uploads/instructor/'.Auth::user()->image_profile) }}" alt="User Image">
+                        {{-- <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="User Image"> --}}
+                        @else
+                          <img src="{{ asset('uploads/user.jpg') }}" alt="User Image">
+                        @endif
                       @endif
                     @else
                       <img src="{{ asset('uploads/instructor/'.$s->schedule->instructor_schedules->first()->instructor->user->image_profile) }}" alt="User Image">
@@ -180,9 +185,9 @@
                     </div>
                     <span class="product-description">
                       @if($s->schedule->schedule_time < now())
-                        Class has been started!
+                        Class has started!
                         @if($s->link_zoom)
-                          Join <a href="{{ $s->link_zoom }}" target="_blank">here</a>.
+                          <a href="{{ $s->link_zoom }}" target="_blank" class="btn btn-xs btn-flat btn-success">Click here to join</a>
                         @endif
                       @else
                         {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}

@@ -169,7 +169,7 @@
                           @if($dt->link_zoom)
                             <a href="{{ $dt->link_zoom }}" target="_blank" class="btn btn-xs btn-flat btn-success">Join this session until {{ $schedule_time_end->isoFormat('hh:mm A') }}</a>
                           @else
-                            <a href="{{ $dt->link_zoom }}" target="_blank" class="btn btn-xs btn-flat btn-primary">Chat here to request the meeting link</a>
+                            <a href="{{ route('student.chat_instructor.show', [$dt->schedule->instructor_schedules->first()->instructor->user_id]) }}" target="_blank" class="btn btn-xs btn-flat btn-primary">Chat here to request the meeting link</a>
                           @endif
                         @else
                           {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
@@ -464,7 +464,7 @@
                           @if($dt->link_zoom)
                             <a href="{{ $dt->link_zoom }}" target="_blank" class="btn btn-xs btn-flat btn-success">Join this session until {{ $schedule_time_end->isoFormat('hh:mm A') }}</a>
                           @else
-                            <a href="{{ $dt->link_zoom }}" target="_blank" class="btn btn-xs btn-flat btn-primary">Chat here to request the meeting link</a>
+                            <a href="{{ route('student.chat_instructor.show', [$dt->schedule->instructor_schedules->first()->instructor->user_id]) }}" target="_blank" class="btn btn-xs btn-flat btn-primary">Chat here to request the meeting link</a>
                           @endif
                         @else
                           {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
