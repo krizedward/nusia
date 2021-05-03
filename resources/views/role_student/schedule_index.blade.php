@@ -107,27 +107,19 @@
                       </p>
                       <hr>
                       @if($has_a_schedule)
-                        <table class="table table-bordered example2">
+                        <table class="table table-bordered example1">
                           <thead>
-                            <th>Class / Session</th>
+                            <th>Class (Session) & Attendance Status</th>
                             <th>Time</th>
-                            <th>Attendance</th>
                             <th style="width:5%;">Link</th>
                           </thead>
                           <tbody>
                             @foreach($session_registrations as $i => $dt)
                               @if($schedule_now <= $schedule_times_end_form[$i])
                                 <tr>
-                                  <td>{{ $dt->session->course->title }} / {{ $dt->session->title }}</td>
                                   <td>
-                                    <span class="hidden">{{ $schedule_times_begin[$i]->isoFormat('YYMMDDAhhmm') }}</span>
-                                    @if($schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                      Today, {{ $schedule_times_begin[$i]->isoFormat('hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
-                                    @else
-                                      {{ $schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
-                                    @endif
-                                  </td>
-                                  <td>
+                                    {{ $dt->session->course->title }} ({{ $dt->session->title }})
+                                    &nbsp;&nbsp;
                                     @if($dt->status == 'Not Assigned')
                                       <?php
                                         $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
@@ -147,6 +139,14 @@
                                       <label data-toggle="tooltip" title class="label bg-purple" data-original-title="You have attended this session, but are still required to complete the feedback form.">Should Submit Form</label>
                                     @elseif($dt->status == 'Present')
                                       <label data-toggle="tooltip" title class="label bg-green" data-original-title="You have attended this session and completed the feedback form for this session.">Present</label>
+                                    @endif
+                                  </td>
+                                  <td>
+                                    <span class="hidden">{{ $schedule_times_begin[$i]->isoFormat('YYMMDDAhhmm') }}</span>
+                                    @if($schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      Today, {{ $schedule_times_begin[$i]->isoFormat('hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
+                                    @else
+                                      {{ $schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
                                     @endif
                                   </td>
                                   <td class="text-center">
