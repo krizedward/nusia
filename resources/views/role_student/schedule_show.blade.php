@@ -777,9 +777,9 @@
                     @if($course_registration->session_registrations)
                       <table class="table table-bordered example1">
                         <thead>
-                          <th style="width:2%;" class="text-right">#</th>
+                          <th class="text-right">#</th>
                           <th>Title</th>
-                          <th style="width:20%;">Attendance</th>
+                          <th>Attendance Status</th>
                         </thead>
                         <tbody>
                           <?php
