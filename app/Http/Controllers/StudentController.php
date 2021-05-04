@@ -1170,10 +1170,22 @@ class StudentController extends Controller
             session(['caption-danger' => 'Cannot reschedule as your limit has been reached for this session.']);
             return redirect()->back()->withInput();
         }
+        if($session->requirement && $session->reschedule_technical_issue_instructor == -1) {
+            session(['caption-danger' => 'Cannot reschedule, please firstly accept or decline a reschedule request from your instructor for this session.']);
+            return redirect()->back()->withInput();
+        }
         
         $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
         if($schedule_time < now()) {
             session(['caption-danger' => 'Cannot reschedule as the inputted time is invalid.']);
+            return redirect()->back()->withInput();
+        }
+        if($schedule_time == $session->schedule->schedule_time) {
+            session(['caption-danger' => 'Cannot reschedule as the inputted time is same as the current time schedule.']);
+            return redirect()->back()->withInput();
+        }
+        if($schedule_time == $session->requirement) {
+            session(['caption-danger' => 'Cannot reschedule as the inputted time is same as the latest requested time schedule.']);
             return redirect()->back()->withInput();
         }
         $session->update([
