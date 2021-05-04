@@ -2,7 +2,7 @@
 
 @section('title', 'Admin | User | Version 2')
 
-@include('layouts.css_and_js.table')
+@include('layouts.css_and_js.all')
 
 @section('content-header')
   <h1><b>User</b></h1>

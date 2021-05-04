@@ -2,7 +2,7 @@
 
 @section('title','Registration Form')
 
-@include('layouts.css_and_js.form_advanced')
+@include('layouts.css_and_js.all')
 
 @section('content')
   <div class="box box-primary">

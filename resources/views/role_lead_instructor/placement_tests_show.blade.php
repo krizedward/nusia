@@ -2,9 +2,7 @@
 
 @section('title', 'Placement Tests | Detail')
 
-{{-- @include('layouts.css_and_js.table') --}}
-
-@include('layouts.css_and_js.form_advanced')
+@include('layouts.css_and_js.all')
 
 @section('content-header')
   <h1><b>Placement Test Detail</b></h1>

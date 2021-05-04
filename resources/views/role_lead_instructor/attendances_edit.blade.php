@@ -2,9 +2,7 @@
 
 @section('title','Attendance')
 
-{{-- @include('layouts.css_and_js.form_general') --}}
-
-@include('layouts.css_and_js.table')
+@include('layouts.css_and_js.all')
 
 @section('content-header')
     <h1><b>Attendance for [{{ $session->course->course_package->course_level->name }}] {{ $session->course->title }} - {{ $session->title }}</b></h1>

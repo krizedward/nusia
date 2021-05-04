@@ -2,11 +2,7 @@
 
 @section('title', 'Schedules')
 
-{{-- @include('layouts.css_and_js.form_general') --}}
-
-{{-- @include('layouts.css_and_js.calendar') --}}
-
-@include('layouts.css_and_js.table')
+@include('layouts.css_and_js.all')
 
 @section('content-header')
   <h1><b>Schedules</b></h1>

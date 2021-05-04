@@ -2,7 +2,7 @@
 
 @section('title','Contact Us')
 
-@include('layouts.css_and_js.dashboard')
+@include('layouts.css_and_js.all')
 
 @section('content')
 <div class="row">

@@ -2,7 +2,7 @@
 
 @section('title', 'Choosing Course Registrations')
 
-@include('layouts.css_and_js.table')
+@include('layouts.css_and_js.all')
 
 @section('content-header')
   @if($current_course_registration)

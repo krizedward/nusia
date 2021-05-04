@@ -4,10 +4,6 @@
 
 @include('layouts.css_and_js.all')
 
-{{-- @include('layouts.css_and_js.table') --}}
-
-{{-- @include('layouts.css_and_js.form_advanced') --}}
-
 @section('content-header')
   <h1><b>Schedules</b></h1>
   <ol class="breadcrumb">

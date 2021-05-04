@@ -2,9 +2,7 @@
 
 @section('title','Nusantara Indonesia | Dashboard')
 
-{{-- @include('layouts.css_and_js.dashboard') --}}
-
-@include('layouts.css_and_js.table')
+@include('layouts.css_and_js.all')
 
 @section('content')
 <div class="row">

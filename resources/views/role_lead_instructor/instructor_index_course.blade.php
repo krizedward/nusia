@@ -2,7 +2,7 @@
 
 @section('title','Instructor | Schedules')
 
-@include('layouts.css_and_js.table')
+@include('layouts.css_and_js.all')
 
 {{-- Schedules di Sidebar --}}
 @section('content-header')

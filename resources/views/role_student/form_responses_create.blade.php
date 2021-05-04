@@ -2,7 +2,7 @@
 
 @section('title', $form->title)
 
-@include('layouts.css_and_js.form_advanced')
+@include('layouts.css_and_js.all')
 
 @section('content')
                 <div class="box box-primary" id="guidelines">

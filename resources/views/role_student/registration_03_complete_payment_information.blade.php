@@ -2,7 +2,7 @@
 
 @section('title','Filling Payment Information')
 
-@include('layouts.css_and_js.form_advanced')
+@include('layouts.css_and_js.all')
 
 @section('content-header')
   <h1><b>Proceed to Your Course Registration Payment!</b></h1>

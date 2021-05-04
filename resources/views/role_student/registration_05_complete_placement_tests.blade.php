@@ -2,7 +2,7 @@
 
 @section('title', 'Completing Placement Test')
 
-@include('layouts.css_and_js.form_advanced')
+@include('layouts.css_and_js.all')
 
 @section('content-header')
   <h1><b>Indonesian Proficiency Placement Test</b></h1>
