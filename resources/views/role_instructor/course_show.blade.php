@@ -718,20 +718,20 @@
                                               @endif
                                             </p>
                                             <div class="col-md-6">
-                                          <form role="form" method="post" action="{{ route('instructor.session_reschedule_approval.update', [$dt->id]) }}" enctype="multipart/form-data">
-                                            @csrf
-                                            @method('PUT')
-                                            <input type="hidden" name="approval_status" value="1" id="approval_status">
-                                              <button type="submit" class="btn btn-s btn-primary" style="width:100%;" onclick="document.getElementById('approval_status').value = 1;">Accept</button>
-                                          </form>
+                                              <form role="form" method="post" action="{{ route('instructor.session_reschedule_approval.update', [$dt->id]) }}" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="approval_status" value="1" id="approval_status">
+                                                <button type="submit" class="btn btn-s btn-primary" style="width:100%;" onclick="document.getElementById('approval_status').value = 1;">Accept</button>
+                                              </form>
                                             </div>
                                             <div class="col-md-6">
-                                          <form role="form" method="post" action="{{ route('instructor.session_reschedule_approval.update', [$dt->id]) }}" enctype="multipart/form-data">
-                                            @csrf
-                                            @method('PUT')
-                                            <input type="hidden" name="approval_status" value="0" id="approval_status">
-                                              <button type="submit" class="btn btn-s btn-danger" style="width:100%;" onclick="document.getElementById('approval_status').value = 0;">Decline</button>
-                                          </form>
+                                              <form role="form" method="post" action="{{ route('instructor.session_reschedule_approval.update', [$dt->id]) }}" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="approval_status" value="0" id="approval_status">
+                                                <button type="submit" class="btn btn-s btn-danger" style="width:100%;" onclick="document.getElementById('approval_status').value = 0;">Decline</button>
+                                              </form>
                                             </div>
                                             <br /><br />
                                           <div class="col-md-12">
