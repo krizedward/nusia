@@ -1208,15 +1208,26 @@
                                       @foreach($course_registration->course->sessions as $s)
                                         @foreach($s->tasks as $dt)
                                           @if($dt->type == 'Assignment')
-                                            <?php $due_date = \Carbon\Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone); ?>
-                                            @if($schedule_now <= $due_date)
-                                              @if(old('assignment_id') == $dt->id))
-                                                <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
-                                              @else
-                                                <option value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
+                                            <?php
+                                              $this_has_been_checked = 0;
+                                              foreach($dt->task_submissions as $ts) {
+                                                if($ts->session_registration->course_registration_id == $course_registration->id && $ts->status == 'Accepted') {
+                                                  $this_has_been_checked = 1;
+                                                  break;
+                                                }
+                                              }
+                                            ?>
+                                            @if($this_has_been_checked == 0)
+                                              <?php $due_date = \Carbon\Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone); ?>
+                                              @if($schedule_now <= $due_date)
+                                                @if(old('assignment_id') == $dt->id))
+                                                  <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
+                                                @else
+                                                  <option value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
+                                                @endif
                                               @endif
-                                              <?php $i++; ?>
                                             @endif
+                                            <?php $i++; ?>
                                           @endif
                                         @endforeach
                                       @endforeach
@@ -1387,15 +1398,26 @@
                                       @foreach($course_registration->course->sessions as $s)
                                         @foreach($s->tasks as $dt)
                                           @if($dt->type == 'Exam')
-                                            <?php $due_date = \Carbon\Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone); ?>
-                                            @if($schedule_now <= $due_date)
-                                              @if(old('exam_id') == $dt->id))
-                                                <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
-                                              @else
-                                                <option value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
+                                            <?php
+                                              $this_has_been_checked = 0;
+                                              foreach($dt->task_submissions as $ts) {
+                                                if($ts->session_registration->course_registration_id == $course_registration->id && $ts->status == 'Accepted') {
+                                                  $this_has_been_checked = 1;
+                                                  break;
+                                                }
+                                              }
+                                            ?>
+                                            @if($this_has_been_checked == 0)
+                                              <?php $due_date = \Carbon\Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone); ?>
+                                              @if($schedule_now <= $due_date)
+                                                @if(old('exam_id') == $dt->id))
+                                                  <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
+                                                @else
+                                                  <option value="{{ $dt->id }}">#{{ $i + 1 }} {{ $dt->title }}</option>
+                                                @endif
                                               @endif
-                                              <?php $i++; ?>
                                             @endif
+                                            <?php $i++; ?>
                                           @endif
                                         @endforeach
                                       @endforeach

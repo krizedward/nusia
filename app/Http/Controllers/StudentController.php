@@ -1239,7 +1239,14 @@ class StudentController extends Controller
         foreach($course_registration->course->sessions as $s)
             foreach($s->tasks as $dt)
                 if($dt->type == 'Assignment') {
-                    if($schedule_now <= Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone))
+                    $this_has_been_checked = 0;
+                    foreach($dt->task_submissions as $ts) {
+                        if($ts->session_registration->course_registration_id == $course_registration_id && $ts->status == 'Accepted') {
+                            $this_has_been_checked = 1;
+                            break;
+                        }
+                    }
+                    if($this_has_been_checked == 0 && $schedule_now <= Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone))
                         array_push($arr_assignments, $dt->id);
                 }
         $data = Validator::make($request->all(), [
@@ -1330,7 +1337,14 @@ class StudentController extends Controller
         foreach($course_registration->course->sessions as $s)
             foreach($s->tasks as $dt)
                 if($dt->type == 'Exam') {
-                    if($schedule_now <= Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone))
+                    $this_has_been_checked = 0;
+                    foreach($dt->task_submissions as $ts) {
+                        if($ts->session_registration->course_registration_id == $course_registration_id && $ts->status == 'Accepted') {
+                            $this_has_been_checked = 1;
+                            break;
+                        }
+                    }
+                    if($this_has_been_checked == 0 && $schedule_now <= Carbon::parse($dt->due_date)->setTimezone(Auth::user()->timezone))
                         array_push($arr_exams, $dt->id);
                 }
         $data = Validator::make($request->all(), [
