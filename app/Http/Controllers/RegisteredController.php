@@ -263,7 +263,7 @@ class RegisteredController extends Controller
             
             // Menyimpan daftar course_registrations yang memiliki jadwal sesi yang belum berjalan.
             // Query ini menghilangkan daftar course_registrations yang sudah SEPENUHNYA selesai.
-            $course_registrations = Schedule
+            /*$course_registrations = Schedule
                 ::join('sessions', 'schedules.id', 'sessions.schedule_id')
                 ->join('courses', 'sessions.course_id', 'courses.id')
                 ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
@@ -276,7 +276,33 @@ class RegisteredController extends Controller
                 ->where('schedules.schedule_time', '>=', $timeStudent)
                 ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
                 ->distinct()
+                ->get();*/
+            $course_registrations = CourseRegistration
+                ::join('courses', 'course_registrations.course_id', 'courses.id')
+                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+                ->where('course_registrations.student_id', Auth::user()->student->id)
+                ->where('course_packages.title', 'NOT LIKE', '%Free%')
+                ->where('course_packages.title', 'NOT LIKE', '%Trial%')
+                ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+                ->where('courses.title', 'NOT LIKE', '%Early Registration%') // TEMPORARILY ADDED
+                ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
+                ->distinct()
                 ->get();
+            $arr = [];
+            foreach($course_registrations as $cr) {
+                $can_be_added = 1;
+                foreach($cr->course->sessions as $s) {
+                    // -> add 3 menit untuk antisipasi proses loading pada tampilan web
+                    $schedule_time_begin = Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                    $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'minutes');
+                    if($schedule_time_begin < $timeStudent) {
+                        $can_be_added = 0;
+                        break;
+                    }
+                }
+                if($can_be_added) array_push($arr, $cr->id);
+            }
+            $course_registrations = CourseRegistration::whereIn('id', $arr)->distinct()->get();
             
             $instructors = Instructor::where('id',Auth::user()->id);
             $is_local_access = config('database.connections.mysql.username') == 'root';
