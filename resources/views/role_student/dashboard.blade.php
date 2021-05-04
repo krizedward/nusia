@@ -114,6 +114,9 @@
             <p class="text-muted" style="margin-bottom:0px;">
               These sessions has been ordered by each starting time.
             </p>
+            <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
@@ -202,6 +205,9 @@
             <p class="text-muted" style="margin-bottom:0px;">
               Click on "Join" or "Form" button to join each session or give feedbacks (required to complete attendance information).
             </p>
+            <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
@@ -409,6 +415,9 @@
             <p class="text-muted" style="margin-bottom:0px;">
               These sessions has been ordered by each starting time.
             </p>
+            <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
@@ -495,6 +504,9 @@
               <div class="box-header with-border">
                 <h3 class="box-title"><b>Materials</b></h3>
                 <p class="text-muted" style="margin-bottom:0px;">Click on a class name to view the class materials.</p>
+                <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
               </div>
               <!-- /.box-header -->
               <div class="box-body">

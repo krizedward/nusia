@@ -38,7 +38,7 @@
       <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title"><b>Sessions</b></h3>
-          <div class="box-tools pull-right">
+          <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
           </div>
         </div>
@@ -139,7 +139,7 @@
       <div class="box box-primary">
         <div class="box-header with-border">
           <h3 class="box-title"><b>Upcoming Sessions</b></h3>
-          <div class="box-tools pull-right">
+          <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
           </div>
         </div>
@@ -217,7 +217,7 @@
       <div class="box box-success">
         <div class="box-header with-border">
           <h3 class="box-title"><b>Materials</b></h3>
-          <div class="box-tools pull-right">
+          <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
           </div>
         </div>

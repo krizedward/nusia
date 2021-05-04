@@ -40,7 +40,7 @@
             <div class="box box-info">
                 <div class="box-header with-border">
                     <h3 class="box-title">Student</h3>
-                    <div class="box-tools pull-right">
+                    <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
             <div class="box box-danger">
                 <div class="box-header with-border">
                     <h3 class="box-title">Instructor</h3>
-                    <div class="box-tools pull-right">
+                    <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                 </div>
@@ -142,9 +142,9 @@
             <div class="box box-warning">
                 <div class="box-header with-border">
                     <h3 class="box-title">Schedule</h3>
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    </div>
+                      <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      </div>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -187,7 +187,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Upcoming Session</h3>
-                    <div class="box-tools pull-right">
+                    <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                 </div>
