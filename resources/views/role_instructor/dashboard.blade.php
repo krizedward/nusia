@@ -33,11 +33,97 @@
   <!-- /.row -->
   <div class="row">
     <!-- Left col -->
+    <div class="col-md-4 hidden-md hidden-lg hidden-xl">
+      <div class="box box-primary hidden-md hidden-lg hidden-xl">
+        <div class="box-header with-border">
+          <h3 class="box-title"><b>Upcoming Sessions</b></h3>
+          <p class="text-muted" style="margin-bottom:0px;">
+            These sessions has been ordered by each starting time.
+          </p>
+          <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <ul class="products-list product-list-in-box">
+            <?php $i = 0; ?>
+            @foreach($sessions_order_by_schedule_time as $s)
+              <?php
+                $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
+              ?>
+              @if($schedule_time_end >= now())
+                <li class="item">
+                  <div class="product-img">
+                    @if($s->schedule->instructor_schedules->first()->instructor_id == Auth::user()->instructor->id)
+                      @if($s->schedule->instructor_schedules->last()->instructor_id != Auth::user()->instructor->id)
+                        <img src="{{ asset('uploads/instructor/'.$s->schedule->instructor_schedules->last()->instructor->user->image_profile) }}" alt="User Image">
+                      @else
+                        @if(Auth::user()->image_profile != 'user.jpg')
+                          <img src="{{ asset('uploads/instructor/'.Auth::user()->image_profile) }}" alt="User Image">
+                        {{-- <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="User Image"> --}}
+                        @else
+                          <img src="{{ asset('uploads/user.jpg') }}" alt="User Image">
+                        @endif
+                      @endif
+                    @else
+                      <img src="{{ asset('uploads/instructor/'.$s->schedule->instructor_schedules->first()->instructor->user->image_profile) }}" alt="User Image">
+                    @endif
+                  </div>
+                  <div class="product-info">
+                    <div class="product-title">
+                      {{ $s->course->course_package->course_level->name }} - {{ $s->course->title }} - {{ $s->title }}
+                      @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                        <span class="label label-success pull-right">Today</span>
+                      @else
+                        <span class="label label-info pull-right">{{ $schedule_time_begin->isoFormat('MMM DD \'YY') }}</span>
+                      @endif
+                    </div>
+                    <span class="product-description">
+                      @if($s->schedule->schedule_time < now())
+                        Class has started!
+                        @if($s->link_zoom)
+                          <a href="{{ $s->link_zoom }}" target="_blank" class="btn btn-xs btn-flat btn-success">Click here to join</a>
+                        @endif
+                      @else
+                        {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                      @endif
+                    </span>
+                  </div>
+                </li>
+                <!-- /.item -->
+              @endif
+              <?php $i++; ?>
+            @endforeach
+            @if($i == 0)
+              <div style="color:#555555">
+                No courses available.
+              </div>
+            @endif
+          </ul>
+        </div>
+        <!-- /.box-body -->
+        @if($sessions->count() > 0)
+          <div class="box-footer text-center">
+            <a href="{{ route('instructor.schedule.index') }}" class="uppercase">View All Sessions</a>
+          </div>
+          <!-- /.box-footer -->
+        @endif
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
     <div class="col-md-8">
       <!-- TABLE: Sessions Instructor -->
       <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title"><b>Sessions</b></h3>
+          <p class="text-muted" style="margin-bottom:0px;">
+            Click on "Join" button to join each session.
+          </p>
           <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
           </div>
@@ -136,9 +222,12 @@
     </div>
     <!-- /.col -->
     <div class="col-md-4">
-      <div class="box box-primary">
+      <div class="box box-primary hidden-xs hidden-sm">
         <div class="box-header with-border">
           <h3 class="box-title"><b>Upcoming Sessions</b></h3>
+          <p class="text-muted" style="margin-bottom:0px;">
+            These sessions has been ordered by each starting time.
+          </p>
           <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
           </div>
@@ -217,6 +306,7 @@
       <div class="box box-success">
         <div class="box-header with-border">
           <h3 class="box-title"><b>Materials</b></h3>
+          <p class="text-muted" style="margin-bottom:0px;">Click on a class name to view the class materials.</p>
           <div class="box-tools pull-right hidden-md hidden-lg hidden-xl">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
           </div>
