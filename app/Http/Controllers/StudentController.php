@@ -1165,10 +1165,53 @@ class StudentController extends Controller
     
     public function schedule_reschedule_update(Request $request) {
         // mengajukan reschedule
+        $session = Session::findOrFail($request->session_id);
+        if($session->reschedule_technical_issue_student > 0) {
+            session(['caption-danger' => 'Cannot reschedule as your limit has been reached for this session.']);
+            return redirect()->back()->withInput();
+        }
+        
+        $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
+        if($schedule_time < now()) {
+            session(['caption-danger' => 'Cannot reschedule as the inputted time is invalid.']);
+            return redirect()->back()->withInput();
+        }
+        $session->update([
+            'requirement' => $schedule_time,
+            'reschedule_technical_issue_student' => -1,
+            'updated_at' => now(),
+        ]);
+        session(['caption-success' => 'This reschedule information has been added. Thank you!']);
+        return redirect()->back();
     }
     
     public function schedule_reschedule_approval_update(Request $request, $session_id) {
         // menyetujui reschedule
+        $session = Session::findOrFail($request->session_id);
+        if($session->requirement < now()) {
+            session(['caption-danger' => 'Cannot approve this reschedule information, as the inputted time is invalid.']);
+            return redirect()->back()->withInput();
+        }
+        if($request->approval_status == 0) {
+            $session->update([
+                'requirement' => null,
+                'reschedule_technical_issue_instructor' => 0,
+                'updated_at' => now(),
+            ]);
+            session(['caption-success' => 'This reschedule information has been approved not to be changed. Thank you!']);
+        } else if($request->approval_status == 1) {
+            $session->schedule->update([
+                'schedule_time' => $session->requirement,
+                'updated_at' => now(),
+            ]);
+            $session->update([
+                'requirement' => null,
+                'reschedule_technical_issue_instructor' => 1,
+                'updated_at' => now(),
+            ]);
+            session(['caption-success' => 'This reschedule information has been approved for change. Kindly check the most recent time schedule for this session. Thank you!']);
+        }
+        return redirect()->back();
     }
     
     public function feedback_store(Request $request, $course_registration_id, $session_registration_id)
