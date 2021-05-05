@@ -230,37 +230,53 @@
                             @foreach($data as $dt)
                               <tr>
                                 <td>
-                                  {{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}
-                                  <span class="hidden-md hidden-lg hidden-xl">
-                                    @if($dt->instructor_id != Auth::user()->instructor->id)
-                                      <br /><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.chat_instructor.show', $dt->instructor->user_id) }}">Chat</a>
-                                    @endif
-                                  </span>
-                                </td>
-                                <td>
-                                  <?php
-                                    if($dt->instructor->interest) {
-                                      $interest = explode(', ', $dt->instructor->interest);
-                                    } else $interest = null;
-                                  ?>
-                                  @if($interest)
-                                    @for($i = 0; $i < count($interest); $i = $i + 1)
-                                      <span class="label label-success">{{ $interest[$i] }}</span>
-                                    @endfor
+                                  @if($sessions->first()->course->course_registrations->toArray() != null && $sessions->first()->course->course_registrations->count() >= $sessions->first()->course->course_package->course_type->count_student_min)
+                                    {{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}
+                                    <span class="hidden-md hidden-lg hidden-xl">
+                                      @if($dt->instructor_id != Auth::user()->instructor->id)
+                                        <br /><a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.chat_instructor.show', $dt->instructor->user_id) }}">Chat</a>
+                                      @endif
+                                    </span>
                                   @else
-                                    <span class="text-muted"><i>N/A</i></span>
+                                    <i class="text-muted">Pending</i>
                                   @endif
                                 </td>
                                 <td>
-                                  @if($dt->instructor->user->image_profile != 'user.jpg')
-                                    <img src="{{ asset('uploads/instructor/'.$dt->instructor->user->image_profile) }}" style="width:100%">
+                                  @if($sessions->first()->course->course_registrations->toArray() != null && $sessions->first()->course->course_registrations->count() >= $sessions->first()->course->course_package->course_type->count_student_min)
+                                    <?php
+                                      if($dt->instructor->interest) {
+                                        $interest = explode(', ', $dt->instructor->interest);
+                                      } else $interest = null;
+                                    ?>
+                                    @if($interest)
+                                      @for($i = 0; $i < count($interest); $i = $i + 1)
+                                        <span class="label label-success">{{ $interest[$i] }}</span>
+                                      @endfor
+                                    @else
+                                      <span class="text-muted"><i>N/A</i></span>
+                                    @endif
+                                  @else
+                                    <i class="text-muted">Pending</i>
+                                  @endif
+                                </td>
+                                <td>
+                                  @if($sessions->first()->course->course_registrations->toArray() != null && $sessions->first()->course->course_registrations->count() >= $sessions->first()->course->course_package->course_type->count_student_min)
+                                    @if($dt->instructor->user->image_profile != 'user.jpg')
+                                      <img src="{{ asset('uploads/instructor/'.$dt->instructor->user->image_profile) }}" style="width:100%">
+                                    @else
+                                      <img src="{{ asset('uploads/user.jpg') }}" style="width:100%">
+                                    @endif
                                   @else
                                     <img src="{{ asset('uploads/user.jpg') }}" style="width:100%">
                                   @endif
                                 </td>
                                 <td class="hidden-xs hidden-sm text-center">
-                                  @if($dt->instructor_id != Auth::user()->instructor->id)
-                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.chat_instructor.show', $dt->instructor->user_id) }}">Link</a>
+                                  @if($sessions->first()->course->course_registrations->toArray() != null && $sessions->first()->course->course_registrations->count() >= $sessions->first()->course->course_package->course_type->count_student_min)
+                                    @if($dt->instructor_id != Auth::user()->instructor->id)
+                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('instructor.chat_instructor.show', $dt->instructor->user_id) }}">Link</a>
+                                    @else
+                                      <i class="text-muted">N/A</i>
+                                    @endif
                                   @else
                                     <i class="text-muted">N/A</i>
                                   @endif
@@ -645,12 +661,15 @@
                                           $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                                         ?>
                                         @foreach($sessions as $i => $dt)
+                                          <?php
+                                            $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                            $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
+                                          ?>
                                           @if(old('session_id') == $dt->id))
                                             <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
                                           @else
                                             <option value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
                                           @endif
-                                          <?php $i++; ?>
                                         @endforeach
                                       </select>
                                       @error('session_id')
@@ -1055,128 +1074,130 @@
                           @endforeach
                         </tbody>
                       </table>
-                      <hr>
-                      <div class="box-header">
-                        <h4><b>Add or Modify a Main Material</b></h4>
-                        <p class="no-padding text-red">* This field is required</p>
-                      </div>
-                      <div class="box-body">
-                        <form role="form" method="post" action="{{ route('instructor.material.update', [$course->id, 1]) }}" enctype="multipart/form-data">
-                          @csrf
-                          @method('PUT')
-                          <div class="box-body">
-                            <div class="row">
-                              <div class="col-md-12">
-                                <div class="col-md-6">
-                                  <div class="form-group @error('material_public_id') has-error @enderror">
-                                    <label for="material_public_id">
-                                      Main Material ID
-                                      <span class="text-red">*</span>
-                                    </label>
-                                    <select name="material_public_id" type="text" class="@error('material_public_id') is-invalid @enderror form-control">
-                                      <option selected="selected" value="">-- Enter Main Material ID --</option>
-                                      <option value="0">Add a New Material</option>
-                                      @foreach($course->course_package->material_publics as $i => $mp)
-                                        @if(old('material_public_id') == $mp->id))
-                                          <option selected="selected" value="{{ $mp->id }}">#{{ $i + 1 }} - {{ $mp->name }}</option>
-                                        @else
-                                          <option value="{{ $mp->id }}">#{{ $i + 1 }} - {{ $mp->name }}</option>
-                                        @endif
-                                        <?php $i++; ?>
-                                      @endforeach
-                                    </select>
-                                    @error('material_public_id')
-                                      <p style="color:red">{{ $message }}</p>
-                                    @enderror
-                                  </div>
-                                </div>
-                                <div class="col-md-6">
-                                  <div class="form-group @error('material_public_session_name') has-error @enderror">
-                                    <label for="material_public_session_name">
-                                      For Session
-                                      <span class="text-red">*</span>
-                                    </label>
-                                    <select name="material_public_session_name" type="text" class="@error('material_public_session_name') is-invalid @enderror form-control">
-                                      <option selected="selected" value="">-- Enter Session Name --</option>
-                                      @foreach($sessions as $i => $dt)
-                                        @if(old('material_public_session_name') == $dt->id))
-                                          <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
-                                        @else
-                                          <option value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
-                                        @endif
-                                        <?php $i++; ?>
-                                      @endforeach
-                                    </select>
-                                    @error('material_public_session_name')
-                                      <p style="color:red">{{ $message }}</p>
-                                    @enderror
-                                  </div>
-                                </div>
+                      @if(Auth::user()->roles == 'Lead Instructor')
+                        <hr>
+                        <div class="box-header">
+                          <h4><b>Add or Modify a Main Material</b></h4>
+                          <p class="no-padding text-red">* This field is required</p>
+                        </div>
+                        <div class="box-body">
+                          <form role="form" method="post" action="{{ route('instructor.material.update', [$course->id, 1]) }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="box-body">
+                              <div class="row">
                                 <div class="col-md-12">
-                                  <div class="form-group @error('material_public_name') has-error @enderror">
-                                    <label for="material_public_name">
-                                      Material Name
-                                      <span class="text-red">*</span>
-                                    </label>
-                                    <input name="material_public_name" value="{{ old('material_public_name') }}" type="text" class="@error('material_public_name') is-invalid @enderror form-control" placeholder="Enter Material Name">
-                                    @error('material_public_name')
-                                      <p style="color:red">{{ $message }}</p>
-                                    @enderror
+                                  <div class="col-md-6">
+                                    <div class="form-group @error('material_public_id') has-error @enderror">
+                                      <label for="material_public_id">
+                                        Main Material ID
+                                        <span class="text-red">*</span>
+                                      </label>
+                                      <select name="material_public_id" type="text" class="@error('material_public_id') is-invalid @enderror form-control">
+                                        <option selected="selected" value="">-- Enter Main Material ID --</option>
+                                        <option value="0">Add a New Material</option>
+                                        @foreach($course->course_package->material_publics as $i => $mp)
+                                          @if(old('material_public_id') == $mp->id))
+                                            <option selected="selected" value="{{ $mp->id }}">#{{ $i + 1 }} - {{ $mp->name }}</option>
+                                          @else
+                                            <option value="{{ $mp->id }}">#{{ $i + 1 }} - {{ $mp->name }}</option>
+                                          @endif
+                                          <?php $i++; ?>
+                                        @endforeach
+                                      </select>
+                                      @error('material_public_id')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
                                   </div>
-                                  <div class="form-group @error('material_public_description') has-error @enderror">
-                                    <label for="material_public_description">
-                                      Material Description
-                                    </label>
-                                    <textarea name="material_public_description" class="@error('material_public_description') is-invalid @enderror form-control" rows="5" placeholder="Enter Material Description">{{ old('material_public_description') }}</textarea>
-                                    @error('material_public_description')
-                                      <p style="color:red">{{ $message }}</p>
-                                    @enderror
+                                  <div class="col-md-6">
+                                    <div class="form-group @error('material_public_session_name') has-error @enderror">
+                                      <label for="material_public_session_name">
+                                        For Session
+                                        <span class="text-red">*</span>
+                                      </label>
+                                      <select name="material_public_session_name" type="text" class="@error('material_public_session_name') is-invalid @enderror form-control">
+                                        <option selected="selected" value="">-- Enter Session Name --</option>
+                                        @foreach($sessions as $i => $dt)
+                                          @if(old('material_public_session_name') == $dt->id))
+                                            <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
+                                          @else
+                                            <option value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
+                                          @endif
+                                          <?php $i++; ?>
+                                        @endforeach
+                                      </select>
+                                      @error('material_public_session_name')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
                                   </div>
-                                  <div class="form-group @error('material_public_path_type') has-error @enderror">
-                                    <label for="material_public_path_type">
-                                      Insert a Link or Upload a File
-                                      <span class="text-red">*</span>
-                                    </label>
-                                    <select id="material_public_path_type" name="material_public_path_type" type="text" class="@error('material_public_path_type') is-invalid @enderror form-control" onchange="if(document.getElementById('material_public_path_type').value == 'link') { document.getElementById('material_public_path_link_div').className = 'form-group'; document.getElementById('material_public_path_file_div').className = 'form-group hidden'; } else if(document.getElementById('material_public_path_type').value == 'file') { document.getElementById('material_public_path_link_div').className = 'form-group hidden'; document.getElementById('material_public_path_file_div').className = 'form-group'; } else { document.getElementById('material_public_path_link_div').className = 'form-group hidden'; document.getElementById('material_public_path_file_div').className = 'form-group hidden'; }">
-                                      <option selected="selected" value="0">-- Enter Your Choice --</option>
-                                      <option value="link">Insert a Link</option>
-                                      <option value="file">Upload a File</option>
-                                    </select>
-                                    @error('material_public_path_type')
-                                      <p style="color:red">{{ $message }}</p>
-                                    @enderror
-                                  </div>
-                                  <div id="material_public_path_link_div" class="form-group @error('material_public_path_link') has-error @enderror hidden">
-                                    <label for="material_public_path_link">
-                                      Insert a Link
-                                      <span class="text-red">*</span>
-                                    </label>
-                                    <input name="material_public_path_link" value="{{ old('material_public_path_link') }}" type="text" class="@error('material_public_path_link') is-invalid @enderror form-control" placeholder="Enter a Link">
-                                    @error('material_public_path_link')
-                                      <p style="color:red">{{ $message }}</p>
-                                    @enderror
-                                  </div>
-                                  <div id="material_public_path_file_div" class="form-group @error('material_public_path_file') has-error @enderror hidden">
-                                    <label for="material_public_path_file">
-                                      Upload File (any type)
-                                      <span class="text-red">*</span>
-                                    </label>
-                                    <p class="text-red" style="padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
-                                    <p class="text-red" style="padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
-                                    <input name="material_public_path_file" type="file" accept="*" class="@error('material_public_path_file') is-invalid @enderror form-control">
-                                    @error('material_public_path_file')
-                                      <p style="color:red">{{ $message }}</p>
-                                    @enderror
+                                  <div class="col-md-12">
+                                    <div class="form-group @error('material_public_name') has-error @enderror">
+                                      <label for="material_public_name">
+                                        Material Name
+                                        <span class="text-red">*</span>
+                                      </label>
+                                      <input name="material_public_name" value="{{ old('material_public_name') }}" type="text" class="@error('material_public_name') is-invalid @enderror form-control" placeholder="Enter Material Name">
+                                      @error('material_public_name')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                    <div class="form-group @error('material_public_description') has-error @enderror">
+                                      <label for="material_public_description">
+                                        Material Description
+                                      </label>
+                                      <textarea name="material_public_description" class="@error('material_public_description') is-invalid @enderror form-control" rows="5" placeholder="Enter Material Description">{{ old('material_public_description') }}</textarea>
+                                      @error('material_public_description')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                    <div class="form-group @error('material_public_path_type') has-error @enderror">
+                                      <label for="material_public_path_type">
+                                        Insert a Link or Upload a File
+                                        <span class="text-red">*</span>
+                                      </label>
+                                      <select id="material_public_path_type" name="material_public_path_type" type="text" class="@error('material_public_path_type') is-invalid @enderror form-control" onchange="if(document.getElementById('material_public_path_type').value == 'link') { document.getElementById('material_public_path_link_div').className = 'form-group'; document.getElementById('material_public_path_file_div').className = 'form-group hidden'; } else if(document.getElementById('material_public_path_type').value == 'file') { document.getElementById('material_public_path_link_div').className = 'form-group hidden'; document.getElementById('material_public_path_file_div').className = 'form-group'; } else { document.getElementById('material_public_path_link_div').className = 'form-group hidden'; document.getElementById('material_public_path_file_div').className = 'form-group hidden'; }">
+                                        <option selected="selected" value="0">-- Enter Your Choice --</option>
+                                        <option value="link">Insert a Link</option>
+                                        <option value="file">Upload a File</option>
+                                      </select>
+                                      @error('material_public_path_type')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                    <div id="material_public_path_link_div" class="form-group @error('material_public_path_link') has-error @enderror hidden">
+                                      <label for="material_public_path_link">
+                                        Insert a Link
+                                        <span class="text-red">*</span>
+                                      </label>
+                                      <input name="material_public_path_link" value="{{ old('material_public_path_link') }}" type="text" class="@error('material_public_path_link') is-invalid @enderror form-control" placeholder="Enter a Link">
+                                      @error('material_public_path_link')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                    <div id="material_public_path_file_div" class="form-group @error('material_public_path_file') has-error @enderror hidden">
+                                      <label for="material_public_path_file">
+                                        Upload File (any type)
+                                        <span class="text-red">*</span>
+                                      </label>
+                                      <p class="text-red" style="padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
+                                      <p class="text-red" style="padding-top:0px; margin-top:0px;">If you need to upload more than one file, please convert the files to a ZIP file (or other similar file extensions: .rar, .7z, etc.)</p>
+                                      <input name="material_public_path_file" type="file" accept="*" class="@error('material_public_path_file') is-invalid @enderror form-control">
+                                      @error('material_public_path_file')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          <div class="box-footer">
-                            <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
-                          </div>
-                        </form>
-                      </div>
+                            <div class="box-footer">
+                              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                            </div>
+                          </form>
+                        </div>
+                      @endif
                     @else
                       <div class="text-center">No data available.</div>
                     @endif
