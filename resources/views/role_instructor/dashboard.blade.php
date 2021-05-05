@@ -326,9 +326,9 @@
                   <p class="box-title" style="display:inline;">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ $s->course->code }}{{ $s->course->id }}" aria-expanded="false" class="collapsed" style="color:#555555;">
                       @if($s->course->title)
-                        <p>{{ $s->course->title }}</p>
+                        <p><b>{{ $s->course->title }}</b></p>
                       @else
-                        <p>{{ $s->course->course_package->title }}</p>
+                        <p><b>{{ $s->course->course_package->title }}</b></p>
                       @endif
                     </a>
                   </p>
