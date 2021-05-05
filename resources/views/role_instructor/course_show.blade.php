@@ -559,6 +559,66 @@
                       </table>
                       <hr>
                       <div class="box-header">
+                        <h4><b>Modify Session Information</b></h4>
+                        <p class="no-padding text-red">* This field is required</p>
+                      </div>
+                      <div class="box-body">
+                        <form role="form" method="post" action="{{ route('instructor.session_show.update') }}" enctype="multipart/form-data">
+                          @csrf
+                          @method('PUT')
+                          <div class="box-body">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="col-md-12">
+                                  <div class="form-group @error('session_id') has-error @enderror">
+                                    <label for="session_id">
+                                      Session ID
+                                      <span class="text-red">*</span>
+                                    </label>
+                                    <select name="session_id" type="text" class="@error('session_id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Session ID --</option>
+                                      <?php
+                                        $i = 0;
+                                        $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                                      ?>
+                                      @foreach($sessions as $i => $dt)
+                                        @if(old('session_id') == $dt->id))
+                                          <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
+                                        @else
+                                          <option value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
+                                        @endif
+                                        <?php $i++; ?>
+                                      @endforeach
+                                    </select>
+                                    @error('session_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('session_description') has-error @enderror">
+                                    <label for="session_description">Session Description</label>
+                                    <textarea name="session_description" class="@error('session_description') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Description">{{ old('session_description') }}</textarea>
+                                    @error('session_description')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group @error('link_zoom') has-error @enderror">
+                                    <label for="link_zoom">Meeting Link</label>
+                                    <input name="link_zoom" type="text" class="form-control" placeholder="Enter Meeting Link" value="{{ old('link_zoom') }}">
+                                    @error('link_zoom')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="box-footer">
+                            <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                          </div>
+                        </form>
+                      </div>
+                      <hr>
+                      <div class="box-header">
                         <h4><b>Reschedule a Session</b></h4>
                         @if($course->course_package->course_type->count_student_max == 1)
                           <p class="no-padding text-red">* This field is required</p>

@@ -230,8 +230,12 @@ Route::group(['middleware'=>'auth'], function() {
         Route::post('/instructor/course/{course_id}/session/store', 'InstructorController@session_store')->name('instructor.session.store');
         
         // memodifikasi informasi umum mengenai sesi
-        // & memodifikasi ketersediaan jadwal mengajar
-        Route::put('/instructor/course/session/update', 'InstructorController@session_update')->name('instructor.session.update');
+        // & memodifikasi ketersediaan jadwal mengajar (via index)
+        Route::put('/instructor/course/session/index/update', 'InstructorController@session_index_update')->name('instructor.session_index.update');
+        
+        // memodifikasi informasi umum mengenai sesi
+        // & memodifikasi ketersediaan jadwal mengajar (via show)
+        Route::put('/instructor/course/session/show/update', 'InstructorController@session_show_update')->name('instructor.session_show.update');
         
         // mengajukan reschedule
         Route::put('/instructor/course/session/reschedule/update', 'InstructorController@session_reschedule_update')->name('instructor.session_reschedule.update');

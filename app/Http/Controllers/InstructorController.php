@@ -166,9 +166,9 @@ class InstructorController extends Controller
         // & menambah ketersediaan jadwal mengajar
     }
 
-    public function session_update(Request $request) {
+    public function session_index_update(Request $request) {
         // memodifikasi informasi umum mengenai sesi
-        // & memodifikasi ketersediaan jadwal mengajar
+        // & memodifikasi ketersediaan jadwal mengajar (via index)
         $data = Validator::make($request->all(), [
             'schedule_time_date' => ['bail', Rule::requiredIf($request->schedule_time_flag == 1)],
             'schedule_time_time' => ['bail', Rule::requiredIf($request->schedule_time_flag == 1)],
@@ -269,6 +269,37 @@ class InstructorController extends Controller
                 }
             }
         }
+        return redirect()->back();
+    }
+
+    public function session_show_update(Request $request) {
+        // memodifikasi informasi umum mengenai sesi
+        // & memodifikasi ketersediaan jadwal mengajar (via show)
+        $data = Validator::make($request->all(), [
+            'session_id' => ['bail', 'required'],
+            'session_description' => ['bail', 'sometimes'],
+            'link_zoom' => ['bail', 'sometimes'],
+        ]);
+        if($data->fails()) {
+            session(['caption-danger' => 'This session information has not been changed. Try again.']);
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+        
+        // memodifikasi informasi sesi yang sudah ada
+        $session = Session::findOrFail($request->session_id);
+        if($session->schedule->instructor_schedules->first()->instructor->id != Auth::user()->instructor->id && $session->schedule->instructor_schedules->last()->instructor->id != Auth::user()->instructor->id) {
+            session(['caption-danger' => 'Cannot change this session information. You are not authorized to edit this session information.']);
+            return redirect()->back();
+        }
+        
+        $session->update([
+            'description' => $request->session_description,
+            'link_zoom' => $request->link_zoom,
+            'updated_at' => now(),
+        ]);
+        session(['caption-success' => 'This session information has been changed. Thank you!']);
         return redirect()->back();
     }
     

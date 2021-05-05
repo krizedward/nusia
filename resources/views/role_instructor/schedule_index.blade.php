@@ -36,7 +36,7 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-          <form action="{{ route('instructor.session.update') }}" method="post">
+          <form action="{{ route('instructor.session_index.update') }}" method="post">
             @csrf
             @method('PUT')
             <div class="form-group">
@@ -61,7 +61,7 @@
             </div>
             <div id="link_zoom_div" class="form-group @error('link_zoom') has-error @enderror hidden">
               <label for="link_zoom">Meeting Link</label>
-              <input name="link_zoom" type="text" class="form-control" placeholder="insert a meeting link" value="{{ old('name') }}">
+              <input name="link_zoom" type="text" class="form-control" placeholder="insert a meeting link" value="{{ old('link_zoom') }}">
               @error('link_zoom')
                 <p style="color:red">{{ $message }}</p>
               @enderror
