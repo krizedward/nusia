@@ -537,13 +537,24 @@
                                       <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="Product Image">
                                     </div>
                                     <div class="product-info">
-                                      @if($cr->course->title)
-                                        <div class="product-title">{{ $cr->course->title }} - {{ $dt->name }}</div>
-                                      @else
-                                        <div class="product-title">{{ $cr->course->course_package->title }} - {{ $dt->name }}</div>
-                                      @endif
+                                      <div class="product-title">
+                                        @if($cr->course->title)
+                                          {{ $cr->course->title }} - {{ $dt->name }}
+                                        @else
+                                          {{ $cr->course->course_package->title }} - {{ $dt->name }}
+                                        @endif
+                                        @if(strpos($dt->path, '://') !== false || strpos($dt->path, 'www.') !== false)
+                                          (Link)
+                                        @else
+                                          ({{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }})
+                                        @endif
+                                      </div>
                                       <span class="product-description">
-                                        <a target="_blank" rel="noopener noreferrer" href="{{ route('student.material.download', [$cr->id, 1, $dt->id]) }}">Download</a>
+                                        @if(strpos($dt->path, '://') !== false || strpos($dt->path, 'www.') !== false)
+                                          <a target="_blank" rel="noopener noreferrer nofollow" href="{{ $dt->path }}">Click here to download</a>
+                                        @else
+                                          <a target="_blank" rel="noopener noreferrer" href="{{ route('student.material.download', [$cr->id, 1, $dt->id]) }}">Click here to download</a>
+                                        @endif
                                       </span>
                                     </div>
                                   </li>
@@ -559,15 +570,26 @@
                                         <img src="{{ asset('adminlte/dist/img/default-50x50.gif') }}" alt="Product Image">
                                       </div>
                                       <div class="product-info">
-                                        @if($s->title)
-                                          <div class="product-title">{{ $s->title }} - {{ $dt->name }}</div>
-                                        @elseif($s->course->title)
-                                          <div class="product-title">{{ $s->course->title }} - {{ $dt->name }}</div>
-                                        @else
-                                          <div class="product-title">{{ $s->course->course_package->title }} - {{ $dt->name }}</div>
-                                        @endif
+                                        <div class="product-title">
+                                          @if($s->title)
+                                            {{ $s->title }} - {{ $dt->name }}
+                                          @elseif($s->course->title)
+                                            {{ $s->course->title }} - {{ $dt->name }}
+                                          @else
+                                            {{ $s->course->course_package->title }} - {{ $dt->name }}
+                                          @endif
+                                          @if(strpos($dt->path, '://') !== false || strpos($dt->path, 'www.') !== false)
+                                            (Link)
+                                          @else
+                                            ({{ strtoupper( substr($dt->path, strrpos($dt->path, '.', 0) + 1) ) }})
+                                          @endif
+                                        </div>
                                         <span class="product-description">
-                                          <a target="_blank" rel="noopener noreferrer" href="{{ route('student.material.download', [$cr->id, 2, $dt->id]) }}">Download</a>
+                                          @if(strpos($dt->path, '://') !== false || strpos($dt->path, 'www.') !== false)
+                                            <a target="_blank" rel="noopener noreferrer nofollow" href="{{ $dt->path }}">Click here to download</a>
+                                          @else
+                                            <a target="_blank" rel="noopener noreferrer" href="{{ route('student.material.download', [$cr->id, 2, $dt->id]) }}">Click here to download</a>
+                                          @endif
                                         </span>
                                       </div>
                                     </li>
