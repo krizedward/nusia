@@ -231,7 +231,7 @@ Route::group(['middleware'=>'auth'], function() {
         
         // memodifikasi informasi umum mengenai sesi
         // & memodifikasi ketersediaan jadwal mengajar (via index)
-        Route::put('/instructor/course/session/index/update', 'InstructorController@session_index_update')->name('instructor.session_index.update');
+        Route::put('/instructor/course/session/index/{flag?}/update', 'InstructorController@session_index_update')->name('instructor.session_index.update');
         
         // memodifikasi informasi umum mengenai sesi
         // & memodifikasi ketersediaan jadwal mengajar (via show)

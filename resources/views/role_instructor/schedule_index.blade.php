@@ -29,14 +29,51 @@
       ?>
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title"><b>Edit Session Information</b></h3>
-          {{--
-          <p class="no-margin">There are <b>{{ $count }} sessions</b> available.</p>
-          --}}
+          <h3 class="box-title"><b>Add Teaching Availability</b></h3>
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-          <form action="{{ route('instructor.session_index.update') }}" method="post">
+          <form action="{{ route('instructor.session_index.update', [1]) }}" method="post">
+            @csrf
+            @method('PUT')
+            <div id="schedule_time_div" class="form-group @error('schedule_time_date') has-error @enderror @error('schedule_time_time') has-error @enderror">
+              <label for="schedule_time_date">Schedule</label>
+              <p class="text-red">The time schedule inputted is adjusted with your local time.</p>
+              <div class="input-group date">
+                <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                <input name="schedule_time_date" type="text" class="form-control pull-right datepicker">
+              </div>
+              <label for="schedule_time_time" class="hidden">Schedule (set the time)</label><br />
+              <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                <input name="schedule_time_time" type="text" class="form-control pull-right timepicker">
+              </div>
+              @error('schedule_time_date')
+                <p style="color:red">{{ $message }}</p>
+              @enderror
+              @error('schedule_time_time')
+                <p style="color:red">{{ $message }}</p>
+              @enderror
+            </div>
+            <button type="submit" class="btn btn-s btn-flat btn-primary" style="width:100%;">Submit</button>
+          </form>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title"><b>Edit Meeting Link</b></h3>
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <form action="{{ route('instructor.session_index.update', [2]) }}" method="post">
             @csrf
             @method('PUT')
             <div class="form-group">
@@ -59,41 +96,12 @@
                 @endforeach
               </select>
             </div>
-            <div id="link_zoom_div" class="form-group @error('link_zoom') has-error @enderror hidden">
+            <div id="link_zoom_div" class="form-group @error('link_zoom') has-error @enderror">
               <label for="link_zoom">Meeting Link</label>
               <input name="link_zoom" type="text" class="form-control" placeholder="insert a meeting link" value="{{ old('link_zoom') }}">
               @error('link_zoom')
                 <p style="color:red">{{ $message }}</p>
               @enderror
-            </div>
-            <div class="form-group">
-              <label class="hidden" for="link_zoom_flag_btn">Meeting Link</label>
-              <input type="hidden" id="link_zoom_flag" name="link_zoom_flag" value="0">
-              <input type="button" id="link_zoom_flag_btn" class="btn btn-flat btn-xs btn-default" style="width:100%;" value="Click to enable changing the meeting link" onclick="if(document.getElementById('link_zoom_flag').value == 0) { document.getElementById('link_zoom_flag').value = 1; document.getElementById('link_zoom_div').className = 'form-group'; document.getElementById('link_zoom_flag_btn').value = 'Click to disable changing the meeting link'; } else { document.getElementById('link_zoom_flag').value = 0; document.getElementById('link_zoom_div').className = 'form-group hidden'; document.getElementById('link_zoom_flag_btn').value = 'Click to enable changing the meeting link'; }">
-            </div>
-            <div id="schedule_time_div" class="form-group @error('schedule_time_date') has-error @enderror @error('schedule_time_time') has-error @enderror hidden">
-              <label for="schedule_time_date">Schedule</label>
-              <p class="text-red">The time schedule inputted is adjusted with your local time.</p>
-              <div class="input-group date">
-                <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                <input name="schedule_time_date" type="text" class="form-control pull-right datepicker">
-              </div>
-              <label for="schedule_time_time" class="hidden">Schedule (set the time)</label><br />
-              <div class="input-group">
-                <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
-                <input name="schedule_time_time" type="text" class="form-control pull-right timepicker">
-              </div>
-              @error('schedule_time_date')
-                <p style="color:red">{{ $message }}</p>
-              @enderror
-              @error('schedule_time_time')
-                <p style="color:red">{{ $message }}</p>
-              @enderror
-            </div>
-            <div class="form-group">
-              <label class="hidden" for="schedule_time_btn">Schedule</label>
-              <input type="hidden" id="schedule_time_flag" name="schedule_time_flag" value="0">
-              <input type="button" id="schedule_time_flag_btn" class="btn btn-flat btn-xs btn-default" style="width:100%;" value="Click to enable changing the schedule" onclick="if(document.getElementById('schedule_time_flag').value == 0) { document.getElementById('schedule_time_flag').value = 1; document.getElementById('schedule_time_div').className = 'form-group'; document.getElementById('schedule_time_flag_btn').value = 'Click to disable changing the schedule'; } else { document.getElementById('schedule_time_flag').value = 0; document.getElementById('schedule_time_div').className = 'form-group hidden'; document.getElementById('schedule_time_flag_btn').value = 'Click to enable changing the schedule'; }">
             </div>
             <button type="submit" class="btn btn-s btn-flat btn-primary" style="width:100%;">Submit</button>
           </form>
@@ -172,7 +180,11 @@
                                   {{--<td>{{ $dt->schedule->session->course->course_package->course_level->name }}</td>--}}
                                   <td>
                                     <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
-                                    {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                                    @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                                    @else
+                                      {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                                    @endif
                                   </td>
                                   <td class="text-center">
                                     <?php
@@ -269,6 +281,9 @@
                                 <tr>
                                   <td>
                                     <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                    @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      <b>(Today)</b>
+                                    @endif
                                     {{ $schedule_time_begin_iso }}
                                   </td>
                                   <td class="text-center">
@@ -347,6 +362,9 @@
                               <tr>
                                 <td>
                                   <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                  @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                    <b>(Today)</b>
+                                  @endif
                                   {{ $schedule_time_begin_iso }}
                                 </td>
                                 <td class="text-center">
@@ -401,7 +419,7 @@
                 <div class="col-md-12">
                   <div class="box box-default">
                     <div class="box-header">
-                      <h3 class="box-title"><b>All Assigned Courses</b></h3>
+                      <h3 class="box-title"><b>Currently Assigned Courses</b></h3>
                       {{--
                       <div>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('registered.dashboard.index') }}">
@@ -415,6 +433,150 @@
                       </div>
                     </div>
                     <div class="box-body">
+                      <strong><i class="fa fa-edit margin-r-5"></i> Types of Class Status</strong>
+                      <p>
+                        <label data-toggle="tooltip" title class="label bg-red" data-original-title="This class sessions are not ready to be published yet. Please check whether all schedules for this class have been assigned.">Not Ready</label>
+                        <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This class has not started yet.">Upcoming</label>
+                        <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This class is in progress.">Ongoing</label>
+                      </p>
+                      <hr>
+                      <table class="table table-bordered table-striped example1">
+                        <thead>
+                          <th>Next Meeting Time</th>
+                          <th>Class Status</th>
+                          {{--
+                          <th>First Meet in Class</th>
+                          <th>Last Meet in Class</th>
+                          --}}
+                          <th>Class Name</th>
+                          <th style="width:5%;">View</th>
+                        </thead>
+                        <tbody>
+                          @if($courses->toArray() != null)
+                            @foreach($courses as $dt)
+                              <?php
+                                // UNTUK KOLOM "Next Meeting Time" dan "Class Status"
+                                $next_meeting_time = null;
+                                $next_meeting_link = null;
+                                $course_time_begin = null;
+                                $course_time_end = null;
+                                $class_status = null;
+                                if($dt->sessions) {
+                                  foreach($dt->sessions as $s) {
+                                    $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
+                                    // UNTUK KOLOM "Next Meeting Time"
+                                    if($schedule_time_end >= $schedule_now) {
+                                      if($next_meeting_time == null) {
+                                        $next_meeting_time = $schedule_time_begin;
+                                        $next_meeting_link = $s->link_zoom;
+                                      }
+                                      if($schedule_time_end < $next_meeting_time) {
+                                        $next_meeting_time = $schedule_time_begin;
+                                        $next_meeting_link = $s->link_zoom;
+                                      }
+                                    }
+                                    // UNTUK KOLOM "Class Status"
+                                    if($course_time_begin == null) $course_time_begin = $schedule_time_begin;
+                                    if($course_time_end == null) $course_time_end = $schedule_time_begin;
+                                    if($course_time_begin > $schedule_time_begin) $course_time_begin = $schedule_time_begin;
+                                    if($course_time_end < $schedule_time_begin) $course_time_end = $schedule_time_begin;
+                                  }
+                                  // SIMPAN NILAI VARIABEL UNTUK SELEKSI KOLOM "Class Status"
+                                  if($dt->sessions->count() < $dt->course_package->count_session) $class_status = 1; // Not Ready
+                                  if($schedule_now < $course_time_begin) $class_status = 2; // Upcoming
+                                  else if($schedule_now <= $course_time_end) $class_status = 3; // Ongoing
+                                  else if($schedule_now > $course_time_end) $class_status = 4; // Done
+                                } else {
+                                  $class_status = 1; // Not Ready
+                                }
+                              ?>
+                              @if($class_status == 4)
+                                @continue
+                              @endif
+                              <tr>
+                                {{--
+                                @if($course_time_begin)
+                                  <td>
+                                    <span class="hidden">{{ $course_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                    {{ $course_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                  </td>
+                                @else
+                                  <td><i>N/A</i></td>
+                                @endif
+                                @if($course_time_end)
+                                  <td>
+                                    <span class="hidden">{{ $course_time_end->isoFormat('YYMMDDAhhmm') }}</span>
+                                    {{ $course_time_end->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                  </td>
+                                @else
+                                  <td><i>N/A</i></td>
+                                @endif
+                                --}}
+                                <td>
+                                  @if($next_meeting_time)
+                                    <span class="hidden">{{ $next_meeting_time->isoFormat('YYMMDDAhhmm') }}</span>
+                                    @if($next_meeting_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      Today, {{ $next_meeting_time->isoFormat('hh:mm A') }}
+                                    @else
+                                      {{ $next_meeting_time->isoFormat('ddd, MMM Do YYYY, hh:mm A') }}
+                                    @endif
+                                    <div class="pull-right">
+                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $next_meeting_link }}">Link</a>
+                                      &nbsp;&nbsp;
+                                    </div>
+                                  @else
+                                    <span class="hidden">N/A</span>
+                                    <i>N/A</i>
+                                    <div class="pull-right">
+                                      <button disabled class="btn btn-flat btn-xs btn-default btn-disabled">Link</button>
+                                      &nbsp;&nbsp;
+                                    </div>
+                                  @endif
+                                </td>
+                                <td class="text-center">
+                                  @if($class_status == 1)
+                                    <span class="hidden">1</span>
+                                    <label data-toggle="tooltip" title class="label bg-red" data-original-title="This class sessions are not ready to be published yet. Please check whether all schedules for this class have been assigned.">Not Ready</label>
+                                  @elseif($class_status == 2)
+                                    <span class="hidden">2</span>
+                                    <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This class has not started yet.">Upcoming</label>
+                                  @elseif($class_status == 3)
+                                    <span class="hidden">3</span>
+                                    <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This class is in progress.">Ongoing</label>
+                                  @elseif($class_status == 4)
+                                    <span class="hidden">4</span>
+                                    <label data-toggle="tooltip" title class="label bg-green" data-original-title="This class has been completed. Please make sure that all session attendances for this class have been checked.">Done</label>
+                                  @endif
+                                </td>
+                                <td>{{ $dt->course_package->material_type->name }} - {{ $dt->course_package->course_type->name }} - {{ $dt->title }}</td>
+                                <td class="text-center"><a target="_blank" class="btn btn-flat btn-xs bg-purple" href="{{ route('instructor.course.show', [$dt->id]) }}">Info</a></td>
+                              </tr>
+                            @endforeach
+                          @else
+                            <p class="text-muted">No schedules available.</p>
+                          @endif
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="box box-default collapsed-box">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>All Assigned Courses</b></h3>
+                      {{--
+                      <div>
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('registered.dashboard.index') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add User
+                        </a>
+                      </div>
+                      --}}
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                      </div>
+                    </div>
+                    <div class="box-body" style="display:none;">
                       <strong><i class="fa fa-edit margin-r-5"></i> Types of Class Status</strong>
                       <p>
                         <label data-toggle="tooltip" title class="label bg-red" data-original-title="This class sessions are not ready to be published yet. Please check whether all schedules for this class have been assigned.">Not Ready</label>
@@ -497,7 +659,11 @@
                                 <td>
                                   @if($next_meeting_time)
                                     <span class="hidden">{{ $next_meeting_time->isoFormat('YYMMDDAhhmm') }}</span>
-                                    {{ $next_meeting_time->isoFormat('ddd, MMM Do YYYY, hh:mm A') }}
+                                    @if($next_meeting_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      Today, {{ $next_meeting_time->isoFormat('hh:mm A') }}
+                                    @else
+                                      {{ $next_meeting_time->isoFormat('ddd, MMM Do YYYY, hh:mm A') }}
+                                    @endif
                                     <div class="pull-right">
                                       <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $next_meeting_link }}">Link</a>
                                       &nbsp;&nbsp;

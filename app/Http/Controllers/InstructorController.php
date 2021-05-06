@@ -166,108 +166,81 @@ class InstructorController extends Controller
         // & menambah ketersediaan jadwal mengajar
     }
 
-    public function session_index_update(Request $request) {
+    public function session_index_update(Request $request, $flag = 0) {
         // memodifikasi informasi umum mengenai sesi
         // & memodifikasi ketersediaan jadwal mengajar (via index)
-        $data = Validator::make($request->all(), [
-            'schedule_time_date' => ['bail', Rule::requiredIf($request->schedule_time_flag == 1)],
-            'schedule_time_time' => ['bail', Rule::requiredIf($request->schedule_time_flag == 1)],
-        ]);
-        if($data->fails()) {
-            session(['caption-danger' => 'This session information has not been changed. Try again.']);
-            return redirect()->back()
-                ->withErrors($data)
-                ->withInput();
-        }
-        
-        if($request->schedule_time_flag == 1) {
+        if($flag == 1) {
+            // add teaching availability
+            $data = Validator::make($request->all(), [
+                'schedule_time_date' => ['bail', 'required'],
+                'schedule_time_time' => ['bail', 'required'],
+            ]);
+            if($data->fails()) {
+                session(['caption-danger' => 'This teaching availability information has not been changed. Try again.']);
+                return redirect()->back()
+                    ->withErrors($data)
+                    ->withInput();
+            }
+            
             $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
             if($schedule_time < now()) {
-                session(['caption-danger' => 'Cannot change the time schedule as the inputted time is invalid.']);
+                session(['caption-danger' => 'Cannot change the teaching availability information as the inputted time has passed the current time.']);
                 return redirect()->back()->withInput();
             }
-        }
-        else $schedule_time = null;
-        
-        $schedule_time_is_exist = 0;
-        $already_existed_instructor_schedule = null;
-        if($schedule_time) {
+            
+            $schedule_time_is_exist = 0;
             foreach(Auth::user()->instructor->instructor_schedules as $dt) {
                 if($dt->schedule->schedule_time == $schedule_time) {
                     $schedule_time_is_exist = 1;
-                    $already_existed_instructor_schedule = $dt;
                     break;
                 }
             }
-        }
-        
-        if($request->session_id) {
-            // memodifikasi informasi sesi yang sudah ada
-            $session = Session::findOrFail($request->session_id);
-            if($request->link_zoom_flag == 1) {
-                // memodifikasi link meeting
-                $session->update([
-                    'link_zoom' => $request->link_zoom,
-                    'updated_at' => now(),
-                ]);
-                session(['caption-success' => 'This session information has been changed. Thank you!']);
-            }
-            if($schedule_time) {
-                // memodifikasi jadwal meeting
-                if($schedule_time_is_exist) {
-                    // terdapat jadwal meeting yang sama dengan schedule_time
-                    // maka tukar ketersediaan waktu antara jadwal lama dengan jadwal baru
-                    if($already_existed_instructor_schedule->status == 'Busy') {
-                        // jadwal yang ditukar telah diintegrasikan dengan sesi lain
-                        // maka tidak dapat dilakukan penukaran jadwal
-                        session(['caption-danger' => 'Cannot change the time schedule as the inputted time has been assigned to another session.']);
-                    } else if($already_existed_instructor_schedule->status == 'Available') {
-                        // jadwal yang ditukar belum diintegrasikan dengan sesi lain
-                        // maka dilakukan penukaran jadwal
-                        $session->schedule->instructor_schedules->first()->update([
-                            'status' => 'Available',
-                            'updated_at' => now(),
-                        ]);
-                        $session->update([
-                            'schedule_id' => $already_existed_instructor_schedule->schedule_id,
-                            'updated_at' => now(),
-                        ]);
-                        $already_existed_instructor_schedule->update([
-                            'status' => 'Busy',
-                            'updated_at' => now(),
-                        ]);
-                        session(['caption-success' => 'This session information has been changed. Thank you!']);
-                    }
-                } else {
-                    // tidak ada jadwal meeting yang sama dengan jadwal baru ini
-                    $session->schedule->update([
+            if($schedule_time_is_exist) {
+                // jadwal tersebut sudah ada, sehingga tidak dilakukan perubahan
+                session(['caption-danger' => 'This teaching availability information has been previously registered. No changes are made.']);
+                return redirect()->back()->withInput();
+            } else {
+                // jadwal tersebut belum ada, sehingga dibuat sebagai jadwal baru
+                InstructorSchedule::create([
+                    'instructor_id' => Auth::user()->instructor->id,
+                    'schedule_id' => Schedule::create([
                         'schedule_time' => $schedule_time,
-                        'updated_at' => now(),
-                    ]);
-                    session(['caption-success' => 'This session information has been changed. Thank you!']);
-                }
-            }
-        } else {
-            // menambah informasi jadwal atau informasi sesi baru
-            if($schedule_time) {
-                if($schedule_time_is_exist) {
-                    // jadwal tersebut sudah ada, sehingga tidak dilakukan perubahan
-                    session(['caption-danger' => 'This schedule has been previously registered. No changes are made.']);
-                    return redirect()->back()->withInput();
-                } else {
-                    // jadwal tersebut belum ada, sehingga dibuat sebagai jadwal baru
-                    InstructorSchedule::create([
-                        'instructor_id' => Auth::user()->instructor->id,
-                        'schedule_id' => Schedule::create([
-                            'schedule_time' => $schedule_time,
-                            'created_at' => now(),
-                        ])->id,
-                        'status' => 'Available',
                         'created_at' => now(),
-                    ]);
-                    session(['caption-success' => 'This schedule information has been added. Thank you!']);
-                }
+                    ])->id,
+                    'status' => 'Available',
+                    'created_at' => now(),
+                ]);
+                session(['caption-success' => 'This teaching availability information has been added. Thank you!']);
             }
+        } else if($flag == 2) {
+            // edit meeting link
+            $data = Validator::make($request->all(), [
+                'session_id' => ['bail', 'required'],
+                'link_zoom' => ['bail', 'sometimes'],
+            ]);
+            if($data->fails()) {
+                session(['caption-danger' => 'This session information has not been changed. Try again.']);
+                return redirect()->back()
+                    ->withErrors($data)
+                    ->withInput();
+            }
+            
+            $session = Session::findOrFail($request->session_id);
+            if($session->schedule->instructor_schedules->first()->instructor_id != Auth::user()->instructor->id && $session->schedule->instructor_schedules->last()->instructor_id != Auth::user()->instructor->id) {
+                session(['caption-danger' => 'Cannot change this session information. You are not authorized to edit this session information.']);
+                return redirect()->back();
+            }
+            $session->update([
+                'link_zoom' => $request->link_zoom,
+                'updated_at' => now(),
+            ]);
+            session(['caption-success' => 'This session information has been changed. Thank you!']);
+        } else {
+            // tidak diizinkan mengubah informasi
+            session(['caption-danger' => 'Cannot change, as you are not authorized to edit this information.']);
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
         }
         return redirect()->back();
     }
