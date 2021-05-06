@@ -86,6 +86,9 @@
                           <td>
                             @if($next_meeting_time)
                               {{ $next_meeting_time->isoFormat('dddd') }}
+                              @if($next_meeting_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                <b>(Today)</b>
+                              @endif
                             @else
                               <i class="text-muted">N/A</i>
                             @endif
