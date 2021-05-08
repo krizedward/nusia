@@ -901,7 +901,7 @@
                                       $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                                       $schedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                                     ?>
-                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                     @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                       <b>(Today)</b>
                                     @endif
@@ -916,7 +916,7 @@
                                         $reschedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                                         $reschedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                                       ?>
-                                      <span class="hidden">{{ $reschedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                      <span class="hidden">{{ $reschedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                       @if($reschedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                         <b>(Today)</b>
                                       @endif

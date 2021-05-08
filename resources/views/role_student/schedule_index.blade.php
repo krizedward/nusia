@@ -138,7 +138,7 @@
                                     @endif
                                   </td>
                                   <td>
-                                    <span class="hidden">{{ $schedule_times_begin[$i]->isoFormat('YYMMDDAhhmm') }}</span>
+                                    <span class="hidden">{{ $schedule_times_begin[$i]->isoFormat('YYMMDDHHmm') }}</span>
                                     @if($schedule_times_begin[$i]->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                       Today, {{ $schedule_times_begin[$i]->isoFormat('hh:mm A') }} {{ $schedule_times_end[$i]->isoFormat('[-] hh:mm A') }}
                                     @else

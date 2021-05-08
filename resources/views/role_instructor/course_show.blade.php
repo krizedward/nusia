@@ -495,7 +495,7 @@
                                   $schedule_time_30_mins_after_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
                                   $schedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                                 ?>
-                                <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                 @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                   Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                                 @else
@@ -748,7 +748,7 @@
                                       $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                                       $schedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                                     ?>
-                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                     @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                       <b>(Today)</b>
                                     @endif
@@ -763,7 +763,7 @@
                                         $reschedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                                         $reschedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                                       ?>
-                                      <span class="hidden">{{ $reschedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                      <span class="hidden">{{ $reschedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                       @if($reschedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                         <b>(Today)</b>
                                       @endif

@@ -124,7 +124,7 @@
                 <div class="col-md-12">
                   <div class="box box-default">
                     <div class="box-header">
-                      <h3 class="box-title"><b>All Sessions</b></h3>
+                      <h3 class="box-title"><b>Current Sessions</b></h3>
                       {{--
                       <div>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('registered.dashboard.index') }}">
@@ -143,7 +143,6 @@
                         <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This session has not started yet.">Upcoming</label>
                         <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This session is in progress.">Ongoing</label>
                         <label data-toggle="tooltip" title class="label bg-blue" data-original-title="You are required to complete this session attendance information.">Attendance Check</label>
-                        <label data-toggle="tooltip" title class="label bg-green" data-original-title="This session has passed its scheduled time and the attendance infomation for this session has been completed.">Done</label>
                       </p>
                       <hr>
                       <table class="table table-bordered table-striped example2">
@@ -161,25 +160,28 @@
                           @if($instructor_schedules->toArray() != null)
                             @foreach($instructor_schedules as $dt)
                               @if($dt->schedule->session)
+                                <?php
+                                  $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_10_mins_before_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_30_mins_after_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_10_mins_before_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->sub(10, 'minutes');
+                                  $schedule_time_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes');
+                                  $schedule_time_30_mins_after_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
+                                ?>
+                                @if($schedule_time_30_mins_after_end < $schedule_now)
+                                  @continue
+                                @endif
                                 <tr>
                                   <td>
-                                    <?php
-                                      $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                      $schedule_time_10_mins_before_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                      $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                      $schedule_time_30_mins_after_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                      $schedule_time_10_mins_before_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->sub(10, 'minutes');
-                                      $schedule_time_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes');
-                                      $schedule_time_30_mins_after_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
-                                    ?>
                                     {{ $dt->schedule->session->course->course_package->material_type->name }} - {{ $dt->schedule->session->course->course_package->course_type->name }} - {{ $dt->schedule->session->course->course_package->course_level->name }}
-                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                   </td>
                                   <td>{{ $dt->schedule->session->course->title }}</td>
                                   <td>{{ $dt->schedule->session->title }}</td>
                                   {{--<td>{{ $dt->schedule->session->course->course_package->course_level->name }}</td>--}}
                                   <td>
-                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                     @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                       Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
                                     @else
@@ -200,17 +202,14 @@
                                       }
                                     ?>
                                     @if($schedule_now < $schedule_time_begin)
-                                      <span class="hidden">1{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                      <span class="hidden">1{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                       <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This session has not started yet.">Upcoming</label>
                                     @elseif($schedule_now >= $schedule_time_begin && $schedule_now <= $schedule_time_end)
-                                      <span class="hidden">2{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                      <span class="hidden">2{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                       <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This session is in progress.">Ongoing</label>
                                     @elseif($attendance_is_checked == 0)
-                                      <span class="hidden">3{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                      <span class="hidden">3{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                       <label data-toggle="tooltip" title class="label bg-blue" data-original-title="You are required to complete this session attendance information.">Attendance Check</label>
-                                    @else
-                                      <span class="hidden">4{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
-                                      <label data-toggle="tooltip" title class="label bg-green" data-original-title="This session has passed its scheduled time and the attendance infomation for this session has been completed.">Done</label>
                                     @endif
                                   </td>
                                   @if($dt->schedule->session->link_zoom)
@@ -223,6 +222,67 @@
                                   @else
                                     <td class="text-center"><a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Link</a></td>
                                   @endif
+                                </tr>
+                              @endif
+                            @endforeach
+                          @else
+                            <p class="text-muted">No schedules available.</p>
+                          @endif
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="box box-default collapsed-box">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>All Sessions</b></h3>
+                      {{--
+                      <div>
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('registered.dashboard.index') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add User
+                        </a>
+                      </div>
+                      --}}
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                      </div>
+                    </div>
+                    <div class="box-body" style="display:none;">
+                      <table class="table table-bordered table-striped example1">
+                        <thead>
+                          <th>Course</th>
+                          <th>Class (Session)</th>
+                          {{--<th>Level</th>--}}
+                          <th>Meeting Time</th>
+                        </thead>
+                        <tbody>
+                          @if($instructor_schedules->toArray() != null)
+                            @foreach($instructor_schedules as $dt)
+                              @if($dt->schedule->session)
+                                <?php
+                                  $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_10_mins_before_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_30_mins_after_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_10_mins_before_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->sub(10, 'minutes');
+                                  $schedule_time_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes');
+                                  $schedule_time_30_mins_after_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
+                                ?>
+                                <tr>
+                                  <td>
+                                    {{ $dt->schedule->session->course->course_package->material_type->name }} - {{ $dt->schedule->session->course->course_package->course_type->name }} - {{ $dt->schedule->session->course->course_package->course_level->name }}
+                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
+                                  </td>
+                                  <td>{{ $dt->schedule->session->course->title }} ({{ $dt->schedule->session->title }})</td>
+                                  {{--<td>{{ $dt->schedule->session->course->course_package->course_level->name }}</td>--}}
+                                  <td>
+                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
+                                    @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                                    @else
+                                      {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                                    @endif
+                                  </td>
                                 </tr>
                               @endif
                             @endforeach
@@ -280,7 +340,7 @@
                               @if($schedule_now <= $schedule_time_begin)
                                 <tr>
                                   <td>
-                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                     @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                       <b>(Today)</b>
                                     @endif
@@ -361,7 +421,7 @@
                               ?>
                               <tr>
                                 <td>
-                                  <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                  <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                   @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                     <b>(Today)</b>
                                   @endif
@@ -499,7 +559,7 @@
                                 {{--
                                 @if($course_time_begin)
                                   <td>
-                                    <span class="hidden">{{ $course_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                    <span class="hidden">{{ $course_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                     {{ $course_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
                                   </td>
                                 @else
@@ -507,7 +567,7 @@
                                 @endif
                                 @if($course_time_end)
                                   <td>
-                                    <span class="hidden">{{ $course_time_end->isoFormat('YYMMDDAhhmm') }}</span>
+                                    <span class="hidden">{{ $course_time_end->isoFormat('YYMMDDHHmm') }}</span>
                                     {{ $course_time_end->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
                                   </td>
                                 @else
@@ -516,7 +576,7 @@
                                 --}}
                                 <td>
                                   @if($next_meeting_time)
-                                    <span class="hidden">{{ $next_meeting_time->isoFormat('YYMMDDAhhmm') }}</span>
+                                    <span class="hidden">{{ $next_meeting_time->isoFormat('YYMMDDHHmm') }}</span>
                                     @if($next_meeting_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                       Today, {{ $next_meeting_time->isoFormat('hh:mm A') }}
                                     @else
@@ -641,7 +701,7 @@
                                 {{--
                                 @if($course_time_begin)
                                   <td>
-                                    <span class="hidden">{{ $course_time_begin->isoFormat('YYMMDDAhhmm') }}</span>
+                                    <span class="hidden">{{ $course_time_begin->isoFormat('YYMMDDHHmm') }}</span>
                                     {{ $course_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
                                   </td>
                                 @else
@@ -649,7 +709,7 @@
                                 @endif
                                 @if($course_time_end)
                                   <td>
-                                    <span class="hidden">{{ $course_time_end->isoFormat('YYMMDDAhhmm') }}</span>
+                                    <span class="hidden">{{ $course_time_end->isoFormat('YYMMDDHHmm') }}</span>
                                     {{ $course_time_end->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
                                   </td>
                                 @else
@@ -658,7 +718,7 @@
                                 --}}
                                 <td>
                                   @if($next_meeting_time)
-                                    <span class="hidden">{{ $next_meeting_time->isoFormat('YYMMDDAhhmm') }}</span>
+                                    <span class="hidden">{{ $next_meeting_time->isoFormat('YYMMDDHHmm') }}</span>
                                     @if($next_meeting_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
                                       Today, {{ $next_meeting_time->isoFormat('hh:mm A') }}
                                     @else
