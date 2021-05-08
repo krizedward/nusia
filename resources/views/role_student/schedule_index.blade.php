@@ -105,7 +105,7 @@
                       @if($has_a_schedule)
                         <table class="table table-bordered example1">
                           <thead>
-                            <th>Class (Session) & Attendance Status</th>
+                            <th>Session & Attendance</th>
                             <th>Time</th>
                             <th style="width:5%;">Link</th>
                           </thead>
