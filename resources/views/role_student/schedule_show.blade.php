@@ -563,6 +563,20 @@
                           Otherwise, your attendance (for that session) will not be counted.
                         </dd>
                       </dl>
+                      @if($course_registration->course->course_package->course_type->count_student_max == 1)
+                        <hr>
+                        <dl>
+                          <dt>
+                            <i class="fa fa-clock-o margin-r-5"></i> Reschedule Features
+                          </dt>
+                          <dd>
+                            If you want to reschedule a session, you can <b>send the request
+                            no later than 3 days</b> before the session begins.<br />
+                            You are required to <b>check each session at least 2 days</b> before
+                            the session begins to see whether your request has been approved or not.
+                          </dd>
+                        </dl>
+                      @endif
                       <hr>
                       <dl>
                         <dt>
@@ -760,24 +774,27 @@
                       <hr>
                       <div class="box-header">
                         <h4><b>Reschedule a Session</b></h4>
-                        @if($course_registration->course->course_package->course_type->count_student_max == 1)
-                          <p class="no-padding text-red">* This field is required</p>
+                        <p class="no-padding text-red">* This field is required</p>
+                        @if($course_registration->course->course_package->course_type->count_student_max != 1)
+                          <div class="text-muted text-center">
+                            You cannot reschedule a group-based class.
+                          </div>
                         @endif
                       </div>
                       <div class="box-body">
-                        @if($course_registration->course->course_package->course_type->count_student_max == 1)
-                          <form role="form" method="post" action="{{ route('student.schedule_reschedule.update') }}" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-                            <div class="box-body">
-                              <div class="row">
+                        <form role="form" method="post" action="{{ route('student.schedule_reschedule.update') }}" enctype="multipart/form-data">
+                          @csrf
+                          @method('PUT')
+                          <div class="box-body">
+                            <div class="row">
+                              <div class="col-md-12">
                                 <div class="col-md-12">
-                                  <div class="col-md-12">
-                                    <div class="form-group @error('session_id') has-error @enderror">
-                                      <label for="session_id">
-                                        Session ID
-                                        <span class="text-red">*</span>
-                                      </label>
+                                  <div class="form-group @error('session_id') has-error @enderror">
+                                    <label for="session_id">
+                                      Session ID
+                                      <span class="text-red">*</span>
+                                    </label>
+                                    @if($course_registration->course->course_package->course_type->count_student_max == 1)
                                       <select name="session_id" type="text" class="@error('session_id') is-invalid @enderror form-control">
                                         <option selected="selected" value="">-- Enter Session ID --</option>
                                         <?php
@@ -796,10 +813,16 @@
                                       @error('session_id')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
-                                    </div>
-                                    <div class="form-group @error('schedule_time_date') has-error @enderror @error('schedule_time_time') has-error @enderror">
-                                      <label for="schedule_time_date">Reschedule This Session to</label>
-                                      <p class="text-red">The time schedule inputted is adjusted with your local time.</p>
+                                    @else
+                                      <select type="text" class="form-control" disabled>
+                                        <option selected="selected" value="">-- Enter Session ID --</option>
+                                      </select>
+                                    @endif
+                                  </div>
+                                  <div class="form-group @error('schedule_time_date') has-error @enderror @error('schedule_time_time') has-error @enderror">
+                                    <label for="schedule_time_date">Reschedule This Session to</label>
+                                    <p class="text-red">The time schedule inputted is adjusted with your local time.</p>
+                                    @if($course_registration->course->course_package->course_type->count_student_max == 1)
                                       <div class="input-group date">
                                         <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
                                         <input name="schedule_time_date" type="text" class="form-control pull-right datepicker">
@@ -815,20 +838,36 @@
                                       @error('schedule_time_time')
                                         <p style="color:red">{{ $message }}</p>
                                       @enderror
-                                    </div>
+                                    @else
+                                      <div class="input-group date">
+                                        <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                        <input type="text" class="form-control pull-right datepicker" disabled>
+                                      </div>
+                                      <label for="schedule_time_time" class="hidden">Schedule (set the time)</label><br />
+                                      <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                                        <input type="text" class="form-control pull-right timepicker" disabled>
+                                      </div>
+                                      @error('schedule_time_date')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                      @error('schedule_time_time')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    @endif
                                   </div>
                                 </div>
                               </div>
                             </div>
-                            <div class="box-footer">
-                              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
-                            </div>
-                          </form>
-                        @else
-                          <div class="text-muted text-center">
-                            You cannot reschedule a group-based class.
                           </div>
-                        @endif
+                          <div class="box-footer">
+                            @if($course_registration->course->course_package->course_type->count_student_max == 1)
+                              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                            @else
+                              <button class="btn btn-flat btn-md btn-default" style="width:100%;" disabled>Submit</button>
+                            @endif
+                          </div>
+                        </form>
                       </div>
                       <hr>
                       <div class="box-header">
