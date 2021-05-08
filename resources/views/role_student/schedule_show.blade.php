@@ -56,6 +56,7 @@
                         $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                         $next_meeting_time = null;
                         $next_meeting_link = null;
+                        $session_title = null;
                         if($course_registration->course->sessions) {
                           foreach($course_registration->course->sessions as $s) {
                             $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
@@ -76,58 +77,62 @@
                           }
                         }
                       ?>
-                      <table>
-                        <tr style="vertical-align:baseline;">
-                          <td colspan="3"><b><u>{{ $session_title }}</u></b></td>
-                        </tr>
-                        <tr style="vertical-align:baseline;">
-                          <td width="45"><b>Day</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($next_meeting_time)
-                              {{ $next_meeting_time->isoFormat('dddd') }}
-                              @if($next_meeting_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                <b>(Today)</b>
+                      @if($session_title)
+                        <table>
+                          <tr style="vertical-align:baseline;">
+                            <td colspan="3"><b><u>{{ $session_title }}</u></b></td>
+                          </tr>
+                          <tr style="vertical-align:baseline;">
+                            <td width="45"><b>Day</b></td>
+                            <td>&nbsp;:&nbsp;&nbsp;</td>
+                            <td>
+                              @if($next_meeting_time)
+                                {{ $next_meeting_time->isoFormat('dddd') }}
+                                @if($next_meeting_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                  <b>(Today)</b>
+                                @endif
+                              @else
+                                <i class="text-muted">N/A</i>
                               @endif
-                            @else
-                              <i class="text-muted">N/A</i>
-                            @endif
-                          </td>
-                        </tr>
-                        <tr style="vertical-align:baseline;">
-                          <td width="45"><b>Date</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($next_meeting_time)
-                              {{ $next_meeting_time->isoFormat('MMMM Do YYYY') }}
-                            @else
-                              <i class="text-muted">N/A</i>
-                            @endif
-                          </td>
-                        </tr>
-                        <tr style="vertical-align:baseline;">
-                          <td width="45"><b>Time</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($next_meeting_time)
-                              {{ $next_meeting_time->isoFormat('hh:mm A') }}
-                            @else
-                              <i class="text-muted">N/A</i>
-                            @endif
-                          </td>
-                        </tr>
-                        <tr style="vertical-align:baseline;">
-                          <td width="45"><b>Link</b></td>
-                          <td>&nbsp;:&nbsp;&nbsp;</td>
-                          <td>
-                            @if($next_meeting_link)
-                              <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $next_meeting_link }}">Link</a>
-                            @else
-                              <i class="text-muted">N/A</i>
-                            @endif
-                          </td>
-                        </tr>
-                      </table>
+                            </td>
+                          </tr>
+                          <tr style="vertical-align:baseline;">
+                            <td width="45"><b>Date</b></td>
+                            <td>&nbsp;:&nbsp;&nbsp;</td>
+                            <td>
+                              @if($next_meeting_time)
+                                {{ $next_meeting_time->isoFormat('MMMM Do YYYY') }}
+                              @else
+                                <i class="text-muted">N/A</i>
+                              @endif
+                            </td>
+                          </tr>
+                          <tr style="vertical-align:baseline;">
+                            <td width="45"><b>Time</b></td>
+                            <td>&nbsp;:&nbsp;&nbsp;</td>
+                            <td>
+                              @if($next_meeting_time)
+                                {{ $next_meeting_time->isoFormat('hh:mm A') }}
+                              @else
+                                <i class="text-muted">N/A</i>
+                              @endif
+                            </td>
+                          </tr>
+                          <tr style="vertical-align:baseline;">
+                            <td width="45"><b>Link</b></td>
+                            <td>&nbsp;:&nbsp;&nbsp;</td>
+                            <td>
+                              @if($next_meeting_link)
+                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $next_meeting_link }}">Link</a>
+                              @else
+                                <i class="text-muted">N/A</i>
+                              @endif
+                            </td>
+                          </tr>
+                        </table>
+                      @else
+                        This class has ended.
+                      @endif
                     </p>
                     <hr>
                     <strong><i class="fa fa-clock-o margin-r-5"></i> Registration Time</strong>
