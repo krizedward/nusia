@@ -152,9 +152,8 @@ class RegisteredController extends Controller
                 ->get();
             $arr = [];
             foreach($sessions as $s) {
-                // -> add 3 menit untuk antisipasi proses loading pada tampilan web
                 $schedule_time_begin = Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'minutes');
+                $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
 
                 if($schedule_time_begin >= $timeStudent) {
                     array_push($arr, $s->id);
@@ -177,9 +176,8 @@ class RegisteredController extends Controller
                 ->get();
             $arr = [];
             foreach($sessions_order_by_schedule_time as $s) {
-                // -> add 3 menit untuk antisipasi proses loading pada tampilan web
                 $schedule_time_begin = Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'minutes');
+                $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
                 if($schedule_time_begin >= $timeStudent) {
                     array_push($arr, $s->id);
                 }
@@ -225,9 +223,8 @@ class RegisteredController extends Controller
                 ->get();
             $arr = [];
             foreach($session_registrations as $sr) {
-                // -> add 3 menit untuk antisipasi proses loading pada tampilan web
                 $schedule_time_begin = Carbon::parse($sr->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                $schedule_time_begin->add($sr->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'minutes');
+                $schedule_time_begin->add($sr->session->course->course_package->material_type->duration_in_minute, 'minutes');
                 if($schedule_time_begin >= $timeStudent) {
                     array_push($arr, $sr->id);
                 }
@@ -243,9 +240,8 @@ class RegisteredController extends Controller
                 ->get();
             $arr = [];
             foreach($session_order_by_schedule_time as $s) {
-                // -> add 3 menit untuk antisipasi proses loading pada tampilan web
                 $schedule_time_begin = Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'minutes');
+                $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
                 if($schedule_time_begin >= $timeStudent) {
                     array_push($arr, $s->id);
                 }
@@ -292,9 +288,8 @@ class RegisteredController extends Controller
             foreach($course_registrations as $cr) {
                 $can_be_added = 1;
                 foreach($cr->course->sessions as $s) {
-                    // -> add 3 menit untuk antisipasi proses loading pada tampilan web
                     $schedule_time_begin = Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                    $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'minutes');
+                    $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
                     if($schedule_time_begin < $timeStudent) {
                         $can_be_added = 0;
                         break;

@@ -166,7 +166,8 @@
                       <span class="product-description">
                         <!-- Note: Don't forget to join the session(s).-->
                         @if($schedule_now >= $schedule_time_begin && $schedule_now <= $schedule_time_end)
-                          {{--Class has been started.--}}
+                          {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}<br />
+                          Class has started.<br />
                           @if($dt->link_zoom)
                             <a href="{{ $dt->link_zoom }}" target="_blank" class="btn btn-xs btn-flat btn-success">Join this session until {{ $schedule_time_end->isoFormat('hh:mm A') }}</a>
                           @else
@@ -467,7 +468,8 @@
                       <span class="product-description">
                         <!-- Note: Don't forget to join the session(s).-->
                         @if($schedule_now >= $schedule_time_begin && $schedule_now <= $schedule_time_end)
-                          {{--Class has been started.--}}
+                          {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}<br />
+                          Class has started.<br />
                           @if($dt->link_zoom)
                             <a href="{{ $dt->link_zoom }}" target="_blank" class="btn btn-xs btn-flat btn-success">Join this session until {{ $schedule_time_end->isoFormat('hh:mm A') }}</a>
                           @else

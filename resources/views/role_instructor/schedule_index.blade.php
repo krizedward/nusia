@@ -498,6 +498,7 @@
                         <label data-toggle="tooltip" title class="label bg-red" data-original-title="This class sessions are not ready to be published yet. Please check whether all schedules for this class have been assigned.">Not Ready</label>
                         <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This class has not started yet.">Upcoming</label>
                         <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This class is in progress.">Ongoing</label>
+                        <label data-toggle="tooltip" title class="label bg-blue" data-original-title="This class is waiting for a last attendance check.">Last Attd</label>
                       </p>
                       <hr>
                       <table class="table table-bordered table-striped example1">
@@ -520,12 +521,15 @@
                                 $next_meeting_link = null;
                                 $course_time_begin = null;
                                 $course_time_end = null;
+                                $course_time_end_form = null;
                                 $class_status = null;
                                 if($dt->sessions) {
                                   foreach($dt->sessions as $s) {
                                     $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                     $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                     $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
+                                    $schedule_time_end_form = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end_form->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
                                     // UNTUK KOLOM "Next Meeting Time"
                                     if($schedule_time_end >= $schedule_now) {
                                       if($next_meeting_time == null) {
@@ -539,20 +543,23 @@
                                     }
                                     // UNTUK KOLOM "Class Status"
                                     if($course_time_begin == null) $course_time_begin = $schedule_time_begin;
-                                    if($course_time_end == null) $course_time_end = $schedule_time_begin;
+                                    if($course_time_end == null) $course_time_end = $schedule_time_end;
+                                    if($course_time_end_form == null) $course_time_end_form = $schedule_time_end_form;
                                     if($course_time_begin > $schedule_time_begin) $course_time_begin = $schedule_time_begin;
-                                    if($course_time_end < $schedule_time_begin) $course_time_end = $schedule_time_begin;
+                                    if($course_time_end < $schedule_time_end) $course_time_end = $schedule_time_end;
+                                    if($course_time_end_form < $schedule_time_end_form) $course_time_end_form = $schedule_time_end_form;
                                   }
                                   // SIMPAN NILAI VARIABEL UNTUK SELEKSI KOLOM "Class Status"
                                   if($dt->sessions->count() < $dt->course_package->count_session) $class_status = 1; // Not Ready
-                                  if($schedule_now < $course_time_begin) $class_status = 2; // Upcoming
+                                  else if($schedule_now < $course_time_begin) $class_status = 2; // Upcoming
                                   else if($schedule_now <= $course_time_end) $class_status = 3; // Ongoing
-                                  else if($schedule_now > $course_time_end) $class_status = 4; // Done
+                                  else if($schedule_now <= $course_time_end_form) $class_status = 4; // Last Attd
+                                  else if($schedule_now > $course_time_end_form) $class_status = 5; // Done
                                 } else {
                                   $class_status = 1; // Not Ready
                                 }
                               ?>
-                              @if($class_status == 4)
+                              @if($class_status == 5)
                                 @continue
                               @endif
                               <tr>
@@ -607,7 +614,7 @@
                                     <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This class is in progress.">Ongoing</label>
                                   @elseif($class_status == 4)
                                     <span class="hidden">4</span>
-                                    <label data-toggle="tooltip" title class="label bg-green" data-original-title="This class has been completed. Please make sure that all session attendances for this class have been checked.">Done</label>
+                                    <label data-toggle="tooltip" title class="label bg-blue" data-original-title="This class is waiting for a last attendance check.">Last Attd</label>
                                   @endif
                                 </td>
                                 <td>{{ $dt->course_package->material_type->name }} - {{ $dt->course_package->course_type->name }} - {{ $dt->title }}</td>
@@ -642,6 +649,7 @@
                         <label data-toggle="tooltip" title class="label bg-red" data-original-title="This class sessions are not ready to be published yet. Please check whether all schedules for this class have been assigned.">Not Ready</label>
                         <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This class has not started yet.">Upcoming</label>
                         <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This class is in progress.">Ongoing</label>
+                        <label data-toggle="tooltip" title class="label bg-blue" data-original-title="This class is waiting for a last attendance check.">Last Attd</label>
                         <label data-toggle="tooltip" title class="label bg-green" data-original-title="This class has been completed. Please make sure that all session attendances for this class have been checked.">Done</label>
                       </p>
                       <hr>
@@ -665,12 +673,15 @@
                                 $next_meeting_link = null;
                                 $course_time_begin = null;
                                 $course_time_end = null;
+                                $course_time_end_form = null;
                                 $class_status = null;
                                 if($dt->sessions) {
                                   foreach($dt->sessions as $s) {
                                     $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                     $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
                                     $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
+                                    $schedule_time_end_form = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end_form->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
                                     // UNTUK KOLOM "Next Meeting Time"
                                     if($schedule_time_end >= $schedule_now) {
                                       if($next_meeting_time == null) {
@@ -684,15 +695,18 @@
                                     }
                                     // UNTUK KOLOM "Class Status"
                                     if($course_time_begin == null) $course_time_begin = $schedule_time_begin;
-                                    if($course_time_end == null) $course_time_end = $schedule_time_begin;
+                                    if($course_time_end == null) $course_time_end = $schedule_time_end;
+                                    if($course_time_end_form == null) $course_time_end_form = $schedule_time_end_form;
                                     if($course_time_begin > $schedule_time_begin) $course_time_begin = $schedule_time_begin;
-                                    if($course_time_end < $schedule_time_begin) $course_time_end = $schedule_time_begin;
+                                    if($course_time_end < $schedule_time_end) $course_time_end = $schedule_time_end;
+                                    if($course_time_end_form < $schedule_time_end_form) $course_time_end_form = $schedule_time_end_form;
                                   }
                                   // SIMPAN NILAI VARIABEL UNTUK SELEKSI KOLOM "Class Status"
                                   if($dt->sessions->count() < $dt->course_package->count_session) $class_status = 1; // Not Ready
-                                  if($schedule_now < $course_time_begin) $class_status = 2; // Upcoming
+                                  else if($schedule_now < $course_time_begin) $class_status = 2; // Upcoming
                                   else if($schedule_now <= $course_time_end) $class_status = 3; // Ongoing
-                                  else if($schedule_now > $course_time_end) $class_status = 4; // Done
+                                  else if($schedule_now <= $course_time_end_form) $class_status = 4; // Last Attd
+                                  else if($schedule_now > $course_time_end_form) $class_status = 5; // Done
                                 } else {
                                   $class_status = 1; // Not Ready
                                 }
@@ -749,6 +763,9 @@
                                     <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This class is in progress.">Ongoing</label>
                                   @elseif($class_status == 4)
                                     <span class="hidden">4</span>
+                                    <label data-toggle="tooltip" title class="label bg-blue" data-original-title="This class is waiting for a last attendance check.">Last Attd</label>
+                                  @elseif($class_status == 5)
+                                    <span class="hidden">5</span>
                                     <label data-toggle="tooltip" title class="label bg-green" data-original-title="This class has been completed. Please make sure that all session attendances for this class have been checked.">Done</label>
                                   @endif
                                 </td>

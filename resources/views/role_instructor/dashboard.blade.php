@@ -84,9 +84,25 @@
                     </div>
                     <span class="product-description">
                       @if($s->schedule->schedule_time < now())
+                        {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}<br />
                         Class has started!
                         @if($s->link_zoom)
                           <a href="{{ $s->link_zoom }}" target="_blank" class="btn btn-xs btn-flat btn-success">Click here to join</a>
+                        @else
+                          <form role="form" method="post" action="{{ route('instructor.session_show.update') }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="session_id" value="{{ $s->id }}">
+                            <input type="hidden" name="session_description" value="{{ $s->description }}">
+                            <div class="form-group @error('link_zoom') has-error @enderror">
+                              <label for="link_zoom">Please add a meeting link:</label>
+                              <input name="link_zoom" type="text" class="form-control" placeholder="Enter a meeting link" value="{{ old('link_zoom') }}">
+                              @error('link_zoom')
+                                <p style="color:red">{{ $message }}</p>
+                              @enderror
+                            </div>
+                            <button type="submit" class="btn btn-flat btn-sm bg-blue" style="width:100%;">Submit</button>
+                          </form>
                         @endif
                       @else
                         {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
@@ -272,9 +288,25 @@
                     </div>
                     <span class="product-description">
                       @if($s->schedule->schedule_time < now())
+                        {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}<br />
                         Class has started!
                         @if($s->link_zoom)
                           <a href="{{ $s->link_zoom }}" target="_blank" class="btn btn-xs btn-flat btn-success">Click here to join</a>
+                        @else
+                          <form role="form" method="post" action="{{ route('instructor.session_show.update') }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="session_id" value="{{ $s->id }}">
+                            <input type="hidden" name="session_description" value="{{ $s->description }}">
+                            <div class="form-group @error('link_zoom') has-error @enderror">
+                              <label for="link_zoom">Please add a meeting link:</label>
+                              <input name="link_zoom" type="text" class="form-control" placeholder="Enter a meeting link" value="{{ old('link_zoom') }}">
+                              @error('link_zoom')
+                                <p style="color:red">{{ $message }}</p>
+                              @enderror
+                            </div>
+                            <button type="submit" class="btn btn-flat btn-sm bg-blue" style="width:100%;">Submit</button>
+                          </form>
                         @endif
                       @else
                         {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
