@@ -66,7 +66,7 @@
                       </td>
                       <td class="text-center">
                         @if($sr->status == 'Not Assigned')
-                          <input type="checkbox" class="minimal" value="false" onclick="checkboxClick{{ $sr->course_registration->student->id }}(this);" id="flag{{ $sr->course_registration->student->id }}" name="flag{{ $sr->course_registration->student->id }}">
+                          <input type="checkbox" {{--class="minimal"--}} value="false" onclick="checkboxClick{{ $sr->course_registration->student->id }}(this);" id="flag{{ $sr->course_registration->student->id }}" name="flag{{ $sr->course_registration->student->id }}">
                         @else
                           @if($sr->status == 'Not Present') {{-- Status present ada beberapa, sehingga tidak direkomendasikan untuk mengganti seleksi ini. --}}
                             <label class="label label-danger">Not Present</label>

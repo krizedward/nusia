@@ -383,6 +383,7 @@ class InstructorController extends Controller
                 if($key == 'flag'.$sr->course_registration->student->id && $val == 'true') {
                     $sr->update([
                         'status' => 'Should Submit Form',
+                        'updated_at' => now(),
                     ]);
                     $flag = 1;
                     break;
@@ -391,6 +392,7 @@ class InstructorController extends Controller
             if($flag == 0) {
                 $sr->update([
                     'status' => 'Not Present',
+                    'updated_at' => now(),
                 ]);
             }
         }
