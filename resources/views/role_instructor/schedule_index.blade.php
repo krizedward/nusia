@@ -124,7 +124,7 @@
                 <div class="col-md-12">
                   <div class="box box-default">
                     <div class="box-header">
-                      <h3 class="box-title"><b>Current Sessions</b></h3>
+                      <h3 class="box-title"><b>Upcoming Sessions</b></h3>
                       {{--
                       <div>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('registered.dashboard.index') }}">
