@@ -113,10 +113,11 @@ class RegisteredController extends Controller
 
         //03.11.2020
         //Membuat Akses Untuk Lead Instructor
-        if ($this->is_lead_instructor()) {
+        //19 Mei 2021(digabung dan dikombinasi dengan role Instructor)
+        /*if ($this->is_lead_instructor()) {
             
             return view('role_lead_instructor.dashboard');
-        }
+        }*/
 
         if($this->is_admin()) {
             //Alert::success('Success', 'Login Berhasil !!!');
