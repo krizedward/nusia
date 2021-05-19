@@ -381,31 +381,6 @@ class RegisteredController extends Controller
         // melihat informasi profil
         if($this->is_admin()){
             return view('role_admin.profile');
-        } else if($this->is_lead_instructor()){
-            $interests = [
-                'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Art', 'Aviation',
-                'Baking', 'Baseball', 'Basketball', 'Blogging', 'Boating', 'Bowling',
-                'Broadcasting', 'Business', 'Camping', 'Chess', 'Child caring',
-                'Clothing', 'Collecting', 'Community service', 'Cooking', 'Cosmetics', 'Crafting', 'Creative Writing', 'Culinary', 'Culture',
-                'Cycling', 'Dancing', 'Design', 'Discussion', 'Driving/racing',
-                'Electronics', 'Entrepreneurship', 'Event organizing', 'Fashion', 'Finance',
-                'Fishing', 'Foods & beverages', 'Football', 'Formulate Teaching Methods', 'Gardening', 'Gender Studies', 'Golf',
-                'Hairstyling', 'Handicrafting', 'Health', 'Higher education', 'Hiking',
-                'History', 'Home decoration', 'Horseback riding', 'Housecleaning', 'Hunting',
-                'Ice hockey', 'Jogging', 'Knowledge', 'Korean Pop Culture', 'Lacrosse', 'Laundry/ironing', 'Law',
-                'Leadership', 'Leatherworking', 'Listening', 'Listening Music', 'Literature', 'Management', 'Marketing',
-                'Mechanics', 'Motivating', 'Movie', 'Music', 'Nursing',
-                'Outdoor recreation', 'Photography', 'Physical exercise', 'Politics', 'Pop Culture', 'Pottery',
-                'Programming', 'Reading', 'Real estate', 'Research', 'Retail',
-                'Running (marathon)', 'Running (sprint)', 'Science Fiction', 'Scouting', 'Sewing/needle work', 'Sharing', 'Sharing Culture', 'Shopping',
-                'Singing', 'Skiing', 'Snorkeling', 'Snowboarding', 'Soccer', 'Social',
-                'Speaking (1-on-1)', 'Speaking (public)', 'Sports', 'Surfing', 'Swimming',
-                'Teaching', 'Technology', 'Tennis', 'Thriathlons', 'Tourism', 'Travelling',
-                'Videographing', 'Volleyball', 'Volunteering', 'Walking', 'Wrestling', 'Writing',
-                'Woodworking',
-            ];
-
-            return view('role_lead_instructor.profile',compact('interests'));
         } else if($this->is_instructor()){
             $interests = [
                 'Administration', 'Agriculture', 'Animal caring', 'Architecture', 'Art', 'Aviation',
@@ -429,8 +404,38 @@ class RegisteredController extends Controller
                 'Videographing', 'Volleyball', 'Volunteering', 'Walking', 'Wrestling', 'Writing',
                 'Woodworking',
             ];
-
-            return view('role_instructor.profile',compact('interests'));
+            $timezones = [
+                '-11', '-10', '-09:30', '-09', '-08', '-07',
+                '-06', '-05', '-04', '-03', '-02', '-01',
+                '+00', '+01', '+02', '+03', '+04', '+04:30', '+05', '+05:30', '+05:45', '+06',
+                '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
+            ];
+            $zone_names = [
+                /* -11 */ 'Pacific/Pago_Pago',      /* -10 */ 'Pacific/Rarotonga',
+                /* -09:30 */ 'Pacific/Marquesas',   /* -09 */ 'Pacific/Gambier',
+                /* -08 */ 'Pacific/Pitcairn',       /* -07 */ 'America/Phoenix',
+                /* -06 */ 'America/Costa_Rica',     /* -05 */ 'America/Panama',
+                /* -04 */ 'America/Port_of_Spain',  /* -03 */ 'America/Montevideo',
+                /* -02 */ 'Atlantic/South_Georgia', /* -01 */ 'Atlantic/Cape_Verde',
+                /* +00 */ 'Africa/Abidjan',         /* +01 */ 'Africa/Lagos',
+                /* +02 */ 'Africa/Maputo',          /* +03 */ 'Africa/Nairobi',
+                /* +04 */ 'Asia/Dubai',             /* +04:30 */ 'Asia/Kabul',
+                /* +05 */ 'Asia/Ashgabat',          /* +05:30 */ 'Asia/Colombo',
+                /* +05:45 */ 'Asia/Kathmandu',      /* +06 */ 'Asia/Dhaka',
+                /* +06:30 */ 'Asia/Yangon',         /* +07 */ 'Asia/Bangkok',
+                /* +08 */ 'Asia/Macau',             /* +08:45 */ 'Australia/Eucla',
+                /* +09 */ 'Asia/Tokyo',             /* +09:30 */ 'Australia/Darwin',
+                /* +10 */ 'Asia/Vladivostok',       /* +11 */ 'Pacific/Pohnpei',
+                /* +12 */ 'Pacific/Nauru',          /* +13 */ 'Pacific/Fakaofo',
+                /* +14 */ 'Pacific/Kiritimati',
+            ];
+            for($i = 0; $i < count($timezones); $i++) {
+                if(Auth::user()->timezone == $zone_names[$i]) {
+                    $tz_old = $timezones[$i];
+                    break;
+                }
+            }
+            return view('role_instructor.profile',compact('interests', 'timezones', 'tz_old'));
         } else if($this->is_student()){
             if(Auth::user()->citizenship == 'Not Available') {
                 return redirect()->route('student.student_registration_form.index');
@@ -514,6 +519,37 @@ class RegisteredController extends Controller
             // tips: untuk Admin mengedit tampilan Instructor / Student, gunakan session('roles_to_edit') untuk mengambil roles yang sedang diedit.
             session(['roles_to_edit' => null]); // membersihkan session.
         } else if($this->is_instructor()) {
+            $timezones = [
+                '-11', '-10', '-09:30', '-09', '-08', '-07', '-06', '-05', '-04', '-03', '-02', '-01',
+                '+00', '+01', '+02', '+03', '+04', '+04:30', '+05', '+05:30', '+05:45', '+06',
+                '+06:30', '+07', '+08', '+08:45', '+09', '+09:30', '+10', '+11', '+12', '+13', '+14',
+            ];
+            $zone_names = [
+                /* -11 */ 'Pacific/Pago_Pago',      /* -10 */ 'Pacific/Rarotonga',
+                /* -09:30 */ 'Pacific/Marquesas',   /* -09 */ 'Pacific/Gambier',
+                /* -08 */ 'Pacific/Pitcairn',       /* -07 */ 'America/Phoenix',
+                /* -06 */ 'America/Costa_Rica',     /* -05 */ 'America/Panama',
+                /* -04 */ 'America/Port_of_Spain',  /* -03 */ 'America/Montevideo',
+                /* -02 */ 'Atlantic/South_Georgia', /* -01 */ 'Atlantic/Cape_Verde',
+                /* +00 */ 'Africa/Abidjan',         /* +01 */ 'Africa/Lagos',
+                /* +02 */ 'Africa/Maputo',          /* +03 */ 'Africa/Nairobi',
+                /* +04 */ 'Asia/Dubai',             /* +04:30 */ 'Asia/Kabul',
+                /* +05 */ 'Asia/Ashgabat',          /* +05:30 */ 'Asia/Colombo',
+                /* +05:45 */ 'Asia/Kathmandu',      /* +06 */ 'Asia/Dhaka',
+                /* +06:30 */ 'Asia/Yangon',         /* +07 */ 'Asia/Bangkok',
+                /* +08 */ 'Asia/Macau',             /* +08:45 */ 'Australia/Eucla',
+                /* +09 */ 'Asia/Tokyo',             /* +09:30 */ 'Australia/Darwin',
+                /* +10 */ 'Asia/Vladivostok',       /* +11 */ 'Pacific/Pohnpei',
+                /* +12 */ 'Pacific/Nauru',          /* +13 */ 'Pacific/Fakaofo',
+                /* +14 */ 'Pacific/Kiritimati',
+            ];
+            for($i = 0; $i < count($timezones); $i++) {
+                if($request->timezone == $timezones[$i]) {
+                    $request->timezone = $zone_names[$i];
+                    break;
+                }
+            }
+
             $working_experience_begin_year = array(
                 $request->working_experience_begin_year_1,
                 $request->working_experience_begin_year_2,
@@ -644,7 +680,10 @@ class RegisteredController extends Controller
                 session(['error_old_password' => 'This field is required.']);
                 $flag = 0;
             }
-            if($flag == 0) return redirect()->back()->withInput();
+            if($flag == 0) {
+                session(['caption-danger' => 'Your profile information has not been updated. Try again.']);
+                return redirect()->back()->withInput();
+            }
 
             $data = $request->all();
             $data = Validator::make($data, [
@@ -655,6 +694,8 @@ class RegisteredController extends Controller
                 'password' => ['bail', 'sometimes'],
                 'citizenship' => ['bail', 'sometimes'],
                 'domicile' => ['bail', 'sometimes'],
+                'timezone' => ['bail', 'required'],
+                'image_profile_flag' => ['bail', 'required'],
                 'image_profile' => ['bail', 'sometimes', 'max:8000'],
 
                 'working_experience_1' => ['bail', 'required_unless:working_experience_begin_year_1,'],
@@ -676,29 +717,49 @@ class RegisteredController extends Controller
             ]);
 
             if($data->fails()) {
+                session(['caption-danger' => 'Your profile information has not been updated. Try again.']);
                 return redirect()->back()
                     ->withErrors($data)
                     ->withInput();
             }
 
-            $file = $request->file('image_profile');
-            if($file && Auth::user()->image_profile != 'user.jpg') {
+            if($request->image_profile_flag != 0 && Auth::user()->image_profile != 'user.jpg') {
+                // mengganti atau menghapus foto profil, maka foto sebelumnya dihapus dari storage
                 $destinationPath = 'uploads/instructor/';
                 File::delete($destinationPath . Auth::user()->image_profile);
             }
-
+            $file = $request->file('image_profile');
             if($file) {
-                $file_name = Str::random(50).'.'.$file->extension();
-
-                Auth::user()->update([
-                    'image_profile' => $file_name,
-                ]);
-
-                //Move Uploaded File
-                $destinationPath = 'uploads/instructor/';
-                $file->move($destinationPath, $file_name);
+                // mengunggah foto profil baru
+                if($request->image_profile_flag == 1) {
+                    // mengganti foto profil dengan foto yang baru
+                    $file_name = Str::random(50) . '.' . $file->extension();
+                    $destinationPath = 'uploads/instructor/';
+                    $file->move($destinationPath, $file_name);
+                } else if($request->image_profile_flag == 0) {
+                    // tidak mengubah foto profil, maka seleksi ini tidak ada
+                    // tetapi untuk keamanan, ganti foto profil dengan foto profil user saat ini
+                    $file_name = Auth::user()->image_profile;
+                } else if($request->image_profile_flag == -1) {
+                    // menghapus foto profil tidak perlu up, maka seleksi ini tidak ada,
+                    // tetapi untuk keamanan, ganti foto profil dengan 'user.jpg'
+                    $file_name = 'user.jpg';
+                }
+            } else {
+                // tidak mengunggah foto profil baru
+                if($request->image_profile_flag == 1) {
+                    // ingin mengganti foto profil, tetapi tidak ada foto profil baru yang diunggah
+                    // maka, ganti foto profil dengan 'user.jpg'
+                    $file_name = 'user.jpg';
+                } else if($request->image_profile_flag == 0) {
+                    // tidak mengubah foto profil, maka seleksi ini tidak ada
+                    // tetapi untuk keamanan, ganti foto profil dengan foto profil user saat ini
+                    $file_name = Auth::user()->image_profile;
+                } else if($request->image_profile_flag == -1) {
+                    // menghapus foto profil, maka ganti foto profil dengan 'user.jpg'
+                    $file_name = 'user.jpg';
+                }
             }
-
             Auth::user()->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -707,12 +768,14 @@ class RegisteredController extends Controller
                 'phone' => $request->phone,
                 'citizenship' => $request->citizenship,
                 'domicile' => $request->domicile,
+                'timezone' => $request->timezone,
+                'image_profile' => $file_name,
             ]);
-
             Auth::user()->instructor->update([
                 'working_experience' => $working_experience,
                 'interest' => $interest,
             ]);
+            session(['caption-success' => 'Your profile information has been updated. Thank you!']);
         } else if($this->is_student()) {
             $interest = array(
                 $request->interest_1, $request->interest_2, $request->interest_3,
