@@ -14,7 +14,7 @@
 
 @section('content')
 @if($current_course_registration)
-  <form role="form" method="post" action="{{ route('student.store_materials') }}" enctype="multipart/form-data">
+  <form role="form" method="post" action="{{ route('student.choose_course.store') }}" enctype="multipart/form-data">
     @csrf
     <input type="hidden" id="choice" name="choice" value="">
     <input type="hidden" id="choice_mt" name="choice_mt" value="">
@@ -494,7 +494,7 @@
         <div class="box-header">
           <h3 class="box-title"><b>Current Course Registrations</b></h3>
           <div>
-            <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('student.choose_materials', [-1]) }}">
+            <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('student.choose_course.index', [-1]) }}">
             <i class="fa fa-plus"></i>&nbsp;&nbsp;
               Register in a New Course
             </a>
@@ -520,15 +520,15 @@
                 <td>{{ $dt->created_at }}</td>
                 <td class="text-center">
                   @if($dt->course_payments->toArray() == null)
-                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-primary" href="{{ route('student.complete_payment_information', [$dt->id]) }}">
+                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-primary" href="{{ route('student.complete_payment_information.show', [$dt->id]) }}">
                       Link
                     </a>
                   @elseif($dt->placement_test == null || $dt->placement_test->status == 'Not Passed')
-                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-primary" href="{{ route('student.complete_placement_tests', [$dt->id]) }}">
+                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-primary" href="{{ route('student.upload_placement_test.show', [$dt->id]) }}">
                       Link
                     </a>
                   @elseif($dt->placement_test->status == 'Passed' && $dt->session_registrations->toArray() == null)
-                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-primary" href="{{ route('student.complete_course_registrations', [$dt->id]) }}">
+                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-primary" href="{{ route('student.choose_course_registration.show', [$dt->id]) }}">
                       Link
                     </a>
                   @endif
