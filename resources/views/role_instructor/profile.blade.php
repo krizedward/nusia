@@ -227,7 +227,7 @@
                       @endif
                           <label for="timezone">What is your local time zone?</label>
                           <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Reference: <b><a target="_blank" rel="noopener noreferrer" href="https://www.timeanddate.com/">timeanddate.com</a></b></p>
-                          <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control select2">
+                          <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control select2" style="width:100%;">
                             <option selected="selected" value="">-- Enter your current time zone --</option>
                             @foreach($timezones as $timezone)
                               @if(old('timezone') == $timezone)
@@ -249,7 +249,7 @@
                     <div class="col-md-12 @error('image_profile_flag') has-error @enderror">
                       <br />
                       <label for="image_profile_flag" class="control-label">Do you want to change your profile picture?</label><br />
-                      <select name="image_profile_flag" id="image_profile_flag" type="text" class="@error('image_profile_flag') is-invalid @enderror form-control select2" onchange="if(document.getElementById('image_profile_flag').value == 1) document.getElementById('image_profile_div').className = 'col-md-12'; else document.getElementById('image_profile_div').className = 'col-md-12 hidden';">
+                      <select name="image_profile_flag" id="image_profile_flag" type="text" class="@error('image_profile_flag') is-invalid @enderror form-control select2" style="width:100%;" onchange="if(document.getElementById('image_profile_flag').value == 1) document.getElementById('image_profile_div').className = 'col-md-12'; else document.getElementById('image_profile_div').className = 'col-md-12 hidden';">
                         <option selected="selected" value="0">-- Enter your choice --</option>
                         <option value="1">Yes</option>
                         @if(Auth::user()->image_profile != 'user.jpg')
@@ -283,7 +283,7 @@
                         <div class="form-group" id="interest_1">
                       @endif
                           <label for="interest_1">Interest #1</label>
-                          <select name="interest_1" type="text" class="@error('interest_1') is-invalid @enderror form-control select2" id="interest_1_input">
+                          <select name="interest_1" type="text" class="@error('interest_1') is-invalid @enderror form-control select2" style="width:100%;" id="interest_1_input">
                             <option selected="selected" value="">-- Interest --</option>
                             @foreach($interests as $interest)
                               @if(count($interest_values) > 0 && $interest == $interest_values[0])
@@ -305,7 +305,7 @@
                         <div class="form-group" id="interest_2">
                       @endif
                           <label for="interest_2">Interest #2</label>
-                          <select name="interest_2" type="text" class="@error('interest_2') is-invalid @enderror form-control select2" id="interest_2_input">
+                          <select name="interest_2" type="text" class="@error('interest_2') is-invalid @enderror form-control select2" style="width:100%;" id="interest_2_input">
                             <option selected="selected" value="">-- Interest --</option>
                             @foreach($interests as $interest)
                               @if(count($interest_values) > 1 && $interest == $interest_values[1])
@@ -327,7 +327,7 @@
                         <div class="form-group" id="interest_3">
                       @endif
                           <label for="interest_3">Interest #3</label>
-                          <select name="interest_3" type="text" class="@error('interest_3') is-invalid @enderror form-control select2" id="interest_3_input">
+                          <select name="interest_3" type="text" class="@error('interest_3') is-invalid @enderror form-control select2" style="width:100%;" id="interest_3_input">
                             <option selected="selected" value="">-- Interest --</option>
                             @foreach($interests as $interest)
                               @if(count($interest_values) > 2 && $interest == $interest_values[2])
@@ -349,7 +349,7 @@
                         <div class="form-group" id="interest_4">
                       @endif
                           <label for="interest_4">Interest #4</label>
-                          <select name="interest_4" type="text" class="@error('interest_4') is-invalid @enderror form-control select2" id="interest_4_input">
+                          <select name="interest_4" type="text" class="@error('interest_4') is-invalid @enderror form-control select2" style="width:100%;" id="interest_4_input">
                             <option selected="selected" value="">-- Interest --</option>
                             @foreach($interests as $interest)
                               @if(count($interest_values) > 3 && $interest == $interest_values[3])
@@ -371,7 +371,7 @@
                         <div class="form-group" id="interest_5">
                       @endif
                           <label for="interest_5">Interest #5</label>
-                          <select name="interest_5" type="text" class="@error('interest_5') is-invalid @enderror form-control select2" id="interest_5_input">
+                          <select name="interest_5" type="text" class="@error('interest_5') is-invalid @enderror form-control select2" style="width:100%;" id="interest_5_input">
                             <option selected="selected" value="">-- Interest --</option>
                             @foreach($interests as $interest)
                               @if(count($interest_values) > 4 && $interest == $interest_values[4])
@@ -393,7 +393,7 @@
                         <div class="form-group" id="interest_6">
                       @endif
                           <label for="interest_6">Interest #6</label>
-                          <select name="interest_6" type="text" class="@error('interest_6') is-invalid @enderror form-control select2" id="interest_6_input">
+                          <select name="interest_6" type="text" class="@error('interest_6') is-invalid @enderror form-control select2" style="width:100%;" id="interest_6_input">
                             <option selected="selected" value="">-- Interest --</option>
                             @foreach($interests as $interest)
                               @if(count($interest_values) > 5 && $interest == $interest_values[5])
@@ -422,7 +422,7 @@
                         <div class="form-group" id="working_experience_begin_year_1">
                       @endif
                           <label for="working_experience_begin_year_1">(1) From</label>
-                          <select name="working_experience_begin_year_1" type="text" class="@error('working_experience_begin_year_1') is-invalid @enderror form-control select2" id="working_experience_begin_year_1_input">
+                          <select name="working_experience_begin_year_1" type="text" class="@error('working_experience_begin_year_1') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_1_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 0 && substr($working_experience_values[0], 0, 4) == $i)
@@ -444,7 +444,7 @@
                         <div class="form-group" id="working_experience_end_year_1">
                       @endif
                           <label for="working_experience_end_year_1">To (optional)</label>
-                          <select name="working_experience_end_year_1" type="text" class="@error('working_experience_end_year_1') is-invalid @enderror form-control select2" id="working_experience_end_year_1_input">
+                          <select name="working_experience_end_year_1" type="text" class="@error('working_experience_end_year_1') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_1_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 0 && substr($working_experience_values[0], 5, 4) == $i)
@@ -484,7 +484,7 @@
                         <div class="form-group" id="working_experience_begin_year_2">
                       @endif
                           <label for="working_experience_begin_year_2">(2) From</label>
-                          <select name="working_experience_begin_year_2" type="text" class="@error('working_experience_begin_year_2') is-invalid @enderror form-control select2" id="working_experience_begin_year_2_input">
+                          <select name="working_experience_begin_year_2" type="text" class="@error('working_experience_begin_year_2') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_2_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 1 && substr($working_experience_values[1], 0, 4) == $i)
@@ -506,7 +506,7 @@
                         <div class="form-group" id="working_experience_end_year_2">
                       @endif
                           <label for="working_experience_end_year_2">To (optional)</label>
-                          <select name="working_experience_end_year_2" type="text" class="@error('working_experience_end_year_2') is-invalid @enderror form-control select2" id="working_experience_end_year_2_input">
+                          <select name="working_experience_end_year_2" type="text" class="@error('working_experience_end_year_2') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_2_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 1 && substr($working_experience_values[1], 5, 4) == $i)
@@ -546,7 +546,7 @@
                         <div class="form-group" id="working_experience_begin_year_3">
                       @endif
                           <label for="working_experience_begin_year_3">(3) From</label>
-                          <select name="working_experience_begin_year_3" type="text" class="@error('working_experience_begin_year_3') is-invalid @enderror form-control select2" id="working_experience_begin_year_3_input">
+                          <select name="working_experience_begin_year_3" type="text" class="@error('working_experience_begin_year_3') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_3_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 2 && substr($working_experience_values[2], 0, 4) == $i)
@@ -568,7 +568,7 @@
                         <div class="form-group" id="working_experience_end_year_3">
                       @endif
                           <label for="working_experience_end_year_3">To (optional)</label>
-                          <select name="working_experience_end_year_3" type="text" class="@error('working_experience_end_year_3') is-invalid @enderror form-control select2" id="working_experience_end_year_3_input">
+                          <select name="working_experience_end_year_3" type="text" class="@error('working_experience_end_year_3') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_3_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 2 && substr($working_experience_values[2], 5, 4) == $i)
@@ -608,7 +608,7 @@
                         <div class="form-group" id="working_experience_begin_year_4">
                       @endif
                           <label for="working_experience_begin_year_4">(4) From</label>
-                          <select name="working_experience_begin_year_4" type="text" class="@error('working_experience_begin_year_4') is-invalid @enderror form-control select2" id="working_experience_begin_year_4_input">
+                          <select name="working_experience_begin_year_4" type="text" class="@error('working_experience_begin_year_4') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_4_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 3 && substr($working_experience_values[3], 0, 4) == $i)
@@ -630,7 +630,7 @@
                         <div class="form-group" id="working_experience_end_year_4">
                       @endif
                           <label for="working_experience_end_year_4">To (optional)</label>
-                          <select name="working_experience_end_year_4" type="text" class="@error('working_experience_end_year_4') is-invalid @enderror form-control select2" id="working_experience_end_year_4_input">
+                          <select name="working_experience_end_year_4" type="text" class="@error('working_experience_end_year_4') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_4_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 3 && substr($working_experience_values[3], 5, 4) == $i)
@@ -670,7 +670,7 @@
                         <div class="form-group" id="working_experience_begin_year_5">
                       @endif
                           <label for="working_experience_begin_year_5">(5) From</label>
-                          <select name="working_experience_begin_year_5" type="text" class="@error('working_experience_begin_year_5') is-invalid @enderror form-control select2" id="working_experience_begin_year_5_input">
+                          <select name="working_experience_begin_year_5" type="text" class="@error('working_experience_begin_year_5') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_5_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 4 && substr($working_experience_values[4], 0, 4) == $i)
@@ -692,7 +692,7 @@
                         <div class="form-group" id="working_experience_end_year_5">
                       @endif
                           <label for="working_experience_end_year_5">To (optional)</label>
-                          <select name="working_experience_end_year_5" type="text" class="@error('working_experience_end_year_5') is-invalid @enderror form-control select2" id="working_experience_end_year_5_input">
+                          <select name="working_experience_end_year_5" type="text" class="@error('working_experience_end_year_5') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_5_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 4 && substr($working_experience_values[4], 5, 4) == $i)
@@ -732,7 +732,7 @@
                         <div class="form-group" id="working_experience_begin_year_6">
                       @endif
                           <label for="working_experience_begin_year_6">(6) From</label>
-                          <select name="working_experience_begin_year_6" type="text" class="@error('working_experience_begin_year_6') is-invalid @enderror form-control select2" id="working_experience_begin_year_6_input">
+                          <select name="working_experience_begin_year_6" type="text" class="@error('working_experience_begin_year_6') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_6_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 5 && substr($working_experience_values[5], 0, 4) == $i)
@@ -754,7 +754,7 @@
                         <div class="form-group" id="working_experience_end_year_6">
                       @endif
                           <label for="working_experience_end_year_6">To (optional)</label>
-                          <select name="working_experience_end_year_6" type="text" class="@error('working_experience_end_year_6') is-invalid @enderror form-control select2" id="working_experience_end_year_6_input">
+                          <select name="working_experience_end_year_6" type="text" class="@error('working_experience_end_year_6') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_6_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 5 && substr($working_experience_values[5], 5, 4) == $i)
@@ -794,7 +794,7 @@
                         <div class="form-group" id="working_experience_begin_year_7">
                       @endif
                           <label for="working_experience_begin_year_7">(7) From</label>
-                          <select name="working_experience_begin_year_7" type="text" class="@error('working_experience_begin_year_7') is-invalid @enderror form-control select2" id="working_experience_begin_year_7_input">
+                          <select name="working_experience_begin_year_7" type="text" class="@error('working_experience_begin_year_7') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_7_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 6 && substr($working_experience_values[6], 0, 4) == $i)
@@ -816,7 +816,7 @@
                         <div class="form-group" id="working_experience_end_year_7">
                       @endif
                           <label for="working_experience_end_year_7">To (optional)</label>
-                          <select name="working_experience_end_year_7" type="text" class="@error('working_experience_end_year_7') is-invalid @enderror form-control select2" id="working_experience_end_year_7_input">
+                          <select name="working_experience_end_year_7" type="text" class="@error('working_experience_end_year_7') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_7_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 6 && substr($working_experience_values[6], 5, 4) == $i)
@@ -856,7 +856,7 @@
                         <div class="form-group" id="working_experience_begin_year_8">
                       @endif
                           <label for="working_experience_begin_year_8">(8) From</label>
-                          <select name="working_experience_begin_year_8" type="text" class="@error('working_experience_begin_year_8') is-invalid @enderror form-control select2" id="working_experience_begin_year_8_input">
+                          <select name="working_experience_begin_year_8" type="text" class="@error('working_experience_begin_year_8') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_8_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 7 && substr($working_experience_values[7], 0, 4) == $i)
@@ -878,7 +878,7 @@
                         <div class="form-group" id="working_experience_end_year_8">
                       @endif
                           <label for="working_experience_end_year_8">To (optional)</label>
-                          <select name="working_experience_end_year_8" type="text" class="@error('working_experience_end_year_8') is-invalid @enderror form-control select2" id="working_experience_end_year_8_input">
+                          <select name="working_experience_end_year_8" type="text" class="@error('working_experience_end_year_8') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_8_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 7 && substr($working_experience_values[7], 5, 4) == $i)
@@ -918,7 +918,7 @@
                         <div class="form-group" id="working_experience_begin_year_9">
                       @endif
                           <label for="working_experience_begin_year_9">(9) From</label>
-                          <select name="working_experience_begin_year_9" type="text" class="@error('working_experience_begin_year_9') is-invalid @enderror form-control select2" id="working_experience_begin_year_9_input">
+                          <select name="working_experience_begin_year_9" type="text" class="@error('working_experience_begin_year_9') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_9_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 8 && substr($working_experience_values[8], 0, 4) == $i)
@@ -940,7 +940,7 @@
                         <div class="form-group" id="working_experience_end_year_9">
                       @endif
                           <label for="working_experience_end_year_9">To (optional)</label>
-                          <select name="working_experience_end_year_9" type="text" class="@error('working_experience_end_year_9') is-invalid @enderror form-control select2" id="working_experience_end_year_9_input">
+                          <select name="working_experience_end_year_9" type="text" class="@error('working_experience_end_year_9') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_9_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 8 && substr($working_experience_values[8], 5, 4) == $i)
@@ -980,7 +980,7 @@
                         <div class="form-group" id="working_experience_begin_year_10">
                       @endif
                           <label for="working_experience_begin_year_10">(10) From</label>
-                          <select name="working_experience_begin_year_10" type="text" class="@error('working_experience_begin_year_10') is-invalid @enderror form-control select2" id="working_experience_begin_year_10_input">
+                          <select name="working_experience_begin_year_10" type="text" class="@error('working_experience_begin_year_10') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_10_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 9 && substr($working_experience_values[9], 0, 4) == $i)
@@ -1002,7 +1002,7 @@
                         <div class="form-group" id="working_experience_end_year_10">
                       @endif
                           <label for="working_experience_end_year_10">To (optional)</label>
-                          <select name="working_experience_end_year_10" type="text" class="@error('working_experience_end_year_10') is-invalid @enderror form-control select2" id="working_experience_end_year_10_input">
+                          <select name="working_experience_end_year_10" type="text" class="@error('working_experience_end_year_10') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_10_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 9 && substr($working_experience_values[9], 5, 4) == $i)
@@ -1042,7 +1042,7 @@
                         <div class="form-group" id="working_experience_begin_year_11">
                       @endif
                           <label for="working_experience_begin_year_11">(11) From</label>
-                          <select name="working_experience_begin_year_11" type="text" class="@error('working_experience_begin_year_11') is-invalid @enderror form-control select2" id="working_experience_begin_year_11_input">
+                          <select name="working_experience_begin_year_11" type="text" class="@error('working_experience_begin_year_11') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_11_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 10 && substr($working_experience_values[10], 0, 4) == $i)
@@ -1064,7 +1064,7 @@
                         <div class="form-group" id="working_experience_end_year_11">
                       @endif
                           <label for="working_experience_end_year_11">To (optional)</label>
-                          <select name="working_experience_end_year_11" type="text" class="@error('working_experience_end_year_11') is-invalid @enderror form-control select2" id="working_experience_end_year_11_input">
+                          <select name="working_experience_end_year_11" type="text" class="@error('working_experience_end_year_11') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_11_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 10 && substr($working_experience_values[10], 5, 4) == $i)
@@ -1104,7 +1104,7 @@
                         <div class="form-group" id="working_experience_begin_year_12">
                       @endif
                           <label for="working_experience_begin_year_12">(12) From</label>
-                          <select name="working_experience_begin_year_12" type="text" class="@error('working_experience_begin_year_12') is-invalid @enderror form-control select2" id="working_experience_begin_year_12_input">
+                          <select name="working_experience_begin_year_12" type="text" class="@error('working_experience_begin_year_12') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_12_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 11 && substr($working_experience_values[11], 0, 4) == $i)
@@ -1126,7 +1126,7 @@
                         <div class="form-group" id="working_experience_end_year_12">
                       @endif
                           <label for="working_experience_end_year_12">To (optional)</label>
-                          <select name="working_experience_end_year_12" type="text" class="@error('working_experience_end_year_12') is-invalid @enderror form-control select2" id="working_experience_end_year_12_input">
+                          <select name="working_experience_end_year_12" type="text" class="@error('working_experience_end_year_12') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_12_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 11 && substr($working_experience_values[11], 5, 4) == $i)
@@ -1166,7 +1166,7 @@
                         <div class="form-group" id="working_experience_begin_year_13">
                       @endif
                           <label for="working_experience_begin_year_13">(13) From</label>
-                          <select name="working_experience_begin_year_13" type="text" class="@error('working_experience_begin_year_13') is-invalid @enderror form-control select2" id="working_experience_begin_year_13_input">
+                          <select name="working_experience_begin_year_13" type="text" class="@error('working_experience_begin_year_13') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_13_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 12 && substr($working_experience_values[12], 0, 4) == $i)
@@ -1188,7 +1188,7 @@
                         <div class="form-group" id="working_experience_end_year_13">
                       @endif
                           <label for="working_experience_end_year_13">To (optional)</label>
-                          <select name="working_experience_end_year_13" type="text" class="@error('working_experience_end_year_13') is-invalid @enderror form-control select2" id="working_experience_end_year_13_input">
+                          <select name="working_experience_end_year_13" type="text" class="@error('working_experience_end_year_13') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_13_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 12 && substr($working_experience_values[12], 5, 4) == $i)
@@ -1228,7 +1228,7 @@
                         <div class="form-group" id="working_experience_begin_year_14">
                       @endif
                           <label for="working_experience_begin_year_14">(14) From</label>
-                          <select name="working_experience_begin_year_14" type="text" class="@error('working_experience_begin_year_14') is-invalid @enderror form-control select2" id="working_experience_begin_year_14_input">
+                          <select name="working_experience_begin_year_14" type="text" class="@error('working_experience_begin_year_14') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_14_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 13 && substr($working_experience_values[13], 0, 4) == $i)
@@ -1250,7 +1250,7 @@
                         <div class="form-group" id="working_experience_end_year_14">
                       @endif
                           <label for="working_experience_end_year_14">To (optional)</label>
-                          <select name="working_experience_end_year_14" type="text" class="@error('working_experience_end_year_14') is-invalid @enderror form-control select2" id="working_experience_end_year_14_input">
+                          <select name="working_experience_end_year_14" type="text" class="@error('working_experience_end_year_14') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_14_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 13 && substr($working_experience_values[13], 5, 4) == $i)
@@ -1290,7 +1290,7 @@
                         <div class="form-group" id="working_experience_begin_year_15">
                       @endif
                           <label for="working_experience_begin_year_15">(15) From</label>
-                          <select name="working_experience_begin_year_15" type="text" class="@error('working_experience_begin_year_15') is-invalid @enderror form-control select2" id="working_experience_begin_year_15_input">
+                          <select name="working_experience_begin_year_15" type="text" class="@error('working_experience_begin_year_15') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_begin_year_15_input">
                             <option selected="selected" value="">-- From --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 14 && substr($working_experience_values[14], 0, 4) == $i)
@@ -1312,7 +1312,7 @@
                         <div class="form-group" id="working_experience_end_year_15">
                       @endif
                           <label for="working_experience_end_year_15">To (optional)</label>
-                          <select name="working_experience_end_year_15" type="text" class="@error('working_experience_end_year_15') is-invalid @enderror form-control select2" id="working_experience_end_year_15_input">
+                          <select name="working_experience_end_year_15" type="text" class="@error('working_experience_end_year_15') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_15_input">
                             <option selected="selected" value="">-- To --</option>
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 14 && substr($working_experience_values[14], 5, 4) == $i)

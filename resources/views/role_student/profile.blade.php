@@ -159,7 +159,7 @@
                 </div>
                 <div class="col-md-2 @error('interest_1') has-error @enderror">
                   <label for="interest_1" class="control-label hidden">First Interest</label>
-                  <select name="interest_1" type="text" class="@error('interest_1') is-invalid @enderror form-control select2">
+                  <select name="interest_1" type="text" class="@error('interest_1') is-invalid @enderror form-control select2" style="width:100%;">
                     <option selected="selected" value="">None</option>
                     @foreach($interests as $interest)
                       @if(old('interest_1') && old('interest_1') == $interest)
@@ -174,7 +174,7 @@
                 </div>
                 <div class="col-md-2">
                   <label for="interest_2" class="control-label hidden">Second Interest</label>
-                  <select name="interest_2" type="text" class="@error('interest_2') is-invalid @enderror form-control select2">
+                  <select name="interest_2" type="text" class="@error('interest_2') is-invalid @enderror form-control select2" style="width:100%;">
                     <option selected="selected" value="">None</option>
                     @foreach($interests as $interest)
                       @if(old('interest_2') && old('interest_2') == $interest)
@@ -189,7 +189,7 @@
                 </div>
                 <div class="col-md-2">
                   <label for="interest_3" class="control-label hidden">Third Interest</label>
-                  <select name="interest_3" type="text" class="@error('interest_3') is-invalid @enderror form-control select2">
+                  <select name="interest_3" type="text" class="@error('interest_3') is-invalid @enderror form-control select2" style="width:100%;">
                     <option selected="selected" value="">None</option>
                     @foreach($interests as $interest)
                       @if(old('interest_3') && old('interest_3') == $interest)
@@ -204,7 +204,7 @@
                 </div>
                 <div class="col-md-2">
                   <label for="interest_4" class="control-label hidden">Fourth Interest</label>
-                  <select name="interest_4" type="text" class="@error('interest_4') is-invalid @enderror form-control select2">
+                  <select name="interest_4" type="text" class="@error('interest_4') is-invalid @enderror form-control select2" style="width:100%;">
                     <option selected="selected" value="">None</option>
                     @foreach($interests as $interest)
                       @if(old('interest_4') && old('interest_4') == $interest)
@@ -219,7 +219,7 @@
                 </div>
                 <div class="col-md-2">
                   <label for="interest_5" class="control-label hidden">Fifth Interest</label>
-                  <select name="interest_5" type="text" class="@error('interest_5') is-invalid @enderror form-control select2">
+                  <select name="interest_5" type="text" class="@error('interest_5') is-invalid @enderror form-control select2" style="width:100%;">
                     <option selected="selected" value="">None</option>
                     @foreach($interests as $interest)
                       @if(old('interest_5') && old('interest_5') == $interest)
@@ -234,7 +234,7 @@
                 </div>
                 <div class="col-md-2">
                   <label for="interest_6" class="control-label hidden">Sixth Interest</label>
-                  <select name="interest_6" type="text" class="@error('interest_6') is-invalid @enderror form-control select2">
+                  <select name="interest_6" type="text" class="@error('interest_6') is-invalid @enderror form-control select2" style="width:100%;">
                     <option selected="selected" value="">None</option>
                     @foreach($interests as $interest)
                       @if(old('interest_6') && old('interest_6') == $interest)
@@ -256,7 +256,7 @@
               <div class="form-group col-md-12">
                 <div class="col-md-12 @error('image_profile_flag') has-error @enderror">
                   <label for="image_profile_flag" class="control-label">Do you want to change your profile picture?</label>
-                  <select name="image_profile_flag" id="image_profile_flag" type="text" class="@error('image_profile_flag') is-invalid @enderror form-control select2" onchange="if(document.getElementById('image_profile_flag').value == 1) document.getElementById('image_profile_div').className = 'col-md-12'; else document.getElementById('image_profile_div').className = 'col-md-12 hidden';">
+                  <select name="image_profile_flag" id="image_profile_flag" type="text" class="@error('image_profile_flag') is-invalid @enderror form-control select2" style="width:100%;" onchange="if(document.getElementById('image_profile_flag').value == 1) document.getElementById('image_profile_div').className = 'col-md-12'; else document.getElementById('image_profile_div').className = 'col-md-12 hidden';">
                     <option selected="selected" value="0">-- Enter your choice --</option>
                     <option value="1">Yes</option>
                     @if(Auth::user()->image_profile != 'user.jpg')
@@ -281,7 +281,7 @@
                 <div class="col-md-12 @error('timezone') has-error @enderror">
                   <label for="timezone" class="control-label">What is your local time zone?</label>
                   <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Reference: <b><a target="_blank" rel="noopener noreferrer" href="https://www.timeanddate.com/">timeanddate.com</a></b></p>
-                  <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control select2">
+                  <select name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control select2" style="width:100%;">
                     <option selected="selected" value="">-- Enter your current time zone --</option>
                     @foreach($timezones as $timezone)
                       @if(old('timezone') == $timezone)
