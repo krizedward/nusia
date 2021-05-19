@@ -7,8 +7,8 @@
 @section('content-header')
   <h1><b>Placement Test Detail</b></h1>
   <ol class="breadcrumb">
-    <li><a href="{{ route('home') }}">Home</a></li>
-    <li><a href="{{ route('placement_tests.index') }}">Placement Tests</a></li>
+    <li><a href="{{ route('registered.dashboard.index') }}">Home</a></li>
+    <li><a href="{{ route('lead_instructor.student_registration.index') }}">Placement Tests</a></li>
     <li class="active">Detail</li>
   </ol>
 @stop
@@ -69,7 +69,7 @@
                       </table>
                     </p>
                     <hr>
-                    <strong><i class="fa fa-file-video-o margin-r-5"></i> Placement Test</strong>
+                    <strong><i class="fa fa-file-video-o margin-r-5"></i> Placement Test Submission</strong>
                     <p>
                       <?php
                         if($course_registration->placement_test->submitted_at != null)
@@ -128,7 +128,7 @@
                       </div>
                     </div>
                     <div class="box-body">
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Chosen Material Type</strong>
+                      <strong><i class="fa fa-book margin-r-5"></i>&nbsp; Chosen Material Type</strong>
                       <p>
                         @if($course_registration->course->course_package->material_type->description)
                           @if($course_registration->course->course_package->material_type->name == 'General Indonesian Language')
@@ -143,28 +143,10 @@
                         @endif
                       </p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Student Name</strong>
+                      <strong><i class="fa fa-pencil margin-r-5"></i>&nbsp; Student Name</strong>
                       <p>{{ $course_registration->student->user->first_name }} {{ $course_registration->student->user->last_name }}</p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Nationality</strong>
-                      <p>
-                        @if($course_registration->student->user->citizenship != 'Not Available')
-                          {{ $course_registration->student->user->citizenship }}
-                        @else
-                          <i>N/A</i>
-                        @endif
-                      </p>
-                      <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Where do you live now</strong>
-                      <p>
-                        @if($course_registration->student->user->domicile)
-                          {{ $course_registration->student->user->domicile }}
-                        @else
-                          <i>N/A</i>
-                        @endif
-                      </p>
-                      <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Age</strong>
+                      <strong><i class="fa fa-user-circle-o margin-r-5"></i> Age</strong>
                       <p>
                         @if($course_registration->student->age != 0)
                           {{ $course_registration->student->age }}
@@ -173,24 +155,49 @@
                         @endif
                       </p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Interest</strong>
+                      <strong>&nbsp;<i class="fa fa-map-marker margin-r-5"></i>&nbsp; Nationality</strong>
+                      <p>
+                        @if($course_registration->student->user->citizenship != 'Not Available')
+                          {{ $course_registration->student->user->citizenship }}
+                        @else
+                          <i>N/A</i>
+                        @endif
+                      </p>
+                      <hr>
+                      <strong>&nbsp;<i class="fa fa-map-marker margin-r-5"></i>&nbsp; Where do you live now</strong>
+                      <p>
+                        @if($course_registration->student->user->domicile)
+                          {{ $course_registration->student->user->domicile }}
+                        @else
+                          <i>N/A</i>
+                        @endif
+                      </p>
+                      <hr>
+                      <strong><i class="fa fa-cube margin-r-5"></i>&nbsp;Interest</strong>
                       <p>
                         @if($course_registration->student->interest)
-                          <?php
-                            $interest = explode(', ', $course_registration->student->interest);
-                          ?>
+                          <?php $interest = explode(', ', $course_registration->student->interest); ?>
                           @for($i = 0; $i < count($interest); $i = $i + 1)
+                            <span class="label label-success">{{ $interest[$i] }}</span>
+                            {{--
                             {{ $i + 1 }}. {{ $interest[$i] }}
                             @if($i + 1 != count($interest))
                               <br>
                             @endif
+                            --}}
                           @endfor
                         @else
                           <i>N/A</i>
                         @endif
                       </p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Job Status</strong>
+                      <strong>
+                        @if($course_registration->student->status_job == 'Student')
+                          <i class="fa fa-graduation-cap"></i>&nbsp;Job Status
+                        @elseif($course_registration->student->status_job == 'Professional')
+                          <i class="fa fa-briefcase"></i>&nbsp;&nbsp;Job Status
+                        @endif
+                      </strong>
                       <p>
                         @if($course_registration->student->status_description)
                           {{ $course_registration->student->status_job }} at {{ $course_registration->student->status_description }}
@@ -199,7 +206,7 @@
                         @endif
                       </p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Indonesia Language Proficiency</strong>
+                      <strong><i class="fa fa-trophy margin-r-5"></i>&nbsp;Indonesia Language Proficiency</strong>
                       <p>
                         @if($course_registration->student->age != 0)
                           {{ $course_registration->student->indonesian_language_proficiency }}
@@ -208,7 +215,7 @@
                         @endif
                       </p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Target Language Experience</strong>
+                      <strong><i class="fa fa-history margin-r-5"></i>&nbsp;Target Language Experience</strong>
                       <p>
                         @if($course_registration->student->age != 0)
                           @if($course_registration->student->target_language_experience != 'Others')
@@ -226,7 +233,7 @@
                         @endif
                       </p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Description of Course Taken</strong>
+                      <strong><i class="fa fa-pencil-square-o margin-r-5"></i> Description of Course Taken</strong>
                       <p>
                         @if($course_registration->student->description_of_course_taken)
                           {{ $course_registration->student->description_of_course_taken }}
@@ -235,7 +242,7 @@
                         @endif
                       </p>
                       <hr>
-                      <strong><i class="fa fa-circle-o margin-r-5"></i> Learning Objective</strong>
+                      <strong><i class="fa fa-language margin-r-5"></i>&nbsp;&nbsp;Learning Objective</strong>
                       <p>
                         @if($course_registration->student->learning_objective)
                           {{ $course_registration->student->learning_objective }}
@@ -297,7 +304,7 @@
                       </table>
                     </p>
                     <hr>
-                    <strong><i class="fa fa-file-video-o margin-r-5"></i> Placement Test</strong>
+                    <strong><i class="fa fa-file-video-o margin-r-5"></i> Placement Test Submission</strong>
                     <p>
                       <?php
                         if($course_registration->placement_test->submitted_at != null)
@@ -355,7 +362,7 @@
                     </div>
                   </div>
                   <div class="box-body">
-                    <form role="form" method="post" action="{{ route('placement_tests.update', [$course_registration->id]) }}" enctype="multipart/form-data">
+                    <form role="form" method="post" action="{{ route('lead_instructor.confirmation_by_video.update', [$course_registration->id]) }}" enctype="multipart/form-data">
                       @csrf
                       @method('PUT')
                       {{ session(['crid' => $course_registration->id]) }}
@@ -366,10 +373,10 @@
                             <div class="col-md-12">
                               <div class="form-group @error('status') has-error @enderror">
                                 <label for="status">Test Result</label>
-                                <select id="status" name="status" type="text" class="@error('status') is-invalid @enderror form-control" onChange="if(document.getElementById('status').value == 'Passed') {document.getElementById('old_proficiency_div').className = 'form-group'; document.getElementById('indonesian_language_proficiency_div').className = 'form-group';} else {document.getElementById('old_proficiency_div').className = 'form-group hidden'; document.getElementById('indonesian_language_proficiency_div').className = 'form-group hidden';}">
+                                <select id="status" name="status" type="text" class="@error('status') is-invalid @enderror form-control" onChange="if(document.getElementById('status').value == 'Passed') {document.getElementById('old_proficiency_div').className = 'form-group'; document.getElementById('indonesian_language_proficiency_div').className = 'form-group'; document.getElementById('schedule_time_div').className = 'form-group hidden';} else if(document.getElementById('status').value == 'Not Passed') {document.getElementById('old_proficiency_div').className = 'form-group hidden'; document.getElementById('indonesian_language_proficiency_div').className = 'form-group hidden'; document.getElementById('schedule_time_div').className = 'form-group';} else {document.getElementById('old_proficiency_div').className = 'form-group hidden'; document.getElementById('indonesian_language_proficiency_div').className = 'form-group hidden'; document.getElementById('schedule_time_div').className = 'form-group hidden';}">
                                   <option selected="selected" value="">-- Enter Test Result --</option>
-                                  <option value="Passed">Passed</option>
-                                  <option value="Not Passed">Not Passed</option>
+                                  <option value="Passed">PASSED (Assign Proficiency Level)</option>
+                                  <option value="Not Passed">NOT PASSED (Schedule an Interview)</option>
                                 </select>
                                 @error('status')
                                   <p style="color:red">{{ $message }}</p>
@@ -399,6 +406,29 @@
                                   @endforeach
                                 </select>
                                 @error('indonesian_language_proficiency')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="col-md-12">
+                              <div id="schedule_time_div" class="form-group hidden @error('schedule_time_date') has-error @enderror @error('schedule_time_time') has-error @enderror">
+                                <label for="schedule_time_date">Set Interview Schedule</label>
+                                <p class="text-red">The time schedule inputted is adjusted with your local time.</p>
+                                <div class="input-group date">
+                                  <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                  <input name="schedule_time_date" type="text" class="form-control pull-right datepicker">
+                                </div>
+                                <label for="schedule_time_time" class="hidden">Schedule (set the time)</label><br />
+                                <div class="input-group">
+                                  <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                                  <input name="schedule_time_time" type="text" class="form-control pull-right timepicker">
+                                </div>
+                                @error('schedule_time_date')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                                @error('schedule_time_time')
                                   <p style="color:red">{{ $message }}</p>
                                 @enderror
                               </div>

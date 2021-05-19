@@ -823,12 +823,17 @@ class StudentController extends Controller
             // Jika hasil test masih 'Not Passed' (entah sudah diunggah atau belum).
             if($course_registration->placement_test->path == null) {
                 // Jika hasil test BELUM/TIDAK DIUNGGAH,
-                // atau ditolak oleh Lead Instructor,
-                // Student dapat mengunggah hasil placement test [berikutnya].
+                // Student dapat mengunggah hasil placement test.
                 $has_uploaded_for_placement_test = 0;
             } else {
-                // Jika hasil test sudah diunggah tetapi masih 'Not Passed', tampilkan halaman "waiting".
-                $has_uploaded_for_placement_test = 1;
+                // Jika hasil test sudah diunggah tetapi masih 'Not Passed', tampilkan halaman "waiting" atau "interview".
+                if($course_registration->course->requirement == null) {
+                    // Jika masih menunggu konfirmasi dari Lead Instructor.
+                    $has_uploaded_for_placement_test = 1;
+                } else {
+                    // Jika masih menunggu waktu pelaksanaan interview.
+                    $has_uploaded_for_placement_test = 2;
+                }
             }
         } else if($course_registration->placement_test->status == 'Passed') {
             // Jika hasil test sudah diunggah dan 'Passed', redirect ke langkah berikutnya.

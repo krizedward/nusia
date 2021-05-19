@@ -44,6 +44,7 @@ use App\Models\Task;
 use App\Models\TaskSubmission;
 use App\Models\UserNotification;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -100,10 +101,20 @@ class LeadInstructorController extends Controller
             ->where('course_packages.title', 'LIKE', '%Not Assigned%')
             ->where('placement_tests.status', 'Not Passed')
             ->where('placement_tests.path', '<>', null)
+            ->where('courses.requirement', null)
+            ->get();
+        $interviews = PlacementTest
+            ::join('course_registrations', 'placement_tests.course_registration_id', 'course_registrations.id')
+            ->join('courses', 'course_registrations.course_id', 'courses.id')
+            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+            ->where('course_packages.title', 'LIKE', '%Not Assigned%')
+            ->where('placement_tests.status', 'Not Passed')
+            ->where('placement_tests.path', '<>', null)
+            ->where('courses.requirement', '<>', null)
             ->get();
         
         return view('role_lead_instructor.placement_tests_index', compact(
-            'material_types', 'placement_tests',
+            'material_types', 'placement_tests', 'interviews'
         ));
     }
 
@@ -212,10 +223,13 @@ class LeadInstructorController extends Controller
         
         $data = Validator::make($data, [
             'status' => ['bail', 'required',],
-            'indonesian_language_proficiency' => ['bail', 'required_unless:status,"Not Passed"',],
+            'indonesian_language_proficiency' => ['bail', 'required_if:status,"Passed"',],
+            'schedule_time_date' => ['bail', 'required_if:status,"Not Passed"',],
+            'schedule_time_time' => ['bail', 'required_if:status,"Not Passed"',],
             'crid' => ['bail', 'required'],
         ]);
         if($data->fails()) {
+            session(['caption-danger' => 'This placement test information has not been updated. Try again.']);
             return redirect()->back()
                 ->withErrors($data)
                 ->withInput();
@@ -225,11 +239,20 @@ class LeadInstructorController extends Controller
         
         // Jika hasil placement test tidak diterima ('Not Passed').
         if($request->status == 'Not Passed') {
+            $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
+            if($schedule_time < now()) {
+                session(['caption-danger' => 'Cannot schedule the interview as the inputted time is invalid.']);
+                return redirect()->back()->withInput();
+            }
             $course_registration->placement_test->update([
-                'path' => null,
-                'submitted_at' => null,
                 'result_updated_at' => now(),
+                'updated_at' => now(),
             ]);
+            $course_registration->course->update([
+                'requirement' => $schedule_time,
+                'updated_at' => now(),
+            ]);
+            session(['caption-success' => 'This placement test information has been updated. Thank you!']);
             return redirect()->route('lead_instructor.student_registration.index');
         }
         
@@ -335,6 +358,7 @@ class LeadInstructorController extends Controller
             'status' => 'Passed',
             'result_updated_at' => now(),
         ]);
+        session(['caption-success' => 'This placement test information has been updated. Thank you!']);
         return redirect()->route('lead_instructor.student_registration.index');
     }
 
