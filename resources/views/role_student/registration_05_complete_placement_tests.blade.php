@@ -5,7 +5,14 @@
 @include('layouts.css_and_js.all')
 
 @section('content-header')
-  <h1><b>Indonesian Proficiency Placement Test</b></h1>
+  <h1>
+    <b>
+      Indonesian Proficiency Placement Test
+      @if($has_uploaded_for_placement_test == 2)
+        (Interview)
+      @endif
+    </b>
+  </h1>
 @stop
 
 @section('content')
@@ -16,42 +23,90 @@
           <h3 class="box-title"><b>Placement Test Information</b></h3>
         </div>
         <div class="box-body">
-          <dl>
-            <dt><i class="fa fa-pencil margin-r-5"></i> Reading the Requirements</dt>
-            <dd>
-              Click this
-              <a href="#" target="_blank">blue-colored link</a>
-              to download the test requirements.
-            </dd>
-          </dl>
-          <hr>
-          <dl>
-            <dt><i class="fa fa-file-video-o margin-r-5"></i> Preparing the Video</dt>
-            <dd>
-              Record a video that fulfills all test requirements.<br />
-              After recording the video, upload to <b>Google Drive</b> and prepare a shareable link to the video.
-            </dd>
-          </dl>
-          <hr>
-          <dl>
-            <dt><i class="fa fa-check margin-r-5"></i> Completing the Test</dt>
-            <dd>
-              After preparing the link, fill out the submission form and click "submit" button!<br />
-              Please check whether the link has been attached successfully.<br />
-            </dd>
-          </dl>
-          <hr>
-          <dl>
-            <dt><i class="fa fa-file-text-o margin-r-5"></i> More Information</dt>
-            <dd>
-              The result will be announced by email <b>no later than 7 days after submission</b>.<br />
-              Proceeding to the course scheduling is required to finish the registration.<br />
-              <span style="color:#ff0000;">Contact us if you encounter a problem.</span>
-            </dd>
-          </dl>
-          {{--
-          <hr>
-          --}}
+          @if($has_uploaded_for_placement_test != 2)
+            <dl>
+              <dt><i class="fa fa-pencil margin-r-5"></i> Reading the Requirements</dt>
+              <dd>
+                Click this
+                <a href="#" target="_blank">blue-colored link</a>
+                to download the test requirements.
+              </dd>
+            </dl>
+            <hr>
+            <dl>
+              <dt><i class="fa fa-file-video-o margin-r-5"></i> Preparing the Video</dt>
+              <dd>
+                Record a video that fulfills all test requirements.<br />
+                After recording the video, upload to <b>Google Drive</b> and prepare a shareable link to the video.
+              </dd>
+            </dl>
+            <hr>
+            <dl>
+              <dt><i class="fa fa-check margin-r-5"></i> Completing the Test</dt>
+              <dd>
+                After preparing the link, fill out the submission form and click "submit" button!<br />
+                Please check whether the link has been attached successfully.<br />
+              </dd>
+            </dl>
+            <hr>
+            <dl>
+              <dt><i class="fa fa-file-text-o margin-r-5"></i> More Information</dt>
+              <dd>
+                The result will be announced by email <b>no later than 7 days after submission</b>.<br />
+                Proceeding to the course scheduling is required to finish the registration.<br />
+                <span style="color:#ff0000;">Contact NUSIA Academic if you encounter a problem.</span>
+              </dd>
+            </dl>
+            <hr>
+            <a href="{{ route('student.chat_lead_instructor.show', [91]) }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noopener noreferrer">
+              <i class="fa fa-envelope-o"></i>&nbsp;&nbsp;Chat NUSIA Academic
+            </a>
+          @else
+            <dl>
+              <dt><i class="fa fa-user-circle-o margin-r-5"></i> Attending an Interview</dt>
+              <dd>
+                You are required to attend an interview to complete your placement test procedure.
+              </dd>
+            </dl>
+            <?php
+              $schedule_time = \Carbon\Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone);
+            ?>
+            <p>
+              <table>
+                <tr style="vertical-align:baseline;">
+                  <td width="35"><b>Day</b></td>
+                  <td>&nbsp;:&nbsp;&nbsp;</td>
+                  <td>{{ $schedule_time->isoFormat('dddd') }}</td>
+                </tr>
+                <tr style="vertical-align:baseline;">
+                  <td width="35"><b>Date</b></td>
+                  <td>&nbsp;:&nbsp;&nbsp;</td>
+                  <td>{{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}</td>
+                </tr>
+                <tr style="vertical-align:baseline;">
+                  <td width="35"><b>Link</b></td>
+                  <td>&nbsp;:&nbsp;&nbsp;</td>
+                  <td>
+                    Click the button below to join the interview session
+                  </td>
+                </tr>
+              </table>
+            </p>
+            <a href="{{ $course_registration->course->requirement }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noreferrer nofollow">Join Interview</a>
+            <hr>
+            <dl>
+              <dt><i class="fa fa-file-text-o margin-r-5"></i> More Information</dt>
+              <dd>
+                The interview result will be announced by email <b>no later than 7 days after the session ends</b>.<br />
+                Proceeding to the course scheduling is required to finish the registration.<br />
+                <span style="color:#ff0000;">Contact NUSIA Academic if you encounter a problem.</span>
+              </dd>
+            </dl>
+            <hr>
+            <a href="{{ route('student.chat_lead_instructor.show', [91]) }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noopener noreferrer">
+              <i class="fa fa-envelope-o"></i>&nbsp;&nbsp;Chat NUSIA Academic
+            </a>
+          @endif
         </div>
       </div>
     </div>
@@ -106,7 +161,11 @@
               <p class="text-center">
                 <b style="color:#cc0000;">
                   Submitted on {{ $submitted_at->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}.<br />
-                  The result will be announced by email no later than 7 days after this time.
+                  @if($has_uploaded_for_placement_test == 2)
+                    You are required to attend an interview to proceed finishing the course registration.
+                  @else
+                    The result will be announced by email no later than 7 days after this time.
+                  @endif
                 </b>
               </p>
             @else

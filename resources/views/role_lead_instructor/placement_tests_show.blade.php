@@ -373,10 +373,20 @@
                             <div class="col-md-12">
                               <div class="form-group @error('status') has-error @enderror">
                                 <label for="status">Test Result</label>
-                                <select id="status" name="status" type="text" class="@error('status') is-invalid @enderror form-control" onChange="if(document.getElementById('status').value == 'Passed') {document.getElementById('old_proficiency_div').className = 'form-group'; document.getElementById('indonesian_language_proficiency_div').className = 'form-group'; document.getElementById('schedule_time_div').className = 'form-group hidden';} else if(document.getElementById('status').value == 'Not Passed') {document.getElementById('old_proficiency_div').className = 'form-group hidden'; document.getElementById('indonesian_language_proficiency_div').className = 'form-group hidden'; document.getElementById('schedule_time_div').className = 'form-group';} else {document.getElementById('old_proficiency_div').className = 'form-group hidden'; document.getElementById('indonesian_language_proficiency_div').className = 'form-group hidden'; document.getElementById('schedule_time_div').className = 'form-group hidden';}">
+                                <select id="status" name="status" type="text" class="@error('status') is-invalid @enderror form-control" onChange="if(document.getElementById('status').value == 'Passed') {document.getElementById('old_proficiency_div').className = 'form-group'; document.getElementById('indonesian_language_proficiency_div').className = 'form-group'; document.getElementById('schedule_time_div').className = 'form-group hidden'; document.getElementById('meeting_link_div').className = 'form-group hidden';} else if(document.getElementById('status').value == 'Not Passed') {document.getElementById('old_proficiency_div').className = 'form-group hidden'; document.getElementById('indonesian_language_proficiency_div').className = 'form-group hidden'; document.getElementById('schedule_time_div').className = 'form-group'; document.getElementById('meeting_link_div').className = 'form-group';} else {document.getElementById('old_proficiency_div').className = 'form-group hidden'; document.getElementById('indonesian_language_proficiency_div').className = 'form-group hidden'; document.getElementById('schedule_time_div').className = 'form-group hidden'; document.getElementById('meeting_link_div').className = 'form-group hidden';}">
                                   <option selected="selected" value="">-- Enter Test Result --</option>
-                                  <option value="Passed">PASSED (Assign Proficiency Level)</option>
-                                  <option value="Not Passed">NOT PASSED (Schedule an Interview)</option>
+                                  <?php
+                                    $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end = \Carbon\Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone)->add(100, 'minutes');
+                                  ?>
+                                  @if($course_registration->placement_test->result_updated_at == null)
+                                    <option value="Passed">PASSED (Assign Proficiency Level)</option>
+                                  @elseif($course_registration->placement_test->result_updated_at != null && $schedule_now > $schedule_time_end)
+                                    <option value="Passed">PASSED (Assign Proficiency Level)</option>
+                                  @endif
+                                  @if($course_registration->course->requirement == null)
+                                    <option value="Not Passed">NOT PASSED (Schedule an Interview)</option>
+                                  @endif
                                 </select>
                                 @error('status')
                                   <p style="color:red">{{ $message }}</p>
@@ -429,6 +439,13 @@
                                   <p style="color:red">{{ $message }}</p>
                                 @enderror
                                 @error('schedule_time_time')
+                                  <p style="color:red">{{ $message }}</p>
+                                @enderror
+                              </div>
+                              <div id="meeting_link_div" class="form-group hidden @error('meeting_link') has-error @enderror">
+                                <label for="meeting_link">Add Meeting Link</label>
+                                <input id="meeting_link" name="meeting_link" type="text" class="@error('meeting_link') is-invalid @enderror form-control" placeholder="Enter Meeting Link" value="{{ old('meeting_link') }}">
+                                @error('meeting_link')
                                   <p style="color:red">{{ $message }}</p>
                                 @enderror
                               </div>

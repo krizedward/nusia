@@ -102,6 +102,8 @@ class LeadInstructorController extends Controller
             ->where('placement_tests.status', 'Not Passed')
             ->where('placement_tests.path', '<>', null)
             ->where('courses.requirement', null)
+            ->select('placement_tests.id', 'placement_tests.code', 'placement_tests.course_registration_id', 'placement_tests.path', 'placement_tests.status', 'placement_tests.submitted_at', 'placement_tests.result_updated_at', 'placement_tests.created_at', 'placement_tests.updated_at', 'placement_tests.deleted_at')
+            ->distinct()
             ->get();
         $interviews = PlacementTest
             ::join('course_registrations', 'placement_tests.course_registration_id', 'course_registrations.id')
@@ -111,6 +113,8 @@ class LeadInstructorController extends Controller
             ->where('placement_tests.status', 'Not Passed')
             ->where('placement_tests.path', '<>', null)
             ->where('courses.requirement', '<>', null)
+            ->select('placement_tests.id', 'placement_tests.code', 'placement_tests.course_registration_id', 'placement_tests.path', 'placement_tests.status', 'placement_tests.submitted_at', 'placement_tests.result_updated_at', 'placement_tests.created_at', 'placement_tests.updated_at', 'placement_tests.deleted_at')
+            ->distinct()
             ->get();
         
         return view('role_lead_instructor.placement_tests_index', compact(
@@ -127,10 +131,23 @@ class LeadInstructorController extends Controller
         $course_registration = CourseRegistration::where('id', $course_registration_id)->get()->first();
         
         // Periksa apakah akses untuk mengganti placement test ini diperbolehkan.
-        // Tidak diperbolehkan, jika status sudah "Passed" atau
-        // link belum diunggah (untuk placement test yang pernah ditolak sebelumnya).
-        if($course_registration->placement_test->path == null || $course_registration->placement_test->status == 'Passed') {
-            return redirect()->back();
+        if($course_registration->placement_test->status == 'Passed') {
+            // tidak bisa mengedit karena status sesi sudah "Passed"
+            session(['caption-danger' => 'This placement test information has been previously updated. No changes can be made.']);
+            return redirect()->route('lead_instructor.student_registration.index');
+        } else if($course_registration->placement_test->result_updated_at != null) {
+            // untuk sesi yang sudah diperiksa oleh Lead Instructor, tetapi memasuki tahap interview
+            $schedule_now = Carbon::now()->setTimezone(Auth::user()->timezone);
+            $schedule_time_begin_min_30_mins = Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone)->sub(30, 'minutes');
+            $schedule_time_end_add_7_days = Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone)->add(100, 'minutes')->add(7, 'days');
+            if($schedule_now < $schedule_time_begin_min_30_mins || $schedule_now > $schedule_time_end_add_7_days) {
+                // melihat informasi student hanya dapat dilakukan
+                // sejak 30 menit sebelum sesi interview dimulai
+                // hingga 7 hari setelah sesi interview berakhir
+                // (estimasi durasi interview: 100 menit)
+                session(['caption-danger' => 'This placement test information can be displayed 30 minutes before the interview begins until 7 days after the interview ends (estimated interview duration: 100 minutes).']);
+                return redirect()->route('lead_instructor.student_registration.index');
+            }
         }
         
         $course_levels = CoursePackage
@@ -226,6 +243,7 @@ class LeadInstructorController extends Controller
             'indonesian_language_proficiency' => ['bail', 'required_if:status,"Passed"',],
             'schedule_time_date' => ['bail', 'required_if:status,"Not Passed"',],
             'schedule_time_time' => ['bail', 'required_if:status,"Not Passed"',],
+            'meeting_link' => ['bail', 'required_if:status,"Not Passed"',],
             'crid' => ['bail', 'required'],
         ]);
         if($data->fails()) {
@@ -241,15 +259,15 @@ class LeadInstructorController extends Controller
         if($request->status == 'Not Passed') {
             $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
             if($schedule_time < now()) {
-                session(['caption-danger' => 'Cannot schedule the interview as the inputted time is invalid.']);
+                session(['caption-danger' => 'Cannot schedule the interview as the inputted time has passed the current time.']);
                 return redirect()->back()->withInput();
             }
             $course_registration->placement_test->update([
-                'result_updated_at' => now(),
+                'result_updated_at' => $schedule_time,
                 'updated_at' => now(),
             ]);
             $course_registration->course->update([
-                'requirement' => $schedule_time,
+                'requirement' => $request->meeting_link,
                 'updated_at' => now(),
             ]);
             session(['caption-success' => 'This placement test information has been updated. Thank you!']);
@@ -357,6 +375,7 @@ class LeadInstructorController extends Controller
         $course_registration->placement_test->update([
             'status' => 'Passed',
             'result_updated_at' => now(),
+            'updated_at' => now(),
         ]);
         session(['caption-success' => 'This placement test information has been updated. Thank you!']);
         return redirect()->route('lead_instructor.student_registration.index');
@@ -366,8 +385,29 @@ class LeadInstructorController extends Controller
         // menambahkan jadwal meeting alternatif
     }
 
-    public function placement_test_by_meeting_update(Request $request, $session_id) {
+    public function placement_test_by_meeting_update(Request $request) {
         // memodifikasi informasi jadwal meeting alternatif
+        
+        // Jika fungsi ini tidak diakses oleh lead instructor.
+        if(!$this->is_lead_instructor()) return redirect()->back();
+        
+        $data = Validator::make($request->all(), [
+            'placement_test_id' => ['bail', 'required',],
+            'link_zoom' => ['bail', 'required',],
+        ]);
+        if($data->fails()) {
+            session(['caption-danger' => 'This interview information has not been updated. Try again.']);
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+        
+        PlacementTest::findOrFail($request->placement_test_id)->course_registration->course->update([
+            'requirement' => $request->link_zoom,
+            'updated_at' => now(),
+        ]);
+        session(['caption-success' => 'This interview information has been updated. Thank you!']);
+        return redirect()->back();
     }
 
     public function placement_test_by_meeting_destroy($session_id) {

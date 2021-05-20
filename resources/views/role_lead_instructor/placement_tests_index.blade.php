@@ -21,6 +21,7 @@
           @foreach($material_types as $mt)
             <li><a href="#sub_type{{ $mt->id }}" data-toggle="tab"><b>{{ $mt->name }}</b></a></li>
           @endforeach
+          <li><a href="#interviews" data-toggle="tab"><b>Interviews</b></a></li>
         </ul>
         <div class="tab-content">
           <div class="active tab-pane" id="all_submissions">
@@ -63,21 +64,23 @@
                     </div>
                     <div class="box-body">
                       @if($placement_tests->toArray() != null)
-                        <table class="table table-bordered">
-                          <tr>
-                            <th>Material / Proficiency</th>
+                        <table class="table table-bordered example1">
+                          <thead>
+                            <th>Material / Level</th>
                             <th>Student Name</th>
                             <th style="width:5%;">View</th>
-                          </tr>
-                          @foreach($placement_tests as $dt)
-                            <tr>
-                              <td>{{ $dt->course_registration->course->course_package->material_type->name }} / {{ $dt->course_registration->student->indonesian_language_proficiency }}</td>
-                              <td>{{ $dt->course_registration->student->user->first_name }} {{ $dt->course_registration->student->user->last_name }}</td>
-                              <td class="text-center">
-                                <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('lead_instructor.student_registration.show', [$dt->course_registration_id]) }}">Detail</a>
-                              </td>
-                            </tr>
-                          @endforeach
+                          </thead>
+                          <tbody>
+                            @foreach($placement_tests as $dt)
+                              <tr>
+                                <td>{{ $dt->course_registration->course->course_package->material_type->name }} / {{ $dt->course_registration->student->indonesian_language_proficiency }}</td>
+                                <td>{{ $dt->course_registration->student->user->first_name }} {{ $dt->course_registration->student->user->last_name }}</td>
+                                <td class="text-center">
+                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('lead_instructor.student_registration.show', [$dt->course_registration_id]) }}">Detail</a>
+                                </td>
+                              </tr>
+                            @endforeach
+                          </tbody>
                         </table>
                       @else
                         <div class="text-center">No data available.</div>
@@ -139,23 +142,25 @@
                           }
                       ?>
                       @if($flag)
-                        <table class="table table-bordered">
-                          <tr>
-                            <th>Proficiency</th>
+                        <table class="table table-bordered example1">
+                          <thead>
+                            <th>Level</th>
                             <th>Student Name</th>
                             <th style="width:5%;">View</th>
-                          </tr>
-                          @foreach($placement_tests as $dt)
-                            @if($dt->course_registration->course->course_package->material_type_id == $mt->id)
-                              <tr>
-                                <td>{{ $dt->course_registration->student->indonesian_language_proficiency }}</td>
-                                <td>{{ $dt->course_registration->student->user->first_name }} {{ $dt->course_registration->student->user->last_name }}</td>
-                                <td class="text-center">
-                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('lead_instructor.student_registration.show', [$dt->course_registration_id]) }}">Detail</a>
-                                </td>
-                              </tr>
-                            @endif
-                          @endforeach
+                          </thead>
+                          <tbody>
+                            @foreach($placement_tests as $dt)
+                              @if($dt->course_registration->course->course_package->material_type_id == $mt->id)
+                                <tr>
+                                  <td>{{ $dt->course_registration->student->indonesian_language_proficiency }}</td>
+                                  <td>{{ $dt->course_registration->student->user->first_name }} {{ $dt->course_registration->student->user->last_name }}</td>
+                                  <td class="text-center">
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('lead_instructor.student_registration.show', [$dt->course_registration_id]) }}">Detail</a>
+                                  </td>
+                                </tr>
+                              @endif
+                            @endforeach
+                          </tbody>
                         </table>
                       @else
                         <div class="text-center">No data available.</div>
@@ -169,6 +174,184 @@
             </div>
             <!-- /.tab-pane -->
           @endforeach
+          <div class="tab-pane" id="interviews">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="box">
+                  {{--
+                  <div class="box-header">
+                    <h3 class="box-title">Section Title</h3>
+                  </div>
+                  --}}
+                  <div class="box-body">
+                    <dl>
+                      <dt style="font-size:18px;"><i class="fa fa-file-video-o margin-r-5"></i> Viewing the Result</dt>
+                      <dd>
+                        Click "detail" button to show more information from each submission.
+                      </dd>
+                    </dl>
+                    <hr>
+                    <dl>
+                      <dt style="font-size:18px;"><i class="fa fa-file-text-o margin-r-5"></i> Note</dt>
+                      <dd>
+                        {{-- Changing the proficiency level of each student can only be done from each page generated by this button.<br /> --}}
+                        After changing the proficiency level, the registration will be hidden from the table. You cannot edit the registration information afterwards.<br />
+                        <span style="color:#ff0000;">Contact us if you encounter a problem.</span>
+                      </dd>
+                    </dl>
+                    {{-- <hr> --}}
+                  </div>
+                </div>
+                <div class="box box-default">
+                  <div class="box-header with-border">
+                    <h3 class="box-title"><b>Edit Interview Link</b></h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <form action="{{ route('lead_instructor.placement_test_by_meeting.update') }}" method="post">
+                      @csrf
+                      @method('PUT')
+                      <div class="form-group">
+                        <label for="placement_test_id">Placement Test ID</label>
+                        <select id="placement_test_id" name="placement_test_id" class="form-control select2" style="width:100%;">
+                          <option selected value="0">-- Choose an ID --</option>
+                          <?php
+                            $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                          ?>
+                          @foreach($interviews as $dt)
+                            <?php
+                              $schedule_time_end = \Carbon\Carbon::parse($dt->result_updated_at)
+                                ->setTimezone(Auth::user()->timezone)
+                                ->add(100, 'minutes');
+                            ?>
+                            @if($schedule_now <= $schedule_time_end)
+                              <option value="{{ $dt->id }}">
+                                {{ $dt->course_registration->student->user->first_name }} {{ $dt->course_registration->student->user->last_name }} ({{ $dt->course_registration->course->course_package->material_type->name }})
+                              </option>
+                            @endif
+                          @endforeach
+                        </select>
+                      </div>
+                      <div id="link_zoom_div" class="form-group @error('link_zoom') has-error @enderror">
+                        <label for="link_zoom">New Interview Link</label>
+                        <input name="link_zoom" type="text" class="form-control" placeholder="insert an interview link" value="{{ old('link_zoom') }}">
+                        @error('link_zoom')
+                          <p style="color:red">{{ $message }}</p>
+                        @enderror
+                      </div>
+                      <button type="submit" class="btn btn-s btn-flat btn-primary" style="width:100%;">Submit</button>
+                    </form>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+              </div>
+              <div class="col-md-9 no-padding">
+                <div class="col-md-12">
+                  <div class="box box-primary">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>All Upcoming Interview Schedules</b></h3>
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse" aria-label="Minimize"><i class="fa fa-minus"></i></button>
+                      </div>
+                    </div>
+                    <div class="box-body">
+                      @if($interviews->toArray() != null)
+                        <table class="table table-bordered example1">
+                          <thead>
+                            <th>Meeting Time</th>
+                            <th>Material / Level</th>
+                            <th>Student Name</th>
+                          </thead>
+                          <tbody>
+                            @foreach($interviews as $dt)
+                              <?php
+                                $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                                $schedule_time_begin_min_30_mins = \Carbon\Carbon::parse($dt->course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone)->sub(30, 'minutes');
+                                $schedule_time_begin = \Carbon\Carbon::parse($dt->course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone);
+                                $schedule_time_end = \Carbon\Carbon::parse($dt->course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone)->add(100, 'minutes');
+                              ?>
+                              @if($schedule_now <= $schedule_time_end)
+                                <tr>
+                                  <td>
+                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
+                                    @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      Today, {{ $schedule_time_begin->isoFormat('hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                                    @else
+                                      {{ $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }} {{ $schedule_time_end->isoFormat('[-] hh:mm A') }}
+                                    @endif
+                                    &nbsp;&nbsp;<a target="_blank" rel="noopener noreferrer nofollow" class="btn btn-flat btn-xs btn-success" href="{{ $dt->course_registration->course->requirement }}">Interview</a>
+                                    &nbsp;&nbsp;<a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('lead_instructor.student_registration.show', [$dt->course_registration_id]) }}">View Detail</a>
+                                  </td>
+                                  <td>{{ $dt->course_registration->course->course_package->material_type->name }} / {{ $dt->course_registration->student->indonesian_language_proficiency }}</td>
+                                  <td>{{ $dt->course_registration->student->user->first_name }} {{ $dt->course_registration->student->user->last_name }}</td>
+                                </tr>
+                              @endif
+                            @endforeach
+                          </tbody>
+                        </table>
+                      @else
+                        <div class="text-center">No data available.</div>
+                      @endif
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+                  <!-- /.box -->
+                  <div class="box box-primary">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>All Interview to be Reviewed</b></h3>
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse" aria-label="Minimize"><i class="fa fa-minus"></i></button>
+                      </div>
+                    </div>
+                    <div class="box-body">
+                      @if($interviews->toArray() != null)
+                        <table class="table table-bordered example1">
+                          <thead>
+                            <th>Due Time</th>
+                            <th>Material / Level</th>
+                            <th>Student Name</th>
+                          </thead>
+                          <tbody>
+                            @foreach($interviews as $dt)
+                              <?php
+                                $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                                $schedule_time_end = \Carbon\Carbon::parse($dt->course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone)->add(100, 'minutes');
+                                $schedule_time_end_add_7_days = \Carbon\Carbon::parse($dt->course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone)->add(100, 'minutes')->add(7, 'days');
+                              ?>
+                              @if($schedule_now > $schedule_time_end && $schedule_now <= $schedule_time_end_add_7_days)
+                                <tr>
+                                  <td>
+                                    <span class="hidden">{{ $schedule_time_end_add_7_days->isoFormat('YYMMDDHHmm') }}</span>
+                                    @if($schedule_time_end_add_7_days->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      Today, {{ $schedule_time_end_add_7_days->isoFormat('hh:mm A') }}
+                                    @else
+                                      {{ $schedule_time_end_add_7_days->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
+                                    @endif
+                                    &nbsp;&nbsp;<a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('lead_instructor.student_registration.show', [$dt->course_registration_id]) }}">View Detail</a>
+                                  </td>
+                                  <td>{{ $dt->course_registration->course->course_package->material_type->name }} / {{ $dt->course_registration->student->indonesian_language_proficiency }}</td>
+                                  <td>{{ $dt->course_registration->student->user->first_name }} {{ $dt->course_registration->student->user->last_name }}</td>
+                                </tr>
+                              @endif
+                            @endforeach
+                          </tbody>
+                        </table>
+                      @else
+                        <div class="text-center">No data available.</div>
+                      @endif
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+                  <!-- /.box -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.tab-pane -->
         </div>
         <!-- /.tab-content -->
       </div>

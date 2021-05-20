@@ -349,7 +349,7 @@ Route::group(['middleware'=>'auth'], function() {
         Route::post('/reviewer/student-registration/placement-test/by-meeting/store', 'LeadInstructorController@placement_test_by_meeting_store')->name('lead_instructor.placement_test_by_meeting.store');
         
         // memodifikasi informasi jadwal meeting alternatif
-        Route::put('/reviewer/student-registration/placement-test/by-meeting/{session_id}/update', 'LeadInstructorController@placement_test_by_meeting_update')->name('lead_instructor.placement_test_by_meeting.update');
+        Route::put('/reviewer/student-registration/placement-test/by-meeting/update', 'LeadInstructorController@placement_test_by_meeting_update')->name('lead_instructor.placement_test_by_meeting.update');
         
         // menghapus informasi jadwal meeting alternatif
         Route::delete('/reviewer/student-registration/placement-test/by-meeting/{session_id}/destroy', 'LeadInstructorController@placement_test_by_meeting_destroy')->name('lead_instructor.placement_test_by_meeting.destroy');
