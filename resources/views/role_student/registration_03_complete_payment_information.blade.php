@@ -13,7 +13,7 @@
     <div class="box-header with-border">
       <h3 class="box-title"><b>New Student Registration Form</b></h3>
     </div>
-    <form role="form" method="post" action="{{ route('questionnaire.store') }}" enctype="multipart/form-data">
+    <form role="form" method="post" action="{{ route('student.complete_payment_information.show', [$course_registration->id]) }}" enctype="multipart/form-data">
       @csrf
       <div class="box-body">
         <div class="row">

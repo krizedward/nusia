@@ -893,7 +893,7 @@ class StudentController extends Controller
             ]);
         }
 
-        return redirect()->route('student.complete_placement_tests', [$course_registration_id]);
+        return redirect()->route('student.upload_placement_test.show', [$course_registration_id]);
     }
 
     public function chat_lead_instructor_index()
