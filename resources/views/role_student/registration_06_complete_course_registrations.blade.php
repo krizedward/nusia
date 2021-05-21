@@ -9,7 +9,7 @@
 @stop
 
 @section('content')
-  <form role="form" method="post" action="{{ route('student.update_course_registrations', [$course_registration->id]) }}" enctype="multipart/form-data">
+  <form role="form" method="post" action="#" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="row">

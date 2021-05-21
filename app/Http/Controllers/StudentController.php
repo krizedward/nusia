@@ -837,7 +837,7 @@ class StudentController extends Controller
             }
         } else if($course_registration->placement_test->status == 'Passed') {
             // Jika hasil test sudah diunggah dan 'Passed', redirect ke langkah berikutnya.
-            return redirect()->route('student.complete_course_registrations', [$course_registration->id]);
+            return redirect()->route('student.choose_course_registration.show', [$course_registration->id]);
         }
 
         // Halaman "upload-enabled" dan "waiting" digabungkan dalam satu view yang sama,
