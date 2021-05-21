@@ -765,7 +765,7 @@ class RegisteredController extends Controller
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'password' => ($request->password)? Hash::make($request->password) : Auth::user()->password,
                 'phone' => $request->phone,
                 'citizenship' => $request->citizenship,
                 'domicile' => $request->domicile,
