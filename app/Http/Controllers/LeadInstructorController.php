@@ -485,4 +485,23 @@ class LeadInstructorController extends Controller
     public function confirmation_by_meeting_update($course_registration_id) {
         // mengonfirmasi hasil placement test (menurut hasil meeting)
     }
+
+    public function instructor_session_index() {
+        // menampilkan halaman alokasi ketersediaan waktu instruktur
+        
+        // Jika fungsi ini tidak diakses oleh lead instructor.
+        if(!$this->is_lead_instructor()) return redirect()->back();
+        
+        $instructor_schedules = InstructorSchedule::all();
+        $instructors = Instructor::all();
+        $course_packages = CoursePackage
+            ::where('title', 'NOT LIKE', '%Not Assigned%')
+            ->where('title', 'NOT LIKE', '%Early Registration%')
+            ->get();
+        $courses = Course::all();
+        
+        return view('role_lead_instructor.instructor_sessions_index', compact(
+            'instructor_schedules', 'instructors', 'course_packages', 'courses'
+        ));
+    }
 }

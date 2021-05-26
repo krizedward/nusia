@@ -131,7 +131,12 @@
 
       {{-- Menu Tambahan untuk Lead Instructor --}}
       @if(Auth::user()->roles == 'Lead Instructor')
-        <li class="header">REGISTRATIONS</li>
+        <li class="header">LEAD INSTRUCTOR</li>
+        <li class="{{ set_active(['lead_instructor.instructor_session.index',]) }}">
+          <a href="{{ route('lead_instructor.instructor_session.index') }}">
+            <i class="fa fa-edit"></i> <span>Assign Sessions</span>
+          </a>
+        </li>
         <li class="{{ set_active(['lead_instructor.student_registration.index', 'lead_instructor.student_registration.show', 'lead_instructor.placement_test_by_meeting.index', 'lead_instructor.placement_test_by_meeting_student_profile.show']) }}">
           <a href="{{ route('lead_instructor.student_registration.index') }}">
             <i class="fa fa-file-text-o"></i> <span>Placement Tests</span>

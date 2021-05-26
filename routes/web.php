@@ -370,6 +370,11 @@ Route::group(['middleware'=>'auth'], function() {
         // mengonfirmasi hasil placement test (menurut hasil meeting)
         Route::put('/reviewer/student-registration/{course_registration_id}/placement-test/by-meeting/update', 'LeadInstructorController@confirmation_by_meeting_update')->name('lead_instructor.confirmation_by_meeting.update');
         
+        // NEW ROUTING since 26 Mei 2021
+            // menampilkan halaman alokasi ketersediaan waktu instruktur
+            Route::get('/reviewer/instructor-session', 'LeadInstructorController@instructor_session_index')->name('lead_instructor.instructor_session.index');
+            
+        
         // lain-lain (redirection)
         Route::redirect('/reviewer', '/dashboard');
         
