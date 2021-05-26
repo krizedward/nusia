@@ -499,9 +499,10 @@ class LeadInstructorController extends Controller
             ->where('title', 'NOT LIKE', '%Early Registration%')
             ->get();
         $courses = Course::all();
+        $material_types = MaterialType::all();
         
         return view('role_lead_instructor.instructor_sessions_index', compact(
-            'instructor_schedules', 'instructors', 'course_packages', 'courses'
+            'instructor_schedules', 'instructors', 'course_packages', 'courses', 'material_types'
         ));
     }
 }
