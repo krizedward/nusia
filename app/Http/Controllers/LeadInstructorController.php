@@ -495,14 +495,158 @@ class LeadInstructorController extends Controller
         $instructor_schedules = InstructorSchedule::all();
         $instructors = Instructor::all();
         $course_packages = CoursePackage
-            ::where('title', 'NOT LIKE', '%Not Assigned%')
-            ->where('title', 'NOT LIKE', '%Early Registration%')
-            ->get();
-        $courses = Course::all();
+            ::join('course_types', 'course_packages.course_type_id', 'course_types.id')
+            ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+            ->where('course_packages.title', 'NOT LIKE', '%Early Registration%')
+            ->where('course_types.count_student_max', '<>', 1)
+            ->select('course_packages.id', 'course_packages.code', 'course_packages.material_type_id', 'course_packages.course_type_id', 'course_packages.course_level_id', 'course_packages.title', 'course_packages.description', 'course_packages.count_session', 'course_packages.price', 'course_packages.refund_description', 'course_packages.created_at', 'course_packages.updated_at', 'course_packages.deleted_at')
+            ->distinct()->get();
+        $courses = Course
+            ::join('course_packages', 'courses.course_package_id', 'course_packages.id')
+            ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+            ->where('course_types.count_student_max', '<>', 1)
+            ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at', 'courses.deleted_at')
+            ->distinct()->get();
         $material_types = MaterialType::all();
         
         return view('role_lead_instructor.instructor_sessions_index', compact(
             'instructor_schedules', 'instructors', 'course_packages', 'courses', 'material_types'
         ));
+    }
+
+    public function instructor_session_new_class_update(Request $request) {
+        // menambahkan kelas baru (dengan satu sesi pertama)
+        
+        // Jika fungsi ini tidak diakses oleh lead instructor.
+        if(!$this->is_lead_instructor()) return redirect()->back();
+        
+        $data = Validator::make($request->all(), [
+            'course_package_id' => ['bail', 'required',],
+            'class_title' => ['bail', 'required',],
+            'instructor_id' => ['bail', 'required',],
+            'schedule_time_date' => ['bail', 'required',],
+            'schedule_time_time' => ['bail', 'required',],
+        ]);
+        if($data->fails()) {
+            session(['caption-danger' => 'This new class information has not been added. Try again.']);
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+        
+        $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
+        if($schedule_time < now()) {
+            session(['caption-danger' => 'Cannot schedule the class session as the inputted teaching availability has passed the current time.']);
+            return redirect()->back()->withInput();
+        }
+        
+        $instructor_schedule = InstructorSchedule
+            ::join('schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+            ->where('schedules.schedule_time', $schedule_time)
+            ->where('instructor_id', $request->instructor_id)
+            ->select('instructor_schedules.id', 'instructor_schedules.code', 'instructor_schedules.instructor_id', 'instructor_schedules.schedule_id', 'instructor_schedules.status', 'instructor_schedules.created_at', 'instructor_schedules.updated_at', 'instructor_schedules.deleted_at')
+            ->distinct()->first();
+        if($instructor_schedule == null) {
+            session(['caption-danger' => 'Cannot schedule, as the inputted teaching availability is invalid for this instructor.']);
+            return redirect()->back()->withInput();
+        }
+        
+        Session::create([
+            'course_id' => Course::create([
+                'course_package_id' => $request->course_package_id,
+                'title' => $request->class_title,
+                'description' => null,
+                'requirement' => null,
+                'created_at' => now(),
+            ])->id,
+            'schedule_id' => $instructor_schedule->schedule_id,
+            'form_id' => 3,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+            'reschedule_late_confirmation' => 0,
+            'reschedule_technical_issue_instructor' => 0,
+            'reschedule_technical_issue_student' => 0,
+            'created_at' => now(),
+        ]);
+        $instructor_schedule->update([
+            'status' => 'Busy',
+            'updated_at' => now(),
+        ]);
+        
+        session(['caption-success' => 'This new class information has been added. Thank you!']);
+        return redirect()->route('lead_instructor.instructor_session.index');
+    }
+
+    public function instructor_session_schedule_update(Request $request) {
+        // mengedit informasi jadwal masing-masing sesi
+        
+        // Jika fungsi ini tidak diakses oleh lead instructor.
+        if(!$this->is_lead_instructor()) return redirect()->back();
+        
+        $data = Validator::make($request->all(), [
+            'unique_id' => ['bail', 'required',],
+            'material_type_id' => ['bail', 'required',],
+            'course_id' => ['bail', 'required',],
+            'instructor_id' => ['bail', 'required',],
+            'session_number' => ['bail', 'required',],
+            'session_has_been_created' => ['bail', 'required',],
+            'schedule_time_date' . $request->unique_id => ['bail', 'required',],
+            'schedule_time_time' . $request->unique_id => ['bail', 'required',],
+        ]);
+        if($data->fails()) {
+            session(['caption-danger' => 'This session information has not been updated. Try again.']);
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+        
+        $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request['schedule_time_date' . $request->unique_id] . ' ' . $request['schedule_time_time' . $request->unique_id])->toDateTimeString();
+        if($schedule_time < now()) {
+            session(['caption-danger' => 'Cannot schedule the class session as the inputted teaching availability has passed the current time.']);
+            return redirect()->back()->withInput();
+        }
+        
+        $instructor_schedule = InstructorSchedule
+            ::join('schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+            ->where('schedules.schedule_time', $schedule_time)
+            ->where('instructor_id', $request->instructor_id)
+            ->select('instructor_schedules.id', 'instructor_schedules.code', 'instructor_schedules.instructor_id', 'instructor_schedules.schedule_id', 'instructor_schedules.status', 'instructor_schedules.created_at', 'instructor_schedules.updated_at', 'instructor_schedules.deleted_at')
+            ->distinct()->first();
+        if($instructor_schedule == null) {
+            session(['caption-danger' => 'Cannot schedule, as the inputted teaching availability is invalid for this instructor.']);
+            return redirect()->back()->withInput();
+        }
+        
+        if($request->session_has_been_created == 1) {
+            Session::where('course_id', $request->course_id)
+                ->where('title', 'Session ' . $request->session_number)
+                ->first()->update([
+                    'schedule_id' => $instructor_schedule->schedule_id,
+                    'updated_at' => now(),
+            ]);
+        } else {
+            Session::create([
+                'course_id' => $request->course_id,
+                'schedule_id' => $instructor_schedule->schedule_id,
+                'form_id' => 3,
+                'title' => 'Session ' . $request->session_number,
+                'description' => null,
+                'requirement' => null,
+                'link_zoom' => null,
+                'reschedule_late_confirmation' => 0,
+                'reschedule_technical_issue_instructor' => 0,
+                'reschedule_technical_issue_student' => 0,
+                'created_at' => now(),
+            ]);
+        }
+        $instructor_schedule->update([
+            'status' => 'Busy',
+            'updated_at' => now(),
+        ]);
+        
+        session(['caption-success' => 'This session information has been updated. Thank you!']);
+        return redirect()->route('lead_instructor.instructor_session.index');
     }
 }

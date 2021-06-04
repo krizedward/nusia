@@ -374,6 +374,11 @@ Route::group(['middleware'=>'auth'], function() {
             // menampilkan halaman alokasi ketersediaan waktu instruktur
             Route::get('/reviewer/instructor-session', 'LeadInstructorController@instructor_session_index')->name('lead_instructor.instructor_session.index');
             
+            // menambahkan kelas baru (dengan satu sesi pertama)
+            Route::put('/reviewer/instructor-session/new-class/update', 'LeadInstructorController@instructor_session_new_class_update')->name('lead_instructor.instructor_session_new_class.update');
+            
+            // mengedit informasi jadwal masing-masing sesi
+            Route::put('/reviewer/instructor-session/schedule/update', 'LeadInstructorController@instructor_session_schedule_update')->name('lead_instructor.instructor_session_schedule.update');
         
         // lain-lain (redirection)
         Route::redirect('/reviewer', '/dashboard');
