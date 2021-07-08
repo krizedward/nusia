@@ -1,0 +1,652 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+use Str;
+
+use App\User;
+use App\Models\Course;
+use App\Models\CourseCertificate;
+use App\Models\CourseLevel;
+use App\Models\CoursePackage;
+use App\Models\CoursePackageDiscount;
+use App\Models\CoursePayment;
+use App\Models\CourseRegistration;
+use App\Models\CourseType;
+use App\Models\CourseTypeValue;
+use App\Models\Form;
+use App\Models\FormQuestion;
+use App\Models\FormQuestionChoice;
+use App\Models\FormResponse;
+use App\Models\FormResponseDetail;
+use App\Models\Instructor;
+use App\Models\InstructorSchedule;
+use App\Models\MaterialPublic;
+use App\Models\MaterialSession;
+use App\Models\MaterialType;
+use App\Models\MaterialTypeValue;
+use App\Models\Message;
+use App\Models\Metadata;
+use App\Models\Notification;
+use App\Models\NotificationDuration;
+use App\Models\NotificationLabel;
+use App\Models\OtherUser;
+use App\Models\PlacementTest;
+use App\Models\Rating;
+use App\Models\Schedule;
+use App\Models\Session;
+use App\Models\SessionRegistration;
+use App\Models\SessionRegistrationForm;
+use App\Models\Student;
+use App\Models\Task;
+use App\Models\TaskSubmission;
+use App\Models\UserNotification;
+
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
+
+class LeadInstructorController extends Controller
+{
+    /**
+     * Memeriksa role User saat ini.
+     * Return user.roles atau null.
+     */
+    public function user_roles() {
+        return (Auth::check())? Auth::user()->roles : null;
+    }
+
+    /**
+     * Memeriksa jenis role User saat ini.
+     * 1: True (jenis role sesuai)
+     * 0: False (jenis role tidak sesuai)
+     */
+    public function is_admin() {
+        return ($this->user_roles() == "Admin")? 1 : 0;
+    }
+    public function is_financial_team() {
+        return ($this->user_roles() == "Financial Team")? 1 : 0;
+    }
+    public function is_customer_service() {
+        return ($this->user_roles() == "Customer Service")? 1 : 0;
+    }
+    public function is_lead_instructor() {
+        return ($this->user_roles() == "Lead Instructor")? 1 : 0;
+    }
+    public function is_instructor() {
+        return ($this->user_roles() == "Instructor"
+            || $this->user_roles() == "Lead Instructor")? 1 : 0;
+    }
+    public function is_student() {
+        return ($this->user_roles() == "Student")? 1 : 0;
+    }
+
+    public function student_registration_index() {
+        // melihat informasi registrasi student
+        // & melihat daftar jadwal meeting alternatif placement test
+        
+        // Jika fungsi ini tidak diakses oleh lead instructor.
+        if(!$this->is_lead_instructor()) return redirect()->back();
+        
+        $material_types = MaterialType::where('name', 'NOT LIKE', '%Trial%')->get();
+        $placement_tests = PlacementTest
+            ::join('course_registrations', 'placement_tests.course_registration_id', 'course_registrations.id')
+            ->join('courses', 'course_registrations.course_id', 'courses.id')
+            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+            ->where('course_packages.title', 'LIKE', '%Not Assigned%')
+            ->where('placement_tests.status', 'Not Passed')
+            ->where('placement_tests.path', '<>', null)
+            ->where('courses.requirement', null)
+            ->select('placement_tests.id', 'placement_tests.code', 'placement_tests.course_registration_id', 'placement_tests.path', 'placement_tests.status', 'placement_tests.submitted_at', 'placement_tests.result_updated_at', 'placement_tests.created_at', 'placement_tests.updated_at', 'placement_tests.deleted_at')
+            ->distinct()
+            ->get();
+        $interviews = PlacementTest
+            ::join('course_registrations', 'placement_tests.course_registration_id', 'course_registrations.id')
+            ->join('courses', 'course_registrations.course_id', 'courses.id')
+            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+            ->where('course_packages.title', 'LIKE', '%Not Assigned%')
+            ->where('placement_tests.status', 'Not Passed')
+            ->where('placement_tests.path', '<>', null)
+            ->where('courses.requirement', '<>', null)
+            ->select('placement_tests.id', 'placement_tests.code', 'placement_tests.course_registration_id', 'placement_tests.path', 'placement_tests.status', 'placement_tests.submitted_at', 'placement_tests.result_updated_at', 'placement_tests.created_at', 'placement_tests.updated_at', 'placement_tests.deleted_at')
+            ->distinct()
+            ->get();
+        
+        return view('role_lead_instructor.placement_tests_index', compact(
+            'material_types', 'placement_tests', 'interviews'
+        ));
+    }
+
+    public function student_registration_show($course_registration_id) {
+        // melihat informasi profil student
+        
+        // Jika fungsi ini tidak diakses oleh lead instructor.
+        if(!$this->is_lead_instructor()) return redirect()->back();
+        
+        $course_registration = CourseRegistration::where('id', $course_registration_id)->get()->first();
+        
+        // Periksa apakah akses untuk mengganti placement test ini diperbolehkan.
+        if($course_registration->placement_test->status == 'Passed') {
+            // tidak bisa mengedit karena status sesi sudah "Passed"
+            session(['caption-danger' => 'This placement test information has been previously updated. No changes can be made.']);
+            return redirect()->route('lead_instructor.student_registration.index');
+        } else if($course_registration->placement_test->result_updated_at != null) {
+            // untuk sesi yang sudah diperiksa oleh Lead Instructor, tetapi memasuki tahap interview
+            $schedule_now = Carbon::now()->setTimezone(Auth::user()->timezone);
+            $schedule_time_begin_min_30_mins = Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone)->sub(30, 'minutes');
+            $schedule_time_end_add_7_days = Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone)->add(100, 'minutes')->add(7, 'days');
+            if($schedule_now < $schedule_time_begin_min_30_mins || $schedule_now > $schedule_time_end_add_7_days) {
+                // melihat informasi student hanya dapat dilakukan
+                // sejak 30 menit sebelum sesi interview dimulai
+                // hingga 7 hari setelah sesi interview berakhir
+                // (estimasi durasi interview: 100 menit)
+                session(['caption-danger' => 'This placement test information can be displayed 30 minutes before the interview begins until 7 days after the interview ends (estimated interview duration: 100 minutes).']);
+                return redirect()->route('lead_instructor.student_registration.index');
+            }
+        }
+        
+        $course_levels = CoursePackage
+            ::join('course_levels', 'course_packages.course_level_id', 'course_levels.id')
+            ->where('course_packages.material_type_id', $course_registration->course->course_package->material_type_id)
+            ->where('course_levels.name', 'NOT LIKE', '%Trial%')
+            ->where('course_levels.name', 'NOT LIKE', '%Not Assigned%')
+            ->distinct()->select('course_levels.id', 'course_levels.code', 'course_levels.name', 'course_levels.assignment_score_min', 'course_levels.exam_score_min', 'course_levels.created_at', 'course_levels.updated_at', 'course_levels.deleted_at')
+            ->get();
+        
+        return view('role_lead_instructor.placement_tests_show', compact(
+            'course_registration', 'course_levels',
+        ));
+    }
+
+    public function chat_student_index() {
+        // menghubungi student (via chat)
+    }
+
+    public function chat_student_show($user_id) {
+        // menghubungi student (via chat)
+        //$users = User::whereIn('id', app(Controller::class)->get_relevant_user_ids_for_chat())->get();
+        $users = User::all();
+        $messages = Message
+            ::where(function($q) {
+                $q
+                    ->whereIn('user_id_sender', app(Controller::class)->get_relevant_user_ids_for_chat())
+                    ->where('user_id_recipient', Auth::user()->id);
+            })
+            ->orWhere(function($q) {
+                $q
+                    ->where('user_id_sender', Auth::user()->id)
+                    ->whereIn('user_id_recipient', app(Controller::class)->get_relevant_user_ids_for_chat());
+            })
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        
+        $partner = User::findOrFail($user_id);
+        $partner_messages = Message
+            ::where(function($q) use($user_id){
+                $q
+                    ->where('user_id_sender', $user_id)
+                    ->where('user_id_recipient', Auth::user()->id);
+            })
+            ->orWhere(function($q) use($user_id){
+                $q
+                    ->where('user_id_sender', Auth::user()->id)
+                    ->where('user_id_recipient', $user_id);
+            })
+            ->select('user_id_sender', 'user_id_recipient', 'message', 'created_at')
+            ->orderBy('created_at')
+            ->get();
+        return view('role_lead_instructor.chat_show', compact('users', 'messages', 'partner', 'partner_messages'));
+    }
+
+    public function chat_student_store(Request $request, $user_id) {
+        // menghubungi student (via chat)
+        $data = Validator::make($request->all(), [
+            'messageAs' . Str::slug(Auth::user()->roles, '-') . 'To' . $user_id => ['bail', 'required',],
+        ]);
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+        Message::create([
+            'user_id_sender' => Auth::user()->id,
+            'user_id_recipient' => $user_id,
+            'subject' => 'Unknown Subject',
+            'message' => $request['messageAs' . Str::slug(Auth::user()->roles, '-') . 'To' . $user_id],
+            'created_at' => now(),
+        ]);
+        return redirect()->back();
+    }
+
+    public function confirmation_by_video_update(Request $request, $course_registration_id) {
+        // mengonfirmasi hasil placement test
+        
+        // Jika fungsi ini tidak diakses oleh lead instructor.
+        if(!$this->is_lead_instructor()) return redirect()->back();
+        
+        $data = $request->all();
+        
+        // Apabila input form diubah menggunakan fitur "Inspect Elements" pada browser,
+        // lakukan validasi input dengan data sebelumnya yang diakses.
+        if($request->crid != session('crid') || $course_registration_id != session('crid') || $request->crid != $course_registration_id) {
+            // Data ini tidak diluluskan dalam proses validasi.
+            $data['crid'] = null;
+        }
+        
+        $data = Validator::make($data, [
+            'status' => ['bail', 'required',],
+            'indonesian_language_proficiency' => ['bail', 'required_if:status,"Passed"',],
+            'schedule_time_date' => ['bail', 'required_if:status,"Not Passed"',],
+            'schedule_time_time' => ['bail', 'required_if:status,"Not Passed"',],
+            'meeting_link' => ['bail', 'required_if:status,"Not Passed"',],
+            'crid' => ['bail', 'required'],
+        ]);
+        if($data->fails()) {
+            session(['caption-danger' => 'This placement test information has not been updated. Try again.']);
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+        
+        $course_registration = CourseRegistration::where('id', $course_registration_id)->get()->first();
+        
+        // Jika hasil placement test tidak diterima ('Not Passed').
+        if($request->status == 'Not Passed') {
+            $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
+            if($schedule_time < now()) {
+                session(['caption-danger' => 'Cannot schedule the interview as the inputted time has passed the current time.']);
+                return redirect()->back()->withInput();
+            }
+            $course_registration->placement_test->update([
+                'result_updated_at' => $schedule_time,
+                'updated_at' => now(),
+            ]);
+            $course_registration->course->update([
+                'requirement' => $request->meeting_link,
+                'updated_at' => now(),
+            ]);
+            session(['caption-success' => 'This placement test information has been updated. Thank you!']);
+            return redirect()->route('lead_instructor.student_registration.index');
+        }
+        
+        // Jika hasil placement test diterima ('Passed').
+        
+        // Periksa apakah Student sudah mendaftar pada early classes dengan material sama.
+        $early_classes_registration = CourseRegistration
+            ::join('courses', 'course_registrations.course_id', 'courses.id')
+            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
+            ->where('course_registrations.student_id', $course_registration->student_id)
+            ->where('course_packages.title', 'LIKE', '%Early Registration%')
+            ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
+            ->get();
+        
+        // Simpan keterangan apakah Student sudah mendaftar pada early classes dengan material sama.
+        $have_early_classes_for_same_material_type = 0;
+        
+        // Untuk semua early classes.
+        foreach($early_classes_registration as $ecr) {
+            // Apabila sudah ada pendaftaran pada material type yang sama.
+            if($ecr->course->course_package->material_type_id == $course_registration->course->course_package->material_type_id) {
+                // Maka, tidak diperbolehkan mendaftar pada early class di material type yang sama.
+                $have_early_classes_for_same_material_type = 1;
+                
+                // Jika terdaftar pada early class dengan material sama,
+                // maka Student perlu bergabung dalam course berbayar.
+                // Setelah mengetahui hal ini, tidak diperlukan iterasi kembali.
+                break;
+            }
+        }
+        
+        // Kode tambahan untuk memperoleh course_type
+        // (misal "Not Assigned - PRIVATE" menjadi "Private")
+        $course_type = ucwords(strtolower($course_registration->course->course_package->course_type->name));
+        $first_hyphen_pos = strpos($course_type, '-');
+        $substring_loc = strlen($course_type) - $first_hyphen_pos - 2; // -2 sebagai bonus indeks hyphen itu sendiri dan satu spasi.
+        $course_type = substr($course_type, 0 - $substring_loc);
+        
+        if($have_early_classes_for_same_material_type) {
+            // Student sudah pernah terdaftar (sebelumnya) dalam early class, pada material yang sama.
+            if($course_registration->course->course_package->material_type->name == 'Cultural Classes') {
+                $course_package = CoursePackage
+                    ::join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                    ->where('course_packages.title', 'NOT LIKE', '%Free%')
+                    ->where('course_packages.title', 'NOT LIKE', '%Test%')
+                    ->where('course_packages.title', 'NOT LIKE', '%Trial%')
+                    ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+                    ->where('course_packages.title', 'NOT LIKE', '%Early Registration%')
+                    ->where('course_types.name', 'LIKE', '%'.$course_type.'%')
+                    ->where('course_packages.course_level_id', $request->indonesian_language_proficiency)
+                    ->select('course_packages.id', 'course_packages.code', 'course_packages.material_type_id', 'course_packages.course_type_id', 'course_packages.course_level_id', 'course_packages.title', 'course_packages.description', 'course_packages.count_session', 'course_packages.price', 'course_packages.refund_description', 'course_packages.created_at', 'course_packages.updated_at', 'course_packages.deleted_at')
+                    ->get()->first();
+            } else {
+                $course_package = CoursePackage
+                    ::where('title', 'NOT LIKE', '%Free%')
+                    ->where('title', 'NOT LIKE', '%Test%')
+                    ->where('title', 'NOT LIKE', '%Trial%')
+                    ->where('title', 'NOT LIKE', '%Not Assigned%')
+                    ->where('title', 'NOT LIKE', '%Early Registration%')
+                    ->where('title', 'LIKE', '%'.$course_registration->course->course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.$course_type.'%')
+                    ->where('course_level_id', $request->indonesian_language_proficiency)
+                    ->first();
+            }
+        } else {
+            // Student tidak pernah terdaftar (sebelumnya) dalam early class (pada material yang sama).
+            if($course_registration->course->course_package->material_type->name == 'Cultural Classes') {
+                $course_package = CoursePackage
+                    ::join('course_types', 'course_packages.course_type_id', 'course_types.id')
+                    ->where('course_packages.title', 'NOT LIKE', '%Free%')
+                    ->where('course_packages.title', 'NOT LIKE', '%Test%')
+                    ->where('course_packages.title', 'NOT LIKE', '%Trial%')
+                    ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+                    ->where('course_packages.title', 'LIKE', 'Early Registration%')
+                    ->where('course_types.name', 'LIKE', '%'.$course_type.'%')
+                    ->where('course_packages.course_level_id', $request->indonesian_language_proficiency)
+                    ->select('course_packages.id', 'course_packages.code', 'course_packages.material_type_id', 'course_packages.course_type_id', 'course_packages.course_level_id', 'course_packages.title', 'course_packages.description', 'course_packages.count_session', 'course_packages.price', 'course_packages.refund_description', 'course_packages.created_at', 'course_packages.updated_at', 'course_packages.deleted_at')
+                    ->get()->first();
+            } else {
+                $course_package = CoursePackage
+                    ::where('title', 'NOT LIKE', '%Free%')
+                    ->where('title', 'NOT LIKE', '%Test%')
+                    ->where('title', 'NOT LIKE', '%Trial%')
+                    ->where('title', 'NOT LIKE', '%Not Assigned%')
+                    ->where('title', 'LIKE', 'Early Registration%')
+                    ->where('title', 'LIKE', '%'.$course_registration->course->course_package->material_type->name.'%')
+                    ->where('title', 'LIKE', '%'.$course_type.'%')
+                    ->where('course_level_id', $request->indonesian_language_proficiency)
+                    ->first();
+            }
+        }
+        
+        // Sesuaikan informasi course dengan proficiency level yang ditentukan.
+        $course_registration->course->update([
+            'course_package_id' => $course_package->id,
+            'title' => $course_package->material_type->name . ' - ' . $course_package->course_type->name . ' - ' . $course_package->course_level->name,
+            'updated_at' => now(),
+        ]);
+        
+        // Sesuaikan informasi placement test (khususnya, ubah status menjadi "Passed",
+        // sehingga Student dapat melanjutkan pendaftaran course.
+        $course_registration->placement_test->update([
+            'status' => 'Passed',
+            'result_updated_at' => now(),
+            'updated_at' => now(),
+        ]);
+        session(['caption-success' => 'This placement test information has been updated. Thank you!']);
+        return redirect()->route('lead_instructor.student_registration.index');
+    }
+
+    public function placement_test_by_meeting_store(Request $request) {
+        // menambahkan jadwal meeting alternatif
+    }
+
+    public function placement_test_by_meeting_update(Request $request) {
+        // memodifikasi informasi jadwal meeting alternatif
+        
+        // Jika fungsi ini tidak diakses oleh lead instructor.
+        if(!$this->is_lead_instructor()) return redirect()->back();
+        
+        $data = Validator::make($request->all(), [
+            'placement_test_id' => ['bail', 'required',],
+            'link_zoom' => ['bail', 'required',],
+        ]);
+        if($data->fails()) {
+            session(['caption-danger' => 'This interview information has not been updated. Try again.']);
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+        
+        PlacementTest::findOrFail($request->placement_test_id)->course_registration->course->update([
+            'requirement' => $request->link_zoom,
+            'updated_at' => now(),
+        ]);
+        session(['caption-success' => 'This interview information has been updated. Thank you!']);
+        return redirect()->back();
+    }
+
+    public function placement_test_by_meeting_destroy($session_id) {
+        // menghapus informasi jadwal meeting alternatif
+    }
+
+    public function placement_test_by_meeting_index($session_id) {
+        // melihat daftar student peserta meeting alternatif
+    }
+
+    public function placement_test_by_meeting_student_profile_show($session_id, $course_registration_id) {
+        // melihat informasi profil student
+    }
+
+    public function chat_student_alternative_meeting_index() {
+        // menghubungi student (via chat)
+    }
+
+    public function chat_student_alternative_meeting_show($user_id) {
+        // menghubungi student (via chat)
+        //$users = User::whereIn('id', app(Controller::class)->get_relevant_user_ids_for_chat())->get();
+        $users = User::all();
+        $messages = Message
+            ::where(function($q) {
+                $q
+                    ->whereIn('user_id_sender', app(Controller::class)->get_relevant_user_ids_for_chat())
+                    ->where('user_id_recipient', Auth::user()->id);
+            })
+            ->orWhere(function($q) {
+                $q
+                    ->where('user_id_sender', Auth::user()->id)
+                    ->whereIn('user_id_recipient', app(Controller::class)->get_relevant_user_ids_for_chat());
+            })
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        
+        $partner = User::findOrFail($user_id);
+        $partner_messages = Message
+            ::where(function($q) use($user_id){
+                $q
+                    ->where('user_id_sender', $user_id)
+                    ->where('user_id_recipient', Auth::user()->id);
+            })
+            ->orWhere(function($q) use($user_id){
+                $q
+                    ->where('user_id_sender', Auth::user()->id)
+                    ->where('user_id_recipient', $user_id);
+            })
+            ->select('user_id_sender', 'user_id_recipient', 'message', 'created_at')
+            ->orderBy('created_at')
+            ->get();
+        return view('role_lead_instructor.chat_show', compact('users', 'messages', 'partner', 'partner_messages'));
+    }
+
+    public function chat_student_alternative_meeting_store(Request $request, $user_id) {
+        // menghubungi student (via chat)
+        $data = Validator::make($request->all(), [
+            'messageAs' . Str::slug(Auth::user()->roles, '-') . 'To' . $user_id => ['bail', 'required',],
+        ]);
+        if($data->fails()) {
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+        Message::create([
+            'user_id_sender' => Auth::user()->id,
+            'user_id_recipient' => $user_id,
+            'subject' => 'Unknown Subject',
+            'message' => $request['messageAs' . Str::slug(Auth::user()->roles, '-') . 'To' . $user_id],
+            'created_at' => now(),
+        ]);
+        return redirect()->back();
+    }
+
+    public function confirmation_by_meeting_update($course_registration_id) {
+        // mengonfirmasi hasil placement test (menurut hasil meeting)
+    }
+
+    public function instructor_session_index() {
+        // menampilkan halaman alokasi ketersediaan waktu instruktur
+        
+        // Jika fungsi ini tidak diakses oleh lead instructor.
+        if(!$this->is_lead_instructor()) return redirect()->back();
+        
+        $instructor_schedules = InstructorSchedule::all();
+        $instructors = Instructor::all();
+        $course_packages = CoursePackage
+            ::join('course_types', 'course_packages.course_type_id', 'course_types.id')
+            ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+            ->where('course_packages.title', 'NOT LIKE', '%Early Registration%')
+            ->where('course_types.count_student_max', '<>', 1)
+            ->select('course_packages.id', 'course_packages.code', 'course_packages.material_type_id', 'course_packages.course_type_id', 'course_packages.course_level_id', 'course_packages.title', 'course_packages.description', 'course_packages.count_session', 'course_packages.price', 'course_packages.refund_description', 'course_packages.created_at', 'course_packages.updated_at', 'course_packages.deleted_at')
+            ->distinct()->get();
+        $courses = Course
+            ::join('course_packages', 'courses.course_package_id', 'course_packages.id')
+            ->join('course_types', 'course_packages.course_type_id', 'course_types.id')
+            ->where('course_types.count_student_max', '<>', 1)
+            ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at', 'courses.deleted_at')
+            ->distinct()->get();
+        $material_types = MaterialType::all();
+        
+        return view('role_lead_instructor.instructor_sessions_index', compact(
+            'instructor_schedules', 'instructors', 'course_packages', 'courses', 'material_types'
+        ));
+    }
+
+    public function instructor_session_new_class_update(Request $request) {
+        // menambahkan kelas baru (dengan satu sesi pertama)
+        
+        // Jika fungsi ini tidak diakses oleh lead instructor.
+        if(!$this->is_lead_instructor()) return redirect()->back();
+        
+        $data = Validator::make($request->all(), [
+            'course_package_id' => ['bail', 'required',],
+            'class_title' => ['bail', 'required',],
+            'instructor_id' => ['bail', 'required',],
+            'schedule_time_date' => ['bail', 'required',],
+            'schedule_time_time' => ['bail', 'required',],
+        ]);
+        if($data->fails()) {
+            session(['caption-danger' => 'This new class information has not been added. Try again.']);
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+        
+        $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
+        if($schedule_time < now()) {
+            session(['caption-danger' => 'Cannot schedule the class session as the inputted teaching availability has passed the current time.']);
+            return redirect()->back()->withInput();
+        }
+        
+        $instructor_schedule = InstructorSchedule
+            ::join('schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+            ->where('schedules.schedule_time', $schedule_time)
+            ->where('instructor_id', $request->instructor_id)
+            ->select('instructor_schedules.id', 'instructor_schedules.code', 'instructor_schedules.instructor_id', 'instructor_schedules.schedule_id', 'instructor_schedules.status', 'instructor_schedules.created_at', 'instructor_schedules.updated_at', 'instructor_schedules.deleted_at')
+            ->distinct()->first();
+        if($instructor_schedule == null) {
+            session(['caption-danger' => 'Cannot schedule, as the inputted teaching availability is invalid for this instructor.']);
+            return redirect()->back()->withInput();
+        }
+        
+        Session::create([
+            'course_id' => Course::create([
+                'course_package_id' => $request->course_package_id,
+                'title' => $request->class_title,
+                'description' => null,
+                'requirement' => null,
+                'created_at' => now(),
+            ])->id,
+            'schedule_id' => $instructor_schedule->schedule_id,
+            'form_id' => 3,
+            'title' => 'Session 1',
+            'description' => null,
+            'requirement' => null,
+            'link_zoom' => null,
+            'reschedule_late_confirmation' => 0,
+            'reschedule_technical_issue_instructor' => 0,
+            'reschedule_technical_issue_student' => 0,
+            'created_at' => now(),
+        ]);
+        $instructor_schedule->update([
+            'status' => 'Busy',
+            'updated_at' => now(),
+        ]);
+        
+        session(['caption-success' => 'This new class information has been added. Thank you!']);
+        return redirect()->route('lead_instructor.instructor_session.index');
+    }
+
+    public function instructor_session_schedule_update(Request $request) {
+        // mengedit informasi jadwal masing-masing sesi
+        
+        // Jika fungsi ini tidak diakses oleh lead instructor.
+        if(!$this->is_lead_instructor()) return redirect()->back();
+        
+        $data = Validator::make($request->all(), [
+            'unique_id' => ['bail', 'required',],
+            'material_type_id' => ['bail', 'required',],
+            'course_id' => ['bail', 'required',],
+            'instructor_id' => ['bail', 'required',],
+            'session_number' => ['bail', 'required',],
+            'session_has_been_created' => ['bail', 'required',],
+            'schedule_time_date' . $request->unique_id => ['bail', 'required',],
+            'schedule_time_time' . $request->unique_id => ['bail', 'required',],
+        ]);
+        if($data->fails()) {
+            session(['caption-danger' => 'This session information has not been updated. Try again.']);
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+        
+        $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request['schedule_time_date' . $request->unique_id] . ' ' . $request['schedule_time_time' . $request->unique_id])->toDateTimeString();
+        if($schedule_time < now()) {
+            session(['caption-danger' => 'Cannot schedule the class session as the inputted teaching availability has passed the current time.']);
+            return redirect()->back()->withInput();
+        }
+        
+        $instructor_schedule = InstructorSchedule
+            ::join('schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+            ->where('schedules.schedule_time', $schedule_time)
+            ->where('instructor_id', $request->instructor_id)
+            ->select('instructor_schedules.id', 'instructor_schedules.code', 'instructor_schedules.instructor_id', 'instructor_schedules.schedule_id', 'instructor_schedules.status', 'instructor_schedules.created_at', 'instructor_schedules.updated_at', 'instructor_schedules.deleted_at')
+            ->distinct()->first();
+        if($instructor_schedule == null) {
+            session(['caption-danger' => 'Cannot schedule, as the inputted teaching availability is invalid for this instructor.']);
+            return redirect()->back()->withInput();
+        }
+        
+        if($request->session_has_been_created == 1) {
+            Session::where('course_id', $request->course_id)
+                ->where('title', 'Session ' . $request->session_number)
+                ->first()->update([
+                    'schedule_id' => $instructor_schedule->schedule_id,
+                    'updated_at' => now(),
+            ]);
+        } else {
+            Session::create([
+                'course_id' => $request->course_id,
+                'schedule_id' => $instructor_schedule->schedule_id,
+                'form_id' => 3,
+                'title' => 'Session ' . $request->session_number,
+                'description' => null,
+                'requirement' => null,
+                'link_zoom' => null,
+                'reschedule_late_confirmation' => 0,
+                'reschedule_technical_issue_instructor' => 0,
+                'reschedule_technical_issue_student' => 0,
+                'created_at' => now(),
+            ]);
+        }
+        $instructor_schedule->update([
+            'status' => 'Busy',
+            'updated_at' => now(),
+        ]);
+        
+        session(['caption-success' => 'This session information has been updated. Thank you!']);
+        return redirect()->route('lead_instructor.instructor_session.index');
+    }
+}
