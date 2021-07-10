@@ -74,7 +74,7 @@ Route::group(['middleware'=>'auth'], function() {
         Route::put('/student-registration-form/{user_id}/update', 'StudentController@student_registration_form_update')->name('student.student_registration_form.update');
         
         // mendaftar course: memilih jenis course
-        Route::get('/choose-course/{course_registration_id?}/{is_paid?}', 'StudentController@choose_course_index')->name('student.choose_course.index');
+        Route::get('/choose-course/{course_registration_id?}', 'StudentController@choose_course_index')->name('student.choose_course.index');
         Route::post('/choose-course/store', 'StudentController@choose_course_store')->name('student.choose_course.store');
         
         // mendaftar course: melengkapi informasi pembayaran

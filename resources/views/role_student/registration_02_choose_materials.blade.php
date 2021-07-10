@@ -19,6 +19,7 @@
     <input type="hidden" id="choice" name="choice" value="">
     <input type="hidden" id="choice_mt" name="choice_mt" value="">
     <input type="hidden" id="older_choice" name="older_choice" value="{{ $current_course_registration }}">
+    <input type="hidden" id="is_paid" name="is_paid" value="1">
     <div class="row">
       @if(session('error_message'))
         <div class="col-md-12">
@@ -51,15 +52,7 @@
                         <p class="no-margin">
                           <b>{{ $mt->duration_in_minute }} minutes/session</b>
                         </p>
-                        <?php
-                          $flag_registered_early_classes = 1;
-                          foreach($registered_early_classes as $registered_early_class)
-                            if($registered_early_class->course->course_package->material_type_id == $mt->id) {
-                              $flag_registered_early_classes = 0;
-                              break;
-                            }
-                        ?>
-                        @if($flag_registered_early_classes)
+                        @if($mt->name == 'General Indonesian Language')
                           <p class="no-margin" style="color:#ff0000;">
                             <b>This course has one free class so you will gain 16 sessions in total!</b>
                           </p>
@@ -283,7 +276,7 @@
                                         {{-- 1 baris kode di bawah ini hanya untuk sementara --}}
                                         <?php $is_allowed_to_register = 0; ?>
                                         @if($is_allowed_to_register)
-                                          <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                          <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                             <b>BOOK NOW!</b>
                                           </button>
                                         @else
@@ -306,7 +299,7 @@
                                                 </li>
                                               </ul>
                                               @if($is_allowed_to_register)
-                                                <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                                <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                                   <b>BOOK NOW!</b>
                                                 </button>
                                               @else
@@ -424,7 +417,7 @@
                                       {{-- 1 baris kode di bawah ini hanya untuk sementara --}}
                                       <?php $is_allowed_to_register = 0; ?>
                                       @if($is_allowed_to_register)
-                                        <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('choice').value = '{{ $ct->course_packages->first()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                        <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $ct->course_packages->first()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                           <b>BOOK NOW!</b>
                                         </button>
                                       @else
@@ -448,7 +441,7 @@
                                               </li>
                                             </ul>
                                             @if($is_allowed_to_register)
-                                              <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                              <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                                 <b>BOOK NOW!</b>
                                               </button>
                                             @else

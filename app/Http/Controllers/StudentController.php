@@ -330,7 +330,7 @@ class StudentController extends Controller
         return redirect()->route('student.choose_course.index');
     }
 
-    public function choose_course_index($course_registration_id = 0, $is_paid = 1)
+    public function choose_course_index($course_registration_id = 0)
     {
         // mendaftar course: memilih jenis course
             $material_types = MaterialType
@@ -494,43 +494,7 @@ class StudentController extends Controller
         //            sesuai untuk placement test, dan diubah dalam data $new_course_package.
         $current_course_package = CoursePackage::find($request->choice);
 
-        // LANGKAH 5: Apakah Student sudah mendaftar dalam early class?
-        //            Satu material type memberikan 1 bonus early class untuk masing-masing Student.
-        $early_classes_registration = CourseRegistration
-            ::join('courses', 'course_registrations.course_id', 'courses.id')
-            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
-            ->where('course_registrations.student_id', Auth::user()->student->id)
-            ->where('course_packages.title', 'LIKE', '%Early Registration%')
-            ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
-            ->get();
-        /*$early_classes_not_accepted_registration = CourseRegistration
-            ::join('courses', 'course_registrations.course_id', 'courses.id')
-            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
-            ->join('placement_tests', 'course_registrations.id', 'placement_tests.course_registration_id')
-            ->where('course_registrations.student_id', Auth::user()->student->id)
-            ->where('course_packages.title', 'LIKE', '%Early Registration%')
-            ->where('placement_tests.status', 'Not Passed')
-            ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
-            ->get();*/
-        // Simpan keterangan apakah Student sudah mendaftar pada early classes dengan material sama.
-        $have_early_classes_for_same_material_type = 0;
-        // Untuk semua early classes.
-        foreach($early_classes_registration as $ecr) {
-            // Apabila sudah ada pendaftaran pada material type yang sama.
-            if($ecr->course->course_package->material_type_id == $request->choice_mt) {
-                // Maka, tidak diperbolehkan mendaftar pada early class di material type yang sama.
-                // MAKA, DAFTARKAN COURSE INI SEBAGAI COURSE YANG SIAP BERBAYAR.
-                $have_early_classes_for_same_material_type = 1;
-                
-                // Jika terdaftar pada early class dengan material sama,
-                // maka Student perlu bergabung dalam course berbayar.
-                // Setelah mengetahui hal ini, tidak diperlukan iterasi kembali.
-                break;
-            }
-        }
-
-        // LANGKAH 6: Apakah Student mengakses website mode "Trial" atau "Full Version"?
-        //            Sesuaikan new course package apa yang akan diambil.
+        // LANGKAH 5: Sesuaikan new course package apa yang akan diambil.
             if($current_course_package->material_type->name == 'Cultural Classes') {
                 $new_course_package = CoursePackage
                     ::where('title', 'NOT LIKE', '%Free%')
@@ -552,7 +516,7 @@ class StudentController extends Controller
                     ->first();
             }
 
-        // LANGKAH 7: Apabila Student belum pernah memilih jenis course sebelumnya,
+        // LANGKAH 6: Apabila Student belum pernah memilih jenis course sebelumnya,
         //            maka dibuat course registration baru. Otherwise, update course registration lama,
         //            sesuai course yang diganti oleh Student tersebut (selama dapat diganti).
         $new_course_registration_id = -1;
@@ -587,14 +551,14 @@ class StudentController extends Controller
             $new_course_registration_id = $request->older_choice;
         }
 
-        // LANGKAH 8: Apabila Student sudah mendaftar dalam early class,
-        //            maka Student perlu mengisi formulir pembayaran. Otherwise, "no" (or, "skip").
-        if($have_early_classes_for_same_material_type) {
-            // Jika Student sudah pernah mendaftar early class pada material type ini.
+        // LANGKAH 7: Apabila Student sedang mendaftar dalam class berbayar?
+        //            Jika ya, maka Student perlu mengisi formulir pembayaran. Otherwise, "no" (or, "skip").
+        if($request->is_paid == '1') {
+            // Jika Student sedang mendaftar dalam class berbayar untuk material type ini.
             // Maka, arahkan ke formulir pembayaran.
             return redirect()->route('student.complete_payment_information.show', [$new_course_registration_id]);
         } else {
-            // Jika Student belum pernah mendaftar early class pada material type ini.
+            // Jika Student sedang mendaftar dalam class gratis pada material type ini.
             // Maka, skip formulir pembayaran (tambah course payment dengan harga 0).
             CoursePayment::create([
                 'course_registration_id' => $new_course_registration_id,
