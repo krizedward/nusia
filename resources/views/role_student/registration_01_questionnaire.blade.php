@@ -127,8 +127,13 @@
             <div class="col-md-12">
               <div class="form-group @error('indonesian_language_proficiency') has-error @enderror">
                 <label for="indonesian_language_proficiency">Indonesian Language Proficiency (Self-assessment)</label>
-                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Check the radio box below</p>
-                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*The descriptions in each level are based on ACTFL proficiency descriptions</p>
+                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">
+                  *Check the radio box below to see the descriptions in each level,<br />
+                  or you can see ACTFL proficiency descriptions
+                  <a class="btn btn-xs btn-primary" href="https://www.actfl.org/sites/default/files/publications/ACTFLPerformance_Descriptors-Presentational.pdf" target="_blank">
+                    <i class="fa fa-link"></i>&nbsp;&nbsp;Here
+                  </a>
+                </p>
                 <p class="hidden" id="descriptionNovice" style="color:#000000; padding-top:0px; margin-top:0px;"><b>Novice Proficiency</b><br>You are categorized as a novice learner when you have no or limited prior Indonesian language knowledge.</p>
                 <p class="hidden" id="descriptionIntermediate" style="color:#000000; padding-top:0px; margin-top:0px;"><b>Intermediate Proficiency</b><br>You are categorized as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language.</p>
                 <p class="hidden" id="descriptionAdvanced" style="color:#000000; padding-top:0px; margin-top:0px;"><b>Advanced Proficiency</b><br>You are categorized as an advanced learner when you are able to handle a complicated situation or transaction in the Indonesian language.</p>

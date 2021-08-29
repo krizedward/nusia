@@ -67,7 +67,7 @@
                           <dd>
                             {{ $mt->description }}<br />
                             {{--
-                            @if($mt->name == 'Language Partners')
+                            @if($mt->name == 'Indonesian for Specific Purposes')
                               <ul>
                                 @foreach($mt->material_type_values as $mtv)
                                   <li>{{ $mtv->value }}</li>
@@ -151,7 +151,7 @@
                               </div>
                             </div>
                             <div class="box-body">
-                              @if($mt->name != 'Language Partners')
+                              @if($mt->name != 'Indonesian Conversation')
                                 <strong><i class="fa fa-circle-o margin-r-5"></i> Features</strong>
                                 <ul>
                                   @if($mt->name == 'General Indonesian Language')

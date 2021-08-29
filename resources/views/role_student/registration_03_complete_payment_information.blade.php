@@ -86,7 +86,7 @@
     <div class="col-md-9">
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title"><b>Billing Information</b></h3>
+          <h3 class="box-title"><b>Bank Transfer Information</b></h3>
         </div>
         <form role="form" method="post" action="{{ route('student.upload_placement_test.update', [$course_registration->id]) }}" enctype="multipart/form-data">
           @csrf
@@ -97,8 +97,8 @@
               <div class="col-md-6">
                 <div class="col-md-12">
                   <div class="form-group @error('indonesian_language_proficiency') has-error @enderror">
-                    <label for="indonesian_language_proficiency">Indonesian Language Proficiency (Self-assessment)</label>
-                    <input id="indonesian_language_proficiency" name="indonesian_language_proficiency" type="text" class="@error('indonesian_language_proficiency') is-invalid @enderror form-control" disabled value="{{ Auth::user()->student->indonesian_language_proficiency }}">
+                    <label for="indonesian_language_proficiency">Your Account Number</label>
+                    <input id="indonesian_language_proficiency" name="indonesian_language_proficiency" type="text" class="@error('indonesian_language_proficiency') is-invalid @enderror form-control" placeholder="Enter Your Account Number" value="{{ old('account_no') }}">
                     @error('indonesian_language_proficiency')
                       <p style="color:red">{{ $message }}</p>
                     @enderror
@@ -109,12 +109,34 @@
               <div class="col-md-6">
                 <div class="col-md-12">
                   <div class="form-group @error('video_link') has-error @enderror">
-                    <label for="video_link">Video Link (https)</label>
-                    <input id="video_link" name="video_link" type="text" class="@error('video_link') is-invalid @enderror form-control" placeholder="Enter Video Link (https link only)" value="{{ old('video_link') }}">
+                    <label for="video_link">Your Account Name</label>
+                    <input id="video_link" name="video_link" type="text" class="@error('video_link') is-invalid @enderror form-control" placeholder="Enter Your Account Name" value="{{ old('video_link') }}">
                     @error('video_link')
                       <p style="color:red">{{ $message }}</p>
                     @enderror
                   </div>
+                </div>
+              </div>
+              {{--Form Tengah--}}
+              <div class="col-md-12">
+                <div class="col-md-12">
+                  <div class="form-group @error('video_link') has-error @enderror">
+                    <label for="video_link">Enter Promo Code (if any)</label>
+                    <input id="video_link" name="video_link" type="text" class="@error('video_link') is-invalid @enderror form-control" placeholder="Enter Promo Code" value="{{ old('video_link') }}">
+                    @error('video_link')
+                      <p style="color:red">{{ $message }}</p>
+                    @enderror
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="col-md-12">
+                  <label for="image_profile" class="control-label">Upload Payment Evidence (image only)</label>
+                  <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
+                  <input name="image_profile" type="file" accept="image/*" class="@error('image_profile') is-invalid @enderror form-control">
+                  @error('image_profile')
+                    <p style="color:red">{{ $message }}</p>
+                  @enderror
                 </div>
               </div>
             </div>
