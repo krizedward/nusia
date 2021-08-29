@@ -170,7 +170,7 @@
                                 </ul>
                               @endif
                               {{-- <hr> --}}
-                              @if($mt->name == 'Cultural Classes')
+                              @if($mt->name == 'Indonesian Culture')
                                 <table class="table table-bordered">
                                   <tr>
                                     <th>Name</th>
