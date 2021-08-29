@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Alfa6661\AutoNumber\AutoNumberTrait;
 use App\Models\CoursePackage;
+use App\Models\EconomyFlag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -17,6 +18,7 @@ class CoursePackageDiscount extends Model
 
     protected $fillable = [
         'course_package_id',
+        'economy_flag_id',
         'price',
         'description',
         'due_date',
@@ -40,6 +42,14 @@ class CoursePackageDiscount extends Model
     public function course_package()
     {
     	return $this->belongsTo(CoursePackage::class);
+    }
+
+    /**
+     * Get user information.
+     */
+    public function economy_flag()
+    {
+        return $this->belongsTo(EconomyFlag::class);
     }
 
     /**

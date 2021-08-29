@@ -17,6 +17,7 @@ class CreateStudentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('economy_flag_id')->nullable();
             $table->integer('age')->unsigned();
             $table->enum('status_job', ['Professional', 'Student']);
             $table->longText('status_description')->nullable();
@@ -31,6 +32,10 @@ class CreateStudentsTable extends Migration
 
             $table->foreign('user_id')
                 ->references('id')->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('economy_flag_id')
+                ->references('id')->on('economy_flags')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

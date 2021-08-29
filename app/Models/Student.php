@@ -5,6 +5,7 @@ namespace App\Models;
 use Alfa6661\AutoNumber\AutoNumberTrait;
 use App\User;
 use App\Models\CourseRegistration;
+use App\Models\EconomyFlag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -18,6 +19,7 @@ class Student extends Model
 
     protected $fillable = [
         'user_id',
+        'economy_flag_id',
         'age',
         'status_job',
         'status_description',
@@ -46,6 +48,14 @@ class Student extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get user information.
+     */
+    public function economy_flag()
+    {
+        return $this->belongsTo(EconomyFlag::class);
     }
 
     /**

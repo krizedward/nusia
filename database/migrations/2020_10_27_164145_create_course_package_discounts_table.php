@@ -17,6 +17,7 @@ class CreateCoursePackageDiscountsTable extends Migration
             $table->bigIncrements('id');
             $table->string('code',20)->nullable();
             $table->unsignedBigInteger('course_package_id');
+            $table->unsignedBigInteger('economy_flag_id')->nullable();
             $table->bigInteger('price')->unsigned()->nullable();
             $table->longText('description')->nullable();
             $table->timestamp('due_date')->nullable();
@@ -26,6 +27,10 @@ class CreateCoursePackageDiscountsTable extends Migration
 
             $table->foreign('course_package_id')
                 ->references('id')->on('course_packages')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('economy_flag_id')
+                ->references('id')->on('economy_flags')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
