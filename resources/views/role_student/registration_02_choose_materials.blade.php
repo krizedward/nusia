@@ -253,7 +253,7 @@
                                       </div>
                                       <!-- /.modal-dialog -->
                                     </div>
-                                    <tr>
+                                    <tr class="hidden">
                                       <td>
                                         <a href="#" data-toggle="modal" data-target="#CourseChoiceFree{{$cp->id}}" {{-- class="btn btn-s btn-primary" --}}>
                                           {{ $cp->title }} (Free Classes)
@@ -335,7 +335,8 @@
                                     </td>
                                     <td>
                                       <strike>${{ $ct->course_packages->last()->price }}</strike>
-                                      <b style="font-size:115%; color:#007700;">${{ $ct->course_packages->last()->course_package_discounts->last()->price }}</b><br />
+                                      <b style="font-size:115%; color:#007700;">${{ $ct->course_packages->last()->course_package_discounts->last()->price }}</b>
+                                      <span class="label label-danger"><b>Save 50%</b></span><br />
                                     </td>
                                     <td class="text-center">
                                       <?php
@@ -394,7 +395,7 @@
                                     </div>
                                     <!-- /.modal-dialog -->
                                   </div>
-                                  <tr>
+                                  <tr class="hidden">
                                     <td>
                                       <a href="#" data-toggle="modal" data-target="#CourseChoiceFree{{$ct->course_packages->last()->id}}" {{-- class="btn btn-s btn-primary" --}}>
                                         {{ $ct->name }} (Free Classes)

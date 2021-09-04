@@ -86,40 +86,32 @@
     <div class="col-md-9">
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title"><b>Bank Transfer Information</b></h3>
+          <h3 class="box-title"><b>Receipt</b></h3>
         </div>
+        <div class="box-body">
+            <dl>
+              <dt><i class="fa fa-user margin-r-5"></i> Booked Course</dt>
+              <dd>
+                {{ $course_registration->course->title }}
+              </dd>
+            </dl>
+            <hr>
+            <dl>
+              <dt><i class="fa fa-user margin-r-5"></i> Price</dt>
+              <dd>
+                ${{ $course_registration->course->course_package->price }}
+              </dd>
+            </dl>
+            <hr>
+
+
         <form role="form" method="post" action="{{ route('student.upload_placement_test.update', [$course_registration->id]) }}" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           <div class="box-body">
             <div class="row">
-              {{--Form Kiri--}}
-              <div class="col-md-6">
-                <div class="col-md-12">
-                  <div class="form-group @error('indonesian_language_proficiency') has-error @enderror">
-                    <label for="indonesian_language_proficiency">Your Account Number</label>
-                    <input id="indonesian_language_proficiency" name="indonesian_language_proficiency" type="text" class="@error('indonesian_language_proficiency') is-invalid @enderror form-control" placeholder="Enter Your Account Number" value="{{ old('account_no') }}">
-                    @error('indonesian_language_proficiency')
-                      <p style="color:red">{{ $message }}</p>
-                    @enderror
-                  </div>
-                </div>
-              </div>
-              {{--Form Kanan--}}
-              <div class="col-md-6">
-                <div class="col-md-12">
-                  <div class="form-group @error('video_link') has-error @enderror">
-                    <label for="video_link">Your Account Name</label>
-                    <input id="video_link" name="video_link" type="text" class="@error('video_link') is-invalid @enderror form-control" placeholder="Enter Your Account Name" value="{{ old('video_link') }}">
-                    @error('video_link')
-                      <p style="color:red">{{ $message }}</p>
-                    @enderror
-                  </div>
-                </div>
-              </div>
               {{--Form Tengah--}}
               <div class="col-md-12">
-                <div class="col-md-12">
                   <div class="form-group @error('video_link') has-error @enderror">
                     <label for="video_link">Enter Promo Code (if any)</label>
                     <input id="video_link" name="video_link" type="text" class="@error('video_link') is-invalid @enderror form-control" placeholder="Enter Promo Code" value="{{ old('video_link') }}">
@@ -127,29 +119,23 @@
                       <p style="color:red">{{ $message }}</p>
                     @enderror
                   </div>
-                </div>
-              </div>
-              <div class="col-md-12">
-                <div class="col-md-12">
-                  <label for="image_profile" class="control-label">Upload Payment Evidence (image only)</label>
-                  <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
-                  <input name="image_profile" type="file" accept="image/*" class="@error('image_profile') is-invalid @enderror form-control">
-                  @error('image_profile')
-                    <p style="color:red">{{ $message }}</p>
-                  @enderror
-                </div>
               </div>
             </div>
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
+            <a href="{{ route('student.upload_payment_evidence.show', $course_registration->id) }}" class="btn btn-flat btn-md bg-blue" style="width:100%;">
+              Submit
+            </a>
+{{--
             <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(document.getElementById('video_link').value == '') { alert('The video link cannot be empty.'); return false; } if( confirm('Are you sure to submit this link: ' + document.getElementById('video_link').value + '?') ) return true; else return false;">
               Submit
             </button>
+--}}
           </div>
         </form>
+        </div>
       </div>
-      <!-- /.box -->
     </div>
   </div>
 @stop

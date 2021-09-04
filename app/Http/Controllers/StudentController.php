@@ -597,7 +597,8 @@ class StudentController extends Controller
     public function upload_payment_evidence_show($course_registration_id)
     {
         // mendaftar course: mengirim bukti pembayaran
-        return view('role_student.registration_04_upload_payment_evidence');
+        $course_registration = CourseRegistration::find($course_registration_id);
+        return view('role_student.registration_04_upload_payment_evidence', compact('course_registration'));
     }
 
     public function upload_payment_evidence_update(Request $request, $course_registration_id)
