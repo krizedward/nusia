@@ -52,11 +52,6 @@
                         <p class="no-margin">
                           <b>{{ $mt->duration_in_minute }} minutes/session</b>
                         </p>
-                        @if($mt->name == 'General Indonesian Language')
-                          <p class="no-margin" style="color:#ff0000;">
-                            <b>This course has one free class so you will gain 16 sessions in total!</b>
-                          </p>
-                        @endif
                       </div>
                       <!-- /.box-header -->
                       <div class="box-body">
@@ -174,7 +169,7 @@
                                 <table class="table table-bordered">
                                   <tr>
                                     <th>Name</th>
-                                    <th>Price (per level)</th>
+                                    <th>Price (per session)</th>
                                     <th style="width:5%;">Choose</th>
                                   </tr>
                                   @foreach($ct->course_packages as $j => $cp)
@@ -191,7 +186,9 @@
                                       </td>
                                       <td>
                                         <strike>${{ $cp->price }}</strike>
-                                        <b style="font-size:115%; color:#007700;">${{ $cp->course_package_discounts->last()->price }}</b><br />
+                                        @if($cp->course_package_discounts->toArray() != null)
+                                          <b style="font-size:115%; color:#007700;">${{ $cp->course_package_discounts->last()->price }}</b><br />
+                                        @endif
                                       </td>
                                       <td class="text-center">
                                         <?php
@@ -324,7 +321,7 @@
                                 <table class="table table-bordered">
                                   <tr>
                                     <th>Name</th>
-                                    <th>Price (per level)</th>
+                                    <th>Price (per session)</th>
                                     <th style="width:5%;">Choose</th>
                                   </tr>
                                   <tr>
@@ -335,8 +332,10 @@
                                     </td>
                                     <td>
                                       <strike>${{ $ct->course_packages->last()->price }}</strike>
-                                      <b style="font-size:115%; color:#007700;">${{ $ct->course_packages->last()->course_package_discounts->last()->price }}</b>
-                                      <span class="label label-danger"><b>Save 50%</b></span><br />
+                                      @if($ct->course_packages->last()->course_package_discounts->toArray() != null)
+                                        <b style="font-size:115%; color:#007700;">${{ $ct->course_packages->last()->course_package_discounts->last()->price }}</b>
+                                        <span class="label label-danger"><b>Save {{ 100 * $ct->course_packages->last()->course_package_discounts->last()->price / $ct->course_packages->last()->price }}%</b></span><br />
+                                      @endif
                                     </td>
                                     <td class="text-center">
                                       <?php
@@ -368,10 +367,14 @@
                                             {{--<p class="text-muted text-center">&nbsp;</p>--}}
                                             <ul class="list-group list-group-unbordered">
                                               <li class="list-group-item text-center">
-                                                <label class="label label-success" style="font-size:120%;">$ {{ $ct->course_packages->last()->price - $ct->course_packages->last()->course_package_discounts->last()->price }} savings</label><br />
+                                                @if($ct->course_packages->last()->course_package_discounts->toArray() != null)
+                                                  <label class="label label-success" style="font-size:120%;">$ {{ $ct->course_packages->last()->price - $ct->course_packages->last()->course_package_discounts->last()->price }} savings</label><br />
+                                                @endif
                                                 <b style="font-size:153%;"><strike>${{ $ct->course_packages->last()->price }}</strike></b><br />
-                                                {{ $ct->course_packages->last()->course_package_discounts->last()->description }}<br />
-                                                <b style="font-size:135%;">Now is only ${{ $ct->course_packages->last()->course_package_discounts->last()->price }}/level</b><br />
+                                                @if($ct->course_packages->last()->course_package_discounts->toArray() != null)
+                                                  {{ $ct->course_packages->last()->course_package_discounts->last()->description }}<br />
+                                                  <b style="font-size:135%;">Now is only ${{ $ct->course_packages->last()->course_package_discounts->last()->price }}/level</b><br />
+                                                @endif
                                                 <span style="color:#ff0000;">{{ $ct->course_packages->last()->refund_description }}</span>
                                               </li>
                                             </ul>
