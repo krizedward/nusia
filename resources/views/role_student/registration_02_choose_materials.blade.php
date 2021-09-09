@@ -121,10 +121,10 @@
                         $arr = [];
                         foreach($course_packages as $cp) {
                           // Melakukan pemeriksaan ID material type yang sama.
-                          if($cp->material_type->id == $mt->id) {
+                          if($cp->material_type_id == $mt->id) {
                             foreach($course_types as $ct) {
                               // Menghindari duplikasi pada course type (apabila ada yang sama, dan terdapat duplikat karena perbedaan proficiency level).
-                              if($cp->course_type->id == $ct->id && !in_array($ct->id, $arr)) {
+                              if($cp->course_type_id == $ct->id && !in_array($ct->id, $arr)) {
                                 array_push($arr, $ct->id);
                                 break;
                               }
@@ -188,6 +188,7 @@
                                         <strike>${{ $cp->price }}</strike>
                                         @if($cp->course_package_discounts->toArray() != null)
                                           <b style="font-size:115%; color:#007700;">${{ $cp->course_package_discounts->last()->price }}</b><br />
+                                          <span class="label label-danger"><b>Save {{ round(100 * ($cp->price - $cp->course_package_discounts->last()->price) / $cp->price) }}%</b></span><br />
                                         @endif
                                       </td>
                                       <td class="text-center">
@@ -334,7 +335,7 @@
                                       <strike>${{ $ct->course_packages->last()->price }}</strike>
                                       @if($ct->course_packages->last()->course_package_discounts->toArray() != null)
                                         <b style="font-size:115%; color:#007700;">${{ $ct->course_packages->last()->course_package_discounts->last()->price }}</b>
-                                        <span class="label label-danger"><b>Save {{ 100 * $ct->course_packages->last()->course_package_discounts->last()->price / $ct->course_packages->last()->price }}%</b></span><br />
+                                        <span class="label label-danger"><b>Save {{ round(100 * ($ct->course_packages->last()->price - $ct->course_packages->last()->course_package_discounts->last()->price) / $ct->course_packages->last()->price) }}%</b></span><br />
                                       @endif
                                     </td>
                                     <td class="text-center">
