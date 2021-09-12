@@ -194,7 +194,7 @@
                                             ${{ $cp->price }}
                                           @else
                                             @if($mt->name == 'Indonesian for Specific Purposes')
-                                              Company-subsidized
+                                              <span style="color:#007700;"><b>Company-subsidized</b></span><br />
                                             @else
                                               $0
                                             @endif
