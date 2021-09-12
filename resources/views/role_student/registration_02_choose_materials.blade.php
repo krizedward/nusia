@@ -146,26 +146,26 @@
                               </div>
                             </div>
                             <div class="box-body">
-                              @if($mt->name != 'Indonesian Conversation')
+                              {{--@if($mt->name != 'Indonesian for Specific Purposes')--}}
                                 <strong><i class="fa fa-circle-o margin-r-5"></i> Features</strong>
                                 <ul>
-                                  @if($mt->name == 'General Indonesian Language')
+                                  @if($mt->name == 'General Indonesian Language' || $mt->name == 'Indonesian for Young and Teenage Learners')
                                     <li><b>{{ $ct->brief_description_1 }} ({{ $ct->brief_description_2 }})</b></li>
                                   @endif
                                   @foreach($ct->course_type_values as $ctv)
                                     <li>{{ $ctv->value }}</li>
                                   @endforeach
                                 </ul>
-                              @else
+                              {{--@else
                                 <strong><i class="fa fa-circle-o margin-r-5"></i> Features</strong>
                                 <ul>
                                   @foreach($mt->material_type_values as $mtv)
                                     <li>{{ $mtv->value }}</li>
                                   @endforeach
                                 </ul>
-                              @endif
+                              @endif--}}
                               {{-- <hr> --}}
-                              @if($mt->name == 'Indonesian Culture')
+                              @if($mt->name == 'Indonesian Conversation' || $mt->name == 'Indonesian Culture' || $mt->name == 'Indonesian for Specific Purposes')
                                 <table class="table table-bordered">
                                   <tr>
                                     <th>Name</th>
@@ -173,7 +173,7 @@
                                     <th style="width:5%;">Choose</th>
                                   </tr>
                                   @foreach($ct->course_packages as $j => $cp)
-                                    @if($j % 2 == 0)
+                                    @if($j % 2 == 0 && $mt->name == 'Indonesian Culture')
                                       <tr>
                                         <td class="text-center" colspan="3">{{ $cp->description }}</td>
                                       </tr>
@@ -185,10 +185,20 @@
                                         </a>
                                       </td>
                                       <td>
-                                        <strike>${{ $cp->price }}</strike>
                                         @if($cp->course_package_discounts->toArray() != null)
+                                          <strike>${{ $cp->price }}</strike>
                                           <b style="font-size:115%; color:#007700;">${{ $cp->course_package_discounts->last()->price }}</b><br />
                                           <span class="label label-danger"><b>Save {{ round(100 * ($cp->price - $cp->course_package_discounts->last()->price) / $cp->price) }}%</b></span><br />
+                                        @else
+                                          @if($cp->price != 0)
+                                            ${{ $cp->price }}
+                                          @else
+                                            @if($mt->name == 'Indonesian for Specific Purposes')
+                                              Company-subsidized
+                                            @else
+                                              $0
+                                            @endif
+                                          @endif
                                         @endif
                                       </td>
                                       <td class="text-center">
@@ -218,19 +228,20 @@
                                           <div class="box box-primary">
                                             <div class="box-body box-profile">
                                               <h3 class="profile-username text-center"><b>{{ $cp->title }}</b></h3>
-                                              <p class="text-muted text-center">
-                                                <!--span style="font-size:153%;">$ {{ $cp->price - $cp->course_package_discounts->last()->price }} savings</span-->
-                                                <!--label class="label label-success">$ {{ $cp->price - $cp->course_package_discounts->last()->price }} savings</label-->
-                                                <label class="label label-success" style="font-size:153%;">$ {{ $cp->price - $cp->course_package_discounts->last()->price }} savings</label>
-                                              </p>
-                                              <ul class="list-group list-group-unbordered">
-                                                <li class="list-group-item text-center">
-                                                  <b style="font-size:153%;"><strike>${{ $cp->price }}</strike></b><br />
-                                                  {{ $cp->course_package_discounts->last()->description }}<br />
-                                                  <b style="font-size:135%;">Now is only ${{ $cp->course_package_discounts->last()->price }}/level</b><br />
-                                                  <span style="color:#ff0000;">{{ $cp->refund_description }}</span>
-                                                </li>
-                                              </ul>
+                                              @if($cp->refund_description != null || $cp->course_package_discounts->toArray() != null && $cp->course_package_discounts->last()->description)
+                                                <ul class="list-group list-group-unbordered">
+                                                  <li class="list-group-item text-center">
+                                                    @if($cp->course_package_discounts->toArray() != null && $cp->course_package_discounts->last()->description)
+                                                      <label class="label label-danger" style="font-size:120%; display:inline-block; margin-bottom:4px;">{{ $cp->course_package_discounts->last()->description }}</label><br />
+                                                      <b style="font-size:153%;"><strike>${{ $cp->price }}</strike></b><br />
+                                                      <b style="font-size:135%;">Now is only ${{ $cp->course_package_discounts->last()->price }}/session</b><br />
+                                                    @endif
+                                                    <span style="color:#ff0000;">{{ $cp->refund_description }}</span>
+                                                  </li>
+                                                </ul>
+                                              @else
+                                                <br />
+                                              @endif
                                               @if($is_allowed_to_register)
                                                 <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                                   <b>BOOK NOW!</b>
@@ -364,17 +375,17 @@
                                       <div class="modal-content">
                                         <div class="box box-primary">
                                           <div class="box-body box-profile">
-                                            <h3 class="profile-username text-center" style="font-size:235%;"><b>{{ $ct->name }}</b></h3>
+                                            <h3 class="profile-username text-center"><b>{{ $ct->name }}</b></h3>
                                             {{--<p class="text-muted text-center">&nbsp;</p>--}}
                                             <ul class="list-group list-group-unbordered">
                                               <li class="list-group-item text-center">
-                                                @if($ct->course_packages->last()->course_package_discounts->toArray() != null)
-                                                  <label class="label label-success" style="font-size:120%;">$ {{ $ct->course_packages->last()->price - $ct->course_packages->last()->course_package_discounts->last()->price }} savings</label><br />
+                                                @if($ct->course_packages->last()->course_package_discounts->toArray() != null && $cp->course_package_discounts->toArray() != null)
+                                                  {{-- <label class="label label-success" style="font-size:120%;">$ {{ $ct->course_packages->last()->price - $ct->course_packages->last()->course_package_discounts->last()->price }} savings</label><br /> --}}
+                                                  <label class="label label-danger" style="font-size:120%; display:inline-block; margin-bottom:4px;">{{ $cp->course_package_discounts->last()->description }}</label><br />
                                                 @endif
                                                 <b style="font-size:153%;"><strike>${{ $ct->course_packages->last()->price }}</strike></b><br />
                                                 @if($ct->course_packages->last()->course_package_discounts->toArray() != null)
-                                                  {{ $ct->course_packages->last()->course_package_discounts->last()->description }}<br />
-                                                  <b style="font-size:135%;">Now is only ${{ $ct->course_packages->last()->course_package_discounts->last()->price }}/level</b><br />
+                                                  <b style="font-size:135%;">Now is only ${{ $ct->course_packages->last()->course_package_discounts->last()->price }}/session</b><br />
                                                 @endif
                                                 <span style="color:#ff0000;">{{ $ct->course_packages->last()->refund_description }}</span>
                                               </li>
