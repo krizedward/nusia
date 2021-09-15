@@ -212,9 +212,14 @@
                                           }
                                         ?>
                                         @if($is_allowed_to_register)
+{{--
                                           <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                             <b>BOOK NOW!</b>
                                           </button>
+--}}
+                                          <a href="#" data-toggle="modal" data-target="#BookNow{{$cp->id}}" class="btn btn-xs btn-flat btn-primary">
+                                            <b>BOOK NOW!</b>
+                                          </a>
                                         @else
                                           <button disabled class="btn btn-xs btn-flat btn-default btn-disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
                                             <b>N/A</b>
@@ -253,6 +258,53 @@
                                               @endif
                                               <br /><br />
                                               <button onclick="document.getElementById('CourseChoice{{$cp->id}}').className = 'modal fade'; document.getElementById('CourseChoice{{$cp->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open'); return false;" class="btn btn-s btn-default" style="width:100%;">Close</button>
+                                            </div>
+                                            <!-- /.box-body -->
+                                          </div>
+                                          <!-- /.box -->
+                                        </div>
+                                        <!-- /.modal-content -->
+                                      </div>
+                                      <!-- /.modal-dialog -->
+                                    </div>
+                                    <div class="modal fade" id="BookNow{{$cp->id}}">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="box box-primary">
+                                            <div class="box-body box-profile">
+                                              <h3 class="profile-username text-center"><b>Register in {{ $cp->title }}</b></h3>
+                                              @if($cp->refund_description != null || $cp->course_package_discounts->toArray() != null && $cp->course_package_discounts->last()->description)
+                                                <ul class="list-group list-group-unbordered">
+                                                  <li class="list-group-item text-center">
+                                                    @if($cp->course_package_discounts->toArray() != null && $cp->course_package_discounts->last()->description)
+                                                      <label class="label label-danger" style="font-size:120%; display:inline-block; margin-bottom:4px;">{{ $cp->course_package_discounts->last()->description }}</label><br />
+                                                      <b style="font-size:153%;"><strike>${{ $cp->price }}</strike></b><br />
+                                                      <b style="font-size:135%;">Now is only ${{ $cp->course_package_discounts->last()->price }}/session</b><br />
+                                                    @endif
+                                                    <span style="color:#ff0000;">{{ $cp->refund_description }}</span>
+                                                  </li>
+                                                </ul>
+                                              @else
+                                                <br />
+                                              @endif
+              <div class="form-group @error('age') has-error @enderror">
+                <label for="age">Promo Code</label>
+                <input id="age" name="age" type="text" class="@error('age') is-invalid @enderror form-control" placeholder="Enter Promo Code (if any)" value="{{ old('age') }}">
+                @error('age')
+                  <p style="color:red">{{ $message }}</p>
+                @enderror
+              </div>
+                                              @if($is_allowed_to_register)
+                                                <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                                  <b>BOOK NOW!</b>
+                                                </button>
+                                              @else
+                                                <button disabled style="width:100%;" class="btn btn-s btn-default btn-disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
+                                                  <b>N/A</b>
+                                                </button>
+                                              @endif
+                                              <br /><br />
+                                              <button onclick="document.getElementById('BookNow{{$cp->id}}').className = 'modal fade'; document.getElementById('BookNow{{$cp->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open'); return false;" class="btn btn-s btn-default" style="width:100%;">Close</button>
                                             </div>
                                             <!-- /.box-body -->
                                           </div>
@@ -360,9 +412,14 @@
                                         }
                                       ?>
                                       @if($is_allowed_to_register)
+{{--
                                         <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('choice').value = '{{ $ct->course_packages->first()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                           <b>BOOK NOW!</b>
                                         </button>
+--}}
+                                        <a href="#" data-toggle="modal" data-target="#BookNow{{$ct->course_packages->last()->id}}" class="btn btn-xs btn-flat btn-primary">
+                                          <b>BOOK NOW!</b>
+                                        </a>
                                       @else
                                         <button disabled class="btn btn-xs btn-flat btn-default btn-disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
                                           <b>N/A</b>
