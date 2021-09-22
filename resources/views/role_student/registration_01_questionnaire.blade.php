@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title','Registration Form')
+@section('title','New Student Registration Form')
 
 @include('layouts.css_and_js.all')
 
@@ -44,7 +44,7 @@
             </div>
             <div class="col-md-12">
               <div class="form-group @error('age') has-error @enderror">
-                <label for="age">Age</label>
+                <label for="age">Age <span style="color:#ff0000;">*</span></label>
                 <input id="age" name="age" type="text" class="@error('age') is-invalid @enderror form-control" placeholder="Enter Age" value="{{ old('age') }}">
                 @error('age')
                   <p style="color:red">{{ $message }}</p>
@@ -53,7 +53,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group @error('status_job') has-error @enderror">
-                <label for="status_job">Job Status</label>
+                <label for="status_job">Job Status <span style="color:#ff0000;">*</span></label>
                 <select id="status_job" name="status_job" type="text" class="@error('status_job') is-invalid @enderror form-control" onChange="if(document.getElementById('status_job').value == 'Student') {document.getElementById('status_description_label').innerHTML = 'School / University Name'; document.getElementById('status_description_div').className = 'form-group';} else if(document.getElementById('status_job').value == 'Professional') {document.getElementById('status_description_label').innerHTML = 'Working Place'; document.getElementById('status_description_div').className = 'form-group';} else {document.getElementById('status_description_label').innerHTML = 'School / University / Working Place'; document.getElementById('status_description_div').className = 'form-group hidden';}">
                   <option selected="selected" value="">-- Enter Job Status --</option>
                   <option value="Student">Student</option>
@@ -66,7 +66,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group hidden @error('status_description') has-error @enderror" id="status_description_div">
-                <label for="status_description" id="status_description_label">School / University / Working Place</label>
+                <label for="status_description" id="status_description_label">School / University / Working Place <span style="color:#ff0000;">*</span></label>
                 <input id="status_description" name="status_description" type="text" class="@error('status_description') is-invalid @enderror form-control" placeholder="Enter Value" value="{{ old('status_description') }}">
                 @error('status_description')
                   <p style="color:red">{{ $message }}</p>
@@ -78,7 +78,7 @@
           <div class="col-md-6">
             <div class="col-md-12">
               <div class="form-group @error('citizenship') has-error @enderror">
-                <label for="citizenship">Nationality</label>
+                <label for="citizenship">Nationality <span style="color:#ff0000;">*</span></label>
                 {{--<select id="citizenship" name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control">
                   <option selected="selected" value="">-- Enter Nationality --</option>
                   @foreach($countries as $country)
@@ -97,16 +97,23 @@
             </div>
             <div class="col-md-12">
               <div class="form-group @error('domicile') has-error @enderror">
-                <label for="domicile">Where do you live now?</label>
+                <label for="domicile">Where do you live now? <span style="color:#ff0000;">*</span></label>
                 <input id="domicile" name="domicile" type="text" class="@error('domicile') is-invalid @enderror form-control" placeholder="Enter Domicile" value="{{ old('domicile') }}">
                 @error('domicile')
+                  <p style="color:red">{{ $message }}</p>
+                @enderror
+              </div>
+              <div class="form-group @error('province') has-error @enderror">
+                <label for="province" class="hidden">Where do you live now? <span style="color:#ff0000;">*</span></label>
+                <input id="province" name="province" type="text" class="@error('province') is-invalid @enderror form-control" placeholder="Enter Province" value="{{ old('province') }}">
+                @error('province')
                   <p style="color:red">{{ $message }}</p>
                 @enderror
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group @error('timezone') has-error @enderror">
-                <label for="timezone">What is your local time zone?</label>
+                <label for="timezone">What is your local time zone? <span style="color:#ff0000;">*</span></label>
                 <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*This information is needed to adjust Indonesian time to your local time<br>for scheduling your sessions</p>
                 <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Reference: <b><a target="_blank" rel="noopener noreferrer" href="https://www.timeanddate.com/">timeanddate.com</a></b></p>
                 <select id="timezone" name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control">
@@ -126,7 +133,7 @@
             </div>
             <div class="col-md-12">
               <div class="form-group @error('indonesian_language_proficiency') has-error @enderror">
-                <label for="indonesian_language_proficiency">Indonesian Language Proficiency (Self-assessment)</label>
+                <label for="indonesian_language_proficiency">Indonesian Language Proficiency (Self-assessment) <span style="color:#ff0000;">*</span></label>
                 <p style="color:#ff0000; padding-top:0px; margin-top:0px;">
                   *Check the radio box below to see the descriptions in each level,<br />
                   or you can see ACTFL proficiency descriptions
@@ -168,7 +175,7 @@
             <br><br>
             <div class="col-md-2">
               <div class="form-group @error('interest_1') has-error @enderror" id="interest_1_div">
-                <label for="interest_1">Interest (Max. 6)</label>
+                <label for="interest_1">Interest (Max. 6) <span style="color:#ff0000;">*</span></label>
                 <select name="interest_1" type="text" class="@error('interest_1') is-invalid @enderror form-control" id="interest_1" onChange="if(document.getElementById('interest_1').value != '') {document.getElementById('interest_2_div').className = 'form-group';} else {document.getElementById('interest_2_div').className = 'form-group hidden'; document.getElementById('interest_3_div').className = 'form-group hidden'; document.getElementById('interest_4_div').className = 'form-group hidden'; document.getElementById('interest_5_div').className = 'form-group hidden'; document.getElementById('interest_6_div').className = 'form-group hidden'; document.getElementById('interest_2').value = ''; document.getElementById('interest_3').value = ''; document.getElementById('interest_4').value = ''; document.getElementById('interest_5').value = ''; document.getElementById('interest_6').value = '';}">
                   <option selected="selected" value="">-- Enter Interest --</option>
                   @foreach($interests as $interest)
@@ -254,7 +261,7 @@
             {{--Form--}}
             <div class="col-md-6">
               <div class="form-group @error('target_language_experience') has-error @enderror">
-                <label for="target_language_experience">Indonesian Language Experience</label>
+                <label for="target_language_experience">Indonesian Language Experience <span style="color:#ff0000;">*</span></label>
                 <select name="target_language_experience" type="text" class="@error('target_language_experience') is-invalid @enderror form-control" id="target_language_experience" onChange="if(document.getElementById('target_language_experience').value == 'Others') {document.getElementById('target_language_experience_value_div').className = 'form-group';} else {document.getElementById('target_language_experience_value_div').className = 'form-group hidden';} if(document.getElementById('target_language_experience').value != 'Never (no experience)' && document.getElementById('target_language_experience').value != '') {document.getElementById('description_of_course_taken_div').className = 'form-group';} else {document.getElementById('description_of_course_taken_div').className = 'form-group hidden';}">
                   <option selected="selected" value="">-- Enter Indonesian Language Experience --</option>
                   <option value="Never (no experience)">Never (no experience)</option>
@@ -269,7 +276,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group hidden @error('target_language_experience_value') has-error @enderror" id="target_language_experience_value_div">
-                <label for="target_language_experience_value">I have learned Indonesian for .... years</label>
+                <label for="target_language_experience_value">I have learned Indonesian for .... years <span style="color:#ff0000;">*</span></label>
                 @if(old('target_language_experience_value'))
                   <input id="target_language_experience_value" name="target_language_experience_value" type="text" class="@error('target_language_experience_value') is-invalid @enderror form-control" placeholder="Enter Value" value="{{ old('target_language_experience_value') }}">
                 @else
@@ -283,7 +290,7 @@
             <div class="col-md-12">
               <div class="form-group hidden @error('description_of_course_taken') has-error @enderror" id="description_of_course_taken_div">
                 <label for="description_of_course_taken">
-                  Your Learning Experiences<br />
+                  Your Learning Experiences <span style="color:#ff0000;">*</span><br />
                   <i>
                     If you have studied the Indonesian language, briefly describe any courses you have taken! (write in the Indonesian language—if possible)
                   </i>
@@ -297,7 +304,7 @@
             <div class="col-md-12">
               <div class="form-group @error('learning_objective') has-error @enderror" id="learning_objective_div">
                 <label for="learning_objective">
-                  Your Learning Objectives<br />
+                  Your Learning Objectives <span style="color:#ff0000;">*</span><br />
                   <i>
                     Why do you want to learn the Indonesian language? (Briefly describe your learning objectives in the Indonesian language—if possible!)
                   </i>
@@ -310,7 +317,7 @@
             </div>
             <div class="col-md-12">
               <div class="form-group @error('image_profile') has-error @enderror">
-                <label for="image_profile">Upload Profile Picture</label>
+                <label for="image_profile">Upload Profile Picture (optional)</label>
                 <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
                 <input id="image_profile" name="image_profile" type="file" accept="image/*" class="@error('image_profile') is-invalid @enderror form-control">
                 @error('image_profile')

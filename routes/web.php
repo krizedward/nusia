@@ -78,8 +78,8 @@ Route::group(['middleware'=>'auth'], function() {
         Route::post('/choose-course/store', 'StudentController@choose_course_store')->name('student.choose_course.store');
         
         // mendaftar course: melengkapi informasi pembayaran
-        Route::get('/complete-payment-information/{course_registration_id}', 'StudentController@complete_payment_information_show')->name('student.complete_payment_information.show');
-        Route::put('/complete-payment-information/{course_registration_id}/update', 'StudentController@complete_payment_information_update')->name('student.complete_payment_information.update');
+        Route::get('/confirm-course-registration/{course_registration_id}', 'StudentController@complete_payment_information_show')->name('student.complete_payment_information.show');
+        Route::put('/confirm-course-registration/{course_registration_id}/update', 'StudentController@complete_payment_information_update')->name('student.complete_payment_information.update');
         
         // mendaftar course: mengirim bukti pembayaran
         Route::get('/upload-payment-evidence/{course_registration_id}', 'StudentController@upload_payment_evidence_show')->name('student.upload_payment_evidence.show');
@@ -107,8 +107,8 @@ Route::group(['middleware'=>'auth'], function() {
         Route::get('/choose-course-registration/{course_registration_id}', 'StudentController@choose_course_registration_show')->name('student.choose_course_registration.show');
         
         // mendaftar course: mengonfirmasi jadwal & mengonfirmasi instructor
-        Route::get('/confirm-course-registration/{course_registration_id}/choose/{course_id}', 'StudentController@confirm_course_registration_show')->name('student.confirm_course_registration.show');
-        Route::put('/confirm-course-registration/{course_registration_id}/choose/{course_id}/update', 'StudentController@confirm_course_registration_update')->name('student.confirm_course_registration.update');
+        Route::get('/finalize-course-registration/{course_registration_id}/choose/{course_id}', 'StudentController@confirm_course_registration_show')->name('student.confirm_course_registration.show');
+        Route::put('/finalize-course-registration/{course_registration_id}/choose/{course_id}/update', 'StudentController@confirm_course_registration_update')->name('student.confirm_course_registration.update');
         
         // melihat daftar course dalam proses registrasi
         Route::get('/view-course-registration', 'StudentController@view_course_registration_index')->name('student.view_course_registration.index');

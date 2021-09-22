@@ -61,15 +61,13 @@
                           </dt>
                           <dd>
                             {{ $mt->description }}<br />
-                            {{--
-                            @if($mt->name == 'Indonesian for Specific Purposes')
+                            @if($mt->name == 'General Indonesian Language')
                               <ul>
                                 @foreach($mt->material_type_values as $mtv)
                                   <li>{{ $mtv->value }}</li>
                                 @endforeach
                               </ul>
                             @endif
-                            --}}
                           </dd>
                         </dl>
                         <hr>
@@ -217,7 +215,7 @@
                                             <b>BOOK NOW!</b>
                                           </button>
 --}}
-                                          <a href="#" data-toggle="modal" data-target="#BookNow{{$cp->id}}" class="btn btn-xs btn-flat btn-primary">
+                                          <a href="#" data-toggle="modal" data-target="#CourseChoice{{$cp->id}}" class="btn btn-xs btn-flat btn-primary">
                                             <b>BOOK NOW!</b>
                                           </a>
                                         @else
@@ -247,6 +245,13 @@
                                               @else
                                                 <br />
                                               @endif
+                                              <div class="form-group @error('promo_code{{$cp->id}}') has-error @enderror">
+                                                <label for="promo_code{{$cp->id}}">Promo Code</label>
+                                                <input name="promo_code{{$cp->id}}" type="text" class="@error('promo_code{{$cp->id}}') is-invalid @enderror form-control" placeholder="Enter Promo Code (if any)" value="{{ old('promo_code' . $cp->id) }}">
+                                                @error('promo_code{{$cp->id}}')
+                                                  <p style="color:red">{{ $message }}</p>
+                                                @enderror
+                                              </div>
                                               @if($is_allowed_to_register)
                                                 <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                                   <b>BOOK NOW!</b>
@@ -267,7 +272,7 @@
                                       </div>
                                       <!-- /.modal-dialog -->
                                     </div>
-                                    <div class="modal fade" id="BookNow{{$cp->id}}">
+                                    <div class="modal fade" id="CourseChoice{{$cp->id}}">
                                       <div class="modal-dialog">
                                         <div class="modal-content">
                                           <div class="box box-primary">
@@ -287,13 +292,13 @@
                                               @else
                                                 <br />
                                               @endif
-              <div class="form-group @error('age') has-error @enderror">
-                <label for="age">Promo Code</label>
-                <input id="age" name="age" type="text" class="@error('age') is-invalid @enderror form-control" placeholder="Enter Promo Code (if any)" value="{{ old('age') }}">
-                @error('age')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
+                                              <div class="form-group @error('promo_code{{$cp->id}}') has-error @enderror">
+                                                <label for="promo_code{{$cp->id}}">Promo Code</label>
+                                                <input name="promo_code{{$cp->id}}" type="text" class="@error('promo_code{{$cp->id}}') is-invalid @enderror form-control" placeholder="Enter Promo Code (if any)" value="{{ old('promo_code' . $cp->id) }}">
+                                                @error('promo_code{{$cp->id}}')
+                                                  <p style="color:red">{{ $message }}</p>
+                                                @enderror
+                                              </div>
                                               @if($is_allowed_to_register)
                                                 <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                                   <b>BOOK NOW!</b>
@@ -304,7 +309,7 @@
                                                 </button>
                                               @endif
                                               <br /><br />
-                                              <button onclick="document.getElementById('BookNow{{$cp->id}}').className = 'modal fade'; document.getElementById('BookNow{{$cp->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open'); return false;" class="btn btn-s btn-default" style="width:100%;">Close</button>
+                                              <button onclick="document.getElementById('CourseChoice{{$cp->id}}').className = 'modal fade'; document.getElementById('CourseChoice{{$cp->id}}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open'); return false;" class="btn btn-s btn-default" style="width:100%;">Close</button>
                                             </div>
                                             <!-- /.box-body -->
                                           </div>
@@ -352,13 +357,20 @@
                                         <div class="modal-content">
                                           <div class="box box-primary">
                                             <div class="box-body box-profile">
-                                              <h3 class="profile-username text-center"><b>{{ $cp->title }} (Free Classes)</b></h3>
+                                              <h3 class="profile-username text-center"><b>Register in {{ $cp->title }} (Free Classes)</b></h3>
                                               <ul class="list-group list-group-unbordered">
                                                 <li class="list-group-item text-center">
                                                   <b style="font-size:153%;">$0</b><br />
                                                   Book our free classes to experience fun bahasa Indonesia learning!<br />
                                                 </li>
                                               </ul>
+                                              <div class="form-group @error('promo_code{{$cp->id}}') has-error @enderror">
+                                                <label for="promo_code{{$cp->id}}">Promo Code</label>
+                                                <input name="promo_code{{$cp->id}}" type="text" class="@error('promo_code{{$cp->id}}') is-invalid @enderror form-control" placeholder="Enter Promo Code (if any)" value="{{ old('promo_code' . $cp->id) }}">
+                                                @error('promo_code{{$cp->id}}')
+                                                  <p style="color:red">{{ $message }}</p>
+                                                @enderror
+                                              </div>
                                               @if($is_allowed_to_register)
                                                 <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                                   <b>BOOK NOW!</b>
@@ -417,7 +429,7 @@
                                           <b>BOOK NOW!</b>
                                         </button>
 --}}
-                                        <a href="#" data-toggle="modal" data-target="#BookNow{{$ct->course_packages->last()->id}}" class="btn btn-xs btn-flat btn-primary">
+                                        <a href="#" data-toggle="modal" data-target="#CourseChoice{{$ct->course_packages->last()->id}}" class="btn btn-xs btn-flat btn-primary">
                                           <b>BOOK NOW!</b>
                                         </a>
                                       @else
@@ -432,7 +444,7 @@
                                       <div class="modal-content">
                                         <div class="box box-primary">
                                           <div class="box-body box-profile">
-                                            <h3 class="profile-username text-center"><b>{{ $ct->name }}</b></h3>
+                                            <h3 class="profile-username text-center"><b>Register in {{ $ct->name }}</b></h3>
                                             {{--<p class="text-muted text-center">&nbsp;</p>--}}
                                             <ul class="list-group list-group-unbordered">
                                               <li class="list-group-item text-center">
@@ -447,6 +459,13 @@
                                                 <span style="color:#ff0000;">{{ $ct->course_packages->last()->refund_description }}</span>
                                               </li>
                                             </ul>
+                                            <div class="form-group @error('promo_code{{$cp->id}}') has-error @enderror">
+                                              <label for="promo_code{{$cp->id}}">Promo Code</label>
+                                              <input name="promo_code{{$cp->id}}" type="text" class="@error('promo_code{{$cp->id}}') is-invalid @enderror form-control" placeholder="Enter Promo Code (if any)" value="{{ old('promo_code' . $cp->id) }}">
+                                              @error('promo_code{{$cp->id}}')
+                                                <p style="color:red">{{ $message }}</p>
+                                              @enderror
+                                            </div>
                                             @if($is_allowed_to_register)
                                               <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                                 <b>BOOK NOW!</b>
@@ -505,7 +524,7 @@
                                       <div class="modal-content">
                                         <div class="box box-primary">
                                           <div class="box-body box-profile">
-                                            <h3 class="profile-username text-center" style="font-size:235%;"><b>{{ $ct->name }} (Free Classes)</b></h3>
+                                            <h3 class="profile-username text-center" style="font-size:235%;"><b>Register in {{ $ct->name }} (Free Classes)</b></h3>
                                             {{--<p class="text-muted text-center">&nbsp;</p>--}}
                                             <ul class="list-group list-group-unbordered">
                                               <li class="list-group-item text-center">
@@ -513,6 +532,13 @@
                                                 Book our free classes to experience fun bahasa Indonesia learning!<br />
                                               </li>
                                             </ul>
+                                            <div class="form-group @error('promo_code{{$cp->id}}') has-error @enderror">
+                                              <label for="promo_code{{$cp->id}}">Promo Code</label>
+                                              <input name="promo_code{{$cp->id}}" type="text" class="@error('promo_code{{$cp->id}}') is-invalid @enderror form-control" placeholder="Enter Promo Code (if any)" value="{{ old('promo_code' . $cp->id) }}">
+                                              @error('promo_code{{$cp->id}}')
+                                                <p style="color:red">{{ $message }}</p>
+                                              @enderror
+                                            </div>
                                             @if($is_allowed_to_register)
                                               <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                                 <b>BOOK NOW!</b>
