@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CoursePackageDiscount extends Model
 {
     use SoftDeletes;
-    use AutoNumberTrait;
+    //use AutoNumberTrait;
 
     protected $table = "course_package_discounts";
     protected $primaryKey = 'id';
@@ -25,16 +25,16 @@ class CoursePackageDiscount extends Model
         'status'
     ];
 
-    public function getAutoNumberOptions()
-    {
-        return [
-            'code' => [
-                'format' => 'CPD?', // Format kode yang akan digunakan.
-                'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
-                //refrensi : https://www.lab-informatika.com/membuat-kode-otomatis-di-laravel
-            ]
-        ];
-    }
+    //public function getAutoNumberOptions()
+    //{
+    //    return [
+    //        'code' => [
+    //            'format' => 'CPD?', // Format kode yang akan digunakan.
+    //            'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
+    //            //refrensi : https://www.lab-informatika.com/membuat-kode-otomatis-di-laravel
+    //        ]
+    //    ];
+    //}
 
     /**
      * Define a relationship.

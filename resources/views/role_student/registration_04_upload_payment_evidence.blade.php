@@ -200,9 +200,16 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
+
+              <a href="{{ route('student.upload_placement_test.show', [$course_registration->id]) }}" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(document.getElementById('payment_evidence').value == '') { alert('The payment evidence cannot be empty.'); return false; } if( confirm('Are you sure to upload this payment evidence? This action cannot be undone.') ) return true; else return false;">
+                Upload Payment Evidence
+              </a>
+
+{{--
               <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(document.getElementById('payment_evidence').value == '') { alert('The payment evidence cannot be empty.'); return false; } if( confirm('Are you sure to upload this payment evidence? This action cannot be undone.') ) return true; else return false;">
                 Upload Payment Evidence
               </button>
+--}}
             </div>
           </form>
         </div>

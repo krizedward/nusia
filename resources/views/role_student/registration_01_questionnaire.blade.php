@@ -8,9 +8,11 @@
   <div class="box box-primary">
     <div class="box-header with-border">
       <h3 class="box-title"><b>New Student Registration Form</b></h3>
+      <p class="no-margin"><b style="color:#ff0000;">* This information is required</b></p>
     </div>
     <form role="form" method="post" action="{{ route('student.student_registration_form.update', [Auth::user()->id]) }}" enctype="multipart/form-data">
       @csrf
+      @method('PUT')
       <div class="box-body">
         <div class="row">
           <div class="col-md-6">
@@ -95,6 +97,7 @@
                 @enderror
               </div>
             </div>
+            {{--
             <div class="col-md-12">
               <div class="form-group @error('domicile') has-error @enderror">
                 <label for="domicile">Where do you live now? <span style="color:#ff0000;">*</span></label>
@@ -111,11 +114,30 @@
                 @enderror
               </div>
             </div>
+            --}}
+            <div class="col-md-12">
+              <div class="form-group @error('domicile') has-error @enderror">
+                <label for="domicile">Where do you live now? <span style="color:#ff0000;">*</span></label>
+                <select id="domicile" name="domicile" type="text" class="@error('domicile') is-invalid @enderror form-control select2">
+                  <option selected="selected" value="">-- Enter Domicile --</option>
+                  @foreach($arr_provinces as $p)
+                      @if(old('domicile') == $p)
+                        <option selected="selected" value="{{ $p }}">{{ $p }}</option>
+                      @else
+                        <option value="{{ $p }}">{{ $p }}</option>
+                      @endif
+                  @endforeach
+                </select>
+                @error('domicile')
+                  <p style="color:red">{{ $message }}</p>
+                @enderror
+              </div>
+            </div>
             <div class="col-md-12">
               <div class="form-group @error('timezone') has-error @enderror">
                 <label for="timezone">What is your local time zone? <span style="color:#ff0000;">*</span></label>
-                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*This information is needed to adjust Indonesian time to your local time<br>for scheduling your sessions</p>
-                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Reference: <b><a target="_blank" rel="noopener noreferrer" href="https://www.timeanddate.com/">timeanddate.com</a></b></p>
+                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">This information is needed to adjust Indonesian time to your local time<br>for scheduling your sessions</p>
+                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">Reference: <b><a target="_blank" rel="noopener noreferrer" href="https://www.timeanddate.com/">timeanddate.com</a></b></p>
                 <select id="timezone" name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control">
                   <option selected="selected" value="">-- Enter Current Time Zone --</option>
                   @foreach($timezones as $timezone)
@@ -135,7 +157,7 @@
               <div class="form-group @error('indonesian_language_proficiency') has-error @enderror">
                 <label for="indonesian_language_proficiency">Indonesian Language Proficiency (Self-assessment) <span style="color:#ff0000;">*</span></label>
                 <p style="color:#ff0000; padding-top:0px; margin-top:0px;">
-                  *Check the radio box below to see the descriptions in each level,<br />
+                  Check the radio box below to see the descriptions in each level,<br />
                   or you can see ACTFL proficiency descriptions
                   <a class="btn btn-xs btn-primary" href="https://www.actfl.org/sites/default/files/publications/ACTFLPerformance_Descriptors-Presentational.pdf" target="_blank">
                     <i class="fa fa-link"></i>&nbsp;&nbsp;Here
@@ -175,7 +197,7 @@
             <br><br>
             <div class="col-md-2">
               <div class="form-group @error('interest_1') has-error @enderror" id="interest_1_div">
-                <label for="interest_1">Interest (Max. 6) <span style="color:#ff0000;">*</span></label>
+                <label for="interest_1">Interest (Min 1, Max 6) <span style="color:#ff0000;">*</span></label>
                 <select name="interest_1" type="text" class="@error('interest_1') is-invalid @enderror form-control" id="interest_1" onChange="if(document.getElementById('interest_1').value != '') {document.getElementById('interest_2_div').className = 'form-group';} else {document.getElementById('interest_2_div').className = 'form-group hidden'; document.getElementById('interest_3_div').className = 'form-group hidden'; document.getElementById('interest_4_div').className = 'form-group hidden'; document.getElementById('interest_5_div').className = 'form-group hidden'; document.getElementById('interest_6_div').className = 'form-group hidden'; document.getElementById('interest_2').value = ''; document.getElementById('interest_3').value = ''; document.getElementById('interest_4').value = ''; document.getElementById('interest_5').value = ''; document.getElementById('interest_6').value = '';}">
                   <option selected="selected" value="">-- Enter Interest --</option>
                   @foreach($interests as $interest)
@@ -276,11 +298,11 @@
             </div>
             <div class="col-md-6">
               <div class="form-group hidden @error('target_language_experience_value') has-error @enderror" id="target_language_experience_value_div">
-                <label for="target_language_experience_value">I have learned Indonesian for .... years <span style="color:#ff0000;">*</span></label>
+                <label for="target_language_experience_value">I have learned Indonesian for .... years (must be a number) <span style="color:#ff0000;">*</span></label>
                 @if(old('target_language_experience_value'))
-                  <input id="target_language_experience_value" name="target_language_experience_value" type="text" class="@error('target_language_experience_value') is-invalid @enderror form-control" placeholder="Enter Value" value="{{ old('target_language_experience_value') }}">
+                  <input id="target_language_experience_value" name="target_language_experience_value" type="text" class="@error('target_language_experience_value') is-invalid @enderror form-control" placeholder="Enter Value (must be a number)" value="{{ old('target_language_experience_value') }}">
                 @else
-                  <input id="target_language_experience_value" name="target_language_experience_value" type="text" class="@error('target_language_experience_value') is-invalid @enderror form-control" placeholder="Enter Value" value="0">
+                  <input id="target_language_experience_value" name="target_language_experience_value" type="text" class="@error('target_language_experience_value') is-invalid @enderror form-control" placeholder="Enter Value (must be a number)" value="">
                 @endif
                 @error('target_language_experience_value')
                   <p style="color:red">{{ $message }}</p>
@@ -318,7 +340,7 @@
             <div class="col-md-12">
               <div class="form-group @error('image_profile') has-error @enderror">
                 <label for="image_profile">Upload Profile Picture (optional)</label>
-                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
+                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">Maximum file size allowed is 8 MB</p>
                 <input id="image_profile" name="image_profile" type="file" accept="image/*" class="@error('image_profile') is-invalid @enderror form-control">
                 @error('image_profile')
                   <p style="color:red">{{ $message }}</p>

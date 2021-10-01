@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title', 'Choosing Course Registrations')
+@section('title', 'Choosing Course')
 
 @include('layouts.css_and_js.all')
 
@@ -425,7 +425,7 @@
                                       ?>
                                       @if($is_allowed_to_register)
 {{--
-                                        <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('choice').value = '{{ $ct->course_packages->first()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                        <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('choice').value = '{{ $ct->course_packages->last()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                           <b>BOOK NOW!</b>
                                         </button>
 --}}
@@ -467,7 +467,7 @@
                                               @enderror
                                             </div>
                                             @if($is_allowed_to_register)
-                                              <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                              <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $ct->course_packages->last()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                                 <b>BOOK NOW!</b>
                                               </button>
                                             @else
@@ -509,7 +509,7 @@
                                       {{-- 1 baris kode di bawah ini hanya untuk sementara --}}
                                       <?php $is_allowed_to_register = 0; ?>
                                       @if($is_allowed_to_register)
-                                        <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $ct->course_packages->first()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                        <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $ct->course_packages->last()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                           <b>BOOK NOW!</b>
                                         </button>
                                       @else
@@ -540,7 +540,7 @@
                                               @enderror
                                             </div>
                                             @if($is_allowed_to_register)
-                                              <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                              <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $ct->course_packages->last()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                                 <b>BOOK NOW!</b>
                                               </button>
                                             @else

@@ -24,6 +24,7 @@
         </div>
         <div class="box-body">
           @if($has_uploaded_for_placement_test != 2)
+{{--
             <dl>
               <dt><i class="fa fa-pencil margin-r-5"></i> Reading the Requirements</dt>
               <dd>
@@ -33,19 +34,21 @@
               </dd>
             </dl>
             <hr>
+--}}
             <dl>
               <dt><i class="fa fa-file-video-o margin-r-5"></i> Preparing the Video</dt>
               <dd>
-                Record a video that fulfills all test requirements.<br />
-                After recording the video, upload to <b>Google Drive</b> and prepare a shareable link to the video.
+                Record a video that fulfills all test requirements.
+                After recording the video, upload to <b>Google Drive</b> or other file storages.
+                Then, prepare a shareable link to the video.
               </dd>
             </dl>
             <hr>
             <dl>
               <dt><i class="fa fa-check margin-r-5"></i> Completing the Test</dt>
               <dd>
-                After preparing the link, fill out the submission form and click "submit" button!<br />
-                Please check whether the link has been attached successfully.<br />
+                After preparing the link, fill out the submission form and click "submit" button!
+                {{--<br />Please check whether the link has been attached successfully.<br />--}}
               </dd>
             </dl>
             <hr>
@@ -113,7 +116,7 @@
     <div class="col-md-9">
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title"><b>Submit Your Result</b></h3>
+          <h3 class="box-title"><b>Submit Your Placement Test Video</b></h3>
         </div>
         <form role="form" method="post" action="@if($has_uploaded_for_placement_test) # @else {{ route('student.upload_placement_test.update', [$course_registration->id]) }} @endif" enctype="multipart/form-data">
           @if($has_uploaded_for_placement_test == 0)
@@ -122,8 +125,9 @@
           @endif
           <div class="box-body">
             <div class="row">
-              {{--Form Kiri--}}
-              <div class="col-md-6">
+
+
+              <div class="col-md-12">
                 <div class="col-md-12">
                   <div class="form-group @error('indonesian_language_proficiency') has-error @enderror">
                     <label for="indonesian_language_proficiency">Indonesian Language Proficiency (Self-assessment)</label>
@@ -134,8 +138,64 @@
                   </div>
                 </div>
               </div>
-              {{--Form Kanan--}}
-              <div class="col-md-6">
+
+            <div class="col-md-12">
+            <div class="col-md-12">
+              <div class="form-group @error('indonesian_language_proficiency') has-error @enderror">
+                <label for="indonesian_language_proficiency" style="padding-bottom:0px; margin-bottom:0px;">
+                  Please choose one of the levels below that
+                  reflects your Indonesian proficiency right now.
+                </label>
+                <p style="padding-top:0px; margin-top:0px;">
+                  Then, record a video of yourself answering
+                  the following questions in about 3-5 minutes.<br />
+                  After that, upload it to Google Drive or other file storages
+                  and prepare a sharable link to the video.
+                </p>
+                <p class="hidden" id="descriptionNoviceLow" style="padding-top:0px; margin-top:0px;"><b>Novice Low Proficiency</b><br>
+                  1. Pertanyaan 1<br />
+                  2. Pertanyaan 2<br />
+                  3. Pertanyaan 3<br />
+                </p>
+                <p class="hidden" id="descriptionNoviceMid" style="padding-top:0px; margin-top:0px;"><b>Novice Low Proficiency</b><br>
+                  1. Pertanyaan 1<br />
+                  2. Pertanyaan 2<br />
+                  3. Pertanyaan 3<br />
+                </p>
+                <p class="hidden" id="descriptionNoviceHigh" style="padding-top:0px; margin-top:0px;"><b>Novice Low Proficiency</b><br>
+                  1. Pertanyaan 1<br />
+                  2. Pertanyaan 2<br />
+                  3. Pertanyaan 3<br />
+                </p>
+                @if(old('indonesian_language_proficiency') == 'Novice')
+                  <input checked id="radioAnswer1" name="indonesian_language_proficiency" type="radio" value="Novice" onchange="if(document.getElementById('radioAnswer1').checked) { document.getElementById('descriptionNovice').className = ''; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
+                @else
+                  <input id="radioAnswer1" name="indonesian_language_proficiency" type="radio" value="Novice" onchange="if(document.getElementById('radioAnswer1').checked) { document.getElementById('descriptionNovice').className = ''; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
+                @endif
+                <label for="radioAnswer1" class="custom-control-label">Novice</label>
+                <br />
+                @if(old('indonesian_language_proficiency') == 'Intermediate')
+                  <input checked id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
+                @else
+                  <input id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
+                @endif
+                <label for="radioAnswer2" class="custom-control-label">Intermediate</label>
+                <br />
+                @if(old('indonesian_language_proficiency') == 'Advanced')
+                  <input checked id="radioAnswer3" name="indonesian_language_proficiency" type="radio" value="Advanced" onchange="if(document.getElementById('radioAnswer3').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = ''; }">
+                @else
+                  <input id="radioAnswer3" name="indonesian_language_proficiency" type="radio" value="Advanced" onchange="if(document.getElementById('radioAnswer3').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = ''; }">
+                @endif
+                <label for="radioAnswer3" class="custom-control-label">Advanced</label>
+                @error('indonesian_language_proficiency')
+                  <p style="color:red">{{ $message }}</p>
+                @enderror
+              </div>
+            </div>
+            </div>
+
+
+              <div class="col-md-12">
                 <div class="col-md-12">
                   <div class="form-group @error('video_link') has-error @enderror">
                     <label for="video_link">Video Link (https)</label>
