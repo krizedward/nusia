@@ -62,8 +62,10 @@
                   $last_course_package_discount = null;
                   if($course_registration->course->course_package->course_package_discounts->toArray() != null) {
                     foreach(array_reverse($course_registration->course->course_package->course_package_discounts->toArray()) as $cpd) {
-                      if($cpd['due_date'] == null) { $last_course_package_discount = $cpd; break; }
-                      else if($cpd['due_date'] > now()) { $last_course_package_discount = $cpd; break; }
+                      if($cpd['status'] == 'Active') {
+                        if($cpd['due_date'] == null) { $last_course_package_discount = $cpd; break; }
+                        else if($cpd['due_date'] > now()) { $last_course_package_discount = $cpd; break; }
+                      }
                     }
                   }
                 ?>
@@ -97,24 +99,39 @@
             </tr>
             <tr style="vertical-align:baseline;">
               <td width="700" colspan="2"><b>Tax (no tax fee charged in this payment)</b></td>
-              <td class="text-right"><b>$0</b></td>
+              <td class="text-right">
+                @if($last_course_package_discount)
+                  <b>${{ 0 * $last_course_package_discount['price'] * $course_registration->course->course_package->count_session }}</b>
+                @else
+                  <b>${{ 0 * $course_registration->course->course_package->price * $course_registration->course->course_package->count_session }}</b>
+                @endif
+              </td>
             </tr>
             <tr style="vertical-align:baseline;" class="bg-gray">
               <td width="700" colspan="2"><b>TOTAL PAYMENT</b></td>
               <td class="text-right">
                 @if($last_course_package_discount)
-                  <b style="font-size:115%; color:#007700;">${{ $last_course_package_discount['price'] * $course_registration->course->course_package->count_session }}</b>
+                  <b style="font-size:115%; color:#007700;">${{ ($last_course_package_discount['price'] * $course_registration->course->course_package->count_session) + (0 * $last_course_package_discount['price'] * $course_registration->course->course_package->count_session) }}</b>
                 @else
-                  <b>${{ $course_registration->course->course_package->price * $course_registration->course->course_package->count_session }}</b>
+                  <b>${{ ($course_registration->course->course_package->price * $course_registration->course->course_package->count_session) + (0 * $course_registration->course->course_package->price * $course_registration->course->course_package->count_session) }}</b>
                 @endif
               </td>
             </tr>
           </table>
           <hr />
           <p style="color:#ff0000;">Upon confirmation, the course information can no longer be changed.</p>
-          <a href="{{ route('student.upload_payment_evidence.show', $course_registration->id) }}" class="btn btn-flat btn-md bg-blue" style="width:100%;">
-            Confirm Course Registration
-          </a>
+          <form role="form" action="{{ route('student.complete_payment_information.update', $course_registration->id) }}" method="post">
+            @csrf
+            @method('PUT')
+            <button onclick="if(confirm('Are you sure to confirm this payment?')) return true; else return false;" type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">
+              Confirm Course Registration
+            </button>
+{{--
+            <a href="{{ route('student.upload_payment_evidence.show', $course_registration->id) }}" class="btn btn-flat btn-md bg-blue" style="width:100%;">
+              Confirm Course Registration
+            </a>
+--}}
+          </form>
         </div>
       </div>
     </div>

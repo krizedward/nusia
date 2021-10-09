@@ -96,11 +96,6 @@
             <tr style="vertical-align:baseline;">
               <td width="450">
                 <b>{{ $course_registration->course->title }}</b>&nbsp;&nbsp;
-{{--
-                <a href="{{ route('student.choose_course.index', [$course_registration->id]) }}" class="btn btn-xs btn-info">
-                  <i class="fa fa-edit"></i>&nbsp;&nbsp;Change Course
-                </a>
---}}
               </td>
               <td width="250">
                 <?php
