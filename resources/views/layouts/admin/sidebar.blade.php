@@ -70,9 +70,15 @@
             <i class="fa fa-book"></i> <span>Choose a Course</span>
           </a>
         </li>
-        <li class="{{ set_active(['student.complete_payment_information.show', 'student.upload_payment_evidence.show']) }}">
+        <li class="{{ set_active(['student.complete_payment_information.show']) }}">
           <a href="{{ route('student.complete_payment_information.show', [Auth::user()->student->course_registrations->first()->id])}}">
             <i class="fa fa-book"></i> <span>Complete Payment Info</span>
+          </a>
+        </li>
+      @elseif(Auth::user()->student->course_registrations->first()->course_payments->first()->status != 'Confirmed')
+        <li class="{{ set_active(['student.upload_payment_evidence.show']) }}">
+          <a href="{{ route('student.upload_payment_evidence.show', [Auth::user()->student->course_registrations->first()->id])}}">
+            <i class="fa fa-book"></i> <span>Upload Payment Evidence</span>
           </a>
         </li>
       @elseif(Auth::user()->student->course_registrations->first()->placement_test == null || Auth::user()->student->course_registrations->first()->placement_test->status == 'Not Passed')

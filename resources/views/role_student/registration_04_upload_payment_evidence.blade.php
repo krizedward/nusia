@@ -1,334 +1,228 @@
 @extends('layouts.admin.default')
 
-@section('title','Filling Payment Information')
+@section('title','Upload Your Payment Evidence')
 
 @include('layouts.css_and_js.all')
 
 @section('content-header')
-  <h1><b>Proceed to Your Course Registration Payment!</b></h1>
+  <h1><b>Upload Your Payment Evidence!</b></h1>
 @stop
 
 @section('content')
-  <div class="box box-primary">
-    <div class="box-header with-border">
-      <h3 class="box-title"><b>New Student Registration Form</b></h3>
-    </div>
-    <form role="form" method="post" action="{{ route('questionnaire.store') }}" enctype="multipart/form-data">
-      @csrf
-      <div class="box-body">
-        <div class="row">
-          <div class="col-md-6">
-            {{--Form Kiri--}}
-            <div class="col-md-12">
-              <div class="form-group @error('email') has-error @enderror">
-                <label for="email">Email</label>
-                <input id="email" name="email" type="email" class="@error('email') is-invalid @enderror form-control" disabled value="{{ Auth::user()->email }}">
-                @error('email')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group @error('first_name') has-error @enderror">
-                <label for="first_name">First Name</label>
-                <input id="first_name" name="first_name" type="text" class="@error('first_name') is-invalid @enderror form-control" disabled value="{{ Auth::user()->first_name }}">
-                @error('first_name')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group @error('last_name') has-error @enderror">
-                <label for="last_name">Last Name</label>
-                <input id="last_name" name="last_name" type="text" class="@error('last_name') is-invalid @enderror form-control" disabled value="{{ Auth::user()->last_name }}">
-                @error('last_name')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group @error('age') has-error @enderror">
-                <label for="age">Age</label>
-                <input id="age" name="age" type="text" class="@error('age') is-invalid @enderror form-control" placeholder="Enter Age" value="{{ old('age') }}">
-                @error('age')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group @error('status_job') has-error @enderror">
-                <label for="status_job">Job Status</label>
-                <select id="status_job" name="status_job" type="text" class="@error('status_job') is-invalid @enderror form-control" onChange="if(document.getElementById('status_job').value == 'Student') {document.getElementById('status_description_label').innerHTML = 'School / University Name'; document.getElementById('status_description_div').className = 'form-group';} else if(document.getElementById('status_job').value == 'Professional') {document.getElementById('status_description_label').innerHTML = 'Working Place'; document.getElementById('status_description_div').className = 'form-group';} else {document.getElementById('status_description_label').innerHTML = 'School / University / Working Place'; document.getElementById('status_description_div').className = 'form-group hidden';}">
-                  <option selected="selected" value="">-- Enter Job Status --</option>
-                  <option value="Student">Student</option>
-                  <option value="Professional">Professional</option>
-                </select>
-                @error('status_job')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group hidden @error('status_description') has-error @enderror" id="status_description_div">
-                <label for="status_description" id="status_description_label">School / University / Working Place</label>
-                <input id="status_description" name="status_description" type="text" class="@error('status_description') is-invalid @enderror form-control" placeholder="Enter Value" value="{{ old('status_description') }}">
-                @error('status_description')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-          </div>
-          {{--Form Kanan--}}
-          <div class="col-md-6">
-            <div class="col-md-12">
-              <div class="form-group @error('citizenship') has-error @enderror">
-                <label for="citizenship">Nationality</label>
-                {{--<select id="citizenship" name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control">
-                  <option selected="selected" value="">-- Enter Nationality --</option>
-                  @foreach($countries as $country)
-                    @if(old('citizenship') == $country)
-                      <option selected="selected" value="{{ $country }}">{{ $country }}</option>
-                    @else
-                      <option value="{{ $country }}">{{ $country }}</option>
-                    @endif
-                  @endforeach
-                </select>--}}
-                <input id="citizenship" name="citizenship" type="text" class="@error('citizenship') is-invalid @enderror form-control" placeholder="Enter Nationality" value="{{ old('citizenship') }}">
-                @error('citizenship')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group @error('domicile') has-error @enderror">
-                <label for="domicile">Where do you live now?</label>
-                <input id="domicile" name="domicile" type="text" class="@error('domicile') is-invalid @enderror form-control" placeholder="Enter Domicile" value="{{ old('domicile') }}">
-                @error('domicile')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group @error('timezone') has-error @enderror">
-                <label for="timezone">What is your local time zone?</label>
-                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*This information is needed to adjust Indonesian time to your local time<br>for scheduling your sessions</p>
-                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Reference: <b><a target="_blank" rel="noopener noreferrer" href="https://www.timeanddate.com/">timeanddate.com</a></b></p>
-                <select id="timezone" name="timezone" type="text" class="@error('timezone') is-invalid @enderror form-control">
-                  <option selected="selected" value="">-- Enter Current Time Zone --</option>
-                  {{--
-                  @foreach($timezones as $timezone)
-                    @if(old('timezone') == $timezone)
-                      <option selected="selected" value="{{ $timezone }}">UTC/GMT{{ $timezone }}</option>
-                    @else
-                      <option value="{{ $timezone }}">UTC/GMT{{ $timezone }}</option>
-                    @endif
-                  @endforeach
-                  --}}
-                </select>
-                @error('timezone')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group @error('indonesian_language_proficiency') has-error @enderror">
-                <label for="indonesian_language_proficiency">Indonesian Language Proficiency (Self-assessment)</label>
-                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Check the radio box below</p>
-                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*The descriptions in each level are based on ACTFL proficiency descriptions</p>
-                <p class="hidden" id="descriptionNovice" style="color:#000000; padding-top:0px; margin-top:0px;"><b>Novice Proficiency</b><br>You are categorized as a novice learner when you have no or limited prior Indonesian language knowledge.</p>
-                <p class="hidden" id="descriptionIntermediate" style="color:#000000; padding-top:0px; margin-top:0px;"><b>Intermediate Proficiency</b><br>You are categorized as an intermediate learner when you can handle a simple situation or transaction in the Indonesian language.</p>
-                <p class="hidden" id="descriptionAdvanced" style="color:#000000; padding-top:0px; margin-top:0px;"><b>Advanced Proficiency</b><br>You are categorized as an advanced learner when you are able to handle a complicated situation or transaction in the Indonesian language.</p>
-                @if(old('indonesian_language_proficiency') == 'Novice')
-                  <input checked id="radioAnswer1" name="indonesian_language_proficiency" type="radio" value="Novice" onchange="if(document.getElementById('radioAnswer1').checked) { document.getElementById('descriptionNovice').className = ''; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
-                @else
-                  <input id="radioAnswer1" name="indonesian_language_proficiency" type="radio" value="Novice" onchange="if(document.getElementById('radioAnswer1').checked) { document.getElementById('descriptionNovice').className = ''; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
-                @endif
-                <label for="radioAnswer1" class="custom-control-label">Novice</label>
-                <br>
-                @if(old('indonesian_language_proficiency') == 'Intermediate')
-                  <input checked id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
-                @else
-                  <input id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
-                @endif
-                <label for="radioAnswer2" class="custom-control-label">Intermediate</label>
-                <br>
-                @if(old('indonesian_language_proficiency') == 'Advanced')
-                  <input checked id="radioAnswer3" name="indonesian_language_proficiency" type="radio" value="Advanced" onchange="if(document.getElementById('radioAnswer3').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = ''; }">
-                @else
-                  <input id="radioAnswer3" name="indonesian_language_proficiency" type="radio" value="Advanced" onchange="if(document.getElementById('radioAnswer3').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = ''; }">
-                @endif
-                <label for="radioAnswer3" class="custom-control-label">Advanced</label>
-                @error('indonesian_language_proficiency')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-          </div>
-          {{--Form Bawah--}}
-          <div class="col-md-12">
-            <br><br>
-            <div class="col-md-2">
-              <div class="form-group @error('interest_1') has-error @enderror" id="interest_1_div">
-                <label for="interest_1">Interest (Max. 6)</label>
-                <select name="interest_1" type="text" class="@error('interest_1') is-invalid @enderror form-control" id="interest_1" onChange="if(document.getElementById('interest_1').value != '') {document.getElementById('interest_2_div').className = 'form-group';} else {document.getElementById('interest_2_div').className = 'form-group hidden'; document.getElementById('interest_3_div').className = 'form-group hidden'; document.getElementById('interest_4_div').className = 'form-group hidden'; document.getElementById('interest_5_div').className = 'form-group hidden'; document.getElementById('interest_6_div').className = 'form-group hidden'; document.getElementById('interest_2').value = ''; document.getElementById('interest_3').value = ''; document.getElementById('interest_4').value = ''; document.getElementById('interest_5').value = ''; document.getElementById('interest_6').value = '';}">
-                  <option selected="selected" value="">-- Enter Interest --</option>
-                  {{--
-                  @foreach($interests as $interest)
-                    <option value="{{ $interest }}">{{ $interest }}</option>
-                  @endforeach
-                  --}}
-                </select>
-                @error('interest_1')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="form-group hidden @error('interest_2') has-error @enderror" id="interest_2_div">
-                <label for="interest_2">&nbsp;</label>
-                <select name="interest_2" type="text" class="@error('interest_2') is-invalid @enderror form-control" id="interest_2" onChange="if(document.getElementById('interest_2').value != '') {document.getElementById('interest_3_div').className = 'form-group';} else {document.getElementById('interest_3_div').className = 'form-group hidden'; document.getElementById('interest_4_div').className = 'form-group hidden'; document.getElementById('interest_5_div').className = 'form-group hidden'; document.getElementById('interest_6_div').className = 'form-group hidden'; document.getElementById('interest_3').value = ''; document.getElementById('interest_4').value = ''; document.getElementById('interest_5').value = ''; document.getElementById('interest_6').value = '';}">
-                  <option selected="selected" value="">-- Enter Interest --</option>
-                  {{--
-                  @foreach($interests as $interest)
-                    <option value="{{ $interest }}">{{ $interest }}</option>
-                  @endforeach
-                  --}}
-                </select>
-                @error('interest_2')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="form-group hidden @error('interest_3') has-error @enderror" id="interest_3_div">
-                <label for="interest_3">&nbsp;</label>
-                <select name="interest_3" type="text" class="@error('interest_3') is-invalid @enderror form-control" id="interest_3" onChange="if(document.getElementById('interest_3').value != '') {document.getElementById('interest_4_div').className = 'form-group';} else {document.getElementById('interest_4_div').className = 'form-group hidden'; document.getElementById('interest_5_div').className = 'form-group hidden'; document.getElementById('interest_6_div').className = 'form-group hidden'; document.getElementById('interest_4').value = ''; document.getElementById('interest_5').value = ''; document.getElementById('interest_6').value = '';}">
-                  <option selected="selected" value="">-- Enter Interest --</option>
-                  {{--
-                  @foreach($interests as $interest)
-                    <option value="{{ $interest }}">{{ $interest }}</option>
-                  @endforeach
-                  --}}
-                </select>
-                @error('interest_3')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="form-group hidden @error('interest_4') has-error @enderror" id="interest_4_div">
-                <label for="interest_4">&nbsp;</label>
-                <select name="interest_4" type="text" class="@error('interest_4') is-invalid @enderror form-control" id="interest_4" onChange="if(document.getElementById('interest_4').value != '') {document.getElementById('interest_5_div').className = 'form-group';} else {document.getElementById('interest_5_div').className = 'form-group hidden'; document.getElementById('interest_6_div').className = 'form-group hidden'; document.getElementById('interest_5').value = ''; document.getElementById('interest_6').value = '';}">
-                  <option selected="selected" value="">-- Enter Interest --</option>
-                  {{--
-                  @foreach($interests as $interest)
-                    <option value="{{ $interest }}">{{ $interest }}</option>
-                  @endforeach
-                  --}}
-                </select>
-                @error('interest_4')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="form-group hidden @error('interest_5') has-error @enderror" id="interest_5_div">
-                <label for="interest_5">&nbsp;</label>
-                <select name="interest_5" type="text" class="@error('interest_5') is-invalid @enderror form-control" id="interest_5" onChange="if(document.getElementById('interest_5').value != '') {document.getElementById('interest_6_div').className = 'form-group';} else {document.getElementById('interest_6_div').className = 'form-group hidden'; document.getElementById('interest_6').value = '';}">
-                  <option selected="selected" value="">-- Enter Interest --</option>
-                  {{--
-                  @foreach($interests as $interest)
-                    <option value="{{ $interest }}">{{ $interest }}</option>
-                  @endforeach
-                  --}}
-                </select>
-                @error('interest_5')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="form-group hidden @error('interest_6') has-error @enderror" id="interest_6_div">
-                <label for="interest_6">&nbsp;</label>
-                <select name="interest_6" type="text" class="@error('interest_6') is-invalid @enderror form-control" id="interest_6">
-                  <option selected="selected" value="">-- Enter Interest --</option>
-                  {{--
-                  @foreach($interests as $interest)
-                    <option value="{{ $interest }}">{{ $interest }}</option>
-                  @endforeach
-                  --}}
-                </select>
-                @error('interest_6')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-12"></div>
-            {{--Form--}}
-            <div class="col-md-6">
-              <div class="form-group @error('target_language_experience') has-error @enderror">
-                <label for="target_language_experience">Indonesian Language Experience</label>
-                <select name="target_language_experience" type="text" class="@error('target_language_experience') is-invalid @enderror form-control" id="target_language_experience" onChange="if(document.getElementById('target_language_experience').value == 'Others') {document.getElementById('target_language_experience_value_div').className = 'form-group';} else {document.getElementById('target_language_experience_value_div').className = 'form-group hidden';} if(document.getElementById('target_language_experience').value != 'Never (no experience)' && document.getElementById('target_language_experience').value != '') {document.getElementById('description_of_course_taken_div').className = 'form-group';} else {document.getElementById('description_of_course_taken_div').className = 'form-group hidden';}">
-                  <option selected="selected" value="">-- Enter Indonesian Language Experience --</option>
-                  <option value="Never (no experience)">Never (no experience)</option>
-                  <option value="< 6 months">< 6 months</option>
-                  <option value="<= 1 year"><= 1 year</option>
-                  <option value="Others">Others</option>
-                </select>
-                @error('target_language_experience')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group hidden @error('target_language_experience_value') has-error @enderror" id="target_language_experience_value_div">
-                <label for="target_language_experience_value">I have learned Indonesian for .... years</label>
-                @if(old('target_language_experience_value'))
-                  <input id="target_language_experience_value" name="target_language_experience_value" type="text" class="@error('target_language_experience_value') is-invalid @enderror form-control" placeholder="Enter Value" value="{{ old('target_language_experience_value') }}">
-                @else
-                  <input id="target_language_experience_value" name="target_language_experience_value" type="text" class="@error('target_language_experience_value') is-invalid @enderror form-control" placeholder="Enter Value" value="0">
-                @endif
-                @error('target_language_experience_value')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group hidden @error('description_of_course_taken') has-error @enderror" id="description_of_course_taken_div">
-                <label for="description_of_course_taken">Your Learning Experiences</label>
-                <textarea id="description_of_course_taken" name="description_of_course_taken" class="@error('description_of_course_taken') is-invalid @enderror form-control" rows="5" placeholder="If you have studied the Indonesian language, briefly describe any courses you have taken! (write in the Indonesian language—if possible)">{{ old('description_of_course_taken') }}</textarea>
-                @error('description_of_course_taken')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group @error('learning_objective') has-error @enderror" id="learning_objective_div">
-                <label for="learning_objective">Your Learning Objectives</label>
-                <textarea id="learning_objective" name="learning_objective" class="@error('learning_objective') is-invalid @enderror form-control" rows="5" placeholder="Why do you want to learn the Indonesian language? (Briefly describe your learning objectives in the Indonesian language—if possible!)">{{ old('learning_objective') }}</textarea>
-                @error('learning_objective')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group @error('image_profile') has-error @enderror">
-                <label for="image_profile">Upload Profile Picture</label>
-                <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
-                <input id="image_profile" name="image_profile" type="file" accept="image/*" class="@error('image_profile') is-invalid @enderror form-control">
-                @error('image_profile')
-                  <p style="color:red">{{ $message }}</p>
-                @enderror
-              </div>
-            </div>
-          </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="box box-default">
+        <div class="box-header with-border">
+          <h3 class="box-title"><b>Payment Note</b></h3>
+        </div>
+        <div class="box-body">
+            <dl>
+              <dt><i class="fa fa-credit-card margin-r-5"></i> Bank Transfer</dt>
+              <dd>
+                NUSIA Education accepts a payment method through
+                <b>Bank Transfer, either e-banking, m-banking, or ATM</b>.
+                Below is information that might be needed
+                for the local or international transfer:<br /><br />
+                        <table>
+                          <tr style="vertical-align:baseline;">
+                            <td width="45"><b>Acc No.</b></td>
+                            <td>&nbsp;:&nbsp;&nbsp;</td>
+                            <td>8161238511</td>
+                          </tr>
+                          <tr style="vertical-align:baseline;">
+                            <td width="45"><b>Name</b></td>
+                            <td>&nbsp;:&nbsp;&nbsp;</td>
+                            <td>Nina Amalia Nurichsania</td>
+                          </tr>
+                          <tr style="vertical-align:baseline;">
+                            <td width="45"><b>Email</b></td>
+                            <td>&nbsp;:&nbsp;&nbsp;</td>
+                            <td>nusia.payment@gmail.com</td>
+                          </tr>
+                          <tr style="vertical-align:baseline;">
+                            <td width="45"><b>Bank</b></td>
+                            <td>&nbsp;:&nbsp;&nbsp;</td>
+                            <td>BANK CENTRAL ASIA (BCA)</td>
+                          </tr>
+                          <tr style="vertical-align:baseline;">
+                            <td width="45"><b>Branch</b></td>
+                            <td>&nbsp;:&nbsp;&nbsp;</td>
+                            <td>KCU Borobudur</td>
+                          </tr>
+                          <tr style="vertical-align:baseline;">
+                            <td width="45"><b>City</b></td>
+                            <td>&nbsp;:&nbsp;&nbsp;</td>
+                            <td>Malang</td>
+                          </tr>
+                          <tr style="vertical-align:baseline;">
+                            <td width="45"><b>Country</b></td>
+                            <td>&nbsp;:&nbsp;&nbsp;</td>
+                            <td>Indonesia</td>
+                          </tr>
+                          <tr style="vertical-align:baseline;">
+                            <td width="45"><b>SWIFT</b></td>
+                            <td>&nbsp;:&nbsp;&nbsp;</td>
+                            <td>CENAIDJA</td>
+                          </tr>
+                        </table>
+                <br />
+                We suggest a provider, such as <b>TransferWise</b> to avoid international money transfer fees.
+              </dd>
+            </dl>
+            <hr>
+            <dl>
+              <dt><i class="fa fa-file-text-o margin-r-5"></i> More Information</dt>
+              <dd>
+                <span style="color:#ff0000;">Contact NUSIA Finance if you encounter a problem.</span>
+              </dd>
+            </dl>
+            <hr>
+            <a href="{{ route('student.chat_financial_team.show', [89]) }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noopener noreferrer">
+              <i class="fa fa-envelope-o"></i>&nbsp;&nbsp;Chat NUSIA Finance
+            </a>
         </div>
       </div>
-      <!-- /.box-body -->
-      <div class="box-footer">
-        <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+    </div>
+    <div class="col-md-9">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title"><b>Receipt</b></h3>
+          <small class="text-muted hidden-md hidden-lg hidden-xl"><br />
+            (scroll the table horizontally to view price information)
+          </small>
+        </div>
+        <div class="box-body table-responsive">
+          <table class="table table-bordered table-hover">
+            <tr style="vertical-align:baseline;">
+              <td width="450">
+                <b>{{ $course_registration->course->title }}</b>&nbsp;&nbsp;
+              </td>
+              <td width="250">
+                <?php
+                  $last_course_package_discount = null;
+                  if($course_registration->course->course_package->course_package_discounts->toArray() != null) {
+                    foreach(array_reverse($course_registration->course->course_package->course_package_discounts->toArray()) as $cpd) {
+                      if($cpd['due_date'] == null) { $last_course_package_discount = $cpd; break; }
+                      else if($cpd['due_date'] > now()) { $last_course_package_discount = $cpd; break; }
+                    }
+                  }
+                ?>
+                @if($last_course_package_discount)
+                  <strike>${{ $course_registration->course->course_package->price }}</strike>
+                  <b style="font-size:115%; color:#007700;">${{ $last_course_package_discount['price'] }}</b>
+                  <b>
+                    x {{ $course_registration->course->course_package->count_session }}
+                    @if($course_registration->course->course_package->count_session == 1) session
+                    @else sessions
+                    @endif
+                  </b>
+                @else
+                  <b>${{ $course_registration->course->course_package->price }}</b>
+                  <b>
+                    x {{ $course_registration->course->course_package->count_session }}
+                    @if($course_registration->course->course_package->count_session == 1) session
+                    @else sessions
+                    @endif
+                  </b>
+                @endif
+              </td>
+              <td class="text-right">
+                @if($last_course_package_discount)
+                  <strike>${{ $course_registration->course->course_package->price * $course_registration->course->course_package->count_session }}</strike>
+                  <b style="font-size:115%; color:#007700;">${{ $last_course_package_discount['price'] * $course_registration->course->course_package->count_session }}</b>
+                @else
+                  <b>${{ $course_registration->course->course_package->price * $course_registration->course->course_package->count_session }}</b>
+                @endif
+              </td>
+            </tr>
+            <tr style="vertical-align:baseline;">
+              <td width="700" colspan="2"><b>Tax (no tax fee charged in this payment)</b></td>
+              <td class="text-right"><b>$0</b></td>
+            </tr>
+            <tr style="vertical-align:baseline;" class="bg-gray">
+              <td width="700" colspan="2"><b>TOTAL PAYMENT</b></td>
+              <td class="text-right">
+                @if($last_course_package_discount)
+                  <b style="font-size:115%; color:#007700;">${{ $last_course_package_discount['price'] * $course_registration->course->course_package->count_session }}</b>
+                @else
+                  <b>${{ $course_registration->course->course_package->price * $course_registration->course->course_package->count_session }}</b>
+                @endif
+              </td>
+            </tr>
+          </table>
+          <hr>
+@if($is_waiting_for_confirmation == 0)
+          <form role="form" method="post" action="{{ route('student.upload_payment_evidence.update', [$course_registration->id]) }}" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+@endif
+            <div class="box-body">
+              <div class="row">
+                {{--Form Kiri--}}
+                <div class="col-md-6">
+                  <div class="col-md-12">
+                    <div class="form-group @error('account_number') has-error @enderror">
+                      <label for="account_number">Your Account Number</label>
+                      @if($is_waiting_for_confirmation)
+                        <input name="account_number" type="text" class="form-control disabled" placeholder="Enter Your Account Number" value="{{ explode(" | ", $course_registration->course->description)[0] }}" disabled>
+                      @else
+                        <input name="account_number" type="text" class="@error('account_number') is-invalid @enderror form-control" placeholder="Enter Your Account Number" value="{{ old('account_number') }}">
+                      @endif
+                      @error('account_number')
+                        <p style="color:red">{{ $message }}</p>
+                      @enderror
+                    </div>
+                  </div>
+                </div>
+                {{--Form Kanan--}}
+                <div class="col-md-6">
+                  <div class="col-md-12">
+                    <div class="form-group @error('account_name') has-error @enderror">
+                      <label for="account_name">Your Account Name</label>
+                      @if($is_waiting_for_confirmation)
+                        <input name="account_name" type="text" class="form-control disabled" placeholder="Enter Your Account Name" value="{{ explode(" | ", $course_registration->course->description)[1] }}" disabled>
+                      @else
+                        <input name="account_name" type="text" class="@error('account_name') is-invalid @enderror form-control" placeholder="Enter Your Account Name" value="{{ old('account_name') }}">
+                      @endif
+                      @error('account_name')
+                        <p style="color:red">{{ $message }}</p>
+                      @enderror
+                    </div>
+                  </div>
+                </div>
+                {{--Form Tengah--}}
+                <div class="col-md-12">
+                  <div class="col-md-12">
+                    <label for="payment_evidence" class="control-label">Upload Payment Evidence (image only)</label>
+                    <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
+                    @if($is_waiting_for_confirmation)
+                      <input id="payment_evidence" name="payment_evidence" type="file" accept="image/*" class="form-control disabled" disabled>
+                    @else
+                      <input id="payment_evidence" name="payment_evidence" type="file" accept="image/*" class="@error('payment_evidence') is-invalid @enderror form-control">
+                    @endif
+                    @error('payment_evidence')
+                      <p style="color:red">{{ $message }}</p>
+                    @enderror
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+{{--
+              <a href="{{ route('student.upload_placement_test.show', [$course_registration->id]) }}" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(document.getElementById('payment_evidence').value == '') { alert('The payment evidence cannot be empty.'); return false; } if( confirm('Are you sure to upload this payment evidence? This action cannot be undone.') ) return true; else return false;">
+                Upload Payment Evidence
+              </a>
+--}}
+              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(document.getElementById('payment_evidence').value == '') { alert('The payment evidence cannot be empty.'); return false; } if( confirm('Are you sure to upload this payment evidence? This action cannot be undone.') ) return true; else return false;">
+                Upload Payment Evidence
+              </button>
+            </div>
+@if($is_waiting_for_confirmation == 0)
+          </form>
+@endif
+        </div>
       </div>
-    </form>
+    </div>
   </div>
-  <!-- /.box -->
 @stop

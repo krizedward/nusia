@@ -1,6 +1,6 @@
 @extends('layouts.admin.default')
 
-@section('title', 'Choosing Course Registrations')
+@section('title', 'Choosing Course')
 
 @include('layouts.css_and_js.all')
 
@@ -20,7 +20,18 @@
     <input type="hidden" id="choice_mt" name="choice_mt" value="">
     <input type="hidden" id="older_choice" name="older_choice" value="{{ $current_course_registration }}">
     <input type="hidden" id="is_paid" name="is_paid" value="1">
+    <input type="hidden" id="promo_code" name="promo_code" value="">
     <div class="row">
+      @if($current_course_registration > 0)
+        <div class="col-md-12">
+          <div class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <p>
+              <strong><i class="fa fa-book"></i>&nbsp;&nbsp; You might choose another course, replacing the current course.</strong>
+            </p>
+          </div>
+        </div>
+      @endif
       @if(session('error_message'))
         <div class="col-md-12">
           <div class="alert alert-danger alert-dismissible">
@@ -52,11 +63,6 @@
                         <p class="no-margin">
                           <b>{{ $mt->duration_in_minute }} minutes/session</b>
                         </p>
-                        @if($mt->name == 'General Indonesian Language')
-                          <p class="no-margin" style="color:#ff0000;">
-                            <b>This course has one free class so you will gain 16 sessions in total!</b>
-                          </p>
-                        @endif
                       </div>
                       <!-- /.box-header -->
                       <div class="box-body">
@@ -66,15 +72,13 @@
                           </dt>
                           <dd>
                             {{ $mt->description }}<br />
-                            {{--
-                            @if($mt->name == 'Language Partners')
+                            @if($mt->name == 'General Indonesian Language')
                               <ul>
                                 @foreach($mt->material_type_values as $mtv)
                                   <li>{{ $mtv->value }}</li>
                                 @endforeach
                               </ul>
                             @endif
-                            --}}
                           </dd>
                         </dl>
                         <hr>
@@ -91,6 +95,10 @@
                             <span style="color:#ff0000;">Contact us if you encounter a problem.</span>
                           </dd>
                         </dl>
+                        <hr>
+                        <a href="{{ route('non_admin.chat_admin.show', [1]) }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noopener noreferrer">
+                          <i class="fa fa-envelope-o"></i>&nbsp;&nbsp;Chat NUSIA Admin
+                        </a>
                         {{--
                         <hr>
                         --}}
@@ -126,10 +134,10 @@
                         $arr = [];
                         foreach($course_packages as $cp) {
                           // Melakukan pemeriksaan ID material type yang sama.
-                          if($cp->material_type->id == $mt->id) {
+                          if($cp->material_type_id == $mt->id) {
                             foreach($course_types as $ct) {
                               // Menghindari duplikasi pada course type (apabila ada yang sama, dan terdapat duplikat karena perbedaan proficiency level).
-                              if($cp->course_type->id == $ct->id && !in_array($ct->id, $arr)) {
+                              if($cp->course_type_id == $ct->id && !in_array($ct->id, $arr)) {
                                 array_push($arr, $ct->id);
                                 break;
                               }
@@ -151,34 +159,34 @@
                               </div>
                             </div>
                             <div class="box-body">
-                              @if($mt->name != 'Language Partners')
+                              {{--@if($mt->name != 'Indonesian for Specific Purposes')--}}
                                 <strong><i class="fa fa-circle-o margin-r-5"></i> Features</strong>
                                 <ul>
-                                  @if($mt->name == 'General Indonesian Language')
+                                  @if($mt->name == 'General Indonesian Language' || $mt->name == 'Indonesian for Young and Teenage Learners')
                                     <li><b>{{ $ct->brief_description_1 }} ({{ $ct->brief_description_2 }})</b></li>
                                   @endif
                                   @foreach($ct->course_type_values as $ctv)
                                     <li>{{ $ctv->value }}</li>
                                   @endforeach
                                 </ul>
-                              @else
+                              {{--@else
                                 <strong><i class="fa fa-circle-o margin-r-5"></i> Features</strong>
                                 <ul>
                                   @foreach($mt->material_type_values as $mtv)
                                     <li>{{ $mtv->value }}</li>
                                   @endforeach
                                 </ul>
-                              @endif
+                              @endif--}}
                               {{-- <hr> --}}
-                              @if($mt->name == 'Cultural Classes')
+                              @if($mt->name == 'Indonesian Conversation' || $mt->name == 'Indonesian Culture' || $mt->name == 'Indonesian for Specific Purposes')
                                 <table class="table table-bordered">
                                   <tr>
                                     <th>Name</th>
-                                    <th>Price (per level)</th>
+                                    <th>Price (per session)</th>
                                     <th style="width:5%;">Choose</th>
                                   </tr>
                                   @foreach($ct->course_packages as $j => $cp)
-                                    @if($j % 2 == 0)
+                                    @if($j % 2 == 0 && $mt->name == 'Indonesian Culture')
                                       <tr>
                                         <td class="text-center" colspan="3">{{ $cp->description }}</td>
                                       </tr>
@@ -190,8 +198,21 @@
                                         </a>
                                       </td>
                                       <td>
-                                        <strike>${{ $cp->price }}</strike>
-                                        <b style="font-size:115%; color:#007700;">${{ $cp->course_package_discounts->last()->price }}</b><br />
+                                        @if($cp->course_package_discounts->toArray() != null)
+                                          <strike>${{ $cp->price }}</strike>
+                                          <b style="font-size:115%; color:#007700;">${{ $cp->course_package_discounts->last()->price }}</b><br />
+                                          <span class="label label-danger"><b>Save {{ round(100 * ($cp->price - $cp->course_package_discounts->last()->price) / $cp->price) }}%</b></span><br />
+                                        @else
+                                          @if($cp->price != 0)
+                                            ${{ $cp->price }}
+                                          @else
+                                            @if($mt->name == 'Indonesian for Specific Purposes')
+                                              <span style="color:#007700;"><b>Company-subsidized</b></span><br />
+                                            @else
+                                              $0
+                                            @endif
+                                          @endif
+                                        @endif
                                       </td>
                                       <td class="text-center">
                                         <?php
@@ -204,9 +225,14 @@
                                           }
                                         ?>
                                         @if($is_allowed_to_register)
+{{--
                                           <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                             <b>BOOK NOW!</b>
                                           </button>
+--}}
+                                          <a href="#" data-toggle="modal" data-target="#CourseChoice{{$cp->id}}" class="btn btn-xs btn-flat btn-primary">
+                                            <b>BOOK NOW!</b>
+                                          </a>
                                         @else
                                           <button disabled class="btn btn-xs btn-flat btn-default btn-disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
                                             <b>N/A</b>
@@ -219,22 +245,30 @@
                                         <div class="modal-content">
                                           <div class="box box-primary">
                                             <div class="box-body box-profile">
-                                              <h3 class="profile-username text-center"><b>{{ $cp->title }}</b></h3>
-                                              <p class="text-muted text-center">
-                                                <!--span style="font-size:153%;">$ {{ $cp->price - $cp->course_package_discounts->last()->price }} savings</span-->
-                                                <!--label class="label label-success">$ {{ $cp->price - $cp->course_package_discounts->last()->price }} savings</label-->
-                                                <label class="label label-success" style="font-size:153%;">$ {{ $cp->price - $cp->course_package_discounts->last()->price }} savings</label>
-                                              </p>
-                                              <ul class="list-group list-group-unbordered">
-                                                <li class="list-group-item text-center">
-                                                  <b style="font-size:153%;"><strike>${{ $cp->price }}</strike></b><br />
-                                                  {{ $cp->course_package_discounts->last()->description }}<br />
-                                                  <b style="font-size:135%;">Now is only ${{ $cp->course_package_discounts->last()->price }}/level</b><br />
-                                                  <span style="color:#ff0000;">{{ $cp->refund_description }}</span>
-                                                </li>
-                                              </ul>
+                                              <h3 class="profile-username text-center"><b>Register in {{ $cp->title }}</b></h3>
+                                              @if($cp->refund_description != null || $cp->course_package_discounts->toArray() != null && $cp->course_package_discounts->last()->description)
+                                                <ul class="list-group list-group-unbordered">
+                                                  <li class="list-group-item text-center">
+                                                    @if($cp->course_package_discounts->toArray() != null && $cp->course_package_discounts->last()->description)
+                                                      <label class="label label-danger" style="font-size:120%; display:inline-block; margin-bottom:4px;">{{ $cp->course_package_discounts->last()->description }}</label><br />
+                                                      <b style="font-size:153%;"><strike>${{ $cp->price }}</strike></b><br />
+                                                      <b style="font-size:135%;">Now is only ${{ $cp->course_package_discounts->last()->price }}/session</b><br />
+                                                    @endif
+                                                    <span style="color:#ff0000;">{{ $cp->refund_description }}</span>
+                                                  </li>
+                                                </ul>
+                                              @else
+                                                <br />
+                                              @endif
+                                              <div class="form-group @error('promo_code{{$cp->id}}') has-error @enderror">
+                                                <label for="promo_code{{$cp->id}}">Promo Code</label>
+                                                <input id="promo_code{{$cp->id}}" name="promo_code{{$cp->id}}" type="text" class="@error('promo_code{{$cp->id}}') is-invalid @enderror form-control" placeholder="Enter Promo Code (if any)" value="{{ old('promo_code' . $cp->id) }}">
+                                                @error('promo_code{{$cp->id}}')
+                                                  <p style="color:red">{{ $message }}</p>
+                                                @enderror
+                                              </div>
                                               @if($is_allowed_to_register)
-                                                <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                                <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; document.getElementById('promo_code').value = document.getElementById('promo_code{{$cp->id}}').value; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                                   <b>BOOK NOW!</b>
                                                 </button>
                                               @else
@@ -253,7 +287,7 @@
                                       </div>
                                       <!-- /.modal-dialog -->
                                     </div>
-                                    <tr>
+                                    <tr class="hidden">
                                       <td>
                                         <a href="#" data-toggle="modal" data-target="#CourseChoiceFree{{$cp->id}}" {{-- class="btn btn-s btn-primary" --}}>
                                           {{ $cp->title }} (Free Classes)
@@ -291,7 +325,7 @@
                                         <div class="modal-content">
                                           <div class="box box-primary">
                                             <div class="box-body box-profile">
-                                              <h3 class="profile-username text-center"><b>{{ $cp->title }} (Free Classes)</b></h3>
+                                              <h3 class="profile-username text-center"><b>Register in {{ $cp->title }} (Free Classes)</b></h3>
                                               <ul class="list-group list-group-unbordered">
                                                 <li class="list-group-item text-center">
                                                   <b style="font-size:153%;">$0</b><br />
@@ -324,7 +358,7 @@
                                 <table class="table table-bordered">
                                   <tr>
                                     <th>Name</th>
-                                    <th>Price (per level)</th>
+                                    <th>Price (per session)</th>
                                     <th style="width:5%;">Choose</th>
                                   </tr>
                                   <tr>
@@ -335,7 +369,10 @@
                                     </td>
                                     <td>
                                       <strike>${{ $ct->course_packages->last()->price }}</strike>
-                                      <b style="font-size:115%; color:#007700;">${{ $ct->course_packages->last()->course_package_discounts->last()->price }}</b><br />
+                                      @if($ct->course_packages->last()->course_package_discounts->toArray() != null)
+                                        <b style="font-size:115%; color:#007700;">${{ $ct->course_packages->last()->course_package_discounts->last()->price }}</b>
+                                        <span class="label label-danger"><b>Save {{ round(100 * ($ct->course_packages->last()->price - $ct->course_packages->last()->course_package_discounts->last()->price) / $ct->course_packages->last()->price) }}%</b></span><br />
+                                      @endif
                                     </td>
                                     <td class="text-center">
                                       <?php
@@ -348,9 +385,26 @@
                                         }
                                       ?>
                                       @if($is_allowed_to_register)
-                                        <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('choice').value = '{{ $ct->course_packages->first()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+{{--
+                                        <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('choice').value = '{{ $ct->course_packages->last()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                           <b>BOOK NOW!</b>
                                         </button>
+--}}
+                                        @if($mt->name == 'Indonesian for Young and Teenage Learners')
+                                          @if(Auth::user()->student->age >= 7 && Auth::user()->student->age <= 17)
+                                            <a href="#" data-toggle="modal" data-target="#CourseChoice{{$ct->course_packages->last()->id}}" class="btn btn-xs btn-flat btn-primary">
+                                              <b>BOOK NOW!</b>
+                                            </a>
+                                          @else
+                                            <button onclick="alert('You are not eligible to choose this course type. Please contact us for more information.'); return false;" class="btn btn-xs btn-flat btn-default disabled">
+                                              <b>NOT ELIGIBLE</b>
+                                            </button>
+                                          @endif
+                                        @else
+                                          <a href="#" data-toggle="modal" data-target="#CourseChoice{{$ct->course_packages->last()->id}}" class="btn btn-xs btn-flat btn-primary">
+                                            <b>BOOK NOW!</b>
+                                          </a>
+                                        @endif
                                       @else
                                         <button disabled class="btn btn-xs btn-flat btn-default btn-disabled" type="reset" onclick="alert('Unavailable, you are currently registered in the similar material. You can only register in one course per material, at a time.'); return false;">
                                           <b>N/A</b>
@@ -363,19 +417,30 @@
                                       <div class="modal-content">
                                         <div class="box box-primary">
                                           <div class="box-body box-profile">
-                                            <h3 class="profile-username text-center" style="font-size:235%;"><b>{{ $ct->name }}</b></h3>
+                                            <h3 class="profile-username text-center"><b>Register in {{ $ct->name }}</b></h3>
                                             {{--<p class="text-muted text-center">&nbsp;</p>--}}
                                             <ul class="list-group list-group-unbordered">
                                               <li class="list-group-item text-center">
-                                                <label class="label label-success" style="font-size:120%;">$ {{ $ct->course_packages->last()->price - $ct->course_packages->last()->course_package_discounts->last()->price }} savings</label><br />
+                                                @if($ct->course_packages->last()->course_package_discounts->toArray() != null && $ct->course_packages->last()->course_package_discounts->last()->description)
+                                                  {{-- <label class="label label-success" style="font-size:120%;">$ {{ $ct->course_packages->last()->price - $ct->course_packages->last()->course_package_discounts->last()->price }} savings</label><br /> --}}
+                                                  <label class="label label-danger" style="font-size:120%; display:inline-block; margin-bottom:4px;">{{ $ct->course_packages->last()->course_package_discounts->last()->description }}</label><br />
+                                                @endif
                                                 <b style="font-size:153%;"><strike>${{ $ct->course_packages->last()->price }}</strike></b><br />
-                                                {{ $ct->course_packages->last()->course_package_discounts->last()->description }}<br />
-                                                <b style="font-size:135%;">Now is only ${{ $ct->course_packages->last()->course_package_discounts->last()->price }}/level</b><br />
+                                                @if($ct->course_packages->last()->course_package_discounts->toArray() != null)
+                                                  <b style="font-size:135%;">Now is only ${{ $ct->course_packages->last()->course_package_discounts->last()->price }}/session</b><br />
+                                                @endif
                                                 <span style="color:#ff0000;">{{ $ct->course_packages->last()->refund_description }}</span>
                                               </li>
                                             </ul>
+                                            <div class="form-group @error('promo_code{{$ct->course_packages->last()->id}}') has-error @enderror">
+                                              <label for="promo_code{{$ct->course_packages->last()->id}}">Promo Code</label>
+                                              <input id="promo_code{{$ct->course_packages->last()->id}}" name="promo_code{{$ct->course_packages->last()->id}}" type="text" class="@error('promo_code{{$ct->course_packages->last()->id}}') is-invalid @enderror form-control" placeholder="Enter Promo Code (if any)" value="{{ old('promo_code' . $ct->course_packages->last()->id) }}">
+                                              @error('promo_code{{$ct->course_packages->last()->id}}')
+                                                <p style="color:red">{{ $message }}</p>
+                                              @enderror
+                                            </div>
                                             @if($is_allowed_to_register)
-                                              <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                              <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('choice').value = '{{ $ct->course_packages->last()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; document.getElementById('promo_code').value = document.getElementById('promo_code{{$ct->course_packages->last()->id}}').value; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                                 <b>BOOK NOW!</b>
                                               </button>
                                             @else
@@ -394,7 +459,7 @@
                                     </div>
                                     <!-- /.modal-dialog -->
                                   </div>
-                                  <tr>
+                                  <tr class="hidden">
                                     <td>
                                       <a href="#" data-toggle="modal" data-target="#CourseChoiceFree{{$ct->course_packages->last()->id}}" {{-- class="btn btn-s btn-primary" --}}>
                                         {{ $ct->name }} (Free Classes)
@@ -417,7 +482,7 @@
                                       {{-- 1 baris kode di bawah ini hanya untuk sementara --}}
                                       <?php $is_allowed_to_register = 0; ?>
                                       @if($is_allowed_to_register)
-                                        <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $ct->course_packages->first()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                        <button class="btn btn-xs btn-flat btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $ct->course_packages->last()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                           <b>BOOK NOW!</b>
                                         </button>
                                       @else
@@ -432,7 +497,7 @@
                                       <div class="modal-content">
                                         <div class="box box-primary">
                                           <div class="box-body box-profile">
-                                            <h3 class="profile-username text-center" style="font-size:235%;"><b>{{ $ct->name }} (Free Classes)</b></h3>
+                                            <h3 class="profile-username text-center" style="font-size:235%;"><b>Register in {{ $ct->name }} (Free Classes)</b></h3>
                                             {{--<p class="text-muted text-center">&nbsp;</p>--}}
                                             <ul class="list-group list-group-unbordered">
                                               <li class="list-group-item text-center">
@@ -441,7 +506,7 @@
                                               </li>
                                             </ul>
                                             @if($is_allowed_to_register)
-                                              <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $cp->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
+                                              <button style="width:100%;" class="btn btn-s btn-primary" onclick="document.getElementById('is_paid').value = '0'; document.getElementById('choice').value = '{{ $ct->course_packages->last()->id }}'; document.getElementById('choice_mt').value = '{{ $mt->id }}'; if( confirm('Are you sure to book this course: {{ $mt->name }} - {{ $ct->name }}?') ) return true; else return false;">
                                                 <b>BOOK NOW!</b>
                                               </button>
                                             @else

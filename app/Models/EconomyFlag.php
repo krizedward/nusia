@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class EconomyFlag extends Model
 {
     use SoftDeletes;
-    use AutoNumberTrait;
+//    use AutoNumberTrait;
 
     protected $table = "economy_flags";
     protected $primaryKey = 'id';
@@ -21,16 +21,16 @@ class EconomyFlag extends Model
         'name'
     ];
 
-    public function getAutoNumberOptions()
-    {
-        return [
-            'code' => [
-                'format' => 'ECF?', // Format kode yang akan digunakan.
-                'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
-                //refrensi : https://www.lab-informatika.com/membuat-kode-otomatis-di-laravel
-            ]
-        ];
-    }
+//    public function getAutoNumberOptions()
+//    {
+//        return [
+//            'code' => [
+//                'format' => 'ECF?', // Format kode yang akan digunakan.
+//                'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
+//                //refrensi : https://www.lab-informatika.com/membuat-kode-otomatis-di-laravel
+//            ]
+//        ];
+//    }
 
     /**
      * Define a relationship.

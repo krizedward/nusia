@@ -205,7 +205,7 @@ class RegisteredController extends Controller
                 return redirect()->route('student.choose_course.index');
             } else if(Auth::user()->student->course_registrations->first()->course_payments->toArray() == null) {
                 return redirect()->route('student.complete_payment_information.show', [Auth::user()->student->course_registrations->first()->id]);
-            } else if(Auth::user()->student->course_registrations->first()->course_payments->last()->status == 'Not Confirmed') {
+            } else if(Auth::user()->student->course_registrations->first()->course_payments->last()->payment_time == null) {
                 return redirect()->route('student.upload_payment_evidence.show', [Auth::user()->student->course_registrations->first()->id]);
             } else if(Auth::user()->student->course_registrations->first()->placement_test == null || Auth::user()->student->course_registrations->first()->placement_test->status == 'Not Passed') {
                 return redirect()->route('student.upload_placement_test.show', [Auth::user()->student->course_registrations->first()->id]);
