@@ -98,6 +98,8 @@ class FinancialTeamController extends Controller
     public function student_payment_index()
     {
         // melihat daftar pembayaran student
+        $course_payments = CoursePayment::where('status', 'Not Confirmed')->get();
+        return view('role_financial_team.course_payments_index', compact('course_payments'));
     }
 
     public function student_payment_show($course_payment_id)
@@ -117,6 +119,10 @@ class FinancialTeamController extends Controller
     public function student_payment_update(Request $request, $course_payment_id)
     {
         // mengonfirmasi bukti pembayaran
+        CoursePayment::find($course_payment_id)->update([
+            'status' => 'Confirmed',
+        ]);
+        return redirect()->back();
     }
 
     public function chat_student_index()

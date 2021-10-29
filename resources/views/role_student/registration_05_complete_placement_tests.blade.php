@@ -125,16 +125,19 @@
           @endif
           <div class="box-body">
             <div class="row">
-
-
               <div class="col-md-12">
                 <div class="col-md-12">
-                  <div class="form-group @error('indonesian_language_proficiency') has-error @enderror">
+                  <div class="form-group">
+                    <label for="indonesian_language_proficiency">Registered for</label>
+                    <input id="indonesian_language_proficiency" type="text" class="form-control" disabled value="{{ $course_registration->course->course_package->material_type->name }}">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="col-md-12">
+                  <div class="form-group">
                     <label for="indonesian_language_proficiency">Indonesian Language Proficiency (Self-assessment)</label>
-                    <input id="indonesian_language_proficiency" name="indonesian_language_proficiency" type="text" class="@error('indonesian_language_proficiency') is-invalid @enderror form-control" disabled value="{{ Auth::user()->student->indonesian_language_proficiency }}">
-                    @error('indonesian_language_proficiency')
-                      <p style="color:red">{{ $message }}</p>
-                    @enderror
+                    <input id="indonesian_language_proficiency" type="text" class="form-control" disabled value="{{ Auth::user()->student->indonesian_language_proficiency }}">
                   </div>
                 </div>
               </div>
@@ -152,10 +155,38 @@
                   After that, upload it to Google Drive or other file storages
                   and prepare a sharable link to the video.
                 </p>
-                <p class="hidden" id="descriptionNoviceLow" style="padding-top:0px; margin-top:0px;"><b>Novice Low Proficiency</b><br>
-                  1. Pertanyaan 1<br />
-                  2. Pertanyaan 2<br />
-                  3. Pertanyaan 3<br />
+                <p class="hidden" id="descriptionNoviceLow" style="padding-top:0px; margin-top:0px;"><b>NOVICE LOW PROFICIENCY</b><br>
+                  <b>1. Tolong ceritakan tentang diri Anda!</b><br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; (nama, asal, kuliah/bekerja, tempat tinggal)<br />
+{{--
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Siapa nama Anda?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Dari mana asal Anda?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Apakah Anda kuliah atau bekerja?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Di mana Anda tinggal?<br />
+--}}
+                  <b>2. Apa aktivitas Anda sehari-hari?</b><br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; (mulai dari bangun tidur sampai tidur lagi)<br />
+                  <b>3. Ceritakan tentang hobi Anda!</b><br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; (Apa hobi Anda? Melakukan hobi dengan siapa? Di mana?)<br />
+{{--
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Apa hobi Anda?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Melakukan hobi dengan siapa?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Di mana melakukan hobi itu?<br />
+--}}
+                  <b>4. Ceritakan tentang makanan favorit Anda?</b><br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; (Apa makanan favorit Anda? Membeli atau memasak makanan itu?)<br />
+{{--
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Apa makanan favorit Anda?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Membeli atau memasak makanan itu?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Jika membeli, di mana?<br />
+--}}
+                  <b>5. Ceritakan tentang liburan favorit Anda!</b><br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; (Apakah Anda suka berlibur? Berlibur ke mana? Kapan?)<br />
+{{--
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Apakah Anda suka berlibur?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Berlibur ke mana?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Kapan?<br />
+--}}
                 </p>
                 <p class="hidden" id="descriptionNoviceMid" style="padding-top:0px; margin-top:0px;"><b>Novice Low Proficiency</b><br>
                   1. Pertanyaan 1<br />
@@ -168,16 +199,16 @@
                   3. Pertanyaan 3<br />
                 </p>
                 @if(old('indonesian_language_proficiency') == 'Novice')
-                  <input checked id="radioAnswer1" name="indonesian_language_proficiency" type="radio" value="Novice" onchange="if(document.getElementById('radioAnswer1').checked) { document.getElementById('descriptionNovice').className = ''; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
+                  <input checked id="radioAnswer1" name="indonesian_language_proficiency" type="radio" value="Novice" onchange="if(document.getElementById('radioAnswer1').checked) { document.getElementById('descriptionNoviceLow').className = ''; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
                 @else
-                  <input id="radioAnswer1" name="indonesian_language_proficiency" type="radio" value="Novice" onchange="if(document.getElementById('radioAnswer1').checked) { document.getElementById('descriptionNovice').className = ''; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
+                  <input id="radioAnswer1" name="indonesian_language_proficiency" type="radio" value="Novice" onchange="if(document.getElementById('radioAnswer1').checked) { document.getElementById('descriptionNoviceLow').className = ''; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
                 @endif
                 <label for="radioAnswer1" class="custom-control-label">Novice</label>
                 <br />
                 @if(old('indonesian_language_proficiency') == 'Intermediate')
-                  <input checked id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
+                  <input checked id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNoviceLow').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
                 @else
-                  <input id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
+                  <input id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNoviceLow').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
                 @endif
                 <label for="radioAnswer2" class="custom-control-label">Intermediate</label>
                 <br />

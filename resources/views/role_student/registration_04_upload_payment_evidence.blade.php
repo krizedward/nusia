@@ -196,7 +196,12 @@
                     <label for="payment_evidence" class="control-label">Upload Payment Evidence (image only)</label>
                     <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
                     @if($is_waiting_for_confirmation)
+                      <a href="{{ asset('/uploads/student/payment/' . $course_registration->course_payments->last()->path) }}" target="_blank" class="btn btn-flat btn-xs bg-blue">
+                        <i class="fa fa-eye"></i>&nbsp;&nbsp;View Payment Evidence
+                      </a>
+                      {{--
                       <input id="payment_evidence" name="payment_evidence" type="file" accept="image/*" class="form-control disabled" disabled>
+                      --}}
                     @else
                       <input id="payment_evidence" name="payment_evidence" type="file" accept="image/*" class="@error('payment_evidence') is-invalid @enderror form-control">
                     @endif
@@ -209,14 +214,21 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
-{{--
-              <a href="{{ route('student.upload_placement_test.show', [$course_registration->id]) }}" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(document.getElementById('payment_evidence').value == '') { alert('The payment evidence cannot be empty.'); return false; } if( confirm('Are you sure to upload this payment evidence? This action cannot be undone.') ) return true; else return false;">
-                Upload Payment Evidence
-              </a>
---}}
-              <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(document.getElementById('payment_evidence').value == '') { alert('The payment evidence cannot be empty.'); return false; } if( confirm('Are you sure to upload this payment evidence? This action cannot be undone.') ) return true; else return false;">
-                Upload Payment Evidence
-              </button>
+              @if($is_waiting_for_confirmation)
+                <?php
+                  $submitted_at = \Carbon\Carbon::parse($course_registration->course_payments->last()->payment_time)->setTimezone(Auth::user()->timezone);
+                ?>
+                <p class="text-center">
+                  <b style="color:#cc0000;">
+                    Submitted on {{ $submitted_at->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}.<br />
+                    The result will be announced by email no later than 3 working days after this time.
+                  </b>
+                </p>
+              @else
+                <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(document.getElementById('payment_evidence').value == '') { alert('The payment evidence cannot be empty.'); return false; } if( confirm('Are you sure to upload this payment evidence? This action cannot be undone.') ) return true; else return false;">
+                  Upload Payment Evidence
+                </button>
+              @endif
             </div>
 @if($is_waiting_for_confirmation == 0)
           </form>
