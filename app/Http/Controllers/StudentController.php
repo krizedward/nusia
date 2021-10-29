@@ -110,7 +110,7 @@ class StudentController extends Controller
                 return redirect()->route('student.choose_course.index');
             } else if(Auth::user()->student->course_registrations->first()->course_payments->toArray() == null) {
                 return redirect()->route('student.complete_payment_information.show', [Auth::user()->student->course_registrations->first()->id]);
-            } else if(Auth::user()->student->course_registrations->first()->course_payments->last()->status == 'Not Confirmed') {
+            } else if(Auth::user()->student->course_registrations->first()->course_payments->last()->status != 'Confirmed') {
                 return redirect()->route('student.upload_payment_evidence.show', [Auth::user()->student->course_registrations->first()->id]);
             } else if(Auth::user()->student->course_registrations->first()->placement_test == null || Auth::user()->student->course_registrations->first()->placement_test->status == 'Not Passed') {
                 return redirect()->route('student.upload_placement_test.show', [Auth::user()->student->course_registrations->first()->id]);
@@ -171,6 +171,11 @@ class StudentController extends Controller
     public function student_registration_form_update(Request $request, $user_id)
     {
         // mendaftar course: mengisi formulir registrasi student
+        if(!$this->is_student()) {
+            //menampilkan halaman dashboard
+            return redirect()->route('registered.dashboard.index');
+        }
+
         $interest = array(
             $request->interest_1,
             $request->interest_2,
@@ -351,6 +356,11 @@ class StudentController extends Controller
     public function choose_course_index($course_registration_id = 0)
     {
         // mendaftar course: memilih jenis course
+        if(!$this->is_student()) {
+            //menampilkan halaman dashboard
+            return redirect()->route('registered.dashboard.index');
+        }
+
             $material_types = MaterialType
               ::where('name', 'NOT LIKE', '%Trial%')
               ->get();
@@ -437,10 +447,18 @@ class StudentController extends Controller
                 ::where('student_id', Auth::user()->student->id)
                 ->where('id', $course_registration_id)
                 ->first();
-            // URI dapat diganti oleh Student.
-            // Apabila diganti ke ID selain course yang terdaftar, redirect ke route ini.
+            $current_course_registration_data = CourseRegistration
+                ::where('student_id', Auth::user()->student->id)
+                ->where('id', $course_registration_id)
+                ->first();
             if($current_course_registration == null) {
-                return redirect()->route('student.choose_course.index');
+                // URI dapat diganti oleh Student.
+                // Apabila diganti ke ID selain course yang terdaftar, redirect ke route ini.
+                return redirect()->route('registered.dashboard.index');
+            } else if($current_course_registration->course_payments->toArray() != null) {
+                // Jika informasi pendaftaran course tsb sudah dikonfirmasi tidak dapat diubah,
+                // maka lakukan redirect ke route ini.
+                return redirect()->route('registered.dashboard.index');
             }
             $current_course_registration = $current_course_registration->id;
             // LANJUTKAN DARI KODE INI (apa lagi ya yang perlu ditambahkan?)
@@ -448,8 +466,10 @@ class StudentController extends Controller
             // Jika Student memilih untuk mendaftar course baru,
             // selain daftar course yang sudah/sedang didaftarkan sebelumnya.
             // GANTI KODE DI BAGIAN INI DENGAN KODE YANG SESUAI.
+            $current_course_registration_data = null;
             $current_course_registration = -1;
         } else if($course_registration_id == 0) {
+            $current_course_registration_data = null;
             if($all_not_completely_registered_courses->count() == 0) {
                 // Jika Student BELUM/TIDAK SEDANG melakukan pendaftaran dalam course manapun,
                 // ubah nilai $current_course_registration menjadi -1.
@@ -461,14 +481,15 @@ class StudentController extends Controller
                 $current_course_registration = 0;
             }
         } else {
-            // Jika Student melakukan pengeditan di inspect elements,
-            // maka lakukan redirect kembali ke controller ini.
-            return redirect()->route('student.choose_course.index');
+            // Jika Student melakukan pengeditan di inspect elements
+            // (nilai parameter negatif selain -1),
+            // maka lakukan redirect ke route ini.
+            return redirect()->route('registered.dashboard.index');
         }
                 
         return view('role_student.registration_02_choose_materials', compact(
             'material_types', 'course_types', 'course_packages', 'course_package_discounts',
-            'current_course_registration', /*'registered_early_classes',*/
+            'current_course_registration', 'current_course_registration_data', /*'registered_early_classes',*/
             'all_current_running_course_registrations', 'all_not_completely_registered_courses'
         ));
     }
@@ -481,6 +502,10 @@ class StudentController extends Controller
         // Hal ini dilakukan untuk menghindari display pesan error oleh sistem (for security).
         if(!Auth::check()) {
             return redirect()->route('student.choose_course.index');
+        }
+        if(!$this->is_student()) {
+            //menampilkan halaman dashboard
+            return redirect()->route('registered.dashboard.index');
         }
 
         // LANGKAH 2: Apakah Student memilih ID yang sesuai dengan ID yang ditampilkan pada layar?
@@ -642,6 +667,11 @@ class StudentController extends Controller
     public function complete_payment_information_show($course_registration_id)
     {
         // mendaftar course: melengkapi informasi pembayaran
+
+        if(!$this->is_student()) {
+            //menampilkan halaman dashboard
+            return redirect()->route('registered.dashboard.index');
+        }
         
         // Fungsi ini hanya dapat diakses oleh Student
         // yang sudah pernah mendaftar dalam material type yang sama (sebelumnya).
@@ -652,10 +682,14 @@ class StudentController extends Controller
             ::where('student_id', Auth::user()->student->id)
             ->where('id', $course_registration_id)->get()->first();
         
-        // Jika informasi pendaftaran diubah oleh Student melalui URI,
-        // maka lakukan redirect ke halaman pemilihan daftar course.
         if($course_registration == null) {
-            return redirect()->route('student.choose_course.index');
+            // Jika informasi pendaftaran diubah oleh Student melalui URI,
+            // maka lakukan redirect ke route ini.
+            return redirect()->route('registered.dashboard.index');
+        } else if($course_registration->course_payments->toArray() != null) {
+            // Jika informasi pendaftaran course tsb sudah dikonfirmasi tidak dapat diubah,
+            // maka lakukan redirect ke route ini.
+            return redirect()->route('registered.dashboard.index');
         }
         
         return view('role_student.registration_03_complete_payment_information', compact(
@@ -667,6 +701,11 @@ class StudentController extends Controller
     {
         // mendaftar course: melengkapi informasi pembayaran
 
+        if(!$this->is_student()) {
+            //menampilkan halaman dashboard
+            return redirect()->route('registered.dashboard.index');
+        }
+
         // Ambil informasi course_registration Student.
         $course_registration = CourseRegistration
             ::where('student_id', Auth::user()->student->id)
@@ -678,13 +717,15 @@ class StudentController extends Controller
             return redirect()->route('student.choose_course.index');
         }
 
-        CoursePayment::create([
-            'course_registration_id' => $course_registration_id,
-            'payment_type_id' => 1,
-            'payment_time' => null,
-            'amount' => 0,
-            'status' => 'Not Confirmed',
-        ]);
+        if(CoursePayment::where('course_registration_id', $course_registration_id)->first() == null) {
+            CoursePayment::create([
+                'course_registration_id' => $course_registration_id,
+                'payment_type_id' => 1,
+                'payment_time' => null,
+                'amount' => 0,
+                'status' => 'Not Confirmed',
+            ]);
+        }
 
         return redirect()->route('student.upload_payment_evidence.show', [$course_registration_id]);
     }
@@ -692,7 +733,12 @@ class StudentController extends Controller
     public function upload_payment_evidence_show($course_registration_id)
     {
         // mendaftar course: mengirim bukti pembayaran
-        
+
+        if(!$this->is_student()) {
+            //menampilkan halaman dashboard
+            return redirect()->route('registered.dashboard.index');
+        }
+
         // Ambil informasi course_registration Student.
         $course_registration = CourseRegistration
             ::where('student_id', Auth::user()->student->id)
@@ -703,17 +749,110 @@ class StudentController extends Controller
         if($course_registration == null) {
             return redirect()->route('student.choose_course.index');
         }
-        
         if($course_registration->course_payments->toArray() == null) {
             return redirect()->route('student.choose_course.index');
         }
+
+        if($course_registration->course_payments->last()->status == 'Confirmed') {
+            // Jika pembayaran Student dalam course ybs telah dikonfirmasi sesuai,
+            // maka lakukan redirect ke halaman placement test.
+            return redirect()->route('student.upload_placement_test.show', [$course_registration_id]);
+        } else if($course_registration->course_payments->last()->path != null) {
+            // Jika pembayaran Student dalam course ybs telah dilakukan
+            // tetapi belum atau tidak dikonfirmasi, tampilkan halaman menunggu.
+            $is_waiting_for_confirmation = 1;
+        } else $is_waiting_for_confirmation = 0;
         
-        return view('role_student.registration_04_upload_payment_evidence', compact('course_registration'));
+        return view('role_student.registration_04_upload_payment_evidence', compact(
+            'course_registration', 'is_waiting_for_confirmation',
+        ));
     }
 
     public function upload_payment_evidence_update(Request $request, $course_registration_id)
     {
         // mendaftar course: mengirim bukti pembayaran
+
+        if(!$this->is_student()) {
+            //menampilkan halaman dashboard
+            return redirect()->route('registered.dashboard.index');
+        }
+
+        // Ambil informasi course_registration Student.
+        $course_registration = CourseRegistration
+            ::where('student_id', Auth::user()->student->id)
+            ->where('id', $course_registration_id)->get()->first();
+        
+        // Jika informasi pendaftaran diubah oleh Student melalui inspect elements,
+        // maka lakukan redirect ke halaman pemilihan daftar course.
+        if($course_registration == null) {
+            return redirect()->route('student.choose_course.index');
+        }
+
+        // Lakukan validasi informasi pembayaran.
+        $data = $request->all();
+        $file = $request->file('payment_evidence');
+        $data = Validator::make($data, [
+            'account_number' => ['bail', 'required'],
+            'account_name' => ['bail', 'required'],
+            'payment_evidence' => ['bail', 'required', 'max:8000'],
+        ]);
+        if($data->fails()) {
+            session(['caption-danger' => 'Your payment evidence has not been uploaded. Try again.']);
+            return redirect()->back()
+                ->withErrors($data)
+                ->withInput();
+        }
+
+        if($file) {
+            $file_name = Str::random(50).'.'.$file->extension();
+            $destinationPath = 'uploads/student/payment/';
+            $file->move($destinationPath, $file_name);
+        }
+
+        $price_amount = $course_registration->course->course_package->price;
+
+        // Ambil course package discount saat ini, jika ada yang aktif dan tidak lewat batas waktu.
+        $course_package_discount = $course_registration->course->course_package->course_package_discounts->last();
+        if($course_package_discount && $course_package_discount->status == 'Active') {
+            if($course_package_discount->due_date == null || $course_package_discount->due_date >= now()) {
+                // Jika informasi course package discount ditemukan,
+                // maka gantikan harga awal dengan harga setelah didiskon.
+                $price_amount = $course_package_discount->price;
+            }
+        }
+        $course_package_discount = CoursePackageDiscount
+            ::where('economy_flag_id', Auth::user()->student->economy_flag_id)
+            ->where('course_package_id', $course_registration->course->course_package_id)
+            ->where('status', 'Active')
+            ->get()->last();
+        if($course_package_discount && ($course_package_discount->due_date == null || $course_package_discount->due_date >= now())) {
+            // Jika informasi course package discount ditemukan,
+            // maka gantikan harga awal dengan harga setelah didiskon.
+            $price_amount = $course_package_discount->price;
+        }
+        $course_package_discount = CoursePackageDiscount
+            ::where('economy_flag_id', Auth::user()->student->economy_flag_id)
+            ->where('code', $course_registration->course->requirement) // KODE PROMO
+            ->where('course_package_id', $course_registration->course->course_package_id)
+            ->where('status', 'Active')
+            ->get()->last();
+        if($course_package_discount && ($course_package_discount->due_date == null || $course_package_discount->due_date >= now())) {
+            // Jika informasi course package discount ditemukan,
+            // maka gantikan harga awal dengan harga setelah didiskon.
+            $price_amount = $course_package_discount->price;
+        }
+
+        $course_registration->course_payments->last()->update([
+            'payment_time' => now(),
+            'amount' => $price_amount,
+            'path' => ($file)? $file_name : null,
+        ]);
+        $course_registration->course->update([
+            'description' => $request->account_number . ' | ' . $request->account_name,
+        ]);
+
+        session(['caption-success' => 'Your payment evidence has been uploaded. Please wait while we check your payment. Thank you!']);
+        return redirect()->route('student.upload_payment_evidence.show', [$course_registration_id]);
     }
 
     public function chat_financial_team_index()

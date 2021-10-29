@@ -22,6 +22,16 @@
     <input type="hidden" id="is_paid" name="is_paid" value="1">
     <input type="hidden" id="promo_code" name="promo_code" value="">
     <div class="row">
+      @if($current_course_registration > 0)
+        <div class="col-md-12">
+          <div class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <p>
+              <strong><i class="fa fa-book"></i>&nbsp;&nbsp; You might choose another course, replacing the current course.</strong>
+            </p>
+          </div>
+        </div>
+      @endif
       @if(session('error_message'))
         <div class="col-md-12">
           <div class="alert alert-danger alert-dismissible">
@@ -85,6 +95,10 @@
                             <span style="color:#ff0000;">Contact us if you encounter a problem.</span>
                           </dd>
                         </dl>
+                        <hr>
+                        <a href="{{ route('non_admin.chat_admin.show', [1]) }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noopener noreferrer">
+                          <i class="fa fa-envelope-o"></i>&nbsp;&nbsp;Chat NUSIA Admin
+                        </a>
                         {{--
                         <hr>
                         --}}

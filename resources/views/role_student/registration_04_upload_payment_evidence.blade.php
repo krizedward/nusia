@@ -151,9 +151,11 @@
             </tr>
           </table>
           <hr>
+@if($is_waiting_for_confirmation == 0)
           <form role="form" method="post" action="{{ route('student.upload_payment_evidence.update', [$course_registration->id]) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+@endif
             <div class="box-body">
               <div class="row">
                 {{--Form Kiri--}}
@@ -161,8 +163,12 @@
                   <div class="col-md-12">
                     <div class="form-group @error('account_number') has-error @enderror">
                       <label for="account_number">Your Account Number</label>
-                      <input name="account_number" type="text" class="@error('account_number') is-invalid @enderror form-control" placeholder="Enter Your Account Number" value="{{ old('account_number') }}">
-                      @error('indonesian_language_proficiency')
+                      @if($is_waiting_for_confirmation)
+                        <input name="account_number" type="text" class="form-control disabled" placeholder="Enter Your Account Number" value="{{ explode(" | ", $course_registration->course->description)[0] }}" disabled>
+                      @else
+                        <input name="account_number" type="text" class="@error('account_number') is-invalid @enderror form-control" placeholder="Enter Your Account Number" value="{{ old('account_number') }}">
+                      @endif
+                      @error('account_number')
                         <p style="color:red">{{ $message }}</p>
                       @enderror
                     </div>
@@ -173,7 +179,11 @@
                   <div class="col-md-12">
                     <div class="form-group @error('account_name') has-error @enderror">
                       <label for="account_name">Your Account Name</label>
-                      <input name="account_name" type="text" class="@error('account_name') is-invalid @enderror form-control" placeholder="Enter Your Account Name" value="{{ old('account_name') }}">
+                      @if($is_waiting_for_confirmation)
+                        <input name="account_name" type="text" class="form-control disabled" placeholder="Enter Your Account Name" value="{{ explode(" | ", $course_registration->course->description)[1] }}" disabled>
+                      @else
+                        <input name="account_name" type="text" class="@error('account_name') is-invalid @enderror form-control" placeholder="Enter Your Account Name" value="{{ old('account_name') }}">
+                      @endif
                       @error('account_name')
                         <p style="color:red">{{ $message }}</p>
                       @enderror
@@ -185,7 +195,11 @@
                   <div class="col-md-12">
                     <label for="payment_evidence" class="control-label">Upload Payment Evidence (image only)</label>
                     <p style="color:#ff0000; padding-top:0px; margin-top:0px;">*Maximum file size allowed is 8 MB</p>
-                    <input id="payment_evidence" name="payment_evidence" type="file" accept="image/*" class="@error('payment_evidence') is-invalid @enderror form-control">
+                    @if($is_waiting_for_confirmation)
+                      <input id="payment_evidence" name="payment_evidence" type="file" accept="image/*" class="form-control disabled" disabled>
+                    @else
+                      <input id="payment_evidence" name="payment_evidence" type="file" accept="image/*" class="@error('payment_evidence') is-invalid @enderror form-control">
+                    @endif
                     @error('payment_evidence')
                       <p style="color:red">{{ $message }}</p>
                     @enderror
@@ -195,18 +209,18 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
-
+{{--
               <a href="{{ route('student.upload_placement_test.show', [$course_registration->id]) }}" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(document.getElementById('payment_evidence').value == '') { alert('The payment evidence cannot be empty.'); return false; } if( confirm('Are you sure to upload this payment evidence? This action cannot be undone.') ) return true; else return false;">
                 Upload Payment Evidence
               </a>
-
-{{--
+--}}
               <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(document.getElementById('payment_evidence').value == '') { alert('The payment evidence cannot be empty.'); return false; } if( confirm('Are you sure to upload this payment evidence? This action cannot be undone.') ) return true; else return false;">
                 Upload Payment Evidence
               </button>
---}}
             </div>
+@if($is_waiting_for_confirmation == 0)
           </form>
+@endif
         </div>
       </div>
     </div>
