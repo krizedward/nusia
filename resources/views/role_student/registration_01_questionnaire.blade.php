@@ -283,7 +283,7 @@
             {{--Form--}}
             <div class="col-md-6">
               <div class="form-group @error('target_language_experience') has-error @enderror">
-                <label for="target_language_experience">Indonesian Language Experience <span style="color:#ff0000;">*</span></label>
+                <label for="target_language_experience">Indonesian Language Learning Experience <span style="color:#ff0000;">*</span></label>
                 <select name="target_language_experience" type="text" class="@error('target_language_experience') is-invalid @enderror form-control" id="target_language_experience" onChange="if(document.getElementById('target_language_experience').value == 'Others') {document.getElementById('target_language_experience_value_div').className = 'form-group';} else {document.getElementById('target_language_experience_value_div').className = 'form-group hidden';} if(document.getElementById('target_language_experience').value != 'Never (no experience)' && document.getElementById('target_language_experience').value != '') {document.getElementById('description_of_course_taken_div').className = 'form-group';} else {document.getElementById('description_of_course_taken_div').className = 'form-group hidden';}">
                   <option selected="selected" value="">-- Enter Indonesian Language Experience --</option>
                   <option value="Never (no experience)">Never (no experience)</option>

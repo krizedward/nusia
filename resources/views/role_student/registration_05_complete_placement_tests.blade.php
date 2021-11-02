@@ -141,6 +141,14 @@
                   </div>
                 </div>
               </div>
+              <div class="col-md-12">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="target_language_experience">Indonesian Language Learning Experience</label>
+                    <input id="target_language_experience" type="text" class="form-control" disabled value="@if(Auth::user()->student->target_language_experience != 'Others'){{ Auth::user()->student->target_language_experience }} @else{{ Auth::user()->student->target_language_experience_value }} years @endif">
+                  </div>
+                </div>
+              </div>
 
             <div class="col-md-12">
             <div class="col-md-12">
@@ -151,42 +159,52 @@
                 </label>
                 <p style="padding-top:0px; margin-top:0px;">
                   Then, record a video of yourself answering
-                  the following questions in about 3-5 minutes.<br />
+                  the following questions in the required duration based on your chosen level.<br />
                   After that, upload it to Google Drive or other file storages
-                  and prepare a sharable link to the video.
-                </p>
-                <p class="hidden" id="descriptionNoviceLow" style="padding-top:0px; margin-top:0px;"><b>NOVICE LOW PROFICIENCY</b><br>
+                  and prepare a sharable link to the video.<br />
+                  <br />
+                  <b>NOVICE PROFICIENCY (3-5 minutes)</b><br />
+                  Choose the following<br />
                   <b>1. Tolong ceritakan tentang diri Anda!</b><br />
-                  &nbsp;&nbsp;&nbsp;&nbsp; (nama, asal, kuliah/bekerja, tempat tinggal)<br />
-{{--
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Siapa nama Anda?<br />
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Dari mana asal Anda?<br />
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Apakah Anda kuliah atau bekerja?<br />
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Di mana Anda tinggal?<br />
---}}
                   <b>2. Apa aktivitas Anda sehari-hari?</b><br />
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; (mulai dari bangun tidur sampai tidur lagi)<br />
                   <b>3. Ceritakan tentang hobi Anda!</b><br />
-                  &nbsp;&nbsp;&nbsp;&nbsp; (Apa hobi Anda? Melakukan hobi dengan siapa? Di mana?)<br />
-{{--
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Apa hobi Anda?<br />
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Melakukan hobi dengan siapa?<br />
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Di mana melakukan hobi itu?<br />
---}}
                   <b>4. Ceritakan tentang makanan favorit Anda?</b><br />
-                  &nbsp;&nbsp;&nbsp;&nbsp; (Apa makanan favorit Anda? Membeli atau memasak makanan itu?)<br />
-{{--
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Apa makanan favorit Anda?<br />
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Membeli atau memasak makanan itu?<br />
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Jika membeli, di mana?<br />
---}}
                   <b>5. Ceritakan tentang liburan favorit Anda!</b><br />
-                  &nbsp;&nbsp;&nbsp;&nbsp; (Apakah Anda suka berlibur? Berlibur ke mana? Kapan?)<br />
-{{--
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Apakah Anda suka berlibur?<br />
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Berlibur ke mana?<br />
                   &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Kapan?<br />
---}}
+                </p>
+                <p class="hidden" id="descriptionNoviceLow" style="padding-top:0px; margin-top:0px;"><b>NOVICE LOW PROFICIENCY</b><br>
+                  <b>1. Tolong ceritakan tentang diri Anda!</b><br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Siapa nama Anda?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Dari mana asal Anda?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Apakah Anda kuliah atau bekerja?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Di mana Anda tinggal?<br />
+                  <b>2. Apa aktivitas Anda sehari-hari?</b><br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; (mulai dari bangun tidur sampai tidur lagi)<br />
+                  <b>3. Ceritakan tentang hobi Anda!</b><br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Apa hobi Anda?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Melakukan hobi dengan siapa?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Di mana melakukan hobi itu?<br />
+                  <b>4. Ceritakan tentang makanan favorit Anda?</b><br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Apa makanan favorit Anda?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Membeli atau memasak makanan itu?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Jika membeli, di mana?<br />
+                  <b>5. Ceritakan tentang liburan favorit Anda!</b><br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Apakah Anda suka berlibur?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Berlibur ke mana?<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Kapan?<br />
                 </p>
                 <p class="hidden" id="descriptionNoviceMid" style="padding-top:0px; margin-top:0px;"><b>Novice Low Proficiency</b><br>
                   1. Pertanyaan 1<br />
