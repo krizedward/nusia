@@ -97,12 +97,10 @@ class LeadInstructorController extends Controller
         $placement_tests = PlacementTest
             ::join('course_registrations', 'placement_tests.course_registration_id', 'course_registrations.id')
             ->join('courses', 'course_registrations.course_id', 'courses.id')
-            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
-            ->where('course_packages.title', 'LIKE', '%Not Assigned%')
+            ->where('courses.title', 'LIKE', '%Not Assigned%')
             ->where('placement_tests.status', 'Not Passed')
             ->where('placement_tests.path', '<>', null)
-            ->where('courses.requirement', null)
-            ->select('placement_tests.id', 'placement_tests.code', 'placement_tests.course_registration_id', 'placement_tests.path', 'placement_tests.status', 'placement_tests.submitted_at', 'placement_tests.result_updated_at', 'placement_tests.created_at', 'placement_tests.updated_at', 'placement_tests.deleted_at')
+            ->select('placement_tests.*')
             ->distinct()
             ->get();
         $interviews = PlacementTest

@@ -1006,6 +1006,7 @@ class StudentController extends Controller
             ]);
         }
 
+        session(['caption-success' => 'Your placement test video has been uploaded. Please wait while we check your video. Thank you!']);
         return redirect()->route('student.upload_placement_test.show', [$course_registration_id]);
     }
 

@@ -66,7 +66,7 @@
                       @if($placement_tests->toArray() != null)
                         <table class="table table-bordered example1">
                           <thead>
-                            <th>Material / Level</th>
+                            <th>Course / Level</th>
                             <th>Student Name</th>
                             <th style="width:5%;">View</th>
                           </thead>
