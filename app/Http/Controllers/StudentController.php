@@ -941,16 +941,20 @@ class StudentController extends Controller
             } else {
                 // Jika hasil test sudah diunggah tetapi masih 'Not Passed', tampilkan halaman "waiting" atau "interview".
                 if($course_registration->course->requirement == null) {
-                    // Jika masih menunggu konfirmasi dari Lead Instructor.
-                    $has_uploaded_for_placement_test = 1;
+                    // Jika masih menunggu konfirmasi dari Lead Instructor (atau sudah selesai interview).
+                    if($course_registration->placement_test->result_updated_at == null)
+                        $has_uploaded_for_placement_test = 1;
+                    else
+                        $has_uploaded_for_placement_test = 3;
                 } else {
                     // Jika masih menunggu waktu pelaksanaan interview.
                     $has_uploaded_for_placement_test = 2;
                 }
             }
         } else if($course_registration->placement_test->status == 'Passed') {
-            // Jika hasil test sudah diunggah dan 'Passed', redirect ke langkah berikutnya.
-            return redirect()->route('student.choose_course_registration.show', [$course_registration->id]);
+            // Jika hasil test sudah diunggah dan 'Passed', tampilkan pesan status
+            $has_uploaded_for_placement_test = 3;
+            //return redirect()->route('student.choose_course_registration.show', [$course_registration->id]);
         }
 
         // Halaman "upload-enabled" dan "waiting" digabungkan dalam satu view yang sama,

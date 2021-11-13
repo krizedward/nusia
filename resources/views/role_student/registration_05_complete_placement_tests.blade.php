@@ -23,7 +23,7 @@
           <h3 class="box-title"><b>Placement Test Information</b></h3>
         </div>
         <div class="box-body">
-          @if($has_uploaded_for_placement_test != 2)
+          @if($has_uploaded_for_placement_test == 0 || $has_uploaded_for_placement_test == 1)
 {{--
             <dl>
               <dt><i class="fa fa-pencil margin-r-5"></i> Reading the Requirements</dt>
@@ -75,8 +75,8 @@
             <?php
               $schedule_time = \Carbon\Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone);
             ?>
-            <p>
-              <table>
+            <p class="hidden">
+              <table class="hidden">
                 <tr style="vertical-align:baseline;">
                   <td width="35"><b>Day</b></td>
                   <td>&nbsp;:&nbsp;&nbsp;</td>
@@ -96,14 +96,16 @@
                 </tr>
               </table>
             </p>
-            <a href="{{ $course_registration->course->requirement }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noreferrer nofollow">Join Interview</a>
+            <a href="{{ $course_registration->course->requirement }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue hidden" style="width:100%;" rel="noreferrer nofollow">Join Interview</a>
             <hr>
             <dl>
               <dt><i class="fa fa-file-text-o margin-r-5"></i> More Information</dt>
               <dd>
-                The interview result will be announced by email <b>no later than 7 days after the session ends</b>.<br />
-                Proceeding to the course scheduling is required to finish the registration.<br />
-                <span style="color:#ff0000;">Contact NUSIA Academic if you encounter a problem.</span>
+                The interview result will be announced by email <b>no later than 7 days after the session ends</b>.
+                Proceeding to the course scheduling is required to finish the registration.<br /><br />
+                <span style="color:#ff0000;">
+                  If the schedule doesn't match yours, you can chat NUSIA Academic.<br />
+                </span>
               </dd>
             </dl>
             <hr>
@@ -117,7 +119,17 @@
     <div class="col-md-9">
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title"><b>Submit Your Placement Test Video</b></h3>
+          <h3 class="box-title">
+            <b>
+              @if($has_uploaded_for_placement_test == 2)
+                Interview Time!
+              @elseif($has_uploaded_for_placement_test == 3)
+                CONGRATULATIONS!
+              @else
+                Submit Your Placement Test Video
+              @endif
+            </b>
+          </h3>
         </div>
         <form role="form" method="post" action="@if($has_uploaded_for_placement_test) # @else {{ route('student.upload_placement_test.update', [$course_registration->id]) }} @endif" enctype="multipart/form-data">
           @if($has_uploaded_for_placement_test == 0)
@@ -126,6 +138,7 @@
           @endif
           <div class="box-body">
             <div class="row">
+@if($has_uploaded_for_placement_test != 2 && $has_uploaded_for_placement_test != 3)
               <div class="col-md-12">
                 <div class="col-md-12">
                   <div class="form-group">
@@ -254,28 +267,6 @@
                         &nbsp;&nbsp;&nbsp;&nbsp; >> &nbsp;&nbsp; Bagaimana liburan itu?<br />
                       </p>
                     @endif
-{{--
-                    @if(old('indonesian_language_proficiency') == 'Novice')
-                      <input checked id="radioAnswer1" name="indonesian_language_proficiency" type="radio" value="Novice" onchange="if(document.getElementById('radioAnswer1').checked) { document.getElementById('descriptionNoviceLow').className = ''; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
-                    @else
-                      <input id="radioAnswer1" name="indonesian_language_proficiency" type="radio" value="Novice" onchange="if(document.getElementById('radioAnswer1').checked) { document.getElementById('descriptionNoviceLow').className = ''; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
-                    @endif
-                    <label for="radioAnswer1" class="custom-control-label">Novice</label>
-                    <br />
-                    @if(old('indonesian_language_proficiency') == 'Intermediate')
-                      <input checked id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNoviceLow').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
-                    @else
-                      <input id="radioAnswer2" name="indonesian_language_proficiency" type="radio" value="Intermediate" onchange="if(document.getElementById('radioAnswer2').checked) { document.getElementById('descriptionNoviceLow').className = 'hidden'; document.getElementById('descriptionIntermediate').className = ''; document.getElementById('descriptionAdvanced').className = 'hidden'; }">
-                    @endif
-                    <label for="radioAnswer2" class="custom-control-label">Intermediate</label>
-                    <br />
-                    @if(old('indonesian_language_proficiency') == 'Advanced')
-                      <input checked id="radioAnswer3" name="indonesian_language_proficiency" type="radio" value="Advanced" onchange="if(document.getElementById('radioAnswer3').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = ''; }">
-                    @else
-                      <input id="radioAnswer3" name="indonesian_language_proficiency" type="radio" value="Advanced" onchange="if(document.getElementById('radioAnswer3').checked) { document.getElementById('descriptionNovice').className = 'hidden'; document.getElementById('descriptionIntermediate').className = 'hidden'; document.getElementById('descriptionAdvanced').className = ''; }">
-                    @endif
-                    <label for="radioAnswer3" class="custom-control-label">Advanced</label>
---}}
                   </div>
                 </div>
               </div>
@@ -283,9 +274,9 @@
                 <div class="col-md-12">
                   <div class="form-group @error('video_link') has-error @enderror">
                     <label for="video_link">Video Link (https)</label>
-                    @if($has_uploaded_for_placement_test)
+                    @if($has_uploaded_for_placement_test == 1)
                       <input id="video_link" name="video_link" type="text" class="@error('video_link') is-invalid @enderror form-control" placeholder="Enter Video Link (https link only)" disabled value="{{ $course_registration->placement_test->path }}">
-                    @else
+                    @elseif($has_uploaded_for_placement_test == 0)
                       <input id="video_link" name="video_link" type="text" class="@error('video_link') is-invalid @enderror form-control" placeholder="Enter Video Link (https link only)" value="{{ old('video_link') }}">
                     @endif
                     @error('video_link')
@@ -294,11 +285,61 @@
                   </div>
                 </div>
               </div>
+
+@else
+
+              <div class="col-md-12">
+
+<p style="font-color:#cc0000;">
+            You are required to attend an interview session
+            to complete your placement test.
+            Here is the proposed schedule:<br />
+</p>
+
+            <?php
+              $schedule_time = \Carbon\Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone);
+            ?>
+            <p>
+              <table>
+                <tr style="vertical-align:baseline;">
+                  <td width="75"><b>Day</b></td>
+                  <td>&nbsp;:&nbsp;&nbsp;</td>
+                  <td><b>{{ $schedule_time->isoFormat('dddd') }}</b></td>
+                </tr>
+                <tr style="vertical-align:baseline;">
+                  <td width="75"><b>Date, Time</b></td>
+                  <td>&nbsp;:&nbsp;&nbsp;</td>
+                  <td><b>{{ $schedule_time->isoFormat('MMMM Do YYYY, hh:mm A') }}</b></td>
+                </tr>
+              </table>
+            </p>
+<p>
+                <p>
+                  If you agree with the schedule, you can join the interview session
+                  by clicking on the button below.<br /><br />
+                  <span style="color:#ff0000;">
+                    If you are not available, you can chat the NUSIA Academic Team
+                    to reschedule the session.<br /><br />
+                  </span>
+                </p>
+                <a href="{{ $course_registration->course->requirement }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noreferrer nofollow">Join the interview session</a>
+{{--
+                <br /><br />
+                <a href="{{ route('student.chat_lead_instructor.show', [91]) }}" target="_blank" class="btn btn-sm btn-flat btn-default" style="width:100%;" rel="noopener noreferrer">
+                  <i class="fa fa-envelope-o"></i>&nbsp;&nbsp;Chat NUSIA Academic
+                </a>
+--}}
+</p>
+
+              </div>
+
+@endif
+
             </div>
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
-            @if($has_uploaded_for_placement_test)
+            @if($has_uploaded_for_placement_test == 1)
               <?php
                 $submitted_at = \Carbon\Carbon::parse($course_registration->placement_test->submitted_at)->setTimezone(Auth::user()->timezone);
               ?>
@@ -312,7 +353,7 @@
                   @endif
                 </b>
               </p>
-            @else
+            @elseif($has_uploaded_for_placement_test == 0)
               <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(document.getElementById('video_link').value == '') { alert('The video link cannot be empty.'); return false; } if( confirm('Are you sure to submit this link: ' + document.getElementById('video_link').value + '? This action cannot be undone.') ) return true; else return false;">
                 Submit
               </button>
