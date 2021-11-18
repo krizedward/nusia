@@ -112,7 +112,7 @@ class StudentController extends Controller
                 return redirect()->route('student.complete_payment_information.show', [Auth::user()->student->course_registrations->first()->id]);
             } else if(Auth::user()->student->course_registrations->first()->course_payments->last()->status != 'Confirmed') {
                 return redirect()->route('student.upload_payment_evidence.show', [Auth::user()->student->course_registrations->first()->id]);
-            } else if(Auth::user()->student->course_registrations->first()->placement_test == null || Auth::user()->student->course_registrations->first()->placement_test->status == 'Not Passed') {
+            } else if(Auth::user()->student->course_registrations->first()->placement_test == null || (Auth::user()->student->course_registrations->first()->placement_test->status == 'Not Passed' && Auth::user()->student->course_registrations->first()->course->requirement == null)) {
                 return redirect()->route('student.upload_placement_test.show', [Auth::user()->student->course_registrations->first()->id]);
             } else if(Auth::user()->student->course_registrations->first()->placement_test->status == 'Passed' && Auth::user()->student->course_registrations->first()->session_registrations->toArray() == null) {
                 return redirect()->route('student.choose_course_registration.show', [Auth::user()->student->course_registrations->first()->id]);
@@ -943,8 +943,10 @@ class StudentController extends Controller
                 if($course_registration->course->requirement == null) {
                     // Jika masih menunggu konfirmasi dari Lead Instructor (atau sudah selesai interview).
                     if($course_registration->placement_test->result_updated_at == null)
+                        // Hasil belum diumumkan
                         $has_uploaded_for_placement_test = 1;
                     else
+                        // Hasil sudah diumumkan
                         $has_uploaded_for_placement_test = 3;
                 } else {
                     // Jika masih menunggu waktu pelaksanaan interview.

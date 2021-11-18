@@ -45,7 +45,7 @@
                       ?>
                       <table>
                         <tr style="vertical-align:baseline;">
-                          <td width="35"><b>Day</b></td>
+                          <td width="25"><b>Day</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($schedule_time)
@@ -56,7 +56,7 @@
                           </td>
                         </tr>
                         <tr style="vertical-align:baseline;">
-                          <td width="35"><b>Date</b></td>
+                          <td width="25"><b>Date</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($schedule_time)
@@ -79,7 +79,7 @@
                       ?>
                       <table>
                         <tr style="vertical-align:baseline;">
-                          <td width="35"><b>Day</b></td>
+                          <td width="25"><b>Day</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($submitted_at)
@@ -90,7 +90,7 @@
                           </td>
                         </tr>
                         <tr style="vertical-align:baseline;">
-                          <td width="35"><b>Date</b></td>
+                          <td width="25"><b>Date</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($submitted_at)
@@ -101,7 +101,7 @@
                           </td>
                         </tr>
                         <tr style="vertical-align:baseline;">
-                          <td width="35"><b>Link</b></td>
+                          <td width="25"><b>Link</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($course_registration->placement_test->path)
@@ -280,7 +280,7 @@
                       ?>
                       <table>
                         <tr style="vertical-align:baseline;">
-                          <td width="35"><b>Day</b></td>
+                          <td width="25"><b>Day</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($schedule_time)
@@ -291,7 +291,7 @@
                           </td>
                         </tr>
                         <tr style="vertical-align:baseline;">
-                          <td width="35"><b>Date</b></td>
+                          <td width="25"><b>Date</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($schedule_time)
@@ -314,7 +314,7 @@
                       ?>
                       <table>
                         <tr style="vertical-align:baseline;">
-                          <td width="35"><b>Day</b></td>
+                          <td width="25"><b>Day</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($submitted_at)
@@ -325,7 +325,7 @@
                           </td>
                         </tr>
                         <tr style="vertical-align:baseline;">
-                          <td width="35"><b>Date</b></td>
+                          <td width="25"><b>Date</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($submitted_at)
@@ -336,7 +336,7 @@
                           </td>
                         </tr>
                         <tr style="vertical-align:baseline;">
-                          <td width="35"><b>Link</b></td>
+                          <td width="25"><b>Link</b></td>
                           <td>&nbsp;:&nbsp;&nbsp;</td>
                           <td>
                             @if($course_registration->placement_test->path)

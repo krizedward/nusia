@@ -100,18 +100,18 @@ class LeadInstructorController extends Controller
             ->where('courses.title', 'LIKE', '%Not Assigned%')
             ->where('placement_tests.status', 'Not Passed')
             ->where('placement_tests.path', '<>', null)
+            ->where('courses.requirement', null)
             ->select('placement_tests.*')
             ->distinct()
             ->get();
         $interviews = PlacementTest
             ::join('course_registrations', 'placement_tests.course_registration_id', 'course_registrations.id')
             ->join('courses', 'course_registrations.course_id', 'courses.id')
-            ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
-            ->where('course_packages.title', 'LIKE', '%Not Assigned%')
+            ->where('courses.title', 'LIKE', '%Not Assigned%')
             ->where('placement_tests.status', 'Not Passed')
             ->where('placement_tests.path', '<>', null)
             ->where('courses.requirement', '<>', null)
-            ->select('placement_tests.id', 'placement_tests.code', 'placement_tests.course_registration_id', 'placement_tests.path', 'placement_tests.status', 'placement_tests.submitted_at', 'placement_tests.result_updated_at', 'placement_tests.created_at', 'placement_tests.updated_at', 'placement_tests.deleted_at')
+            ->select('placement_tests.*')
             ->distinct()
             ->get();
         
@@ -133,20 +133,20 @@ class LeadInstructorController extends Controller
             // tidak bisa mengedit karena status sesi sudah "Passed"
             session(['caption-danger' => 'This placement test information has been previously updated. No changes can be made.']);
             return redirect()->route('lead_instructor.student_registration.index');
-        } else if($course_registration->placement_test->result_updated_at != null) {
-            // untuk sesi yang sudah diperiksa oleh Lead Instructor, tetapi memasuki tahap interview
-            $schedule_now = Carbon::now()->setTimezone(Auth::user()->timezone);
-            $schedule_time_begin_min_30_mins = Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone)->sub(30, 'minutes');
-            $schedule_time_end_add_7_days = Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone)->add(100, 'minutes')->add(7, 'days');
-            if($schedule_now < $schedule_time_begin_min_30_mins || $schedule_now > $schedule_time_end_add_7_days) {
-                // melihat informasi student hanya dapat dilakukan
-                // sejak 30 menit sebelum sesi interview dimulai
-                // hingga 7 hari setelah sesi interview berakhir
-                // (estimasi durasi interview: 100 menit)
-                session(['caption-danger' => 'This placement test information can be displayed 30 minutes before the interview begins until 7 days after the interview ends (estimated interview duration: 100 minutes).']);
-                return redirect()->route('lead_instructor.student_registration.index');
-            }
-        }
+        } //else if($course_registration->placement_test->result_updated_at != null) {
+          //  // untuk sesi yang sudah diperiksa oleh Lead Instructor, tetapi memasuki tahap interview
+          //  $schedule_now = Carbon::now()->setTimezone(Auth::user()->timezone);
+          //  $schedule_time_begin_min_30_mins = Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone)->sub(30, 'minutes');
+          //  $schedule_time_end_add_7_days = Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone)->add(100, 'minutes')->add(7, 'days');
+          //  if($schedule_now < $schedule_time_begin_min_30_mins || $schedule_now > $schedule_time_end_add_7_days) {
+          //      // melihat informasi student hanya dapat dilakukan
+          //      // sejak 30 menit sebelum sesi interview dimulai
+          //      // hingga 7 hari setelah sesi interview berakhir
+          //      // (estimasi durasi interview: 100 menit)
+          //      session(['caption-danger' => 'This placement test information can be displayed 30 minutes before the interview begins until 7 days after the interview ends (estimated interview duration: 100 minutes).']);
+          //      return redirect()->route('lead_instructor.student_registration.index');
+          //  }
+        // }
         
         $course_levels = CoursePackage
             ::join('course_levels', 'course_packages.course_level_id', 'course_levels.id')
@@ -309,7 +309,7 @@ class LeadInstructorController extends Controller
         
         if($have_early_classes_for_same_material_type) {
             // Student sudah pernah terdaftar (sebelumnya) dalam early class, pada material yang sama.
-            if($course_registration->course->course_package->material_type->name == 'Cultural Classes') {
+            if($course_registration->course->course_package->material_type->name == 'Indonesian Culture') {
                 $course_package = CoursePackage
                     ::join('course_types', 'course_packages.course_type_id', 'course_types.id')
                     ->where('course_packages.title', 'NOT LIKE', '%Free%')
