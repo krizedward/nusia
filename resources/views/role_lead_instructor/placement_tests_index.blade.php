@@ -214,6 +214,7 @@
                     <form action="{{ route('lead_instructor.placement_test_by_meeting.update') }}" method="post">
                       @csrf
                       @method('PUT')
+                      <input type="text" name="type" value="1" class="hidden">
                       <div class="form-group">
                         <label for="placement_test_id">Placement Test ID</label>
                         <select id="placement_test_id" name="placement_test_id" class="form-control select2" style="width:100%;">
@@ -248,6 +249,70 @@
                   <!-- /.box-body -->
                 </div>
                 <!-- /.box -->
+
+
+                <div class="box box-default">
+                  <div class="box-header with-border">
+                    <h3 class="box-title"><b>Reschedule</b></h3>
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <form action="{{ route('lead_instructor.placement_test_by_meeting.update') }}" method="post">
+                      @csrf
+                      @method('PUT')
+                      <input type="text" name="type" value="2" class="hidden">
+                      <div class="form-group">
+                        <label for="placement_test_id_2">Placement Test ID</label>
+                        <select id="placement_test_id_2" name="placement_test_id_2" class="form-control select2" style="width:100%;">
+                          <option selected value="0">-- Choose an ID --</option>
+                          <?php
+                            $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                          ?>
+                          @foreach($interviews as $dt)
+                            <?php
+                              $schedule_time_end = \Carbon\Carbon::parse($dt->result_updated_at)
+                                ->setTimezone(Auth::user()->timezone)
+                                ->add(100, 'minutes');
+                            ?>
+                            @if($schedule_now <= $schedule_time_end)
+                              <option value="{{ $dt->id }}">
+                                {{ $dt->course_registration->student->user->first_name }} {{ $dt->course_registration->student->user->last_name }} ({{ $dt->course_registration->course->course_package->material_type->name }})
+                              </option>
+                            @endif
+                          @endforeach
+                        </select>
+                      </div>
+                      <div id="schedule_time_div" class="form-group @error('schedule_time_date') has-error @enderror @error('schedule_time_time') has-error @enderror">
+                        <label for="schedule_time_date">New Interview Schedule</label>
+                        <p class="text-red">The time schedule inputted is adjusted with your local time.</p>
+                        <div class="input-group date">
+                          <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                          <input name="schedule_time_date" type="text" class="form-control pull-right datepicker">
+                        </div>
+                        <label for="schedule_time_time" class="hidden">Schedule (set the time)</label><br />
+                        <div class="input-group">
+                          <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                          <input name="schedule_time_time" type="text" class="form-control pull-right timepicker">
+                        </div>
+                        @error('schedule_time_date')
+                          <p style="color:red">{{ $message }}</p>
+                        @enderror
+                        @error('schedule_time_time')
+                          <p style="color:red">{{ $message }}</p>
+                        @enderror
+                      </div>
+                      <button type="submit" class="btn btn-s btn-flat btn-primary" style="width:100%;">Submit</button>
+                    </form>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+
+
+
               </div>
               <div class="col-md-9 no-padding">
                 <div class="col-md-12">
@@ -263,7 +328,7 @@
                         <table class="table table-bordered example1">
                           <thead>
                             <th>Meeting Time</th>
-                            <th>Material / Level</th>
+                            <th>Course / Level</th>
                             <th>Student Name</th>
                           </thead>
                           <tbody>
@@ -312,7 +377,7 @@
                         <table class="table table-bordered example1">
                           <thead>
                             <th>Due Time</th>
-                            <th>Material / Level</th>
+                            <th>Course / Level</th>
                             <th>Student Name</th>
                           </thead>
                           <tbody>

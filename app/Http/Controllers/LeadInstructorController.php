@@ -275,30 +275,30 @@ class LeadInstructorController extends Controller
         // Jika hasil placement test diterima ('Passed').
         
         // Periksa apakah Student sudah mendaftar pada early classes dengan material sama.
-        $early_classes_registration = CourseRegistration
+        /*$early_classes_registration = CourseRegistration
             ::join('courses', 'course_registrations.course_id', 'courses.id')
             ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
             ->where('course_registrations.student_id', $course_registration->student_id)
             ->where('course_packages.title', 'LIKE', '%Early Registration%')
             ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
-            ->get();
+            ->get();*/
         
         // Simpan keterangan apakah Student sudah mendaftar pada early classes dengan material sama.
-        $have_early_classes_for_same_material_type = 0;
+        //$have_early_classes_for_same_material_type = 0;
         
         // Untuk semua early classes.
-        foreach($early_classes_registration as $ecr) {
+        //foreach($early_classes_registration as $ecr) {
             // Apabila sudah ada pendaftaran pada material type yang sama.
-            if($ecr->course->course_package->material_type_id == $course_registration->course->course_package->material_type_id) {
+        //    if($ecr->course->course_package->material_type_id == $course_registration->course->course_package->material_type_id) {
                 // Maka, tidak diperbolehkan mendaftar pada early class di material type yang sama.
-                $have_early_classes_for_same_material_type = 1;
+        //        $have_early_classes_for_same_material_type = 1;
                 
                 // Jika terdaftar pada early class dengan material sama,
                 // maka Student perlu bergabung dalam course berbayar.
                 // Setelah mengetahui hal ini, tidak diperlukan iterasi kembali.
-                break;
-            }
-        }
+        //        break;
+        //    }
+        //}
         
         // Kode tambahan untuk memperoleh course_type
         // (misal "Not Assigned - PRIVATE" menjadi "Private")
@@ -307,35 +307,35 @@ class LeadInstructorController extends Controller
         $substring_loc = strlen($course_type) - $first_hyphen_pos - 2; // -2 sebagai bonus indeks hyphen itu sendiri dan satu spasi.
         $course_type = substr($course_type, 0 - $substring_loc);
         
-        if($have_early_classes_for_same_material_type) {
+        //if($have_early_classes_for_same_material_type) {
             // Student sudah pernah terdaftar (sebelumnya) dalam early class, pada material yang sama.
-            if($course_registration->course->course_package->material_type->name == 'Indonesian Culture') {
-                $course_package = CoursePackage
-                    ::join('course_types', 'course_packages.course_type_id', 'course_types.id')
-                    ->where('course_packages.title', 'NOT LIKE', '%Free%')
-                    ->where('course_packages.title', 'NOT LIKE', '%Test%')
-                    ->where('course_packages.title', 'NOT LIKE', '%Trial%')
-                    ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
-                    ->where('course_packages.title', 'NOT LIKE', '%Early Registration%')
-                    ->where('course_types.name', 'LIKE', '%'.$course_type.'%')
-                    ->where('course_packages.course_level_id', $request->indonesian_language_proficiency)
-                    ->select('course_packages.id', 'course_packages.code', 'course_packages.material_type_id', 'course_packages.course_type_id', 'course_packages.course_level_id', 'course_packages.title', 'course_packages.description', 'course_packages.count_session', 'course_packages.price', 'course_packages.refund_description', 'course_packages.created_at', 'course_packages.updated_at', 'course_packages.deleted_at')
-                    ->get()->first();
-            } else {
-                $course_package = CoursePackage
-                    ::where('title', 'NOT LIKE', '%Free%')
-                    ->where('title', 'NOT LIKE', '%Test%')
-                    ->where('title', 'NOT LIKE', '%Trial%')
-                    ->where('title', 'NOT LIKE', '%Not Assigned%')
-                    ->where('title', 'NOT LIKE', '%Early Registration%')
-                    ->where('title', 'LIKE', '%'.$course_registration->course->course_package->material_type->name.'%')
-                    ->where('title', 'LIKE', '%'.$course_type.'%')
-                    ->where('course_level_id', $request->indonesian_language_proficiency)
-                    ->first();
-            }
-        } else {
+        //    if($course_registration->course->course_package->material_type->name == 'Indonesian Culture') {
+        //        $course_package = CoursePackage
+        //            ::join('course_types', 'course_packages.course_type_id', 'course_types.id')
+        //            ->where('course_packages.title', 'NOT LIKE', '%Free%')
+        //            ->where('course_packages.title', 'NOT LIKE', '%Test%')
+        //            ->where('course_packages.title', 'NOT LIKE', '%Trial%')
+        //            ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+        //            ->where('course_packages.title', 'NOT LIKE', '%Early Registration%')
+        //            ->where('course_types.name', 'LIKE', '%'.$course_type.'%')
+        //            ->where('course_packages.course_level_id', $request->indonesian_language_proficiency)
+         //           ->select('course_packages.id', 'course_packages.code', 'course_packages.material_type_id', 'course_packages.course_type_id', 'course_packages.course_level_id', 'course_packages.title', 'course_packages.description', 'course_packages.count_session', 'course_packages.price', 'course_packages.refund_description', 'course_packages.created_at', 'course_packages.updated_at', 'course_packages.deleted_at')
+        //            ->get()->first();
+        //    } else {
+        //        $course_package = CoursePackage
+        //            ::where('title', 'NOT LIKE', '%Free%')
+        //            ->where('title', 'NOT LIKE', '%Test%')
+        //            ->where('title', 'NOT LIKE', '%Trial%')
+        //            ->where('title', 'NOT LIKE', '%Not Assigned%')
+        //            ->where('title', 'NOT LIKE', '%Early Registration%')
+        //           ->where('title', 'LIKE', '%'.$course_registration->course->course_package->material_type->name.'%')
+        //            ->where('title', 'LIKE', '%'.$course_type.'%')
+        //            ->where('course_level_id', $request->indonesian_language_proficiency)
+        //            ->first();
+        //    }
+        //} else {
             // Student tidak pernah terdaftar (sebelumnya) dalam early class (pada material yang sama).
-            if($course_registration->course->course_package->material_type->name == 'Cultural Classes') {
+            if($course_registration->course->course_package->material_type->name == 'Indonesian Culture') {
                 $course_package = CoursePackage
                     ::join('course_types', 'course_packages.course_type_id', 'course_types.id')
                     ->where('course_packages.title', 'NOT LIKE', '%Free%')
@@ -359,7 +359,7 @@ class LeadInstructorController extends Controller
                     ->where('course_level_id', $request->indonesian_language_proficiency)
                     ->first();
             }
-        }
+        //}
         
         // Sesuaikan informasi course dengan proficiency level yang ditentukan.
         $course_registration->course->update([
@@ -389,22 +389,44 @@ class LeadInstructorController extends Controller
         // Jika fungsi ini tidak diakses oleh lead instructor.
         if(!$this->is_lead_instructor()) return redirect()->back();
         
-        $data = Validator::make($request->all(), [
-            'placement_test_id' => ['bail', 'required',],
-            'link_zoom' => ['bail', 'required',],
-        ]);
-        if($data->fails()) {
-            session(['caption-danger' => 'This interview information has not been updated. Try again.']);
-            return redirect()->back()
-                ->withErrors($data)
-                ->withInput();
+        if($request->type == '1') {
+            $data = Validator::make($request->all(), [
+                'placement_test_id' => ['bail', 'required',],
+                'link_zoom' => ['bail', 'required',],
+            ]);
+            if($data->fails()) {
+                session(['caption-danger' => 'This interview information has not been updated. Try again.']);
+                return redirect()->back()
+                    ->withErrors($data)
+                    ->withInput();
+            }
+            
+            PlacementTest::findOrFail($request->placement_test_id)->course_registration->course->update([
+                'requirement' => $request->link_zoom,
+            ]);
+        } else if($request->type == '2') {
+            $data = Validator::make($request->all(), [
+                'placement_test_id_2' => ['bail', 'required',],
+                'schedule_time_date' => ['bail', 'required',],
+                'schedule_time_time' => ['bail', 'required',],
+            ]);
+            if($data->fails()) {
+                session(['caption-danger' => 'This interview information has not been updated. Try again.']);
+                return redirect()->back()
+                    ->withErrors($data)
+                    ->withInput();
+            }
+            
+            $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
+            if($schedule_time < now()) {
+                session(['caption-danger' => 'Cannot schedule the interview as the inputted time has passed the current time.']);
+                return redirect()->back()->withInput();
+            }
+            PlacementTest::findOrFail($request->placement_test_id_2)->update([
+                'result_updated_at' => $schedule_time,
+            ]);
         }
-        
-        PlacementTest::findOrFail($request->placement_test_id)->course_registration->course->update([
-            'requirement' => $request->link_zoom,
-            'updated_at' => now(),
-        ]);
-        session(['caption-success' => 'This interview information has been updated. Thank you!']);
+        session(['caption-success' => 'The interview information has been updated. Thank you!']);
         return redirect()->back();
     }
 
