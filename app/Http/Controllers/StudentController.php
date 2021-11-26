@@ -1111,7 +1111,7 @@ class StudentController extends Controller
                 ->where('courses.course_package_id', $course_registration->course->course_package_id)
                 ->select('instructors.id', 'instructors.code', 'instructors.user_id', 'instructors.interest', 'instructors.working_experience', 'instructors.created_at', 'instructors.updated_at', 'instructors.deleted_at')
                 ->distinct()->get();
-dd($course_registration->course->course_package->title);
+//dd($course_registration->course->course_package->title);
         } else {
             // Jika Student tidak mendaftar dalam kelas "PRIVATE",
             // maka tidak diperlukan daftar instruktur yang mengajar,
@@ -1136,7 +1136,9 @@ dd($course_registration->course->course_package->title);
             ->where('courses.course_package_id', $course_registration->course->course_package_id)
             ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at', 'courses.deleted_at')
             ->distinct()->get();
-
+        
+        $instructors = Instructor::all();
+        
         return view('role_student.registration_06_complete_course_registrations', compact(
             'course_registration', 'course_registration_is_private', 'instructors', 'courses',
         ));

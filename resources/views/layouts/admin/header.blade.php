@@ -1,5 +1,5 @@
   <!-- Logo -->
-    <a href="{{ route('registered.dashboard.index') }}" class="logo">
+    <a href="{{ route('registered.dashboard.index') }}" class="logo" style="background-color:#0073b7;">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <!--span class="logo-mini"><b>N</b></span-->
       <span class="logo-mini"><img src="{{ asset('header.ico') }}" alt="Header"></span>
@@ -7,7 +7,7 @@
       <span class="logo-lg"><b>Nusantara</b> Indonesia</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
+    <nav class="navbar navbar-static-top" style="background-color:#0073b7;">
       <!-- Sidebar toggle button-->
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>

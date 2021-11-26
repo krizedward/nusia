@@ -65,7 +65,7 @@
             <a href="{{ route('student.chat_lead_instructor.show', [91]) }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noopener noreferrer">
               <i class="fa fa-envelope-o"></i>&nbsp;&nbsp;Chat NUSIA Academic
             </a>
-          @else
+          @elseif($has_uploaded_for_placement_test == 2)
             <dl>
               <dt><i class="fa fa-user-circle-o margin-r-5"></i> Attending an Interview</dt>
               <dd>
@@ -112,6 +112,18 @@
             <a href="{{ route('student.chat_lead_instructor.show', [91]) }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noopener noreferrer">
               <i class="fa fa-envelope-o"></i>&nbsp;&nbsp;Chat NUSIA Academic
             </a>
+          @elseif($has_uploaded_for_placement_test == 3)
+            <dl>
+              <dt><i class="fa fa-file-text-o margin-r-5"></i> Course Scheduling</dt>
+              <dd>
+                After getting the test result, proceeding to the course scheduling is required to finish the registration.<br />
+                <span style="color:#ff0000;">Contact NUSIA Academic if you encounter a problem.</span>
+              </dd>
+            </dl>
+            <hr>
+            <a href="{{ route('student.chat_lead_instructor.show', [91]) }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noopener noreferrer">
+              <i class="fa fa-envelope-o"></i>&nbsp;&nbsp;Chat NUSIA Academic
+            </a>
           @endif
         </div>
       </div>
@@ -138,7 +150,7 @@
           @endif
           <div class="box-body">
             <div class="row">
-@if($has_uploaded_for_placement_test != 2 && $has_uploaded_for_placement_test != 3)
+@if($has_uploaded_for_placement_test == 0 || $has_uploaded_for_placement_test == 1)
               <div class="col-md-12">
                 <div class="col-md-12">
                   <div class="form-group">
@@ -286,11 +298,11 @@
                 </div>
               </div>
 
-@else
+@elseif($has_uploaded_for_placement_test == 2)
 
               <div class="col-md-12">
 
-<p style="font-color:#cc0000;">
+<p>
             You are required to attend an interview session
             to complete your placement test.
             Here is the proposed schedule:<br />
@@ -332,6 +344,45 @@
 </p>
 
               </div>
+
+@elseif($has_uploaded_for_placement_test == 3)
+
+              <div class="col-md-12">
+
+<p class="h3 text-center">
+  
+            You have been successfully enrolled in<br />
+            <b>Advanced High</b> proficiency level!
+  
+</p>
+
+            <?php
+              $schedule_time = \Carbon\Carbon::parse($course_registration->placement_test->result_updated_at)->setTimezone(Auth::user()->timezone);
+            ?>
+            <p class="h4 text-center">
+              This result is updated on
+              <b>{{ $schedule_time->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}</b>
+            </p>
+<p class="text-center">
+                <p class="text-center">
+                  Please note that proceeding to the course scheduling
+                  is required to finish the registration.<br />
+                  Click on the button below to continue the final registration process.<br />
+                  <span style="color:#ff0000;">
+                    Contact NUSIA Academic if you encounter a problem.<br />
+                  </span>
+                </p>
+                <a href="{{ route('student.choose_course_registration.show', [$course_registration->id]) }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noreferrer nofollow">Proceed to course scheduling</a>
+{{--
+                <br /><br />
+                <a href="{{ route('student.chat_lead_instructor.show', [91]) }}" target="_blank" class="btn btn-sm btn-flat btn-default" style="width:100%;" rel="noopener noreferrer">
+                  <i class="fa fa-envelope-o"></i>&nbsp;&nbsp;Chat NUSIA Academic
+                </a>
+--}}
+</p>
+
+              </div>
+
 
 @endif
 
