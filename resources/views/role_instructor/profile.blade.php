@@ -272,6 +272,25 @@
                     </div>
                   </div>
                   <div class="col-md-12">
+                    <div class="col-md-12">
+                      @if($errors->get('bio_description'))
+                        <div class="form-group has-error">
+                      @else
+                        <div class="form-group">
+                      @endif
+                          <label for="bio_description">Tell me about yourself!</label>
+                          @if(Auth::user()->instructor->bio_description)
+                            <textarea id="bio_description" name="bio_description" class="@error('bio_description') is-invalid @enderror form-control" rows="5" placeholder="Enter Bio Description">{{ Auth::user()->instructor->bio_description }}</textarea>
+                          @else
+                            <textarea id="bio_description" name="bio_description" class="@error('bio_description') is-invalid @enderror form-control" rows="5" placeholder="Enter Bio Description">{{ old('bio_description') }}</textarea>
+                          @endif
+                          @error('bio_description')
+                            <p style="color:red">{{ $message }}</p>
+                          @enderror
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
                     <div class="col-md-12">&nbsp;</div>
                     <?php
                       $interest_values = explode(', ', Auth::user()->instructor->interest);

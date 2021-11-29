@@ -715,6 +715,7 @@ class RegisteredController extends Controller
                 'working_experience_14' => ['bail', 'required_unless:working_experience_begin_year_14,'],
                 'working_experience_15' => ['bail', 'required_unless:working_experience_begin_year_15,'],
                 'interest_1' => ['bail', 'sometimes'],
+                'bio_description' => ['bail', 'sometimes'],
             ]);
 
             if($data->fails()) {
@@ -775,6 +776,7 @@ class RegisteredController extends Controller
             Auth::user()->instructor->update([
                 'working_experience' => $working_experience,
                 'interest' => $interest,
+                'bio_description' => $request->bio_description,
             ]);
             session(['caption-success' => 'Your profile information has been updated. Thank you!']);
         } else if($this->is_student()) {

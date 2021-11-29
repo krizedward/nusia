@@ -20,6 +20,7 @@ class Instructor extends Model
         'user_id',
         'interest',
         'working_experience',
+        'bio_description',
     ];
 
     public function getAutoNumberOptions()

@@ -1109,7 +1109,7 @@ class StudentController extends Controller
                 ->join('sessions', 'sessions.schedule_id', 'schedules.id')
                 ->join('courses', 'sessions.course_id', 'courses.id')
                 ->where('courses.course_package_id', $course_registration->course->course_package_id)
-                ->select('instructors.id', 'instructors.code', 'instructors.user_id', 'instructors.interest', 'instructors.working_experience', 'instructors.created_at', 'instructors.updated_at', 'instructors.deleted_at')
+                ->select('instructors.*')
                 ->distinct()->get();
 //dd($course_registration->course->course_package->title);
         } else {
