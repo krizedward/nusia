@@ -152,7 +152,12 @@
                                     @endif
                                     {{ $schedule_time_begin_iso }}
                                   </td>
-                                  <td>{{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}</td>
+                                  <td>
+                                    @if($dt->instructor)
+                                      {{ $dt->instructor->user->first_name }}
+                                      {{ $dt->instructor->user->last_name }}
+                                    @endif
+                                  </td>
                                   <td class="text-center">
                                     @if($dt->status == 'Available')
                                       @if($schedule_now <= $schedule_time_begin)
@@ -221,7 +226,12 @@
                                   @endif
                                   {{ $schedule_time_begin_iso }}
                                 </td>
-                                <td>{{ $dt->instructor->user->first_name }} {{ $dt->instructor->user->last_name }}</td>
+                                <td>
+                                  @if($dt->instructor)
+                                    {{ $dt->instructor->user->first_name }}
+                                    {{ $dt->instructor->user->last_name }}
+                                  @endif
+                                </td>
                                 <td class="text-center">
                                   @if($dt->status == 'Available')
                                     @if($schedule_now <= $schedule_time_begin)

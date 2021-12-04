@@ -345,13 +345,24 @@
                             <ul class="list-group list-group-unbordered">
                                 <li class="list-group-item">
                                     <ol>
-                                    <li>&nbsp;&nbsp;&nbsp;Learners must attend all sessions in NUSIA's free classes.<br>&nbsp;&nbsp;&nbsp;If learners cannot attend some of them, they cannot reschedule the sessions.</li>
-                                    <li>&nbsp;&nbsp;&nbsp;Learners must read the learning materials on the dashboard before joining each session.</li>
-                                    <li>&nbsp;&nbsp;&nbsp;Learners must give feedback on the link provided in the dashboard<br>&nbsp;&nbsp;&nbsp;after finishing each session.</li>
-                                    <li>&nbsp;&nbsp;&nbsp;All sessions in the free classes are recorded.<br>&nbsp;&nbsp;&nbsp;Learners allow NUSIA to employ the video recordings for research and marketing purposes<br>
-                                        &nbsp;&nbsp;&nbsp;(If you disagree with this term,
-                                        please contact NUSIA Admin via chat <a href="{{ route('non_admin.chat_admin.show', [1]) }}" class="btn btn-xs btn-primary bg-blue">Here</a>)</li>
+                                      <li>Once you have completed the registration process in a NUSIA’s class, you cannot cancel or change the class unless the minimum quota per class (for group only) is not met.</li>
+                                      <li>All teaching and learning sessions are recorded. You allow NUSIA to employ the video recordings for research and marketing purposes.</li>
+                                      <li>All content of this site is copyright protected. All rights are owned by NUSIA Education. Any use or reproduction of the content of any kind without our explicit consent is punishable and inadmissible.</li>
                                     </ol>
+                                    <p class="no-margin no-padding" style="font-size:3px;">&nbsp;</p>
+                                    <span class="no-margin no-padding" style="color:#ff0000;">
+                                      <span class="hidden-xs hidden-sm">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        If you disagree with this term,
+                                        please contact NUSIA Admin <a href="{{ route('non_admin.chat_admin.show', [1]) }}" class="btn btn-xs btn-primary bg-blue">Here</a>
+                                      </span>
+                                      <span class="hidden-md hidden-lg">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        If you disagree with this term,<br />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        please contact NUSIA Admin <a href="{{ route('non_admin.chat_admin.show', [1]) }}" class="btn btn-xs btn-primary bg-blue">Here</a>
+                                      </span>
+                                    </span>
                                 </li>
                             </ul>
 

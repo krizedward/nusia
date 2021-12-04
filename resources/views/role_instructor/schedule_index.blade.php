@@ -382,7 +382,7 @@
                       </table>
                     </div>
                   </div>
-                  <div class="box box-default collapsed-box">
+                  <div class="box box-default collapsed-box hidden">
                     <div class="box-header">
                       <h3 class="box-title"><b>All Teaching Availability</b></h3>
                       {{--
