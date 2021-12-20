@@ -24,7 +24,11 @@
             <img class="profile-user-img img-responsive img-circle" src="{{ asset('uploads/user.jpg') }}" alt="User profile picture">
           @endif
           <h3 class="profile-username text-center">
-            <b>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</b><br />
+            @if(Auth::user()->first_name == Auth::user()->last_name)
+              <b>{{ Auth::user()->first_name }}</b><br />
+            @else
+              <b>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</b><br />
+            @endif
             <?php
               $registered_at = \Carbon\Carbon::parse(Auth::user()->created_at)->setTimezone(Auth::user()->timezone);
             ?>
@@ -157,6 +161,24 @@
                             @endif
                         </div>
                     </div>
+                    <div class="col-md-12">
+                      @if($errors->get('full_name'))
+                        <div class="form-group has-error">
+                      @else
+                        <div class="form-group">
+                      @endif
+                          <label for="full_name">Full Name</label>
+                          @if(Auth::user()->first_name == Auth::user()->last_name)
+                            <input name="full_name" value="{{ Auth::user()->first_name }}" type="text" class="@error('full_name') is-invalid @enderror form-control" placeholder="Enter Full Name">
+                          @else
+                            <input name="full_name" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}" type="text" class="@error('full_name') is-invalid @enderror form-control" placeholder="Enter Full Name">
+                          @endif
+                          @error('full_name')
+                            <p style="color:red">{{ $message }}</p>
+                          @enderror
+                        </div>
+                    </div>
+                    {{--
                     <div class="col-md-6">
                       @if($errors->get('first_name'))
                         <div class="form-group has-error">
@@ -183,6 +205,7 @@
                           @enderror
                         </div>
                     </div>
+                    --}}
                   </div>
                   <div class="col-md-6">
                     <div class="col-md-12">

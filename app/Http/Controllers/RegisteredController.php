@@ -688,8 +688,9 @@ class RegisteredController extends Controller
 
             $data = $request->all();
             $data = Validator::make($data, [
-                'first_name' => ['bail', 'sometimes'],
-                'last_name' => ['bail', 'sometimes'],
+                //'first_name' => ['bail', 'sometimes'],
+                //'last_name' => ['bail', 'sometimes'],
+                'full_name' => ['bail', 'sometimes'],
                 'email' => ['bail', 'sometimes', Rule::unique('users')->ignore(Auth::user()->id, 'id')],
                 'old_password' => ['bail', 'sometimes'],
                 'password' => ['bail', 'sometimes'],
@@ -762,9 +763,20 @@ class RegisteredController extends Controller
                     $file_name = 'user.jpg';
                 }
             }
+            
+            $space_occurence_count = substr_count($request->full_name, ' ');
+            if($space_occurence_count == 0) {
+                $first_name = $request->full_name;
+                $last_name = $request->full_name;
+            } else {
+                $reversed_string = strrev($request->full_name);
+                $last_name = strrev( explode(' ', $reversed_string)[0] );
+                $first_name = strrev( substr($reversed_string, strpos($reversed_string, ' ') + 1) );
+            }
+
             Auth::user()->update([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
+                'first_name' => $first_name,
+                'last_name' => $last_name,
                 'email' => $request->email,
                 'password' => ($request->password)? Hash::make($request->password) : Auth::user()->password,
                 'phone' => $request->phone,

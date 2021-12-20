@@ -58,6 +58,24 @@
                 <p style="color:red">{{ $message }}</p>
               @enderror
             </div>
+            <div id="multiplicity" class="form-group @error('multiplicity') has-error @enderror @error('multiplicity') has-error @enderror">
+              <label for="multiplicity">Duration: ... month(s)</label>
+              <select id="multiplicity" name="multiplicity" class="form-control select2">
+                <option selected value="0">-- Choose duration --</option>
+                <option value="1">1 month</option>
+                <option value="2">2 months</option>
+                <option value="3">3 months</option>
+                <option value="4">4 months</option>
+                <option value="5">5 months</option>
+                <option value="6">6 months</option>
+                <option value="7">7 months</option>
+                <option value="8">8 months</option>
+                <option value="9">9 months</option>
+                <option value="10">10 months</option>
+                <option value="11">11 months</option>
+                <option value="12">12 months</option>
+              </select>
+            </div>
             <button type="submit" class="btn btn-s btn-flat btn-primary" style="width:100%;">Submit</button>
           </form>
         </div>
