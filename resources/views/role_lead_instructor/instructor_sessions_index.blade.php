@@ -29,7 +29,7 @@
       ?>
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title"><b>Add New Class</b></h3>
+          <h3 class="box-title"><b>Assign Sessions</b></h3>
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
           </div>
@@ -68,9 +68,25 @@
                 @endforeach
               </select>
             </div>
+
+
+            <div id="teaching_frequency" class="form-group @error('teaching_frequency') has-error @enderror @error('teaching_frequency') has-error @enderror">
+              <label for="teaching_frequency">Teaching Frequency: ... time(s) per week</label>
+              <select id="teaching_frequency" name="teaching_frequency" class="form-control select2">
+                <option selected value="0">-- Choose frequency --</option>
+                <option value="1">1 time</option>
+                <option value="2">2 times</option>
+                <option value="3">3 times</option>
+              </select>
+            </div>
+
+
             <div id="schedule_time_div" class="form-group @error('schedule_time_date') has-error @enderror @error('schedule_time_time') has-error @enderror">
-              <label for="schedule_time_date">First Session Schedule</label>
+              <label for="schedule_time_date">Choose Teaching Schedule</label>
               <p class="text-red">The time schedule inputted is adjusted with your local time.</p>
+
+@for($i = 0; $i < 3; $i++)
+              <label>Schedule #{{ $i + 1 }}</label>
               <div class="input-group date">
                 <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
                 <input name="schedule_time_date" type="text" class="form-control pull-right datepicker">
@@ -86,7 +102,35 @@
               @error('schedule_time_time')
                 <p style="color:red">{{ $message }}</p>
               @enderror
+  @if($i + 1 != 3)
+    <br />
+  @endif
+@endfor
+
+
             </div>
+
+
+            <div id="multiplicity" class="form-group @error('multiplicity') has-error @enderror @error('multiplicity') has-error @enderror">
+              <label for="multiplicity">Duration: ... week(s)</label>
+              <select id="multiplicity" name="multiplicity" class="form-control select2">
+                <option selected value="0">-- Choose duration --</option>
+                <option value="1">1 week</option>
+                <option value="2">2 weeks</option>
+                <option value="3">3 weeks</option>
+                <option value="4">4 weeks</option>
+                <option value="5">5 weeks</option>
+                <option value="6">6 weeks</option>
+                <option value="7">7 weeks</option>
+                <option value="8">8 weeks</option>
+                <option value="9">9 weeks</option>
+                <option value="10">10 weeks</option>
+                <option value="11">11 weeks</option>
+                <option value="12">12 weeks</option>
+              </select>
+            </div>
+
+
             <button type="submit" class="btn btn-s btn-flat btn-primary" style="width:100%;">Submit</button>
           </form>
         </div>
@@ -97,14 +141,115 @@
     <div class="col-md-9">
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-          <li class="active"><a href="#teaching_availability" data-toggle="tab"><b>Teaching Availability</b></a></li>
+          <li class="active"><a href="#response_to_rescheduling_request" data-toggle="tab"><b>Response to Rescheduling Request</b></a></li>
+          <li><a href="#teaching_availability" data-toggle="tab"><b>Teaching Availability</b></a></li>
           @foreach($instructors as $i => $dt)
             <li><a href="#i{{ $i + 1 }}" data-toggle="tab"><b>[{{ $i + 1 }}] {{ $dt->user->first_name }} {{ $dt->user->last_name }}</b></a></li>
           @endforeach
         </ul>
         <div class="tab-content">
+
+          <div class="active tab-pane" id="response_to_rescheduling_request">
+            <div class="row">
+              <div class="col-md-12 no-padding">
+                <div class="col-md-12">
+                  <div class="box box-default">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>Request to Reschedule</b></h3>
+                      {{--
+                      <div>
+                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('registered.dashboard.index') }}">
+                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+                          Add User
+                        </a>
+                      </div>
+                      --}}
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      </div>
+                    </div>
+                    <div class="box-body">
+                      <table class="table table-bordered table-striped example1">
+                        <thead>
+                          <th>Current Time</th>
+                          <th>Requested Time</th>
+                          <th>Instructor</th>
+                          <th style="width:5%;">Approve</th>
+                          <th style="width:5%;">Decline</th>
+                        </thead>
+                        <tbody>
+                          @if($instructor_schedules->toArray() != null)
+                            @foreach($instructor_schedules as $dt)
+                              <?php
+                                $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                $schedule_time_begin_iso = $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A');
+                              ?>
+                              @if($schedule_now <= $schedule_time_begin)
+                                <tr>
+                                  <td>
+                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
+                                    @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      <b>(Today)</b>
+                                    @endif
+                                    {{ $schedule_time_begin_iso }}
+                                  </td>
+                                  <td>
+                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
+                                    @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
+                                      <b>(Today)</b>
+                                    @endif
+                                    {{ $schedule_time_begin_iso }}
+                                  </td>
+                                  <td>
+                                    @if($dt->instructor)
+                                      {{ $dt->instructor->user->first_name }}
+                                      {{ $dt->instructor->user->last_name }}
+                                    @endif
+                                  </td>
+                                  <td class="text-center">
+                                    @if($schedule_now <= $schedule_time_begin)
+                                      <span class="hidden">1</span>
+                                      <form role="form" action="{{ route('instructor.schedule.destroy', [$dt->schedule_id]) }}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-flat btn-xs btn-success" onclick="if(confirm('This schedule will be deleted: {{ $schedule_time_begin_iso }}.')) return true; else return false;"><i class="fa fa-check"></i></button>
+                                      </form>
+                                    @else
+                                      <span class="hidden">2</span>
+                                      <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#"><i class="fa fa-check"></i></a>
+                                    @endif
+                                  </td>
+                                  <td class="text-center">
+                                    @if($schedule_now <= $schedule_time_begin)
+                                      <span class="hidden">1</span>
+                                      <form role="form" action="{{ route('instructor.schedule.destroy', [$dt->schedule_id]) }}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-flat btn-xs btn-danger" onclick="if(confirm('This schedule will be deleted: {{ $schedule_time_begin_iso }}.')) return true; else return false;"><i class="fa fa-times"></i></button>
+                                      </form>
+                                    @else
+                                      <span class="hidden">2</span>
+                                      <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#"><i class="fa fa-times"></i></a>
+                                    @endif
+                                  </td>
+                                </tr>
+                              @endif
+                            @endforeach
+                          @else
+                            <p class="text-muted">No schedules available.</p>
+                          @endif
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.tab-pane -->
           
-          <div class="active tab-pane" id="teaching_availability">
+          <div class="tab-pane" id="teaching_availability">
             <div class="row">
               <div class="col-md-12 no-padding">
                 <div class="col-md-12">
@@ -135,6 +280,7 @@
                           <th>Meeting Time</th>
                           <th>Instructor</th>
                           <th>Availability Status</th>
+                          <th style="width:5%;">Delete</th>
                         </thead>
                         <tbody>
                           @if($instructor_schedules->toArray() != null)
@@ -169,6 +315,19 @@
                                         <span class="hidden">3</span>
                                         <label data-toggle="tooltip" title class="label label-danger" data-original-title="This schedule is currently assigned to a session.">Busy</label>
                                       @endif
+                                    @endif
+                                  </td>
+                                  <td class="text-center">
+                                    @if($schedule_now <= $schedule_time_begin && $dt->status == 'Available')
+                                      <span class="hidden">1</span>
+                                      <form role="form" action="{{ route('instructor.schedule.destroy', [$dt->schedule_id]) }}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-flat btn-xs btn-danger" onclick="if(confirm('This schedule will be deleted: {{ $schedule_time_begin_iso }}.')) return true; else return false;"><i class="fa fa-trash"></i></button>
+                                      </form>
+                                    @else
+                                      <span class="hidden">2</span>
+                                      <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#"><i class="fa fa-trash"></i></a>
                                     @endif
                                   </td>
                                 </tr>
@@ -298,6 +457,7 @@
                           <th>Meeting Time</th>
                           <th>Availability Status</th>
                           <th>Assigned to</th>
+                          <th style="width:5%;">Delete</th>
                         </thead>
                         <tbody>
                           @if($instructor_schedules->toArray() != null)
@@ -334,6 +494,24 @@
                                     @else
                                       <td>N/A</td>
                                     @endif
+
+
+
+                                  <td class="text-center">
+                                    @if($schedule_now <= $schedule_time_begin && $dt->status == 'Available')
+                                      <span class="hidden">1</span>
+                                      <form role="form" action="{{ route('instructor.schedule.destroy', [$dt->schedule_id]) }}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-flat btn-xs btn-danger" onclick="if(confirm('This schedule will be deleted: {{ $schedule_time_begin_iso }}.')) return true; else return false;"><i class="fa fa-trash"></i></button>
+                                      </form>
+                                    @else
+                                      <span class="hidden">2</span>
+                                      <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#"><i class="fa fa-trash"></i></a>
+                                    @endif
+                                  </td>
+
+
                                   </tr>
                                 @endif
                               @endif

@@ -134,6 +134,11 @@
           <i class="fa fa-calendar"></i> <span>Schedules</span>
         </a>
       </li>
+      <li class="{{ set_active(['instructor.schedule.index', 'instructor.course.show', 'instructor.student_attendance.index', 'instructor.session_feedback.index', 'instructor.instructor_profile.show', 'instructor.student_profile.show']) }}">
+        <a href="{{ route('instructor.schedule.index') }}">
+          <i class="fa fa-edit"></i> <span>Propose Schedules</span>
+        </a>
+      </li>
 
       {{-- Menu Tambahan untuk Lead Instructor --}}
       @if(Auth::user()->roles == 'Lead Instructor')
