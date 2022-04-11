@@ -128,8 +128,8 @@
               @foreach($session_order_by_schedule_time as $dt)
                 <?php
                   $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
-                  $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                  $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                  $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                  $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                   $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                 ?>
                 @if($schedule_time_end >= $schedule_now)
@@ -237,9 +237,9 @@
                         @if($dt->session->schedule->schedule_time)
                           <?php
                             $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
-                            $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                            $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                            $schedule_time_end_form = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                            $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                            $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                            $schedule_time_end_form = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                             $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
                             $schedule_time_end_form->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                           ?>
@@ -430,8 +430,8 @@
               @foreach($session_order_by_schedule_time as $dt)
                 <?php
                   $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
-                  $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                  $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                  $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                  $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                   $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                 ?>
                 @if($schedule_time_end >= $schedule_now)

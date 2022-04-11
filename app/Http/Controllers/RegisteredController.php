@@ -102,7 +102,13 @@ class RegisteredController extends Controller
         //04.11.2020
         //Membuat Akses Untuk Financial Team
         if ($this->is_financial_team()) {
-            return view('role_financial_team.dashboard');
+
+            $timeNusia = Carbon::now()->setTimezone('Asia/Jakarta');
+            $timeStudent = Carbon::now(Auth::user()->timezone);
+            
+            return view('role_financial_team.dashboard', compact(
+                'timeNusia', 'timeStudent',
+            ));
         }
 
         //Membuat Akses Untuk Customer Service
@@ -153,7 +159,7 @@ class RegisteredController extends Controller
                 ->get();
             $arr = [];
             foreach($sessions as $s) {
-                $schedule_time_begin = Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_begin = Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                 $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
 
                 if($schedule_time_begin >= $timeStudent) {
@@ -177,7 +183,7 @@ class RegisteredController extends Controller
                 ->get();
             $arr = [];
             foreach($sessions_order_by_schedule_time as $s) {
-                $schedule_time_begin = Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_begin = Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                 $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
                 if($schedule_time_begin >= $timeStudent) {
                     array_push($arr, $s->id);
@@ -224,7 +230,7 @@ class RegisteredController extends Controller
                 ->get();
             $arr = [];
             foreach($session_registrations as $sr) {
-                $schedule_time_begin = Carbon::parse($sr->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_begin = Carbon::parse(explode('||', $sr->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                 $schedule_time_begin->add($sr->session->course->course_package->material_type->duration_in_minute, 'minutes');
                 if($schedule_time_begin >= $timeStudent) {
                     array_push($arr, $sr->id);
@@ -241,7 +247,7 @@ class RegisteredController extends Controller
                 ->get();
             $arr = [];
             foreach($session_order_by_schedule_time as $s) {
-                $schedule_time_begin = Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_begin = Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                 $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
                 if($schedule_time_begin >= $timeStudent) {
                     array_push($arr, $s->id);
@@ -289,7 +295,7 @@ class RegisteredController extends Controller
             foreach($course_registrations as $cr) {
                 $can_be_added = 1;
                 foreach($cr->course->sessions as $s) {
-                    $schedule_time_begin = Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                    $schedule_time_begin = Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                     $schedule_time_begin->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
                     if($schedule_time_begin < $timeStudent) {
                         $can_be_added = 0;
@@ -348,20 +354,37 @@ class RegisteredController extends Controller
             else if(session('chat-color') == 'success') session(['chat-color-alias' => 'green']);
         }
         
-        $users = User::whereIn('id', app(Controller::class)->get_relevant_user_ids_for_chat())->get();
-        $messages = Message
-            ::where(function($q) {
-                $q
-                    ->whereIn('user_id_sender', app(Controller::class)->get_relevant_user_ids_for_chat())
-                    ->where('user_id_recipient', 'LIKE', Auth::user()->id);
-            })
-            ->orWhere(function($q) {
-                $q
-                    ->where('user_id_sender', 'LIKE', Auth::user()->id)
-                    ->whereIn('user_id_recipient', app(Controller::class)->get_relevant_user_ids_for_chat());
-            })
-            ->orderBy('created_at', 'DESC')
-            ->get();
+        if($this->is_lead_instructor()) {
+            $users = User::whereIn('id', app(Controller::class)->get_relevant_user_ids_for_chat())->get();
+            $messages = Message
+                ::where(function($q) {
+                    $q
+                        ->whereIn('user_id_sender', app(Controller::class)->get_relevant_user_ids_for_chat())
+                        ->where('user_id_recipient', 'LIKE', Auth::user()->id);
+                })
+                ->orWhere(function($q) {
+                    $q
+                        ->where('user_id_sender', 'LIKE', Auth::user()->id)
+                        ->whereIn('user_id_recipient', app(Controller::class)->get_relevant_user_ids_for_chat());
+                })
+                ->orderBy('created_at', 'DESC')
+                ->get();
+        } else {
+            $users = User::whereIn('id', app(Controller::class)->get_relevant_user_ids_for_chat())->get();
+            $messages = Message
+                ::where(function($q) {
+                    $q
+                        ->whereIn('user_id_sender', app(Controller::class)->get_relevant_user_ids_for_chat())
+                        ->where('user_id_recipient', 'LIKE', Auth::user()->id);
+                })
+                ->orWhere(function($q) {
+                    $q
+                        ->where('user_id_sender', 'LIKE', Auth::user()->id)
+                        ->whereIn('user_id_recipient', app(Controller::class)->get_relevant_user_ids_for_chat());
+                })
+                ->orderBy('created_at', 'DESC')
+                ->get();
+        }
         if($this->is_student()) {
             return view('role_student.chat_index', compact('users', 'messages'));
         } else if($this->is_instructor()) {
@@ -388,12 +411,12 @@ class RegisteredController extends Controller
                 'Baking', 'Baseball', 'Basketball', 'Blogging', 'Boating', 'Bowling',
                 'Broadcasting', 'Business', 'Camping', 'Chess', 'Child caring',
                 'Clothing', 'Collecting', 'Community service', 'Cooking', 'Cosmetics', 'Crafting', 'Creative Writing', 'Culinary', 'Culture',
-                'Cycling', 'Dancing', 'Design', 'Discussion', 'Driving/racing',
+                'Cycling', 'Dancing', 'Design', 'Discussion', 'Driving/racing', 'Education',
                 'Electronics', 'Entrepreneurship', 'Event organizing', 'Fashion', 'Finance',
                 'Fishing', 'Foods & beverages', 'Football', 'Formulate Teaching Methods', 'Gardening', 'Gender Studies', 'Golf',
                 'Hairstyling', 'Handicrafting', 'Health', 'Higher education', 'Hiking',
                 'History', 'Home decoration', 'Horseback riding', 'Housecleaning', 'Hunting',
-                'Ice hockey', 'Jogging', 'Knowledge', 'Korean Pop Culture', 'Lacrosse', 'Laundry/ironing', 'Law',
+                'Ice hockey', 'Jogging', 'Knowledge', 'Korean Pop Culture', 'Lacrosse', 'Language', 'Laundry/ironing', 'Law',
                 'Leadership', 'Leatherworking', 'Listening', 'Listening Music', 'Literature', 'Management', 'Marketing',
                 'Mechanics', 'Motivating', 'Movie', 'Music', 'Nursing',
                 'Outdoor recreation', 'Photography', 'Physical exercise', 'Politics', 'Pop Culture', 'Pottery',
@@ -456,12 +479,12 @@ class RegisteredController extends Controller
                 'Baking', 'Baseball', 'Basketball', 'Blogging', 'Boating', 'Bowling',
                 'Broadcasting', 'Business', 'Camping', 'Chess', 'Child caring',
                 'Clothing', 'Collecting', 'Community service', 'Cooking', 'Cosmetics', 'Crafting', 'Creative Writing', 'Culinary', 'Culture',
-                'Cycling', 'Dancing', 'Design', 'Discussion', 'Driving/racing',
+                'Cycling', 'Dancing', 'Design', 'Discussion', 'Driving/racing', 'Education',
                 'Electronics', 'Entrepreneurship', 'Event organizing', 'Fashion', 'Finance',
                 'Fishing', 'Foods & beverages', 'Football', 'Formulate Teaching Methods', 'Gardening', 'Gender Studies', 'Golf',
                 'Hairstyling', 'Handicrafting', 'Health', 'Higher education', 'Hiking',
                 'History', 'Home decoration', 'Horseback riding', 'Housecleaning', 'Hunting',
-                'Ice hockey', 'Jogging', 'Knowledge', 'Korean Pop Culture', 'Lacrosse', 'Laundry/ironing', 'Law',
+                'Ice hockey', 'Jogging', 'Knowledge', 'Korean Pop Culture', 'Lacrosse', 'Language', 'Laundry/ironing', 'Law',
                 'Leadership', 'Leatherworking', 'Listening', 'Listening Music', 'Literature', 'Management', 'Marketing',
                 'Mechanics', 'Motivating', 'Movie', 'Music', 'Nursing',
                 'Outdoor recreation', 'Photography', 'Physical exercise', 'Politics', 'Pop Culture', 'Pottery',
@@ -630,8 +653,14 @@ class RegisteredController extends Controller
                         // Write just a year (because both of them are same).
                         $working_experience[$i] = $working_experience_begin_year[$i].': '.$working_experience[$i];
                     } else {
-                        // Reverse the years.
-                        $working_experience[$i] = $working_experience_end_year[$i].'-'.$working_experience_begin_year[$i].': '.$working_experience[$i];
+                        // The years are reversed, or this experience is current.
+                        if($working_experience_end_year[$i] == -2) {
+                            // This experience is current.
+                            $working_experience[$i] = $working_experience_begin_year[$i].'-present: '.$working_experience[$i];
+                        } else {
+                            // Reverse the years.
+                            $working_experience[$i] = $working_experience_end_year[$i].'-'.$working_experience_begin_year[$i].': '.$working_experience[$i];
+                        }
                     }
                 } else if($working_experience_begin_year[$i] != null) {
                     // Here, $working_experience_end_year is null.

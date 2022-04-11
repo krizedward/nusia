@@ -20,13 +20,14 @@
         /*$count = 0;
         foreach($instructor_schedules as $dt) {
           if($dt->schedule->session) {
-            $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)
+            $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])
               ->setTimezone(Auth::user()->timezone)
               ->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes');
             if($schedule_now <= $schedule_time_end) $count++;
           }
         }*/
       ?>
+{{--
       <div class="box box-primary">
         <div class="box-header with-border">
           <h3 class="box-title"><b>Add Teaching Availability</b></h3>
@@ -82,6 +83,7 @@
         <!-- /.box-body -->
       </div>
       <!-- /.box -->
+--}}
       <div class="box box-primary">
         <div class="box-header with-border">
           <h3 class="box-title"><b>Edit Meeting Link</b></h3>
@@ -101,7 +103,7 @@
                 @foreach($instructor_schedules as $dt)
                   @if($dt->schedule->session)
                     <?php
-                      $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)
+                      $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])
                         ->setTimezone(Auth::user()->timezone)
                         ->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes');
                     ?>
@@ -132,7 +134,6 @@
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
           <li class="active"><a href="#sessions" data-toggle="tab"><b>Sessions</b></a></li>
-          <li><a href="#teaching_availability" data-toggle="tab"><b>Teaching Availability</b></a></li>
           <li><a href="#class_information" data-toggle="tab"><b>Class Information</b></a></li>
         </ul>
         <div class="tab-content">
@@ -179,10 +180,10 @@
                             @foreach($instructor_schedules as $dt)
                               @if($dt->schedule->session)
                                 <?php
-                                  $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_10_mins_before_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_30_mins_after_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_10_mins_before_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_30_mins_after_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                   $schedule_time_10_mins_before_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->sub(10, 'minutes');
                                   $schedule_time_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes');
                                   $schedule_time_30_mins_after_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
@@ -278,10 +279,10 @@
                             @foreach($instructor_schedules as $dt)
                               @if($dt->schedule->session)
                                 <?php
-                                  $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_10_mins_before_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_30_mins_after_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_10_mins_before_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_30_mins_after_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                   $schedule_time_10_mins_before_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->sub(10, 'minutes');
                                   $schedule_time_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes');
                                   $schedule_time_30_mins_after_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
@@ -303,181 +304,6 @@
                                   </td>
                                 </tr>
                               @endif
-                            @endforeach
-                          @else
-                            <p class="text-muted">No schedules available.</p>
-                          @endif
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- /.tab-pane -->
-          <div class="tab-pane" id="teaching_availability">
-            <div class="row">
-              <div class="col-md-12 no-padding">
-                <div class="col-md-12">
-                  <div class="box box-default">
-                    <div class="box-header">
-                      <h3 class="box-title"><b>Current Teaching Availability</b></h3>
-                      {{--
-                      <div>
-                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('registered.dashboard.index') }}">
-                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add User
-                        </a>
-                      </div>
-                      --}}
-                      <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                      </div>
-                    </div>
-                    <div class="box-body">
-                      <strong><i class="fa fa-edit margin-r-5"></i> Types of Availability Status</strong>
-                      <p>
-                        <label data-toggle="tooltip" title class="label label-success" data-original-title="This schedule is available for another upcoming reservation.">Available</label>
-                        <label data-toggle="tooltip" title class="label label-danger" data-original-title="This schedule is currently assigned to a session.">Busy</label>
-                      </p>
-                      <hr>
-                      <table class="table table-bordered table-striped example1">
-                        <thead>
-                          <th>Meeting Time</th>
-                          <th>Availability Status</th>
-                          <th style="width:5%;">Delete</th>
-                        </thead>
-                        <tbody>
-                          @if($instructor_schedules->toArray() != null)
-                            @foreach($instructor_schedules as $dt)
-                              <?php
-                                $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                $schedule_time_begin_iso = $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A');
-                              ?>
-                              @if($schedule_now <= $schedule_time_begin)
-                                <tr>
-                                  <td>
-                                    <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
-                                    @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                      <b>(Today)</b>
-                                    @endif
-                                    {{ $schedule_time_begin_iso }}
-                                  </td>
-                                  <td class="text-center">
-                                    @if($dt->status == 'Available')
-                                      @if($schedule_now <= $schedule_time_begin)
-                                        <span class="hidden">1</span>
-                                        <label data-toggle="tooltip" title class="label label-success" data-original-title="This schedule is available for another upcoming reservation.">Available</label>
-                                      @endif
-                                    @elseif($dt->status == 'Busy')
-                                      @if($schedule_now <= $schedule_time_begin)
-                                        <span class="hidden">3</span>
-                                        <label data-toggle="tooltip" title class="label label-danger" data-original-title="This schedule is currently assigned to a session.">Busy</label>
-                                      @endif
-                                    @endif
-                                  </td>
-                                  <td class="text-center">
-                                    @if($schedule_now <= $schedule_time_begin && $dt->status == 'Available')
-                                      <span class="hidden">1</span>
-                                      <form role="form" action="{{ route('instructor.schedule.destroy', [$dt->schedule_id]) }}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-flat btn-xs btn-danger" onclick="if(confirm('This schedule will be deleted: {{ $schedule_time_begin_iso }}.')) return true; else return false;"><i class="fa fa-trash"></i></button>
-                                      </form>
-                                    @else
-                                      <span class="hidden">2</span>
-                                      <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#"><i class="fa fa-trash"></i></a>
-                                    @endif
-                                  </td>
-                                </tr>
-                              @endif
-                            @endforeach
-                          @else
-                            <p class="text-muted">No schedules available.</p>
-                          @endif
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                  <div class="box box-default collapsed-box hidden">
-                    <div class="box-header">
-                      <h3 class="box-title"><b>All Teaching Availability</b></h3>
-                      {{--
-                      <div>
-                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs bg-blue" href="{{ route('registered.dashboard.index') }}">
-                          <i class="fa fa-plus"></i>&nbsp;&nbsp;
-                          Add User
-                        </a>
-                      </div>
-                      --}}
-                      <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-                      </div>
-                    </div>
-                    <div class="box-body" style="display:none;">
-                      <strong><i class="fa fa-edit margin-r-5"></i> Types of Availability Status</strong>
-                      <p>
-                        <label data-toggle="tooltip" title class="label label-success" data-original-title="This schedule is available for another upcoming reservation.">Available</label>
-                        <label data-toggle="tooltip" title class="label label-danger" data-original-title="This schedule is currently assigned to a session.">Busy</label>
-                        <label data-toggle="tooltip" title class="label label-default" data-original-title="This schedule was available for another upcoming reservation (but already passed the current time).">Available</label>
-                        <label data-toggle="tooltip" title class="label label-default" data-original-title="This schedule was assigned to a session (but already passed the current time).">Busy</label>
-                      </p>
-                      <hr>
-                      <table class="table table-bordered table-striped example1">
-                        <thead>
-                          <th>Meeting Time</th>
-                          <th>Availability Status</th>
-                          <th style="width:5%;">Delete</th>
-                        </thead>
-                        <tbody>
-                          @if($instructor_schedules->toArray() != null)
-                            @foreach($instructor_schedules as $dt)
-                              <?php
-                                $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                $schedule_time_begin_iso = $schedule_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A');
-                              ?>
-                              <tr>
-                                <td>
-                                  <span class="hidden">{{ $schedule_time_begin->isoFormat('YYMMDDHHmm') }}</span>
-                                  @if($schedule_time_begin->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                    <b>(Today)</b>
-                                  @endif
-                                  {{ $schedule_time_begin_iso }}
-                                </td>
-                                <td class="text-center">
-                                  @if($dt->status == 'Available')
-                                    @if($schedule_now <= $schedule_time_begin)
-                                      <span class="hidden">1</span>
-                                      <label data-toggle="tooltip" title class="label label-success" data-original-title="This schedule is available for another upcoming reservation.">Available</label>
-                                    @else
-                                      <span class="hidden">2</span>
-                                      <label data-toggle="tooltip" title class="label label-default" data-original-title="This schedule was available for another upcoming reservation (but already passed the current time).">Available</label>
-                                    @endif
-                                  @elseif($dt->status == 'Busy')
-                                    @if($schedule_now <= $schedule_time_begin)
-                                      <span class="hidden">3</span>
-                                      <label data-toggle="tooltip" title class="label label-danger" data-original-title="This schedule is currently assigned to a session.">Busy</label>
-                                    @else
-                                      <span class="hidden">4</span>
-                                      <label data-toggle="tooltip" title class="label label-default" data-original-title="This schedule was assigned to a session (but already passed the current time).">Busy</label>
-                                    @endif
-                                  @endif
-                                </td>
-                                <td class="text-center">
-                                  @if($schedule_now <= $schedule_time_begin && $dt->status == 'Available')
-                                    <span class="hidden">1</span>
-                                    <form role="form" action="{{ route('instructor.schedule.destroy', [$dt->schedule_id]) }}" method="post">
-                                      @csrf
-                                      @method('DELETE')
-                                      <button type="submit" class="btn btn-flat btn-xs btn-danger" onclick="if(confirm('This schedule will be deleted: {{ $schedule_time_begin_iso }}.')) return true; else return false;"><i class="fa fa-trash"></i></button>
-                                    </form>
-                                  @else
-                                    <span class="hidden">2</span>
-                                    <a disabled class="btn btn-flat btn-xs btn-default btn-disabled" href="#"><i class="fa fa-trash"></i></a>
-                                  @endif
-                                </td>
-                              </tr>
                             @endforeach
                           @else
                             <p class="text-muted">No schedules available.</p>
@@ -543,10 +369,10 @@
                                 $class_status = null;
                                 if($dt->sessions) {
                                   foreach($dt->sessions as $s) {
-                                    $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                    $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                     $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
-                                    $schedule_time_end_form = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end_form = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                     $schedule_time_end_form->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
                                     // UNTUK KOLOM "Next Meeting Time"
                                     if($schedule_time_end >= $schedule_now) {
@@ -607,10 +433,17 @@
                                     @else
                                       {{ $next_meeting_time->isoFormat('ddd, MMM Do YYYY, hh:mm A') }}
                                     @endif
-                                    <div class="pull-right">
-                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $next_meeting_link }}">Link</a>
-                                      &nbsp;&nbsp;
-                                    </div>
+                                    @if($next_meeting_link)
+                                      <div class="pull-right">
+                                        <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $next_meeting_link }}">Link</a>
+                                        &nbsp;&nbsp;
+                                      </div>
+                                    @else
+                                      <div class="pull-right">
+                                        <button disabled class="btn btn-flat btn-xs btn-default btn-disabled">Link</button>
+                                        &nbsp;&nbsp;
+                                      </div>
+                                    @endif
                                   @else
                                     <span class="hidden">N/A</span>
                                     <i>N/A</i>
@@ -660,25 +493,10 @@
                       </div>
                     </div>
                     <div class="box-body" style="display:none;">
-                      <strong><i class="fa fa-edit margin-r-5"></i> Types of Class Status</strong>
-                      <p>
-                        <label data-toggle="tooltip" title class="label bg-red" data-original-title="This class sessions are not ready to be published yet. Please check whether all schedules for this class have been assigned.">Not Ready</label>
-                        <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This class has not started yet.">Upcoming</label>
-                        <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This class is in progress.">Ongoing</label>
-                        <label data-toggle="tooltip" title class="label bg-blue" data-original-title="This class is waiting for a last attendance check.">Last Attd</label>
-                        <label data-toggle="tooltip" title class="label bg-green" data-original-title="This class has been completed. Please make sure that all session attendances for this class have been checked.">Done</label>
-                      </p>
-                      <hr>
                       <table class="table table-bordered table-striped example1">
                         <thead>
-                          <th>Next Meeting Time</th>
-                          <th>Class Status</th>
-                          {{--
-                          <th>First Meet in Class</th>
-                          <th>Last Meet in Class</th>
-                          --}}
                           <th>Class Name</th>
-                          <th style="width:5%;">View</th>
+                          <th class="text-center" style="width:5%;">View</th>
                         </thead>
                         <tbody>
                           @if($courses->toArray() != null)
@@ -693,10 +511,10 @@
                                 $class_status = null;
                                 if($dt->sessions) {
                                   foreach($dt->sessions as $s) {
-                                    $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                    $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                     $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
-                                    $schedule_time_end_form = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end_form = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                     $schedule_time_end_form->add($s->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
                                     // UNTUK KOLOM "Next Meeting Time"
                                     if($schedule_time_end >= $schedule_now) {
@@ -727,64 +545,10 @@
                                   $class_status = 1; // Not Ready
                                 }
                               ?>
+                              @if($class_status != 5)
+                                @continue
+                              @endif
                               <tr>
-                                {{--
-                                @if($course_time_begin)
-                                  <td>
-                                    <span class="hidden">{{ $course_time_begin->isoFormat('YYMMDDHHmm') }}</span>
-                                    {{ $course_time_begin->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
-                                  </td>
-                                @else
-                                  <td><i>N/A</i></td>
-                                @endif
-                                @if($course_time_end)
-                                  <td>
-                                    <span class="hidden">{{ $course_time_end->isoFormat('YYMMDDHHmm') }}</span>
-                                    {{ $course_time_end->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}
-                                  </td>
-                                @else
-                                  <td><i>N/A</i></td>
-                                @endif
-                                --}}
-                                <td>
-                                  @if($next_meeting_time)
-                                    <span class="hidden">{{ $next_meeting_time->isoFormat('YYMMDDHHmm') }}</span>
-                                    @if($next_meeting_time->isoFormat('dddd, MMMM Do YYYY') == $schedule_now->isoFormat('dddd, MMMM Do YYYY'))
-                                      Today, {{ $next_meeting_time->isoFormat('hh:mm A') }}
-                                    @else
-                                      {{ $next_meeting_time->isoFormat('ddd, MMM Do YYYY, hh:mm A') }}
-                                    @endif
-                                    <div class="pull-right">
-                                      <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ $next_meeting_link }}">Link</a>
-                                      &nbsp;&nbsp;
-                                    </div>
-                                  @else
-                                    <span class="hidden">N/A</span>
-                                    <i>N/A</i>
-                                    <div class="pull-right">
-                                      <button disabled class="btn btn-flat btn-xs btn-default btn-disabled">Link</button>
-                                      &nbsp;&nbsp;
-                                    </div>
-                                  @endif
-                                </td>
-                                <td class="text-center">
-                                  @if($class_status == 1)
-                                    <span class="hidden">1</span>
-                                    <label data-toggle="tooltip" title class="label bg-red" data-original-title="This class sessions are not ready to be published yet. Please check whether all schedules for this class have been assigned.">Not Ready</label>
-                                  @elseif($class_status == 2)
-                                    <span class="hidden">2</span>
-                                    <label data-toggle="tooltip" title class="label bg-gray" data-original-title="This class has not started yet.">Upcoming</label>
-                                  @elseif($class_status == 3)
-                                    <span class="hidden">3</span>
-                                    <label data-toggle="tooltip" title class="label bg-yellow" data-original-title="This class is in progress.">Ongoing</label>
-                                  @elseif($class_status == 4)
-                                    <span class="hidden">4</span>
-                                    <label data-toggle="tooltip" title class="label bg-blue" data-original-title="This class is waiting for a last attendance check.">Last Attd</label>
-                                  @elseif($class_status == 5)
-                                    <span class="hidden">5</span>
-                                    <label data-toggle="tooltip" title class="label bg-green" data-original-title="This class has been completed. Please make sure that all session attendances for this class have been checked.">Done</label>
-                                  @endif
-                                </td>
                                 <td>{{ $dt->course_package->material_type->name }} - {{ $dt->course_package->course_type->name }} - {{ $dt->title }}</td>
                                 <td class="text-center"><a target="_blank" class="btn btn-flat btn-xs bg-purple" href="{{ route('instructor.course.show', [$dt->id]) }}">Info</a></td>
                               </tr>

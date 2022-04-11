@@ -103,6 +103,23 @@ class InstructorController extends Controller
         return view('role_instructor.schedule_index', compact('instructor_schedules', 'courses'));
     }
 
+    public function propose_schedule_index() {
+        // melihat jadwal mengajar yang diintegrasikan dengan sesi, yang sedang atau akan berlangsung
+        // & melaksanakan kelas (via meeting link)
+        // & melihat ketersediaan jadwal mengajar yang pernah dibuat, secara menyeluruh
+        // & melihat daftar course yang diajar
+        // & melihat hasil filter daftar course sesuai jenis course
+        $instructor_schedules = InstructorSchedule::where('instructor_id', Auth::user()->instructor->id)->get();
+        $courses = Course
+            ::join('sessions', 'sessions.course_id', 'courses.id')
+            ->join('schedules', 'sessions.schedule_id', 'schedules.id')
+            ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+            ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
+            ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at', 'courses.deleted_at')
+            ->distinct()->get();
+        return view('role_instructor.propose_schedule_index', compact('instructor_schedules', 'courses'));
+    }
+
     public function schedule_store(Request $request) {
         // menambah ketersediaan jadwal mengajar
     }
@@ -118,7 +135,7 @@ class InstructorController extends Controller
     public function schedule_destroy($schedule_id) {
         // menghapus ketersediaan jadwal mengajar
         $schedule = Schedule::findOrFail($schedule_id);
-        foreach($schedule->instructor_schedules as $dt) if($dt->instructor_id == Auth::user()->instructor->id)
+        foreach($schedule->instructor_schedules as $dt)
             $dt->delete();
         $schedule->delete();
         session(['caption-success' => 'This session information has been deleted. Thank you!']);
@@ -137,12 +154,35 @@ class InstructorController extends Controller
         // & melihat daftar instructor course
         // & melihat daftar student dalam course
         $course = Course::findOrFail($course_id);
-        $sessions = Session
-            ::join('schedules', 'sessions.schedule_id', 'schedules.id')
-            ->where('sessions.course_id', $course_id)
-            ->orderBy('schedules.schedule_time')
-            ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at')
-            ->get();
+        
+        if($this->is_lead_instructor()) {
+            $sessions = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->where('sessions.course_id', $course_id)
+                ->orderBy('schedules.schedule_time')
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at')
+                ->get();
+        } else if($this->is_instructor()) {
+            $sessions = Session
+                ::join('schedules', 'sessions.schedule_id', 'schedules.id')
+                ->join('instructor_schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+                ->where('sessions.course_id', $course_id)
+                ->where('instructor_schedules.instructor_id', Auth::user()->instructor->id)
+                ->orderBy('schedules.schedule_time')
+                ->select('sessions.id', 'sessions.code', 'sessions.course_id', 'sessions.schedule_id', 'sessions.form_id', 'sessions.title', 'sessions.description', 'sessions.requirement', 'sessions.link_zoom', 'sessions.reschedule_late_confirmation', 'sessions.reschedule_technical_issue_instructor', 'sessions.reschedule_technical_issue_student', 'sessions.created_at', 'sessions.updated_at', 'sessions.deleted_at')
+                ->get();
+        }
+        
+        if(count($sessions) == 0) {
+            // invalid request
+            session(['caption-danger' => 'Invalid request. Please try again or contact NUSIA Admin for more information.']);
+            return redirect()->route('registered.dashboard.index');
+        }
+        
+        if($this->is_lead_instructor()) {
+            session(['caption-warning' => 'You are viewing a course taught by another Instructor.']);
+        } 
+        
         $task_submissions = TaskSubmission
             ::join('tasks', 'task_submissions.task_id', 'tasks.id')
             ->join('sessions', 'tasks.session_id', 'sessions.id')
@@ -156,7 +196,7 @@ class InstructorController extends Controller
         $course_levels = CourseLevel::all();
         
         return view('role_instructor.course_show', compact(
-            'course', 'sessions', 'task_submissions', 'material_types', 'course_types', 'course_levels',
+            'course', 'sessions', 'task_submissions', 'material_types', 'course_types', 'course_levels'
         ));
     }
 
@@ -174,6 +214,14 @@ class InstructorController extends Controller
             $data = Validator::make($request->all(), [
                 'schedule_time_date' => ['bail', 'required'],
                 'schedule_time_time' => ['bail', 'required'],
+                'schedule_time_time_2' => ['bail', 'required'],
+                'schedule_time_time_duration_1' => ['bail', 'sometimes'],
+                'schedule_time_time_duration_2' => ['bail', 'sometimes'],
+                'schedule_time_time_duration_3' => ['bail', 'sometimes'],
+                'schedule_time_time_duration_4' => ['bail', 'sometimes'],
+                'schedule_time_time_duration_5' => ['bail', 'sometimes'],
+                'schedule_time_time_duration_6' => ['bail', 'sometimes'],
+                'multiplicity' => ['bail', 'required', 'numeric', 'integer'],
             ]);
             if($data->fails()) {
                 session(['caption-danger' => 'This teaching availability information has not been changed. Try again.']);
@@ -182,36 +230,51 @@ class InstructorController extends Controller
                     ->withInput();
             }
             
+            $schedule_time_carbon = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time);
             $schedule_time = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time)->toDateTimeString();
             if($schedule_time < now()) {
                 session(['caption-danger' => 'Cannot change the teaching availability information as the inputted time has passed the current time.']);
                 return redirect()->back()->withInput();
             }
             
-            $schedule_time_is_exist = 0;
-            foreach(Auth::user()->instructor->instructor_schedules as $dt) {
-                if($dt->schedule->schedule_time == $schedule_time) {
-                    $schedule_time_is_exist = 1;
-                    break;
+            $schedule_time_carbon_2 = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time_2);
+            $schedule_time_2 = Carbon::createFromFormat('m/d/Y H:i A', $request->schedule_time_date . ' ' . $request->schedule_time_time_2)->toDateTimeString();
+            
+            for($i = 0; $i < ($request->multiplicity * 4); $i++) {
+                if($i != 0) {
+                    $schedule_time_carbon->add(1, 'week');
+                    $schedule_time = $schedule_time_carbon->toDateTimeString();
+                    
+                    $schedule_time_carbon_2->add(1, 'week');
+                    $schedule_time_2 = $schedule_time_carbon_2->toDateTimeString();
                 }
-            }
-            if($schedule_time_is_exist) {
-                // jadwal tersebut sudah ada, sehingga tidak dilakukan perubahan
-                session(['caption-danger' => 'This teaching availability information has been previously registered. No changes are made.']);
-                return redirect()->back()->withInput();
-            } else {
-                // jadwal tersebut belum ada, sehingga dibuat sebagai jadwal baru
-                InstructorSchedule::create([
-                    'instructor_id' => Auth::user()->instructor->id,
-                    'schedule_id' => Schedule::create([
-                        'schedule_time' => $schedule_time,
+                $schedule_time_is_exist = 0;
+                foreach(Auth::user()->instructor->instructor_schedules as $dt) {
+                    if(explode('||', $dt->schedule->schedule_time)[0] == $schedule_time && ( isset(explode('||', $dt->schedule->schedule_time)[1]) && explode('||', $dt->schedule->schedule_time)[1] == $schedule_time_2 )) {
+                        $schedule_time_is_exist = 1;
+                        break;
+                    }
+                }
+                if($schedule_time_is_exist) {
+                    // jadwal tersebut sudah ada, sehingga tidak dilakukan perubahan
+                    session(['caption-danger' => 'This teaching availability information has been previously registered. No changes are made.']);
+                    return redirect()->back()->withInput();
+                } else {
+                    // jadwal tersebut belum ada, sehingga dibuat sebagai jadwal baru
+                    InstructorSchedule::create([
+                        'instructor_id' => Auth::user()->instructor->id,
+                        'schedule_id' => Schedule::create([
+                            'schedule_time' => $schedule_time . '||' . $schedule_time_2 . '||' . $request->schedule_time_time_duration_1 . '||' . $request->schedule_time_time_duration_2 . '||' . $request->schedule_time_time_duration_3 . '||' . $request->schedule_time_time_duration_4 . '||' . $request->schedule_time_time_duration_5 . '||' . $request->schedule_time_time_duration_6 . '||' . 'Proposed',
+                            'created_at' => now(),
+                        ])->id,
+                        'status' => 'Available',
                         'created_at' => now(),
-                    ])->id,
-                    'status' => 'Available',
-                    'created_at' => now(),
-                ]);
-                session(['caption-success' => 'This teaching availability information has been added. Thank you!']);
+                    ]);
+                }
+                
             }
+            // semua jadwal berhasil ditambahkan, sehingga ditampilkan pesan konfirmasi berikut
+            session(['caption-success' => 'This teaching availability information has been added. Thank you!']);
         } else if($flag == 2) {
             // edit meeting link
             $data = Validator::make($request->all(), [
@@ -250,7 +313,9 @@ class InstructorController extends Controller
         // & memodifikasi ketersediaan jadwal mengajar (via show)
         $data = Validator::make($request->all(), [
             'session_id' => ['bail', 'required'],
+            /*'to_session_id' => ['bail', 'sometimes'],*/
             'session_description' => ['bail', 'sometimes'],
+            'link_zoom_flag' => ['bail', 'required'],
             'link_zoom' => ['bail', 'sometimes'],
         ]);
         if($data->fails()) {
@@ -262,6 +327,8 @@ class InstructorController extends Controller
         
         // memodifikasi informasi sesi yang sudah ada
         $session = Session::findOrFail($request->session_id);
+        $course_id = $session->course_id;
+        
         if($session->schedule->instructor_schedules->first()->instructor->id != Auth::user()->instructor->id && $session->schedule->instructor_schedules->last()->instructor->id != Auth::user()->instructor->id) {
             session(['caption-danger' => 'Cannot change this session information. You are not authorized to edit this session information.']);
             return redirect()->back();
@@ -269,8 +336,7 @@ class InstructorController extends Controller
         
         $session->update([
             'description' => $request->session_description,
-            'link_zoom' => $request->link_zoom,
-            'updated_at' => now(),
+            'link_zoom' => ($request->link_zoom_flag == 1)? $request->link_zoom : $session->link_zoom,
         ]);
         session(['caption-success' => 'This session information has been changed. Thank you!']);
         return redirect()->back();
@@ -325,9 +391,16 @@ class InstructorController extends Controller
             ]);
             session(['caption-success' => 'This reschedule information has been approved not to be changed. Thank you!']);
         } else if($request->approval_status == 1) {
+            $schedule_time_begin = Carbon::parse($session->requirement)->toDateTimeString();
+            $schedule_time_end = Carbon::parse($session->requirement)->add($session->course->course_package->material_type->duration_in_minute, 'minutes')->toDateTimeString();
             $session->schedule->update([
-                'schedule_time' => $session->requirement,
-                'updated_at' => now(),
+                'schedule_time' => $schedule_time_begin . '||' . $schedule_time_end
+                    . '||' . explode('||', $session->schedule->schedule_time)[2]
+                    . '||' . explode('||', $session->schedule->schedule_time)[3]
+                    . '||' . explode('||', $session->schedule->schedule_time)[4]
+                    . '||' . explode('||', $session->schedule->schedule_time)[5]
+                    . '||' . explode('||', $session->schedule->schedule_time)[6]
+                    . '||' . explode('||', $session->schedule->schedule_time)[7] . '||Assigned',
             ]);
             $session->update([
                 'requirement' => null,
@@ -353,9 +426,9 @@ class InstructorController extends Controller
         }
         
         $session = Session::findOrFail($session_id);
-        $schedule_time_begin_attendance = Carbon::parse($session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+        $schedule_time_begin_attendance = Carbon::parse(explode('||', $session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
         $schedule_time_begin_attendance->add($session->course->course_package->material_type->duration_in_minute, 'minutes')->sub(10, 'minutes');
-        $schedule_time_end_attendance = Carbon::parse($session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+        $schedule_time_end_attendance = Carbon::parse(explode('||', $session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
         $schedule_time_end_attendance->add($session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
         if(now() <= $schedule_time_begin_attendance || now() > $schedule_time_end_attendance) {
             // tidak diperbolehkan mengakses link.
@@ -370,8 +443,8 @@ class InstructorController extends Controller
         // mengubah status kehadiran student dalam satu sesi
         $session = Session::findOrFail($session_id);
         $schedule_now = Carbon::now()->setTimezone(Auth::user()->timezone);
-        $schedule_time_begin = Carbon::parse($session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-        $schedule_time_end_attendance = Carbon::parse($session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+        $schedule_time_begin = Carbon::parse(explode('||', $session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+        $schedule_time_end_attendance = Carbon::parse(explode('||', $session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
         $schedule_time_end_attendance->add($session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
         if($schedule_now > $schedule_time_end_attendance) {
             session(['caption-danger' => 'Cannot update the attendance information, as the due time has passed. Please contact NUSIA Admin for support.']);
@@ -427,6 +500,7 @@ class InstructorController extends Controller
             $sessions = Session::join('schedules', 'sessions.schedule_id', 'schedules.id')
                 ->where('sessions.course_id', $course_id)
                 ->orderBy('schedules.schedule_time')
+                ->select('sessions.*')
                 ->get();
             foreach($sessions as $i => $s) {
                 if($s->id == $request->material_public_session_name) {
@@ -458,6 +532,7 @@ class InstructorController extends Controller
             $file = $request->file('material_public_path_file');
             if($file) {
                 $file_name = Str::random(10) . '_' . $request['material_public_name'] . '.' . $file->extension();
+                dd($file);
                 $destination_path = 'uploads/material/';
                 $file->move($destination_path, $file_name);
                 $material_public_path = $file_name;

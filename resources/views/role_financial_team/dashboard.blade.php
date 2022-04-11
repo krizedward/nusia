@@ -5,6 +5,35 @@
 @include('layouts.css_and_js.all')
 
 @section('content')
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="alert alert-dismissible">
+        <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Western Indonesian time: <span id="time_nusia">{{ $timeNusia->isoFormat('h:mm A') }}</span></h4>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="alert alert-dismissible">
+        <h4 class="text-center"><i class="icon fa fa-clock-o"></i> Your time: <span id="time_student">{{ $timeStudent->isoFormat('h:mm A') }}</span></h4>
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-warning alert-dismissible">
+        <h4 style="color: #000;"><i class="icon fa fa-link"></i> Welcome, NUSIA Finance Team :)</h4>
+        <span style="color: #000;">Click <b>"Payments"</b> menu on the left panel to view all student payments.</span>
+      </div>
+      <div class="alert alert-warning alert-dismissible">
+        <h4 style="color: #000;"><i class="icon fa fa-clock-o"></i> Please check whether your local time zone shown in the dashboard is correct.</h4>
+        <span style="color: #000">If not, you can change your local time zone in the profile.</span>
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+
+{{--
 <div class="row">
 	<div class="col-md-12">
 		<div class="callout callout-warning" style="color: #000 !important;">
@@ -31,4 +60,5 @@
 		</div>
 	</div>
 </div>
+--}}
 @stop

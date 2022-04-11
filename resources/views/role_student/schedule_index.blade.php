@@ -77,11 +77,12 @@
                         $schedule_times_begin = [];
                         $schedule_times_end = [];
                         $schedule_times_end_form = [];
+                        $sr_arr = [];
                         $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
                         foreach($session_registrations as $dt) {
-                          $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                          $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                          $schedule_time_end_form = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                          $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                          $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                          $schedule_time_end_form = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                           $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
                           $schedule_time_end_form->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                           if($schedule_now <= $schedule_time_end_form) {
@@ -89,6 +90,7 @@
                             array_push($schedule_times_begin, $schedule_time_begin);
                             array_push($schedule_times_end, $schedule_time_end);
                             array_push($schedule_times_end_form, $schedule_time_end_form);
+                            array_push($sr_arr, $dt->id);
                           }
                         }
                       ?>
@@ -110,16 +112,18 @@
                             <th style="width:5%;">Link</th>
                           </thead>
                           <tbody>
-                            @foreach($session_registrations as $i => $dt)
-                              @if($schedule_now <= $schedule_times_end_form[$i])
+                            <?php $i = -1; ?>
+                            @foreach($session_registrations as $dt)
+                              @if($dt->id == $sr_arr[$i + 1])
+                                <?php $i++; ?>
                                 <tr>
                                   <td>
                                     {{ $dt->session->course->title }} ({{ $dt->session->title }})
                                     &nbsp;&nbsp;
                                     @if($dt->status == 'Not Assigned')
                                       <?php
-                                        $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                        $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                        $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                        $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                         $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
                                       ?>
                                       @if($schedule_now < $schedule_time_begin)

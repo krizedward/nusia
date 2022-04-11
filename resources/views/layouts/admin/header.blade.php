@@ -1,5 +1,5 @@
   <!-- Logo -->
-    <a href="{{ route('registered.dashboard.index') }}" class="logo" style="background-color:#0073b7;">
+    <a href="{{ route('registered.dashboard.index') }}" class="logo" {{--style="background-color:#0073b7;"--}}>
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <!--span class="logo-mini"><b>N</b></span-->
       <span class="logo-mini"><img src="{{ asset('header.ico') }}" alt="Header"></span>
@@ -7,7 +7,7 @@
       <span class="logo-lg"><b>Nusantara</b> Indonesia</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top" style="background-color:#0073b7;">
+    <nav class="navbar navbar-static-top" {{--style="background-color:#0073b7;"--}}>
       <!-- Sidebar toggle button-->
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
@@ -55,6 +55,12 @@
               <img src="{{ asset('uploads/student/profile/'. Auth::user()->image_profile) }}" class="user-image" alt="User Image">
               @elseif(Auth::user()->roles == 'Instructor' && Auth::user()->image_profile != 'user.jpg')
               <img src="{{ asset('uploads/instructor/'. Auth::user()->image_profile) }}" class="user-image" alt="User Image">
+              @elseif(Auth::user()->roles == 'Lead Instructor' && Auth::user()->image_profile != 'user.jpg')
+              <img src="{{ asset('uploads/instructor/'. Auth::user()->image_profile) }}" class="user-image" alt="User Image">
+              @elseif(Auth::user()->roles == 'Financial Team' && Auth::user()->image_profile != 'user.jpg')
+              <img src="{{ asset('uploads/finance-profile/'. Auth::user()->image_profile) }}" class="user-image" alt="User Image">
+              @elseif(Auth::user()->roles == 'Customer Service' && Auth::user()->image_profile != 'user.jpg')
+              <img src="{{ asset('uploads/cs-profile/'. Auth::user()->image_profile) }}" class="user-image" alt="User Image">
               @else
               <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="user-image" alt="User Image">
               @endif
@@ -72,6 +78,8 @@
                         <img src="{{ asset('uploads/cs-profile/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
                     @elseif(Auth::user()->roles == 'Financial Team')
                         <img src="{{ asset('uploads/finance-profile/'. Auth::user()->image_profile) }}" class="img-circle" alt="User Image">
+                    @elseif(Auth::user()->roles == 'Admin')
+                        <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="img-circle" alt="User Image">
                     @endif
                 @else
                     <img src="{{ asset('adminlte/dist/img/user.jpg')}}" class="img-circle" alt="User Image">

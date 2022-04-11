@@ -104,6 +104,7 @@
             @else
               <p><i>N/A</i></p>
             @endif
+            
             {{--<hr>--}}
           </div>
           <!-- /.tab-pane -->
@@ -488,6 +489,11 @@
                           <label for="working_experience_end_year_1">To (optional)</label>
                           <select name="working_experience_end_year_1" type="text" class="@error('working_experience_end_year_1') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_1_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 0 && substr($working_experience_values[0], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 0 && substr($working_experience_values[0], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -550,6 +556,11 @@
                           <label for="working_experience_end_year_2">To (optional)</label>
                           <select name="working_experience_end_year_2" type="text" class="@error('working_experience_end_year_2') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_2_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 1 && substr($working_experience_values[1], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 1 && substr($working_experience_values[1], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -612,6 +623,11 @@
                           <label for="working_experience_end_year_3">To (optional)</label>
                           <select name="working_experience_end_year_3" type="text" class="@error('working_experience_end_year_3') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_3_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 2 && substr($working_experience_values[2], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 2 && substr($working_experience_values[2], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -674,6 +690,11 @@
                           <label for="working_experience_end_year_4">To (optional)</label>
                           <select name="working_experience_end_year_4" type="text" class="@error('working_experience_end_year_4') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_4_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 3 && substr($working_experience_values[3], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 3 && substr($working_experience_values[3], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -736,6 +757,11 @@
                           <label for="working_experience_end_year_5">To (optional)</label>
                           <select name="working_experience_end_year_5" type="text" class="@error('working_experience_end_year_5') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_5_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 4 && substr($working_experience_values[4], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 4 && substr($working_experience_values[4], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -798,6 +824,11 @@
                           <label for="working_experience_end_year_6">To (optional)</label>
                           <select name="working_experience_end_year_6" type="text" class="@error('working_experience_end_year_6') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_6_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 5 && substr($working_experience_values[5], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 5 && substr($working_experience_values[5], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -860,6 +891,11 @@
                           <label for="working_experience_end_year_7">To (optional)</label>
                           <select name="working_experience_end_year_7" type="text" class="@error('working_experience_end_year_7') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_7_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 6 && substr($working_experience_values[6], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 6 && substr($working_experience_values[6], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -922,6 +958,11 @@
                           <label for="working_experience_end_year_8">To (optional)</label>
                           <select name="working_experience_end_year_8" type="text" class="@error('working_experience_end_year_8') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_8_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 7 && substr($working_experience_values[7], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 7 && substr($working_experience_values[7], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -984,6 +1025,11 @@
                           <label for="working_experience_end_year_9">To (optional)</label>
                           <select name="working_experience_end_year_9" type="text" class="@error('working_experience_end_year_9') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_9_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 8 && substr($working_experience_values[8], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 8 && substr($working_experience_values[8], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -1046,6 +1092,11 @@
                           <label for="working_experience_end_year_10">To (optional)</label>
                           <select name="working_experience_end_year_10" type="text" class="@error('working_experience_end_year_10') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_10_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 9 && substr($working_experience_values[9], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 9 && substr($working_experience_values[9], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -1108,6 +1159,11 @@
                           <label for="working_experience_end_year_11">To (optional)</label>
                           <select name="working_experience_end_year_11" type="text" class="@error('working_experience_end_year_11') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_11_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 10 && substr($working_experience_values[10], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 10 && substr($working_experience_values[10], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -1170,6 +1226,11 @@
                           <label for="working_experience_end_year_12">To (optional)</label>
                           <select name="working_experience_end_year_12" type="text" class="@error('working_experience_end_year_12') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_12_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 11 && substr($working_experience_values[11], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 11 && substr($working_experience_values[11], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -1232,6 +1293,11 @@
                           <label for="working_experience_end_year_13">To (optional)</label>
                           <select name="working_experience_end_year_13" type="text" class="@error('working_experience_end_year_13') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_13_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 12 && substr($working_experience_values[12], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 12 && substr($working_experience_values[12], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -1294,6 +1360,11 @@
                           <label for="working_experience_end_year_14">To (optional)</label>
                           <select name="working_experience_end_year_14" type="text" class="@error('working_experience_end_year_14') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_14_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 13 && substr($working_experience_values[13], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 13 && substr($working_experience_values[13], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>
@@ -1356,6 +1427,11 @@
                           <label for="working_experience_end_year_15">To (optional)</label>
                           <select name="working_experience_end_year_15" type="text" class="@error('working_experience_end_year_15') is-invalid @enderror form-control select2" style="width:100%;" id="working_experience_end_year_15_input">
                             <option selected="selected" value="">-- To --</option>
+                            @if(count($working_experience_values) > 14 && substr($working_experience_values[14], 5, 7) == 'present')
+                              <option selected="selected" value="-2">Present</option>
+                            @else
+                              <option value="-2">Present</option>
+                            @endif
                             @for($i = date('Y'), $j = 0; $j < 80; $i = $i - 1, $j = $j + 1 )
                               @if(count($working_experience_values) > 14 && substr($working_experience_values[14], 5, 4) == $i)
                                 <option selected="selected" value="{{ $i }}">{{ $i }}</option>

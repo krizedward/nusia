@@ -314,7 +314,8 @@
                 <label for="description_of_course_taken">
                   Your Learning Experiences <span style="color:#ff0000;">*</span><br />
                   <i>
-                    If you have studied the Indonesian language, briefly describe any courses you have taken! (write in the Indonesian language—if possible)
+                    {{--If you have studied the Indonesian language, briefly describe any courses you have taken! (write in the Indonesian language—if possible)--}}
+                    If you have studied the Indonesian language/culture, briefly describe any courses you have taken! (write in the Indonesian language—if possible)
                   </i>
                 </label>
                 <textarea id="description_of_course_taken" name="description_of_course_taken" class="@error('description_of_course_taken') is-invalid @enderror form-control" rows="5" placeholder="Enter Your Learning Experiences">{{ old('description_of_course_taken') }}</textarea>
@@ -328,7 +329,8 @@
                 <label for="learning_objective">
                   Your Learning Objectives <span style="color:#ff0000;">*</span><br />
                   <i>
-                    Why do you want to learn the Indonesian language? (Briefly describe your learning objectives in the Indonesian language—if possible!)
+                    {{--Why do you want to learn the Indonesian language? (Briefly describe your learning objectives in the Indonesian language—if possible!)--}}
+                    Why do you want to learn the Indonesian language/culture? (Briefly describe your learning objectives in the Indonesian language—if possible!)
                   </i>
                 </label>
                 <textarea id="learning_objective" name="learning_objective" class="@error('learning_objective') is-invalid @enderror form-control" rows="5" placeholder="Enter Your Learning Objectives">{{ old('learning_objective') }}</textarea>

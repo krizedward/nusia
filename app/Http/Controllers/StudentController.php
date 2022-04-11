@@ -258,7 +258,7 @@ class StudentController extends Controller
             'status_description' => ['bail', 'required'],
             'interest_1' => ['bail', 'required'],
             'target_language_experience' => ['bail', 'required'],
-            'target_language_experience_value' => ['bail', 'required_if:target_language_experience,Others', 'numeric'],
+            'target_language_experience_value' => ['bail', 'required_if:target_language_experience,Others'/*, 'numeric'*/],
             'description_of_course_taken' => ['bail', 'required_unless:target_language_experience,Never (no experience)'],
             'indonesian_language_proficiency' => ['bail', 'required'],
             'learning_objective' => ['bail', 'required'],
@@ -368,38 +368,30 @@ class StudentController extends Controller
                 ::where('name', 'NOT LIKE', '%Free%')
                 ->where('name', 'NOT LIKE', '%Test%')
                 ->where('name', 'NOT LIKE', '%Trial%')
-                /*->where('name', 'NOT LIKE', '%Not Assigned%')*/
+                ->where('name', 'NOT LIKE', '%Early Registration%')
+                ->where('name', 'NOT LIKE', '%Not Assigned%')
                 ->get();
             $course_packages = CoursePackage
                 ::where('title', 'NOT LIKE', '%Free%')
                 ->where('title', 'NOT LIKE', '%Test%')
                 ->where('title', 'NOT LIKE', '%Trial%')
-                /*->where('title', 'NOT LIKE', '%Not Assigned%'*/
-                /*->where('title', 'NOT LIKE', '%Early Registration%')*/
-                ->get();
-            $course_package_discounts = CoursePackageDiscount
-                ::join('course_packages', 'course_package_discounts.course_package_id', 'course_packages.id')
-                ->where('course_packages.title', 'NOT LIKE', '%Free%')
-                ->where('course_packages.title', 'NOT LIKE', '%Test%')
-                ->where('course_packages.title', 'NOT LIKE', '%Trial%')
-                /*->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')*/
-                /*->where('course_packages.title', 'NOT LIKE', '%Early Registration%')*/
-                ->where('course_package_discounts.due_date', '>', now())
-                ->where('course_package_discounts.status', 'Active')
-                ->select('course_package_discounts.*')
+                ->where('title', 'NOT LIKE', '%Not Assigned%')
+                ->where('title', 'NOT LIKE', '%Early Registration%')
                 ->get();
             
-            /*$registered_early_classes = CourseRegistration
-                ::join('courses', 'course_registrations.course_id', 'courses.id')
-                ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
-                ->where('course_registrations.student_id', Auth::user()->student->id)
-                ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+            $course_packages_ids = $course_packages->pluck('id')->toArray();
+            $course_package_discounts = CoursePackageDiscount
+                ::whereIn('course_package_discounts.course_package_id', $course_packages_ids)
+                /*::join('course_packages', 'course_package_discounts.course_package_id', 'course_packages.id')
                 ->where('course_packages.title', 'NOT LIKE', '%Free%')
                 ->where('course_packages.title', 'NOT LIKE', '%Test%')
                 ->where('course_packages.title', 'NOT LIKE', '%Trial%')
-                ->where('course_packages.title', 'LIKE', '%Early Registration%')
-                ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
-                ->get();*/
+                ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+                ->where('course_packages.title', 'NOT LIKE', '%Early Registration%')*/
+                ->where('course_package_discounts.due_date', '>', now())
+                ->where('course_package_discounts.status', 'Active')
+                //->select('course_package_discounts.*')
+                ->get();
             
             // Menyimpan daftar course_registrations yang memiliki jadwal sesi yang belum berjalan.
             // Query ini menghilangkan daftar course_registrations yang sudah SEPENUHNYA selesai.
@@ -415,9 +407,10 @@ class StudentController extends Controller
                 ->where('course_packages.title', 'NOT LIKE', '%Test%')
                 ->where('course_packages.title', 'NOT LIKE', '%Trial%')
                 ->where('schedules.schedule_time', '>', now())
-                ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
-                ->distinct()
-                ->get();
+                ->select('course_registrations.id as id')
+                ->distinct()->get()->pluck('id')->toArray();
+            $all_current_running_course_registrations = CourseRegistration
+                ::whereIn('id', $all_current_running_course_registrations)->get();
 
             // Menyimpan daftar course_registrations yang bersifat "Not Registered".
             // Hal ini dilakukan untuk mengetahui daftar course yang berstatus masih dalam proses pendaftaran.
@@ -433,9 +426,6 @@ class StudentController extends Controller
                 ->where('courses.title', 'LIKE', '%Not Assigned%')
                 ->select('course_registrations.*')
                 ->get();
-            /*foreach($registered_early_classes as $rec)
-                if($rec->session_registrations->toArray() == null)
-                    array_push($not_completed_registrations, $rec->id);*/
             foreach($not_assigned_registrations as $nar)
                 array_push($not_completed_registrations, $nar->id);
             $all_not_completely_registered_courses = CourseRegistration
@@ -513,9 +503,9 @@ class StudentController extends Controller
         // Berikut daftar ID yang diperbolehkan untuk melanjutkan ke langkah berikutnya.
         // Pengeditan array dilakukan secara MANUAL.
         $arr_available = [
-            15, 24, 25, 26, 27, 28, 29, 30, 31, 32,
-            33, 34, 35, 36, 37, 38, 39, 58, 59, 60,
-            94, 95, 96, 99, 102, 103, 104, 105]; // 28 types
+            15, 24, 25, 26, 27, 58, 59, 60, 94, 95,
+            96, 103, 104, 105, 116, 119, 120, 121, 122, 123,
+            124, 125]; // 22 types
         if(!in_array($request->choice, $arr_available)) {
             session(['error_message' => 'You are not allowed to choose this course type. Please contact us for more information.']);
             return redirect()->route('student.choose_course.index', [$request->older_choice]);
@@ -527,32 +517,12 @@ class StudentController extends Controller
         $current_course_package = CoursePackage::find($request->choice);
         
         // LANGKAH 4: Sesuaikan new course package apa yang akan diambil.
-            //if($current_course_package->material_type->name == 'Indonesian Culture') {
-                //$new_course_package = CoursePackage
-                //    ::where('title', 'NOT LIKE', '%Free%')
-                //    ->where('title', 'NOT LIKE', '%Test%')
-                //    ->where('title', 'NOT LIKE', '%Trial%')
-                    /*->where('title', 'LIKE', '%Not Assigned%')*/
-                    /*->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')*/
-                    /*->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')*/
-                //    ->where('title', 'LIKE', '%'.$current_course_package->title.'%')
-                //    ->first();
-            //} else {
-                //$new_course_package = CoursePackage
-                //    ::where('title', 'NOT LIKE', '%Free%')
-                //    ->where('title', 'NOT LIKE', '%Test%')
-                //    ->where('title', 'NOT LIKE', '%Trial%')
-                    /*->where('title', 'LIKE', '%Not Assigned%')*/
-                //    ->where('title', 'LIKE', '%'.$current_course_package->material_type->name.'%')
-                //    ->where('title', 'LIKE', '%'.ucwords(strtolower($current_course_package->course_type->name)).'%')
-                //    ->first();
-            //}
-            if($current_course_package->id == 99) {
+            if($current_course_package->id == 116) {
                 // Seleksi untuk class for young and teenage learners (private).
                 if(Auth::user()->student->age >= 7 && Auth::user()->student->age <= 11) {
-                    $new_course_package = CoursePackage::find(97);
+                    $new_course_package = CoursePackage::find(114);
                 } else if(Auth::user()->student->age >= 12 && Auth::user()->student->age <= 14) {
-                    $new_course_package = CoursePackage::find(98);
+                    $new_course_package = CoursePackage::find(115);
                 } else if(Auth::user()->student->age >= 15 && Auth::user()->student->age <= 17) {
                     $new_course_package = $current_course_package;
                 } else {
@@ -561,12 +531,12 @@ class StudentController extends Controller
                     session(['error_message' => 'You are not eligible to choose this course type. Please contact us for more information.']);
                     return redirect()->route('student.choose_course.index', [$request->older_choice]);
                 }
-            } else if($current_course_package->id == 102) {
+            } else if($current_course_package->id == 119) {
                 // Seleksi untuk class for young and teenage learners (group).
                 if(Auth::user()->student->age >= 7 && Auth::user()->student->age <= 11) {
-                    $new_course_package = CoursePackage::find(100);
+                    $new_course_package = CoursePackage::find(117);
                 } else if(Auth::user()->student->age >= 12 && Auth::user()->student->age <= 14) {
-                    $new_course_package = CoursePackage::find(101);
+                    $new_course_package = CoursePackage::find(118);
                 } else if(Auth::user()->student->age >= 15 && Auth::user()->student->age <= 17) {
                     $new_course_package = $current_course_package;
                 } else {
@@ -1079,7 +1049,7 @@ class StudentController extends Controller
         return redirect()->back();
     }
 
-    public function choose_course_registration_show($course_registration_id)
+    public function choose_course_registration_show($course_registration_id, $has_chosen_instructor_for_private_course = 0)
     {
         // mendaftar course: memilih jadwal & memilih instructor
         
@@ -1109,9 +1079,9 @@ class StudentController extends Controller
                 ->join('sessions', 'sessions.schedule_id', 'schedules.id')
                 ->join('courses', 'sessions.course_id', 'courses.id')
                 ->where('courses.course_package_id', $course_registration->course->course_package_id)
-                ->select('instructors.*')
-                ->distinct()->get();
-//dd($course_registration->course->course_package->title);
+                ->select('instructors.id as id')
+                ->distinct()->get()->pluck('id')->toArray();
+            $instructors = Instructor::whereIn('id', $instructors)->get();
         } else {
             // Jika Student tidak mendaftar dalam kelas "PRIVATE",
             // maka tidak diperlukan daftar instruktur yang mengajar,
@@ -1128,19 +1098,39 @@ class StudentController extends Controller
         // Model InstructorSchedule digunakan untuk menghindari querying
         // terhadap pendaftaran course Student, karena memang terdapat dalam course package yang sama,
         // seperti dapat dilihat dalam seleksi where() pada kode di bawah ini.
-        $courses = InstructorSchedule
+        /*$courses = InstructorSchedule
             ::join('instructors', 'instructor_schedules.instructor_id', 'instructors.id')
             ->join('schedules', 'instructor_schedules.schedule_id', 'schedules.id')
             ->join('sessions', 'sessions.schedule_id', 'schedules.id')
             ->join('courses', 'sessions.course_id', 'courses.id')
             ->where('courses.course_package_id', $course_registration->course->course_package_id)
             ->select('courses.id', 'courses.code', 'courses.course_package_id', 'courses.title', 'courses.description', 'courses.requirement', 'courses.created_at', 'courses.updated_at', 'courses.deleted_at')
-            ->distinct()->get();
+            ->distinct()->get();*/
+        $courses = [];
+        if($has_chosen_instructor_for_private_course) {
+            $courses = InstructorSchedule
+                ::join('instructors', 'instructor_schedules.instructor_id', 'instructors.id')
+                ->join('schedules', 'instructor_schedules.schedule_id', 'schedules.id')
+                ->join('sessions', 'sessions.schedule_id', 'schedules.id')
+                ->join('courses', 'sessions.course_id', 'courses.id')
+                ->where('courses.course_package_id', $course_registration->course->course_package_id)
+                ->where('instructors.id', $has_chosen_instructor_for_private_course)
+                ->select('courses.id')->distinct()->get()->pluck('id')->toArray();
+            $courses = Course::whereIn('id', $courses)->get();
+            $arr = [];
+            foreach($courses as $c) {
+                if($c->sessions->count() == $c->course_package->count_session)
+                    array_push($arr, $c->id);
+            }
+            $courses = Course::whereIn('id', $arr)->get(); // just show the "Ready" courses.
+        }
         
-        $instructors = Instructor::all();
+        // FOR UI TESTING PURPOSES
+        //$instructors = Instructor::all();
         
         return view('role_student.registration_06_complete_course_registrations', compact(
             'course_registration', 'course_registration_is_private', 'instructors', 'courses',
+            'has_chosen_instructor_for_private_course'
         ));
     }
 
@@ -1154,33 +1144,25 @@ class StudentController extends Controller
         // mendaftar course: mengonfirmasi jadwal & mengonfirmasi instructor
         
         // KODE DI BAWAH INI (DALAM FUNGSI INI) HANYA PERKIRAAN YANG MIRIP SAJA
-        if($request->flag == false) return redirect()->route('courses.index');
-        
-        $data = $request->all();
-        $data = Validator::make($data, [
-            'course_id' => [
-                'bail', 'required',
-                Rule::unique('course_registrations', 'course_id')
-                    ->where('student_id', $request->student_id)
-            ],
-            'student_id' => [
-                'bail', 'required',
-                Rule::unique('course_registrations', 'student_id')
-                    ->where('course_id', $request->course_id)
-            ]
-        ]);
-        
-        if($data->fails()) {
-            return redirect()->back()
-                ->withErrors($data)
-                ->withInput();
+        if($request->flag == false) {
+            session(['caption-danger' => 'You are required to read and agree to the Terms of Service.']);
+            return redirect()->back();
         }
         
-        $course = Course::findOrFail($request->course_id);
-        $course_registration_id = CourseRegistration::create([
-            'course_id' => $request->course_id,
-            'student_id' => $request->student_id
-        ])->id;
+        // should change current $course_registration, to match the new $course
+        $course_registration = CourseRegistration::where('id', $course_registration_id)->get()->first();
+        $course = Course::where('id', $course_id)->get()->first();
+        
+        if( count($course->course_registrations->toArray()) == $course->course_package->course_type->count_student_max ) {
+            // if this course is not available (for registration)
+            session(['caption-danger' => 'This course has been full just now. Please choose another course.']);
+            return redirect()->back();
+        }
+        
+        $course_registration->update([
+            'course_id' => $course->id,
+        ]);
+        
         foreach($course->sessions as $s) {
             SessionRegistration::create([
                 'session_id' => $s->id,
@@ -1188,6 +1170,8 @@ class StudentController extends Controller
                 'status' => 'Not Assigned',
             ]);
         }
+        
+        session(['caption-success' => 'You are successfully registered in this course. Happy studying!']);
         return redirect()->route('registered.dashboard.index');
     }
 
@@ -1216,7 +1200,7 @@ class StudentController extends Controller
             ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
             ->where('course_registrations.student_id', Auth::user()->student->id)
             ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
-            ->where('course_packages.title', 'LIKE', '%Early Registration%')
+            //->where('course_packages.title', 'LIKE', '%Early Registration%')
             ->select('course_registrations.id', 'course_registrations.code', 'course_registrations.course_id', 'course_registrations.student_id', 'course_registrations.created_at', 'course_registrations.updated_at', 'course_registrations.deleted_at')
             ->get();
         foreach($early_registrations as $er)
@@ -1227,14 +1211,14 @@ class StudentController extends Controller
             ::join('courses', 'course_registrations.course_id', 'courses.id')
             ->join('course_packages', 'courses.course_package_id', 'course_packages.id')
             ->where('course_registrations.student_id', Auth::user()->student->id)
-            ->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
-            ->where('course_packages.title', 'NOT LIKE', '%Early Registration%')
-            ->pluck('course_registrations.id');
+            //->where('course_packages.title', 'NOT LIKE', '%Not Assigned%')
+            //->where('course_packages.title', 'NOT LIKE', '%Early Registration%')
+            ->pluck('course_registrations.id')->toArray();
         foreach($other_registrations as $or)
             // Nilai dalam array bersifat otomatis distinct()
             // karena ada seleksi penggunaan kata "Early Registration" dalam course_package.
             // Sehingga, tidak perlu digunakan PHP function in_array().
-            array_push($completed_registrations, $or->id);
+            array_push($completed_registrations, $or);
         
         // Bagian ini untuk mengambil daftar sesi yang diikuti oleh Student.
         $course_registrations = Auth::user()->student->course_registrations->pluck('id');
@@ -1340,14 +1324,20 @@ class StudentController extends Controller
             ]);
             session(['caption-success' => 'This reschedule information has been approved not to be changed. Thank you!']);
         } else if($request->approval_status == 1) {
+            $schedule_time_begin = Carbon::parse($session->requirement)->toDateTimeString();
+            $schedule_time_end = Carbon::parse($session->requirement)->add($session->course->course_package->material_type->duration_in_minute, 'minutes')->toDateTimeString();
             $session->schedule->update([
-                'schedule_time' => $session->requirement,
-                'updated_at' => now(),
+                'schedule_time' => $schedule_time_begin . '||' . $schedule_time_end
+                    . '||' . explode('||', $session->schedule->schedule_time)[2]
+                    . '||' . explode('||', $session->schedule->schedule_time)[3]
+                    . '||' . explode('||', $session->schedule->schedule_time)[4]
+                    . '||' . explode('||', $session->schedule->schedule_time)[5]
+                    . '||' . explode('||', $session->schedule->schedule_time)[6]
+                    . '||' . explode('||', $session->schedule->schedule_time)[7] . '||Assigned',
             ]);
             $session->update([
                 'requirement' => null,
                 'reschedule_technical_issue_instructor' => 1,
-                'updated_at' => now(),
             ]);
             session(['caption-success' => 'This reschedule information has been approved for change. Kindly check the most recent time schedule for this session. Thank you!']);
         }

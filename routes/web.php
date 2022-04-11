@@ -103,7 +103,7 @@ Route::group(['middleware'=>'auth'], function() {
         Route::redirect('/placement-test/chat', '/placement-test/chat/reviewer-team');
         
         // mendaftar course: memilih jadwal & memilih instructor
-        Route::get('/choose-course-registration/{course_registration_id}', 'StudentController@choose_course_registration_show')->name('student.choose_course_registration.show');
+        Route::get('/choose-course-registration/{course_registration_id}/{flag?}', 'StudentController@choose_course_registration_show')->name('student.choose_course_registration.show');
         
         // mendaftar course: mengonfirmasi jadwal & mengonfirmasi instructor
         Route::get('/finalize-course-registration/{course_registration_id}/choose/{course_id}', 'StudentController@confirm_course_registration_show')->name('student.confirm_course_registration.show');
@@ -198,6 +198,7 @@ Route::group(['middleware'=>'auth'], function() {
         // & melihat daftar course yang diajar
         // & melihat hasil filter daftar course sesuai jenis course
         Route::get('/instructor/schedule', 'InstructorController@schedule_index')->name('instructor.schedule.index');
+        Route::get('/instructor/propose-schedule', 'InstructorController@propose_schedule_index')->name('instructor.propose_schedule.index');
         
         // menambah ketersediaan jadwal mengajar
         Route::post('/instructor/schedule/store', 'InstructorController@schedule_store')->name('instructor.schedule.store');
@@ -330,6 +331,7 @@ Route::group(['middleware'=>'auth'], function() {
         // melihat informasi registrasi student
         // & melihat daftar jadwal meeting alternatif placement test
         Route::get('/reviewer/student-registration', 'LeadInstructorController@student_registration_index')->name('lead_instructor.student_registration.index');
+        Route::get('/reviewer/student-registration-history', 'LeadInstructorController@student_registration_history_index')->name('lead_instructor.student_registration_history.index');
         
         // melihat informasi profil student
         Route::get('/reviewer/student-registration/{course_registration_id}', 'LeadInstructorController@student_registration_show')->name('lead_instructor.student_registration.show');
@@ -371,13 +373,16 @@ Route::group(['middleware'=>'auth'], function() {
         
         // NEW ROUTING since 26 Mei 2021
             // menampilkan halaman alokasi ketersediaan waktu instruktur
-            Route::get('/reviewer/instructor-session', 'LeadInstructorController@instructor_session_index')->name('lead_instructor.instructor_session.index');
+            Route::get('/reviewer/assign-sessions', 'LeadInstructorController@instructor_session_index')->name('lead_instructor.instructor_session.index');
             
             // menambahkan kelas baru (dengan satu sesi pertama)
-            Route::put('/reviewer/instructor-session/new-class/update', 'LeadInstructorController@instructor_session_new_class_update')->name('lead_instructor.instructor_session_new_class.update');
+            Route::put('/reviewer/assign-sessions/new-class/update', 'LeadInstructorController@instructor_session_new_class_update')->name('lead_instructor.instructor_session_new_class.update');
             
             // mengedit informasi jadwal masing-masing sesi
-            Route::put('/reviewer/instructor-session/schedule/update', 'LeadInstructorController@instructor_session_schedule_update')->name('lead_instructor.instructor_session_schedule.update');
+            Route::put('/reviewer/assign-sessions/schedule/update', 'LeadInstructorController@instructor_session_schedule_update')->name('lead_instructor.instructor_session_schedule.update');
+        
+        // mengunggah sertifikat
+        Route::put('/reviewer/course-registration/{course_registration_id}/course-certificate/update', 'LeadInstructorController@course_certificate_update')->name('lead_instructor.course_certificate.update');
         
         // lain-lain (redirection)
         Route::redirect('/reviewer', '/dashboard');
@@ -423,9 +428,11 @@ Route::group(['middleware'=>'auth'], function() {
     // daftar use case financial team
         // melihat daftar pembayaran student
         Route::get('/finance/student-payment', 'FinancialTeamController@student_payment_index')->name('financial_team.student_payment.index');
+        Route::get('/finance/student-payment-history', 'FinancialTeamController@student_payment_history_index')->name('financial_team.student_payment_history.index');
         
         // melihat detail informasi pembayaran student
         Route::get('/finance/student-payment/{course_payment_id}', 'FinancialTeamController@student_payment_show')->name('financial_team.student_payment.show');
+        Route::get('/finance/student-payment-history/{course_payment_id}', 'FinancialTeamController@student_payment_history_show')->name('financial_team.student_payment_history.show');
         
         // mengunduh bukti pembayaran
         Route::get('/finance/student-payment/{course_payment_id}/download', 'FinancialTeamController@student_payment_download')->name('financial_team.student_payment.download');

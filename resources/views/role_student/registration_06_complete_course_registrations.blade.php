@@ -9,38 +9,34 @@
 @stop
 
 @section('content')
-  <form role="form" method="post" action="#" enctype="multipart/form-data">
-    @csrf
-    @method('PUT')
     <div class="row">
       <div class="col-md-12">
         <div class="nav-tabs-custom">
           <ul class="nav nav-tabs">
             @if($course_registration_is_private)
-              <li class="active"><a href="#choose_instructors" data-toggle="tab"><b>1. Instructors</b></a></li>
-              <li><a href="#choose_courses" data-toggle="tab"><b>2. Schedule</b></a></li>
+              @if($has_chosen_instructor_for_private_course == 0)
+                <li class="active"><a href="#choose_instructors" data-toggle="tab"><b>1. Instructors</b></a></li>
+              @else
+                <li><a href="#choose_instructors" data-toggle="tab"><b>1. Instructors</b></a></li>
+                <li class="active"><a href="#choose_courses" data-toggle="tab"><b>2. Schedule</b></a></li>
+              @endif
             @else
               <li class="active"><a href="#choose_courses" data-toggle="tab"><b>1. Choose Available Schedule</b></a></li>
             @endif
           </ul>
           <div class="tab-content">
             @if($course_registration_is_private)
-              <div class="active tab-pane" id="choose_instructors">
+              <div class="@if($has_chosen_instructor_for_private_course == 0) active @endif tab-pane" id="choose_instructors">
                 <div class="row">
                   <div class="col-md-3">
                     <div class="box">
                       <div class="box-header with-border">
                         <h3 class="box-title hidden"><b>NUSIA Instructors</b></h3>
-{{--
-                        <p class="no-margin">
-                          <b>Available for {{ $course_registration->course->course_package->title }}</b>
-                        </p>
---}}
                         <p class="no-margin">
                           <b>
-                            General Indonesian Language (Private) - Advanced High
+                            {{ $course_registration->course->course_package->title }}
                           </b><br />
-                          Total Sessions: <b>16</b>
+                          Total Sessions: <b>{{ $course_registration->course->course_package->count_session }}</b>
                         </p>
                       </div>
                       <!-- /.box-header -->
@@ -91,15 +87,21 @@
                   </div>
                   <div class="col-md-9 no-padding">
                     @foreach($instructors as $i => $dt)
+{{-- Uncomment the codes below for published web --}}
+{{--
+                      @if( ($dt->user->first_name . ' ' . $dt->user->last_name) == 'NUSIA Academic' )
+                        @continue
+                      @endif
+--}}
                       <div class="col-md-4">
                         <!-- Box Comment -->
                         <div class="box box-widget">
                           <div class="box-body">
                             <a href="#" data-toggle="modal" data-target="#{{$dt->id}}">
                               @if($dt->user->image_profile != 'user.jpg')
-                                <img class="img-responsive pad" src="{{ url('uploads/instructor/'.$dt->user->image_profile) }}" alt="User profile picture">
+                                <img style="display:block; height:215px; margin: 0 auto;" class="img-responsive pad" src="{{ url('uploads/instructor/'.$dt->user->image_profile) }}" alt="User profile picture">
                               @else
-                                <img class="img-responsive pad" src="{{ asset('uploads/user.jpg') }}" alt="User profile picture">
+                                <img style="display:block; height:215px; margin: 0 auto;" class="img-responsive pad" src="{{ asset('uploads/user.jpg') }}" alt="User profile picture">
                               @endif
                               <p class="text-center text-black text-decoration-none">
                                 <b>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</b>
@@ -143,11 +145,17 @@
                                 
                                 <ul class="list-group list-group-unbordered">
                                   <li class="list-group-item">
-                                    <b>Professional Experiences</b><br />
+                                    <b>Working Experiences</b><br />
+                                    <?php $we_arr = []; ?>
                                     @if($dt->working_experience)
                                       @foreach(explode('|| ', $dt->working_experience) as $we)
+                                        <?php
+                                          array_push($we_arr, $we);
+                                        ?>
+                                      @endforeach
+                                      @foreach(array_reverse($we_arr) as $we)
                                         <p class="no-margin no-padding">
-                                          {{$we}}
+                                          <b>{{ substr($we, 0, strpos($we, ':')) }}</b>{{ substr($we, strpos($we, ':')) }}
                                         </p>
                                       @endforeach
                                     @else
@@ -168,11 +176,7 @@
                                   </li>
                                 </ul>
                                 
-                                @if(Auth::user()->citizenship == 'Not Available')
-                                  <div class="text-center"><b>To continue, please complete the account confirmation.</b></div>
-                                @else
-                                  <a href="#" class="btn btn-primary btn-block"><b>Choose</b></a>
-                                @endif
+                                <a href="{{ route('student.choose_course_registration.show', [$course_registration->id, $dt->id]) }}" class="btn btn-primary btn-block"><b>Choose</b></a>
                               </div>
                               <!-- /.box-body -->
                             </div>
@@ -191,43 +195,40 @@
               <!-- /.tab-pane -->
               
               
-              <div class="tab-pane" id="choose_courses">
+              <div class="@if($has_chosen_instructor_for_private_course != 0) active @endif tab-pane" id="choose_courses">
                 <div class="row">
                   <div class="col-md-3">
                     <div class="box">
                       <div class="box-header with-border">
                         <h3 class="box-title hidden"><b>NUSIA Schedules</b></h3>
-{{--
-                        <p class="no-margin">
-                          <b>Available for {{ $course_registration->course->course_package->title }}</b><br />
-                          Number of Sessions: 16
-                        </p>
---}}
-{{--
                         <p class="no-margin">
                           <b>
-                            {{ $course_registration->course->course_package->material_type->name }}
-                            ({{ $course_registration->course->course_package->course_type->name }})
+                            {{ $course_registration->course->course_package->title }}
                           </b><br />
-                          Level:
-                          <b>
-                            {{ $course_registration->course->course_package->course_level->name }}
-                          </b><br />
-                          Number of Sessions:
-                          <b>
-                            16
-                          </b>
-                        </p>
---}}
-                        <p class="no-margin">
-                          <b>
-                            General Indonesian Language (Private) - Advanced High
-                          </b><br />
-                          Total Sessions: <b>16</b>
+                          Total Sessions: <b>{{ $course_registration->course->course_package->count_session }}</b>
                         </p>
                       </div>
                       <!-- /.box-header -->
                       <div class="box-body">
+                        @foreach($instructors as $dt)
+                          @if($dt->id == $has_chosen_instructor_for_private_course)
+                              <p class="text-center text-black text-decoration-none">
+                                Choosing this instructor:
+                              </p>
+                              @if($dt->user->image_profile != 'user.jpg')
+                                <img style="display:block; height:215px; margin: 0 auto;" class="img-responsive pad" src="{{ url('uploads/instructor/'.$dt->user->image_profile) }}" alt="User profile picture">
+                              @else
+                                <img style="display:block; height:215px; margin: 0 auto;" class="img-responsive pad" src="{{ asset('uploads/user.jpg') }}" alt="User profile picture">
+                              @endif
+                              <p class="text-center text-black text-decoration-none">
+                                <b>{{ $dt->user->first_name }} {{ $dt->user->last_name }}</b>
+                              </p>
+                              <a href="{{ route('student.choose_course_registration.show', [$course_registration->id]) }}" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noopener noreferrer">
+                                Change Instructor
+                              </a>
+                          @endif
+                        @endforeach
+                        <hr>
                         <dl>
                           <dt class="hidden">
                             <i class="fa fa-pencil margin-r-5"></i> Choosing Your Preferences
@@ -274,65 +275,83 @@
                   </div>
                   <div class="col-md-9 no-padding">
 
-
-
-
-            <div class="col-md-4">
-              <div class="box box-primary">
-                <div class="box-header with-border">
-                  <h3 class="box-title"><i class="fa fa-group"></i>&nbsp;&nbsp;GIPR010001</h3>
-                </div>
-                <div class="box-body">
-                  <div class="row">
-{{--
-                    <!--div class="col-md-12">
-                      <b>Description</b>
-                      <p>{{ $dt->description }}</p>
-                    </div-->
-                    <!--div class="col-md-12">
-                      <b>Requirement</b>
-                      <p>{{ $dt->requirement }}</p>
-                    </div-->
---}}
-                      <div class="col-md-12 text-center">
-                        <p>
-                          <b>
-                            Wednesday: 09:00 AM - 10:40 AM<br />
-                            Saturday: 09:00 AM - 10:40 AM
-                          </b>
-                        </p>
-                        <p>
-                          from<br />
-                          <b style="color:#ff0000;">Wednesday, December 1st 2021</b><br />
-                          until<br />
-                          <b style="color:#ff0000;">Wednesday, December 1st 2021</b>
-                        </p>
+@foreach($courses as $dt)
+                    <div class="col-md-4">
+                      <div class="box box-primary">
+                        <div class="box-header with-border">
+                          <h3 class="box-title"><i class="fa fa-group"></i>&nbsp;&nbsp;{{ $dt->title }}</h3>
+                        </div>
+                        <div class="box-body">
+                          <div class="row">
+                            {{--
+                            <div class="col-md-12">
+                              <b>Description</b>
+                              <p>{{ $dt->description }}</p>
+                            </div>
+                            <div class="col-md-12">
+                              <b>Requirement</b>
+                              <p>{{ $dt->requirement }}</p>
+                            </div>
+                            --}}
+                            <div class="col-md-12 text-center">
+                              <?php
+                                $sessions = $dt->sessions;
+                                
+                                $session_begin = explode('||', $sessions->first()->schedule->schedule_time)[0];
+                                $session_end = explode('||', $sessions->last()->schedule->schedule_time)[1];
+                                $session_begin = \Carbon\Carbon::parse($session_begin)->setTimezone(Auth::user()->timezone);
+                                $session_end = \Carbon\Carbon::parse($session_end)->setTimezone(Auth::user()->timezone);
+                                
+                                $arr = [];
+                                foreach($sessions as $i => $s) {
+                                  $schedule_time_begin = explode('||', $s->schedule->schedule_time)[0];
+                                  $schedule_time_end = explode('||', $s->schedule->schedule_time)[1];
+                                  $schedule_time_begin = \Carbon\Carbon::parse($schedule_time_begin)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end = \Carbon\Carbon::parse($schedule_time_end)->setTimezone(Auth::user()->timezone);
+                                  $str = $schedule_time_begin->isoFormat('dddd') . ': ' . $schedule_time_begin->isoFormat('hh:mm A') . ' - ' . $schedule_time_end->isoFormat('hh:mm A');
+                                  if(!in_array($str, $arr)) array_push($arr, $str);
+                                }
+                              ?>
+                              <p>
+                                <b>
+                                  @foreach($arr as $i => $a)
+                                    {{ $a }}
+                                    @if($i + 1 != count($arr)) <br /> @endif
+                                  @endforeach
+                                </b>
+                              </p>
+                              <p>
+                                from<br />
+                                <b style="color:#ff0000;">{{ $session_begin->isoFormat('dddd, MMMM Do YYYY') }}</b><br />
+                                until<br />
+                                <b style="color:#ff0000;">{{ $session_end->isoFormat('dddd, MMMM Do YYYY') }}</b>
+                              </p>
+                            </div>
+                            <div class="col-md-12 text-center">
+                              <p>
+                                Number of Students Registered: {{ count( $dt->course_registrations->toArray() ) }}/{{ $dt->course_package->course_type->count_student_max }}
+                              </p>
+                            </div>
+                            <div class="col-md-12">
+                              @if( count( $dt->course_registrations->toArray() ) != $dt->course_package->course_type->count_student_max )
+                                <a href="#" data-toggle="modal" data-target="#id{{ $dt->id }}" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;">
+                                  Choose This Class
+                                </a>
+                              @else
+                                <button onclick="alert('This class is full. Please choose another.'); return false;" class="btn btn-sm btn-flat btn-default disabled" style="width:100%;">
+                                  Choose This Class
+                                </button>
+                              @endif
+                            </div>
+                          </div>
+                        </div>
+                        <!-- /.box-body -->
                       </div>
-
-                    <div class="col-md-12 text-center">
-                      <p>
-                        Number of Students Registered: 0/5
-                      </p>
+                      <!-- /.box -->
                     </div>
-                    <div class="col-md-12">
-                        <a href="#" data-toggle="modal" data-target="#id" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;">
-                          Choose This Class
-                        </a>
-{{--
-                        <a href="#" data-toggle="modal" data-target="#id" class="btn btn-sm btn-flat btn-default disabled" style="width:100%;" disabled>
-                          Choose This Class
-                        </a>
---}}
-                    </div>
-                  </div>
-                </div>
-                <!-- /.box-body -->
-              </div>
-              <!-- /.box -->
-            </div>
-            <!-- /.col -->
+                    <!-- /.col -->
 
-        <div class="modal fade" id="id">
+        <div class="modal fade" id="id{{ $dt->id }}">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <!-- Profile Image -->
@@ -366,15 +385,14 @@
                                 </li>
                             </ul>
 
-                            <form action="#" method="POST">
+                            <form action="{{ route('student.confirm_course_registration.update', [$course_registration->id, $dt->id]) }}" method="POST">
                               @csrf
                               @method('PUT')
-                              <input type="hidden" value="0" name="course_id">
-                              <input type="hidden" value="0" name="student_id">
                               <input type="checkbox" value="false" onclick="checkboxClick(this);" id="flag" name="flag" class="minimal">&nbsp;&nbsp;I have read and agree to the Terms of Service
-                              <br>
-                              <br>
+                              <br><br>
                               <button type="submit" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;">Agree and Continue</button>
+                              <br><br>
+                              <button onclick="document.getElementById('id{{ $dt->id }}').className = 'modal fade'; document.getElementById('id{{ $dt->id }}').style = ''; document.getElementsByClassName('modal-backdrop')[0].remove('modal-backdrop'); document.getElementsByClassName('modal-open')[0].style = 'height:auto; min-height:100%;'; document.getElementsByClassName('modal-open')[0].classList.remove('modal-open'); return false;" class="btn btn-sm btn-flat btn-default" style="width:100%;">Close</button>
                             </form>
                         </div>
                         <!-- /.box-body -->
@@ -386,13 +404,12 @@
             <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
-    </div>
-    <script>
-      function checkboxClick(cb) {
-          document.getElementById("flag").value = cb.checked;
-      }
-    </script>
-
+        <script>
+          function checkboxClick(cb) {
+              document.getElementById("flag").value = cb.checked;
+          }
+        </script>
+@endforeach
 
 
 
@@ -413,5 +430,5 @@
       </div>
       <!-- /.col -->
     </div>
-  </form>
+
 @stop

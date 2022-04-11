@@ -63,8 +63,8 @@
                         $session_title = null;
                         if($sessions->toArray() != null) {
                           foreach($sessions as $s) {
-                            $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                            $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                            $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                            $schedule_time_end = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                             $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
                             if($schedule_time_end >= $schedule_now) {
                               if($next_meeting_time == null) {
@@ -485,11 +485,11 @@
                               </td>
                               <td>
                                 <?php
-                                  $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_10_mins_before_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_30_mins_after_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_end_form = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_10_mins_before_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_30_mins_after_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end_form = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                   $schedule_time_10_mins_before_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->sub(10, 'minutes');
                                   $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                                   $schedule_time_30_mins_after_end->add($dt->schedule->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(30, 'minutes');
@@ -618,6 +618,29 @@
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
                                   </div>
+                                  <!--div class="form-group @error('to_session_id') has-error @enderror">
+                                    <label for="to_session_id">
+                                      To Session ID (optional, fill this to change multiple sessions at once)
+                                    </label>
+                                    <select name="to_session_id" type="text" class="@error('to_session_id') is-invalid @enderror form-control">
+                                      <option selected="selected" value="">-- Enter Session ID --</option>
+                                      <?php
+                                        $i = 0;
+                                        $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
+                                      ?>
+                                      @foreach($sessions as $i => $dt)
+                                        @if(old('to_session_id') == $dt->id))
+                                          <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
+                                        @else
+                                          <option value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
+                                        @endif
+                                        <?php $i++; ?>
+                                      @endforeach
+                                    </select>
+                                    @error('to_session_id')
+                                      <p style="color:red">{{ $message }}</p>
+                                    @enderror
+                                  </div-->
                                   <div class="form-group @error('session_description') has-error @enderror">
                                     <label for="session_description">Session Description</label>
                                     <textarea name="session_description" class="@error('session_description') is-invalid @enderror form-control" rows="5" placeholder="Enter Session Description">{{ old('session_description') }}</textarea>
@@ -625,19 +648,34 @@
                                       <p style="color:red">{{ $message }}</p>
                                     @enderror
                                   </div>
-                                  <div class="form-group @error('link_zoom') has-error @enderror">
-                                    <label for="link_zoom">Meeting Link</label>
-                                    <input name="link_zoom" type="text" class="form-control" placeholder="Enter Meeting Link" value="{{ old('link_zoom') }}">
-                                    @error('link_zoom')
-                                      <p style="color:red">{{ $message }}</p>
-                                    @enderror
+                                  <div class="form-group">
+                                    <div class="@error('link_zoom_flag') has-error @enderror">
+                                      <label for="link_zoom_flag" class="control-label">Do you want to change the meeting link?</label><br />
+                                      <select name="link_zoom_flag" id="link_zoom_flag" type="text" class="@error('link_zoom_flag') is-invalid @enderror form-control select2" style="width:100%;" onchange="if(document.getElementById('link_zoom_flag').value == 1) document.getElementById('link_zoom_div').className = ''; else document.getElementById('link_zoom_div').className = 'hidden';">
+                                        <option selected="selected" value="0">-- Enter your choice --</option>
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                      </select>
+                                      @error('link_zoom_flag')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
+                                    <div class="hidden" id="link_zoom_div">
+                                      <br />
+                                      <label for="link_zoom">Meeting Link (leave empty to remove the meeting link)</label>
+                                      <input name="link_zoom" type="text" class="form-control" placeholder="Enter Meeting Link" value="{{ old('link_zoom') }}">
+                                      @error('link_zoom')
+                                        <p style="color:red">{{ $message }}</p>
+                                      @enderror
+                                    </div>
                                   </div>
+                                  
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div class="box-footer">
-                            <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;">Submit</button>
+                            <button type="submit" class="btn btn-flat btn-md bg-blue" style="width:100%;" onclick="if(confirm('Are you sure to submit this session information form?')) return true; else return false;">Submit</button>
                           </div>
                         </form>
                       </div>
@@ -670,7 +708,7 @@
                                         ?>
                                         @foreach($sessions as $i => $dt)
                                           <?php
-                                            $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                            $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                             $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                                           ?>
                                           @if(old('session_id') == $dt->id))
@@ -742,9 +780,9 @@
                                   </td>
                                   <td>
                                     <?php
-                                      $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                      $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                      $schedule_time_end_form = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_end_form = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                       $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                                       $schedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                                     ?>
@@ -777,7 +815,8 @@
                                       @if($dt->reschedule_technical_issue_student == '-1')
                                         <a href="#" data-toggle="modal" data-target="#Approval{{$dt->id}}" class="btn btn-flat btn-xs bg-purple">Action</a>
                                       @else
-                                        <a disabled href="#" class="btn btn-flat btn-xs btn-default btn-disabled" disabled>Pending</a>
+                                        {{--<a disabled href="#" class="btn btn-flat btn-xs btn-default btn-disabled" disabled>Pending</a>--}}
+                                        <label class="label label-warning">Waiting</label>
                                       @endif
                                     @else
                                       -
@@ -918,8 +957,8 @@
                                   <td>
                                     @if($dt->status == 'Not Assigned')
                                       <?php
-                                        $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                        $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                        $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                        $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                         $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
                                       ?>
                                       @if($schedule_now < $schedule_time_begin)
@@ -1082,7 +1121,7 @@
                           @endforeach
                         </tbody>
                       </table>
-                      @if(Auth::user()->roles == 'Lead Instructor')
+                      @if(Auth::user()->roles == 'Instructor')
                         <hr>
                         <div class="box-header">
                           <h4><b>Add or Modify a Main Material</b></h4>
@@ -1212,7 +1251,7 @@
                   </div>
                 </div>
                 @foreach($sessions as $i => $s)
-                  <div class="box box-warning">
+                  <div class="box box-warning" hidden>
                     <div class="box-header">
                       <h3 class="box-title"><b>Supplementary Materials for #{{ $i + 1 }} - {{ $s->title }}</b></h3>
                       <div class="box-tools pull-right">
@@ -1636,7 +1675,7 @@
                                     <select name="assignment_session_id" type="text" class="@error('assignment_session_id') is-invalid @enderror form-control">
                                       <option selected="selected" value="">-- Enter Session Name --</option>
                                       @foreach($sessions as $i => $dt)
-                                        <?php $schedule_time = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone); ?>
+                                        <?php $schedule_time = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone); ?>
                                         @if($schedule_now <= $schedule_time->add(3, 'days'))
                                           @if(old('assignment_session_id') == $dt->id))
                                             <option selected="selected" value="{{ $dt->id }}">#{{ $i + 1 }} - {{ $dt->title }}</option>
@@ -2433,7 +2472,7 @@
                             <?php
                               $count_present = 0;
                               foreach($cr->session_registrations as $sr)
-                                if($sr->status == 'Present')
+                                if($sr->status == 'Present' || $sr->status == 'Should Submit Form')
                                   $count_present++;
                             ?>
                             <tr>
@@ -2444,7 +2483,7 @@
                                 {{ $count_present }}/{{ $total_sessions }}
                               </td>
                               <td class="text-center">
-                                @if($cr->course_certificate->path)
+                                @if($cr->course_certificate && $cr->course_certificate->path)
                                   @if($count_present >= 80 * $total_sessions / 100)
                                     <label data-toggle="tooltip" title class="label bg-green" data-original-title="This student is eligible to get the course certificate.">Eligible</label>
                                   @else
@@ -2462,6 +2501,9 @@
                       <div class="text-center">No data available.</div>
                     @endif
                   </div>
+
+
+
                 </div>
               </div>
             </div>

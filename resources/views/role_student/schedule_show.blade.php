@@ -59,8 +59,8 @@
                         $session_title = null;
                         if($course_registration->course->sessions) {
                           foreach($course_registration->course->sessions as $s) {
-                            $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                            $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                            $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                            $schedule_time_end = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                             $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
                             if($schedule_time_end >= $schedule_now) {
                               if($next_meeting_time == null) {
@@ -571,9 +571,17 @@
                           </dt>
                           <dd>
                             If you want to reschedule a session, you can <b>send the request
-                            no later than 3 days</b> before the session begins.<br />
-                            You are required to <b>check each session at least 2 days</b> before
-                            the session begins to see whether your request has been approved or not.
+                            no later than 24 hours</b> before the session begins.
+                            You are required to <b>check the session</b> before it begins
+                            to see whether your request has been approved or not.<br />
+                            <span style="color:#ff0000;">
+                              If you happen to face force majeure during your class session
+                              (an extraordinary event or circumstance beyond your control,
+                              such as war, strikes, riot, crime, epidemic, hospitalized, etc),
+                              please contact NUSIA's customer service and
+                              provide a proof of your situation in order to be able
+                              to reschedule your session.
+                            </span>
                           </dd>
                         </dl>
                       @endif
@@ -626,9 +634,9 @@
                               </td>
                               <td>
                                 <?php
-                                  $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                  $schedule_time_end_form = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                  $schedule_time_end_form = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                   $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
                                   $schedule_time_end_form->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                                 ?>
@@ -895,9 +903,9 @@
                                   </td>
                                   <td>
                                     <?php
-                                      $schedule_time_begin = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                      $schedule_time_end = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                      $schedule_time_end_form = \Carbon\Carbon::parse($dt->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                      $schedule_time_end_form = \Carbon\Carbon::parse(explode('||', $dt->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                       $schedule_time_end->add($dt->course->course_package->material_type->duration_in_minute, 'minutes');
                                       $schedule_time_end_form->add($dt->course->course_package->material_type->duration_in_minute, 'minutes')->add(3, 'days');
                                     ?>
@@ -930,7 +938,8 @@
                                       @if($dt->reschedule_technical_issue_instructor == '-1')
                                         <a href="#" data-toggle="modal" data-target="#Approval{{$dt->id}}" class="btn btn-flat btn-xs bg-purple">Action</a>
                                       @else
-                                        <a disabled href="#" class="btn btn-flat btn-xs btn-default btn-disabled" disabled>Pending</a>
+                                        {{--<a disabled href="#" class="btn btn-flat btn-xs btn-default btn-disabled" disabled>Pending</a>--}}
+                                        <label class="label label-warning">Waiting</label>
                                       @endif
                                     @else
                                       -
@@ -1038,8 +1047,8 @@
                               <td>
                                 @if($dt->status == 'Not Assigned')
                                   <?php
-                                    $schedule_time_begin = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                                    $schedule_time_end = \Carbon\Carbon::parse($dt->session->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                                    $schedule_time_end = \Carbon\Carbon::parse(explode('||', $dt->session->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                                     $schedule_time_end->add($dt->session->course->course_package->material_type->duration_in_minute, 'minutes');
                                   ?>
                                   @if($schedule_now < $schedule_time_begin)
@@ -1154,7 +1163,11 @@
                               </td>
                               <td class="text-center">
                                 @if($dt->path)
-                                  <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.material.download', [$course_registration->id, 1, $dt->id]) }}">Link</a>
+                                  @if(strpos($dt->path, '://') !== false || strpos($dt->path, 'www.') !== false)
+                                    <a target="_blank" rel="noopener noreferrer nofollow" class="btn btn-flat btn-xs btn-success" href="{{ $dt->path }}">Link</a>
+                                  @else
+                                    <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.material.download', [$course_registration->id, 1, $dt->id]) }}">Link</a>
+                                  @endif
                                 @else
                                   <i class="text-muted">-</i>
                                 @endif
@@ -1193,7 +1206,7 @@
                   </div>
                 </div>
                 @foreach($course_registration->course->sessions as $i => $s)
-                  <div class="box box-warning">
+                  <div class="box box-warning" hidden>
                     <div class="box-header">
                       <h3 class="box-title"><b>Supplementary Materials for #{{ $i + 1 }} - {{ $s->title }}</b></h3>
                       <div class="box-tools pull-right">
@@ -2119,7 +2132,7 @@
                           <?php
                             $i = 0;
                             foreach($course_registration->session_registrations as $dt) {
-                              if($dt->status == 'Present') {
+                              if($dt->status == 'Present' || $dt->status == 'Should Submit Form') {
                                 $i++;
                               }
                             }
@@ -2131,7 +2144,7 @@
                               {{ $i }}/{{ $total_sessions }}
                             </td>
                             <td>
-                              @if($course_registration->course_certificate->path)
+                              @if($course_registration->course_certificate && $course_registration->course_certificate->path)
                                 @if($i >= 80 * $total_sessions / 100)
                                   <label data-toggle="tooltip" title class="label bg-green" data-original-title="You are eligible to get the certificate.">Eligible</label>
                                 @else
@@ -2143,7 +2156,7 @@
                             </td>
                             <td>
                               @if($i >= 80 * $total_sessions / 100)
-                                @if($course_registration->course_certificate->path)
+                                @if($course_registration->course_certificate && $course_registration->course_certificate->path)
                                   <a target="_blank" rel="noopener noreferrer" class="btn btn-flat btn-xs btn-success" href="{{ route('student.certificate.download') }}">Link</a>
                                 @else
                                   <a disabled rel="noopener noreferrer" class="btn btn-flat btn-xs btn-default btn-disabled" href="#">Link</a>

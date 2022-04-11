@@ -352,7 +352,7 @@
 <p class="h3 text-center">
   
             You have been successfully enrolled in<br />
-            <b>Advanced High</b> proficiency level!
+            <b>{{ $course_registration->course->course_package->course_level->name }}</b> level!
   
 </p>
 
@@ -372,7 +372,7 @@
                     Contact NUSIA Academic if you encounter a problem.<br />
                   </span>
                 </p>
-                <a href="{{ route('student.choose_course_registration.show', [$course_registration->id]) }}" target="_blank" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noreferrer nofollow">Proceed to course scheduling</a>
+                <a href="{{ route('student.choose_course_registration.show', [$course_registration->id]) }}" class="btn btn-sm btn-flat btn-primary bg-blue" style="width:100%;" rel="noreferrer nofollow">Proceed to course scheduling</a>
 {{--
                 <br /><br />
                 <a href="{{ route('student.chat_lead_instructor.show', [91]) }}" target="_blank" class="btn btn-sm btn-flat btn-default" style="width:100%;" rel="noopener noreferrer">

@@ -50,7 +50,7 @@
                   <tr>
                     <th>Student Name</th>
                     <th style="width:12%;">Picture</th>
-                    <th style="width: 150px">Present/Not Present</th>
+                    <th style="width: 150px">Attendance</th>
                   </tr>
                 </thead>
                 <tbody>

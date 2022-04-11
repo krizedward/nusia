@@ -221,7 +221,7 @@
                 <p class="text-center">
                   <b style="color:#cc0000;">
                     Submitted on {{ $submitted_at->isoFormat('dddd, MMMM Do YYYY, hh:mm A') }}.<br />
-                    The result will be announced by email no later than 3 working days after this time.
+                    The payment confirmation will be announced by email no later than 3 working days after this time.
                   </b>
                 </p>
               @else

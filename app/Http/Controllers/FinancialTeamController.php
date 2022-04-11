@@ -102,6 +102,13 @@ class FinancialTeamController extends Controller
         return view('role_financial_team.course_payments_index', compact('course_payments'));
     }
 
+    public function student_payment_history_index()
+    {
+        // melihat daftar pembayaran student
+        $course_payments = CoursePayment::where('status', '<>', 'Not Confirmed')->get();
+        return view('role_financial_team.course_payments_index', compact('course_payments'));
+    }
+
     public function student_payment_show($course_payment_id)
     {
         // melihat detail informasi pembayaran student

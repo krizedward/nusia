@@ -51,19 +51,33 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
-    public function get_relevant_user_ids_for_chat()
+    public function get_relevant_user_ids_for_chat($can_access_all_in_one_role = 0)
     {
         // ambil daftar sender dan recipient pesan yang dikirim oleh user
         // (tidak termasuk ID user yang login akun ini, tetapi merupakan ID lawan bicaranya)
         // return array
-        $user_id_senders = Message
-            ::where('user_id_sender', 'NOT LIKE', Auth::user()->id) // ambil ID lawan bicara
-            ->where('user_id_recipient', 'LIKE', Auth::user()->id)
-            ->pluck('user_id_sender')->toArray();
-        $user_id_recipients = Message
-            ::where('user_id_sender', 'LIKE', Auth::user()->id)
-            ->where('user_id_recipient', 'NOT LIKE', Auth::user()->id) // ambil ID lawan bicara
-            ->pluck('user_id_recipient')->toArray();
-        return array_unique(array_merge($user_id_senders, $user_id_recipients));
+        if($can_access_all_in_one_role) {
+            // still have bugs
+            $user_id_senders = Message
+                ::join('users', 'messages.user_id_recipient', 'users.id')
+                ->where('messages.user_id_sender', 'NOT LIKE', Auth::user()->id) // ambil ID lawan bicara
+                ->where('users.roles', Auth::user()->roles)
+                ->pluck('messages.user_id_sender')->toArray();
+            $user_id_recipients = Message
+                ::join('users', 'messages.user_id_sender', 'users.id')
+                ->where('users.roles', Auth::user()->roles)
+                ->where('messages.user_id_recipient', 'NOT LIKE', Auth::user()->id) // ambil ID lawan bicara
+                ->pluck('messages.user_id_recipient')->toArray();
+        } else {
+            $user_id_senders = Message
+                ::where('user_id_sender', 'NOT LIKE', Auth::user()->id) // ambil ID lawan bicara
+                ->where('user_id_recipient', 'LIKE', Auth::user()->id)
+                ->pluck('user_id_sender')->toArray();
+            $user_id_recipients = Message
+                ::where('user_id_sender', 'LIKE', Auth::user()->id)
+                ->where('user_id_recipient', 'NOT LIKE', Auth::user()->id) // ambil ID lawan bicara
+                ->pluck('user_id_recipient')->toArray();
+        }
+        return array_values(array_unique(array_merge($user_id_senders, $user_id_recipients)));
     }
 }

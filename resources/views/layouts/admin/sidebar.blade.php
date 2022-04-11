@@ -134,9 +134,9 @@
           <i class="fa fa-calendar"></i> <span>Schedules</span>
         </a>
       </li>
-      <li class="{{ set_active(['instructor.schedule.index', 'instructor.course.show', 'instructor.student_attendance.index', 'instructor.session_feedback.index', 'instructor.instructor_profile.show', 'instructor.student_profile.show']) }}">
-        <a href="{{ route('instructor.schedule.index') }}">
-          <i class="fa fa-edit"></i> <span>Propose Schedules</span>
+      <li class="{{ set_active(['instructor.propose_schedule.index']) }}">
+        <a href="{{ route('instructor.propose_schedule.index') }}">
+          <i class="fa fa-pencil"></i> <span>Propose Schedules</span>
         </a>
       </li>
 
@@ -151,6 +151,11 @@
         <li class="{{ set_active(['lead_instructor.student_registration.index', 'lead_instructor.student_registration.show', 'lead_instructor.placement_test_by_meeting.index', 'lead_instructor.placement_test_by_meeting_student_profile.show']) }}">
           <a href="{{ route('lead_instructor.student_registration.index') }}">
             <i class="fa fa-file-text-o"></i> <span>Placement Tests</span>
+          </a>
+        </li>
+        <li class="{{ set_active(['lead_instructor.student_registration_history.index']) }}">
+          <a href="{{ route('lead_instructor.student_registration_history.index') }}">
+            <i class="fa fa-clock-o"></i> <span>Past Placement Tests</span>
           </a>
         </li>
       @endif
@@ -182,6 +187,11 @@
       <li class="{{ set_active(['financial_team.student_payment.index', 'financial_team.student_payment.show']) }}">
         <a href="{{ route('financial_team.student_payment.index') }}">
           <i class="fa fa-book"> </i><span> Payments</span>
+        </a>
+      </li>
+      <li class="{{ set_active(['financial_team.student_payment_history.index', 'financial_team.student_payment_history.show']) }}">
+        <a href="{{ route('financial_team.student_payment_history.index') }}">
+          <i class="fa fa-clock-o"> </i><span> Past Payments</span>
         </a>
       </li>
     @endif

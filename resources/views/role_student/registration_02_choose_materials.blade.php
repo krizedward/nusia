@@ -186,11 +186,13 @@
                                     <th style="width:5%;">Choose</th>
                                   </tr>
                                   @foreach($ct->course_packages as $j => $cp)
+                                    {{--
                                     @if($j % 2 == 0 && $mt->name == 'Indonesian Culture')
                                       <tr>
                                         <td class="text-center" colspan="3">{{ $cp->description }}</td>
                                       </tr>
                                     @endif
+                                    --}}
                                     <tr>
                                       <td>
                                         <a href="#" data-toggle="modal" data-target="#CourseChoice{{$cp->id}}" {{-- class="btn btn-s btn-primary" --}}>
@@ -218,7 +220,7 @@
                                         <?php
                                           $is_allowed_to_register = 1;
                                           foreach($all_current_running_course_registrations as $acrcr) {
-                                            if($acrcr->course->course_package->material_type == $mt->id) {
+                                            if($acrcr->course->course_package->material_type_id == $mt->id) {
                                               $is_allowed_to_register = 0;
                                               break;
                                             }
@@ -301,7 +303,7 @@
                                         <?php
                                           $is_allowed_to_register = 1;
                                           foreach($all_current_running_course_registrations as $acrcr) {
-                                            if($acrcr->course->course_package->material_type == $mt->id) {
+                                            if($acrcr->course->course_package->material_type_id == $mt->id) {
                                               $is_allowed_to_register = 0;
                                               break;
                                             }
@@ -378,7 +380,7 @@
                                       <?php
                                         $is_allowed_to_register = 1;
                                         foreach($all_current_running_course_registrations as $acrcr) {
-                                          if($acrcr->course->course_package->material_type == $mt->id) {
+                                          if($acrcr->course->course_package->material_type_id == $mt->id) {
                                             $is_allowed_to_register = 0;
                                             break;
                                           }
@@ -473,7 +475,7 @@
                                       <?php
                                         $is_allowed_to_register = 1;
                                         foreach($all_current_running_course_registrations as $acrcr) {
-                                          if($acrcr->course->course_package->material_type == $mt->id) {
+                                          if($acrcr->course->course_package->material_type_id == $mt->id) {
                                             $is_allowed_to_register = 0;
                                             break;
                                           }

@@ -40,6 +40,8 @@
                   <?php
                     $user_id = ($m->user_id_sender != Auth::user()->id)? $m->user_id_sender : $m->user_id_recipient;
                     $dt = $users->where('id', $user_id)->first();
+                    if(!$dt) continue;
+                    
                     if(in_array($user_id, $arr)) continue;
                     array_push($arr, $user_id);
                     

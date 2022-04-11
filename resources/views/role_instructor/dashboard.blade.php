@@ -51,8 +51,8 @@
             @foreach($sessions_order_by_schedule_time as $s)
               <?php
                 $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
-                $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                $schedule_time_end = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                 $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
               ?>
               @if($schedule_time_end >= now())
@@ -95,7 +95,7 @@
                             <input type="hidden" name="session_id" value="{{ $s->id }}">
                             <input type="hidden" name="session_description" value="{{ $s->description }}">
                             <div class="form-group @error('link_zoom') has-error @enderror">
-                              <label for="link_zoom">Please add a meeting link:</label>
+                              <label for="link_zoom">Please add a new meeting link:</label>
                               <input name="link_zoom" type="text" class="form-control" placeholder="Enter a meeting link" value="{{ old('link_zoom') }}">
                               @error('link_zoom')
                                 <p style="color:red">{{ $message }}</p>
@@ -166,8 +166,8 @@
                     <td>{{ $s->title }}</td>
                     <?php
                       $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
-                      $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                      $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                      $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                      $schedule_time_end = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                       $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
                     ?>
                     <td>
@@ -255,8 +255,8 @@
             @foreach($sessions_order_by_schedule_time as $s)
               <?php
                 $schedule_now = \Carbon\Carbon::now()->setTimezone(Auth::user()->timezone);
-                $schedule_time_begin = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
-                $schedule_time_end = \Carbon\Carbon::parse($s->schedule->schedule_time)->setTimezone(Auth::user()->timezone);
+                $schedule_time_begin = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
+                $schedule_time_end = \Carbon\Carbon::parse(explode('||', $s->schedule->schedule_time)[0])->setTimezone(Auth::user()->timezone);
                 $schedule_time_end->add($s->course->course_package->material_type->duration_in_minute, 'minutes');
               ?>
               @if($schedule_time_end >= now())
@@ -299,7 +299,7 @@
                             <input type="hidden" name="session_id" value="{{ $s->id }}">
                             <input type="hidden" name="session_description" value="{{ $s->description }}">
                             <div class="form-group @error('link_zoom') has-error @enderror">
-                              <label for="link_zoom">Please add a meeting link:</label>
+                              <label for="link_zoom">Please add a new meeting link:</label>
                               <input name="link_zoom" type="text" class="form-control" placeholder="Enter a meeting link" value="{{ old('link_zoom') }}">
                               @error('link_zoom')
                                 <p style="color:red">{{ $message }}</p>
